@@ -17,7 +17,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
     <html lang="en">
       <body className={inter.className}>
         <Header></Header>
-        <div className="items-center h-[84vh] overflow-auto px-4 bg-white">
+        <div className="items-center overflow-auto px-4 bg-white">
           {children}  
         </div>
         <Footer></Footer>
