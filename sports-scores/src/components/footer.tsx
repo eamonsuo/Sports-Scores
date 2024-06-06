@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import cricketBall from "../../public/cricket-ball-icon.svg"
+import aflBall from "@/../public/football.svg"
 
 export default function Footer() {
     return (
@@ -11,9 +12,9 @@ export default function Footer() {
                 <Image src={cricketBall} width={30} height={30} alt="cricket ball" className="text-center"></Image>
             </div>
         </Link>
-        <Link href="/sports/afl">
+        <Link href="/sports/afl#current-date">
             <div className="size-11 rounded-full bg-gray-500 flex place-content-center">
-                <Image src={cricketBall} width={30} height={30} alt="cricket ball" className="text-center"></Image>
+            <Image src={aflBall} width={30} height={30} alt="AFL ball" className="text-center"></Image>
             </div>
         </Link>
     </div>);
