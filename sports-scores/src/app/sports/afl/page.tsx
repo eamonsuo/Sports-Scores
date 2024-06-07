@@ -3,13 +3,9 @@ import NavButtonGroup from "@/components/NavButtonGroup"
 
 export default async function Page() {
   
-  return (<>
+  return (
   <div className="flex flex-col h-full">
-    <div><NavButtonGroup></NavButtonGroup></div>
-  
-  <div className="flex-1 overflow-y-auto">
-  <MatchSummaryList></MatchSummaryList>
-  </div>
-  </div>
-  </>);
+      <NavButtonGroup></NavButtonGroup>
+      <MatchSummaryList></MatchSummaryList>
+  </div>);
 }

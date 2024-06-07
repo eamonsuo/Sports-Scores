@@ -24,7 +24,7 @@ export default async function MatchSummaryList() {
   let displayDate: boolean = false;
   let currentMatch = false;  
   
-  return (<> 
+  return (<div className="flex-1 overflow-y-auto px-4">
       {fixtures.response.map((item: any)=> {
         let item_date: Date = new Date(item.date);
         displayDate = false;
@@ -58,5 +58,5 @@ export default async function MatchSummaryList() {
           }}>
         </ScoreSummaryCard></>;})
       }
-  </> );
+  </div> );
 }

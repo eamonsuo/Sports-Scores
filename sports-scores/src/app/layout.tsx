@@ -16,9 +16,11 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
   return (
     <html lang="en">
       <body className={inter.className}>
-      <div className="flex flex-col h-dvh">
+        {/* Set to Dynamic view height aka height of browser minus any browser things. Helps on
+         mobile where safari search overhangs regular view height*/}
+      <div className="flex flex-col h-dvh"> 
         <Header></Header>
-        <main className="items-center flex-1 overflow-y-auto px-4 bg-white">          
+        <main className="items-center flex-1 overflow-y-auto bg-white">          
           {children}  
         </main>
         <Footer></Footer>
