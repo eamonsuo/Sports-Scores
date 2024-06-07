@@ -8,7 +8,8 @@ export default function ScoreSummaryCard({matchDetails, homeDetails, awayDetails
             <p className="text-gray-700 text-xs">{matchDetails?.status}</p>
             <p className="text-gray-500 text-center">{matchDetails?.summary}</p>
             
-            <div className='grid grid-cols-5 gap-2 mt-2'>
+            {/* make grid consistent for all logos/names */}
+            <div className='grid grid-cols-5 gap-2 mt-2'> 
                 <div className=' content-center'><Image src={homeDetails?.img} width={48} height={48} alt="Home team image"/></div>
                 <p className=" text-black content-center">{homeDetails?.score}</p>
                 <div></div>

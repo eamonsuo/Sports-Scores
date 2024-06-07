@@ -16,11 +16,13 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
   return (
     <html lang="en">
       <body className={inter.className}>
+        <div className="flex flex-col h-screen overflow-hidden">
         <Header></Header>
-        <div className="items-center overflow-auto px-4 bg-white">
+        <main className="items-center flex-1 overflow-y-scroll px-4 bg-white">
           {children}  
-        </div>
+        </main>
         <Footer></Footer>
+        </div>
       </body>
     </html>
   );
