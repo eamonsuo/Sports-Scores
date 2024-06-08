@@ -17,16 +17,20 @@ export default async function MatchSummaryList() {
 
   const reqHeaders: Headers = new Headers();
   reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
+  //TODO: make reusable
+  //TODO: build api library
   const rawFixtures = await fetch(`https://v1.afl.api-sports.io/games?season=2024&league=1`, {headers: reqHeaders});
   const fixtures: APISportsGameAfl = await rawFixtures.json();
 
   // console.log(fixtures);
   let sectionDate: Date = new Date("2024-01-01");
   let displayDate: boolean = false;
-  let currentMatch: boolean = false;  
+  let currentMatch: boolean = false;
+  let currentDateFlag: boolean = false;
   
   return (<div className="flex-1 overflow-y-auto px-4">
       {fixtures.response.map((item: APISportsMatchResponseAfl)=> {
+        
         let item_date: Date = new Date(item.date);
         displayDate = false;
         if (sectionDate.toDateString() !== item_date.toDateString()) {
@@ -34,8 +38,12 @@ export default async function MatchSummaryList() {
           displayDate = true;
         }
 
-        if (!currentMatch && (current_date.toDateString() === sectionDate.toDateString() || current_date.getTime() <= sectionDate.getTime())) {
+        if (currentMatch) {
+          currentMatch = false;
+        }
+        if (!currentDateFlag && (current_date.toDateString() === sectionDate.toDateString() || current_date.getTime() <= sectionDate.getTime())) {
           currentMatch = true;
+          currentDateFlag = true;
         }
         
         return <><SectionDate key={item.game.id} sectionDate={sectionDate} display={displayDate} currentDate={currentMatch}></SectionDate> <ScoreSummaryCard 
