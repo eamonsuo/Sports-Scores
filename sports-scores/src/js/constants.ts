@@ -22,3 +22,8 @@ export const MATCHSTATUSAFL = {
     LONG_CANC: "Cancelled",
     LONG_PST: "Postponed"
 }
+
+export const SPORT = {
+    AFL: "AFL",
+    CRICKET: "CRICKET",
+}

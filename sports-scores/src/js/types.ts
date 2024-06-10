@@ -1,4 +1,4 @@
-interface APISportsGameAfl {
+interface APISportsAflGames {
     get: string,
     parameters: {
         season: string,
@@ -9,7 +9,7 @@ interface APISportsGameAfl {
     response: APISportsMatchResponseAfl[]
 }
 
-interface APISportsMatchResponseAfl {
+type APISportsMatchResponseAfl = {
     game: {
         id: number
     },
@@ -82,4 +82,10 @@ type TeamScoreDetails = {
     img: string,
     score: string,
     name: string
+}
+
+type MatchSummary = {
+    id: number,
+    startDate: string,
+    details: ScoreSummaryCardProps
 }

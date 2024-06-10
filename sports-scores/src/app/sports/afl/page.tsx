@@ -1,5 +1,6 @@
 import MatchSummaryList from "@/components/MatchSummaryList"
 import NavButtonGroup from "@/components/NavButtonGroup"
+import { SPORT } from "@/js/constants";
 import { fetchAflData } from "@/js/externalAPI";
 
 export default async function Page() {
@@ -12,7 +13,7 @@ export default async function Page() {
   return (
   <div className="flex flex-col h-full">
       <NavButtonGroup buttons={buttonList}></NavButtonGroup>
-      <MatchSummaryList></MatchSummaryList>
+      <MatchSummaryList sport={SPORT.AFL}></MatchSummaryList>
       <div className="m-2">API Counter: {res.response.requests.current} out of {res.response.requests.limit_day}</div>
   </div>);
 }
