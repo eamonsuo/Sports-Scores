@@ -1,5 +1,5 @@
 import MatchSummaryList from "@/components/MatchSummaryList";
-import { APICALLS, SPORT } from "@/js/constants";
+import { APICALLS, SPORT } from "@/lib/constants";
 import { fetchAflData } from "@/api/afl.api";
 import React, { ReactNode } from "react";
 

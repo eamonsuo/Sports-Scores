@@ -1,6 +1,4 @@
 import ScoreSummaryCard from "@/components/ScoreSummaryCard";
-import { calculateAFLMatchResult } from "@/js/utils";
-import { APICALLS, MATCHSTATUSAFL, SPORT } from "@/js/constants";
 
 function SectionDate({ sectionDate, display, currentDate }: any) {
   if (display) {

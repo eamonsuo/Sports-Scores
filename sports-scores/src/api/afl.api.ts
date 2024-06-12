@@ -1,5 +1,5 @@
-import { APICALLS, SPORT } from "@/js/constants";
-import { setAFLMatchSummary } from "../js/utils";
+import { APICALLS, SPORT } from "@/lib/constants";
+import { setAFLMatchSummary } from "../lib/utils";
 import { NextResponse } from "next/server";
 
 const REVALIDATE = 10000; //TODO: change for deployment
