@@ -1,19 +1,20 @@
-import MatchSummaryList from "@/components/MatchSummaryList"
-import NavButtonGroup from "@/components/NavButtonGroup"
-import { SPORT } from "@/js/constants";
-import { fetchAflData } from "@/js/externalAPI";
+import MatchSummaryList from "@/components/MatchSummaryList";
+import { APICALLS, SPORT } from "@/js/constants";
+import { fetchAflData } from "@/api/afl.api";
+import React, { ReactNode } from "react";
+
+import ClientSportsPage from "@/components/ClientSportsPage";
+import APIStatus from "@/components/ApiStatus";
 
 export default async function Page() {
-  let buttonList: NavButtonGroupProps = [
-    {label: "Matches", link: "/misc/coming"}, 
-    {label: "Ladder", link: "/misc/coming"}];
-
-    const res = await fetchAflData("status");
+  const fixtures: MatchSummary[] = await fetchAflData("fixtures");
+  const status: APISportsStatus = await fetchAflData("status");
 
   return (
-  <div className="flex flex-col h-full">
-      <NavButtonGroup buttons={buttonList}></NavButtonGroup>
-      <MatchSummaryList sport={SPORT.AFL}></MatchSummaryList>
-      <div className="m-2">API Counter: {res.response.requests.current} out of {res.response.requests.limit_day}</div>
-  </div>);
+    <ClientSportsPage
+      matches={<MatchSummaryList data={fixtures} />}
+      ladder={<div>ladder</div>}
+      apiStatus={<APIStatus data={status} />}
+    ></ClientSportsPage>
+  );
 }
