@@ -3,50 +3,46 @@ import { setAFLMatchSummary } from "../lib/utils";
 import { NextResponse } from "next/server";
 
 const REVALIDATE = 10000; //TODO: change for deployment
+const reqHeaders = new Headers();
+reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
 
-export async function fetchAflData(type: APISettings) {
-  const reqHeaders = new Headers();
-  reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
+const fetchOptions = {
+  headers: reqHeaders,
+  next: { revalidate: REVALIDATE },
+};
 
-  const fetchOptions = {
-    headers: reqHeaders,
-    next: { revalidate: REVALIDATE },
-  };
+export async function fetchAFLFixtures(season: string) {
+  const rawFixtures = await fetch(
+    `${process.env.AFL_BASEURL}/games?season=${season}&league=1`,
+    fetchOptions
+  );
 
-  let returnValue;
-
-  switch (type) {
-    case APICALLS.FIXTURES:
-      const rawFixtures = await fetch(
-        `${process.env.AFL_BASEURL}/games?season=2024&league=1`,
-        fetchOptions
-      );
-
-      returnValue = (await rawFixtures.json()) as APISportsAFLGames;
-      return mapAflFixtureFields(returnValue.response);
-    case APICALLS.STATUS:
-      const rawStatus = await fetch(
-        `${process.env.AFL_BASEURL}/status`,
-        fetchOptions
-      );
-
-      returnValue = await rawStatus.json();
-      return returnValue.response as APISportsStatus;
-    case APICALLS.STANDINGS:
-      const rawStandings = await fetch(
-        `${process.env.AFL_BASEURL}/standings?season=2024&league=1`,
-        fetchOptions
-      );
-
-      returnValue = await rawStandings.json();
-      return returnValue;
-  }
-
-  return {};
+  let fixtures = (await rawFixtures.json()) as AFLGamesResponse;
+  return mapAflFixtureFields(fixtures.response);
 }
 
-function mapAflFixtureFields(matches: APISportsMatchAFL[]) {
-  return matches.map((item: APISportsMatchAFL) => ({
+export async function fetchAFLStatus() {
+  const rawStatus = await fetch(
+    `${process.env.AFL_BASEURL}/status`,
+    fetchOptions
+  );
+
+  let status = await rawStatus.json();
+  return status.response as APISportsStatusDetails;
+}
+
+export async function fetchAFLStandings(season: string) {
+  const rawStandings = await fetch(
+    `${process.env.AFL_BASEURL}/standings?season=${season}&league=1`,
+    fetchOptions
+  );
+
+  let standings = (await rawStandings.json()) as AFLStandingsResponse;
+  return standings.response;
+}
+
+function mapAflFixtureFields(matches: AFLGame[]) {
+  return matches.map((item: AFLGame) => ({
     id: item.game.id,
     startDate: item.date,
     details: {

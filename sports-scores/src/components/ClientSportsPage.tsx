@@ -1,35 +1,31 @@
 "use client";
+import { it } from "node:test";
 import { ReactNode, useState } from "react";
 
 export default function ClientSportsPage({
-  matches,
-  ladder,
+  options,
   apiStatus,
 }: {
-  matches: ReactNode;
-  ladder: ReactNode;
+  options: { btnLabel: string; component: ReactNode; state: string }[];
   apiStatus: ReactNode;
 }) {
-  const [view, setView] = useState<"matches" | "ladder">("matches");
+  const [view, setView] = useState<string>("matches");
 
+  //TODO: Make page dynamic, e.g. set number of buttons/areas by passed array
   return (
     <div className="flex flex-col h-full">
       <div className="flex m-4">
-        <button
-          className="bg-gray-500 text-center p-2 border-2 flex-1"
-          onClick={() => setView("matches")}
-        >
-          Matches
-        </button>
-
-        <button
-          className="bg-gray-500 text-center p-2 border-2 flex-1"
-          onClick={() => setView("ladder")}
-        >
-          Ladder
-        </button>
+        {options.map((item) => (
+          <button
+            key={item.state}
+            className="bg-gray-500 text-center p-2 border-2 flex-1"
+            onClick={() => setView(item.state)}
+          >
+            {item.btnLabel}
+          </button>
+        ))}
       </div>
-      {view === "matches" ? matches : ladder}
+      {options.map((item) => view === item.state && item.component)}
       {apiStatus}
     </div>
   );

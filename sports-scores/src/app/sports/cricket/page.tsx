@@ -1,58 +1,43 @@
-import ScoreSummaryCard from "@/components/ScoreSummaryCard"
-import { setMatchStatusCricket } from "@/js/utils";
+import MatchSummaryList from "@/components/sport/MatchSummaryList";
+import ClientSportsPage from "@/components/ClientSportsPage";
+import APIStatus from "@/components/ApiStatus";
+import { fetchCricketFixtures, fetchCricketStatus } from "@/api/cricket.api";
+import Link from "next/link";
 
 export default async function Page() {
-  const current_date: Date = new Date(Date.now());
-  const query_start_date: Date = new Date(current_date);
-  query_start_date.setDate(query_start_date.getDate() - 7);
-  const query_end_date: Date = new Date(query_start_date);
-  query_end_date.setFullYear(query_end_date.getFullYear() + 1);
+  const DAYSINPAST = 30; // Get records 30 days in the past
+  const YEARSINFUTURE = 1; // Get records 1 year in the future
 
-  
-  const rawFixtures = await fetch(`https://cricket.sportmonks.com/api/v2.0/fixtures?sort=starting_at&filter[starts_between]=${query_start_date.getFullYear()}-${query_start_date.getMonth()+1}-${query_start_date.getDate()},${query_end_date.getFullYear()}-${query_end_date.getMonth()+1}-${query_end_date.getDate()}&include=runs,venue,localteam,visitorteam&api_token=${process.env.SportsMonksAPIKey}`);
-  // console.log(query_start_date, '---', query_start_date.getMonth());
-  const fixtures = await rawFixtures.json();
-  let sectionDate: Date = new Date(query_start_date);
-  let displayDate: boolean = false;
-  
+  const currentDate: Date = new Date(Date.now());
+  const queryStartDate: Date = new Date(currentDate);
+  queryStartDate.setDate(queryStartDate.getDate() - DAYSINPAST);
+  const queryEndDate: Date = new Date(queryStartDate);
+  queryEndDate.setFullYear(queryEndDate.getFullYear() + YEARSINFUTURE);
 
-  function SectionDate({sectionDate, display}: any) {
-    if (display) {
-      return (<div className="text-black mt-2">{sectionDate.toDateString()}</div>)
-    }
-    return null
-  }
-  
-  return (
-    <div className="items-center h-[84vh] overflow-auto px-4 bg-white">
-      {fixtures.data.map((item: any)=> 
-        {
-        let item_date: Date = new Date(item.starting_at);
-        if (sectionDate.getTime() < item_date.getTime()) {
-          sectionDate = item_date;
-          displayDate = true
-        }
-        // console.log(item.note);
-        return <><SectionDate key={item.id} sectionDate={sectionDate} display={displayDate}></SectionDate> <ScoreSummaryCard 
-          key={item.id} 
-          matchDetails={{
-            venue: `${item.venue.name}, ${item.venue.city}`,
-            status: setMatchStatusCricket(item.status),
-            summary: item.status === 'NS' ? `Starts at ${item_date.toLocaleTimeString()} ` : item.note,
-            otherDetail: item.round
-          }} 
-          homeDetails={{
-            img: item.localteam.image_path,
-            score: `${item.runs[0]?.wickets ? item.runs[0]?.wickets : '0'}/${item.runs[0]?.score ? item.runs[0]?.score : '0'}`,
-            name: item.localteam.name
-          }} 
-          awayDetails={{
-            img: item.visitorteam.image_path,
-            score: `${item.runs[1]?.wickets ? item.runs[1]?.wickets : '0'}/${item.runs[1]?.score ? item.runs[1]?.score : '0'}`,
-            name: item.visitorteam.name
-          }}>
-        </ScoreSummaryCard></>;})
-      }
-    </div>
+  let startDate = `${queryStartDate.getFullYear()}-${
+    queryStartDate.getMonth() + 1
+  }-${queryStartDate.getDate()}`;
+  let endDate = `${queryEndDate.getFullYear()}-${
+    queryEndDate.getMonth() + 1
+  }-${queryEndDate.getDate()}`;
+
+  const fixtures: MatchSummary[] = await fetchCricketFixtures(
+    startDate,
+    endDate
   );
+
+  const pageOptions = [
+    {
+      btnLabel: "Matches",
+      component: <MatchSummaryList data={fixtures} />,
+      state: "matches",
+    },
+    {
+      btnLabel: "Series",
+      component: <div>Nothing to see here</div>,
+      state: "series",
+    },
+  ];
+
+  return <ClientSportsPage options={pageOptions} apiStatus={<></>} />;
 }

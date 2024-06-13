@@ -1,7 +1,7 @@
 import Image from "next/image";
 import aflBall from "@/../public/football.svg";
 
-export default async function Page() {
+export default function Page() {
   return (
     <p>
       <Image

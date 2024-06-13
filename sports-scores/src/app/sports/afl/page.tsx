@@ -1,20 +1,35 @@
-import MatchSummaryList from "@/components/MatchSummaryList";
-import { APICALLS, SPORT } from "@/lib/constants";
-import { fetchAflData } from "@/api/afl.api";
-import React, { ReactNode } from "react";
-
+import MatchSummaryList from "@/components/sport/MatchSummaryList";
+import {
+  fetchAFLFixtures,
+  fetchAFLStandings,
+  fetchAFLStatus,
+} from "@/api/afl.api";
 import ClientSportsPage from "@/components/ClientSportsPage";
 import APIStatus from "@/components/ApiStatus";
+import Ladder from "@/components/sport/Ladder";
 
 export default async function Page() {
-  const fixtures: MatchSummary[] = await fetchAflData("fixtures");
-  const status: APISportsStatus = await fetchAflData("status");
+  const fixtures: MatchSummary[] = await fetchAFLFixtures("2024");
+  const status: APISportsStatusDetails = await fetchAFLStatus();
+  const standings: AFLStanding[] = await fetchAFLStandings("2024");
+
+  const pageOptions = [
+    {
+      btnLabel: "Matches",
+      component: <MatchSummaryList data={fixtures} />,
+      state: "matches",
+    },
+    {
+      btnLabel: "Ladder",
+      component: <Ladder data={standings} />,
+      state: "ladder",
+    },
+  ];
 
   return (
     <ClientSportsPage
-      matches={<MatchSummaryList data={fixtures} />}
-      ladder={<div>ladder</div>}
+      options={pageOptions}
       apiStatus={<APIStatus data={status} />}
-    ></ClientSportsPage>
+    />
   );
 }

@@ -1,4 +1,4 @@
-import ScoreSummaryCard from "@/components/ScoreSummaryCard";
+import ScoreSummaryCard from "@/components/sport/ScoreSummaryCard";
 
 function SectionDate({ sectionDate, display, currentDate }: any) {
   if (display) {
@@ -14,11 +14,7 @@ function SectionDate({ sectionDate, display, currentDate }: any) {
   return null;
 }
 
-export default async function MatchSummaryList({
-  data,
-}: {
-  data: MatchSummary[];
-}) {
+export default function MatchSummaryList({ data }: { data: MatchSummary[] }) {
   const current_date: Date = new Date(Date.now());
 
   // console.log(fixtures);
