@@ -1,3 +1,3 @@
-export default async function Page() {
-    return(<p>Coming Soon....</p>)
+export default function Page() {
+  return <p>Coming Soon....</p>;
 }
