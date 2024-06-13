@@ -4,7 +4,7 @@ This is a web app which will allow you to view all results from a range of sport
 
 Currently Implemented:
 - Cricket (Summary Only - T20I, BBL, CSAT20 only)
-- AFL (Summary Only)
+- AFL (Summary & Ladder)
 
 To Be Implemented:
 - NRL
