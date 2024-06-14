@@ -6,10 +6,9 @@ export default function ScoreSummaryCard({
   homeDetails,
   awayDetails,
 }: ScoreSummaryCardProps) {
-  // console.log(matchDetails);
   return (
     <Link href={`./${matchDetails.sport}/${matchDetails.gameid}`}>
-      <div className="border border-gray-300 min-h-[100px] flex flex-col mt-4 items-center justify-center p-4">
+      <div className="border border-gray-300 min-h-[100px] flex flex-col mt-4 items-center justify-center p-4 active:bg-gray-300">
         <p className="text-gray-700 text-xs">{matchDetails.status}</p>
         <p className="text-gray-500 text-center">{matchDetails.summary}</p>
 

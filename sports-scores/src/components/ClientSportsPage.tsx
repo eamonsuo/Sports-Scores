@@ -16,7 +16,7 @@ export default function ClientSportsPage({
         {options.map((item) => (
           <button
             key={item.state}
-            className="bg-gray-500 text-center p-2 border-2 flex-1"
+            className="bg-gray-400 text-center p-2 border-2 flex-1 active:bg-gray-700 focus:bg-gray-600"
             onClick={() => setView(item.state)}
           >
             {item.btnLabel}

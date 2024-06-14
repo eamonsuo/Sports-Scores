@@ -88,7 +88,7 @@ function mapAflFixtureFields(matches: AFLGame[]) {
           item.teams.away.name,
           item.scores.away.score
         ),
-        otherDetail: item.round,
+        otherDetail: `Round ${item.week}`,
       },
       homeDetails: {
         img: item.teams.home.logo,

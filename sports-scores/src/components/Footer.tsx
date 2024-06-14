@@ -8,7 +8,7 @@ export default function Footer() {
   return (
     <footer className="bg-gray-200 h-16 flex flex-row w-full p-1 gap-2 overflow-auto border-t place-items-center">
       <Link href="/sports/cricket">
-        <div className="size-11 rounded-full bg-gray-500 flex place-content-center">
+        <div className="size-11 rounded-full bg-gray-400 flex place-content-center active:bg-gray-500">
           <Image
             src={cricketBall}
             width={30}
@@ -19,7 +19,7 @@ export default function Footer() {
         </div>
       </Link>
       <Link href="/sports/afl#current-date">
-        <div className="size-11 rounded-full bg-gray-500 flex place-content-center">
+        <div className="size-11 rounded-full bg-gray-400 flex place-content-center active:bg-gray-500">
           <Image
             src={aflBall}
             width={30}
