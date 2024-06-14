@@ -1,8 +1,6 @@
 import MatchSummaryList from "@/components/sport/MatchSummaryList";
 import ClientSportsPage from "@/components/ClientSportsPage";
-import APIStatus from "@/components/ApiStatus";
-import { fetchCricketFixtures, fetchCricketStatus } from "@/api/cricket.api";
-import Link from "next/link";
+import { fetchCricketFixtures } from "@/api/cricket.api";
 
 export default async function Page() {
   const DAYSINPAST = 30; // Get records 30 days in the past

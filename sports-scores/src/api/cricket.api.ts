@@ -1,7 +1,5 @@
-import { APICALLS, SPORT } from "@/lib/constants";
-import { setAFLMatchSummary, setMatchStatusCricket } from "../lib/utils";
-import { NextResponse } from "next/server";
-import { start } from "repl";
+import { SPORT } from "@/lib/constants";
+import { setMatchStatusCricket } from "../lib/utils";
 
 const REVALIDATE = 10000; //TODO: change for deployment
 
@@ -41,6 +39,8 @@ function mapCricketFixtureFields(matches: SportsmonksMatchCricket[]) {
     startDate: item.starting_at,
     details: {
       matchDetails: {
+        gameid: item.id,
+        sport: SPORT.CRICKET,
         venue: `${item.venue.name}, ${item.venue.city}`,
         status: setMatchStatusCricket(item.status),
         summary:

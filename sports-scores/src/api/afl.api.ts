@@ -1,6 +1,5 @@
-import { APICALLS, SPORT } from "@/lib/constants";
+import { SPORT } from "@/lib/constants";
 import { setAFLMatchSummary } from "../lib/utils";
-import { NextResponse } from "next/server";
 
 const REVALIDATE = 10000; //TODO: change for deployment
 const reqHeaders = new Headers();
@@ -19,6 +18,36 @@ export async function fetchAFLFixtures(season: string) {
 
   let fixtures = (await rawFixtures.json()) as AFLGamesResponse;
   return mapAflFixtureFields(fixtures.response);
+}
+
+export async function fetchAFLGame(gameId: number) {
+  const rawGame = await fetch(
+    `${process.env.AFL_BASEURL}/games?id=${gameId}`,
+    fetchOptions
+  );
+
+  let game = (await rawGame.json()) as AFLGamesResponse;
+  return game.response[0];
+}
+
+export async function fetchAFLGameQuarters(gameId: number) {
+  const rawQuarters = await fetch(
+    `${process.env.AFL_BASEURL}/games/quarters?id=${gameId}`,
+    fetchOptions
+  );
+
+  let quarters = (await rawQuarters.json()) as AFLGameQuartersResponse;
+  return quarters.response[0].quarters;
+}
+
+export async function fetchAFLGameEvents(gameId: number) {
+  const rawEvents = await fetch(
+    `${process.env.AFL_BASEURL}/games/events?id=${gameId}`,
+    fetchOptions
+  );
+
+  let events = (await rawEvents.json()) as AFLGameEventsResponse;
+  return events.response[0].events;
 }
 
 export async function fetchAFLStatus() {
@@ -47,6 +76,8 @@ function mapAflFixtureFields(matches: AFLGame[]) {
     startDate: item.date,
     details: {
       matchDetails: {
+        gameid: item.game.id,
+        sport: SPORT.AFL,
         venue: item.venue,
         status: item.status.long,
         summary: setAFLMatchSummary(

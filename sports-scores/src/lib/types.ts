@@ -134,6 +134,55 @@ type AFLStanding = {
   last_5: string;
 };
 
+interface AFLGameQuartersResponse extends APISportsResponse {
+  response: AFLGameQuarter[];
+}
+
+type AFLGameQuarter = {
+  game: {
+    id: number;
+  };
+  quarters: [
+    {
+      quarter: number;
+      teams: {
+        home: TeamQuarterStats;
+        away: TeamQuarterStats;
+      };
+    }
+  ];
+};
+
+type TeamQuarterStats = {
+  id: number;
+  goals: number;
+  behinds: number;
+  points: number;
+};
+
+interface AFLGameEventsResponse extends APISportsResponse {
+  response: AFLGameEvent[];
+}
+
+type AFLGameEvent = {
+  game: {
+    id: number;
+  };
+  events: [
+    {
+      team: {
+        id: number;
+      };
+      player: {
+        id: number;
+      };
+      period: number;
+      minute: number;
+      type: string;
+    }
+  ];
+};
+
 type NavButtonGroupProps = {
   label: string;
   link: any;
@@ -146,6 +195,8 @@ type ScoreSummaryCardProps = {
 };
 
 type MatchDetails = {
+  gameid: number;
+  sport: string;
   venue: string;
   status: string;
   summary: string;
