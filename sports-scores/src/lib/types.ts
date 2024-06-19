@@ -106,7 +106,7 @@ type TeamQuarterStats = {
   points: number;
 };
 
-interface AFLGameEvents extends AFLGame {
+interface AFLGameEvents {
   game: {
     id: number;
   };
@@ -120,7 +120,7 @@ interface AFLGameEvents extends AFLGame {
       };
       period: number;
       minute: number;
-      type: string;
+      type: "goal" | "behind";
     },
   ];
 }
