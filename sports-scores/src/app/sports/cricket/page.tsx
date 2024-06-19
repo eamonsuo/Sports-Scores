@@ -1,4 +1,4 @@
-import MatchSummaryList from "@/components/sport/MatchSummaryList";
+import MatchSummaryList from "@/components/summary-page/MatchSummaryList";
 import ClientSportsPage from "@/components/ClientSportsPage";
 import { fetchCricketFixtures } from "@/api/cricket.api";
 
@@ -21,7 +21,7 @@ export default async function Page() {
 
   const fixtures: MatchSummary[] = await fetchCricketFixtures(
     startDate,
-    endDate
+    endDate,
   );
 
   const pageOptions = [

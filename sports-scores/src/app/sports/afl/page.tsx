@@ -1,12 +1,12 @@
-import MatchSummaryList from "@/components/sport/MatchSummaryList";
+import MatchSummaryList from "@/components/summary-page/MatchSummaryList";
 import {
   fetchAFLFixtures,
   fetchAFLStandings,
   fetchAFLStatus,
 } from "@/api/afl.api";
-import ClientSportsPage from "@/components/ClientSportsPage";
-import APIStatus from "@/components/ApiStatus";
-import Ladder from "@/components/sport/Ladder";
+import ClientSportsPage from "@/components/summary-page/ClientSportsPage";
+import APIStatus from "@/components/ui/ApiStatus";
+import Ladder from "@/components/summary-page/Ladder";
 
 export default async function Page() {
   const fixtures: MatchSummary[] = await fetchAFLFixtures("2024");

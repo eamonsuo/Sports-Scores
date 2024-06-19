@@ -8,11 +8,11 @@ interface APISportsResponse {
   results: number;
 }
 
-interface AFLGamesResponse extends APISportsResponse {
-  response: AFLGame[];
+interface AFLGamesResponse<T> extends APISportsResponse {
+  response: T[];
 }
 
-type AFLGame = {
+interface AFLGame {
   game: {
     id: number;
   };
@@ -27,7 +27,7 @@ type AFLGame = {
   round: string;
   week: number;
   venue: string;
-  attendance?: number;
+  attendance: number;
   status: {
     long:
       | "Not Started"
@@ -82,7 +82,48 @@ type AFLGame = {
       psbehinds: number;
     };
   };
+}
+
+interface AFLGameQuarters {
+  game: {
+    id: number;
+  };
+  quarters: [
+    {
+      quarter: number;
+      teams: {
+        home: TeamQuarterStats;
+        away: TeamQuarterStats;
+      };
+    },
+  ];
+}
+
+type TeamQuarterStats = {
+  id: number;
+  goals: number;
+  behinds: number;
+  points: number;
 };
+
+interface AFLGameEvents extends AFLGame {
+  game: {
+    id: number;
+  };
+  events: [
+    {
+      team: {
+        id: number;
+      };
+      player: {
+        id: number;
+      };
+      period: number;
+      minute: number;
+      type: string;
+    },
+  ];
+}
 
 interface APISportsStatus extends APISportsResponse {
   paging: {
@@ -134,54 +175,16 @@ type AFLStanding = {
   last_5: string;
 };
 
-interface AFLGameQuartersResponse extends APISportsResponse {
-  response: AFLGameQuarter[];
-}
+// interface BaseResponse<T> {
+//   get: string;
+//   reponse: T;
+// }
 
-type AFLGameQuarter = {
-  game: {
-    id: number;
-  };
-  quarters: [
-    {
-      quarter: number;
-      teams: {
-        home: TeamQuarterStats;
-        away: TeamQuarterStats;
-      };
-    }
-  ];
-};
+// interface GetQuartersResponseBody {
+//   game: string;
+// }
 
-type TeamQuarterStats = {
-  id: number;
-  goals: number;
-  behinds: number;
-  points: number;
-};
-
-interface AFLGameEventsResponse extends APISportsResponse {
-  response: AFLGameEvent[];
-}
-
-type AFLGameEvent = {
-  game: {
-    id: number;
-  };
-  events: [
-    {
-      team: {
-        id: number;
-      };
-      player: {
-        id: number;
-      };
-      period: number;
-      minute: number;
-      type: string;
-    }
-  ];
-};
+// type GetQuartersResponse = BaseResponse<GetQuartersResponse>
 
 type NavButtonGroupProps = {
   label: string;
@@ -200,7 +203,7 @@ type MatchDetails = {
   venue: string;
   status: string;
   summary: string;
-  otherDetail: string;
+  otherDetail?: string;
 };
 
 type TeamScoreDetails = {

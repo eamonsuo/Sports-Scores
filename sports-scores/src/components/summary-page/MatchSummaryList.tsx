@@ -1,15 +1,15 @@
-import ScoreSummaryCard from "@/components/sport/ScoreSummaryCard";
+import ScoreSummaryCard from "@/components/summary-page/MatchSummaryCard";
 
 function SectionDate({ sectionDate, display, currentDate }: any) {
   if (display) {
     if (currentDate) {
       return (
-        <div id="current-date" className="text-black mt-2">
+        <div id="current-date" className="mt-4 text-black">
           {sectionDate.toDateString()}
         </div>
       );
     }
-    return <div className="text-black mt-2">{sectionDate.toDateString()}</div>;
+    return <div className="mt-4 text-black">{sectionDate.toDateString()}</div>;
   }
   return null;
 }
