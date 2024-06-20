@@ -44,41 +44,47 @@ export default function ScoreDetails({
 
       {/* Table of G.B. */}
       <table className="m-4 w-full text-center">
-        <tr>
-          <th></th>
-          <th>Q1</th>
-          <th>Q2</th>
-          <th>Q3</th>
-          <th>Q4</th>
-        </tr>
-        <tr>
-          <td>
-            <Image
-              src={gameData.teams.home.logo}
-              width={15}
-              height={15}
-              alt="Home Logo"
-            />
-          </td>
-          {quarterData.quarters.map((item) => (
-            <td key={item.quarter}>
-              {item.teams.home.goals}.{item.teams.home.behinds}
+        <thead>
+          <tr>
+            <th></th>
+            <th>Q1</th>
+            <th>Q2</th>
+            <th>Q3</th>
+            <th>Q4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <Image
+                src={gameData.teams.home.logo}
+                width={15}
+                height={15}
+                alt="Home Logo"
+              />
             </td>
-          ))}
-        </tr>
-        <tr>
-          <Image
-            src={gameData.teams.away.logo}
-            width={15}
-            height={15}
-            alt="Away Logo"
-          />
-          {quarterData.quarters.map((item) => (
-            <td key={item.quarter}>
-              {item.teams.away.goals}.{item.teams.away.behinds}
+            {quarterData.quarters.map((item) => (
+              <td key={item.quarter}>
+                {item.teams.home.goals}.{item.teams.home.behinds}
+              </td>
+            ))}
+          </tr>
+          <tr>
+            <td>
+              <Image
+                src={gameData.teams.away.logo}
+                width={15}
+                height={15}
+                alt="Away Logo"
+              />
             </td>
-          ))}
-        </tr>
+            {quarterData.quarters.map((item) => (
+              <td key={item.quarter}>
+                {item.teams.away.goals}.{item.teams.away.behinds}
+              </td>
+            ))}
+          </tr>
+        </tbody>
       </table>
     </>
   );
