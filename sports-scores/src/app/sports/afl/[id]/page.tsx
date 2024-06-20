@@ -16,7 +16,7 @@ export default async function Page({ params }: { params: { id: number } }) {
   return (
     <div className="flex flex-col">
       <ScoreDetails gameData={game} quarterData={quarters} />
-      <ScoreChart data={events} />
+      <ScoreChart gameData={game} eventData={events} />
       <KeyPlayerStats data={""} />
     </div>
   );

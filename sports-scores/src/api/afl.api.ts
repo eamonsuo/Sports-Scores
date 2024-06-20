@@ -17,7 +17,7 @@ export async function fetchAFLFixtures(season: string) {
   );
 
   let fixtures = (await rawFixtures.json()) as AFLGamesResponse<AFLGame>;
-  return mapAflFixtureFields(fixtures.response);
+  return fixtures.response;
 }
 
 export async function fetchAFLGame(gameId: number) {
@@ -69,38 +69,4 @@ export async function fetchAFLStandings(season: string) {
 
   let standings = (await rawStandings.json()) as AFLStandingsResponse;
   return standings.response;
-}
-
-function mapAflFixtureFields(matches: AFLGame[]) {
-  return matches.map((item: AFLGame) => ({
-    id: item.game.id,
-    startDate: item.date,
-    details: {
-      matchDetails: {
-        gameid: item.game.id,
-        sport: SPORT.AFL,
-        venue: item.venue,
-        status: item.status.long,
-        summary: setAFLMatchSummary(
-          item.status.short,
-          item.date,
-          item.teams.home.name,
-          item.scores.home.score,
-          item.teams.away.name,
-          item.scores.away.score,
-        ),
-        otherDetail: `Round ${item.week}`,
-      },
-      homeDetails: {
-        img: item.teams.home.logo,
-        score: item.scores.home.score.toString(),
-        name: item.teams.home.name,
-      },
-      awayDetails: {
-        img: item.teams.away.logo,
-        score: item.scores.away.score.toString(),
-        name: item.teams.away.name,
-      },
-    },
-  }));
 }

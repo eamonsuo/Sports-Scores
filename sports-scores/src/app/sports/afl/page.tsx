@@ -7,16 +7,17 @@ import {
 import ClientSportsPage from "@/components/summary-page/ClientSportsPage";
 import APIStatus from "@/components/ui/ApiStatus";
 import Ladder from "@/components/summary-page/Ladder";
+import { mapAflFixtureFields } from "@/lib/utils";
 
 export default async function Page() {
-  const fixtures: MatchSummary[] = await fetchAFLFixtures("2024");
+  const fixtures = await fetchAFLFixtures("2024");
   const status: APISportsStatusDetails = await fetchAFLStatus();
   const standings: AFLStanding[] = await fetchAFLStandings("2024");
 
   const pageOptions = [
     {
       btnLabel: "Matches",
-      component: <MatchSummaryList data={fixtures} />,
+      component: <MatchSummaryList data={mapAflFixtureFields(fixtures)} />,
       state: "matches",
     },
     {
