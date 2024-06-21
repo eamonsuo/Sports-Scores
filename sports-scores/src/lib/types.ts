@@ -191,21 +191,6 @@ type NavButtonGroupProps = {
   link: any;
 }[];
 
-type ScoreSummaryCardProps = {
-  matchDetails: MatchDetails;
-  homeDetails: TeamScoreDetails;
-  awayDetails: TeamScoreDetails;
-};
-
-type MatchDetails = {
-  gameid: number;
-  sport: string;
-  venue: string;
-  status: string;
-  summary: string;
-  otherDetail?: string;
-};
-
 type TeamScoreDetails = {
   img: string;
   score: string;
@@ -215,7 +200,13 @@ type TeamScoreDetails = {
 type MatchSummary = {
   id: number;
   startDate: string;
-  details: ScoreSummaryCardProps;
+  sport: string;
+  venue: string;
+  status: string;
+  summary: string;
+  otherDetail?: string;
+  homeDetails: TeamScoreDetails;
+  awayDetails: TeamScoreDetails;
 };
 
 type APISettings = "status" | "fixtures" | "standings";

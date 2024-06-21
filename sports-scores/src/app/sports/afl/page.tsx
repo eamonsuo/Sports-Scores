@@ -1,12 +1,12 @@
-import MatchSummaryList from "@/components/summary-page/MatchSummaryList";
+import MatchSummaryList from "@/components/generic/MatchSummaryList";
 import {
   fetchAFLFixtures,
   fetchAFLStandings,
   fetchAFLStatus,
 } from "@/api/afl.api";
-import ClientSportsPage from "@/components/summary-page/ClientSportsPage";
+import ClientSportsPage from "@/components/generic/ClientSportsPage";
 import APIStatus from "@/components/ui/ApiStatus";
-import Ladder from "@/components/summary-page/Ladder";
+import Ladder from "@/components/afl/AFLLadder";
 import { mapAflFixtureFields } from "@/lib/utils";
 
 export default async function Page() {

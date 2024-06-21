@@ -74,36 +74,31 @@ export function setAFLMatchSummary(
   }
 }
 
-export function mapAflFixtureFields(matches: AFLGame[]) {
+export function mapAflFixtureFields(matches: AFLGame[]): MatchSummary[] {
   return matches.map((item: AFLGame) => ({
     id: item.game.id,
     startDate: item.date,
-    details: {
-      matchDetails: {
-        gameid: item.game.id,
-        sport: SPORT.AFL,
-        venue: item.venue,
-        status: item.status.long,
-        summary: setAFLMatchSummary(
-          item.status.short,
-          item.date,
-          item.teams.home.name,
-          item.scores.home.score,
-          item.teams.away.name,
-          item.scores.away.score,
-        ),
-        otherDetail: `Round ${item.week}`,
-      },
-      homeDetails: {
-        img: item.teams.home.logo,
-        score: item.scores.home.score.toString(),
-        name: item.teams.home.name,
-      },
-      awayDetails: {
-        img: item.teams.away.logo,
-        score: item.scores.away.score.toString(),
-        name: item.teams.away.name,
-      },
+    sport: SPORT.AFL,
+    venue: item.venue,
+    status: item.status.long,
+    summary: setAFLMatchSummary(
+      item.status.short,
+      item.date,
+      item.teams.home.name,
+      item.scores.home.score,
+      item.teams.away.name,
+      item.scores.away.score,
+    ),
+    otherDetail: `Round ${item.week}`,
+    homeDetails: {
+      img: item.teams.home.logo,
+      score: item.scores.home.score.toString(),
+      name: item.teams.home.name,
+    },
+    awayDetails: {
+      img: item.teams.away.logo,
+      score: item.scores.away.score.toString(),
+      name: item.teams.away.name,
     },
   }));
 }

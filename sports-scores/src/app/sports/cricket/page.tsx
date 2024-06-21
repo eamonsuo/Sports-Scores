@@ -1,5 +1,5 @@
-import MatchSummaryList from "@/components/summary-page/MatchSummaryList";
-import ClientSportsPage from "@/components/summary-page/ClientSportsPage";
+import MatchSummaryList from "@/components/generic/MatchSummaryList";
+import ClientSportsPage from "@/components/generic/ClientSportsPage";
 import { fetchCricketFixtures } from "@/api/cricket.api";
 
 export default async function Page() {

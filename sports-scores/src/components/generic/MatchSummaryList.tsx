@@ -1,4 +1,4 @@
-import ScoreSummaryCard from "@/components/summary-page/MatchSummaryCard";
+import ScoreSummaryCard from "@/components/generic/MatchSummaryCard";
 
 function SectionDate({ sectionDate, display, currentDate }: any) {
   if (display) {
@@ -57,12 +57,7 @@ export default function MatchSummaryList({ data }: { data: MatchSummary[] }) {
               display={displayDate}
               currentDate={currentMatch}
             />
-            <ScoreSummaryCard
-              key={item.id}
-              matchDetails={item.details?.matchDetails}
-              homeDetails={item.details?.homeDetails}
-              awayDetails={item.details?.awayDetails}
-            />
+            <ScoreSummaryCard key={item.id} data={item} />
           </>
         );
       })}

@@ -4,7 +4,9 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
-export default function ScoreChart({
+//TODO: Genericise?
+//TODO: Add loading spinner
+export default function AFLScoreChart({
   gameData,
   eventData,
 }: {

@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function Ladder({ data }: { data: AFLStanding[] }) {
+export default function AFLLadder({ data }: { data: AFLStanding[] }) {
   //   console.log(data[0]);
   return (
     <div className="flex-1 overflow-y-auto px-4">
@@ -18,7 +18,7 @@ export default function Ladder({ data }: { data: AFLStanding[] }) {
         <tbody className="text-center">
           {data.map((item) => (
             <tr key={item.team.id} className="border">
-              <td className="pe-2">{item.position}</td>
+              <td className="py-2 pe-2">{item.position}</td>
               <td className="text-left text-sm">
                 <div className="flex">
                   <Image
