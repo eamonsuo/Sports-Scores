@@ -2,10 +2,11 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { useState } from "react";
+import Spinner from "../ui/Spinner";
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
 //TODO: Genericise?
-//TODO: Add loading spinner
 export default function AFLScoreChart({
   gameData,
   eventData,
@@ -13,6 +14,8 @@ export default function AFLScoreChart({
   gameData: AFLGame;
   eventData: AFLGameEvents;
 }) {
+  let [loading, setLoading] = useState(true);
+
   let difference = 0;
   // console.log("NEW");
   // console.log("quarters", data);
@@ -44,6 +47,7 @@ export default function AFLScoreChart({
   return (
     <>
       <p className="m-4">Score Trend</p>
+      {loading && <Spinner />} {/* TODO improve */}
       <div className="flex">
         <div className="ms-1 flex flex-col place-content-around">
           <Image
@@ -60,6 +64,7 @@ export default function AFLScoreChart({
           />
         </div>
         <Plot
+          onInitialized={() => setLoading(false)}
           className="w-full"
           data={[
             {
@@ -77,9 +82,8 @@ export default function AFLScoreChart({
           layout={{
             height: 200,
             margin: { l: 20, t: 0, b: 0, r: 20 },
-            xaxis: { fixedrange: true, showticklabels: false },
+            xaxis: { showticklabels: false },
             yaxis: {
-              fixedrange: true,
               range: [-yrange - 1, yrange + 1],
               // side: "right",
             },
@@ -87,7 +91,7 @@ export default function AFLScoreChart({
             //   range: ["Home", "Away"],
             // },
           }}
-          config={{ displayModeBar: false }}
+          config={{ staticPlot: true /*responsive: true*/ }}
         />
       </div>
     </>
