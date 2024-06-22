@@ -15,7 +15,7 @@ export default function ScoreChart({
   homeLogo: string;
   awayLogo: string;
 }) {
-  let [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   let y = scoreDifference;
 

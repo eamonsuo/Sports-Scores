@@ -14,7 +14,7 @@ function SectionDate({ sectionDate, display, currentDate }: any) {
   return null;
 }
 
-export default function MatchSummaryList({ data }: { data: MatchSummary[] }) {
+export default function FixtureSummaryList({ data }: { data: MatchSummary[] }) {
   const current_date: Date = new Date(Date.now());
 
   // console.log(fixtures);
@@ -50,15 +50,14 @@ export default function MatchSummaryList({ data }: { data: MatchSummary[] }) {
         }
 
         return (
-          <>
+          <div key={item.id}>
             <SectionDate
-              key={item.id}
               sectionDate={sectionDate}
               display={displayDate}
               currentDate={currentMatch}
             />
-            <ScoreSummaryCard key={item.id} data={item} />
-          </>
+            <ScoreSummaryCard data={item} />
+          </div>
         );
       })}
     </div>

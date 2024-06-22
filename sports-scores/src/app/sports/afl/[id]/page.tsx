@@ -15,8 +15,6 @@ export default async function Page({ params }: { params: { id: number } }) {
   const quarters = await fetchAFLGameQuarters(params.id);
   const events = await fetchAFLGameEvents(params.id);
 
-  let matchSum = mapAflFixtureFields([game])[0];
-
   let difference = 0;
   let scores = events.events.flatMap((item) => {
     if (item.team.id == game.teams.home.id) {
@@ -29,7 +27,7 @@ export default async function Page({ params }: { params: { id: number } }) {
 
   return (
     <div className="flex flex-col">
-      <MatchDetailsHero data={matchSum} />
+      <MatchDetailsHero data={mapAflFixtureFields([game])[0]} />
       <AFLScoreBreakdown
         quarterData={quarters}
         homeLogo={game.teams.home.logo}

@@ -1,4 +1,4 @@
-import MatchSummaryList from "@/components/generic/MatchSummaryList";
+import MatchSummaryList from "@/components/generic/FixtureSummaryList";
 import ClientSportsPage from "@/components/generic/ClientSportsPage";
 import { fetchCricketFixtures } from "@/api/cricket.api";
 

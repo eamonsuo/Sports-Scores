@@ -1,4 +1,3 @@
-import MatchSummaryList from "@/components/generic/MatchSummaryList";
 import {
   fetchAFLFixtures,
   fetchAFLStandings,
@@ -8,6 +7,7 @@ import ClientSportsPage from "@/components/generic/ClientSportsPage";
 import APIStatus from "@/components/ui/ApiStatus";
 import Ladder from "@/components/afl/AFLLadder";
 import { mapAflFixtureFields } from "@/lib/utils";
+import FixtureRoundList from "@/components/generic/FixtureRoundList";
 
 export default async function Page() {
   const fixtures = await fetchAFLFixtures("2024");
@@ -17,7 +17,9 @@ export default async function Page() {
   const pageOptions = [
     {
       btnLabel: "Matches",
-      component: <MatchSummaryList data={mapAflFixtureFields(fixtures)} />,
+      component: (
+        <FixtureRoundList data={mapAflFixtureFields(fixtures)} rounds={24} />
+      ),
       state: "matches",
     },
     {
