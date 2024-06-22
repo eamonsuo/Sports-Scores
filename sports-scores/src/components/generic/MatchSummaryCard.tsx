@@ -8,7 +8,6 @@ export default function ScoreSummaryCard({ data }: { data: MatchSummary }) {
         <p className="text-xs text-gray-700">{data.status}</p>
         <p className="mb-2 text-center text-gray-500">{data.summary}</p>
 
-        {/* TODO: make grid consistent for all logos/names */}
         <div className="m-2 grid w-full grid-cols-5 gap-2">
           <div className="content-center justify-self-center">
             <Image

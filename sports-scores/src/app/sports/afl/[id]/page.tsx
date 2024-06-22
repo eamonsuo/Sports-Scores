@@ -7,7 +7,7 @@ import {
 import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
 import { mapAflFixtureFields } from "@/lib/utils";
 import AFLScoreBreakdown from "@/components/afl/AFLScoreBreakdown";
-import AFLScoreChart from "@/components/afl/AFLScoreChart";
+import ScoreChart from "@/components/generic/ScoreChart";
 import AFLKeyPlayerStats from "@/components/afl/AFLKeyPlayerStats";
 
 export default async function Page({ params }: { params: { id: number } }) {
@@ -17,6 +17,16 @@ export default async function Page({ params }: { params: { id: number } }) {
 
   let matchSum = mapAflFixtureFields([game])[0];
 
+  let difference = 0;
+  let scores = events.events.flatMap((item) => {
+    if (item.team.id == game.teams.home.id) {
+      item.type === "behind" ? (difference += 1) : (difference += 6);
+    } else {
+      item.type === "behind" ? (difference -= 1) : (difference -= 6);
+    }
+    return difference;
+  });
+
   return (
     <div className="flex flex-col">
       <MatchDetailsHero data={matchSum} />
@@ -25,7 +35,11 @@ export default async function Page({ params }: { params: { id: number } }) {
         homeLogo={game.teams.home.logo}
         awayLogo={game.teams.away.logo}
       />
-      <AFLScoreChart gameData={game} eventData={events} />
+      <ScoreChart
+        scoreDifference={scores}
+        homeLogo={game.teams.home.logo}
+        awayLogo={game.teams.away.logo}
+      />
       <AFLKeyPlayerStats data={""} />
     </div>
   );
