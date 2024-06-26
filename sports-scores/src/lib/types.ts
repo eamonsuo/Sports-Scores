@@ -8,11 +8,11 @@ interface APISportsResponse {
   results: number;
 }
 
-interface AFLGamesResponse extends APISportsResponse {
-  response: AFLGame[];
+interface AFLGamesResponse<T> extends APISportsResponse {
+  response: T[];
 }
 
-type AFLGame = {
+interface AFLGame {
   game: {
     id: number;
   };
@@ -27,7 +27,7 @@ type AFLGame = {
   round: string;
   week: number;
   venue: string;
-  attendance?: number;
+  attendance: number;
   status: {
     long:
       | "Not Started"
@@ -82,7 +82,48 @@ type AFLGame = {
       psbehinds: number;
     };
   };
+}
+
+interface AFLGameQuarters {
+  game: {
+    id: number;
+  };
+  quarters: [
+    {
+      quarter: number;
+      teams: {
+        home: TeamQuarterStats;
+        away: TeamQuarterStats;
+      };
+    },
+  ];
+}
+
+type TeamQuarterStats = {
+  id: number;
+  goals: number;
+  behinds: number;
+  points: number;
 };
+
+interface AFLGameEvents {
+  game: {
+    id: number;
+  };
+  events: [
+    {
+      team: {
+        id: number;
+      };
+      player: {
+        id: number;
+      };
+      period: number;
+      minute: number;
+      type: "goal" | "behind";
+    },
+  ];
+}
 
 interface APISportsStatus extends APISportsResponse {
   paging: {
@@ -134,23 +175,21 @@ type AFLStanding = {
   last_5: string;
 };
 
+// interface BaseResponse<T> {
+//   get: string;
+//   reponse: T;
+// }
+
+// interface GetQuartersResponseBody {
+//   game: string;
+// }
+
+// type GetQuartersResponse = BaseResponse<GetQuartersResponse>
+
 type NavButtonGroupProps = {
   label: string;
   link: any;
 }[];
-
-type ScoreSummaryCardProps = {
-  matchDetails: MatchDetails;
-  homeDetails: TeamScoreDetails;
-  awayDetails: TeamScoreDetails;
-};
-
-type MatchDetails = {
-  venue: string;
-  status: string;
-  summary: string;
-  otherDetail: string;
-};
 
 type TeamScoreDetails = {
   img: string;
@@ -161,7 +200,14 @@ type TeamScoreDetails = {
 type MatchSummary = {
   id: number;
   startDate: string;
-  details: ScoreSummaryCardProps;
+  sport: string;
+  venue: string;
+  status: string;
+  summary: string;
+  otherDetail?: string;
+  homeDetails: TeamScoreDetails;
+  awayDetails: TeamScoreDetails;
+  roundNum?: number;
 };
 
 type APISettings = "status" | "fixtures" | "standings";

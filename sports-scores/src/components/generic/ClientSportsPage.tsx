@@ -1,5 +1,4 @@
 "use client";
-import { it } from "node:test";
 import { ReactNode, useState } from "react";
 
 export default function ClientSportsPage({
@@ -11,14 +10,13 @@ export default function ClientSportsPage({
 }) {
   const [view, setView] = useState<string>("matches");
 
-  //TODO: Make page dynamic, e.g. set number of buttons/areas by passed array
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex m-4">
+    <div className="flex h-full flex-col">
+      <div className="m-4 flex">
         {options.map((item) => (
           <button
             key={item.state}
-            className="bg-gray-500 text-center p-2 border-2 flex-1"
+            className="flex-1 border-2 bg-gray-400 p-2 text-center focus:bg-gray-600 active:bg-gray-700"
             onClick={() => setView(item.state)}
           >
             {item.btnLabel}

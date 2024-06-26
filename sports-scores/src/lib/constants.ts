@@ -24,8 +24,8 @@ export const MATCHSTATUSAFL = {
 };
 
 export const SPORT = {
-  AFL: "AFL",
-  CRICKET: "CRICKET",
+  AFL: "afl",
+  CRICKET: "cricket",
 };
 
 export const APICALLS = {

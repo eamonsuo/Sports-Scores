@@ -1,20 +1,20 @@
-import ScoreSummaryCard from "@/components/sport/ScoreSummaryCard";
+import ScoreSummaryCard from "@/components/generic/MatchSummaryCard";
 
 function SectionDate({ sectionDate, display, currentDate }: any) {
   if (display) {
     if (currentDate) {
       return (
-        <div id="current-date" className="text-black mt-2">
+        <div id="current-date" className="mt-4 text-black">
           {sectionDate.toDateString()}
         </div>
       );
     }
-    return <div className="text-black mt-2">{sectionDate.toDateString()}</div>;
+    return <div className="mt-4 text-black">{sectionDate.toDateString()}</div>;
   }
   return null;
 }
 
-export default function MatchSummaryList({ data }: { data: MatchSummary[] }) {
+export default function FixtureSummaryList({ data }: { data: MatchSummary[] }) {
   const current_date: Date = new Date(Date.now());
 
   // console.log(fixtures);
@@ -30,7 +30,7 @@ export default function MatchSummaryList({ data }: { data: MatchSummary[] }) {
   return (
     <div className="flex-1 overflow-y-auto px-4">
       {data.map((item: MatchSummary) => {
-        let item_date: Date = new Date(item.startDate);
+        let item_date = new Date(item.startDate);
         displayDate = false;
         if (sectionDate.toDateString() !== item_date.toDateString()) {
           sectionDate = item_date;
@@ -50,20 +50,14 @@ export default function MatchSummaryList({ data }: { data: MatchSummary[] }) {
         }
 
         return (
-          <>
+          <div key={item.id}>
             <SectionDate
-              key={item.id}
               sectionDate={sectionDate}
               display={displayDate}
               currentDate={currentMatch}
             />
-            <ScoreSummaryCard
-              key={item.id}
-              matchDetails={item.details?.matchDetails}
-              homeDetails={item.details?.homeDetails}
-              awayDetails={item.details?.awayDetails}
-            />
-          </>
+            <ScoreSummaryCard data={item} />
+          </div>
         );
       })}
     </div>
