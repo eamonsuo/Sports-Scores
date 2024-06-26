@@ -2,23 +2,28 @@
 
 import { useState } from "react";
 import FixtureSummaryList from "./FixtureSummaryList";
+import { MATCHSTATUSAFL } from "@/lib/constants";
 
 export default function FixtureRoundList({
   data,
   rounds,
+  startingRound,
+  curRound,
 }: {
   data: MatchSummary[];
   rounds: number;
+  startingRound: number;
+  curRound: number;
 }) {
-  const [round, setRound] = useState(1);
+  const [round, setRound] = useState(curRound);
 
   const hideScroll = `
-    .roundScroll::-webkit-scrollbar {
+    .hideScroll::-webkit-scrollbar {
         display: none;
     }`;
 
   let buttonRow = [];
-  for (let i = 1; i <= rounds; i++) {
+  for (let i = startingRound; i <= rounds; i++) {
     buttonRow.push(
       <button
         key={i}
@@ -33,13 +38,12 @@ export default function FixtureRoundList({
   return (
     <>
       <style>{hideScroll}</style>
-      <div className="roundScroll flex overflow-x-auto">{buttonRow}</div>
+      <div className="hideScroll flex overflow-x-auto">{buttonRow}</div>
 
       <FixtureSummaryList
         data={data.filter(
           (item) =>
-            item.otherDetail === `Round ${round}` &&
-            item.status !== "Cancelled",
+            item.roundNum === round && item.status !== MATCHSTATUSAFL.LONG_CANC,
         )}
       />
     </>

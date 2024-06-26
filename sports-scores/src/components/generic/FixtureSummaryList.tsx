@@ -30,7 +30,7 @@ export default function FixtureSummaryList({ data }: { data: MatchSummary[] }) {
   return (
     <div className="flex-1 overflow-y-auto px-4">
       {data.map((item: MatchSummary) => {
-        let item_date: Date = new Date(item.startDate);
+        let item_date = new Date(item.startDate);
         displayDate = false;
         if (sectionDate.toDateString() !== item_date.toDateString()) {
           sectionDate = item_date;

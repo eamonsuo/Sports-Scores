@@ -207,6 +207,7 @@ type MatchSummary = {
   otherDetail?: string;
   homeDetails: TeamScoreDetails;
   awayDetails: TeamScoreDetails;
+  roundNum?: number;
 };
 
 type APISettings = "status" | "fixtures" | "standings";

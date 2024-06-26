@@ -100,5 +100,20 @@ export function mapAflFixtureFields(matches: AFLGame[]): MatchSummary[] {
       score: item.scores.away.score.toString(),
       name: item.teams.away.name,
     },
+    roundNum: item.week,
   }));
+}
+
+export function getCurrentWeek(data: MatchSummary[]) {
+  let curDate = new Date(Date.now());
+  curDate.setHours(0, 0, 0, 0);
+
+  let record = data.find((item) => {
+    let itemDate = new Date(item.startDate);
+    itemDate.setHours(0, 0, 0, 0);
+    item;
+    return itemDate >= curDate;
+  });
+
+  return record?.roundNum;
 }
