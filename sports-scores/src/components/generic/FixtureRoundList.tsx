@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FixtureSummaryList from "./FixtureSummaryList";
 import { MATCHSTATUSAFL } from "@/lib/constants";
 
@@ -15,7 +15,12 @@ export default function FixtureRoundList({
   startingRound: number;
   curRound: number;
 }) {
-  const [round, setRound] = useState(curRound);
+  const [round, setRound] = useState(curRound); //need to put in parent so that it only gets set once. Need to change page structure?
+
+  useEffect(() => {
+    let curBtn = document.getElementById(`${round}`);
+    curBtn?.scrollIntoView({ inline: "center" });
+  }, [round]);
 
   const hideScroll = `
     .hideScroll::-webkit-scrollbar {
@@ -27,6 +32,7 @@ export default function FixtureRoundList({
     buttonRow.push(
       <button
         key={i}
+        id={`${i}`}
         className="mx-2 mb-3 whitespace-nowrap border-b border-gray-300 text-sm"
         onClick={() => setRound(i)}
       >
@@ -38,7 +44,7 @@ export default function FixtureRoundList({
   return (
     <>
       <style>{hideScroll}</style>
-      <div className="hideScroll flex overflow-x-auto">{buttonRow}</div>
+      <div className="hideScroll flex overflow-x-auto px-2">{buttonRow}</div>
 
       <FixtureSummaryList
         data={data.filter(
