@@ -23,9 +23,35 @@ export const MATCHSTATUSAFL = {
   LONG_PST: "Postponed",
 };
 
+export const MATCHSTATUSNFL = {
+  SHORT_NS: "NS",
+  SHORT_Q1: "Q1",
+  SHORT_Q2: "Q2",
+  SHORT_Q3: "Q3",
+  SHORT_Q4: "Q4",
+  SHORT_OT: "OT",
+  SHORT_FT: "FT",
+  SHORT_HT: "HT",
+  SHORT_AOT: "AOT",
+  SHORT_CANC: "CANC",
+  SHORT_PST: "PST",
+  LONG_NS: "Not Started",
+  LONG_Q1: "First Quarter",
+  LONG_Q2: "Second Quarter",
+  LONG_Q3: "Third Quarter",
+  LONG_Q4: "Fourth Quarter",
+  LONG_OT: "Overtime",
+  LONG_AOT: "After Over Time",
+  LONG_FT: "Finished",
+  LONG_HT: "Halftime",
+  LONG_CANC: "Cancelled",
+  LONG_PST: "Postponed",
+};
+
 export const SPORT = {
   AFL: "afl",
   CRICKET: "cricket",
+  NFL: "nfl",
 };
 
 export const APICALLS = {
