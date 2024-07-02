@@ -2,18 +2,16 @@
 
 import { useEffect, useState } from "react";
 import FixtureSummaryList from "./FixtureSummaryList";
-import { MATCHSTATUSAFL } from "@/lib/constants";
+import { MATCHSTATUSAFL, MATCHSTATUSNFL } from "@/lib/constants";
 
 export default function FixtureRoundList({
   data,
   rounds,
-  startingRound,
   curRound,
 }: {
   data: MatchSummary[];
-  rounds: number;
-  startingRound: number;
-  curRound: number;
+  rounds: string[];
+  curRound: string;
 }) {
   const [round, setRound] = useState(curRound); //need to put in parent so that it only gets set once. Need to change page structure?
 
@@ -28,15 +26,15 @@ export default function FixtureRoundList({
     }`;
 
   let buttonRow = [];
-  for (let i = startingRound; i <= rounds; i++) {
+  for (let i = 0; i < rounds.length; i++) {
     buttonRow.push(
       <button
-        key={i}
-        id={`${i}`}
+        key={rounds[i]}
+        id={rounds[i]}
         className="mx-2 mb-3 whitespace-nowrap border-b border-gray-300 text-sm"
-        onClick={() => setRound(i)}
+        onClick={() => setRound(rounds[i])}
       >
-        {`Round ${i}`}
+        {rounds[i]}
       </button>,
     );
   }
@@ -49,7 +47,9 @@ export default function FixtureRoundList({
       <FixtureSummaryList
         data={data.filter(
           (item) =>
-            item.roundNum === round && item.status !== MATCHSTATUSAFL.LONG_CANC,
+            item.roundLabel === round &&
+            (item.status !== MATCHSTATUSAFL.LONG_CANC ||
+              item.status !== MATCHSTATUSNFL.LONG_CANC),
         )}
       />
     </>

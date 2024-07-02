@@ -18,10 +18,21 @@ export default async function Page() {
   const mappedFixtures = mapNFLFixtureFields(fixtures);
   //   let curRound = getCurrentWeek(mappedFixtures);
 
+  let labels = [
+    ...new Set(mappedFixtures.map((item) => item.roundLabel ?? "")),
+  ];
+  console.log(labels);
+
   const pageOptions = [
     {
       btnLabel: "Matches",
-      component: <FixtureSummaryList data={mappedFixtures} />,
+      component: (
+        <FixtureRoundList
+          data={mappedFixtures}
+          rounds={labels}
+          curRound="Pre - HOF Weekend"
+        />
+      ),
       state: "matches",
     },
     {

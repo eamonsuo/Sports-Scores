@@ -17,15 +17,19 @@ export default async function Page() {
   const mappedFixtures = mapAflFixtureFields(fixtures);
   let curRound = getCurrentWeek(mappedFixtures);
 
+  let roundLabels = [
+    ...new Set(mappedFixtures.map((item) => item.roundLabel ?? "")),
+  ];
+  console.log(roundLabels);
+
   const pageOptions = [
     {
       btnLabel: "Matches",
       component: (
         <FixtureRoundList
           data={mappedFixtures}
-          rounds={24}
-          startingRound={0}
-          curRound={curRound ?? 0}
+          rounds={roundLabels}
+          curRound={curRound ?? ""}
         />
       ),
       state: "matches",
