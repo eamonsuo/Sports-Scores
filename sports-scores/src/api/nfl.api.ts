@@ -39,6 +39,15 @@ export async function fetchNFLStatus() {
   return status.response as APISportsStatusDetails;
 }
 
+export async function fetchNFLStandings(season: string) {
+  const rawStandings = await fetch(
+    `${process.env.NFL_BASEURL}/standings?season=${season}&league=1`,
+    fetchOptions,
+  );
+
+  let standings = (await rawStandings.json()) as NFLStandingsResponse;
+  return standings.response;
+}
 /*
 export async function fetchNFLGameQuarters(gameId: number) {
   const rawQuarters = await fetch(
@@ -63,13 +72,5 @@ export async function fetchNFLGameEvents(gameId: number) {
 
 
 
-export async function fetchNFLStandings(season: string) {
-  const rawStandings = await fetch(
-    `${process.env.NFL_BASEURL}/standings?season=${season}&league=1`,
-    fetchOptions,
-  );
 
-  let standings = (await rawStandings.json()) as //NFLStandingsResponse;
-  return standings.response;
-}
 */

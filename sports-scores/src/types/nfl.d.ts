@@ -45,17 +45,7 @@ interface NFLGame {
       timer: string | null;
     };
   };
-  league: {
-    id: number;
-    name: string;
-    season: string;
-    logo: string;
-    country: {
-      name: string;
-      code: string;
-      flag: string;
-    };
-  };
+  league: NFLLeagueDetails;
   teams: {
     home: {
       id: number;
@@ -88,6 +78,56 @@ interface NFLGame {
   };
 }
 
+interface NFLStandingsResponse extends APISportsResponse {
+  response: NFLStanding[];
+}
+
+type NFLStanding = {
+  league: NFLLeagueDetails;
+  conference: string;
+  division: string;
+  position: number;
+  team: {
+    id: number;
+    name: string;
+    logo: string;
+  };
+  won: number;
+  lost: number;
+  ties: number;
+  points: {
+    for: number;
+    against: number;
+    difference: number;
+  };
+  records: {
+    home: string;
+    road: string;
+    conference: string;
+    division: string;
+  };
+  streak: string;
+  ncaa_conference: {
+    won: number | null;
+    lost: number | null;
+    points: {
+      for: number | null;
+      against: number | null;
+    };
+  };
+};
+
+type NFLLeagueDetails = {
+  id: number;
+  name: string;
+  season: number;
+  logo: string;
+  country: {
+    name: string;
+    code: string;
+    flag: string;
+  };
+};
 /*
 interface NFLGameQuarters {
   game: {
@@ -130,28 +170,5 @@ interface NFLGameEvents {
   ];
 }
 
-interface NFLStandingsResponse extends APISportsResponse {
-  response: NFLStanding[];
-}
 
-type NFLStanding = {
-  position: number;
-  team: {
-    id: number;
-    name: string;
-    logo: string;
-  };
-  pts: number;
-  games: {
-    played: number;
-    win: number;
-    drawn: number;
-    lost: number;
-  };
-  points: {
-    for: number;
-    against: number;
-  };
-  last_5: string;
-};
 */
