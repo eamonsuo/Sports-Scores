@@ -8,29 +8,26 @@ import APIStatus from "@/components/ui/ApiStatus";
 import Ladder from "@/components/afl/AFLLadder";
 import { getCurrentWeek, mapAflFixtureFields } from "@/lib/utils";
 import FixtureRoundList from "@/components/generic/FixtureRoundList";
+import { redirect } from "next/navigation";
 
 export default async function Page() {
   const fixtures = await fetchAFLFixtures("2024");
-  const status: APISportsStatusDetails = await fetchAFLStatus();
-  const standings: AFLStanding[] = await fetchAFLStandings("2024");
+  const status = await fetchAFLStatus();
+  const standings = await fetchAFLStandings("2024");
+
+  //TODO: Fix error handling for rate limit
+  if (fixtures[0] === undefined) {
+    redirect("/misc/rateLimit");
+  }
 
   const mappedFixtures = mapAflFixtureFields(fixtures);
   let curRound = getCurrentWeek(mappedFixtures);
-
-  let roundLabels = [
-    ...new Set(mappedFixtures.map((item) => item.roundLabel ?? "")),
-  ];
-  console.log(roundLabels);
 
   const pageOptions = [
     {
       btnLabel: "Matches",
       component: (
-        <FixtureRoundList
-          data={mappedFixtures}
-          rounds={roundLabels}
-          curRound={curRound ?? ""}
-        />
+        <FixtureRoundList data={mappedFixtures} curRound={curRound ?? ""} />
       ),
       state: "matches",
     },

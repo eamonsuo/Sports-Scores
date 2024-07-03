@@ -78,6 +78,27 @@ interface NFLGame {
   };
 }
 
+interface NFLGameEvents {
+  quarter: string;
+  minute: string;
+  team: {
+    id: number;
+    name: string;
+    logo: string;
+  };
+  player: {
+    id: number;
+    name: string;
+    image: string;
+  };
+  type: string;
+  comment: string;
+  score: {
+    home: number;
+    away: number;
+  };
+}
+
 interface NFLStandingsResponse extends APISportsResponse {
   response: NFLStanding[];
 }
@@ -128,47 +149,3 @@ type NFLLeagueDetails = {
     flag: string;
   };
 };
-/*
-interface NFLGameQuarters {
-  game: {
-    id: number;
-  };
-  quarters: [
-    {
-      quarter: number;
-      teams: {
-        home: TeamQuarterStats;
-        away: TeamQuarterStats;
-      };
-    },
-  ];
-}
-
-type TeamQuarterStats = {
-  id: number;
-  goals: number;
-  behinds: number;
-  points: number;
-};
-
-interface NFLGameEvents {
-  game: {
-    id: number;
-  };
-  events: [
-    {
-      team: {
-        id: number;
-      };
-      player: {
-        id: number;
-      };
-      period: number;
-      minute: number;
-      type: "goal" | "behind";
-    },
-  ];
-}
-
-
-*/

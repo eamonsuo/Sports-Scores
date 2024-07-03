@@ -10,11 +10,17 @@ import AFLScoreBreakdown from "@/components/afl/AFLScoreBreakdown";
 import ScoreChart from "@/components/generic/ScoreChart";
 import AFLKeyPlayerStats from "@/components/afl/AFLKeyPlayerStats";
 import { MATCHSTATUSAFL } from "@/lib/constants";
+import { redirect } from "next/navigation";
 
 export default async function Page({ params }: { params: { id: number } }) {
   const game = await fetchAFLGame(params.id);
   const quarters = await fetchAFLGameQuarters(params.id);
   const events = await fetchAFLGameEvents(params.id);
+
+  //TODO: Fix error handling for rate limit
+  if (game === null) {
+    redirect("/misc/rateLimit");
+  }
 
   let gameStarted =
     game.status.short === MATCHSTATUSAFL.SHORT_NS ? false : true;

@@ -1,6 +1,6 @@
 import { SPORT } from "@/lib/constants";
 
-const REVALIDATE = 15; //TODO: change for deployment
+const REVALIDATE = 1500; //TODO: change for deployment
 const reqHeaders = new Headers();
 reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
 
@@ -48,17 +48,6 @@ export async function fetchNFLStandings(season: string) {
   let standings = (await rawStandings.json()) as NFLStandingsResponse;
   return standings.response;
 }
-/*
-export async function fetchNFLGameQuarters(gameId: number) {
-  const rawQuarters = await fetch(
-    `${process.env.NFL_BASEURL}/games/quarters?id=${gameId}`,
-    fetchOptions,
-  );
-
-  let quarters =
-    (await rawQuarters.json()) as //NFLGamesResponse<NFLGameQuarters>;
-  return quarters.response[0];
-}
 
 export async function fetchNFLGameEvents(gameId: number) {
   const rawEvents = await fetch(
@@ -66,11 +55,6 @@ export async function fetchNFLGameEvents(gameId: number) {
     fetchOptions,
   );
 
-  let events = (await rawEvents.json()) as //NFLGamesResponse<NFLGameEvents>;
-  return events.response[0];
+  let events = (await rawEvents.json()) as NFLGamesResponse<NFLGameEvents>;
+  return events.response;
 }
-
-
-
-
-*/
