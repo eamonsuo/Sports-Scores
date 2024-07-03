@@ -52,6 +52,9 @@ export const SPORT = {
   AFL: "afl",
   CRICKET: "cricket",
   NFL: "nfl",
+  F1: "f1",
+  NRL: "nrl",
+  GOLF: "golf",
 };
 
 export const APICALLS = {
@@ -59,3 +62,7 @@ export const APICALLS = {
   FIXTURES: "fixtures",
   STANDINGS: "standings",
 };
+
+// const currencies = ["AUD", "USD"] as const;
+
+// type Currency = (typeof currencies)[number];
