@@ -100,7 +100,7 @@ export function mapAflFixtureFields(matches: AFLGame[]): MatchSummary[] {
       score: item.scores.away.score.toString(),
       name: item.teams.away.name,
     },
-    roundNum: item.week,
+    roundLabel: `Round ${item.week}`,
   }));
 }
 
@@ -115,5 +115,28 @@ export function getCurrentWeek(data: MatchSummary[]) {
     return itemDate >= curDate;
   });
 
-  return record?.roundNum;
+  return record?.roundLabel ?? "";
+}
+
+export function mapNFLFixtureFields(matches: NFLGame[]): MatchSummary[] {
+  return matches.map((item: NFLGame) => ({
+    id: item.game.id,
+    startDate: item.game.date.date,
+    sport: SPORT.NFL,
+    venue: item.game.venue.name ?? "",
+    status: item.game.status.long,
+    summary: "NFL Game",
+    otherDetail: item.game.stage.concat(", ", item.game.week),
+    homeDetails: {
+      img: item.teams.home.logo,
+      score: (item.scores.home.total ?? 0).toString(),
+      name: item.teams.home.name ?? "",
+    },
+    awayDetails: {
+      img: item.teams.away.logo,
+      score: (item.scores.away.total ?? 0).toString(),
+      name: item.teams.away.name ?? "",
+    },
+    roundLabel: `${item.game.stage === "Pre Season" ? "Pre - " : ""}${item.game.week === "Hall of Fame Weekend" ? "HOF Weekend" : item.game.week}`,
+  }));
 }

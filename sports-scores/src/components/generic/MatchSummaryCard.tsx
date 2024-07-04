@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function ScoreSummaryCard({ data }: { data: MatchSummary }) {
+export default function MatchSummaryCard({ data }: { data: MatchSummary }) {
   return (
-    <Link href={`./${data.sport}/${data.id}`}>
+    <Link href={`${data.sport}/${data.id}`}>
       <div className="mt-4 flex min-h-[100px] flex-col items-center justify-center border border-gray-300 p-4 active:bg-gray-300">
         <p className="text-xs text-gray-700">{data.status}</p>
         <p className="mb-2 text-center text-gray-500">{data.summary}</p>
