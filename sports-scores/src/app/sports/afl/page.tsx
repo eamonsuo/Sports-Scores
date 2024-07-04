@@ -26,9 +26,7 @@ export default async function Page() {
   const pageOptions = [
     {
       btnLabel: "Matches",
-      component: (
-        <FixtureRoundList data={mappedFixtures} curRound={curRound ?? ""} />
-      ),
+      component: <FixtureRoundList data={mappedFixtures} curRound={curRound} />,
       state: "matches",
     },
     {

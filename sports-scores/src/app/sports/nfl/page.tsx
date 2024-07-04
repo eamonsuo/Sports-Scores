@@ -8,7 +8,7 @@ import FixtureRoundList from "@/components/generic/FixtureRoundList";
 import FixtureSummaryList from "@/components/generic/FixtureSummaryList";
 import NFLLadder from "@/components/nfl/NFLLadder";
 import APIStatus from "@/components/ui/ApiStatus";
-import { mapNFLFixtureFields } from "@/lib/utils";
+import { getCurrentWeek, mapNFLFixtureFields } from "@/lib/utils";
 
 export default async function Page() {
   const fixtures = await fetchNFLFixtures("2024");
@@ -16,14 +16,12 @@ export default async function Page() {
   const standings = await fetchNFLStandings("2024");
 
   const mappedFixtures = mapNFLFixtureFields(fixtures);
-  //   let curRound = getCurrentWeek(mappedFixtures);
+  let curRound = getCurrentWeek(mappedFixtures);
 
   const pageOptions = [
     {
       btnLabel: "Matches",
-      component: (
-        <FixtureRoundList data={mappedFixtures} curRound="Pre - HOF Weekend" />
-      ),
+      component: <FixtureRoundList data={mappedFixtures} curRound={curRound} />,
       state: "matches",
     },
     {

@@ -115,7 +115,7 @@ export function getCurrentWeek(data: MatchSummary[]) {
     return itemDate >= curDate;
   });
 
-  return record?.roundLabel;
+  return record?.roundLabel ?? "";
 }
 
 export function mapNFLFixtureFields(matches: NFLGame[]): MatchSummary[] {
