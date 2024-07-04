@@ -6,7 +6,7 @@ Currently Implemented:
 
 - Cricket (Summary Only - T20I, BBL, CSAT20 only)
 - AFL (Summary, Ladder, Match Details)
-- NFL (Summary Only)
+- NFL (Summary, Ladder, Match Details)
 
 To Be Implemented:
 
