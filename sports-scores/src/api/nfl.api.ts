@@ -1,5 +1,3 @@
-import { SPORT } from "@/lib/constants";
-
 const REVALIDATE = 1500; //TODO: change for deployment
 const reqHeaders = new Headers();
 reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);

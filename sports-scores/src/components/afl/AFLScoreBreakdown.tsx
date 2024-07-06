@@ -1,6 +1,5 @@
 import Image from "next/image";
 
-//TODO: Genericise?
 export default function AFLScoreBreakdown({
   quarterData,
   homeLogo,

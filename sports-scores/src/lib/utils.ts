@@ -1,4 +1,4 @@
-import { MATCHSTATUSAFL, SPORT } from "./constants";
+import { MATCHSTATUSAFL, MATCHSTATUSNFL, SPORT } from "./constants";
 
 export function setMatchStatusCricket(status: string) {
   switch (status) {
@@ -11,7 +11,7 @@ export function setMatchStatusCricket(status: string) {
   }
 }
 
-export function calculateAFLMatchResult(
+export function calculateMatchResult(
   homeName: string,
   homeScore: number,
   awayName: string,
@@ -39,32 +39,31 @@ export function calculateAFLMatchResult(
     : `${winningTeam} ${description} ${winningMargin}`;
 }
 
-export function setAFLMatchSummary(
+export function setMatchSummary(
   status: string,
-  startDate: string,
+  startTime: string,
   homeName: string,
   homeScore: number,
   awayName: string,
   awayScore: number,
 ) {
   switch (status) {
-    case MATCHSTATUSAFL.SHORT_NS:
-      let tempDate: Date = new Date(startDate);
-      return `Starts at ${tempDate.toLocaleTimeString()} `;
-    case MATCHSTATUSAFL.SHORT_FT:
-      return calculateAFLMatchResult(
+    case MATCHSTATUSAFL.SHORT_NS || MATCHSTATUSNFL.SHORT_NS:
+      return `Starts at ${startTime}`;
+    case MATCHSTATUSAFL.SHORT_FT || MATCHSTATUSNFL.SHORT_FT:
+      return calculateMatchResult(
         homeName,
         homeScore,
         awayName,
         awayScore,
         true,
       );
-    case MATCHSTATUSAFL.SHORT_CANC:
+    case MATCHSTATUSAFL.SHORT_CANC || MATCHSTATUSNFL.SHORT_CANC:
       return "Match Cancelled";
-    case MATCHSTATUSAFL.SHORT_PST:
+    case MATCHSTATUSAFL.SHORT_PST || MATCHSTATUSNFL.SHORT_PST:
       return "Match Postponed";
     default:
-      return calculateAFLMatchResult(
+      return calculateMatchResult(
         homeName,
         homeScore,
         awayName,
@@ -77,13 +76,13 @@ export function setAFLMatchSummary(
 export function mapAflFixtureFields(matches: AFLGame[]): MatchSummary[] {
   return matches.map((item: AFLGame) => ({
     id: item.game.id,
-    startDate: item.date,
+    startDate: item.date, //Edit date to be in correct timezone
     sport: SPORT.AFL,
     venue: item.venue,
     status: item.status.long,
-    summary: setAFLMatchSummary(
+    summary: setMatchSummary(
       item.status.short,
-      item.date,
+      getLocalTime(item.time),
       item.teams.home.name,
       item.scores.home.score,
       item.teams.away.name,
@@ -125,7 +124,14 @@ export function mapNFLFixtureFields(matches: NFLGame[]): MatchSummary[] {
     sport: SPORT.NFL,
     venue: item.game.venue.name ?? "",
     status: item.game.status.long,
-    summary: "NFL Game",
+    summary: setMatchSummary(
+      item.game.status.short,
+      getLocalTime(item.game.date.time),
+      item.teams.home.name ?? "",
+      item.scores.home.total ?? 0,
+      item.teams.away.name ?? "",
+      item.scores.away.total ?? 0,
+    ),
     otherDetail: item.game.stage.concat(", ", item.game.week),
     homeDetails: {
       img: item.teams.home.logo,
@@ -139,4 +145,16 @@ export function mapNFLFixtureFields(matches: NFLGame[]): MatchSummary[] {
     },
     roundLabel: `${item.game.stage === "Pre Season" ? "Pre - " : ""}${item.game.week === "Hall of Fame Weekend" ? "HOF Weekend" : item.game.week}`,
   }));
+}
+
+//Convert to AEST
+//startTime format: hh:mm
+export function getLocalTime(startTime: string) {
+  let splitTime = startTime.split(":");
+  let tempDate = new Date(
+    Date.UTC(0, 0, 0, Number(splitTime[0]), Number(splitTime[1])),
+  );
+  return tempDate.toLocaleTimeString("en-US", {
+    timeZone: "Australia/Brisbane",
+  });
 }
