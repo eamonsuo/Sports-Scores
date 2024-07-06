@@ -16,7 +16,7 @@ export default async function Page() {
   const standings = await fetchAFLStandings("2024");
 
   //TODO: Fix error handling for rate limit
-  if (fixtures[0] === undefined) {
+  if (fixtures[0] === undefined || status.account === undefined) {
     redirect("/misc/rateLimit");
   }
 

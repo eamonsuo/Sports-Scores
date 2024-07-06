@@ -1,6 +1,14 @@
 import MatchSummaryCard from "@/components/generic/MatchSummaryCard";
 
-function SectionDate({ sectionDate, display, currentDate }: any) {
+function SectionDate({
+  sectionDate,
+  display,
+  currentDate,
+}: {
+  sectionDate: Date;
+  display: boolean;
+  currentDate: boolean;
+}) {
   if (display) {
     if (currentDate) {
       return (
