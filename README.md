@@ -4,13 +4,13 @@ This is a web app which will allow you to view all results from a range of sport
 
 Currently Implemented:
 
-- Cricket (Summary Only - T20I, BBL, CSAT20 only)
-- AFL (Summary, Ladder, Match Details)
-- NFL (Summary, Ladder, Match Details)
+- Cricket (Fixtures Only - T20I, BBL, CSAT20 only)
+- AFL (Fixtures, Ladder, Match Details)
+- NFL (Fixtures, Ladder, Match Details)
+- F1 (Races, Driver & Team Standings, Race Results)
 
 To Be Implemented:
 
-- F1
 - NRL
 - Golf
 - Football
