@@ -10,8 +10,6 @@ import RaceList from "@/components/f1/RaceList";
 import ClientSportsPage from "@/components/generic/ClientSportsPage";
 import APIStatus from "@/components/ui/ApiStatus";
 import { mapF1SessionFields } from "@/lib/dataMapping";
-import { cricinfoScraper } from "@/lib/scraper";
-import { redirect } from "next/navigation";
 
 export default async function Page() {
   const status = await fetchF1Status();
