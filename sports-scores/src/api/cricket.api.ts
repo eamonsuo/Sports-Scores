@@ -39,7 +39,7 @@ function mapCricketFixtureFields(matches: SportsmonksMatchCricket[]) {
     startDate: item.starting_at,
     gameid: item.id,
     sport: SPORT.CRICKET,
-    venue: `${item.venue.name}, ${item.venue.city}`,
+    venue: `${item.venue?.name}, ${item.venue?.city}`,
     status: setMatchStatusCricket(item.status),
     summary:
       item.status === "NS"
