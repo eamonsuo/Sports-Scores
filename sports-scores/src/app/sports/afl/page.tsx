@@ -6,14 +6,15 @@ import {
 import ClientSportsPage from "@/components/generic/ClientSportsPage";
 import APIStatus from "@/components/ui/ApiStatus";
 import Ladder from "@/components/afl/AFLLadder";
-import { getCurrentWeek, mapAflFixtureFields } from "@/lib/utils";
+import { getCurrentWeek } from "@/lib/utils";
 import FixtureRoundList from "@/components/generic/FixtureRoundList";
 import { redirect } from "next/navigation";
+import { mapAflFixtureFields } from "@/lib/dataMapping";
 
 export default async function Page() {
-  const fixtures = await fetchAFLFixtures("2024");
+  const fixtures = await fetchAFLFixtures(2024);
   const status = await fetchAFLStatus();
-  const standings = await fetchAFLStandings("2024");
+  const standings = await fetchAFLStandings(2024);
 
   //TODO: Fix error handling for rate limit
   if (fixtures[0] === undefined || status.account === undefined) {

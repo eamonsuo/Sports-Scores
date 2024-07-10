@@ -5,7 +5,7 @@ import {
 } from "@/api/afl.api";
 
 import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
-import { mapAflFixtureFields } from "@/lib/utils";
+import { mapAflFixtureFields } from "@/lib/dataMapping";
 import AFLScoreBreakdown from "@/components/afl/AFLScoreBreakdown";
 import ScoreChart from "@/components/generic/ScoreChart";
 import AFLKeyPlayerStats from "@/components/afl/AFLKeyPlayerStats";

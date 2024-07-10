@@ -22,11 +22,11 @@ function SectionDate({
   return null;
 }
 
-export default function FixtureSummaryList({ data }: { data: MatchSummary[] }) {
+export default function FixtureList({ data }: { data: MatchSummary[] }) {
   const current_date: Date = new Date(Date.now());
 
   // console.log(fixtures);
-  let sectionDate: Date = new Date("2024-01-01");
+  let sectionDate: Date = new Date("2000-01-01");
   let displayDate: boolean = false;
   let currentMatch: boolean = false;
   let currentDateFlag: boolean = false;

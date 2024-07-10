@@ -57,7 +57,7 @@ export default function Footer() {
           ></Image>
         </div>
       </Link>
-      <Link href={`/sports/${SPORT.NFL}`}>
+      <Link href={`/sports/${SPORT.NFL}/matches`}>
         <div className="flex size-11 place-content-center rounded-full bg-gray-400 active:bg-gray-500">
           <Image
             src={nflBall}
@@ -68,7 +68,7 @@ export default function Footer() {
           ></Image>
         </div>
       </Link>
-      <Link href={`/sports/${SPORT.F1}`}>
+      <Link href={`/sports/${SPORT.F1}#currentDate`}>
         <div className="flex size-11 place-content-center rounded-full bg-gray-400 active:bg-gray-500">
           <Image
             src={f1Helmet}

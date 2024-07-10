@@ -7,7 +7,7 @@ const fetchOptions = {
   next: { revalidate: REVALIDATE },
 };
 
-export async function fetchAFLFixtures(season: string) {
+export async function fetchAFLFixtures(season: number) {
   const rawFixtures = await fetch(
     `${process.env.AFL_BASEURL}/games?season=${season}&league=1`,
     fetchOptions,
@@ -58,7 +58,7 @@ export async function fetchAFLStatus() {
   return status.response as APISportsStatusDetails;
 }
 
-export async function fetchAFLStandings(season: string) {
+export async function fetchAFLStandings(season: number) {
   const rawStandings = await fetch(
     `${process.env.AFL_BASEURL}/standings?season=${season}&league=1`,
     fetchOptions,

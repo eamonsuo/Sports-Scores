@@ -3,7 +3,7 @@ import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
 import ScoreChart from "@/components/generic/ScoreChart";
 import NFLScoreBreakdown from "@/components/nfl/NFLScoreBreakdown";
 import { MATCHSTATUSNFL } from "@/lib/constants";
-import { mapNFLFixtureFields } from "@/lib/utils";
+import { mapNFLFixtureFields } from "@/lib/dataMapping";
 import { redirect } from "next/navigation";
 
 export default async function Page({ params }: { params: { id: number } }) {
@@ -22,7 +22,6 @@ export default async function Page({ params }: { params: { id: number } }) {
   if (gameStarted) {
     scores = events.map((item) => item.score.home - item.score.away);
   }
-  console.log();
 
   return (
     <div className="flex flex-col">
