@@ -1,6 +1,7 @@
-import MatchSummaryList from "@/components/generic/FixtureSummaryList";
+import MatchSummaryList from "@/components/generic/FixtureList";
 import ClientSportsPage from "@/components/generic/ClientSportsPage";
-import { fetchCricketFixtures } from "@/api/cricket.api";
+import { cricinfoScraper } from "@/lib/scraper";
+import { mapScrape } from "@/lib/dataMapping";
 
 export default async function Page() {
   const DAYSINPAST = 30; // Get records 30 days in the past
@@ -19,10 +20,13 @@ export default async function Page() {
     queryEndDate.getMonth() + 1
   }-${queryEndDate.getDate()}`;
 
-  const fixtures: MatchSummary[] = await fetchCricketFixtures(
-    startDate,
-    endDate,
-  );
+  // const fixtures: MatchSummary[] = await fetchCricketFixtures(
+  //   startDate,
+  //   endDate,
+  // );
+
+  const scrape = await cricinfoScraper();
+  const fixtures = mapScrape(scrape);
 
   const pageOptions = [
     {

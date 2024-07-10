@@ -1,5 +1,10 @@
 import { SPORT } from "./constants";
-import { getLocalTime, setMatchSummary } from "./utils";
+import {
+  getLocalTime,
+  getLocalTimeISO,
+  setMatchStatusCricket,
+  setMatchSummary,
+} from "./utils";
 
 export function mapAflFixtureFields(matches: AFLGame[]): MatchSummary[] {
   return matches.map((item: AFLGame) => ({
@@ -70,5 +75,61 @@ export function mapF1SessionFields(sessions: F1Session[]): SessionSummary[] {
     type: item.type,
     startDate: item.date,
     sport: SPORT.F1,
+  }));
+}
+
+export function mapCricketFixtureFields(matches: SportsmonksMatchCricket[]) {
+  return matches.map((item: SportsmonksMatchCricket) => ({
+    id: item.id,
+    startDate: item.starting_at,
+    gameid: item.id,
+    sport: SPORT.CRICKET,
+    venue: `${item.venue?.name}, ${item.venue?.city}`,
+    status: setMatchStatusCricket(item.status),
+    summary:
+      item.status === "NS"
+        ? `Starts at ${new Date(item.starting_at).toLocaleTimeString()} `
+        : item.note,
+    otherDetail: item.round,
+    homeDetails: {
+      img: item.localteam.image_path,
+      score: `${item.runs[0]?.wickets ? item.runs[0]?.wickets : "0"}/${
+        item.runs[0]?.score ? item.runs[0]?.score : "0"
+      }`,
+      name: item.localteam.name,
+    },
+    awayDetails: {
+      img: item.visitorteam.image_path,
+      score: `${item.runs[1]?.wickets ? item.runs[1]?.wickets : "0"}/${
+        item.runs[1]?.score ? item.runs[1]?.score : "0"
+      }`,
+      name: item.visitorteam.name,
+    },
+  }));
+}
+
+export function mapScrape(data: any): MatchSummary[] {
+  return data.map((item: CricketMatch) => ({
+    id: item.id,
+    startDate: item.startTime,
+    gameid: item.id,
+    sport: SPORT.CRICKET,
+    venue: item.ground.smallName,
+    status: `${item.stage} - ${item.state}`,
+    summary:
+      item.status === "{{MATCH_START_TIME}}"
+        ? `Starts at ${getLocalTimeISO(item.startTime)} `
+        : item.statusText,
+    otherDetail: item.title,
+    homeDetails: {
+      img: "",
+      score: `${item.teams[0]?.score ?? "0"} ${item.teams[0].scoreInfo ?? ""}`,
+      name: item.teams[0].team.name,
+    },
+    awayDetails: {
+      img: "",
+      score: `${item.teams[1]?.score ?? "0"} ${item.teams[1].scoreInfo ?? ""}`,
+      name: item.teams[1].team.name,
+    },
   }));
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import FixtureSummaryList from "./FixtureSummaryList";
+import FixtureList from "./FixtureList";
 import { MATCHSTATUSAFL, MATCHSTATUSNFL } from "@/lib/constants";
 
 export default function FixtureRoundList({
@@ -45,7 +45,7 @@ export default function FixtureRoundList({
       <style>{hideScroll}</style>
       <div className="hideScroll flex overflow-x-auto px-2">{buttonRow}</div>
 
-      <FixtureSummaryList
+      <FixtureList
         data={data.filter(
           (item) =>
             item.roundLabel === round &&

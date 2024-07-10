@@ -7,7 +7,7 @@ const fetchOptions = {
   next: { revalidate: REVALIDATE },
 };
 
-export async function fetchNFLFixtures(season: string) {
+export async function fetchNFLFixtures(season: number) {
   const rawFixtures = await fetch(
     `${process.env.NFL_BASEURL}/games?season=${season}&league=1`,
     fetchOptions,
@@ -37,7 +37,7 @@ export async function fetchNFLStatus() {
   return status.response as APISportsStatusDetails;
 }
 
-export async function fetchNFLStandings(season: string) {
+export async function fetchNFLStandings(season: number) {
   const rawStandings = await fetch(
     `${process.env.NFL_BASEURL}/standings?season=${season}&league=1`,
     fetchOptions,
