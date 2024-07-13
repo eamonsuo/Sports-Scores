@@ -1,3 +1,4 @@
+import { MatchSummary } from "@/types/misc";
 import Image from "next/image";
 
 export default function MatchDetailsHero({ data }: { data: MatchSummary }) {

@@ -8,7 +8,7 @@ import F1DriverStandings from "@/components/f1/F1DriverStandings";
 import F1TeamStandings from "@/components/f1/F1TeamStandings";
 import RaceList from "@/components/f1/RaceList";
 import ClientSportsPage from "@/components/generic/ClientSportsPage";
-import APIStatus from "@/components/ui/ApiStatus";
+import APIStatus from "@/components/misc/ApiStatus";
 import { mapF1SessionFields } from "@/lib/dataMapping";
 
 export default async function Page() {
@@ -26,12 +26,12 @@ export default async function Page() {
       state: "matches",
     },
     {
-      btnLabel: "Driver Standings",
+      btnLabel: "Drivers",
       component: <F1DriverStandings data={driverStandings} />,
       state: "drivers",
     },
     {
-      btnLabel: "Team Standings",
+      btnLabel: "Teams",
       component: <F1TeamStandings data={teamStandings} />,
       state: "teams",
     },

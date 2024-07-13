@@ -55,6 +55,7 @@ export const SPORT = {
   F1: "f1",
   NRL: "nrl",
   GOLF: "golf",
+  OLYMPICS: "olympics",
 };
 
 export const APICALLS = {
@@ -66,3 +67,7 @@ export const APICALLS = {
 // const currencies = ["AUD", "USD"] as const;
 
 // type Currency = (typeof currencies)[number];
+
+export const TAILWINDS = {
+  FOOTER_SPORT: "flex size-11 place-content-center rounded-full bg-gray-400",
+};

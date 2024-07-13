@@ -1,4 +1,7 @@
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 import { MATCHSTATUSAFL, MATCHSTATUSNFL, SPORT } from "./constants";
+import { MatchSummary } from "@/types/misc";
 
 export function setMatchStatusCricket(status: string) {
   switch (status) {
@@ -49,7 +52,7 @@ export function setMatchSummary(
 ) {
   switch (status) {
     case MATCHSTATUSAFL.SHORT_NS || MATCHSTATUSNFL.SHORT_NS:
-      return `Starts at ${startTime}`;
+      return ``;
     case MATCHSTATUSAFL.SHORT_FT || MATCHSTATUSNFL.SHORT_FT:
       return calculateMatchResult(
         homeName,
@@ -94,9 +97,11 @@ export function getLocalTime(startTime: string) {
   let tempDate = new Date(
     Date.UTC(0, 0, 0, Number(splitTime[0]), Number(splitTime[1])),
   );
-  return tempDate.toLocaleTimeString("en-US", {
-    timeZone: "Australia/Brisbane",
-  });
+  return tempDate
+    .toLocaleTimeString("en-US", {
+      timeZone: "Australia/Brisbane",
+    })
+    .replace(":00 ", " ");
 }
 
 //Convert to AEST
@@ -104,7 +109,13 @@ export function getLocalTime(startTime: string) {
 export function getLocalTimeISO(startTime: string) {
   // let splitTime = startTime.split(":");
   let tempDate = new Date(startTime);
-  return tempDate.toLocaleTimeString("en-US", {
-    timeZone: "Australia/Brisbane",
-  });
+  return tempDate
+    .toLocaleTimeString("en-US", {
+      timeZone: "Australia/Brisbane",
+    })
+    .replace(":00 ", " ");
+}
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }

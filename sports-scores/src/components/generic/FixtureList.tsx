@@ -1,4 +1,5 @@
 import MatchSummaryCard from "@/components/generic/MatchSummaryCard";
+import { MatchSummary } from "@/types/misc";
 
 function SectionDate({
   sectionDate,
@@ -25,7 +26,6 @@ function SectionDate({
 export default function FixtureList({ data }: { data: MatchSummary[] }) {
   const current_date: Date = new Date(Date.now());
 
-  // console.log(fixtures);
   let sectionDate: Date = new Date("2000-01-01");
   let displayDate: boolean = false;
   let currentMatch: boolean = false;

@@ -9,6 +9,8 @@
 // import APIStatus from "@/components/ui/ApiStatus";
 // import { getCurrentWeek, mapNFLFixtureFields } from "@/lib/utils";
 
+import { redirect } from "next/navigation";
+
 export default async function Page() {
   // const fixtures = await fetchNFLFixtures(2024);
   // const status = await fetchNFLStatus();
@@ -36,5 +38,5 @@ export default async function Page() {
   //     apiStatus={<APIStatus data={status} />}
   //   />
   // );
-  return;
+  redirect("/main/matches");
 }
