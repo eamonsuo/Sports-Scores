@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 interface APISportsResponse {
   get: string;
   parameters: {
@@ -55,6 +57,7 @@ type MatchSummary = {
   homeDetails: TeamScoreDetails;
   awayDetails: TeamScoreDetails;
   roundLabel?: string;
+  timer: string;
 };
 
 type APISettings = "status" | "fixtures" | "standings";

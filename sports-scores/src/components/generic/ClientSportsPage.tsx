@@ -1,4 +1,5 @@
 "use client";
+import { clsx } from "clsx";
 import { ReactNode, useState } from "react";
 
 export default function ClientSportsPage({
@@ -12,11 +13,16 @@ export default function ClientSportsPage({
 
   return (
     <div className="flex h-full flex-col">
-      <div className="m-4 flex">
+      <div className="m-4 flex rounded-lg border border-gray-200 bg-gray-200 p-1">
         {options.map((item) => (
           <button
             key={item.state}
-            className="flex-1 border-2 bg-gray-400 p-2 text-center focus:bg-gray-600 active:bg-gray-700"
+            className={clsx(
+              "flex-1 rounded-md px-4 py-2 text-center focus:relative",
+              view === item.state
+                ? "text-black-500 bg-white shadow-sm"
+                : "text-gray-500 hover:text-gray-700",
+            )}
             onClick={() => setView(item.state)}
           >
             {item.btnLabel}

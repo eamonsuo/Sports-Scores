@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useState } from "react";
-import Spinner from "../ui/Spinner";
+import Spinner from "../misc/Spinner";
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
 export default function ScoreChart({

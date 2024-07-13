@@ -4,7 +4,7 @@ import {
   fetchAFLStatus,
 } from "@/api/afl.api";
 import ClientSportsPage from "@/components/generic/ClientSportsPage";
-import APIStatus from "@/components/ui/ApiStatus";
+import APIStatus from "@/components/misc/ApiStatus";
 import Ladder from "@/components/afl/AFLLadder";
 import { getCurrentWeek } from "@/lib/utils";
 import FixtureRoundList from "@/components/generic/FixtureRoundList";
