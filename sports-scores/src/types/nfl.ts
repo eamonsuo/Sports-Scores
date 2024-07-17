@@ -1,8 +1,10 @@
-interface NFLGamesResponse<T> extends APISportsResponse {
+import { APISportsResponse } from "./misc";
+
+export interface NFLResponse<T> extends APISportsResponse {
   response: T[];
 }
 
-interface NFLGame {
+export type NFLGame = {
   game: {
     id: number;
     stage: string;
@@ -76,9 +78,9 @@ interface NFLGame {
       total: number | null;
     };
   };
-}
+};
 
-interface NFLGameEvents {
+export type NFLGameEvents = {
   quarter: string;
   minute: string;
   team: {
@@ -97,13 +99,9 @@ interface NFLGameEvents {
     home: number;
     away: number;
   };
-}
+};
 
-interface NFLStandingsResponse extends APISportsResponse {
-  response: NFLStanding[];
-}
-
-type NFLStanding = {
+export type NFLStanding = {
   league: NFLLeagueDetails;
   conference: string;
   division: string;

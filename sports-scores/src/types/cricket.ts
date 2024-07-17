@@ -1,4 +1,4 @@
-interface CricinfoResponse {
+export interface CricinfoResponse {
   appNextJsContext: any;
   globalDetails: any;
   editionDetails: any;

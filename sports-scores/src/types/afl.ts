@@ -1,8 +1,10 @@
-interface AFLGamesResponse<T> extends APISportsResponse {
+import { APISportsResponse } from "./misc";
+
+export interface AFLResponse<T> extends APISportsResponse {
   response: T[];
 }
 
-interface AFLGame {
+export type AFLGame = {
   game: {
     id: number;
   };
@@ -72,9 +74,9 @@ interface AFLGame {
       psbehinds: number;
     };
   };
-}
+};
 
-interface AFLGameQuarters {
+export type AFLGameQuarters = {
   game: {
     id: number;
   };
@@ -87,7 +89,7 @@ interface AFLGameQuarters {
       };
     },
   ];
-}
+};
 
 type TeamQuarterStats = {
   id: number;
@@ -96,7 +98,7 @@ type TeamQuarterStats = {
   points: number;
 };
 
-interface AFLGameEvents {
+export type AFLGameEvents = {
   game: {
     id: number;
   };
@@ -113,13 +115,9 @@ interface AFLGameEvents {
       type: "goal" | "behind";
     },
   ];
-}
+};
 
-interface AFLStandingsResponse extends APISportsResponse {
-  response: AFLStanding[];
-}
-
-type AFLStanding = {
+export type AFLStanding = {
   position: number;
   team: {
     id: number;

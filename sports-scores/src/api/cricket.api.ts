@@ -1,7 +1,7 @@
 import { mapCricketFixtureFields } from "@/lib/dataMapping";
 import { SportsmonksCricket } from "@/types/misc";
 
-const REVALIDATE = 10000; //TODO: change for deployment
+const REVALIDATE = 1500;
 
 const fetchOptions = {
   next: { revalidate: REVALIDATE },

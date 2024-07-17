@@ -1,6 +1,13 @@
+import {
+  AFLGame,
+  AFLGameEvents,
+  AFLGameQuarters,
+  AFLResponse,
+  AFLStanding,
+} from "@/types/afl";
 import { APISportsStatusDetails } from "@/types/misc";
 
-const REVALIDATE = 1500; //TODO: change for deployment
+const REVALIDATE = 1500;
 const reqHeaders = new Headers();
 reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
 
@@ -15,7 +22,7 @@ export async function fetchAFLFixtures(season: number) {
     fetchOptions,
   );
 
-  let fixtures = (await rawFixtures.json()) as AFLGamesResponse<AFLGame>;
+  let fixtures = (await rawFixtures.json()) as AFLResponse<AFLGame>;
   return fixtures.response;
 }
 
@@ -25,7 +32,7 @@ export async function fetchAFLGame(gameId: number) {
     fetchOptions,
   );
 
-  let game = (await rawGame.json()) as AFLGamesResponse<AFLGame>;
+  let game = (await rawGame.json()) as AFLResponse<AFLGame>;
   return game.response[0];
 }
 
@@ -35,8 +42,7 @@ export async function fetchAFLGameQuarters(gameId: number) {
     fetchOptions,
   );
 
-  let quarters =
-    (await rawQuarters.json()) as AFLGamesResponse<AFLGameQuarters>;
+  let quarters = (await rawQuarters.json()) as AFLResponse<AFLGameQuarters>;
   return quarters.response[0];
 }
 
@@ -46,7 +52,7 @@ export async function fetchAFLGameEvents(gameId: number) {
     fetchOptions,
   );
 
-  let events = (await rawEvents.json()) as AFLGamesResponse<AFLGameEvents>;
+  let events = (await rawEvents.json()) as AFLResponse<AFLGameEvents>;
   return events.response[0];
 }
 
@@ -66,6 +72,6 @@ export async function fetchAFLStandings(season: number) {
     fetchOptions,
   );
 
-  let standings = (await rawStandings.json()) as AFLStandingsResponse;
+  let standings = (await rawStandings.json()) as AFLResponse<AFLStanding>;
   return standings.response;
 }
