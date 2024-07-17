@@ -1,5 +1,6 @@
 import MatchSummaryCard from "@/components/generic/MatchSummaryCard";
 import { MatchSummary } from "@/types/misc";
+import React from "react";
 
 function SectionDate({
   sectionDate,
@@ -58,14 +59,14 @@ export default function FixtureList({ data }: { data: MatchSummary[] }) {
         }
 
         return (
-          <div key={item.id}>
+          <React.Fragment key={item.id}>
             <SectionDate
               sectionDate={sectionDate}
               display={displayDate}
               currentDate={currentMatch}
             />
             <MatchSummaryCard data={item} />
-          </div>
+          </React.Fragment>
         );
       })}
     </div>

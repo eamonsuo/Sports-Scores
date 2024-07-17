@@ -38,5 +38,5 @@ export default async function Page() {
   //     apiStatus={<APIStatus data={status} />}
   //   />
   // );
-  redirect("/main/matches");
+  redirect("nfl/main/matches");
 }
