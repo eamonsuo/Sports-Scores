@@ -23,14 +23,18 @@ export default function MatchDetailsHero({ data }: { data: MatchSummary }) {
         />
       </div>
 
-      <p className="text-center text-gray-700">{data.homeDetails.name}</p>
-      <div className="text-center">{data.status}</div>
-      <p className="text-center text-gray-700">{data.awayDetails.name}</p>
-      <p className="content-center text-center text-2xl text-black">
+      <p className="text-center text-gray-700 dark:text-neutral-500">
+        {data.homeDetails.name}
+      </p>
+      <div className="text-center dark:text-neutral-400">{data.status}</div>
+      <p className="text-center text-gray-700 dark:text-neutral-500">
+        {data.awayDetails.name}
+      </p>
+      <p className="content-center text-center text-2xl dark:text-neutral-400">
         {data.homeDetails.score}
       </p>
       <div></div>
-      <p className="content-center text-center text-2xl text-black">
+      <p className="content-center text-center text-2xl dark:text-neutral-400">
         {data.awayDetails.score}
       </p>
     </div>

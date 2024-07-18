@@ -17,13 +17,14 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
+      {/* Dark mode enabled */}
       <body className={inter.className}>
         {/* Set to Dynamic view height aka height of browser minus any browser things. Helps on
          mobile where safari search overhangs regular view height*/}
         <div className="flex h-dvh w-dvw flex-col">
           <Header></Header>
-          <main className="flex-1 items-center overflow-y-auto bg-white">
+          <main className="flex-1 items-center overflow-y-auto bg-white dark:bg-neutral-950">
             {children}
           </main>
           <Footer></Footer>

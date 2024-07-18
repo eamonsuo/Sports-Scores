@@ -11,7 +11,7 @@ export default function Header() {
   const router = useRouter();
 
   return (
-    <header className="flex h-16 w-full justify-between border-b bg-gray-200">
+    <header className="flex h-16 w-full justify-between dark:bg-neutral-900">
       <button className="ps-2" onClick={() => router.back()}>
         <Image src={backArrow} width={30} height={30} alt="back arrow"></Image>
       </button>

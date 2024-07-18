@@ -6,7 +6,7 @@ export default function F1SessionResultsTable({
   data: F1SessionResults[];
 }) {
   return (
-    <table className="w-full">
+    <table className="w-full flex-1 dark:text-neutral-400">
       <thead>
         <th className="pe-2">Pos</th>
         <th className="px-2">Driver</th>

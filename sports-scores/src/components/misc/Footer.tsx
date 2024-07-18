@@ -73,7 +73,7 @@ const footerLinks: {
 export default function Footer() {
   const [curSport, setCurSport] = useState("");
   return (
-    <footer className="hideScroll flex h-16 w-full flex-row place-items-center gap-2 overflow-auto border-t bg-gray-200 p-1">
+    <footer className="hideScroll flex h-16 w-full flex-row place-items-center gap-2 overflow-auto bg-gray-200 p-1 dark:bg-neutral-900">
       {footerLinks.map((item) => (
         <Link
           key={item.sport}
@@ -83,7 +83,9 @@ export default function Footer() {
           <div
             className={clsx(
               "flex size-11 place-content-center rounded-full",
-              curSport === item.sport ? "bg-gray-500" : "bg-gray-400",
+              curSport === item.sport
+                ? "bg-gray-500 dark:bg-neutral-400"
+                : "bg-gray-400 dark:bg-neutral-600",
             )}
           >
             <Image

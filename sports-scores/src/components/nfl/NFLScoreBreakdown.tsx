@@ -15,7 +15,7 @@ export default function NFLScoreBreakdown({
     OTFLAG = true;
   }
   return (
-    <table className="m-4 text-center">
+    <table className="m-4 text-center dark:text-neutral-400">
       <thead>
         <tr>
           <th></th>

@@ -47,8 +47,10 @@ export default function FixtureRoundList({
             key={item}
             className={clsx(
               "inline-flex items-center justify-center rounded-full px-2.5 py-0.5",
-              item === round && "bg-gray-300 text-black",
-              item !== round && "bg-gray-100 text-gray-700",
+              item === round &&
+                "bg-gray-300 text-black dark:bg-neutral-600 dark:text-neutral-200",
+              item !== round &&
+                "bg-gray-100 text-gray-700 dark:bg-neutral-800 dark:text-neutral-400",
             )}
           >
             <p className="whitespace-nowrap text-sm">{item}</p>

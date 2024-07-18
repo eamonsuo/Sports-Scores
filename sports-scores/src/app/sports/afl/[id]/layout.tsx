@@ -6,7 +6,7 @@ const Layout = ({
   params: { id: number };
 }) => (
   <div>
-    <p>hello world {params.id}</p>
+    <p className="dark:text-neutral-400">hello world {params.id}</p>
     {children}
   </div>
 );

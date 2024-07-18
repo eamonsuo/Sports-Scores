@@ -2,28 +2,7 @@ import MatchSummaryCard from "@/components/generic/MatchSummaryCard";
 import RaceSummaryCard from "./RaceSummaryCard";
 import { SessionSummary } from "@/types/f1";
 import React from "react";
-
-function SectionDate({
-  sectionDate,
-  display,
-  currentDate,
-}: {
-  sectionDate: Date;
-  display: boolean;
-  currentDate: boolean;
-}) {
-  if (display) {
-    if (currentDate) {
-      return (
-        <div id="current-date" className="mt-4 text-black">
-          {sectionDate.toDateString()}
-        </div>
-      );
-    }
-    return <div className="mt-4 text-black">{sectionDate.toDateString()}</div>;
-  }
-  return null;
-}
+import SectionDate from "../generic/SectionDate";
 
 export default function RaceList({ data }: { data: SessionSummary[] }) {
   const current_date: Date = new Date(Date.now());
