@@ -1,4 +1,4 @@
-interface CricinfoResponse {
+export interface CricinfoResponse {
   appNextJsContext: any;
   globalDetails: any;
   editionDetails: any;
@@ -12,7 +12,7 @@ interface CricinfoResponse {
   };
 }
 
-interface CricketMatch {
+export interface CricketMatch {
   _uid: number;
   id: number;
   objectId: number;

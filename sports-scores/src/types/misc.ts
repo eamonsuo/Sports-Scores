@@ -1,6 +1,4 @@
-import { ReactNode } from "react";
-
-interface APISportsResponse {
+export interface APISportsResponse {
   get: string;
   parameters: {
     season: string;
@@ -10,7 +8,7 @@ interface APISportsResponse {
   results: number;
 }
 
-interface APISportsStatus extends APISportsResponse {
+export interface APISportsStatus extends APISportsResponse {
   paging: {
     current: number;
     total: number;
@@ -18,7 +16,7 @@ interface APISportsStatus extends APISportsResponse {
   response: APISportsStatusDetails;
 }
 
-type APISportsStatusDetails = {
+export type APISportsStatusDetails = {
   account: {
     firstname: string;
     lastname: string;
@@ -46,7 +44,7 @@ type TeamScoreDetails = {
   name: string;
 };
 
-type MatchSummary = {
+export type MatchSummary = {
   id: number;
   startDate: string;
   sport: string;
@@ -62,7 +60,7 @@ type MatchSummary = {
 
 type APISettings = "status" | "fixtures" | "standings";
 
-interface SportsmonksCricket {
+export interface SportsmonksCricket {
   data: SportsmonksMatchCricket[];
   links: any;
   meta: any;

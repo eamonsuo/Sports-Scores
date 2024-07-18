@@ -1,4 +1,4 @@
-import { MatchSummary, SportsmonksMatchCricket } from "@/types/misc";
+import { MatchSummary } from "@/types/misc";
 import { MATCHSTATUSAFL, MATCHSTATUSNFL, SPORT } from "./constants";
 import {
   getLocalTime,
@@ -6,8 +6,12 @@ import {
   setMatchStatusCricket,
   setMatchSummary,
 } from "./utils";
+import { AFLGame } from "@/types/afl";
+import { F1Session, SessionSummary } from "@/types/f1";
+import { NFLGame } from "@/types/nfl";
+import { CricketMatch } from "@/types/cricket";
 
-export function mapAflFixtureFields(matches: AFLGame[]) {
+export function mapAFLFixtureFields(matches: AFLGame[]) {
   return matches.map(
     (item: AFLGame) =>
       ({
@@ -94,35 +98,35 @@ export function mapF1SessionFields(sessions: F1Session[]) {
   );
 }
 
-export function mapCricketFixtureFields(matches: SportsmonksMatchCricket[]) {
-  return matches.map((item: SportsmonksMatchCricket) => ({
-    id: item.id,
-    startDate: item.starting_at,
-    gameid: item.id,
-    sport: SPORT.CRICKET,
-    venue: `${item.venue?.name}, ${item.venue?.city}`,
-    status: setMatchStatusCricket(item.status),
-    summary:
-      item.status === "NS"
-        ? `Starts at ${new Date(item.starting_at).toLocaleTimeString()} `
-        : item.note,
-    otherDetail: item.round,
-    homeDetails: {
-      img: item.localteam.image_path,
-      score: `${item.runs[0]?.wickets ? item.runs[0]?.wickets : "0"}/${
-        item.runs[0]?.score ? item.runs[0]?.score : "0"
-      }`,
-      name: item.localteam.name,
-    },
-    awayDetails: {
-      img: item.visitorteam.image_path,
-      score: `${item.runs[1]?.wickets ? item.runs[1]?.wickets : "0"}/${
-        item.runs[1]?.score ? item.runs[1]?.score : "0"
-      }`,
-      name: item.visitorteam.name,
-    },
-  }));
-}
+// export function mapCricketFixtureFields(matches: SportsmonksMatchCricket[]) {
+//   return matches.map((item: SportsmonksMatchCricket) => ({
+//     id: item.id,
+//     startDate: item.starting_at,
+//     gameid: item.id,
+//     sport: SPORT.CRICKET,
+//     venue: `${item.venue?.name}, ${item.venue?.city}`,
+//     status: setMatchStatusCricket(item.status),
+//     summary:
+//       item.status === "NS"
+//         ? `Starts at ${new Date(item.starting_at).toLocaleTimeString()} `
+//         : item.note,
+//     otherDetail: item.round,
+//     homeDetails: {
+//       img: item.localteam.image_path,
+//       score: `${item.runs[0]?.wickets ? item.runs[0]?.wickets : "0"}/${
+//         item.runs[0]?.score ? item.runs[0]?.score : "0"
+//       }`,
+//       name: item.localteam.name,
+//     },
+//     awayDetails: {
+//       img: item.visitorteam.image_path,
+//       score: `${item.runs[1]?.wickets ? item.runs[1]?.wickets : "0"}/${
+//         item.runs[1]?.score ? item.runs[1]?.score : "0"
+//       }`,
+//       name: item.visitorteam.name,
+//     },
+//   }));
+// }
 
 export function mapScrape(data: CricketMatch[]) {
   return data.map(

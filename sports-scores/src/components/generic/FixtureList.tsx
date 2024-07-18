@@ -1,27 +1,7 @@
 import MatchSummaryCard from "@/components/generic/MatchSummaryCard";
 import { MatchSummary } from "@/types/misc";
-
-function SectionDate({
-  sectionDate,
-  display,
-  currentDate,
-}: {
-  sectionDate: Date;
-  display: boolean;
-  currentDate: boolean;
-}) {
-  if (display) {
-    if (currentDate) {
-      return (
-        <div id="current-date" className="mt-4 text-black">
-          {sectionDate.toDateString()}
-        </div>
-      );
-    }
-    return <div className="mt-4 text-black">{sectionDate.toDateString()}</div>;
-  }
-  return null;
-}
+import React from "react";
+import SectionDate from "./SectionDate";
 
 export default function FixtureList({ data }: { data: MatchSummary[] }) {
   const current_date: Date = new Date(Date.now());
@@ -58,14 +38,14 @@ export default function FixtureList({ data }: { data: MatchSummary[] }) {
         }
 
         return (
-          <div key={item.id}>
+          <React.Fragment key={item.id}>
             <SectionDate
               sectionDate={sectionDate}
               display={displayDate}
               currentDate={currentMatch}
             />
             <MatchSummaryCard data={item} />
-          </div>
+          </React.Fragment>
         );
       })}
     </div>

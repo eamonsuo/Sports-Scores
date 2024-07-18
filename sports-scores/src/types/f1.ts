@@ -1,8 +1,10 @@
-interface F1Response<T> extends APISportsResponse {
+import { APISportsResponse } from "./misc";
+
+export interface F1Response<T> extends APISportsResponse {
   response: T[];
 }
 
-interface F1Session {
+export type F1Session = {
   id: number;
   competition: Competition;
   circuit: Circuit;
@@ -15,9 +17,9 @@ interface F1Session {
   date: string;
   weather: any;
   status: string;
-}
+};
 
-interface F1SessionResults {
+export type F1SessionResults = {
   race: { id: number };
   driver: Driver;
   team: Team;
@@ -27,17 +29,16 @@ interface F1SessionResults {
   grid: string;
   pits: number;
   gap: string | null;
-  time: string | null;
-}
+};
 
-interface F1TeamStandings {
+export type F1TeamStandings = {
   position: number;
   team: Team;
   points: number;
   season: number;
-}
+};
 
-interface F1DriverStandings {
+export type F1DriverStandings = {
   position: number;
   driver: Driver;
   team: Team;
@@ -45,45 +46,45 @@ interface F1DriverStandings {
   wins: number;
   behind: number | null;
   season: number;
-}
+};
 
-interface Competition {
+type Competition = {
   id: number;
   name: string;
   location: { country: string; city: string };
-}
+};
 
-interface Circuit {
+type Circuit = {
   id: number;
   name: string;
   image: string;
-}
+};
 
-interface Laps {
+type Laps = {
   current: number | null;
   total: number | null;
-}
+};
 
-interface FastestLap {
+type FastestLap = {
   driver: { id: number | null };
   time: string | null;
-}
+};
 
-interface Driver {
+type Driver = {
   id: number;
   name: string;
   abbr: string;
   number: number;
   image: string;
-}
+};
 
-interface Team {
+type Team = {
   id: number;
   name: string;
   logo: string;
-}
+};
 
-interface SessionSummary {
+export type SessionSummary = {
   id: number;
   name: string;
   logo: string;
@@ -91,4 +92,4 @@ interface SessionSummary {
   type: string;
   startDate: string;
   sport: string;
-}
+};

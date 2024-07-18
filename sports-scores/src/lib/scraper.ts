@@ -1,3 +1,4 @@
+import { CricketMatch, CricinfoResponse } from "@/types/cricket";
 import { writeFile } from "fs";
 
 const jsdom = require("jsdom");

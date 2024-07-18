@@ -1,3 +1,4 @@
+import { NFLStanding } from "@/types/nfl";
 import Image from "next/image";
 
 export default function NFLLadder({ data }: { data: NFLStanding[] }) {
@@ -8,9 +9,9 @@ export default function NFLLadder({ data }: { data: NFLStanding[] }) {
     let curDiv = splitData.splice(0, 4);
     tables.push(
       <div key={curDiv[0].division}>
-        <p className="pb-1 pt-3">{curDiv[0].division}</p>
+        <p className="pb-1 pt-3 dark:text-neutral-400">{curDiv[0].division}</p>
 
-        <table className="w-full">
+        <table className="w-full dark:text-neutral-400">
           <thead>
             <tr>
               <th className="pe-2"></th>

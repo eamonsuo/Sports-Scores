@@ -1,8 +1,9 @@
+import { AFLStanding } from "@/types/afl";
 import Image from "next/image";
 
 export default function AFLLadder({ data }: { data: AFLStanding[] }) {
   return (
-    <div className="flex-1 overflow-y-auto px-4">
+    <div className="flex-1 overflow-y-auto px-4 dark:text-neutral-400">
       <table>
         <thead>
           <tr>

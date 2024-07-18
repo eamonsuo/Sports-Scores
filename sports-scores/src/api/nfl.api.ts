@@ -1,6 +1,7 @@
+import { REVALIDATE } from "@/lib/constants";
 import { APISportsStatusDetails } from "@/types/misc";
+import { NFLGame, NFLGameEvents, NFLResponse, NFLStanding } from "@/types/nfl";
 
-const REVALIDATE = 1500; //TODO: change for deployment
 const reqHeaders = new Headers();
 reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
 
@@ -15,7 +16,7 @@ export async function fetchNFLFixtures(season: number) {
     fetchOptions,
   );
 
-  let fixtures = (await rawFixtures.json()) as NFLGamesResponse<NFLGame>;
+  let fixtures = (await rawFixtures.json()) as NFLResponse<NFLGame>;
   return fixtures.response;
 }
 
@@ -25,7 +26,7 @@ export async function fetchNFLGame(gameId: number) {
     fetchOptions,
   );
 
-  let game = (await rawGame.json()) as NFLGamesResponse<NFLGame>;
+  let game = (await rawGame.json()) as NFLResponse<NFLGame>;
   return game.response[0];
 }
 
@@ -45,7 +46,7 @@ export async function fetchNFLStandings(season: number) {
     fetchOptions,
   );
 
-  let standings = (await rawStandings.json()) as NFLStandingsResponse;
+  let standings = (await rawStandings.json()) as NFLResponse<NFLStanding>;
   return standings.response;
 }
 
@@ -55,6 +56,6 @@ export async function fetchNFLGameEvents(gameId: number) {
     fetchOptions,
   );
 
-  let events = (await rawEvents.json()) as NFLGamesResponse<NFLGameEvents>;
+  let events = (await rawEvents.json()) as NFLResponse<NFLGameEvents>;
   return events.response;
 }
