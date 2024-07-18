@@ -1,3 +1,4 @@
+import { NFLStanding } from "@/types/nfl";
 import Image from "next/image";
 
 export default function NFLLadder({ data }: { data: NFLStanding[] }) {

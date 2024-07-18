@@ -1,3 +1,4 @@
+import { REVALIDATE } from "@/lib/constants";
 import {
   F1Response,
   F1Session,
@@ -7,7 +8,6 @@ import {
 } from "@/types/f1";
 import { APISportsStatusDetails } from "@/types/misc";
 
-const REVALIDATE = 1500;
 const reqHeaders = new Headers();
 reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
 

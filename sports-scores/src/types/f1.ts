@@ -84,7 +84,7 @@ type Team = {
   logo: string;
 };
 
-type SessionSummary = {
+export type SessionSummary = {
   id: number;
   name: string;
   logo: string;

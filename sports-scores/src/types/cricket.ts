@@ -12,7 +12,7 @@ export interface CricinfoResponse {
   };
 }
 
-interface CricketMatch {
+export interface CricketMatch {
   _uid: number;
   id: number;
   objectId: number;

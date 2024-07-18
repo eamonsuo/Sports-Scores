@@ -1,3 +1,4 @@
+import { REVALIDATE } from "@/lib/constants";
 import {
   AFLGame,
   AFLGameEvents,
@@ -7,7 +8,6 @@ import {
 } from "@/types/afl";
 import { APISportsStatusDetails } from "@/types/misc";
 
-const REVALIDATE = 1500;
 const reqHeaders = new Headers();
 reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
 

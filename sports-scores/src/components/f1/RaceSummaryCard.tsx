@@ -1,3 +1,4 @@
+import { SessionSummary } from "@/types/f1";
 import Image from "next/image";
 import Link from "next/link";
 

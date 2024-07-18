@@ -1,3 +1,4 @@
+import { AFLGameQuarters } from "@/types/afl";
 import Image from "next/image";
 
 export default function AFLScoreBreakdown({

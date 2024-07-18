@@ -1,3 +1,5 @@
+import { F1SessionResults } from "@/types/f1";
+
 export default function F1SessionResultsTable({
   data,
 }: {

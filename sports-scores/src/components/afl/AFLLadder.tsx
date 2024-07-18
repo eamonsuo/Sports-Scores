@@ -1,3 +1,4 @@
+import { AFLStanding } from "@/types/afl";
 import Image from "next/image";
 
 export default function AFLLadder({ data }: { data: AFLStanding[] }) {

@@ -1,5 +1,7 @@
 import MatchSummaryCard from "@/components/generic/MatchSummaryCard";
 import RaceSummaryCard from "./RaceSummaryCard";
+import { SessionSummary } from "@/types/f1";
+import React from "react";
 
 function SectionDate({
   sectionDate,
@@ -59,14 +61,14 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
         }
 
         return (
-          <div key={item.id}>
+          <React.Fragment key={item.id}>
             <SectionDate
               sectionDate={sectionDate}
               display={displayDate}
               currentDate={currentMatch}
             />
             <RaceSummaryCard data={item} />
-          </div>
+          </React.Fragment>
         );
       })}
     </div>

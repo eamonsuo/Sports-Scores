@@ -1,4 +1,6 @@
-export default function F1SessionResultsTable({
+import { F1TeamStandings } from "@/types/f1";
+
+export default function F1TeamStandingsTable({
   data,
 }: {
   data: F1TeamStandings[];

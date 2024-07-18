@@ -1,7 +1,7 @@
+import { REVALIDATE } from "@/lib/constants";
 import { APISportsStatusDetails } from "@/types/misc";
 import { NFLGame, NFLGameEvents, NFLResponse, NFLStanding } from "@/types/nfl";
 
-const REVALIDATE = 1500;
 const reqHeaders = new Headers();
 reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
 

@@ -1,3 +1,4 @@
+import { NFLGame } from "@/types/nfl";
 import Image from "next/image";
 
 export default function NFLScoreBreakdown({

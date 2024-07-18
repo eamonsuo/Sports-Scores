@@ -1,4 +1,6 @@
-export default function F1DriverStandings({
+import { F1DriverStandings } from "@/types/f1";
+
+export default function F1DriverStandingsTable({
   data,
 }: {
   data: F1DriverStandings[];
