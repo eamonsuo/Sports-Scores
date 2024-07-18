@@ -7,6 +7,21 @@ const fetchOptions = {
 };
 
 export async function fetchCricketFixtures(startDate: string, endDate: string) {
+  // const DAYSINPAST = 30; // Get records 30 days in the past
+  // const YEARSINFUTURE = 1; // Get records 1 year in the future
+
+  // const currentDate = new Date(Date.now());
+  // const queryStartDate = new Date(currentDate);
+  // queryStartDate.setDate(queryStartDate.getDate() - DAYSINPAST);
+  // const queryEndDate = new Date(queryStartDate);
+  // queryEndDate.setFullYear(queryEndDate.getFullYear() + YEARSINFUTURE);
+
+  // let startDate = `${queryStartDate.getFullYear()}-${
+  //   queryStartDate.getMonth() + 1
+  // }-${queryStartDate.getDate()}`;
+  // let endDate = `${queryEndDate.getFullYear()}-${
+  //   queryEndDate.getMonth() + 1
+  // }-${queryEndDate.getDate()}`;
   // startDate/endDate format = yyyy-mm-dd
 
   // const rawFixtures = await fetch(

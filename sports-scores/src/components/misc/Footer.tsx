@@ -34,7 +34,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.CRICKET,
-    link: `/sports/${SPORT.CRICKET}`,
+    link: `/sports/${SPORT.CRICKET}/main/matches`,
     img: cricketBall,
     altText: "Cricket",
   },
@@ -46,7 +46,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.AFL,
-    link: `/sports/${SPORT.AFL}#current-date`,
+    link: `/sports/${SPORT.AFL}/main/matches`,
     img: aflBall,
     altText: "AFL",
   },
@@ -58,7 +58,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.F1,
-    link: `/sports/${SPORT.F1}`,
+    link: `/sports/${SPORT.F1}/main/races#current-date`,
     img: f1Helmet,
     altText: "F1",
   },

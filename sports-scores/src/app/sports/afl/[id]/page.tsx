@@ -5,7 +5,7 @@ import {
 } from "@/api/afl.api";
 
 import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
-import { mapAflFixtureFields } from "@/lib/dataMapping";
+import { mapAFLFixtureFields } from "@/lib/dataMapping";
 import AFLScoreBreakdown from "@/components/afl/AFLScoreBreakdown";
 import ScoreChart from "@/components/generic/ScoreChart";
 import AFLKeyPlayerStats from "@/components/afl/AFLKeyPlayerStats";
@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: { id: number } }) {
 
   return (
     <div className="flex flex-col">
-      <MatchDetailsHero data={mapAflFixtureFields([game])[0]} />
+      <MatchDetailsHero data={mapAFLFixtureFields([game])[0]} />
       {gameStarted ? (
         <>
           <AFLScoreBreakdown
