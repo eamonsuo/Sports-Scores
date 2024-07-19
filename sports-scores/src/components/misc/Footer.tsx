@@ -34,7 +34,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.CRICKET,
-    link: `/sports/${SPORT.CRICKET}/main/matches`,
+    link: `/sports/${SPORT.CRICKET}/main/matches#current-date`,
     img: cricketBall,
     altText: "Cricket",
   },

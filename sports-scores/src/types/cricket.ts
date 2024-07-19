@@ -1,17 +1,18 @@
-export interface CricinfoResponse {
+export interface CricinfoResponse<T> {
   appNextJsContext: any;
   globalDetails: any;
   editionDetails: any;
-  appPageProps: {
-    data: {
-      content: {
-        matches: CricketMatch[];
-      };
-    };
-    layout: any;
-  };
+  appPageProps: T;
 }
 
+export type LiveScores = {
+  data: {
+    content: {
+      matches: CricketMatch[];
+    };
+  };
+  layout: any;
+};
 export interface CricketMatch {
   _uid: number;
   id: number;
