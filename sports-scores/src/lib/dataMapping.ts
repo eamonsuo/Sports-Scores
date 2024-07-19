@@ -145,12 +145,12 @@ export function mapScrape(data: CricketMatch[]) {
         timer: item.stage,
         otherDetail: item.title,
         homeDetails: {
-          img: "",
+          img: `https://p.imgci.com${item.teams[0].team.imageUrl}`,
           score: `${item.teams[0]?.score ?? "0"} ${item.teams[0].scoreInfo ?? ""}`,
           name: item.teams[0].team.name,
         },
         awayDetails: {
-          img: "",
+          img: `https://p.imgci.com${item.teams[1].team.imageUrl}`,
           score: `${item.teams[1]?.score ?? "0"} ${item.teams[1].scoreInfo ?? ""}`,
           name: item.teams[1].team.name,
         },

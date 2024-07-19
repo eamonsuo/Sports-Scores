@@ -64,7 +64,7 @@ export const APICALLS = {
   STANDINGS: "standings",
 };
 
-export const REVALIDATE = 15;
+export const REVALIDATE = 15; //TODO: Update to 15 for prod deployment
 // const currencies = ["AUD", "USD"] as const;
 
 // type Currency = (typeof currencies)[number];
