@@ -22,21 +22,6 @@ export default function FixtureRoundList({
 
   let roundLabels = [...new Set(data.map((item) => item.roundLabel ?? ""))];
 
-  let buttonRow = [];
-  for (let i = 0; i < roundLabels.length; i++) {
-    buttonRow.push(
-      <button
-        key={roundLabels[i]}
-        id={roundLabels[i]}
-        ref={roundLabels[i] === curRound ? curBtn : null}
-        className="mx-2 mb-3 whitespace-nowrap border-b border-gray-300 text-sm"
-        onClick={() => setRound(roundLabels[i])}
-      >
-        {roundLabels[i]}
-      </button>,
-    );
-  }
-
   return (
     <>
       <div className="hideScroll mx-2 mb-2 flex gap-1 overflow-x-auto">

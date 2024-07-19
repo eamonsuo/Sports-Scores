@@ -7,15 +7,14 @@ export default function SectionDate({
   display: boolean;
   currentDate: boolean;
 }) {
-  if (display) {
-    return (
+  return (
+    display && (
       <div
         id={currentDate ? "current-date" : undefined}
         className="mt-4 text-black dark:text-neutral-400"
       >
         {sectionDate.toDateString()}
       </div>
-    );
-  }
-  return null;
+    )
+  );
 }
