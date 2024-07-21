@@ -1,7 +1,7 @@
 export default async function Page() {
   return (
     <iframe
-      src="https://en.m.wikipedia.org/wiki/2024_Summer_Olympics#Calendar"
+      src="https://olympics.com/en/paris-2024/schedule/24-july"
       className="h-full w-full"
     />
   );
