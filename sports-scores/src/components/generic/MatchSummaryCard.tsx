@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function MatchSummaryCard({ data }: { data: MatchSummary }) {
   return (
     <Link href={`/sports/${data.sport}/${data.id}`}>
-      <div className="mt-4 flex flex-col items-center justify-center rounded-md border border-gray-300 p-4 shadow-sm active:bg-gray-300 dark:border-neutral-500 dark:active:bg-neutral-500">
+      <div className="mt-4 flex flex-col items-center justify-center rounded-md border border-gray-300 p-4 shadow-sm active:bg-gray-300 dark:border-neutral-500 dark:active:bg-neutral-700">
         <p className="text-xs text-gray-700 dark:text-neutral-500">{}</p>
         <p className="text-center text-gray-500 dark:text-neutral-500">
           {data.summary}
