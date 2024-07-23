@@ -13,23 +13,23 @@ import { MATCHSTATUSAFL } from "@/lib/constants";
 import { redirect } from "next/navigation";
 
 export default async function Page({ params }: { params: { id: number } }) {
-  const game = await fetchAFLGame(params.id);
+  const rawGame = await fetchAFLGame(params.id);
   const quarters = await fetchAFLGameQuarters(params.id);
   const events = await fetchAFLGameEvents(params.id);
 
   //TODO: Fix error handling for rate limit
-  if (game === null) {
+  if (rawGame === null) {
     redirect("/misc/rateLimit");
   }
 
   let gameStarted =
-    game.status.short === MATCHSTATUSAFL.SHORT_NS ? false : true;
+    rawGame.status.short === MATCHSTATUSAFL.SHORT_NS ? false : true;
   let scores = [0];
 
   if (gameStarted) {
     let difference = 0;
     scores = events.events.flatMap((item) => {
-      if (item.team.id == game.teams.home.id) {
+      if (item.team.id == rawGame.teams.home.id) {
         item.type === "behind" ? (difference += 1) : (difference += 6);
       } else {
         item.type === "behind" ? (difference -= 1) : (difference -= 6);
@@ -38,20 +38,26 @@ export default async function Page({ params }: { params: { id: number } }) {
     });
   }
 
+  let game = mapAFLFixtureFields([rawGame])[0];
+
   return (
     <div className="flex flex-col">
-      <MatchDetailsHero data={mapAFLFixtureFields([game])[0]} />
+      <MatchDetailsHero
+        homeInfo={game.homeDetails}
+        awayInfo={game.awayDetails}
+        status={game.status}
+      />
       {gameStarted ? (
         <>
           <AFLScoreBreakdown
             quarterData={quarters}
-            homeLogo={game.teams.home.logo}
-            awayLogo={game.teams.away.logo}
+            homeLogo={rawGame.teams.home.logo}
+            awayLogo={rawGame.teams.away.logo}
           />
           <ScoreChart
             scoreDifference={scores}
-            homeLogo={game.teams.home.logo}
-            awayLogo={game.teams.away.logo}
+            homeLogo={rawGame.teams.home.logo}
+            awayLogo={rawGame.teams.away.logo}
           />
           <AFLKeyPlayerStats data={""} />
         </>
