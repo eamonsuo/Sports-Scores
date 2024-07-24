@@ -1,4 +1,3 @@
-import { MatchSummary } from "@/types/misc";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -32,7 +31,7 @@ export default function MatchSummaryCard({
         </p>
 
         <div className="m-2 grid w-full grid-cols-5 gap-2">
-          <div className="content-center justify-self-center">
+          <div className="content-center justify-self-start">
             <Image
               src={homeInfo.img}
               width={40}
@@ -49,7 +48,7 @@ export default function MatchSummaryCard({
           <p className="content-center text-right dark:text-neutral-400">
             {awayInfo.score}
           </p>
-          <div className="content-center justify-self-center">
+          <div className="content-center justify-self-end">
             <Image
               src={awayInfo.img}
               width={40}
