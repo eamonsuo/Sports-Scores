@@ -7,36 +7,42 @@ import { mapNFLFixtureFields } from "@/lib/dataMapping";
 import { redirect } from "next/navigation";
 
 export default async function Page({ params }: { params: { id: number } }) {
-  const game = await fetchNFLGame(params.id);
+  const rawGame = await fetchNFLGame(params.id);
   const events = await fetchNFLGameEvents(params.id);
 
   //TODO: Fix error handling for rate limit
-  if (game === null) {
+  if (rawGame === null) {
     redirect("/misc/rateLimit");
   }
 
   let gameStarted =
-    game.game.status.short === MATCHSTATUSNFL.SHORT_NS ? false : true;
+    rawGame.game.status.short === MATCHSTATUSNFL.SHORT_NS ? false : true;
   let scores = [0];
 
   if (gameStarted) {
     scores = events.map((item) => item.score.home - item.score.away);
   }
 
+  let game = mapNFLFixtureFields([rawGame])[0];
+
   return (
     <div className="flex flex-col">
-      <MatchDetailsHero data={mapNFLFixtureFields([game])[0]} />
+      <MatchDetailsHero
+        homeInfo={game.homeDetails}
+        awayInfo={game.awayDetails}
+        status={game.status}
+      />
       {gameStarted ? (
         <>
           <NFLScoreBreakdown
-            data={game}
-            homeLogo={game.teams.home.logo}
-            awayLogo={game.teams.away.logo}
+            data={rawGame}
+            homeLogo={rawGame.teams.home.logo}
+            awayLogo={rawGame.teams.away.logo}
           />
           <ScoreChart
             scoreDifference={scores}
-            homeLogo={game.teams.home.logo}
-            awayLogo={game.teams.away.logo}
+            homeLogo={rawGame.teams.home.logo}
+            awayLogo={rawGame.teams.away.logo}
           />
           {/* <NFLKeyPlayerStats data={""} /> */}
         </>

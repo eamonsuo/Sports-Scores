@@ -1,4 +1,3 @@
-import MatchSummaryCard from "@/components/generic/MatchSummaryCard";
 import RaceSummaryCard from "./RaceSummaryCard";
 import { SessionSummary } from "@/types/f1";
 import React from "react";
@@ -46,7 +45,14 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
               display={displayDate}
               currentDate={currentMatch}
             />
-            <RaceSummaryCard data={item} />
+            <RaceSummaryCard
+              id={item.id}
+              href={`/sports/${item.sport}/${item.id}`}
+              grandPrix={item.name}
+              sessionType={item.type}
+              img={item.logo}
+              status={item.status}
+            />
           </React.Fragment>
         );
       })}

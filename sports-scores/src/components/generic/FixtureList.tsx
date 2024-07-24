@@ -3,6 +3,7 @@ import { MatchSummary } from "@/types/misc";
 import React from "react";
 import SectionDate from "./SectionDate";
 
+// Assumes data prop is already sorted in desired order
 export default function FixtureList({ data }: { data: MatchSummary[] }) {
   const current_date: Date = new Date(Date.now());
 
@@ -44,7 +45,17 @@ export default function FixtureList({ data }: { data: MatchSummary[] }) {
               display={displayDate}
               currentDate={currentMatch}
             />
-            <MatchSummaryCard data={item} />
+            <MatchSummaryCard
+              id={item.id}
+              href={`sports/${item.sport}/${item.id}`}
+              homeInfo={item.homeDetails}
+              awayInfo={item.awayDetails}
+              matchSummary={item.summary}
+              bottomInfo={item.otherDetail}
+              venue={item.venue}
+              timer={item.timer}
+              topInfo={undefined}
+            />
           </React.Fragment>
         );
       })}
