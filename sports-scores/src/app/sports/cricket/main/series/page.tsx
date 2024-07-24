@@ -1,6 +1,14 @@
-export default async function Page() {
-  // const races = await fetchF1Races(2024);
-  // const mappedraces = mapF1SessionFields(races);
+import CricketFixtureList from "@/components/cricket/CricketFixtureList";
+import FixtureList from "@/components/generic/FixtureList";
+import { mapScrape } from "@/lib/dataMapping";
+import { cricinfoSeriesScraper } from "@/lib/scraper";
 
-  return <></>;
+export default async function Page() {
+  const scrape = await cricinfoSeriesScraper();
+
+  return scrape.map((item) => (
+    <p className="text-center" key={item.id}>
+      {item.longName}
+    </p>
+  ));
 }

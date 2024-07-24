@@ -129,31 +129,32 @@ export function mapF1SessionFields(sessions: F1Session[]) {
 // }
 
 export function mapScrape(data: CricketMatch[]) {
-  return data.map(
-    (item: CricketMatch) =>
-      ({
-        id: item.id,
-        startDate: item.startTime,
-        gameid: item.id,
-        sport: SPORT.CRICKET,
-        venue: item.ground.smallName,
-        status: `${item.stage} - ${item.state}`,
-        summary:
-          item.status === "{{MATCH_START_TIME}}"
-            ? `Starts at ${getLocalTimeISO(item.startTime)} `
-            : item.statusText,
-        timer: item.stage,
-        otherDetail: item.title,
-        homeDetails: {
-          img: `https://p.imgci.com${item.teams[0].team.imageUrl}`,
-          score: `${item.teams[0]?.score ?? "0"} ${item.teams[0].scoreInfo ?? ""}`,
-          name: item.teams[0].team.name,
-        },
-        awayDetails: {
-          img: `https://p.imgci.com${item.teams[1].team.imageUrl}`,
-          score: `${item.teams[1]?.score ?? "0"} ${item.teams[1].scoreInfo ?? ""}`,
-          name: item.teams[1].team.name,
-        },
-      }) as MatchSummary,
-  );
+  return data.map((item: CricketMatch) => {
+    let homeTeam = item.teams[0].isHome ? item.teams[0] : item.teams[1];
+    let awayTeam = item.teams[0].isHome ? item.teams[1] : item.teams[0];
+    return {
+      id: item.id,
+      startDate: item.startTime,
+      gameid: item.id,
+      sport: SPORT.CRICKET,
+      venue: item.ground?.smallName,
+      status: `${item.stage} - ${item.state}`,
+      summary:
+        item.status === "{{MATCH_START_TIME}}"
+          ? `Starts at ${getLocalTimeISO(item.startTime)} `
+          : item.statusText,
+      timer: item.stage,
+      otherDetail: item.title,
+      homeDetails: {
+        img: `https://p.imgci.com${homeTeam.team.imageUrl ?? "/db/PICTURES/CMS"}`,
+        score: `${homeTeam?.score ?? "0"}`,
+        name: homeTeam.team.name,
+      },
+      awayDetails: {
+        img: `https://p.imgci.com${awayTeam.team.imageUrl ?? "/db/PICTURES/CMS"}`,
+        score: `${awayTeam?.score ?? "0"}`,
+        name: awayTeam.team.name,
+      },
+    } as MatchSummary;
+  });
 }
