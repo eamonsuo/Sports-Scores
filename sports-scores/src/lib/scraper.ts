@@ -30,7 +30,7 @@ async function scrapeData<T>(url: string) {
   return jsonData as T;
 }
 
-async function scrapeUrls(urls: string[]) {
+async function scrapePages(urls: string[]) {
   return (
     await Promise.all(
       urls.map(async (item) => {
@@ -81,7 +81,7 @@ export async function cricinfoTeamsScraper() {
     ),
   );
 
-  let bulkData = await scrapeUrls(urls);
+  let bulkData = await scrapePages(urls);
   return bulkData.sort(compareCricketMatchDates);
 }
 
@@ -94,6 +94,11 @@ export async function cricinfoSeriesScraper() {
     type.seriesGroups.flatMap((group) =>
       group.items.flatMap((item) => item.series),
     ),
+  );
+
+  series = series.filter(
+    (value, index, self) =>
+      index === self.findIndex((t) => t.name === value.name),
   );
 
   return series.sort(compareCricketSeriesDates);
@@ -132,4 +137,4 @@ async function testing() {
   );
 }
 
-// testing();
+testing();
