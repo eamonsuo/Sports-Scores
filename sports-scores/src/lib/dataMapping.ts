@@ -155,6 +155,7 @@ export function mapScrape(data: CricketMatch[]) {
         score: `${awayTeam?.score ?? "0"}`,
         name: awayTeam.team.name,
       },
+      seriesName: item.series.longName,
     } as MatchSummary;
   });
 }

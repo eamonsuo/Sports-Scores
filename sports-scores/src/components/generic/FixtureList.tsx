@@ -40,14 +40,15 @@ export default function FixtureList({ data }: { data: MatchSummary[] }) {
 
         return (
           <React.Fragment key={item.id}>
-            <SectionDate
-              sectionDate={sectionDate}
-              display={displayDate}
-              currentDate={currentMatch}
-            />
+            {displayDate && (
+              <SectionDate
+                sectionDate={sectionDate}
+                currentDate={currentMatch}
+              />
+            )}
             <MatchSummaryCard
               id={item.id}
-              href={`sports/${item.sport}/${item.id}`}
+              href={`/sports/${item.sport}/${item.id}`}
               homeInfo={item.homeDetails}
               awayInfo={item.awayDetails}
               matchSummary={item.summary}

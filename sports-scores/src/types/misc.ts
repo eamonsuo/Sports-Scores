@@ -56,6 +56,7 @@ export type MatchSummary = {
   awayDetails: TeamScoreDetails;
   roundLabel?: string;
   timer: string;
+  seriesName?: string;
 };
 
 type APISettings = "status" | "fixtures" | "standings";

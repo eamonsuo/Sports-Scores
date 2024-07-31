@@ -22,7 +22,7 @@ export interface SeriesResults {
       title: string;
       seriesGroups: {
         title: string;
-        items: { title: string; series: Series; images: Image[] }[];
+        items: { title: string; series: Series; images: CricketImage[] }[];
       }[];
     }[];
   };
@@ -131,13 +131,13 @@ interface Ground {
   longName: string;
   slug: string;
   location: string;
-  image: Image;
+  image: CricketImage;
   town: Town;
   country: Country;
   capacity: number | null;
 }
 
-interface Image {
+export interface CricketImage {
   id: number;
   objectId: number;
   slug: string;
@@ -195,6 +195,6 @@ interface TeamDetails {
   imageUrl: string;
   isCountry: boolean;
   primaryColor: string | null;
-  image: Image;
+  image: CricketImage;
   country: Country;
 }

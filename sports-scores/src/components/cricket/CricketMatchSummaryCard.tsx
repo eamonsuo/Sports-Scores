@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function CricketMatchSummaryCard({
   id,
-  href,
+  hrefMatch,
   matchSummary,
   homeInfo,
   awayInfo,
@@ -11,9 +11,11 @@ export default function CricketMatchSummaryCard({
   venue,
   topInfo,
   bottomInfo,
+  seriesName,
+  hrefSeries,
 }: {
   id: number;
-  href: string;
+  hrefMatch: string;
   matchSummary: string;
   homeInfo: { name: string; score: string; img: string };
   awayInfo: { name: string; score: string; img: string };
@@ -21,10 +23,12 @@ export default function CricketMatchSummaryCard({
   venue: string;
   topInfo?: string;
   bottomInfo?: string;
+  seriesName: string;
+  hrefSeries: string;
 }) {
   return (
-    <Link href={href}>
-      <div className="mt-4 flex flex-col items-center justify-center rounded-md border border-gray-300 p-4 shadow-sm active:bg-gray-300 dark:border-neutral-500 dark:active:bg-neutral-700">
+    <Link href={hrefMatch}>
+      <div className="flex flex-col items-center justify-center rounded-b-md border border-gray-300 p-4 shadow-sm active:bg-gray-300 dark:border-neutral-500 dark:active:bg-neutral-700">
         <p className="text-xs text-gray-700 dark:text-neutral-500">{topInfo}</p>
         <p className="text-center text-gray-500 dark:text-neutral-500">
           {matchSummary}

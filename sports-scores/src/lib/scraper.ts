@@ -4,6 +4,7 @@ import {
   MatchResults,
   SeriesResults,
   Series,
+  CricketImage,
 } from "@/types/cricket";
 import { writeFile } from "fs";
 import { REVALIDATE } from "./constants";
@@ -63,6 +64,20 @@ function compareCricketSeriesDates(a: Series, b: Series) {
   return 0;
 }
 
+function compareCricketSeriesDatesType2(
+  a: { title: string; series: Series; images: CricketImage[] },
+  b: { title: string; series: Series; images: CricketImage[] },
+) {
+  let first = Date.parse(a.series.startDate);
+  let second = Date.parse(b.series.startDate);
+  if (first > second) {
+    return 1;
+  } else if (first < second) {
+    return -1;
+  }
+  return 0;
+}
+
 export async function cricinfoTeamsScraper() {
   let teams = [
     "australia-2",
@@ -90,18 +105,33 @@ export async function cricinfoSeriesScraper() {
     "https://www.espncricinfo.com/cricket-fixtures",
   );
 
-  let series = rawData.props.appPageProps.data.collections.flatMap((type) =>
-    type.seriesGroups.flatMap((group) =>
-      group.items.flatMap((item) => item.series),
-    ),
+  let series = rawData.props.appPageProps.data.collections.flatMap(
+    (item) => item.seriesGroups,
   );
 
-  series = series.filter(
-    (value, index, self) =>
-      index === self.findIndex((t) => t.name === value.name),
-  );
+  let combinedSeries: typeof series = [];
 
-  return series.sort(compareCricketSeriesDates);
+  series.map((item) => {
+    let duplicate = false;
+    for (const com of combinedSeries) {
+      if (item.title === com.title) {
+        com.items = com.items.concat(item.items);
+        duplicate = true;
+        break;
+      }
+    }
+    !duplicate && combinedSeries.push(item);
+  });
+
+  combinedSeries.map((item) => {
+    item.items = item.items.filter(
+      (item) =>
+        Date.parse(item.series.endDate) > Date.now() - 1000 * 60 * 60 * 24 * 30, //Filter out series more than 30 days old
+    );
+    item.items.sort(compareCricketSeriesDatesType2);
+  });
+
+  return combinedSeries;
 }
 
 export async function cricinfoRecentMatchesScraper() {
@@ -122,19 +152,38 @@ export async function cricinfoRecentMatchesScraper() {
 }
 
 async function testing() {
-  let series = await scrapeData<CricinfoResponse<SeriesResults>>(
+  let rawData = await scrapeData<CricinfoResponse<SeriesResults>>(
     "https://www.espncricinfo.com/cricket-fixtures",
   );
 
-  let urls = series.props.appPageProps.data.collections.flatMap((type) =>
-    type.seriesGroups.flatMap((group) => group.items.flatMap((item) => item)),
+  let series = rawData.props.appPageProps.data.collections.flatMap(
+    (item) => item.seriesGroups,
   );
 
-  writeFile(
-    "_espnTest",
-    JSON.stringify(await cricinfoSeriesScraper()),
-    (err) => {},
-  );
+  let combinedSeries: typeof series = [];
+
+  for (const s of series) {
+    let duplicate = false;
+    for (const com of combinedSeries) {
+      if (s.title === com.title) {
+        // console.log(com.items.length);
+        com.items = com.items.concat(s.items);
+        // console.log(com.items.length);
+        duplicate = true;
+        break;
+      }
+    }
+    !duplicate && combinedSeries.push(s);
+  }
+
+  combinedSeries.map((item) => item.items.sort(compareCricketSeriesDatesType2));
+
+  // series = series.filter(
+  //   (value, index, self) =>
+  //     index === self.findIndex((t) => t.name === value.name),
+  // );
+
+  writeFile("_espnTest", JSON.stringify(combinedSeries), (err) => {});
 }
 
-testing();
+// testing();

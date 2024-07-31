@@ -1,8 +1,8 @@
-import MatchSummaryCard from "@/components/generic/MatchSummaryCard";
 import { MatchSummary } from "@/types/misc";
 import React from "react";
 import SectionDate from "@/components/generic/SectionDate";
 import CricketMatchSummaryCard from "./CricketMatchSummaryCard";
+import CricketSeriesHeader from "./CricketSeriesHeader";
 
 // Assumes data prop is already sorted in desired order
 export default function CricketFixtureList({ data }: { data: MatchSummary[] }) {
@@ -41,14 +41,16 @@ export default function CricketFixtureList({ data }: { data: MatchSummary[] }) {
 
         return (
           <React.Fragment key={item.id}>
-            <SectionDate
-              sectionDate={sectionDate}
-              display={displayDate}
-              currentDate={currentMatch}
-            />
+            {displayDate && (
+              <SectionDate
+                sectionDate={sectionDate}
+                currentDate={currentMatch}
+              />
+            )}
+            <CricketSeriesHeader href="" seriesName={item.seriesName ?? ""} />
             <CricketMatchSummaryCard
               id={item.id}
-              href={`sports/${item.sport}/${item.id}`}
+              hrefMatch={`/sports/${item.sport}/${item.id}`}
               homeInfo={item.homeDetails}
               awayInfo={item.awayDetails}
               matchSummary={item.summary}
@@ -56,6 +58,8 @@ export default function CricketFixtureList({ data }: { data: MatchSummary[] }) {
               venue={item.venue}
               timer={item.timer}
               topInfo={undefined}
+              hrefSeries=""
+              seriesName={item.seriesName ?? ""}
             />
           </React.Fragment>
         );
