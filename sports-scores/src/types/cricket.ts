@@ -1,18 +1,34 @@
 export interface CricinfoResponse<T> {
-  appNextJsContext: any;
-  globalDetails: any;
-  editionDetails: any;
-  appPageProps: T;
+  props: {
+    appNextJsContext: any;
+    globalDetails: any;
+    editionDetails: any;
+    appPageProps: T;
+  };
 }
 
-export type LiveScores = {
+export interface MatchResults {
   data: {
     content: {
       matches: CricketMatch[];
     };
   };
   layout: any;
-};
+}
+
+export interface SeriesResults {
+  data: {
+    collections: {
+      title: string;
+      seriesGroups: {
+        title: string;
+        items: { title: string; series: Series; images: CricketImage[] }[];
+      }[];
+    }[];
+  };
+  layout: any;
+}
+
 export interface CricketMatch {
   _uid: number;
   id: number;
@@ -83,7 +99,7 @@ export interface CricketMatch {
   ballByBallSource: string;
 }
 
-interface Series {
+export interface Series {
   id: number;
   objectId: number;
   scribeId: number;
@@ -115,13 +131,13 @@ interface Ground {
   longName: string;
   slug: string;
   location: string;
-  image: Image;
+  image: CricketImage;
   town: Town;
   country: Country;
   capacity: number | null;
 }
 
-interface Image {
+export interface CricketImage {
   id: number;
   objectId: number;
   slug: string;
@@ -179,6 +195,6 @@ interface TeamDetails {
   imageUrl: string;
   isCountry: boolean;
   primaryColor: string | null;
-  image: Image;
+  image: CricketImage;
   country: Country;
 }

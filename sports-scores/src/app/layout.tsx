@@ -16,6 +16,8 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  // let t = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
   return (
     <html lang="en" className="dark">
       {/* Dark mode enabled */}

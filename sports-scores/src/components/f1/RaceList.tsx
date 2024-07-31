@@ -40,11 +40,7 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
 
         return (
           <React.Fragment key={item.id}>
-            <SectionDate
-              sectionDate={sectionDate}
-              display={displayDate}
-              currentDate={currentMatch}
-            />
+            <SectionDate sectionDate={sectionDate} currentDate={currentMatch} />
             <RaceSummaryCard
               id={item.id}
               href={`/sports/${item.sport}/${item.id}`}
