@@ -5,6 +5,7 @@ import {
   SeriesResults,
   Series,
   CricketImage,
+  MatchDetails,
 } from "@/types/cricket";
 import { writeFile } from "fs";
 import { REVALIDATE } from "./constants";
@@ -134,8 +135,8 @@ export async function cricinfoSeriesScraper() {
   return combinedSeries;
 }
 
-export async function cricinfoRecentMatchesScraper() {
-  let upcomingMatches = await scrapeData<CricinfoResponse<any>>(
+export async function cricinfoMatchesScraper() {
+  let upcomingMatches = await scrapeData<CricinfoResponse<any>>( //TODO: Define response type
     "https://www.espncricinfo.com/live-cricket-match-schedule-fixtures",
   );
 
@@ -151,39 +152,18 @@ export async function cricinfoRecentMatchesScraper() {
   );
 }
 
+export async function cricinfoMatchDetails(url: string) {
+  let matchDetails = await scrapeData<CricinfoResponse<MatchDetails>>(url);
+
+  return matchDetails.props.appPageProps.data;
+}
+
 async function testing() {
-  let rawData = await scrapeData<CricinfoResponse<SeriesResults>>(
-    "https://www.espncricinfo.com/cricket-fixtures",
+  let upcomingMatches = await scrapeData<CricinfoResponse<MatchDetails>>(
+    "https://www.espncricinfo.com/series/icc-men-s-t20-world-cup-2024-1411166/australia-vs-india-51st-match-super-eights-group-1-1415751/full-scorecard",
   );
 
-  let series = rawData.props.appPageProps.data.collections.flatMap(
-    (item) => item.seriesGroups,
-  );
-
-  let combinedSeries: typeof series = [];
-
-  for (const s of series) {
-    let duplicate = false;
-    for (const com of combinedSeries) {
-      if (s.title === com.title) {
-        // console.log(com.items.length);
-        com.items = com.items.concat(s.items);
-        // console.log(com.items.length);
-        duplicate = true;
-        break;
-      }
-    }
-    !duplicate && combinedSeries.push(s);
-  }
-
-  combinedSeries.map((item) => item.items.sort(compareCricketSeriesDatesType2));
-
-  // series = series.filter(
-  //   (value, index, self) =>
-  //     index === self.findIndex((t) => t.name === value.name),
-  // );
-
-  writeFile("_espnTest", JSON.stringify(combinedSeries), (err) => {});
+  writeFile("_espnTest", JSON.stringify(upcomingMatches), (err) => {});
 }
 
 // testing();

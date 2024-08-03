@@ -50,7 +50,7 @@ export default function CricketFixtureList({ data }: { data: MatchSummary[] }) {
             <CricketSeriesHeader href="" seriesName={item.seriesName ?? ""} />
             <CricketMatchSummaryCard
               id={item.id}
-              hrefMatch={`/sports/${item.sport}/${item.id}`}
+              hrefMatch={`/sports/${item.sport}/match/${item.matchSlug}`}
               homeInfo={item.homeDetails}
               awayInfo={item.awayDetails}
               matchSummary={item.summary}

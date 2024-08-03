@@ -57,6 +57,7 @@ export type MatchSummary = {
   roundLabel?: string;
   timer: string;
   seriesName?: string;
+  matchSlug?: string; // Primarily used in cricket to get match details
 };
 
 type APISettings = "status" | "fixtures" | "standings";
