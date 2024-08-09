@@ -23,7 +23,7 @@ export default function FixtureRoundList({
   let roundLabels = [...new Set(data.map((item) => item.roundLabel ?? ""))];
 
   // Swipe actions
-  const MOVE_THRESHOLD = 180;
+  const MOVE_THRESHOLD = 100;
 
   let initialX = 0;
   let moveX = 0;
