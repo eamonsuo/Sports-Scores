@@ -325,7 +325,7 @@ interface MatchSeriesResult {
 interface Inning {
   inningNumber: number;
   isCurrent: boolean;
-  team: Team;
+  team: TeamDetails;
   isBatted: boolean;
   runs: number;
   wickets: number;
@@ -398,7 +398,7 @@ interface DismissalText {
   commentary: string;
 }
 
-interface InningBowler {
+export interface InningBowler {
   player: Player;
   bowledType: string;
   overs: number;

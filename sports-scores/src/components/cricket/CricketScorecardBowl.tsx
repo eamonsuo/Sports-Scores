@@ -1,11 +1,11 @@
 import { getImageUrl } from "@/lib/utils";
-import { InningBatsman } from "@/types/cricket";
+import { InningBatsman, InningBowler } from "@/types/cricket";
 import Image from "next/image";
 
-export default async function CricketScorecardBat({
+export default async function CricketScorecardBowl({
   data,
 }: {
-  data: InningBatsman[];
+  data: InningBowler[];
 }) {
   return (
     <table className="w-full flex-1 dark:text-neutral-400">
@@ -13,9 +13,10 @@ export default async function CricketScorecardBat({
         <tr>
           <th className="pe-2"></th>
           <th className="px-2">Player</th>
+          <th className="px-2">O</th>
           <th className="px-2">R</th>
-          <th className="px-2">B</th>
-          <th className="px-2">SR</th>
+          <th className="px-2">W</th>
+          <th className="px-2">ECON</th>
         </tr>
       </thead>
       <tbody className="text-center">
@@ -29,14 +30,12 @@ export default async function CricketScorecardBat({
                 width={30}
                 height={30}
               ></Image>{" "}
-              <div className="flex flex-col">
-                <p>{item.player.name}</p>{" "}
-                <p className="text-xs">{item.dismissalText?.long}</p>
-              </div>
+              {item.player.name}
             </td>
-            <td>{item.runs}</td>
-            <td>{item.balls}</td>
-            <td>{item.strikerate}</td>
+            <td>{item.overs}</td>
+            <td>{item.conceded}</td>
+            <td>{item.wickets}</td>
+            <td>{item.economy.toFixed(2)}</td>
           </tr>
         ))}
       </tbody>

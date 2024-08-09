@@ -1,6 +1,7 @@
 import { MatchSummary } from "@/types/misc";
 import { MATCHSTATUSAFL, MATCHSTATUSNFL, SPORT } from "./constants";
 import {
+  getImageUrl,
   getLocalTime,
   getLocalTimeISO,
   setMatchStatusCricket,
@@ -146,12 +147,12 @@ export function mapScrape(data: CricketMatch[]) {
       timer: item.stage,
       otherDetail: item.title,
       homeDetails: {
-        img: `https://p.imgci.com${homeTeam.team.imageUrl ?? "/db/PICTURES/CMS"}`,
+        img: getImageUrl(homeTeam.team.imageUrl),
         score: `${homeTeam?.score ?? "0"}`,
         name: homeTeam.team.name,
       },
       awayDetails: {
-        img: `https://p.imgci.com${awayTeam.team.imageUrl ?? "/db/PICTURES/CMS"}`,
+        img: getImageUrl(awayTeam.team.imageUrl),
         score: `${awayTeam?.score ?? "0"}`,
         name: awayTeam.team.name,
       },

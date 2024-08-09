@@ -16,7 +16,7 @@ export default async function SportsLayout({
           },
           {
             href: "matches#current-date",
-            label: "Matches",
+            label: "All Matches",
             page: "matches",
           },
           {

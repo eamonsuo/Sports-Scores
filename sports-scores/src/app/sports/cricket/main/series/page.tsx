@@ -2,6 +2,7 @@ import { cricinfoSeriesScraper } from "@/lib/scraper";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { getImageUrl } from "@/lib/utils";
 
 export default async function Page() {
   const scrape = await cricinfoSeriesScraper();
@@ -20,7 +21,7 @@ export default async function Page() {
                 <div className="me-2 content-center">
                   {item.images.length > 0 && (
                     <Image
-                      src={`https://p.imgci.com${item.images[0].url ?? "/db/PICTURES/CMS"}`}
+                      src={getImageUrl(item.images[0].url)}
                       width={20}
                       height={20}
                       alt="Series logo"
@@ -28,7 +29,7 @@ export default async function Page() {
                   )}
                   {item.images.length === 2 && (
                     <Image
-                      src={`https://p.imgci.com${item.images[1].url ?? "/db/PICTURES/CMS"}`}
+                      src={getImageUrl(item.images[1].url)}
                       width={20}
                       height={20}
                       alt="Series logo"
