@@ -22,6 +22,35 @@ export default function FixtureRoundList({
 
   let roundLabels = [...new Set(data.map((item) => item.roundLabel ?? ""))];
 
+  // Swipe actions
+  const MOVE_THRESHOLD = 180;
+
+  let initialX = 0;
+  let moveX = 0;
+
+  function touchStart(event: React.TouchEvent<HTMLDivElement>) {
+    initialX = event.touches[0].pageX;
+    // console.log("initial", initialX, " ---  end", event);
+  }
+
+  function touchMove(event: React.TouchEvent<HTMLDivElement>) {
+    let currentX = event.touches[0].pageX;
+    moveX = currentX - initialX;
+  }
+
+  function touchEnd() {
+    let curIndex = roundLabels.indexOf(round);
+
+    if (moveX < -MOVE_THRESHOLD) {
+      curIndex + 1 !== roundLabels.length &&
+        setRound(roundLabels[curIndex + 1]);
+    } else if (moveX > MOVE_THRESHOLD) {
+      curIndex !== 0 && setRound(roundLabels[curIndex - 1]);
+    }
+
+    moveX = 0;
+  }
+
   return (
     <>
       <div className="hideScroll mx-2 mb-2 flex gap-1 overflow-x-auto">
@@ -43,14 +72,21 @@ export default function FixtureRoundList({
         ))}
       </div>
 
-      <FixtureList
-        data={data.filter(
-          (item) =>
-            item.roundLabel === round &&
-            item.status !== MATCHSTATUSAFL.LONG_CANC &&
-            item.status !== MATCHSTATUSNFL.LONG_CANC,
-        )}
-      />
+      <div
+        onTouchStart={touchStart}
+        onTouchMove={touchMove}
+        onTouchEnd={touchEnd}
+        className="flex-1 overflow-y-auto"
+      >
+        <FixtureList
+          data={data.filter(
+            (item) =>
+              item.roundLabel === round &&
+              item.status !== MATCHSTATUSAFL.LONG_CANC &&
+              item.status !== MATCHSTATUSNFL.LONG_CANC,
+          )}
+        />
+      </div>
     </>
   );
 }
