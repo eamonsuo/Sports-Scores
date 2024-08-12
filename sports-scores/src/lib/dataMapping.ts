@@ -53,7 +53,8 @@ export function mapNFLFixtureFields(matches: NFLGame[]) {
     (item: NFLGame) =>
       ({
         id: item.game.id,
-        startDate: item.game.date.date,
+        startDate:
+          item.game.date.date + "T" + item.game.date.time + ":00+00:00",
         sport: SPORT.NFL,
         venue: item.game.venue.name ?? "",
         status: item.game.status.long,

@@ -27,12 +27,6 @@ const footerLinks: {
     altText: "ABC News",
   },
   {
-    sport: SPORT.OLYMPICS,
-    link: `/sports/${SPORT.OLYMPICS}`,
-    img: oly,
-    altText: "Olympics",
-  },
-  {
     sport: SPORT.CRICKET,
     link: `/sports/${SPORT.CRICKET}/main/myteams#current-date`,
     img: cricketBall,
