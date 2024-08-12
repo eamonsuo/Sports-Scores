@@ -1,3 +1,5 @@
+import { fetchAFLStatus } from "@/api/afl.api";
+import APIStatus from "@/components/misc/ApiStatus";
 import NavButtonGroup from "@/components/misc/NavButtonGroup";
 
 export default async function SportsLayout({
@@ -10,23 +12,18 @@ export default async function SportsLayout({
       <NavButtonGroup
         buttons={[
           {
-            href: "myteams#current-date",
-            label: "My Teams",
-            page: "myteams",
+            href: "",
+            label: "1",
+            page: "",
           },
           {
-            href: "matches#current-date",
-            label: "All Matches",
-            page: "matches",
-          },
-          {
-            href: "series",
-            label: "Series",
-            page: "series",
+            href: "",
+            label: "2",
+            page: "",
           },
         ]}
       />
-      {children}
+      {children}m
     </div>
   );
 }

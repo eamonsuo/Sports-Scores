@@ -14,6 +14,7 @@ reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
 const fetchOptions = {
   headers: reqHeaders,
   next: { revalidate: REVALIDATE },
+  //  cache: 'no-store'
 };
 
 export async function fetchAFLFixtures(season: number) {

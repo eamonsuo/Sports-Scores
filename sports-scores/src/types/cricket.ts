@@ -29,6 +29,26 @@ export interface SeriesResults {
   layout: any;
 }
 
+export interface MatchDetails {
+  data: {
+    match: CricketMatch;
+    content: {
+      matchPlayers: {
+        teamPlayers: TeamPlayer[];
+      } | null;
+      notes: {
+        groups: [];
+      };
+      closeOfPlay: null | any;
+      matchPlayerAwards: any[];
+      innings: Inning[]; //TODO
+      superOverInnings: any[];
+      supportInfo: SupportInfo;
+    };
+  };
+  layout: any;
+}
+
 export interface CricketMatch {
   _uid: number;
   id: number;
@@ -197,4 +217,264 @@ interface TeamDetails {
   primaryColor: string | null;
   image: CricketImage;
   country: Country;
+}
+
+interface TeamPlayer {
+  type: "PLAYING";
+  team: Team;
+  players: PlayerStats[];
+  bestBatsmen: PlayerPerformance[];
+  bestBowlers: PlayerPerformance[];
+}
+
+interface PlayerStats {
+  playerRoleType: "P";
+  player: Player;
+  isOverseas: boolean;
+  isWithdrawn: boolean;
+  note: string | null;
+}
+
+interface Player {
+  id: number;
+  objectId: number;
+  name: string;
+  longName: string;
+  mobileName: string;
+  indexName: string;
+  battingName: string;
+  fieldingName: string;
+  slug: string;
+  imageUrl: string;
+  headshotImageUrl: string;
+  dateOfBirth: DateOfBirth;
+  dateOfDeath: DateOfBirth | null;
+  gender: "F" | "M";
+  battingStyles: string[];
+  bowlingStyles: string[];
+  longBattingStyles: string[];
+  longBowlingStyles: string[];
+  image: CricketImage;
+  countryTeamId: number;
+  playerRoleTypeIds: number[];
+  playingRoles: string[];
+  headshotImage: CricketImage;
+}
+
+interface DateOfBirth {
+  year: number;
+  month: number;
+  date: number;
+}
+
+interface PlayerPerformance {
+  player: Player;
+  team: Team;
+  matches: number;
+  runs?: number;
+  innings: number;
+  average: number;
+  notouts?: number;
+  wickets?: number;
+  economy?: number;
+  conceded?: number;
+  balls?: number;
+  strikerate?: number;
+}
+
+interface SupportInfo {
+  stories: any[];
+  videos: any[];
+  seriesStories: any[];
+  seriesStandings: any | null;
+  liveInfo: any | null;
+  liveSummary: any | null;
+  superOverLiveSummary: any | null;
+  mostValuedPlayerOfTheMatch: any | null;
+  playersOfTheMatch: any | null;
+  playersOfTheSeries: any | null;
+  matchSeriesResult: MatchSeriesResult;
+  recentReportStory: any | null;
+  recentPreviewStory: any | null;
+  liveBlogStory: any | null;
+  fantasyPickStory: any | null;
+  commentaryStarted: boolean;
+  superOver: boolean;
+  bet365Odds: any | null;
+  teamsPrevMatches: any;
+  teamsNextMatches: any;
+  seriesPrevMatches: any[];
+}
+
+interface MatchSeriesResult {
+  leadTeam: TeamDetails;
+  leadType: number;
+  leadHowWon: number;
+  resultType: number;
+  matchesWonByLeadTeam: number;
+  matchesWonByLoserTeam: number;
+  matchNumber: number;
+  totalNumberOfMatches: number;
+  abondonedNumberOfMatches: number;
+  cancelledNumberOfMatches: number;
+  isLeadAbandoned: boolean;
+  isLeadCancelled: boolean;
+  groupTitle: string;
+}
+
+interface Inning {
+  inningNumber: number;
+  isCurrent: boolean;
+  team: TeamDetails;
+  isBatted: boolean;
+  runs: number;
+  wickets: number;
+  lead: number;
+  target: number;
+  overs: number;
+  balls: number;
+  totalOvers: number;
+  totalBalls: number;
+  minutes: number | null;
+  extras: number;
+  byes: number;
+  legbyes: number;
+  wides: number;
+  noballs: number;
+  penalties: number;
+  event: number;
+  ballsPerOver: number;
+  inningBatsmen: InningBatsman[];
+  inningBowlers: InningBowler[];
+  inningPartnerships: InningPartnership[];
+  inningOvers: any[]; //TODO: maybe other matches have this
+  inningWickets: InningWicket[];
+  inningFallOfWickets: FallOfWicket[];
+  inningDRSReviews: any[];
+  inningOverGroups: any[];
+}
+
+export interface InningBatsman {
+  playerRoleType: string;
+  player: Player;
+  battedType: string;
+  runs: number | null;
+  balls: number | null;
+  minutes: number | null;
+  fours: number | null;
+  sixes: number | null;
+  strikerate: number | null;
+  isOut: boolean;
+  dismissalType: number | null;
+  dismissalBatsman: Player | null;
+  dismissalBowler: Player | null;
+  dismissalFielders: DismissalFielder[] | null;
+  dismissalText: DismissalText | null;
+  dismissalComment: string | null;
+  fowOrder: number | null;
+  fowWicketNum: number | null;
+  fowRuns: number | null;
+  fowBalls: number | null;
+  fowOvers: number | null;
+  fowOverNumber: number | null;
+  ballOversActual: number | null;
+  ballOversUnique: number | null;
+  ballTotalRuns: number | null;
+  ballBatsmanRuns: number | null;
+  videos: any[];
+  images: any[];
+  currentType: string | null;
+}
+
+interface DismissalFielder {
+  player: Player;
+  isKeeper: boolean;
+  isSubstitute: boolean;
+}
+
+interface DismissalText {
+  short: string;
+  long: string;
+  commentary: string;
+}
+
+export interface InningBowler {
+  player: Player;
+  bowledType: string;
+  overs: number;
+  balls: number;
+  maidens: number;
+  conceded: number;
+  wickets: number;
+  economy: number;
+  runsPerBall: number;
+  dots: number | null;
+  fours: number | null;
+  sixes: number | null;
+  wides: number;
+  noballs: number;
+  videos: any[]; // replace `any` with a more specific type if available
+  images: any[]; // replace `any` with a more specific type if available
+  currentType: string | null;
+  inningWickets: any[]; // replace `any` with a more specific type if available
+}
+
+interface InningPartnership {
+  player1: Player;
+  player2: Player;
+  outPlayerId: number;
+  player1Runs: number;
+  player1Balls: number;
+  player2Runs: number;
+  player2Balls: number;
+  runs: number;
+  balls: number;
+  overs: number;
+  isLive: boolean;
+}
+
+interface InningWicket {
+  playerRoleType: string;
+  player: Player;
+  battedType: string;
+  runs: number;
+  balls: number;
+  minutes: number | null;
+  fours: number;
+  sixes: number;
+  strikerate: number;
+  isOut: boolean;
+  dismissalType: number;
+  dismissalBatsman: Player;
+  dismissalBowler: Player | null;
+  dismissalFielders: Fielder[];
+  dismissalText: DismissalText;
+  dismissalComment: string | null;
+  fowOrder: number;
+  fowWicketNum: number;
+  fowRuns: number;
+  fowBalls: number | null;
+  fowOvers: number;
+  fowOverNumber: number;
+  ballOversActual: number | null;
+  ballOversUnique: number | null;
+  ballTotalRuns: number | null;
+  ballBatsmanRuns: number | null;
+  videos: any[]; // Define type based on actual video data structure if available
+  images: any[]; // Define type based on actual image data structure if available
+  currentType: string | null;
+}
+
+interface Fielder {
+  player: Player;
+  isKeeper: boolean;
+  isSubstitute: boolean;
+}
+
+interface FallOfWicket {
+  fowOrder: number;
+  fowWicketNum: number;
+  fowRuns: number;
+  fowOvers: number;
+  fowBalls: number | null;
 }

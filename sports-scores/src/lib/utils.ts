@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { MATCHSTATUSAFL, MATCHSTATUSNFL, SPORT } from "./constants";
 import { MatchSummary } from "@/types/misc";
+import fallback from "@/../public/vercel.svg";
 
 export function setMatchStatusCricket(status: string) {
   switch (status) {
@@ -118,4 +119,11 @@ export function getLocalTimeISO(startTime: string) {
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+export function getImageUrl(slug: string) {
+  if (slug === null || slug === undefined) {
+    return fallback;
+  }
+  return `https://p.imgci.com${slug ?? "/db/PICTURES/CMS"}`;
 }
