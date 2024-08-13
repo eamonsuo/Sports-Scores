@@ -1,8 +1,8 @@
+import fallback from "@/../public/vercel.svg";
+import { MatchSummary } from "@/types/misc";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { MATCHSTATUSAFL, MATCHSTATUSNFL, SPORT } from "./constants";
-import { MatchSummary } from "@/types/misc";
-import fallback from "@/../public/vercel.svg";
+import { MATCHSTATUSAFL, MATCHSTATUSNFL } from "./constants";
 
 export function setMatchStatusCricket(status: string) {
   switch (status) {
@@ -121,7 +121,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getImageUrl(slug: string) {
+export function getCricketImageUrl(slug: string) {
   if (slug === null || slug === undefined) {
     return fallback;
   }

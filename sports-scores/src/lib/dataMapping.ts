@@ -1,17 +1,16 @@
+import { AFLGame } from "@/types/afl";
+import { BaseballGame } from "@/types/baseball";
+import { CricketMatch } from "@/types/cricket";
+import { F1Session, SessionSummary } from "@/types/f1";
 import { MatchSummary } from "@/types/misc";
+import { NFLGame } from "@/types/nfl";
 import { MATCHSTATUSAFL, MATCHSTATUSNFL, SPORT } from "./constants";
 import {
-  getImageUrl,
+  getCricketImageUrl,
   getLocalTime,
   getLocalTimeISO,
-  setMatchStatusCricket,
   setMatchSummary,
 } from "./utils";
-import { AFLGame } from "@/types/afl";
-import { F1Session, SessionSummary } from "@/types/f1";
-import { NFLGame } from "@/types/nfl";
-import { CricketMatch } from "@/types/cricket";
-import { BaseballGame } from "@/types/baseball";
 
 export function mapAFLFixtureFields(matches: AFLGame[]) {
   return matches.map(

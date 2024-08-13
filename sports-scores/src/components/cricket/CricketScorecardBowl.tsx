@@ -1,5 +1,5 @@
-import { getImageUrl } from "@/lib/utils";
-import { InningBatsman, InningBowler } from "@/types/cricket";
+import { getCricketImageUrl } from "@/lib/utils";
+import { InningBowler } from "@/types/cricket";
 import Image from "next/image";
 
 export default async function CricketScorecardBowl({
@@ -25,7 +25,7 @@ export default async function CricketScorecardBowl({
             <td>{data.indexOf(item) + 1}</td>
             <td className="flex gap-2 py-2 text-left">
               <Image
-                src={getImageUrl(item.player.headshotImageUrl)}
+                src={getCricketImageUrl(item.player.headshotImageUrl)}
                 alt=""
                 width={30}
                 height={30}
