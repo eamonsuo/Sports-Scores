@@ -50,6 +50,7 @@ export const MATCHSTATUSNFL = {
 
 export const SPORT = {
   AFL: "afl",
+  BASEBALL: "baseball",
   CRICKET: "cricket",
   NFL: "nfl",
   F1: "f1",
@@ -64,7 +65,7 @@ export const APICALLS = {
   STANDINGS: "standings",
 };
 
-export const REVALIDATE = 15; //TODO: Update to 15 for prod deployment
+export const REVALIDATE = 0; //TODO: Update to 15 for prod deployment
 // const currencies = ["AUD", "USD"] as const;
 
 // type Currency = (typeof currencies)[number];
