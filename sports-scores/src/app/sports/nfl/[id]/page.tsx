@@ -10,7 +10,7 @@ export default async function Page({ params }: { params: { id: number } }) {
   const rawGame = await fetchNFLGame(params.id);
   const events = await fetchNFLGameEvents(params.id);
 
-  if (rawGame === null || events === null) {
+  if (rawGame === null) {
     redirect("/misc/apiError");
   }
 
@@ -18,7 +18,7 @@ export default async function Page({ params }: { params: { id: number } }) {
     rawGame.game.status.short === MATCHSTATUSNFL.SHORT_NS ? false : true;
   let scores = [0];
 
-  if (gameStarted) {
+  if (events !== null) {
     scores = events.map((item) => item.score.home - item.score.away);
   }
 

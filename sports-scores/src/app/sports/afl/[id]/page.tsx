@@ -17,7 +17,7 @@ export default async function Page({ params }: { params: { id: number } }) {
   const quarters = await fetchAFLGameQuarters(params.id, REVALIDATE);
   const events = await fetchAFLGameEvents(params.id, REVALIDATE);
 
-  if (rawGame === null || quarters === null || events === null) {
+  if (rawGame === null) {
     redirect("/misc/apiError");
   }
 
@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: { id: number } }) {
     rawGame.status.short === MATCHSTATUSAFL.SHORT_NS ? false : true;
   let scores = [0];
 
-  if (gameStarted) {
+  if (events !== null) {
     let difference = 0;
     scores = events.events.flatMap((item) => {
       if (item.team.id == rawGame.teams.home.id) {
@@ -46,7 +46,7 @@ export default async function Page({ params }: { params: { id: number } }) {
         awayInfo={game.awayDetails}
         status={game.status}
       />
-      {gameStarted ? (
+      {gameStarted && quarters !== null ? (
         <>
           <AFLScoreBreakdown
             quarterData={quarters}
