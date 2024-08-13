@@ -23,6 +23,10 @@ export async function fetchF1Status() {
   );
 
   let status = await rawStatus.json();
+  if (status.response.length === 0) {
+    return null;
+  }
+
   return status.response as APISportsStatusDetails;
 }
 
@@ -36,6 +40,10 @@ export async function fetchAllF1Sessions(
   );
 
   let sessions = (await rawSessions.json()) as F1Response<F1Session>;
+  if (sessions.response.length === 0) {
+    return null;
+  }
+
   return sessions.response;
 }
 
@@ -46,6 +54,10 @@ export async function fetchF1Races(season: number, timezone: string = "UTC") {
   );
 
   let races = (await rawRaces.json()) as F1Response<F1Session>;
+  if (races.response.length === 0) {
+    return null;
+  }
+
   return races.response;
 }
 
@@ -56,6 +68,10 @@ export async function fetchF1SessionResult(raceId: number) {
   );
 
   let results = (await rawSessions.json()) as F1Response<F1SessionResults>;
+  if (results.response.length === 0) {
+    return null;
+  }
+
   return results.response;
 }
 
@@ -66,6 +82,10 @@ export async function fetchF1DriverStandings(season: number) {
   );
 
   let standings = (await rawStandings.json()) as F1Response<F1DriverStandings>;
+  if (standings.response.length === 0) {
+    return null;
+  }
+
   return standings.response;
 }
 
@@ -76,5 +96,9 @@ export async function fetchF1TeamStandings(season: number) {
   );
 
   let standings = (await rawStandings.json()) as F1Response<F1TeamStandings>;
+  if (standings.response.length === 0) {
+    return null;
+  }
+
   return standings.response;
 }

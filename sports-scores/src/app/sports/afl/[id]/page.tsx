@@ -9,24 +9,23 @@ import { mapAFLFixtureFields } from "@/lib/dataMapping";
 import AFLScoreBreakdown from "@/components/afl/AFLScoreBreakdown";
 import ScoreChart from "@/components/generic/ScoreChart";
 import AFLKeyPlayerStats from "@/components/afl/AFLKeyPlayerStats";
-import { MATCHSTATUSAFL } from "@/lib/constants";
+import { MATCHSTATUSAFL, REVALIDATE } from "@/lib/constants";
 import { redirect } from "next/navigation";
 
 export default async function Page({ params }: { params: { id: number } }) {
-  const rawGame = await fetchAFLGame(params.id);
-  const quarters = await fetchAFLGameQuarters(params.id);
-  const events = await fetchAFLGameEvents(params.id);
+  const rawGame = await fetchAFLGame(params.id, REVALIDATE);
+  const quarters = await fetchAFLGameQuarters(params.id, REVALIDATE);
+  const events = await fetchAFLGameEvents(params.id, REVALIDATE);
 
-  //TODO: Fix error handling for rate limit
   if (rawGame === null) {
-    redirect("/misc/rateLimit");
+    redirect("/misc/apiError");
   }
 
   let gameStarted =
     rawGame.status.short === MATCHSTATUSAFL.SHORT_NS ? false : true;
   let scores = [0];
 
-  if (gameStarted) {
+  if (events !== null) {
     let difference = 0;
     scores = events.events.flatMap((item) => {
       if (item.team.id == rawGame.teams.home.id) {
@@ -47,7 +46,7 @@ export default async function Page({ params }: { params: { id: number } }) {
         awayInfo={game.awayDetails}
         status={game.status}
       />
-      {gameStarted ? (
+      {gameStarted && quarters !== null ? (
         <>
           <AFLScoreBreakdown
             quarterData={quarters}

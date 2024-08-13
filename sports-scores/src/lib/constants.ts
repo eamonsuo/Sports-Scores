@@ -50,6 +50,7 @@ export const MATCHSTATUSNFL = {
 
 export const SPORT = {
   AFL: "afl",
+  BASEBALL: "baseball",
   CRICKET: "cricket",
   NFL: "nfl",
   F1: "f1",

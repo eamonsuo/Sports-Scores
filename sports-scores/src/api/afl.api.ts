@@ -11,68 +11,107 @@ import { APISportsStatusDetails } from "@/types/misc";
 const reqHeaders = new Headers();
 reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
 
-const fetchOptions = {
-  headers: reqHeaders,
-  next: { revalidate: REVALIDATE },
-  //  cache: 'no-store'
-};
-
-export async function fetchAFLFixtures(season: number) {
+export async function fetchAFLFixtures(season: number, revalidate: number = 0) {
   const rawFixtures = await fetch(
     `${process.env.AFL_BASEURL}/games?season=${season}&league=1`,
-    fetchOptions,
+    {
+      headers: reqHeaders,
+      next: { revalidate: revalidate },
+    },
   );
 
   let fixtures = (await rawFixtures.json()) as AFLResponse<AFLGame>;
+  if (fixtures.response.length === 0) {
+    return null;
+  }
+
   return fixtures.response;
 }
 
-export async function fetchAFLGame(gameId: number) {
-  const rawGame = await fetch(
-    `${process.env.AFL_BASEURL}/games?id=${gameId}`,
-    fetchOptions,
-  );
+export async function fetchAFLGame(gameId: number, revalidate: number = 0) {
+  const rawGame = await fetch(`${process.env.AFL_BASEURL}/games?id=${gameId}`, {
+    headers: reqHeaders,
+    next: { revalidate: revalidate },
+  });
 
   let game = (await rawGame.json()) as AFLResponse<AFLGame>;
+  if (game.response.length === 0) {
+    return null;
+  }
+
   return game.response[0];
 }
 
-export async function fetchAFLGameQuarters(gameId: number) {
+export async function fetchAFLGameQuarters(
+  gameId: number,
+  revalidate: number = 0,
+) {
   const rawQuarters = await fetch(
     `${process.env.AFL_BASEURL}/games/quarters?id=${gameId}`,
-    fetchOptions,
+    {
+      headers: reqHeaders,
+      next: { revalidate: revalidate },
+    },
   );
 
   let quarters = (await rawQuarters.json()) as AFLResponse<AFLGameQuarters>;
+  if (quarters.response.length === 0) {
+    return null;
+  }
+
   return quarters.response[0];
 }
 
-export async function fetchAFLGameEvents(gameId: number) {
+export async function fetchAFLGameEvents(
+  gameId: number,
+  revalidate: number = 0,
+) {
   const rawEvents = await fetch(
     `${process.env.AFL_BASEURL}/games/events?id=${gameId}`,
-    fetchOptions,
+    {
+      headers: reqHeaders,
+      next: { revalidate: revalidate },
+    },
   );
 
   let events = (await rawEvents.json()) as AFLResponse<AFLGameEvents>;
+  if (events.response.length === 0) {
+    return null;
+  }
+
   return events.response[0];
 }
 
-export async function fetchAFLStatus() {
-  const rawStatus = await fetch(
-    `${process.env.AFL_BASEURL}/status`,
-    fetchOptions,
-  );
+export async function fetchAFLStatus(revalidate: number = 0) {
+  const rawStatus = await fetch(`${process.env.AFL_BASEURL}/status`, {
+    headers: reqHeaders,
+    next: { revalidate: revalidate },
+  });
 
   let status = await rawStatus.json();
+  if (status.response.length === 0) {
+    return null;
+  }
+
   return status.response as APISportsStatusDetails;
 }
 
-export async function fetchAFLStandings(season: number) {
+export async function fetchAFLStandings(
+  season: number,
+  revalidate: number = 0,
+) {
   const rawStandings = await fetch(
     `${process.env.AFL_BASEURL}/standings?season=${season}&league=1`,
-    fetchOptions,
+    {
+      headers: reqHeaders,
+      next: { revalidate: revalidate },
+    },
   );
 
   let standings = (await rawStandings.json()) as AFLResponse<AFLStanding>;
+  if (standings.response.length === 0) {
+    return null;
+  }
+
   return standings.response;
 }

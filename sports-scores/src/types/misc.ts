@@ -4,7 +4,7 @@ export interface APISportsResponse {
     season: string;
     league: string;
   };
-  errors: any[];
+  errors: any[] | { rateLimit?: string; requests?: string };
   results: number;
 }
 
@@ -17,17 +17,17 @@ export interface APISportsStatus extends APISportsResponse {
 }
 
 export type APISportsStatusDetails = {
-  account: {
+  account?: {
     firstname: string;
     lastname: string;
     email: string;
   };
-  subscription: {
+  subscription?: {
     plan: string;
     end: string;
     active: boolean;
   };
-  requests: {
+  requests?: {
     current: number;
     limit_day: number;
   };
