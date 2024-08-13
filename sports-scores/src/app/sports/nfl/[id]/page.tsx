@@ -10,9 +10,8 @@ export default async function Page({ params }: { params: { id: number } }) {
   const rawGame = await fetchNFLGame(params.id);
   const events = await fetchNFLGameEvents(params.id);
 
-  //TODO: Fix error handling for rate limit
-  if (rawGame === null) {
-    redirect("/misc/rateLimit");
+  if (rawGame === null || events === null) {
+    redirect("/misc/apiError");
   }
 
   let gameStarted =

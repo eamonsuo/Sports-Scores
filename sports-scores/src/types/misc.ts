@@ -4,7 +4,7 @@ export interface APISportsResponse {
     season: string;
     league: string;
   };
-  errors: any[] | { rateLimit: string };
+  errors: any[] | { rateLimit?: string; requests?: string };
   results: number;
 }
 

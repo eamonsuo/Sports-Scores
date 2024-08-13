@@ -21,6 +21,9 @@ export async function fetchAFLFixtures(season: number, revalidate: number = 0) {
   );
 
   let fixtures = (await rawFixtures.json()) as AFLResponse<AFLGame>;
+  if (fixtures.response.length === 0) {
+    return null;
+  }
 
   return fixtures.response;
 }
@@ -32,6 +35,10 @@ export async function fetchAFLGame(gameId: number, revalidate: number = 0) {
   });
 
   let game = (await rawGame.json()) as AFLResponse<AFLGame>;
+  if (game.response.length === 0) {
+    return null;
+  }
+
   return game.response[0];
 }
 
@@ -48,6 +55,10 @@ export async function fetchAFLGameQuarters(
   );
 
   let quarters = (await rawQuarters.json()) as AFLResponse<AFLGameQuarters>;
+  if (quarters.response.length === 0) {
+    return null;
+  }
+
   return quarters.response[0];
 }
 
@@ -64,6 +75,10 @@ export async function fetchAFLGameEvents(
   );
 
   let events = (await rawEvents.json()) as AFLResponse<AFLGameEvents>;
+  if (events.response.length === 0) {
+    return null;
+  }
+
   return events.response[0];
 }
 
@@ -74,6 +89,10 @@ export async function fetchAFLStatus(revalidate: number = 0) {
   });
 
   let status = await rawStatus.json();
+  if (status.response.length === 0) {
+    return null;
+  }
+
   return status.response as APISportsStatusDetails;
 }
 
@@ -90,5 +109,9 @@ export async function fetchAFLStandings(
   );
 
   let standings = (await rawStandings.json()) as AFLResponse<AFLStanding>;
+  if (standings.response.length === 0) {
+    return null;
+  }
+
   return standings.response;
 }

@@ -17,9 +17,8 @@ export default async function Page({ params }: { params: { id: number } }) {
   const quarters = await fetchAFLGameQuarters(params.id, REVALIDATE);
   const events = await fetchAFLGameEvents(params.id, REVALIDATE);
 
-  //TODO: Fix error handling for rate limit
-  if (rawGame === null) {
-    redirect("/misc/rateLimit");
+  if (rawGame === null || quarters === null || events === null) {
+    redirect("/misc/apiError");
   }
 
   let gameStarted =

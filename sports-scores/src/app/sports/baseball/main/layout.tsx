@@ -1,4 +1,5 @@
-import { fetchF1Status } from "@/api/f1.api";
+import { fetchAFLStatus } from "@/api/afl.api";
+import { fetchBaseballStatus } from "@/api/baseball.api";
 import APIStatus from "@/components/misc/ApiStatus";
 import NavButtonGroup from "@/components/misc/NavButtonGroup";
 import { redirect } from "next/navigation";
@@ -8,7 +9,7 @@ export default async function SportsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const status = await fetchF1Status();
+  const status = await fetchBaseballStatus();
 
   if (status === null) {
     redirect("/misc/apiError");
@@ -19,19 +20,14 @@ export default async function SportsLayout({
       <NavButtonGroup
         buttons={[
           {
-            href: "races#current-date",
-            label: "Races",
-            page: "races",
+            href: "matches",
+            label: "Matches",
+            page: "matches",
           },
           {
-            href: "drivers",
-            label: "Drivers",
-            page: "drivers",
-          },
-          {
-            href: "teams",
-            label: "Teams",
-            page: "teams",
+            href: "ladder",
+            label: "Ladder",
+            page: "ladder",
           },
         ]}
       />

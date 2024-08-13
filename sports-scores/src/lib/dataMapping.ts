@@ -11,6 +11,7 @@ import { AFLGame } from "@/types/afl";
 import { F1Session, SessionSummary } from "@/types/f1";
 import { NFLGame } from "@/types/nfl";
 import { CricketMatch } from "@/types/cricket";
+import { BaseballGame } from "@/types/baseball";
 
 export function mapAFLFixtureFields(matches: AFLGame[]) {
   return matches.map(
@@ -48,13 +49,42 @@ export function mapAFLFixtureFields(matches: AFLGame[]) {
   );
 }
 
+export function mapBaseballFixtureFields(matches: BaseballGame[]) {
+  return matches.map(
+    (item) =>
+      ({
+        id: item.id,
+        startDate: item.date,
+        sport: SPORT.BASEBALL,
+        venue: "",
+        status: item.status.long,
+        summary: "",
+        timer:
+          item.status.short === MATCHSTATUSAFL.SHORT_NS
+            ? getLocalTime(item.time)
+            : item.status.short,
+        homeDetails: {
+          img: item.teams.home.logo,
+          score: item.scores.home.total?.toString(),
+          name: item.teams.home.name,
+        },
+        awayDetails: {
+          img: item.teams.away.logo,
+          score: item.scores.away.total?.toString(),
+          name: item.teams.away.name,
+        },
+        roundLabel: `Round ${item.week}`,
+      }) as MatchSummary,
+  );
+}
+
 export function mapNFLFixtureFields(matches: NFLGame[]) {
   return matches.map(
     (item: NFLGame) =>
       ({
         id: item.game.id,
         startDate:
-          item.game.date.date + "T" + item.game.date.time + ":00+00:00",
+          item.game.date.date + "T" + item.game.date.time + ":00+00:00", //Ensures startTime is in UTC
         sport: SPORT.NFL,
         venue: item.game.venue.name ?? "",
         status: item.game.status.long,
