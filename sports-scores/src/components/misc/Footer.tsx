@@ -75,7 +75,7 @@ export default function Footer() {
         >
           <Avatar
             className={cn(
-              "size-10 p-[6px]",
+              "size-11 p-[6px]",
               curSport === item.sport
                 ? "bg-gray-500 dark:bg-neutral-400"
                 : "bg-gray-400 dark:bg-neutral-600",
