@@ -1,18 +1,11 @@
 "use client";
 import { SPORT } from "@/lib/constants";
-import clsx from "clsx";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-import nflBall from "@/../public/american-football.svg";
-import abc from "@/../public/Australian_Broadcasting_Corporation_logo_(1974-).svg";
-import cricketBall from "@/../public/cricket-ball-icon.svg";
-import f1Helmet from "@/../public/f1-helmet-svgrepo-com.svg";
-import aflBall from "@/../public/football.svg";
-import golfBall from "@/../public/golf-ball-with-dents-svgrepo-com.svg";
-import oly from "@/../public/Olympic_Rings.svg";
-import nrlBall from "@/../public/rugby-game-svgrepo-com.svg";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "../generic/Avatar";
 
 const footerLinks: {
   sport: string;
@@ -23,49 +16,49 @@ const footerLinks: {
   {
     sport: "abc news",
     link: "https://www.abc.net.au/news/sport",
-    img: abc,
+    img: "/Australian_Broadcasting_Corporation_logo_(1974-).svg",
     altText: "ABC News",
   },
   {
     sport: SPORT.OLYMPICS,
     link: `/sports/${SPORT.OLYMPICS}`,
-    img: oly,
+    img: "/Olympic_Rings.svg",
     altText: "Paralympics",
   },
   {
     sport: SPORT.CRICKET,
     link: `/sports/${SPORT.CRICKET}/main/myteams#current-date`,
-    img: cricketBall,
+    img: "/cricket-ball-icon.svg",
     altText: "Cricket",
   },
   {
     sport: SPORT.NRL,
     link: `/sports/${SPORT.NRL}`,
-    img: nrlBall,
+    img: "/rugby-game-svgrepo-com.svg",
     altText: "NRL",
   },
   {
     sport: SPORT.AFL,
     link: `/sports/${SPORT.AFL}/main/matches`,
-    img: aflBall,
+    img: "/football.svg",
     altText: "AFL",
   },
   {
     sport: SPORT.NFL,
     link: `/sports/${SPORT.NFL}/main/matches`,
-    img: nflBall,
+    img: "/american-football.svg",
     altText: "NFL",
   },
   {
     sport: SPORT.F1,
     link: `/sports/${SPORT.F1}/main/races#current-date`,
-    img: f1Helmet,
+    img: "/f1-helmet-svgrepo-com.svg",
     altText: "F1",
   },
   {
     sport: SPORT.GOLF,
     link: `/sports/${SPORT.GOLF}`,
-    img: golfBall,
+    img: "/golf-ball-with-dents-svgrepo-com.svg",
     altText: "Golf",
   },
 ];
@@ -80,22 +73,19 @@ export default function Footer() {
           href={item.link}
           onClick={() => setCurSport(item.sport)}
         >
-          <div
-            className={clsx(
-              "flex size-11 place-content-center rounded-full",
+          <Avatar
+            className={cn(
+              "size-10 p-[6px]",
               curSport === item.sport
                 ? "bg-gray-500 dark:bg-neutral-400"
                 : "bg-gray-400 dark:bg-neutral-600",
             )}
           >
-            <Image
-              src={item.img}
-              width={30}
-              height={30}
-              alt={item.altText}
-              className="text-center"
-            ></Image>
-          </div>
+            <AvatarImage src={item.img} alt={item.sport} />
+            <AvatarFallback>
+              <Image src={"/next.svg"} width={30} height={10} alt="" />
+            </AvatarFallback>
+          </Avatar>
         </Link>
       ))}
     </footer>
