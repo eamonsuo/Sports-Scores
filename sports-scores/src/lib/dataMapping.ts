@@ -1,17 +1,17 @@
+import { AFLGame } from "@/types/afl";
+import { BaseballGame } from "@/types/baseball";
+import { CricketMatch } from "@/types/cricket";
+import { F1Session, SessionSummary } from "@/types/f1";
 import { MatchSummary } from "@/types/misc";
+import { NFLGame } from "@/types/nfl";
 import { MATCHSTATUSAFL, MATCHSTATUSNFL, SPORT } from "./constants";
 import {
-  getImageUrl,
+  getCricketImageUrl,
   getLocalTime,
   getLocalTimeISO,
-  setMatchStatusCricket,
   setMatchSummary,
+  shortenTeamNames,
 } from "./utils";
-import { AFLGame } from "@/types/afl";
-import { F1Session, SessionSummary } from "@/types/f1";
-import { NFLGame } from "@/types/nfl";
-import { CricketMatch } from "@/types/cricket";
-import { BaseballGame } from "@/types/baseball";
 
 export function mapAFLFixtureFields(matches: AFLGame[]) {
   return matches.map(
@@ -37,12 +37,12 @@ export function mapAFLFixtureFields(matches: AFLGame[]) {
         homeDetails: {
           img: item.teams.home.logo,
           score: item.scores.home.score.toString(),
-          name: item.teams.home.name,
+          name: shortenTeamNames(item.teams.home.name),
         },
         awayDetails: {
           img: item.teams.away.logo,
           score: item.scores.away.score.toString(),
-          name: item.teams.away.name,
+          name: shortenTeamNames(item.teams.away.name),
         },
         roundLabel: `Round ${item.week}`,
       }) as MatchSummary,
@@ -103,12 +103,12 @@ export function mapNFLFixtureFields(matches: NFLGame[]) {
         homeDetails: {
           img: item.teams.home.logo,
           score: (item.scores.home.total ?? 0).toString(),
-          name: item.teams.home.name ?? "",
+          name: shortenTeamNames(item.teams.home.name ?? ""),
         },
         awayDetails: {
           img: item.teams.away.logo,
           score: (item.scores.away.total ?? 0).toString(),
-          name: item.teams.away.name ?? "",
+          name: shortenTeamNames(item.teams.away.name ?? ""),
         },
         roundLabel: `${item.game.stage === "Pre Season" ? "Pre - " : ""}${item.game.week === "Hall of Fame Weekend" ? "HOF Weekend" : item.game.week}`,
       }) as MatchSummary,
@@ -175,15 +175,15 @@ export function mapScrape(data: CricketMatch[]) {
         item.status === "{{MATCH_START_TIME}}"
           ? `Starts at ${getLocalTimeISO(item.startTime)} `
           : item.statusText,
-      timer: item.stage,
+      timer: item.status === "{{MATCH_START_TIME}}" ? item.stage : item.status,
       otherDetail: item.title,
       homeDetails: {
-        img: getImageUrl(homeTeam.team.imageUrl),
+        img: getCricketImageUrl(homeTeam.team.imageUrl),
         score: `${homeTeam?.score ?? "0"}`,
         name: homeTeam.team.name,
       },
       awayDetails: {
-        img: getImageUrl(awayTeam.team.imageUrl),
+        img: getCricketImageUrl(awayTeam.team.imageUrl),
         score: `${awayTeam?.score ?? "0"}`,
         name: awayTeam.team.name,
       },

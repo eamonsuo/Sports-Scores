@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
-import Header from "@/components/misc/Header";
 import Footer from "@/components/misc/Footer";
+import Header from "@/components/misc/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +20,14 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="dark">
+      <link rel="icon" href="/favicon.ico" sizes="any" />
+      <link rel="icon" href="/icon?icon.ico" type="image/ico" sizes="32x32" />
+      <link
+        rel="apple-touch-icon"
+        href="/apple-icon?apple-icon.png"
+        type="image/png"
+        sizes="32x32"
+      />
       {/* Dark mode enabled */}
       <body className={inter.className}>
         {/* Set to Dynamic view height aka height of browser minus any browser things. Helps on

@@ -54,7 +54,7 @@ export default function FixtureList({ data }: { data: MatchSummary[] }) {
               matchSummary={item.summary}
               bottomInfo={item.otherDetail}
               venue={item.venue}
-              timer={item.timer}
+              timer={{ display: item.timer }}
               topInfo={undefined}
             />
           </React.Fragment>

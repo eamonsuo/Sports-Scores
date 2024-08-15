@@ -11,7 +11,10 @@ import { APISportsStatusDetails } from "@/types/misc";
 const reqHeaders = new Headers();
 reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
 
-export async function fetchAFLFixtures(season: number, revalidate: number = 0) {
+export async function fetchAFLFixtures(
+  season: number,
+  revalidate: number = REVALIDATE,
+) {
   const rawFixtures = await fetch(
     `${process.env.AFL_BASEURL}/games?season=${season}&league=1`,
     {
@@ -28,7 +31,10 @@ export async function fetchAFLFixtures(season: number, revalidate: number = 0) {
   return fixtures.response;
 }
 
-export async function fetchAFLGame(gameId: number, revalidate: number = 0) {
+export async function fetchAFLGame(
+  gameId: number,
+  revalidate: number = REVALIDATE,
+) {
   const rawGame = await fetch(`${process.env.AFL_BASEURL}/games?id=${gameId}`, {
     headers: reqHeaders,
     next: { revalidate: revalidate },
@@ -44,7 +50,7 @@ export async function fetchAFLGame(gameId: number, revalidate: number = 0) {
 
 export async function fetchAFLGameQuarters(
   gameId: number,
-  revalidate: number = 0,
+  revalidate: number = REVALIDATE,
 ) {
   const rawQuarters = await fetch(
     `${process.env.AFL_BASEURL}/games/quarters?id=${gameId}`,
@@ -64,7 +70,7 @@ export async function fetchAFLGameQuarters(
 
 export async function fetchAFLGameEvents(
   gameId: number,
-  revalidate: number = 0,
+  revalidate: number = REVALIDATE,
 ) {
   const rawEvents = await fetch(
     `${process.env.AFL_BASEURL}/games/events?id=${gameId}`,
@@ -82,7 +88,7 @@ export async function fetchAFLGameEvents(
   return events.response[0];
 }
 
-export async function fetchAFLStatus(revalidate: number = 0) {
+export async function fetchAFLStatus(revalidate: number = REVALIDATE) {
   const rawStatus = await fetch(`${process.env.AFL_BASEURL}/status`, {
     headers: reqHeaders,
     next: { revalidate: revalidate },
@@ -98,7 +104,7 @@ export async function fetchAFLStatus(revalidate: number = 0) {
 
 export async function fetchAFLStandings(
   season: number,
-  revalidate: number = 0,
+  revalidate: number = REVALIDATE,
 ) {
   const rawStandings = await fetch(
     `${process.env.AFL_BASEURL}/standings?season=${season}&league=1`,

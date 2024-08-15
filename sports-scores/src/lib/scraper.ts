@@ -1,11 +1,11 @@
 import {
-  CricketMatch,
   CricinfoResponse,
-  MatchResults,
-  SeriesResults,
-  Series,
   CricketImage,
+  CricketMatch,
   MatchDetails,
+  MatchResults,
+  Series,
+  SeriesResults,
 } from "@/types/cricket";
 import { writeFile } from "fs";
 import { REVALIDATE } from "./constants";
@@ -54,7 +54,7 @@ function compareCricketMatchDates(a: CricketMatch, b: CricketMatch) {
   return 0;
 }
 
-function compareCricketSeriesDates(a: Series, b: Series) {
+function compareCricketSeriesDatesOLD(a: Series, b: Series) {
   let first = Date.parse(a.startDate);
   let second = Date.parse(b.startDate);
   if (first > second) {
@@ -65,7 +65,7 @@ function compareCricketSeriesDates(a: Series, b: Series) {
   return 0;
 }
 
-function compareCricketSeriesDatesType2(
+function compareCricketSeriesDates(
   a: { title: string; series: Series; images: CricketImage[] },
   b: { title: string; series: Series; images: CricketImage[] },
 ) {
@@ -98,7 +98,12 @@ export async function cricinfoTeamsScraper() {
   );
 
   let bulkData = await scrapePages(urls);
-  return bulkData.sort(compareCricketMatchDates);
+  return bulkData
+    .filter(
+      (item) =>
+        Date.parse(item.endDate) > Date.now() - 1000 * 60 * 60 * 24 * 90, //Keep matches that are <=90 days old
+    )
+    .sort(compareCricketMatchDates);
 }
 
 export async function cricinfoSeriesScraper() {
@@ -126,28 +131,44 @@ export async function cricinfoSeriesScraper() {
 
   combinedSeries.map((item) => {
     item.items = item.items.filter(
-      (item) =>
-        Date.parse(item.series.endDate) > Date.now() - 1000 * 60 * 60 * 24 * 30, //Filter out series more than 30 days old
+      (series) =>
+        Date.parse(series.series.endDate) >
+        Date.now() - 1000 * 60 * 60 * 24 * 10, //Filter out series more than 30 days old
     );
-    item.items.sort(compareCricketSeriesDatesType2);
+
+    item.items = item.items.filter(
+      (obj, index) =>
+        item.items.findIndex((series) => series.series.id === obj.series.id) ===
+        index,
+    ); //Filter out duplicate series in a Series group
+
+    item.items.sort(compareCricketSeriesDates);
   });
 
   return combinedSeries;
 }
 
-export async function cricinfoMatchesScraper() {
-  let upcomingMatches = await scrapeData<CricinfoResponse<any>>( //TODO: Define response type
-    "https://www.espncricinfo.com/live-cricket-match-schedule-fixtures",
+export async function cricinfoLiveMatchesScraper() {
+  let liveMatches = await scrapeData<CricinfoResponse<any>>( //TODO: Define response type
+    "https://www.espncricinfo.com/live-cricket-score",
   );
+
+  // let upcomingMatches = await scrapeData<CricinfoResponse<any>>( //TODO: Define response type
+  //   "https://www.espncricinfo.com/live-cricket-match-schedule-fixtures",
+  // );
 
   // let pastMatches = await scrapeData<CricinfoResponse<any>>(
   //   "https://www.espncricinfo.com/live-cricket-match-results",
   // );
 
   return (
-    upcomingMatches.props.appPageProps.data.data.content.matches
+    liveMatches.props.appPageProps.data.content.matches
+      // .concat(upcomingMatches.props.appPageProps.data.data.content.matches)
       // .concat(pastMatches.props.appPageProps.data.data.content.matches)
-      .filter((item: CricketMatch) => item.internationalClassId !== null)
+      .filter(
+        (item: CricketMatch) =>
+          item.internationalClassId !== null || item.state === "LIVE",
+      )
       .sort(compareCricketMatchDates)
   );
 }

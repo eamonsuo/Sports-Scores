@@ -1,10 +1,10 @@
 "use client";
 
+import { MATCHSTATUSAFL, MATCHSTATUSNFL } from "@/lib/constants";
+import { MatchSummary } from "@/types/misc";
+import { clsx } from "clsx";
 import { useEffect, useRef, useState } from "react";
 import FixtureList from "./FixtureList";
-import { MATCHSTATUSAFL, MATCHSTATUSNFL } from "@/lib/constants";
-import { clsx } from "clsx";
-import { MatchSummary } from "@/types/misc";
 
 export default function FixtureRoundList({
   data,
