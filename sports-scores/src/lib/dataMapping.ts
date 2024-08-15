@@ -10,6 +10,7 @@ import {
   getLocalTime,
   getLocalTimeISO,
   setMatchSummary,
+  shortenTeamNames,
 } from "./utils";
 
 export function mapAFLFixtureFields(matches: AFLGame[]) {
@@ -36,12 +37,12 @@ export function mapAFLFixtureFields(matches: AFLGame[]) {
         homeDetails: {
           img: item.teams.home.logo,
           score: item.scores.home.score.toString(),
-          name: item.teams.home.name,
+          name: shortenTeamNames(item.teams.home.name),
         },
         awayDetails: {
           img: item.teams.away.logo,
           score: item.scores.away.score.toString(),
-          name: item.teams.away.name,
+          name: shortenTeamNames(item.teams.away.name),
         },
         roundLabel: `Round ${item.week}`,
       }) as MatchSummary,
@@ -102,12 +103,12 @@ export function mapNFLFixtureFields(matches: NFLGame[]) {
         homeDetails: {
           img: item.teams.home.logo,
           score: (item.scores.home.total ?? 0).toString(),
-          name: item.teams.home.name ?? "",
+          name: shortenTeamNames(item.teams.home.name ?? ""),
         },
         awayDetails: {
           img: item.teams.away.logo,
           score: (item.scores.away.total ?? 0).toString(),
-          name: item.teams.away.name ?? "",
+          name: shortenTeamNames(item.teams.away.name ?? ""),
         },
         roundLabel: `${item.game.stage === "Pre Season" ? "Pre - " : ""}${item.game.week === "Hall of Fame Weekend" ? "HOF Weekend" : item.game.week}`,
       }) as MatchSummary,
@@ -174,15 +175,15 @@ export function mapScrape(data: CricketMatch[]) {
         item.status === "{{MATCH_START_TIME}}"
           ? `Starts at ${getLocalTimeISO(item.startTime)} `
           : item.statusText,
-      timer: item.stage,
+      timer: item.status === "{{MATCH_START_TIME}}" ? item.stage : item.status,
       otherDetail: item.title,
       homeDetails: {
-        img: getImageUrl(homeTeam.team.imageUrl),
+        img: getCricketImageUrl(homeTeam.team.imageUrl),
         score: `${homeTeam?.score ?? "0"}`,
         name: homeTeam.team.name,
       },
       awayDetails: {
-        img: getImageUrl(awayTeam.team.imageUrl),
+        img: getCricketImageUrl(awayTeam.team.imageUrl),
         score: `${awayTeam?.score ?? "0"}`,
         name: awayTeam.team.name,
       },

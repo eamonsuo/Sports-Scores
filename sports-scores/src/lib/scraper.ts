@@ -98,7 +98,12 @@ export async function cricinfoTeamsScraper() {
   );
 
   let bulkData = await scrapePages(urls);
-  return bulkData.sort(compareCricketMatchDates);
+  return bulkData
+    .filter(
+      (item) =>
+        Date.parse(item.endDate) > Date.now() - 1000 * 60 * 60 * 24 * 90, //Keep matches that are <=90 days old
+    )
+    .sort(compareCricketMatchDates);
 }
 
 export async function cricinfoSeriesScraper() {
@@ -143,7 +148,7 @@ export async function cricinfoSeriesScraper() {
   return combinedSeries;
 }
 
-export async function cricinfoMatchesScraper() {
+export async function cricinfoLiveMatchesScraper() {
   let liveMatches = await scrapeData<CricinfoResponse<any>>( //TODO: Define response type
     "https://www.espncricinfo.com/live-cricket-score",
   );

@@ -1,10 +1,11 @@
+import { shortenTeamNames } from "@/lib/utils";
 import { AFLStanding } from "@/types/afl";
 import Image from "next/image";
 
 export default function AFLLadder({ data }: { data: AFLStanding[] }) {
   return (
     <div className="flex-1 overflow-y-auto px-4 dark:text-neutral-400">
-      <table>
+      <table className="w-full">
         <thead>
           <tr>
             <th className="pe-2"></th>
@@ -28,7 +29,7 @@ export default function AFLLadder({ data }: { data: AFLStanding[] }) {
                     alt={"Logo"}
                     className="me-2"
                   />
-                  {` ${item.team.name}`}
+                  {` ${shortenTeamNames(item.team.name)}`}
                 </div>
               </td>
               <td>{item.games.played}</td>

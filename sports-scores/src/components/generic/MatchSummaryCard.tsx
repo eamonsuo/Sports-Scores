@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -17,7 +18,7 @@ export default function MatchSummaryCard({
   matchSummary: string;
   homeInfo: { name: string; score: string; img: string };
   awayInfo: { name: string; score: string; img: string };
-  timer: string;
+  timer: { display: string; displayColour?: "green" | "yellow" | "white" };
   venue: string;
   topInfo?: string;
   bottomInfo?: string;
@@ -42,9 +43,15 @@ export default function MatchSummaryCard({
           <p className="content-center dark:text-neutral-400">
             {homeInfo.score}
           </p>
-          <p className="content-center text-center text-xs dark:text-neutral-500">
-            {timer}
+          <p
+            className={clsx(
+              "content-center rounded-sm text-center text-xs dark:text-neutral-500",
+              `bg-${timer.displayColour}-500`,
+            )}
+          >
+            {timer.display}
           </p>
+
           <p className="content-center text-right dark:text-neutral-400">
             {awayInfo.score}
           </p>

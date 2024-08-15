@@ -127,3 +127,14 @@ export function getCricketImageUrl(slug: string) {
   }
   return `https://p.imgci.com${slug ?? "/db/PICTURES/CMS"}`;
 }
+
+export function shortenTeamNames(team: string) {
+  switch (team) {
+    case "Greater Western Sydney Giants":
+      return "GWS Giants";
+    case "North Melbourne Kangaroos":
+      return "North Melbourne";
+    default:
+      return team;
+  }
+}

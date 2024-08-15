@@ -1,18 +1,18 @@
 "use client";
-import Link from "next/link";
-import Image from "next/image";
-import clsx from "clsx";
-import { useState } from "react";
 import { SPORT } from "@/lib/constants";
+import clsx from "clsx";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 
-import cricketBall from "@/../public/cricket-ball-icon.svg";
-import aflBall from "@/../public/football.svg";
-import abc from "@/../public/Australian_Broadcasting_Corporation_logo_(1974-).svg";
 import nflBall from "@/../public/american-football.svg";
-import nrlBall from "@/../public/rugby-game-svgrepo-com.svg";
+import abc from "@/../public/Australian_Broadcasting_Corporation_logo_(1974-).svg";
+import cricketBall from "@/../public/cricket-ball-icon.svg";
 import f1Helmet from "@/../public/f1-helmet-svgrepo-com.svg";
+import aflBall from "@/../public/football.svg";
 import golfBall from "@/../public/golf-ball-with-dents-svgrepo-com.svg";
 import oly from "@/../public/Olympic_Rings.svg";
+import nrlBall from "@/../public/rugby-game-svgrepo-com.svg";
 
 const footerLinks: {
   sport: string;
@@ -25,6 +25,12 @@ const footerLinks: {
     link: "https://www.abc.net.au/news/sport",
     img: abc,
     altText: "ABC News",
+  },
+  {
+    sport: SPORT.OLYMPICS,
+    link: `/sports/${SPORT.OLYMPICS}`,
+    img: oly,
+    altText: "Paralympics",
   },
   {
     sport: SPORT.CRICKET,
