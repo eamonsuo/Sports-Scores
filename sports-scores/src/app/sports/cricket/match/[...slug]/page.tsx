@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
           <ClientSportsPage
             apiStatus={<></>}
             options={optionsScorecard}
-            defaultState="1"
+            defaultState={optionsScorecard[0].state}
           />
         ),
       state: "scorecard",
