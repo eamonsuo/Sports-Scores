@@ -16,31 +16,31 @@ const footerLinks: {
   {
     sport: "abc news",
     link: "https://www.abc.net.au/news/sport",
-    img: "/Australian_Broadcasting_Corporation_logo_(1974-).svg",
+    img: "/abc-news-logo.svg",
     altText: "ABC News",
   },
   {
     sport: SPORT.OLYMPICS,
     link: `/sports/${SPORT.OLYMPICS}`,
-    img: "/Olympic_Rings.svg",
+    img: "/olympic-rings.svg",
     altText: "Paralympics",
   },
   {
     sport: SPORT.CRICKET,
     link: `/sports/${SPORT.CRICKET}/main/myteams#current-date`,
-    img: "/cricket-ball-icon.svg",
+    img: "/cricket-ball.svg",
     altText: "Cricket",
   },
   {
     sport: SPORT.NRL,
     link: `/sports/${SPORT.NRL}`,
-    img: "/rugby-game-svgrepo-com.svg",
+    img: "/nrl-ball.svg",
     altText: "NRL",
   },
   {
     sport: SPORT.AFL,
     link: `/sports/${SPORT.AFL}/main/matches`,
-    img: "/football.svg",
+    img: "/afl-ball.svg",
     altText: "AFL",
   },
   {
@@ -52,13 +52,13 @@ const footerLinks: {
   {
     sport: SPORT.F1,
     link: `/sports/${SPORT.F1}/main/races#current-date`,
-    img: "/f1-helmet-svgrepo-com.svg",
+    img: "/f1-helmet.svg",
     altText: "F1",
   },
   {
     sport: SPORT.GOLF,
     link: `/sports/${SPORT.GOLF}`,
-    img: "/golf-ball-with-dents-svgrepo-com.svg",
+    img: "/golf-ball.svg",
     altText: "Golf",
   },
 ];
@@ -83,7 +83,7 @@ export default function Footer() {
           >
             <AvatarImage src={item.img} alt={item.sport} />
             <AvatarFallback>
-              <Image src={"/next.svg"} width={30} height={10} alt="" />
+              <Image src={"/vercel.svg"} width={30} height={10} alt="" />
             </AvatarFallback>
           </Avatar>
         </Link>

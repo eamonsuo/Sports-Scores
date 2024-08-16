@@ -175,7 +175,7 @@ export function mapScrape(data: CricketMatch[]) {
         item.status === "{{MATCH_START_TIME}}"
           ? `Starts at ${getLocalTimeISO(item.startTime)} `
           : item.statusText,
-      timer: item.status === "{{MATCH_START_TIME}}" ? item.stage : item.status,
+      timer: item.status === "{{MATCH_START_TIME}}" ? "Scheduled" : item.status,
       otherDetail: item.title,
       homeDetails: {
         img: getCricketImageUrl(homeTeam.team.imageUrl),

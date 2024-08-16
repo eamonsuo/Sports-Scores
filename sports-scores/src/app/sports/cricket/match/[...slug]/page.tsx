@@ -1,8 +1,8 @@
 import CricketScorecardBat from "@/components/cricket/CricketScorecardBat";
 import CricketScorecardBowl from "@/components/cricket/CricketScorecardBowl";
 import ClientSportsPage from "@/components/generic/ClientSportsPage";
+import Placeholder from "@/components/misc/Placeholder";
 import { cricinfoMatchDetails } from "@/lib/scraper";
-import React from "react";
 
 export default async function Page({ params }: { params: { slug: string[] } }) {
   let url =
@@ -28,24 +28,32 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
   let optionsOverall = [
     {
       btnLabel: `Details`,
-      component: <p className="text-center">coming soon</p>,
+      component: <Placeholder>Coming Soon</Placeholder>,
       state: "details",
     },
     {
       btnLabel: `Scorecard`,
-      component: (
-        <ClientSportsPage
-          apiStatus={<></>}
-          options={optionsScorecard}
-          defaultState="1"
-        />
-      ),
+      component:
+        scrape.content.innings.length === 0 ? (
+          <Placeholder>No Scorecard Details</Placeholder>
+        ) : (
+          <ClientSportsPage
+            apiStatus={<></>}
+            options={optionsScorecard}
+            defaultState="1"
+          />
+        ),
       state: "scorecard",
     },
     {
       btnLabel: `Commentry`,
-      component: <p className="text-center">coming soon</p>,
+      component: <Placeholder>Coming Soon</Placeholder>,
       state: "commentry",
+    },
+    {
+      btnLabel: `Series`,
+      component: <Placeholder>Coming Soon</Placeholder>,
+      state: "series",
     },
   ];
 

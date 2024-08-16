@@ -1,3 +1,5 @@
+import Placeholder from "@/components/misc/Placeholder";
+
 export default function Page() {
-  return <p>Coming Soon....</p>;
+  return <Placeholder>Coming Soon</Placeholder>;
 }

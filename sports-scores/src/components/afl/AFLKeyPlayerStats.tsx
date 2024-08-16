@@ -1,4 +1,6 @@
+import Placeholder from "../misc/Placeholder";
+
 //TODO: Genericise?
 export default function AFLKeyPlayerStats({ data }: { data: any }) {
-  return <p className="m-4">Key Player Stats - Coming Soon</p>;
+  return <Placeholder>Key Player Stats - Coming Soon</Placeholder>;
 }

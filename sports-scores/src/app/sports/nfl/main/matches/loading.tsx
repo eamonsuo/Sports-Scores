@@ -1,5 +1,5 @@
-import Loader from "@/components/misc/Loader";
+import Placeholder from "@/components/misc/Placeholder";
 
 export default function Loading() {
-  return <Loader />;
+  return <Placeholder>Loading...</Placeholder>;
 }
