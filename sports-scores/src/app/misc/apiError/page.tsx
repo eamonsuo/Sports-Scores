@@ -1,3 +1,9 @@
+import Placeholder from "@/components/misc/Placeholder";
+
 export default function Page() {
-  return <p>API Rate Limit Reached - Try selecting another sport</p>;
+  return (
+    <Placeholder>
+      API Rate Limit Reached - Try selecting another sport
+    </Placeholder>
+  );
 }

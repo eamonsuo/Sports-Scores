@@ -4,8 +4,13 @@ export interface APISportsResponse {
     season: string;
     league: string;
   };
-  errors: any[] | { rateLimit?: string; requests?: string };
+  errors: any[] | APISportsErrors;
   results: number;
+}
+
+export interface APISportsErrors {
+  rateLimit?: string;
+  requests?: string;
 }
 
 export interface APISportsStatus extends APISportsResponse {

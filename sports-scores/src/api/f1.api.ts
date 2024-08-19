@@ -1,9 +1,10 @@
 import { REVALIDATE } from "@/lib/constants";
+import { handleAPIErrors } from "@/lib/utils";
 import {
+  F1DriverStandings,
   F1Response,
   F1Session,
   F1SessionResults,
-  F1DriverStandings,
   F1TeamStandings,
 } from "@/types/f1";
 import { APISportsStatusDetails } from "@/types/misc";
@@ -24,7 +25,7 @@ export async function fetchF1Status() {
 
   let status = await rawStatus.json();
   if (status.response.length === 0) {
-    return null;
+    return handleAPIErrors(status);
   }
 
   return status.response as APISportsStatusDetails;
@@ -41,7 +42,7 @@ export async function fetchAllF1Sessions(
 
   let sessions = (await rawSessions.json()) as F1Response<F1Session>;
   if (sessions.response.length === 0) {
-    return null;
+    return handleAPIErrors(sessions);
   }
 
   return sessions.response;
@@ -55,7 +56,7 @@ export async function fetchF1Races(season: number, timezone: string = "UTC") {
 
   let races = (await rawRaces.json()) as F1Response<F1Session>;
   if (races.response.length === 0) {
-    return null;
+    return handleAPIErrors(races);
   }
 
   return races.response;
@@ -69,7 +70,7 @@ export async function fetchF1SessionResult(raceId: number) {
 
   let results = (await rawSessions.json()) as F1Response<F1SessionResults>;
   if (results.response.length === 0) {
-    return null;
+    return handleAPIErrors(results);
   }
 
   return results.response;
@@ -83,7 +84,7 @@ export async function fetchF1DriverStandings(season: number) {
 
   let standings = (await rawStandings.json()) as F1Response<F1DriverStandings>;
   if (standings.response.length === 0) {
-    return null;
+    return handleAPIErrors(standings);
   }
 
   return standings.response;
@@ -97,7 +98,7 @@ export async function fetchF1TeamStandings(season: number) {
 
   let standings = (await rawStandings.json()) as F1Response<F1TeamStandings>;
   if (standings.response.length === 0) {
-    return null;
+    return handleAPIErrors(standings);
   }
 
   return standings.response;

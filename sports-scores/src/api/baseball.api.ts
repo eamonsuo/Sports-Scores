@@ -1,11 +1,5 @@
 import { REVALIDATE } from "@/lib/constants";
-import {
-  AFLGame,
-  AFLGameEvents,
-  AFLGameQuarters,
-  AFLResponse,
-  AFLStanding,
-} from "@/types/afl";
+import { handleAPIErrors } from "@/lib/utils";
 import { BaseballGame, BaseballResponse } from "@/types/baseball";
 import { APISportsStatusDetails } from "@/types/misc";
 
@@ -26,7 +20,7 @@ export async function fetchBaseballFixtures(season: number) {
 
   let fixtures = (await rawFixtures.json()) as BaseballResponse<BaseballGame>;
   if (fixtures.response.length === 0) {
-    return null;
+    return handleAPIErrors(fixtures);
   }
 
   return fixtures.response;
@@ -40,7 +34,7 @@ export async function fetchBaseballGame(gameId: number) {
 
   let game = (await rawGame.json()) as BaseballResponse<BaseballGame>;
   if (game.response.length === 0) {
-    return null;
+    return handleAPIErrors(game);
   }
 
   return game.response[0];
@@ -54,7 +48,7 @@ export async function fetchBaseballStatus() {
 
   let status = await rawStatus.json();
   if (status.response.length === 0) {
-    return null;
+    return handleAPIErrors(status);
   }
 
   return status.response as APISportsStatusDetails;
@@ -67,5 +61,5 @@ export async function fetchBaseballStandings(season: number) {
   );
 
   let standings = await rawStandings.json(); // as AFLResponse<AFLStanding>;
-  return standings.response;
+  // return standings.response;
 }
