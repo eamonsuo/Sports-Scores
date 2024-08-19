@@ -25,12 +25,6 @@ export default async function Page({ params }: { params: { id: number } }) {
     rawGame.status.short === MATCHSTATUSAFL.SHORT_NS ? false : true;
   let scores: { event: string; difference: number }[] = [];
 
-  //  if (typeof quarters === "string" && gameStarted) {
-  //   return <Placeholder>{quarters}</Placeholder>;
-  // } else if (typeof events === "string" && gameStarted) {
-  //   return <Placeholder>{events}</Placeholder>;
-  // }
-
   if (typeof events !== "string") {
     let diff = 0;
     scores = events.events.flatMap((item) => {
@@ -46,7 +40,7 @@ export default async function Page({ params }: { params: { id: number } }) {
   let game = mapAFLFixtureFields([rawGame])[0];
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-1 flex-col">
       <MatchDetailsHero
         homeInfo={game.homeDetails}
         awayInfo={game.awayDetails}

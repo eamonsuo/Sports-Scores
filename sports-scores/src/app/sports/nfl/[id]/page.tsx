@@ -12,15 +12,13 @@ export default async function Page({ params }: { params: { id: number } }) {
 
   if (typeof rawGame === "string") {
     return <Placeholder>{rawGame}</Placeholder>;
-  } else if (typeof events === "string") {
-    return <Placeholder>{events}</Placeholder>;
   }
 
   let gameStarted =
     rawGame.game.status.short === MATCHSTATUSNFL.SHORT_NS ? false : true;
   let scores: { event: string; difference: number }[] = [];
 
-  if (events !== null) {
+  if (typeof events !== "string") {
     scores = events.map((item) => {
       return {
         event: item.type,
@@ -32,7 +30,7 @@ export default async function Page({ params }: { params: { id: number } }) {
   let game = mapNFLFixtureFields([rawGame])[0];
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-1 flex-col">
       <MatchDetailsHero
         homeInfo={game.homeDetails}
         awayInfo={game.awayDetails}

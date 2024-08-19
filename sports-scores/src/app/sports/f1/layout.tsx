@@ -19,17 +19,17 @@ export default async function SportsLayout({
       <NavButtonGroup
         buttons={[
           {
-            href: "races#current-date",
+            href: "/sports/f1/main/races#current-date",
             label: "Races",
             page: "races",
           },
           {
-            href: "drivers",
+            href: "/sports/f1/main/drivers",
             label: "Drivers",
             page: "drivers",
           },
           {
-            href: "teams",
+            href: "/sports/f1/main/teams",
             label: "Teams",
             page: "teams",
           },

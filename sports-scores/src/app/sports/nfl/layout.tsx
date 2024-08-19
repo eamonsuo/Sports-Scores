@@ -1,4 +1,4 @@
-import { fetchAFLStatus } from "@/api/afl.api";
+import { fetchNFLStatus } from "@/api/nfl.api";
 import APIStatus from "@/components/misc/ApiStatus";
 import NavButtonGroup from "@/components/misc/NavButtonGroup";
 import Placeholder from "@/components/misc/Placeholder";
@@ -8,7 +8,7 @@ export default async function SportsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const status = await fetchAFLStatus();
+  const status = await fetchNFLStatus();
 
   if (typeof status === "string") {
     return <Placeholder>{status}</Placeholder>;
@@ -19,13 +19,13 @@ export default async function SportsLayout({
       <NavButtonGroup
         buttons={[
           {
-            href: "matches",
+            href: "/sports/nfl/main/matches",
             label: "Matches",
             page: "matches",
           },
           {
-            href: "ladder",
-            label: "Ladder",
+            href: "/sports/nfl/main/ladder",
+            label: "Standings",
             page: "ladder",
           },
         ]}
