@@ -16,7 +16,11 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
       btnLabel: `Innings ${item.inningNumber}`,
       component: (
         <div className="px-4">
-          <CricketScorecardBat data={item.inningBatsmen} />
+          <CricketScorecardBat
+            batters={item.inningBatsmen}
+            total={item.runs}
+            overs={item.overs}
+          />
           <div className="py-6"></div>
           <CricketScorecardBowl data={item.inningBowlers} />
         </div>

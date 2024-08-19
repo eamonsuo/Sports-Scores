@@ -3,9 +3,13 @@ import { InningBatsman } from "@/types/cricket";
 import Image from "next/image";
 
 export default async function CricketScorecardBat({
-  data,
+  batters,
+  total,
+  overs,
 }: {
-  data: InningBatsman[];
+  batters: InningBatsman[];
+  total: number;
+  overs: number;
 }) {
   return (
     <table className="w-full flex-1 dark:text-neutral-400">
@@ -19,9 +23,9 @@ export default async function CricketScorecardBat({
         </tr>
       </thead>
       <tbody className="text-center">
-        {data.map((item) => (
+        {batters.map((item) => (
           <tr key={item.player.battingName} className="border">
-            <td>{data.indexOf(item) + 1}</td>
+            <td>{batters.indexOf(item) + 1}</td>
             <td className="flex gap-2 py-2 text-left">
               <Image
                 src={getCricketImageUrl(item.player.headshotImageUrl)}
@@ -39,6 +43,11 @@ export default async function CricketScorecardBat({
             <td>{item.strikerate}</td>
           </tr>
         ))}
+        <tr>
+          <td></td> <td className="py-3 text-left">Total</td>
+          <td>{total}</td>
+          <td>({overs})</td>
+        </tr>
       </tbody>
     </table>
   );
