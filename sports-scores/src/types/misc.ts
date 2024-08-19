@@ -11,6 +11,7 @@ export interface APISportsResponse {
 export interface APISportsErrors {
   rateLimit?: string;
   requests?: string;
+  token?: string;
 }
 
 export interface APISportsStatus extends APISportsResponse {

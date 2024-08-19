@@ -144,6 +144,7 @@ export function handleAPIErrors(response: APISportsResponse) {
     return (
       (response.errors as APISportsErrors).rateLimit ??
       (response.errors as APISportsErrors).requests ??
+      (response.errors as APISportsErrors).token ??
       "Unknown error"
     );
   }

@@ -18,10 +18,15 @@ export default async function Page({ params }: { params: { id: number } }) {
 
   let gameStarted =
     rawGame.game.status.short === MATCHSTATUSNFL.SHORT_NS ? false : true;
-  let scores = [0];
+  let scores: { event: string; difference: number }[] = [];
 
   if (events !== null) {
-    scores = events.map((item) => item.score.home - item.score.away);
+    scores = events.map((item) => {
+      return {
+        event: item.type,
+        difference: item.score.home - item.score.away,
+      };
+    });
   }
 
   let game = mapNFLFixtureFields([rawGame])[0];
@@ -40,6 +45,7 @@ export default async function Page({ params }: { params: { id: number } }) {
             homeLogo={rawGame.teams.home.logo}
             awayLogo={rawGame.teams.away.logo}
           />
+
           <ScoreChart
             scoreDifference={scores}
             homeLogo={rawGame.teams.home.logo}

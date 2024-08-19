@@ -1,72 +1,52 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useState } from "react";
-import Spinner from "../misc/Spinner";
-const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import { ChartConfig, ChartContainer } from "./Chart";
 
 export default function ScoreChart({
   scoreDifference,
   homeLogo,
   awayLogo,
 }: {
-  scoreDifference: number[]; // Array of numbers representing the score difference between the home team (+) and away team (-) after each score
+  scoreDifference: { event: string; difference: number }[]; // Array of numbers representing the score difference between the home team (+) and away team (-) after each score
   homeLogo: string;
   awayLogo: string;
 }) {
-  const [loading, setLoading] = useState(true);
+  const chartConfig = {
+    difference: {
+      label: "Score Difference",
+    },
+  } satisfies ChartConfig;
 
-  let y = scoreDifference;
+  let values = scoreDifference;
+  values = [{ event: "Start", difference: 0 }].concat(values);
+  values.push(values.at(-1) ?? { event: "End", difference: 0 });
 
-  y = [0].concat(y);
-  y.push(y.at(-1) ?? 0);
-
-  let ymax = y.reduce((a, b) => Math.max(a, b), -Infinity);
-  let ymin = -y.reduce((a, b) => Math.min(a, b), Infinity);
+  let ymax = values.reduce((a, b) => Math.max(a, b.difference), -Infinity);
+  let ymin = -values.reduce((a, b) => Math.min(a, b.difference), Infinity);
   let yrange = ymax >= ymin ? ymax : ymin;
-
-  // console.log("MAX", yrange);
 
   return (
     <>
       <p className="m-4">Score Trend</p>
-      {loading && <Spinner />} {/* TODO improve */}
-      <div className="flex">
-        <div className="ms-1 flex flex-col place-content-around">
+      <div className="mx-4 flex gap-2">
+        <div className="flex flex-col place-content-around">
           <Image src={homeLogo} width={15} height={15} alt="Home team image" />
           <Image src={awayLogo} width={15} height={15} alt="Away team image" />
         </div>
-        <Plot
-          onInitialized={() => setLoading(false)}
-          className="w-full"
-          data={[
-            {
-              x: Array.from(Array(y.length).keys()),
-              y: y,
-              type: "scatter",
-              mode: "lines",
-              line: { shape: "hv" },
-            },
-            // {
-            //   x: [0, 0],
-            //   y: ["home", "Away"],
-            // },
-          ]}
-          layout={{
-            height: 200,
-            margin: { l: 20, t: 0, b: 0, r: 20 },
-            xaxis: { showticklabels: false },
-            yaxis: {
-              range: [-yrange - 1, yrange + 1],
-              // side: "right",
-            },
-            // yaxis2: {
-            //   range: ["Home", "Away"],
-            // },
-          }}
-          config={{ staticPlot: true /*responsive: true*/ }}
-        />
+        <ChartContainer config={chartConfig} className="min-h-[100px] flex-1">
+          <LineChart accessibilityLayer data={values}>
+            <YAxis
+              width={20}
+              tickLine={false}
+              domain={[-yrange - 1, yrange + 1]}
+            />
+            <XAxis tickLine={false} tick={false} axisLine={false} height={5} />
+            <CartesianGrid strokeDasharray="4" vertical={false} />
+            <Line type="stepAfter" dataKey="difference" dot={false} />
+          </LineChart>
+        </ChartContainer>
       </div>
     </>
   );

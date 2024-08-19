@@ -19,25 +19,27 @@ export default async function Page({ params }: { params: { id: number } }) {
 
   if (typeof rawGame === "string") {
     return <Placeholder>{rawGame}</Placeholder>;
-  } else if (typeof quarters === "string") {
-    return <Placeholder>{quarters}</Placeholder>;
-  } else if (typeof events === "string") {
-    return <Placeholder>{events}</Placeholder>;
   }
 
   let gameStarted =
     rawGame.status.short === MATCHSTATUSAFL.SHORT_NS ? false : true;
-  let scores = [0];
+  let scores: { event: string; difference: number }[] = [];
 
-  if (events !== null) {
-    let difference = 0;
+  //  if (typeof quarters === "string" && gameStarted) {
+  //   return <Placeholder>{quarters}</Placeholder>;
+  // } else if (typeof events === "string" && gameStarted) {
+  //   return <Placeholder>{events}</Placeholder>;
+  // }
+
+  if (typeof events !== "string") {
+    let diff = 0;
     scores = events.events.flatMap((item) => {
       if (item.team.id == rawGame.teams.home.id) {
-        item.type === "behind" ? (difference += 1) : (difference += 6);
+        item.type === "behind" ? (diff += 1) : (diff += 6);
       } else {
-        item.type === "behind" ? (difference -= 1) : (difference -= 6);
+        item.type === "behind" ? (diff -= 1) : (diff -= 6);
       }
-      return difference;
+      return { event: item.type, difference: diff };
     });
   }
 
@@ -50,7 +52,7 @@ export default async function Page({ params }: { params: { id: number } }) {
         awayInfo={game.awayDetails}
         status={game.status}
       />
-      {gameStarted && quarters !== null ? (
+      {gameStarted && typeof quarters !== "string" ? (
         <>
           <AFLScoreBreakdown
             quarterData={quarters}
