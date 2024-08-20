@@ -1,8 +1,13 @@
+import CricketMatchDetails from "@/components/cricket/CricketMatchDetails";
 import CricketScorecardBat from "@/components/cricket/CricketScorecardBat";
 import CricketScorecardBowl from "@/components/cricket/CricketScorecardBowl";
 import ClientSportsPage from "@/components/generic/ClientSportsPage";
+import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
+import { Button } from "@/components/misc/Button";
 import Placeholder from "@/components/misc/Placeholder";
 import { cricinfoMatchDetails } from "@/lib/scraper";
+import { getCricketImageUrl, getLocalTimeISO } from "@/lib/utils";
+import Link from "next/link";
 
 export default async function Page({ params }: { params: { slug: string[] } }) {
   let url =
@@ -10,6 +15,19 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
     params.slug.join("/") +
     "/full-scorecard";
   let scrape = await cricinfoMatchDetails(url);
+  let homeTeam = scrape.match.teams[0].isHome
+    ? scrape.match.teams[0]
+    : scrape.match.teams[1];
+  let awayTeam = scrape.match.teams[0].isHome
+    ? scrape.match.teams[1]
+    : scrape.match.teams[0];
+
+  let homeTeamPlayers = scrape.content.matchPlayers?.teamPlayers[0].team.isHome
+    ? scrape.content.matchPlayers?.teamPlayers[0]
+    : scrape.content.matchPlayers?.teamPlayers[1];
+  let awayTeamPlayers = scrape.content.matchPlayers?.teamPlayers[0].team.isHome
+    ? scrape.content.matchPlayers?.teamPlayers[1]
+    : scrape.content.matchPlayers?.teamPlayers[0];
 
   let optionsScorecard = scrape.content.innings.map((item) => {
     return {
@@ -32,7 +50,78 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
   let optionsOverall = [
     {
       btnLabel: `Details`,
-      component: <Placeholder>Coming Soon</Placeholder>,
+      component: (
+        <>
+          <MatchDetailsHero
+            status={
+              scrape.match.status === "{{MATCH_START_TIME}}"
+                ? "Scheduled"
+                : scrape.match.status
+            }
+            homeInfo={{
+              img: getCricketImageUrl(homeTeam.team.imageUrl),
+              score: `${homeTeam?.score ?? "0"}`,
+              name: homeTeam.team.name,
+            }}
+            awayInfo={{
+              img: getCricketImageUrl(awayTeam.team.imageUrl),
+              score: `${awayTeam?.score ?? "0"}`,
+              name: awayTeam.team.name,
+            }}
+          />
+          <CricketMatchDetails
+            date={
+              new Date(scrape.match.startTime).toLocaleDateString("en-US", {
+                weekday: "short",
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+                timeZone: "Australia/Brisbane",
+              }) +
+              " " +
+              getLocalTimeISO(scrape.match.startTime)
+            }
+            venue={scrape.match.ground.longName}
+            toss={
+              (scrape.match.teams.find(
+                (item) => item.team.id === scrape.match.tossWinnerTeamId,
+              )?.team.name ?? "NA") +
+              (scrape.match.tossWinnerChoice === 1 ? " - Chose to Bat" : "") +
+              (scrape.match.tossWinnerChoice === 2 ? " - Chose to Bowl" : "")
+            }
+            homePlayers={
+              homeTeamPlayers?.players.map(
+                (item) =>
+                  item.player.battingName +
+                  (item.playerRoleType !== "P"
+                    ? ` (${item.playerRoleType})`
+                    : "") +
+                  ", ",
+              ) ?? ["NA"]
+            }
+            awayPlayers={
+              awayTeamPlayers?.players.map(
+                (item) =>
+                  item.player.battingName +
+                  (item.playerRoleType !== "P"
+                    ? ` (${item.playerRoleType})`
+                    : "") +
+                  ", ",
+              ) ?? ["NA"]
+            }
+            umpires={
+              scrape.match.umpires?.map(
+                (item) => item.player.battingName + ", ",
+              ) ?? ["NA"]
+            }
+            pom={
+              scrape.content.matchPlayerAwards?.find(
+                (item) => item.type === "PLAYER_OF_MATCH",
+              )?.player.name ?? "NA"
+            }
+          />
+        </>
+      ),
       state: "details",
     },
     {
@@ -56,7 +145,15 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
     },
     {
       btnLabel: `Series`,
-      component: <Placeholder>Coming Soon</Placeholder>,
+      component: (
+        <Link
+          href={`/sports/cricket/series/${scrape.match.series.slug}-${scrape.match.series.objectId}/matches`}
+        >
+          <Button className="m-4">
+            Go to Series Details - {scrape.match.series.longName}
+          </Button>
+        </Link>
+      ),
       state: "series",
     },
   ];
