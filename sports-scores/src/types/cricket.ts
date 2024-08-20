@@ -41,7 +41,7 @@ export interface MatchDetails {
       };
       closeOfPlay: null | any;
       matchPlayerAwards: any[];
-      innings: Inning[]; //TODO
+      innings: Inning[];
       superOverInnings: any[];
       supportInfo: SupportInfo;
     };
@@ -117,6 +117,7 @@ export interface CricketMatch {
   generatedAt: string;
   scorecardSource: string;
   ballByBallSource: string;
+  umpires?: { player: Player; team: Team }[];
 }
 
 export interface Series {

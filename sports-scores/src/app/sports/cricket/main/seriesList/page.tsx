@@ -1,11 +1,11 @@
-import { cricinfoSeriesScraper } from "@/lib/scraper";
+import { cricinfoAllSeriesScraper } from "@/lib/scraper";
 import { getCricketImageUrl } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
 export default async function Page() {
-  const scrape = await cricinfoSeriesScraper();
+  const scrape = await cricinfoAllSeriesScraper();
 
   return (
     <div className="flex-1 overflow-y-auto px-4">
@@ -15,7 +15,7 @@ export default async function Page() {
           {item.items.map((series) => (
             <React.Fragment key={series.series.id}>
               <Link
-                href=""
+                href={`/sports/cricket/series/${series.series.slug}-${series.series.objectId}/matches`}
                 className="mt-4 flex rounded-md border border-gray-300 p-2 shadow-sm active:bg-gray-300 dark:border-neutral-500 dark:text-neutral-500 dark:active:bg-neutral-700"
               >
                 <div className="me-2 content-center">

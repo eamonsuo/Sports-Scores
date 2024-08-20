@@ -106,7 +106,7 @@ export async function cricinfoTeamsScraper() {
     .sort(compareCricketMatchDates);
 }
 
-export async function cricinfoSeriesScraper() {
+export async function cricinfoAllSeriesScraper() {
   let rawData = await scrapeData<CricinfoResponse<SeriesResults>>(
     "https://www.espncricinfo.com/cricket-fixtures",
   );
@@ -133,7 +133,7 @@ export async function cricinfoSeriesScraper() {
     item.items = item.items.filter(
       (series) =>
         Date.parse(series.series.endDate) >
-        Date.now() - 1000 * 60 * 60 * 24 * 10, //Filter out series more than 30 days old
+        Date.now() - 1000 * 60 * 60 * 24 * 10, //Filter out series more than 10 days old
     );
 
     item.items = item.items.filter(
@@ -179,9 +179,14 @@ export async function cricinfoMatchDetails(url: string) {
   return matchDetails.props.appPageProps.data;
 }
 
+export async function cricinfoSeriesScraper(url: string) {
+  let data = await scrapeData<CricinfoResponse<MatchResults>>(url);
+  return data.props.appPageProps.data.content.matches;
+}
+
 async function testing() {
   let upcomingMatches = await scrapeData<CricinfoResponse<MatchDetails>>(
-    "https://www.espncricinfo.com/series/icc-men-s-t20-world-cup-2024-1411166/australia-vs-india-51st-match-super-eights-group-1-1415751/full-scorecard",
+    "https://www.espncricinfo.com/series/australia-a-women-vs-india-a-women-2024-1443790/australia-a-women-vs-india-a-women-2nd-match-1443798/full-scorecard",
   );
 
   writeFile("_espnTest", JSON.stringify(upcomingMatches), (err) => {});

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
-import { ChartConfig, ChartContainer } from "./Chart";
+import { ChartConfig, ChartContainer } from "../misc/Chart";
 
 export default function ScoreChart({
   scoreDifference,

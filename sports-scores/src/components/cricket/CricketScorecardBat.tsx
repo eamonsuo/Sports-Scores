@@ -32,9 +32,9 @@ export default async function CricketScorecardBat({
                 alt=""
                 width={30}
                 height={30}
-              ></Image>{" "}
+              ></Image>
               <div className="flex flex-col">
-                <p>{item.player.name}</p>{" "}
+                <p>{item.player.name}</p>
                 <p className="text-xs">{item.dismissalText?.long}</p>
               </div>
             </td>

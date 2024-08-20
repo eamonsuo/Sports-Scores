@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { Avatar, AvatarFallback, AvatarImage } from "../generic/Avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "./Avatar";
 
 const footerLinks: {
   sport: string;
