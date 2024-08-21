@@ -1,13 +1,11 @@
 import Image from "next/image";
-import aflBall from "@/../public/football.svg";
-import abc from "@/../public/Australian_Broadcasting_Corporation_logo_(1974-).svg";
 
 export default function Page() {
   return (
     <>
       <p>
         <Image
-          src={aflBall}
+          src={"/afl-ball.svg"}
           width={30}
           height={30}
           alt="AFL ball"
@@ -19,7 +17,7 @@ export default function Page() {
       </p>
       <p>
         <Image
-          src={abc}
+          src={"/abc-news-logo.svg"}
           width={30}
           height={30}
           alt="ABC Logo"

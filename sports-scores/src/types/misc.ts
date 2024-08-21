@@ -4,8 +4,14 @@ export interface APISportsResponse {
     season: string;
     league: string;
   };
-  errors: any[] | { rateLimit?: string; requests?: string };
+  errors: any[] | APISportsErrors;
   results: number;
+}
+
+export interface APISportsErrors {
+  rateLimit?: string;
+  requests?: string;
+  token?: string;
 }
 
 export interface APISportsStatus extends APISportsResponse {
@@ -58,6 +64,7 @@ export type MatchSummary = {
   timer: string;
   seriesName?: string;
   matchSlug?: string; // Primarily used in cricket to get match details
+  seriesSlug?: string; // Used to navigate to cricket series
 };
 
 type APISettings = "status" | "fixtures" | "standings";

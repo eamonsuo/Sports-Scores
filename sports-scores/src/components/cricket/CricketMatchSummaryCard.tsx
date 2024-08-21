@@ -15,7 +15,12 @@ export default function CricketMatchSummaryCard({
   hrefSeries,
 }: {
   id: number;
-  hrefMatch: string;
+  hrefMatch:
+    | string
+    | {
+        pathname: string;
+        query: { [key: string]: string };
+      };
   matchSummary: string;
   homeInfo: { name: string; score: string; img: string };
   awayInfo: { name: string; score: string; img: string };

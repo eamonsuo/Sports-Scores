@@ -1,13 +1,13 @@
 import { fetchBaseballFixtures } from "@/api/baseball.api";
 import FixtureList from "@/components/generic/FixtureList";
+import Placeholder from "@/components/misc/Placeholder";
 import { mapBaseballFixtureFields } from "@/lib/dataMapping";
-import { redirect } from "next/navigation";
 
 export default async function Page() {
   const fixtures = await fetchBaseballFixtures(2024);
 
-  if (fixtures === null) {
-    redirect("/misc/apiError");
+  if (typeof fixtures === "string") {
+    return <Placeholder>{fixtures}</Placeholder>;
   }
 
   const mappedFixtures = mapBaseballFixtureFields(fixtures);

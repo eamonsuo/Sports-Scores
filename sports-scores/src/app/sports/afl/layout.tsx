@@ -1,7 +1,7 @@
 import { fetchAFLStatus } from "@/api/afl.api";
 import APIStatus from "@/components/misc/ApiStatus";
 import NavButtonGroup from "@/components/misc/NavButtonGroup";
-import { redirect } from "next/navigation";
+import Placeholder from "@/components/misc/Placeholder";
 
 export default async function SportsLayout({
   children,
@@ -10,8 +10,8 @@ export default async function SportsLayout({
 }) {
   const status = await fetchAFLStatus();
 
-  if (status === null) {
-    redirect("/misc/apiError");
+  if (typeof status === "string") {
+    return <Placeholder>{status}</Placeholder>;
   }
 
   return (
@@ -19,12 +19,12 @@ export default async function SportsLayout({
       <NavButtonGroup
         buttons={[
           {
-            href: "matches",
+            href: "/sports/afl/main/matches",
             label: "Matches",
             page: "matches",
           },
           {
-            href: "ladder",
+            href: "/sports/afl/main/ladder",
             label: "Ladder",
             page: "ladder",
           },

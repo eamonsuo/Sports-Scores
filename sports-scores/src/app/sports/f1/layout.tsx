@@ -1,7 +1,7 @@
 import { fetchF1Status } from "@/api/f1.api";
 import APIStatus from "@/components/misc/ApiStatus";
 import NavButtonGroup from "@/components/misc/NavButtonGroup";
-import { redirect } from "next/navigation";
+import Placeholder from "@/components/misc/Placeholder";
 
 export default async function SportsLayout({
   children,
@@ -10,8 +10,8 @@ export default async function SportsLayout({
 }) {
   const status = await fetchF1Status();
 
-  if (status === null) {
-    redirect("/misc/apiError");
+  if (typeof status === "string") {
+    return <Placeholder>{status}</Placeholder>;
   }
 
   return (
@@ -19,17 +19,17 @@ export default async function SportsLayout({
       <NavButtonGroup
         buttons={[
           {
-            href: "races#current-date",
+            href: "/sports/f1/main/races#current-date",
             label: "Races",
             page: "races",
           },
           {
-            href: "drivers",
+            href: "/sports/f1/main/drivers",
             label: "Drivers",
             page: "drivers",
           },
           {
-            href: "teams",
+            href: "/sports/f1/main/teams",
             label: "Teams",
             page: "teams",
           },

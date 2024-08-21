@@ -1,5 +1,5 @@
 import fallback from "@/../public/vercel.svg";
-import { MatchSummary } from "@/types/misc";
+import { APISportsErrors, APISportsResponse, MatchSummary } from "@/types/misc";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { MATCHSTATUSAFL, MATCHSTATUSNFL } from "./constants";
@@ -137,4 +137,16 @@ export function shortenTeamNames(team: string) {
     default:
       return team;
   }
+}
+
+export function handleAPIErrors(response: APISportsResponse) {
+  if ((response.errors as any[]).length === undefined) {
+    return (
+      (response.errors as APISportsErrors).rateLimit ??
+      (response.errors as APISportsErrors).requests ??
+      (response.errors as APISportsErrors).token ??
+      "Unknown error"
+    );
+  }
+  return "No Results";
 }

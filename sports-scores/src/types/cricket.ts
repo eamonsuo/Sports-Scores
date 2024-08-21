@@ -7,7 +7,7 @@ export interface CricinfoResponse<T> {
   };
 }
 
-export interface MatchResults {
+export interface CricketMatchResults {
   data: {
     content: {
       matches: CricketMatch[];
@@ -16,20 +16,47 @@ export interface MatchResults {
   layout: any;
 }
 
-export interface SeriesResults {
+export interface CricketAllSeriesResults {
   data: {
     collections: {
       title: string;
       seriesGroups: {
         title: string;
-        items: { title: string; series: Series; images: CricketImage[] }[];
+        items: {
+          title: string;
+          series: CricketSeries;
+          images: CricketImage[];
+        }[];
       }[];
     }[];
   };
   layout: any;
 }
 
-export interface MatchDetails {
+export interface CricketSeriesResult {
+  data: {
+    series: CricketSeries;
+    content: {
+      feed: any;
+      seriesResults: { results: SeriesMatchResults[] } | null;
+      recentFixtures: any;
+      recentResults: any[];
+      standings: CricketStandings | null;
+      topBatsmen: any[];
+      topBowlers: any[];
+      topFanRatings: any;
+      smartStats: any | null;
+      recentSimilarSerieses: any[];
+      recordEntity: any;
+      trophyRecordEntity: any | null;
+      otherSerieses: any;
+      teams: Team[];
+    };
+  };
+  layout: any;
+}
+
+export interface CricketMatchDetails {
   data: {
     match: CricketMatch;
     content: {
@@ -41,7 +68,7 @@ export interface MatchDetails {
       };
       closeOfPlay: null | any;
       matchPlayerAwards: any[];
-      innings: Inning[]; //TODO
+      innings: Inning[];
       superOverInnings: any[];
       supportInfo: SupportInfo;
     };
@@ -92,7 +119,7 @@ export interface CricketMatch {
   liveRecentBalls: string | null;
   livePlayers: string | null;
   ballsPerOver: number | null;
-  series: Series;
+  series: CricketSeries;
   ground: Ground;
   teams: Team[];
   dayType: string;
@@ -117,9 +144,20 @@ export interface CricketMatch {
   generatedAt: string;
   scorecardSource: string;
   ballByBallSource: string;
+  umpires?: { player: Player; team: Team }[];
 }
 
-export interface Series {
+interface FanRating {
+  id: number;
+  type: string;
+  name: string;
+}
+
+interface FanRatings {
+  playerMatchClasses: FanRating[];
+}
+
+export interface CricketSeries {
   id: number;
   objectId: number;
   scribeId: number;
@@ -141,6 +179,14 @@ export interface Series {
   totalVideos: number;
   totalSquads: number;
   gamePlayWatch: boolean;
+  fanRatings?: FanRatings;
+  trophy?: string | null;
+  hasStats?: boolean;
+  hasSmartStats?: boolean;
+  matchClass?: string | null;
+  totalTeams?: number;
+  totalGalleries?: number;
+  totalImages?: number;
 }
 
 interface Ground {
@@ -168,7 +214,7 @@ export interface CricketImage {
   longCaption: string;
   credit: string;
   photographer: string | null;
-  peerUrls: string | null;
+  peerUrls: string | null | string[];
 }
 
 interface Town {
@@ -344,8 +390,8 @@ interface Inning {
   penalties: number;
   event: number;
   ballsPerOver: number;
-  inningBatsmen: InningBatsman[];
-  inningBowlers: InningBowler[];
+  inningBatsmen: CricketInningBatsman[];
+  inningBowlers: CricketInningBowler[];
   inningPartnerships: InningPartnership[];
   inningOvers: any[]; //TODO: maybe other matches have this
   inningWickets: InningWicket[];
@@ -354,7 +400,7 @@ interface Inning {
   inningOverGroups: any[];
 }
 
-export interface InningBatsman {
+export interface CricketInningBatsman {
   playerRoleType: string;
   player: Player;
   battedType: string;
@@ -398,7 +444,7 @@ interface DismissalText {
   commentary: string;
 }
 
-export interface InningBowler {
+export interface CricketInningBowler {
   player: Player;
   bowledType: string;
   overs: number;
@@ -477,4 +523,68 @@ interface FallOfWicket {
   fowRuns: number;
   fowOvers: number;
   fowBalls: number | null;
+}
+
+interface SeriesMatchResults {
+  series: CricketSeries;
+  classId: number;
+  isLive: boolean;
+  result: Result;
+}
+
+interface Result {
+  leadTeam: TeamDetails;
+  leadType: number;
+  leadHowWon: number;
+  resultType: number;
+  matchesWonByLeadTeam: number;
+  matchesWonByLoserTeam: number;
+  matchNumber: number | null;
+  totalNumberOfMatches: number;
+  abondonedNumberOfMatches: number;
+  cancelledNumberOfMatches: number;
+  isLeadAbandoned: boolean;
+  isLeadCancelled: boolean;
+  groupTitle: string | null;
+}
+
+export interface CricketStandings {
+  series: CricketSeries;
+  notes: string;
+  teamsToQualifyCount: number | null;
+  available: any;
+  groups: StandingsGroup[];
+  finalMatches: any[];
+  liveTeamIds: any[];
+  objects: any;
+}
+
+interface StandingsGroup {
+  name: string;
+  teamsToQualifyCount: number;
+  teamStats: StandingsTeam[];
+  finalMatches: any[];
+}
+
+interface StandingsTeam {
+  teamInfo: TeamDetails;
+  recentMatches: any[];
+  rank: number;
+  seriesPlayed: number | null;
+  seriesWon: number | null;
+  matchesPlayed: string;
+  matchesWon: number;
+  matchesLost: number;
+  matchesTied: number;
+  matchesDrawn: number;
+  matchesNoResult: number;
+  points: number;
+  quotient: number | null;
+  nrr: number | null;
+  rpwr: number | null; // If applicable, otherwise remove if not used
+  for: string;
+  against: string;
+  pct: number | null; // Percentage
+  nextMatch: any[] | null;
+  allMatchObjectIds: number[];
 }

@@ -1,4 +1,5 @@
 import { REVALIDATE } from "@/lib/constants";
+import { handleAPIErrors } from "@/lib/utils";
 import { APISportsStatusDetails } from "@/types/misc";
 import { NFLGame, NFLGameEvents, NFLResponse, NFLStanding } from "@/types/nfl";
 
@@ -18,7 +19,7 @@ export async function fetchNFLFixtures(season: number) {
 
   let fixtures = (await rawFixtures.json()) as NFLResponse<NFLGame>;
   if (fixtures.response.length === 0) {
-    return null;
+    return handleAPIErrors(fixtures);
   }
 
   return fixtures.response;
@@ -32,7 +33,7 @@ export async function fetchNFLGame(gameId: number) {
 
   let game = (await rawGame.json()) as NFLResponse<NFLGame>;
   if (game.response.length === 0) {
-    return null;
+    return handleAPIErrors(game);
   }
 
   return game.response[0];
@@ -46,7 +47,7 @@ export async function fetchNFLStatus() {
 
   let status = await rawStatus.json();
   if (status.response.length === 0) {
-    return null;
+    return handleAPIErrors(status);
   }
 
   return status.response as APISportsStatusDetails;
@@ -60,7 +61,7 @@ export async function fetchNFLStandings(season: number) {
 
   let standings = (await rawStandings.json()) as NFLResponse<NFLStanding>;
   if (standings.response.length === 0) {
-    return null;
+    return handleAPIErrors(standings);
   }
 
   return standings.response;
@@ -74,7 +75,7 @@ export async function fetchNFLGameEvents(gameId: number) {
 
   let events = (await rawEvents.json()) as NFLResponse<NFLGameEvents>;
   if (events.response.length === 0) {
-    return null;
+    return handleAPIErrors(events);
   }
 
   return events.response;

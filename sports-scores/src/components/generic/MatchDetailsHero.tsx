@@ -1,4 +1,3 @@
-import { MatchSummary } from "@/types/misc";
 import Image from "next/image";
 
 export default function MatchDetailsHero({
@@ -25,8 +24,8 @@ export default function MatchDetailsHero({
       <div className="content-center justify-self-center">
         <Image
           src={awayInfo.img}
-          width={40}
-          height={40}
+          width={60}
+          height={60}
           alt="Away team image"
         />
       </div>
