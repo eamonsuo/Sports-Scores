@@ -126,5 +126,5 @@ export async function fetchAFLStandings(
     return handleAPIErrors(standings);
   }
 
-  return standings.response;
+  return standings.response.filter((item) => item.games.played > 19); //TODO: Remove for 2025
 }
