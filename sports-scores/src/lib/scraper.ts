@@ -178,8 +178,7 @@ export async function cricinfoLiveMatchesScraper() {
             item.series.objectId === 1444468 || //Sheffield Shield
             item.series.objectId === 1444469 || //One Day Cup (Men Domestic)
             item.series.objectId === 1445042) && //WNCL
-          Date.parse(item.series.endDate) >
-            Date.now() - 1000 * 60 * 60 * 24 * 1, //Keep games which have finished in the last day
+          Date.parse(item.endDate) > Date.now() - 1000 * 60 * 60 * 24 * 1, //Keep games which have finished in the last day
       )
       .sort(compareCricketMatchDates)
   );

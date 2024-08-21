@@ -27,7 +27,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.CRICKET,
-    link: `/sports/${SPORT.CRICKET}/main/myteams#current-date`,
+    link: `/sports/${SPORT.CRICKET}/main/matches#current-date`,
     img: "/cricket-ball.svg",
     altText: "Cricket",
   },
