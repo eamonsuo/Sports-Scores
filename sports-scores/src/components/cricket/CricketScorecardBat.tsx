@@ -1,5 +1,5 @@
 import { getCricketImageUrl } from "@/lib/utils";
-import { InningBatsman } from "@/types/cricket";
+import { CricketInningBatsman } from "@/types/cricket";
 import Image from "next/image";
 
 export default async function CricketScorecardBat({
@@ -7,7 +7,7 @@ export default async function CricketScorecardBat({
   total,
   overs,
 }: {
-  batters: InningBatsman[];
+  batters: CricketInningBatsman[];
   total: number;
   overs: number;
 }) {

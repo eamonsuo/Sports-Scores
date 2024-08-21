@@ -1,11 +1,12 @@
 import {
   CricinfoResponse,
+  CricketAllSeriesResults,
   CricketImage,
   CricketMatch,
-  MatchDetails,
-  MatchResults,
-  Series,
-  SeriesResults,
+  CricketMatchDetails,
+  CricketMatchResults,
+  CricketSeries,
+  CricketSeriesResult,
 } from "@/types/cricket";
 import { writeFile } from "fs";
 import { REVALIDATE } from "./constants";
@@ -36,7 +37,8 @@ async function scrapePages(urls: string[]) {
   return (
     await Promise.all(
       urls.map(async (item) => {
-        let data = await scrapeData<CricinfoResponse<MatchResults>>(item);
+        let data =
+          await scrapeData<CricinfoResponse<CricketMatchResults>>(item);
         return data.props.appPageProps.data.content.matches;
       }),
     )
@@ -54,7 +56,7 @@ function compareCricketMatchDates(a: CricketMatch, b: CricketMatch) {
   return 0;
 }
 
-function compareCricketSeriesDatesOLD(a: Series, b: Series) {
+function compareCricketSeriesDatesOLD(a: CricketSeries, b: CricketSeries) {
   let first = Date.parse(a.startDate);
   let second = Date.parse(b.startDate);
   if (first > second) {
@@ -66,8 +68,8 @@ function compareCricketSeriesDatesOLD(a: Series, b: Series) {
 }
 
 function compareCricketSeriesDates(
-  a: { title: string; series: Series; images: CricketImage[] },
-  b: { title: string; series: Series; images: CricketImage[] },
+  a: { title: string; series: CricketSeries; images: CricketImage[] },
+  b: { title: string; series: CricketSeries; images: CricketImage[] },
 ) {
   let first = Date.parse(a.series.startDate);
   let second = Date.parse(b.series.startDate);
@@ -107,7 +109,7 @@ export async function cricinfoTeamsScraper() {
 }
 
 export async function cricinfoAllSeriesScraper() {
-  let rawData = await scrapeData<CricinfoResponse<SeriesResults>>(
+  let rawData = await scrapeData<CricinfoResponse<CricketAllSeriesResults>>(
     "https://www.espncricinfo.com/cricket-fixtures",
   );
 
@@ -174,22 +176,32 @@ export async function cricinfoLiveMatchesScraper() {
 }
 
 export async function cricinfoMatchDetails(url: string) {
-  let matchDetails = await scrapeData<CricinfoResponse<MatchDetails>>(url);
+  let matchDetails =
+    await scrapeData<CricinfoResponse<CricketMatchDetails>>(url);
 
   return matchDetails.props.appPageProps.data;
 }
 
-export async function cricinfoSeriesScraper(url: string) {
-  let data = await scrapeData<CricinfoResponse<MatchResults>>(url);
+export async function cricinfoSeriesMatchesScraper(url: string) {
+  let data = await scrapeData<CricinfoResponse<CricketMatchResults>>(url);
   return data.props.appPageProps.data.content.matches;
 }
 
-async function testing() {
-  let upcomingMatches = await scrapeData<CricinfoResponse<MatchDetails>>(
-    "https://www.espncricinfo.com/series/australia-a-women-vs-india-a-women-2024-1443790/australia-a-women-vs-india-a-women-2nd-match-1443798/full-scorecard",
-  );
-
-  writeFile("_espnTest", JSON.stringify(upcomingMatches), (err) => {});
+export async function cricinfoSeriesStandingsScraper(url: string) {
+  let data = await scrapeData<CricinfoResponse<CricketSeriesResult>>(url);
+  return data.props.appPageProps.data;
 }
 
-// testing();
+async function testing() {
+  let upcomingMatches = await scrapeData<CricinfoResponse<CricketSeriesResult>>(
+    "https://www.espncricinfo.com/series/icc-men-s-t20-world-cup-2024-1411166",
+  );
+
+  writeFile(
+    "_espnTest",
+    JSON.stringify(upcomingMatches.props.appPageProps.data.content),
+    (err) => {},
+  );
+}
+
+testing();

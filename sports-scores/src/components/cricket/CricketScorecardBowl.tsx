@@ -1,11 +1,11 @@
 import { getCricketImageUrl } from "@/lib/utils";
-import { InningBowler } from "@/types/cricket";
+import { CricketInningBowler } from "@/types/cricket";
 import Image from "next/image";
 
 export default async function CricketScorecardBowl({
   data,
 }: {
-  data: InningBowler[];
+  data: CricketInningBowler[];
 }) {
   return (
     <table className="w-full flex-1 dark:text-neutral-400">

@@ -29,9 +29,12 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
     ? scrape.content.matchPlayers?.teamPlayers[1]
     : scrape.content.matchPlayers?.teamPlayers[0];
 
+  let homeInnings = 1;
+  let awayInnings = 1;
+
   let optionsScorecard = scrape.content.innings.map((item) => {
     return {
-      btnLabel: `Innings ${item.inningNumber}`,
+      btnLabel: `${homeTeam.team.id === item.team.id ? (homeInnings++ === 1 ? "1st " : "2nd ") : awayInnings++ === 1 ? "1st " : "2nd "} ${item.team.abbreviation}`,
       component: (
         <div className="px-4">
           <CricketScorecardBat
@@ -147,7 +150,7 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
       btnLabel: `Series`,
       component: (
         <Link
-          href={`/sports/cricket/series/${scrape.match.series.slug}-${scrape.match.series.objectId}/matches`}
+          href={`/sports/cricket/series/${scrape.match.series.slug}-${scrape.match.series.objectId}/matches#current-date`}
         >
           <Button className="m-4">
             Go to Series Details - {scrape.match.series.longName}
@@ -164,13 +167,5 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
       options={optionsOverall}
       defaultState="scorecard"
     />
-    // <div className="flex flex-1 flex-col gap-2 overflow-y-auto px-4 dark:text-neutral-400">
-    //   <p>
-    //     {scrape.content.innings[0].team.longName} Innings{" "}
-    //     {scrape.content.innings[0].inningNumber}
-    //   </p>
-    //   <CricketScorecardBat data={scrape.content.innings[0].inningBatsmen} />
-    //   <CricketScorecardBowl data={scrape.content.innings[0].inningBowlers} />
-    // </div>
   );
 }

@@ -15,7 +15,7 @@ export default async function Page() {
           {item.items.map((series) => (
             <React.Fragment key={series.series.id}>
               <Link
-                href={`/sports/cricket/series/${series.series.slug}-${series.series.objectId}/matches`}
+                href={`/sports/cricket/series/${series.series.slug}-${series.series.objectId}/matches#current-date`}
                 className="mt-4 flex rounded-md border border-gray-300 p-2 shadow-sm active:bg-gray-300 dark:border-neutral-500 dark:text-neutral-500 dark:active:bg-neutral-700"
               >
                 <div className="me-2 content-center">
