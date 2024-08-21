@@ -64,6 +64,7 @@ export type MatchSummary = {
   timer: string;
   seriesName?: string;
   matchSlug?: string; // Primarily used in cricket to get match details
+  seriesSlug?: string; // Used to navigate to cricket series
 };
 
 type APISettings = "status" | "fixtures" | "standings";

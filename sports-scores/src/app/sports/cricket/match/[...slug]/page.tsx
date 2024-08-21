@@ -3,7 +3,6 @@ import CricketScorecardBat from "@/components/cricket/CricketScorecardBat";
 import CricketScorecardBowl from "@/components/cricket/CricketScorecardBowl";
 import ClientSportsPage from "@/components/generic/ClientSportsPage";
 import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
-import { Button } from "@/components/misc/Button";
 import Placeholder from "@/components/misc/Placeholder";
 import { cricinfoMatchDetails } from "@/lib/scraper";
 import { getCricketImageUrl, getLocalTimeISO } from "@/lib/utils";
@@ -152,9 +151,9 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
         <Link
           href={`/sports/cricket/series/${scrape.match.series.slug}-${scrape.match.series.objectId}/matches#current-date`}
         >
-          <Button className="m-4">
+          <p className="m-4 rounded-md p-2 text-center dark:bg-neutral-700 dark:text-neutral-300">
             Go to Series Details - {scrape.match.series.longName}
-          </Button>
+          </p>
         </Link>
       ),
       state: "series",
