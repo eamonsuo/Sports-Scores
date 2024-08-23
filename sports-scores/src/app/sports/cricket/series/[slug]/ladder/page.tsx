@@ -3,6 +3,7 @@ import CricketSeriesResult from "@/components/cricket/CricketSeriesResult";
 import Placeholder from "@/components/misc/Placeholder";
 import { cricinfoSeriesStandingsScraper } from "@/lib/scraper";
 import { getCricketImageUrl } from "@/lib/utils";
+import Image from "next/image";
 
 export default async function Page({ params }: { params: { slug: number } }) {
   let url = "https://www.espncricinfo.com/series/" + params.slug;
@@ -46,11 +47,32 @@ export default async function Page({ params }: { params: { slug: number } }) {
           ></CricketSeriesResult>
         ))}
 
+      {series.isTrophy && seriesResults?.results.length === 1 && (
+        <div className="flex flex-col items-center">
+          <p className="pt-6 dark:text-neutral-400">TOURNAMENT WINNER </p>
+          <Image
+            src={getCricketImageUrl(
+              seriesResults.results[0].result.leadTeam.imageUrl,
+            )}
+            height={150}
+            width={150}
+            alt={"Winning Team"}
+            className="m-4"
+          />
+
+          <p className="text-xl dark:text-neutral-400">
+            {seriesResults.results[0].result.leadTeam.longName}{" "}
+          </p>
+        </div>
+      )}
+
       {series.isTrophy && standings !== null && (
         <>
           <CricketSeriesLadder data={standings} />
 
-          <p className="pt-6 dark:text-neutral-400">Notes: </p>
+          <p className="pt-6 dark:text-neutral-400">
+            {standings.notes.length > 0 && "Notes:"}{" "}
+          </p>
           <p className="pt-3 dark:text-neutral-400">{standings.notes}</p>
         </>
       )}

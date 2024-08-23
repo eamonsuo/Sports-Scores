@@ -40,6 +40,7 @@ export default function ScoreChart({
             <YAxis
               width={20}
               tickLine={false}
+              ticks={[-yrange - 1, 0, yrange + 1]}
               domain={[-yrange - 1, yrange + 1]}
             />
             <XAxis tickLine={false} tick={false} axisLine={false} height={5} />
