@@ -30,7 +30,7 @@ export default async function Page({ params }: { params: { id: number } }) {
   let game = mapNFLFixtureFields([rawGame])[0];
 
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col overflow-y-auto">
       <MatchDetailsHero
         homeInfo={game.homeDetails}
         awayInfo={game.awayDetails}

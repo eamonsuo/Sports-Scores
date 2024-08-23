@@ -4,7 +4,6 @@ import {
   fetchAFLGameQuarters,
 } from "@/api/afl.api";
 
-import AFLKeyPlayerStats from "@/components/afl/AFLKeyPlayerStats";
 import AFLScoreBreakdown from "@/components/afl/AFLScoreBreakdown";
 import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
 import ScoreChart from "@/components/generic/ScoreChart";
@@ -40,7 +39,7 @@ export default async function Page({ params }: { params: { id: number } }) {
   let game = mapAFLFixtureFields([rawGame])[0];
 
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col overflow-y-auto pb-4">
       <MatchDetailsHero
         homeInfo={game.homeDetails}
         awayInfo={game.awayDetails}
@@ -58,7 +57,7 @@ export default async function Page({ params }: { params: { id: number } }) {
             homeLogo={rawGame.teams.home.logo}
             awayLogo={rawGame.teams.away.logo}
           />
-          <AFLKeyPlayerStats data={""} />
+          {/* <AFLKeyPlayerStats data={""} /> */}
         </>
       ) : null}
     </div>
