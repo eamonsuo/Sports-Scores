@@ -1,4 +1,3 @@
-import { REVALIDATE } from "@/lib/constants";
 import { handleAPIErrors } from "@/lib/utils";
 import { APISportsStatusDetails } from "@/types/misc";
 import { NFLGame, NFLGameEvents, NFLResponse, NFLStanding } from "@/types/nfl";
@@ -8,7 +7,7 @@ reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
 
 const fetchOptions = {
   headers: reqHeaders,
-  next: { revalidate: REVALIDATE },
+  // next: { revalidate: REVALIDATE },
 };
 
 export async function fetchNFLFixtures(season: number) {

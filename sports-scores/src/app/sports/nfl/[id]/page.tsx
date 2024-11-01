@@ -6,7 +6,8 @@ import NFLScoreBreakdown from "@/components/nfl/NFLScoreBreakdown";
 import { MATCHSTATUSNFL } from "@/lib/constants";
 import { mapNFLFixtureFields } from "@/lib/dataMapping";
 
-export default async function Page({ params }: { params: { id: number } }) {
+export default async function Page(props: { params: Promise<{ id: number }> }) {
+  const params = await props.params;
   const rawGame = await fetchNFLGame(params.id);
   const events = await fetchNFLGameEvents(params.id);
 

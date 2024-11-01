@@ -8,7 +8,8 @@ import { cricinfoMatchDetails } from "@/lib/scraper";
 import { getCricketImageUrl, getLocalTimeISO } from "@/lib/utils";
 import Link from "next/link";
 
-export default async function Page({ params }: { params: { slug: string[] } }) {
+export default async function Page(props: { params: Promise<{ slug: string[] }> }) {
+  const params = await props.params;
   let url =
     "https://www.espncricinfo.com/series/" +
     params.slug.join("/") +

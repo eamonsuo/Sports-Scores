@@ -11,7 +11,8 @@ import Placeholder from "@/components/misc/Placeholder";
 import { MATCHSTATUSAFL, REVALIDATE } from "@/lib/constants";
 import { mapAFLFixtureFields } from "@/lib/dataMapping";
 
-export default async function Page({ params }: { params: { id: number } }) {
+export default async function Page(props: { params: Promise<{ id: number }> }) {
+  const params = await props.params;
   const rawGame = await fetchAFLGame(params.id, REVALIDATE);
   const quarters = await fetchAFLGameQuarters(params.id, REVALIDATE);
   const events = await fetchAFLGameEvents(params.id, REVALIDATE);

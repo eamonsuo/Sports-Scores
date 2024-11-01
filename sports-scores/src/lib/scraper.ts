@@ -9,14 +9,13 @@ import {
   CricketSeriesResult,
 } from "@/types/cricket";
 import { writeFile } from "fs";
-import { REVALIDATE } from "./constants";
 
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
 const fetchOptions = {
   // cache: 'no-store',
-  next: { revalidate: REVALIDATE },
+  // next: { revalidate: REVALIDATE },
 };
 
 async function scrapeData<T>(url: string) {
