@@ -2,7 +2,7 @@ import { fetchNFLFixtures } from "@/api/nfl.api";
 import FixtureRoundList from "@/components/generic/FixtureRoundList";
 import Placeholder from "@/components/misc/Placeholder";
 import { mapNFLFixtureFields } from "@/lib/dataMapping";
-import { getCurrentWeek } from "@/lib/utils";
+import { getCurrentWeek } from "@/lib/projUtils";
 
 export default async function Page() {
   const fixtures = await fetchNFLFixtures(2024);

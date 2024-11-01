@@ -1,4 +1,4 @@
-import { handleAPIErrors } from "@/lib/utils";
+import { handleAPIErrors } from "@/lib/projUtils";
 import {
   F1DriverStandings,
   F1Response,

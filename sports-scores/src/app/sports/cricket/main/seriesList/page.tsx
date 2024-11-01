@@ -1,5 +1,5 @@
+import { getCricketImageUrl } from "@/lib/projUtils";
 import { cricinfoAllSeriesScraper } from "@/lib/scraper";
-import { getCricketImageUrl } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";

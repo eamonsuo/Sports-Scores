@@ -4,11 +4,13 @@ import CricketScorecardBowl from "@/components/cricket/CricketScorecardBowl";
 import ClientSportsPage from "@/components/generic/ClientSportsPage";
 import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
 import Placeholder from "@/components/misc/Placeholder";
+import { getCricketImageUrl, getLocalTimeISO } from "@/lib/projUtils";
 import { cricinfoMatchDetails } from "@/lib/scraper";
-import { getCricketImageUrl, getLocalTimeISO } from "@/lib/utils";
 import Link from "next/link";
 
-export default async function Page(props: { params: Promise<{ slug: string[] }> }) {
+export default async function Page(props: {
+  params: Promise<{ slug: string[] }>;
+}) {
   const params = await props.params;
   let url =
     "https://www.espncricinfo.com/series/" +

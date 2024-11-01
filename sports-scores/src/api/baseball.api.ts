@@ -1,4 +1,4 @@
-import { handleAPIErrors } from "@/lib/utils";
+import { handleAPIErrors } from "@/lib/projUtils";
 import { BaseballGame, BaseballResponse } from "@/types/baseball";
 import { APISportsStatusDetails } from "@/types/misc";
 

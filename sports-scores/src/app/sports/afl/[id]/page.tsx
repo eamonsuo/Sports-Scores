@@ -8,14 +8,14 @@ import AFLScoreBreakdown from "@/components/afl/AFLScoreBreakdown";
 import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
 import ScoreChart from "@/components/generic/ScoreChart";
 import Placeholder from "@/components/misc/Placeholder";
-import { MATCHSTATUSAFL, REVALIDATE } from "@/lib/constants";
+import { MATCHSTATUSAFL } from "@/lib/constants";
 import { mapAFLFixtureFields } from "@/lib/dataMapping";
 
 export default async function Page(props: { params: Promise<{ id: number }> }) {
   const params = await props.params;
-  const rawGame = await fetchAFLGame(params.id, REVALIDATE);
-  const quarters = await fetchAFLGameQuarters(params.id, REVALIDATE);
-  const events = await fetchAFLGameEvents(params.id, REVALIDATE);
+  const rawGame = await fetchAFLGame(params.id);
+  const quarters = await fetchAFLGameQuarters(params.id);
+  const events = await fetchAFLGameEvents(params.id);
 
   if (typeof rawGame === "string") {
     return <Placeholder>{rawGame}</Placeholder>;
@@ -27,7 +27,7 @@ export default async function Page(props: { params: Promise<{ id: number }> }) {
 
   if (typeof events !== "string") {
     let diff = 0;
-    scores = events.events.flatMap((item) => {
+    scores = events.events.flatMap((item: any) => {
       if (item.team.id == rawGame.teams.home.id) {
         item.type === "behind" ? (diff += 1) : (diff += 6);
       } else {

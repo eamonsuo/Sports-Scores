@@ -1,4 +1,4 @@
-import { getCricketImageUrl } from "@/lib/utils";
+import { getCricketImageUrl } from "@/lib/projUtils";
 import { CricketInningBatsman } from "@/types/cricket";
 import Image from "next/image";
 

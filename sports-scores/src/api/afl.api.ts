@@ -1,5 +1,4 @@
-import { REVALIDATE } from "@/lib/constants";
-import { handleAPIErrors } from "@/lib/utils";
+import { handleAPIErrors } from "@/lib/projUtils";
 import {
   AFLGame,
   AFLGameEvents,
@@ -14,7 +13,7 @@ reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
 
 export async function fetchAFLFixtures(
   season: number,
-  revalidate: number = REVALIDATE,
+  // revalidate: number = REVALIDATE,
 ) {
   const rawFixtures = await fetch(
     `${process.env.AFL_BASEURL}/games?season=${season}&league=1`,
@@ -35,7 +34,7 @@ export async function fetchAFLFixtures(
 
 export async function fetchAFLGame(
   gameId: number,
-  revalidate: number = REVALIDATE,
+  // revalidate: number = REVALIDATE,
 ) {
   const rawGame = await fetch(`${process.env.AFL_BASEURL}/games?id=${gameId}`, {
     headers: reqHeaders,
@@ -53,7 +52,7 @@ export async function fetchAFLGame(
 
 export async function fetchAFLGameQuarters(
   gameId: number,
-  revalidate: number = REVALIDATE,
+  // revalidate: number = REVALIDATE,
 ) {
   const rawQuarters = await fetch(
     `${process.env.AFL_BASEURL}/games/quarters?id=${gameId}`,
@@ -74,7 +73,7 @@ export async function fetchAFLGameQuarters(
 
 export async function fetchAFLGameEvents(
   gameId: number,
-  revalidate: number = REVALIDATE,
+  // revalidate: number = REVALIDATE,
 ) {
   const rawEvents = await fetch(
     `${process.env.AFL_BASEURL}/games/events?id=${gameId}`,
@@ -93,7 +92,7 @@ export async function fetchAFLGameEvents(
   return events.response[0];
 }
 
-export async function fetchAFLStatus(revalidate: number = REVALIDATE) {
+export async function fetchAFLStatus() {
   const rawStatus = await fetch(`${process.env.AFL_BASEURL}/status`, {
     headers: reqHeaders,
     // next: { revalidate: revalidate },
@@ -110,7 +109,7 @@ export async function fetchAFLStatus(revalidate: number = REVALIDATE) {
 
 export async function fetchAFLStandings(
   season: number,
-  revalidate: number = REVALIDATE,
+  // revalidate: number = REVALIDATE,
 ) {
   const rawStandings = await fetch(
     `${process.env.AFL_BASEURL}/standings?season=${season}&league=1`,
