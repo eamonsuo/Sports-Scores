@@ -119,7 +119,7 @@ export function getCricketImageUrl(slug: string) {
   if (slug === null || slug === undefined) {
     return fallback;
   }
-  return `https://p.imgci.com${slug ?? "/db/PICTURES/CMS"}`;
+  return `https://p.imgci.com${slug.replace("/lsci", "") ?? "/db/PICTURES/CMS"}`;
 }
 
 export function shortenTeamNames(team: string) {

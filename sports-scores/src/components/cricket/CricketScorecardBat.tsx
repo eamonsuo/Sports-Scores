@@ -44,7 +44,8 @@ export default async function CricketScorecardBat({
           </tr>
         ))}
         <tr>
-          <td></td> <td className="py-3 text-left">Total</td>
+          <td></td>
+          <td className="py-3 text-left">Total</td>
           <td>{total}</td>
           <td>({overs})</td>
         </tr>
