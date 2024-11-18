@@ -82,11 +82,10 @@ export function getCurrentWeek(data: MatchSummary[]) {
   let record = data.find((item) => {
     let itemDate = new Date(item.startDate);
     itemDate.setHours(0, 0, 0, 0);
-    item;
     return itemDate >= curDate;
   });
 
-  return record?.roundLabel ?? "";
+  return record?.roundLabel ?? data[data.length - 1].roundLabel;
 }
 
 //Convert to AEST

@@ -15,5 +15,5 @@ export default async function Page() {
 
   let curRound = getCurrentWeek(mappedFixtures);
 
-  return <FixtureRoundList data={mappedFixtures} curRound={curRound} />;
+  return <FixtureRoundList data={mappedFixtures} curRound={curRound ?? ""} />;
 }
