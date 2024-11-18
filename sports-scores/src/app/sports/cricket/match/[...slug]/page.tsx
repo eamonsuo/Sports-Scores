@@ -1,4 +1,4 @@
-import CricketMatchDetails from "@/components/cricket/CricketMatchDetails";
+import CricketMatchSummary from "@/components/cricket/CricketMatchSummary";
 import CricketScorecardBat from "@/components/cricket/CricketScorecardBat";
 import CricketScorecardBowl from "@/components/cricket/CricketScorecardBowl";
 import ClientSportsPage from "@/components/generic/ClientSportsPage";
@@ -6,6 +6,7 @@ import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
 import Placeholder from "@/components/misc/Placeholder";
 import { getCricketImageUrl, getLocalTimeISO } from "@/lib/projUtils";
 import { cricinfoMatchDetails } from "@/lib/scraper";
+import { CricketMatchDetails, Team, TeamPlayer } from "@/types/cricket";
 import Link from "next/link";
 
 export default async function Page(props: {
@@ -17,24 +18,55 @@ export default async function Page(props: {
     params.slug.join("/") +
     "/full-scorecard";
   let scrape = await cricinfoMatchDetails(url);
-  let homeTeam = scrape.match.teams[0].isHome
-    ? scrape.match.teams[0]
-    : scrape.match.teams[1];
-  let awayTeam = scrape.match.teams[0].isHome
-    ? scrape.match.teams[1]
-    : scrape.match.teams[0];
 
-  let homeTeamPlayers = scrape.content.matchPlayers?.teamPlayers[0].team.isHome
-    ? scrape.content.matchPlayers?.teamPlayers[0]
-    : scrape.content.matchPlayers?.teamPlayers[1];
-  let awayTeamPlayers = scrape.content.matchPlayers?.teamPlayers[0].team.isHome
-    ? scrape.content.matchPlayers?.teamPlayers[1]
-    : scrape.content.matchPlayers?.teamPlayers[0];
+  let scrapeData = scrape.data;
+
+  let homeTeam = scrapeData.match.teams[0].isHome
+    ? scrapeData.match.teams[0]
+    : scrapeData.match.teams[1];
+  let awayTeam = scrapeData.match.teams[0].isHome
+    ? scrapeData.match.teams[1]
+    : scrapeData.match.teams[0];
+
+  let homeTeamPlayers = scrapeData.content.matchPlayers?.teamPlayers[0].team
+    .isHome
+    ? scrapeData.content.matchPlayers?.teamPlayers[0]
+    : scrapeData.content.matchPlayers?.teamPlayers[1];
+  let awayTeamPlayers = scrapeData.content.matchPlayers?.teamPlayers[0].team
+    .isHome
+    ? scrapeData.content.matchPlayers?.teamPlayers[1]
+    : scrapeData.content.matchPlayers?.teamPlayers[0];
 
   let homeInnings = 1;
   let awayInnings = 1;
 
-  let optionsScorecard = scrape.content.innings.map((item) => {
+  let optionsOverall = buildOptions(
+    scrape,
+    homeTeam,
+    homeInnings,
+    awayTeam,
+    awayInnings,
+    homeTeamPlayers,
+    awayTeamPlayers,
+  );
+
+  return (
+    <ClientSportsPage
+      apiStatus={<></>}
+      options={optionsOverall}
+      defaultState="scorecard"
+    />
+  );
+}
+
+function createScorecards(
+  scrape: CricketMatchDetails,
+  homeTeam: Team,
+  homeInnings: number,
+  awayTeam: Team,
+  awayInnings: number,
+) {
+  return scrape.data.content.innings.map((item) => {
     return {
       btnLabel: `${homeTeam.team.id === item.team.id ? (homeInnings++ === 1 ? "1st " : "2nd ") : awayInnings++ === 1 ? "1st " : "2nd "} ${item.team.abbreviation}`,
       component: (
@@ -43,6 +75,7 @@ export default async function Page(props: {
             batters={item.inningBatsmen}
             total={item.runs}
             overs={item.overs}
+            wickets={item.wickets ?? 0}
           />
           <div className="py-6"></div>
           <CricketScorecardBowl data={item.inningBowlers} />
@@ -51,17 +84,40 @@ export default async function Page(props: {
       state: item.inningNumber.toString(),
     };
   });
+}
 
-  let optionsOverall = [
+function buildOptions(
+  scrape: CricketMatchDetails,
+  homeTeam: Team,
+  homeInnings: number,
+  awayTeam: Team,
+  awayInnings: number,
+  homeTeamPlayers?: TeamPlayer,
+  awayTeamPlayers?: TeamPlayer,
+) {
+  let scrapeData = scrape.data;
+
+  let optionsScorecard = createScorecards(
+    scrape,
+    homeTeam,
+    homeInnings,
+    awayTeam,
+    awayInnings,
+  );
+
+  return [
     {
       btnLabel: `Details`,
       component: (
         <>
+          <p className="my-2 text-center text-xl text-neutral-400">
+            {scrapeData.match.statusText}
+          </p>
           <MatchDetailsHero
             status={
-              scrape.match.status === "{{MATCH_START_TIME}}"
+              scrapeData.match.status === "{{MATCH_START_TIME}}"
                 ? "Scheduled"
-                : scrape.match.status
+                : scrapeData.match.status
             }
             homeInfo={{
               img: getCricketImageUrl(homeTeam.team.imageUrl),
@@ -74,9 +130,9 @@ export default async function Page(props: {
               name: awayTeam.team.name,
             }}
           />
-          <CricketMatchDetails
+          <CricketMatchSummary
             date={
-              new Date(scrape.match.startTime).toLocaleDateString("en-US", {
+              new Date(scrapeData.match.startTime).toLocaleDateString("en-US", {
                 weekday: "short",
                 month: "short",
                 day: "numeric",
@@ -84,15 +140,19 @@ export default async function Page(props: {
                 timeZone: "Australia/Brisbane",
               }) +
               " " +
-              getLocalTimeISO(scrape.match.startTime)
+              getLocalTimeISO(scrapeData.match.startTime)
             }
-            venue={scrape.match.ground.longName}
+            venue={scrapeData.match.ground.longName}
             toss={
-              (scrape.match.teams.find(
-                (item) => item.team.id === scrape.match.tossWinnerTeamId,
+              (scrapeData.match.teams.find(
+                (item) => item.team.id === scrapeData.match.tossWinnerTeamId,
               )?.team.name ?? "NA") +
-              (scrape.match.tossWinnerChoice === 1 ? " - Chose to Bat" : "") +
-              (scrape.match.tossWinnerChoice === 2 ? " - Chose to Bowl" : "")
+              (scrapeData.match.tossWinnerChoice === 1
+                ? " - Chose to Bat"
+                : "") +
+              (scrapeData.match.tossWinnerChoice === 2
+                ? " - Chose to Bowl"
+                : "")
             }
             homePlayers={
               homeTeamPlayers?.players.map(
@@ -115,12 +175,12 @@ export default async function Page(props: {
               ) ?? ["NA"]
             }
             umpires={
-              scrape.match.umpires?.map(
+              scrapeData.match.umpires?.map(
                 (item) => item.player.battingName + ", ",
               ) ?? ["NA"]
             }
             pom={
-              scrape.content.matchPlayerAwards?.find(
+              scrapeData.content.matchPlayerAwards?.find(
                 (item) => item.type === "PLAYER_OF_MATCH",
               )?.player.name ?? "NA"
             }
@@ -132,7 +192,7 @@ export default async function Page(props: {
     {
       btnLabel: `Scorecard`,
       component:
-        scrape.content.innings.length === 0 ? (
+        scrapeData.content.innings.length === 0 ? (
           <Placeholder>No Scorecard Details</Placeholder>
         ) : (
           <ClientSportsPage
@@ -152,22 +212,14 @@ export default async function Page(props: {
       btnLabel: `Series`,
       component: (
         <Link
-          href={`/sports/cricket/series/${scrape.match.series.slug}-${scrape.match.series.objectId}/matches#current-date`}
+          href={`/sports/cricket/series/${scrapeData.match.series.slug}-${scrapeData.match.series.objectId}/matches#current-date`}
         >
           <p className="m-4 rounded-md p-2 text-center dark:bg-neutral-700 dark:text-neutral-300">
-            Go to Series Details - {scrape.match.series.longName}
+            Go to Series Details - {scrapeData.match.series.longName}
           </p>
         </Link>
       ),
       state: "series",
     },
   ];
-
-  return (
-    <ClientSportsPage
-      apiStatus={<></>}
-      options={optionsOverall}
-      defaultState="scorecard"
-    />
-  );
 }
