@@ -85,7 +85,7 @@ export function getCurrentWeek(data: MatchSummary[]) {
     return itemDate >= curDate;
   });
 
-  return record?.roundLabel ?? data[data.length - 1].roundLabel;
+  return record?.roundLabel ?? data[data.length - 1].roundLabel ?? "";
 }
 
 //Convert to AEST
