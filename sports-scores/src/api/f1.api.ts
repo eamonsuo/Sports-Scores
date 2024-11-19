@@ -13,7 +13,6 @@ reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
 
 const fetchOptions = {
   headers: reqHeaders,
-  // next: { revalidate: REVALIDATE },
 };
 
 export async function fetchF1Status() {

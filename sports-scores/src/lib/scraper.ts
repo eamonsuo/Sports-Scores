@@ -13,13 +13,8 @@ import { writeFile } from "fs";
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
-const fetchOptions = {
-  // cache: 'no-store',
-  // next: { revalidate: REVALIDATE },
-};
-
 export async function scrapeData<T>(url: string) {
-  const response = await fetch(url, fetchOptions);
+  const response = await fetch(url);
 
   const html = await response.text();
 

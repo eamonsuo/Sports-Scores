@@ -1,7 +1,7 @@
-import RaceSummaryCard from "./RaceSummaryCard";
 import { SessionSummary } from "@/types/f1";
 import React from "react";
 import SectionDate from "../generic/SectionDate";
+import RaceSummaryCard from "./RaceSummaryCard";
 
 export default function RaceList({ data }: { data: SessionSummary[] }) {
   const current_date: Date = new Date(Date.now());
@@ -11,6 +11,7 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
   let displayDate: boolean = false;
   let currentMatch: boolean = false;
   let currentDateFlag: boolean = false;
+  let curGrandPrix = "";
 
   if (data.length === 0) {
     return <>NO DATA</>;
@@ -21,8 +22,12 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
       {data.map((item: SessionSummary) => {
         let item_date = new Date(item.startDate);
         displayDate = false;
-        if (sectionDate.toDateString() !== item_date.toDateString()) {
+        if (
+          sectionDate.toDateString() !== item_date.toDateString() &&
+          curGrandPrix !== item.name
+        ) {
           sectionDate = item_date;
+          curGrandPrix = item.name;
           displayDate = true;
         }
 
@@ -40,11 +45,27 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
 
         return (
           <React.Fragment key={item.id}>
-            <SectionDate sectionDate={sectionDate} currentDate={currentMatch} />
+            {displayDate && (
+              <React.Fragment>
+                <SectionDate
+                  sectionDate={sectionDate}
+                  currentDate={currentMatch}
+                />
+                <RaceSummaryCard
+                  id={item.id}
+                  href={`/sports/${item.sport}/${item.id}`}
+                  grandPrix={item.name}
+                  sessionType={""}
+                  img={item.logo}
+                  status={item.status}
+                />
+              </React.Fragment>
+            )}
+
             <RaceSummaryCard
               id={item.id}
               href={`/sports/${item.sport}/${item.id}`}
-              grandPrix={item.name}
+              grandPrix={""}
               sessionType={item.type}
               img={item.logo}
               status={item.status}
