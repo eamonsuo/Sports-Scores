@@ -3,6 +3,8 @@ import { mapScrape } from "@/lib/dataMapping";
 import { cricinfoLiveMatchesScraper, scrapeData } from "@/lib/scraper";
 import { CricinfoResponse, CricketMatchDetails } from "@/types/cricket";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page() {
   const scrape = await cricinfoLiveMatchesScraper();
 
