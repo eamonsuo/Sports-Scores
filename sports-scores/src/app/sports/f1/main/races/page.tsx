@@ -18,7 +18,7 @@ export default async function Page() {
   return <RaceList data={mappedraces} />;
 }
 
-export function compareF1Sessions(a: SessionSummary, b: SessionSummary) {
+function compareF1Sessions(a: SessionSummary, b: SessionSummary) {
   let aDate = new Date(a.startDate);
   let bDate = new Date(b.startDate);
 
