@@ -4,6 +4,8 @@ import { cricinfoLiveMatchesScraper } from "@/lib/scraper";
 
 export const dynamic = "force-dynamic";
 
+export const revalidate = 10;
+
 export default async function Page() {
   const scrape = await cricinfoLiveMatchesScraper();
 
