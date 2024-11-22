@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
-import { ChartConfig, ChartContainer } from "../misc/Chart";
+import { ChartConfig, ChartContainer } from "../ui/chart";
 
 export default function ScoreChart({
   scoreDifference,
@@ -14,10 +14,13 @@ export default function ScoreChart({
   awayLogo: string;
 }) {
   const chartConfig = {
-    difference: {
+    desktop: {
       label: "Score Difference",
+      color: "#2563eb",
     },
   } satisfies ChartConfig;
+
+  console.log("DEV --- ", scoreDifference);
 
   let values = scoreDifference;
   values = [{ event: "Start", difference: 0 }].concat(values);

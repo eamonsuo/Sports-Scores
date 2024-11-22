@@ -11,7 +11,7 @@ import {
   getLocalTimeISO,
   setMatchSummary,
   shortenTeamNames,
-} from "./utils";
+} from "./projUtils";
 
 export function mapAFLFixtureFields(matches: AFLGame[]) {
   return matches.map(

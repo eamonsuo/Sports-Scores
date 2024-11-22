@@ -1,4 +1,4 @@
-export default function CricketMatchDetails({
+export default function CricketMatchSummary({
   date,
   venue,
   toss,

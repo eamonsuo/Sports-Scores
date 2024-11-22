@@ -2,6 +2,8 @@ import { fetchNFLStandings } from "@/api/nfl.api";
 import Placeholder from "@/components/misc/Placeholder";
 import NFLLadder from "@/components/nfl/NFLLadder";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page() {
   const standings = await fetchNFLStandings(2024);
 

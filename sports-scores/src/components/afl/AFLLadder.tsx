@@ -1,4 +1,4 @@
-import { shortenTeamNames } from "@/lib/utils";
+import { shortenTeamNames } from "@/lib/projUtils";
 import { AFLStanding } from "@/types/afl";
 import Image from "next/image";
 

@@ -1,5 +1,4 @@
-import { REVALIDATE } from "@/lib/constants";
-import { handleAPIErrors } from "@/lib/utils";
+import { handleAPIErrors } from "@/lib/projUtils";
 import { BaseballGame, BaseballResponse } from "@/types/baseball";
 import { APISportsStatusDetails } from "@/types/misc";
 
@@ -8,7 +7,7 @@ reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
 
 const fetchOptions = {
   headers: reqHeaders,
-  next: { revalidate: REVALIDATE },
+  // next: { revalidate: REVALIDATE },
   //  cache: 'no-store'
 };
 

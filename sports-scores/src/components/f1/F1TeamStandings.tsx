@@ -9,9 +9,11 @@ export default function F1TeamStandingsTable({
     <div className="flex-1 overflow-y-auto px-4 dark:text-neutral-400">
       <table className="w-full">
         <thead>
-          <th className="pe-2">Pos</th>
-          <th className="px-2">Team</th>
-          <th className="px-2">Pts</th>
+          <tr>
+            <th className="pe-2">Pos</th>
+            <th className="px-2">Team</th>
+            <th className="px-2">Pts</th>
+          </tr>
         </thead>
         <tbody className="text-center">
           {data.map((item) => (

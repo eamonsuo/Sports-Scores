@@ -9,11 +9,13 @@ export default function F1SessionResultsTable({
     <div className="flex-1 overflow-y-auto px-4 dark:text-neutral-400">
       <table className="mb-2 w-full dark:text-neutral-400">
         <thead>
-          <th className="pe-2">Pos</th>
-          <th className="px-2">Driver</th>
-          <th className="px-2">Grid</th>
-          <th className="px-2">Gap</th>
-          <th className="px-2">Pts</th>
+          <tr>
+            <th className="pe-2">Pos</th>
+            <th className="px-2">Driver</th>
+            <th className="px-2">Grid</th>
+            <th className="px-2">Gap</th>
+            <th className="px-2">Pts</th>
+          </tr>
         </thead>
         <tbody className="text-center">
           {data.map((item) => (

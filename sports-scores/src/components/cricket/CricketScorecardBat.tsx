@@ -1,4 +1,4 @@
-import { getCricketImageUrl } from "@/lib/utils";
+import { getCricketImageUrl } from "@/lib/projUtils";
 import { CricketInningBatsman } from "@/types/cricket";
 import Image from "next/image";
 
@@ -6,10 +6,12 @@ export default async function CricketScorecardBat({
   batters,
   total,
   overs,
+  wickets,
 }: {
   batters: CricketInningBatsman[];
   total: number;
   overs: number;
+  wickets: number;
 }) {
   return (
     <table className="w-full flex-1 dark:text-neutral-400">
@@ -44,8 +46,9 @@ export default async function CricketScorecardBat({
           </tr>
         ))}
         <tr>
-          <td></td> <td className="py-3 text-left">Total</td>
-          <td>{total}</td>
+          <td></td>
+          <td className="py-3 text-left">Total</td>
+          <td>{`${wickets}/${total}`}</td>
           <td>({overs})</td>
         </tr>
       </tbody>

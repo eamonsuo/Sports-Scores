@@ -9,18 +9,12 @@ import {
   CricketSeriesResult,
 } from "@/types/cricket";
 import { writeFile } from "fs";
-import { REVALIDATE } from "./constants";
 
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
-const fetchOptions = {
-  // cache: 'no-store',
-  next: { revalidate: REVALIDATE },
-};
-
-async function scrapeData<T>(url: string) {
-  const response = await fetch(url, fetchOptions);
+export async function scrapeData<T>(url: string) {
+  const response = await fetch(url);
 
   const html = await response.text();
 
@@ -180,7 +174,7 @@ export async function cricinfoLiveMatchesScraper() {
             item.series.objectId === 1445042) && //WNCL
           Date.parse(item.endDate) > Date.now() - 1000 * 60 * 60 * 24 * 1, //Keep games which have finished in the last day
       )
-      .sort(compareCricketMatchDates)
+      .sort(compareCricketMatchDates) as CricketMatch[]
   );
 }
 
@@ -188,7 +182,7 @@ export async function cricinfoMatchDetails(url: string) {
   let matchDetails =
     await scrapeData<CricinfoResponse<CricketMatchDetails>>(url);
 
-  return matchDetails.props.appPageProps.data;
+  return matchDetails.props.appPageProps;
 }
 
 export async function cricinfoSeriesMatchesScraper(url: string) {

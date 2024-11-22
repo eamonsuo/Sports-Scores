@@ -234,7 +234,7 @@ interface Country {
   slug: string;
 }
 
-interface Team {
+export interface Team {
   team: TeamDetails;
   isHome: boolean;
   isLive: boolean;
@@ -265,7 +265,7 @@ interface TeamDetails {
   country: Country;
 }
 
-interface TeamPlayer {
+export interface TeamPlayer {
   type: "PLAYING";
   team: Team;
   players: PlayerStats[];

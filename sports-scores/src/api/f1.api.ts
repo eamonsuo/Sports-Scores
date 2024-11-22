@@ -1,5 +1,4 @@
-import { REVALIDATE } from "@/lib/constants";
-import { handleAPIErrors } from "@/lib/utils";
+import { handleAPIErrors } from "@/lib/projUtils";
 import {
   F1DriverStandings,
   F1Response,
@@ -14,7 +13,6 @@ reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
 
 const fetchOptions = {
   headers: reqHeaders,
-  next: { revalidate: REVALIDATE },
 };
 
 export async function fetchF1Status() {

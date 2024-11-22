@@ -1,5 +1,4 @@
-import { REVALIDATE } from "@/lib/constants";
-import { handleAPIErrors } from "@/lib/utils";
+import { handleAPIErrors } from "@/lib/projUtils";
 import {
   AFLGame,
   AFLGameEvents,
@@ -12,15 +11,11 @@ import { APISportsStatusDetails } from "@/types/misc";
 const reqHeaders = new Headers();
 reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
 
-export async function fetchAFLFixtures(
-  season: number,
-  revalidate: number = REVALIDATE,
-) {
+export async function fetchAFLFixtures(season: number) {
   const rawFixtures = await fetch(
     `${process.env.AFL_BASEURL}/games?season=${season}&league=1`,
     {
       headers: reqHeaders,
-      next: { revalidate: revalidate },
     },
   );
 
@@ -33,13 +28,9 @@ export async function fetchAFLFixtures(
   return fixtures.response;
 }
 
-export async function fetchAFLGame(
-  gameId: number,
-  revalidate: number = REVALIDATE,
-) {
+export async function fetchAFLGame(gameId: number) {
   const rawGame = await fetch(`${process.env.AFL_BASEURL}/games?id=${gameId}`, {
     headers: reqHeaders,
-    next: { revalidate: revalidate },
   });
 
   let game = (await rawGame.json()) as AFLResponse<AFLGame>;
@@ -51,15 +42,11 @@ export async function fetchAFLGame(
   return game.response[0];
 }
 
-export async function fetchAFLGameQuarters(
-  gameId: number,
-  revalidate: number = REVALIDATE,
-) {
+export async function fetchAFLGameQuarters(gameId: number) {
   const rawQuarters = await fetch(
     `${process.env.AFL_BASEURL}/games/quarters?id=${gameId}`,
     {
       headers: reqHeaders,
-      next: { revalidate: revalidate },
     },
   );
 
@@ -72,15 +59,11 @@ export async function fetchAFLGameQuarters(
   return quarters.response[0];
 }
 
-export async function fetchAFLGameEvents(
-  gameId: number,
-  revalidate: number = REVALIDATE,
-) {
+export async function fetchAFLGameEvents(gameId: number) {
   const rawEvents = await fetch(
     `${process.env.AFL_BASEURL}/games/events?id=${gameId}`,
     {
       headers: reqHeaders,
-      next: { revalidate: revalidate },
     },
   );
 
@@ -93,10 +76,9 @@ export async function fetchAFLGameEvents(
   return events.response[0];
 }
 
-export async function fetchAFLStatus(revalidate: number = REVALIDATE) {
+export async function fetchAFLStatus() {
   const rawStatus = await fetch(`${process.env.AFL_BASEURL}/status`, {
     headers: reqHeaders,
-    next: { revalidate: revalidate },
   });
 
   let status = await rawStatus.json();
@@ -108,15 +90,11 @@ export async function fetchAFLStatus(revalidate: number = REVALIDATE) {
   return status.response as APISportsStatusDetails;
 }
 
-export async function fetchAFLStandings(
-  season: number,
-  revalidate: number = REVALIDATE,
-) {
+export async function fetchAFLStandings(season: number) {
   const rawStandings = await fetch(
     `${process.env.AFL_BASEURL}/standings?season=${season}&league=1`,
     {
       headers: reqHeaders,
-      next: { revalidate: revalidate },
     },
   );
 
