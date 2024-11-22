@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import Footer from "@/components/misc/Footer";
-import Header from "@/components/misc/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,7 +32,7 @@ export default function RootLayout({
         {/* Set to Dynamic view height aka height of browser minus any browser things. Helps on
          mobile where safari search overhangs regular view height*/}
         <div className="flex h-dvh w-dvw flex-col">
-          <Header></Header>
+          {/* <Header></Header> */}
           <main className="flex-1 items-center overflow-y-auto bg-white dark:bg-neutral-950">
             {children}
           </main>

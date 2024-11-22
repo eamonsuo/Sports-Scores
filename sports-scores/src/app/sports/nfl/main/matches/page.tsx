@@ -4,6 +4,8 @@ import Placeholder from "@/components/misc/Placeholder";
 import { mapNFLFixtureFields } from "@/lib/dataMapping";
 import { getCurrentWeek } from "@/lib/projUtils";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page() {
   const fixtures = await fetchNFLFixtures(2024);
 

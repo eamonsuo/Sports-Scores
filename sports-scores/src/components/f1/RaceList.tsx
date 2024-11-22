@@ -1,13 +1,14 @@
 import { SessionSummary } from "@/types/f1";
 import React from "react";
-import SectionDate from "../generic/SectionDate";
-import RaceSummaryCard from "./RaceSummaryCard";
+import SectionDateRange from "../generic/SectionDateRange";
+import SessionSummaryCard from "./SessionSummaryCard";
+import WeekendSummaryCard from "./WeekendSummaryCard";
 
 export default function RaceList({ data }: { data: SessionSummary[] }) {
   const current_date: Date = new Date(Date.now());
 
   // console.log(fixtures);
-  let sectionDate: Date = new Date("2000-01-01");
+  let startDate: Date = new Date("2000-01-01");
   let displayDate: boolean = false;
   let currentMatch: boolean = false;
   let currentDateFlag: boolean = false;
@@ -20,25 +21,24 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
   return (
     <div className="flex-1 overflow-y-auto px-4">
       {data.map((item: SessionSummary) => {
-        let item_date = new Date(item.startDate);
+        let itemDate = new Date(item.startDate);
+        let raceDate = new Date(
+          data.find((s) => s.name === item.name && s.type === "Race")
+            ?.startDate ?? "",
+        );
+
         displayDate = false;
-        if (
-          sectionDate.toDateString() !== item_date.toDateString() &&
-          curGrandPrix !== item.name
-        ) {
-          sectionDate = item_date;
+        if (curGrandPrix !== item.name) {
           curGrandPrix = item.name;
+          startDate = new Date(item.startDate); //Assumes data variable is sorted by date
           displayDate = true;
         }
 
         if (currentMatch) {
           currentMatch = false;
         }
-        if (
-          !currentDateFlag &&
-          (current_date.toDateString() === sectionDate.toDateString() ||
-            current_date.getTime() <= sectionDate.getTime())
-        ) {
+
+        if (!currentDateFlag && current_date.getTime() <= raceDate.getTime()) {
           currentMatch = true;
           currentDateFlag = true;
         }
@@ -47,25 +47,21 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
           <React.Fragment key={item.id}>
             {displayDate && (
               <React.Fragment>
-                <SectionDate
-                  sectionDate={sectionDate}
+                <SectionDateRange
+                  dateFrom={startDate}
+                  dateTo={raceDate}
                   currentDate={currentMatch}
                 />
-                <RaceSummaryCard
-                  id={item.id}
-                  href={`/sports/${item.sport}/${item.id}`}
+                <WeekendSummaryCard
                   grandPrix={item.name}
-                  sessionType={""}
                   img={item.logo}
-                  status={item.status}
+                  status={""}
                 />
               </React.Fragment>
             )}
 
-            <RaceSummaryCard
-              id={item.id}
+            <SessionSummaryCard
               href={`/sports/${item.sport}/${item.id}`}
-              grandPrix={""}
               sessionType={item.type}
               img={item.logo}
               status={item.status}

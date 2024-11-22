@@ -4,6 +4,8 @@ import Placeholder from "@/components/misc/Placeholder";
 import { mapF1SessionFields } from "@/lib/dataMapping";
 import { SessionSummary } from "@/types/f1";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page() {
   const races = await fetchAllF1Sessions(2024);
 
@@ -12,8 +14,6 @@ export default async function Page() {
   }
 
   const mappedraces = mapF1SessionFields(races).sort(compareF1Sessions);
-
-  // const grandPrix = mappedraces.map()
 
   return <RaceList data={mappedraces} />;
 }
