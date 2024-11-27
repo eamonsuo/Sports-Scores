@@ -1,4 +1,5 @@
 import fallback from "@/../public/vercel.svg";
+import { CricketImage, CricketMatch, CricketSeries } from "@/types/cricket";
 import { APISportsErrors, APISportsResponse, MatchSummary } from "@/types/misc";
 import { MATCHSTATUSAFL, MATCHSTATUSNFL } from "./constants";
 
@@ -142,4 +143,29 @@ export function handleAPIErrors(response: APISportsResponse) {
     );
   }
   return "No Results";
+}
+
+export function compareCricketMatchDates(a: CricketMatch, b: CricketMatch) {
+  let first = Date.parse(a.startTime);
+  let second = Date.parse(b.startTime);
+  if (first > second) {
+    return 1;
+  } else if (first < second) {
+    return -1;
+  }
+  return 0;
+}
+
+export function compareCricketSeriesDates(
+  a: { title: string; series: CricketSeries; images: CricketImage[] },
+  b: { title: string; series: CricketSeries; images: CricketImage[] },
+) {
+  let first = Date.parse(a.series.startDate);
+  let second = Date.parse(b.series.startDate);
+  if (first > second) {
+    return 1;
+  } else if (first < second) {
+    return -1;
+  }
+  return 0;
 }

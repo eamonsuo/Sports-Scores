@@ -1,5 +1,5 @@
+import { fetchCricketAllSeries } from "@/api/cricket.api";
 import { getCricketImageUrl } from "@/lib/projUtils";
-import { cricinfoAllSeriesScraper } from "@/lib/scraper";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -7,7 +7,7 @@ import React from "react";
 export const revalidate = 0;
 
 export default async function Page() {
-  const scrape = await cricinfoAllSeriesScraper();
+  const scrape = await fetchCricketAllSeries();
 
   return (
     <div className="flex-1 overflow-y-auto px-4">

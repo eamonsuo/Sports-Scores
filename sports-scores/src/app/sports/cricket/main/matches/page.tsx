@@ -1,11 +1,11 @@
+import { fetchCricketCurrentMatches } from "@/api/cricket.api";
 import CricketFixtureList from "@/components/cricket/CricketFixtureList";
 import { mapScrape } from "@/lib/dataMapping";
-import { cricinfoLiveMatchesScraper } from "@/lib/scraper";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const scrape = await cricinfoLiveMatchesScraper();
+  const scrape = await fetchCricketCurrentMatches();
 
   // for (let i = 0; i < scrape.length; i++) {
   //   let url =
