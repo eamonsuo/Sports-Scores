@@ -1,8 +1,8 @@
+import { fetchCricketSeriesStandings } from "@/api/cricket.api";
 import CricketSeriesLadder from "@/components/cricket/CricketSeriesLadder";
 import CricketSeriesResult from "@/components/cricket/CricketSeriesResult";
 import Placeholder from "@/components/misc/Placeholder";
 import { getCricketImageUrl } from "@/lib/projUtils";
-import { cricinfoSeriesStandingsScraper } from "@/lib/scraper";
 import Image from "next/image";
 
 export default async function Page(props: {
@@ -10,7 +10,7 @@ export default async function Page(props: {
 }) {
   const params = await props.params;
   let url = "https://www.espncricinfo.com/series/" + params.slug;
-  let scrape = await cricinfoSeriesStandingsScraper(url);
+  let scrape = await fetchCricketSeriesStandings(url);
 
   const series = scrape.series;
   const standings = scrape.content.standings;

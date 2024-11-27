@@ -1,3 +1,4 @@
+import { fetchCricketMatch } from "@/api/cricket.api";
 import CricketMatchSummary from "@/components/cricket/CricketMatchSummary";
 import CricketScorecardBat from "@/components/cricket/CricketScorecardBat";
 import CricketScorecardBowl from "@/components/cricket/CricketScorecardBowl";
@@ -5,7 +6,6 @@ import ClientSportsPage from "@/components/generic/ClientSportsPage";
 import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
 import Placeholder from "@/components/misc/Placeholder";
 import { getCricketImageUrl, getLocalTimeISO } from "@/lib/projUtils";
-import { cricinfoMatchDetails } from "@/lib/scraper";
 import { CricketMatchDetails, Team, TeamPlayer } from "@/types/cricket";
 import Link from "next/link";
 
@@ -17,7 +17,7 @@ export default async function Page(props: {
     "https://www.espncricinfo.com/series/" +
     params.slug.join("/") +
     "/full-scorecard";
-  let scrape = await cricinfoMatchDetails(url);
+  let scrape = await fetchCricketMatch(url);
 
   let scrapeData = scrape.data;
 
