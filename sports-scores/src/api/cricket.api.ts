@@ -12,18 +12,29 @@ import {
   CricketSeriesResult,
 } from "@/types/cricket";
 
-export async function fetchCricketMyTeams() {
-  let teams = [
-    "australia-2",
-    "australia-women-238",
-    "brisbane-heat-509668",
-    "brisbane-heat-women-896397",
-    "queensland-459",
-    "queensland-women-476",
-    "australia-a-women-217",
-  ];
+const MY_TEAMS_URL = [
+  "australia-2",
+  "australia-women-238",
+  "brisbane-heat-509668",
+  "brisbane-heat-women-896397",
+  "queensland-459",
+  "queensland-women-476",
+  "australia-a-women-217",
+  "prime-minister-s-xi-australia-452",
+];
 
-  let urls = teams.map((item) =>
+const SERIES_IDS = [
+  1445395, //Darwin T20 Series
+  1445044, //T20 Spring Series (Pre WBBL)
+  1442625, //WBBL
+  1443056, //BBL
+  1444468, //Sheffield Shield
+  1444469, //One Day Cup (Men Domestic)
+  1445042, //WNCL
+];
+
+export async function fetchCricketMyTeams() {
+  let urls = MY_TEAMS_URL.map((item) =>
     "https://www.espncricinfo.com/team/".concat(
       item,
       "/match-schedule-fixtures-and-results",
@@ -86,10 +97,6 @@ export async function fetchCricketCurrentMatches() {
     "https://www.espncricinfo.com/live-cricket-score",
   );
 
-  // let upcomingMatches = await scrapeData<CricinfoResponse<any>>( //TODO: Define response type
-  //   "https://www.espncricinfo.com/live-cricket-match-schedule-fixtures",
-  // );
-
   let pastMatches = await scrapeData<CricinfoResponse<any>>(
     "https://www.espncricinfo.com/live-cricket-match-results",
   );
@@ -102,13 +109,9 @@ export async function fetchCricketCurrentMatches() {
         (item: CricketMatch) =>
           (item.internationalClassId !== null ||
             // item.state === "LIVE" ||
-            item.series.objectId === 1445395 || //Darwin T20 Series
-            item.series.objectId === 1445044 || //T20 Spring Series (Pre WBBL)
-            item.series.objectId === 1442625 || //WBBL
-            item.series.objectId === 1443056 || //BBL
-            item.series.objectId === 1444468 || //Sheffield Shield
-            item.series.objectId === 1444469 || //One Day Cup (Men Domestic)
-            item.series.objectId === 1445042) && //WNCL
+            MY_TEAMS_URL.includes(item.teams[0].team.slug) || //Is in My Teams
+            MY_TEAMS_URL.includes(item.teams[1].team.slug) || //Is in My Teams
+            SERIES_IDS.includes(item.series.objectId)) && //Is in My Series
           Date.parse(item.endDate) > Date.now() - 1000 * 60 * 60 * 24 * 1, //Keep games which have finished in the last day
       )
       .sort(compareCricketMatchDates) as CricketMatch[]

@@ -368,7 +368,7 @@ interface MatchSeriesResult {
   groupTitle: string;
 }
 
-interface Inning {
+export interface Inning {
   inningNumber: number;
   isCurrent: boolean;
   team: TeamDetails;
