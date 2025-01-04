@@ -89,6 +89,7 @@ function detailsComponents(
           name: awayTeam.team.name,
         }}
       />
+      {/* TODO: add live batter/bowler scores */}
       <CricketMatchSummary
         date={
           new Date(match.startTime).toLocaleDateString("en-US", {

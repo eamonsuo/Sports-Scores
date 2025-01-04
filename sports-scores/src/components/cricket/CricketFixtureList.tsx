@@ -48,7 +48,7 @@ export default function CricketFixtureList({ data }: { data: MatchSummary[] }) {
               />
             )}
             <CricketSeriesHeader
-              href={`/sports/cricket/series/${item.seriesSlug}/matches#current-date`}
+              href={`/sports/${item.sport}/series/${item.seriesSlug}/matches#current-date`}
               seriesName={item.seriesName ?? ""}
             />
             <CricketMatchSummaryCard

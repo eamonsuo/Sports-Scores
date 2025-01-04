@@ -2,7 +2,7 @@ import {
   compareCricketMatchDates,
   compareCricketSeriesDates,
 } from "@/lib/projUtils";
-import { scrapeData, scrapePages } from "@/lib/scraper";
+import { scrapeNextData, scrapeNextPages } from "@/lib/scraper";
 import {
   CricinfoResponse,
   CricketAllSeriesResults,
@@ -41,7 +41,7 @@ export async function fetchCricketMyTeams() {
     ),
   );
 
-  let bulkData = await scrapePages(urls);
+  let bulkData = await scrapeNextPages(urls);
   return bulkData
     .filter(
       (item) =>
@@ -51,7 +51,7 @@ export async function fetchCricketMyTeams() {
 }
 
 export async function fetchCricketAllSeries() {
-  let rawData = await scrapeData<CricinfoResponse<CricketAllSeriesResults>>(
+  let rawData = await scrapeNextData<CricinfoResponse<CricketAllSeriesResults>>(
     "https://www.espncricinfo.com/cricket-fixtures",
   );
 
@@ -93,11 +93,11 @@ export async function fetchCricketAllSeries() {
 }
 
 export async function fetchCricketCurrentMatches() {
-  let liveMatches = await scrapeData<CricinfoResponse<any>>( //TODO: Define response type
+  let liveMatches = await scrapeNextData<CricinfoResponse<any>>( //TODO: Define response type
     "https://www.espncricinfo.com/live-cricket-score",
   );
 
-  let pastMatches = await scrapeData<CricinfoResponse<any>>(
+  let pastMatches = await scrapeNextData<CricinfoResponse<any>>(
     "https://www.espncricinfo.com/live-cricket-match-results",
   );
 
@@ -120,17 +120,17 @@ export async function fetchCricketCurrentMatches() {
 
 export async function fetchCricketMatch(url: string) {
   let matchDetails =
-    await scrapeData<CricinfoResponse<CricketMatchDetails>>(url);
+    await scrapeNextData<CricinfoResponse<CricketMatchDetails>>(url);
 
   return matchDetails.props.appPageProps;
 }
 
 export async function fetchCricketSeriesMatches(url: string) {
-  let data = await scrapeData<CricinfoResponse<CricketMatchResults>>(url);
+  let data = await scrapeNextData<CricinfoResponse<CricketMatchResults>>(url);
   return data.props.appPageProps.data.content.matches;
 }
 
 export async function fetchCricketSeriesStandings(url: string) {
-  let data = await scrapeData<CricinfoResponse<CricketSeriesResult>>(url);
+  let data = await scrapeNextData<CricinfoResponse<CricketSeriesResult>>(url);
   return data.props.appPageProps.data;
 }
