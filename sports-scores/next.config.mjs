@@ -20,6 +20,12 @@ const nextConfig = {
         port: "",
         pathname: "/db/PICTURES/CMS/**",
       },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        port: "",
+        pathname: "/pgatour-prod/**",
+      },
     ],
   },
   logging: {

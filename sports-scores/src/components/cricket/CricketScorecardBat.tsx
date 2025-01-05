@@ -7,11 +7,19 @@ export default async function CricketScorecardBat({
   total,
   overs,
   wickets,
+  extras,
 }: {
   batters: CricketInningBatsman[];
   total: number;
   overs: number;
   wickets: number;
+  extras: {
+    total: number;
+    byes: number;
+    legbyes: number;
+    wides: number;
+    noballs: number;
+  };
 }) {
   return (
     <table className="w-full flex-1 dark:text-neutral-400">
@@ -45,6 +53,14 @@ export default async function CricketScorecardBat({
             <td>{item.strikerate}</td>
           </tr>
         ))}
+        <tr>
+          <td></td>
+          <td className="pt-3 text-left">
+            Extras&nbsp;&nbsp;&nbsp;&nbsp;
+            {`b ${extras.byes}, lb ${extras.legbyes}, w ${extras.wides}, nb ${extras.noballs}`}
+          </td>
+          <td className="pt-3">{extras.total}</td>
+        </tr>
         <tr>
           <td></td>
           <td className="py-3 text-left">Total</td>
