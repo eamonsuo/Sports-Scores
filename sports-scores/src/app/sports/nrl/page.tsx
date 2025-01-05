@@ -1,5 +1,4 @@
 import { Button } from "@/components/misc/Button";
-import { redirect } from "next/navigation";
 
 export default async function Page() {
   return (
