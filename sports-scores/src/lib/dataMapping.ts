@@ -3,7 +3,7 @@ import { BaseballGame } from "@/types/baseball";
 import { CricketMatch } from "@/types/cricket";
 import { F1Session, SessionSummary } from "@/types/f1";
 import { MatchSummary } from "@/types/misc";
-import { NFLGame } from "@/types/nfl";
+import { NFLGame, NFLStanding } from "@/types/nfl";
 import { MATCHSTATUSAFL, MATCHSTATUSNFL, SPORT } from "./constants";
 import {
   getCricketImageUrl,
@@ -78,7 +78,10 @@ export function mapBaseballFixtureFields(matches: BaseballGame[]) {
   );
 }
 
-export function mapNFLFixtureFields(matches: NFLGame[]) {
+export function mapNFLFixtureFields(
+  matches: NFLGame[],
+  standings: NFLStanding[],
+) {
   return matches.map(
     (item: NFLGame) =>
       ({
@@ -104,11 +107,13 @@ export function mapNFLFixtureFields(matches: NFLGame[]) {
           img: item.teams.home.logo,
           score: (item.scores.home.total ?? 0).toString(),
           name: shortenTeamNames(item.teams.home.name ?? ""),
+          winDrawLoss: `${standings.find((x) => x.team.id === item.teams.home.id)?.won}-${standings.find((x) => x.team.id === item.teams.home.id)?.ties}-${standings.find((x) => x.team.id === item.teams.home.id)?.lost}`,
         },
         awayDetails: {
           img: item.teams.away.logo,
           score: (item.scores.away.total ?? 0).toString(),
           name: shortenTeamNames(item.teams.away.name ?? ""),
+          winDrawLoss: `${standings.find((x) => x.team.id === item.teams.away.id)?.won}-${standings.find((x) => x.team.id === item.teams.away.id)?.ties}-${standings.find((x) => x.team.id === item.teams.away.id)?.lost}`,
         },
         roundLabel: `${item.game.stage === "Pre Season" ? "Pre - " : ""}${item.game.week === "Hall of Fame Weekend" ? "HOF Weekend" : item.game.week}`,
       }) as MatchSummary,

@@ -48,6 +48,7 @@ type TeamScoreDetails = {
   img: string;
   score: string;
   name: string;
+  winDrawLoss?: string;
 };
 
 export type MatchSummary = {
@@ -65,6 +66,7 @@ export type MatchSummary = {
   seriesName?: string;
   matchSlug?: string; // Primarily used in cricket to get match details
   seriesSlug?: string; // Used to navigate to cricket series
+  winDrawLoss?: string;
 };
 
 type APISettings = "status" | "fixtures" | "standings";

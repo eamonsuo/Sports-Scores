@@ -4,6 +4,8 @@ import TournamentSummaryCard from "@/components/golf/TournamentSummaryCard";
 import { Button } from "@/components/misc/Button";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page() {
   let curTournament = await fetchPGACurrentTournament();
 
@@ -21,19 +23,16 @@ export default async function Page() {
         <Button>View DP World Tour (Redirects)</Button>
       </Link>
       <GolfTourHeader href="/sports/golf/pga/schedule" tourName="PGA Tour" />
-      <p>{tournDetails.displayDate}</p>
-      {/* <SectionDateRange
-        dateFrom={tournDetails.displayDate}
-        dateTo={raceDate}
-        currentDate={false}
-      /> */}
+      <div className="mt-4 text-black dark:text-neutral-400">
+        {tournDetails.displayDate}
+      </div>
 
       <TournamentSummaryCard
         name={tournDetails.tournamentName}
         img={tournDetails.tournamentLogo[0]}
         status={`${tournDetails.roundDisplay} - ${tournDetails.roundStatusDisplay}`}
         top5Players={top5}
-        url={`/sports/golf/tournaments/2025/${tournDetails.tournamentName.toLowerCase().replace(" ", "-")}/${tournDetails.id}`}
+        url={`/sports/golf/tournaments/${tournDetails.seasonYear}/${tournDetails.tournamentName.toLowerCase().replace(" ", "-")}/${tournDetails.id}`}
       />
     </div>
   );
