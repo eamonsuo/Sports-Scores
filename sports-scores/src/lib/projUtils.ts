@@ -1,7 +1,7 @@
 import fallback from "@/../public/vercel.svg";
 import { CricketImage, CricketMatch, CricketSeries } from "@/types/cricket";
 import { APISportsErrors, APISportsResponse, MatchSummary } from "@/types/misc";
-import { MATCHSTATUSAFL, MATCHSTATUSNFL } from "./constants";
+import { COUNTRYFLAGURLS, MATCHSTATUSAFL, MATCHSTATUSNFL } from "./constants";
 
 export function setMatchStatusCricket(status: string) {
   switch (status) {
@@ -53,7 +53,9 @@ export function setMatchSummary(
   switch (status) {
     case MATCHSTATUSAFL.SHORT_NS || MATCHSTATUSNFL.SHORT_NS:
       return ``;
-    case MATCHSTATUSAFL.SHORT_FT || MATCHSTATUSNFL.SHORT_FT:
+    case MATCHSTATUSAFL.SHORT_FT ||
+      MATCHSTATUSNFL.SHORT_FT ||
+      MATCHSTATUSNFL.SHORT_AOT:
       return calculateMatchResult(
         homeName,
         homeScore,
@@ -122,12 +124,30 @@ export function getCricketImageUrl(slug: string) {
   return `https://p.imgci.com${slug.replace("/lsci", "") ?? "/db/PICTURES/CMS"}`;
 }
 
+export function getGolfImageUrl(countryAbbr: string) {
+  var slug = COUNTRYFLAGURLS[countryAbbr as keyof typeof COUNTRYFLAGURLS];
+
+  if (slug === null || slug === undefined) {
+    return slug;
+  }
+
+  return `https://p.imgci.com${slug.replace("/lsci", "") ?? "/db/PICTURES/CMS"}`;
+}
+
 export function shortenTeamNames(team: string) {
   switch (team) {
+    //AFL
     case "Greater Western Sydney Giants":
       return "GWS Giants";
     case "North Melbourne Kangaroos":
       return "North Melbourne";
+    //NFL
+    case "Washington Commanders":
+      return "Washington Comm.";
+    case "Tampa Bay Buccaneers":
+      return "Tampa Bay Buccs";
+    case "Los Angeles Chargers":
+      return "LA Chargers";
     default:
       return team;
   }

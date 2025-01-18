@@ -16,8 +16,8 @@ export default function MatchSummaryCard({
   id: number;
   href: string;
   matchSummary: string;
-  homeInfo: { name: string; score: string; img: string };
-  awayInfo: { name: string; score: string; img: string };
+  homeInfo: { name: string; score: string; img: string; winDrawLoss?: string };
+  awayInfo: { name: string; score: string; img: string; winDrawLoss?: string };
   timer: { display: string; displayColour?: "green" | "yellow" | "white" };
   venue: string;
   topInfo?: string;
@@ -64,11 +64,11 @@ export default function MatchSummaryCard({
             />
           </div>
           <p className="col-span-2 text-left text-xs text-gray-700 dark:text-neutral-500">
-            {homeInfo.name}
+            {homeInfo.name} <br /> {homeInfo.winDrawLoss}
           </p>
           <div></div>
           <p className="col-span-2 text-right text-xs text-gray-700 dark:text-neutral-500">
-            {awayInfo.name}
+            {awayInfo.name} <br /> {awayInfo.winDrawLoss}
           </p>
         </div>
 
