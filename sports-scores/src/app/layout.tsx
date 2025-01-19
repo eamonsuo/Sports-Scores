@@ -36,7 +36,7 @@ export default function RootLayout({
           <main className="flex-1 items-center overflow-y-auto bg-white dark:bg-neutral-950">
             {children}
           </main>
-          <Footer></Footer>
+          <Footer />
         </div>
       </body>
     </html>

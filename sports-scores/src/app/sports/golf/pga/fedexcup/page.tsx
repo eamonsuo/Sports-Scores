@@ -1,6 +1,8 @@
 import { fetchPGACurrentTournament } from "@/api/golf.api";
 import GolfTourHeader from "@/components/golf/GolfTourHeader";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page() {
   let curTournament = await fetchPGACurrentTournament();
 

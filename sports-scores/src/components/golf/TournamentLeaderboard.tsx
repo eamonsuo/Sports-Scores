@@ -21,13 +21,13 @@ export default function TournamentLeaderboard({
         <tbody className="text-center">
           {players.map((item, index) => (
             <tr key={index} className="border">
-              <td className="py-2">{item.scoringData.position}</td>
+              <td className="py-2">{item.scoringData?.position}</td>
               <td className="pe-2">
-                <GolfPlayerImage country={item.player.country} />
+                <GolfPlayerImage country={item.player?.country} />
               </td>
-              <td className="text-left">{item.player.displayName}</td>
-              <td>{item.scoringData.total}</td>
-              <td>{item.scoringData.thru}</td>
+              <td className="text-left">{item.player?.displayName}</td>
+              <td>{item.scoringData?.total}</td>
+              <td>{item.scoringData?.thru}</td>
             </tr>
           ))}
         </tbody>
