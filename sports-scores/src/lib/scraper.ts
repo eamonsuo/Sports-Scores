@@ -30,6 +30,20 @@ export async function scrapeNextPages(urls: string[]) {
   ).flat();
 }
 
+export async function test(url: string) {
+  const response = await fetch(url);
+
+  const html = await response.text();
+
+  const dom = new JSDOM(html);
+  const document = dom.window.document;
+
+  // console.log(document.querySelector("div.fixres__body").children.length);
+}
+// test(
+//   "https://www.skysports.com/rugby-league/competitions/telstra-premiership/fixtures",
+// );
+
 /* Puppeteer Scraping Function */
 export async function scrapeSitePuppeteer(url: string, scrapeLogic: Function) {
   const browser = await puppeteer.launch({
