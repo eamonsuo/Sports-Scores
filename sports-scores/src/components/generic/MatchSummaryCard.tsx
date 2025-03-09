@@ -16,8 +16,8 @@ export default function MatchSummaryCard({
   id: number;
   href: string;
   matchSummary: string;
-  homeInfo: { name: string; score: string; img: string; winDrawLoss?: string };
-  awayInfo: { name: string; score: string; img: string; winDrawLoss?: string };
+  homeInfo: { name: string; score: string; img?: string; winDrawLoss?: string };
+  awayInfo: { name: string; score: string; img?: string; winDrawLoss?: string };
   timer: { display: string; displayColour?: "green" | "yellow" | "white" };
   venue: string;
   topInfo?: string;
@@ -34,7 +34,7 @@ export default function MatchSummaryCard({
         <div className="m-2 grid w-full grid-cols-5 gap-2">
           <div className="content-center justify-self-start">
             <Image
-              src={homeInfo.img}
+              src={homeInfo.img ?? "/vercel.svg"}
               width={40}
               height={40}
               alt="Home team image"
@@ -57,7 +57,7 @@ export default function MatchSummaryCard({
           </p>
           <div className="content-center justify-self-end">
             <Image
-              src={awayInfo.img}
+              src={awayInfo.img ?? "/vercel.svg"}
               width={40}
               height={40}
               alt="Away team image"

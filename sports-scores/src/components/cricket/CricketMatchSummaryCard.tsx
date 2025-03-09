@@ -22,8 +22,8 @@ export default function CricketMatchSummaryCard({
         query: { [key: string]: string };
       };
   matchSummary: string;
-  homeInfo: { name: string; score: string; img: string };
-  awayInfo: { name: string; score: string; img: string };
+  homeInfo: { name: string; score: string; img?: string };
+  awayInfo: { name: string; score: string; img?: string };
   timer: string;
   venue: string;
   topInfo?: string;
@@ -42,7 +42,7 @@ export default function CricketMatchSummaryCard({
         <div className="m-2 grid w-full grid-cols-5 gap-2">
           <div className="content-center justify-self-start">
             <Image
-              src={homeInfo.img}
+              src={homeInfo.img ?? "/vercel.svg"}
               width={40}
               height={40}
               alt="Home team image"
@@ -59,7 +59,7 @@ export default function CricketMatchSummaryCard({
           </div>
           <div className="content-center justify-self-end">
             <Image
-              src={awayInfo.img}
+              src={awayInfo.img ?? "/vercel.svg"}
               width={40}
               height={40}
               alt="Away team image"

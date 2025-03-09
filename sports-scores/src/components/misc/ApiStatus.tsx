@@ -1,11 +1,10 @@
-import { APISportsStatusDetails } from "@/types/misc";
 import { clsx } from "clsx";
 
 export default function APIStatus({
-  data,
+  status,
   className,
 }: {
-  data: APISportsStatusDetails;
+  status: string;
   className?: string;
 }) {
   return (
@@ -14,6 +13,6 @@ export default function APIStatus({
         "p-1 dark:bg-neutral-900 dark:text-neutral-400",
         className,
       )}
-    >{`API Calls: ${data?.requests?.current} out of ${data?.requests?.limit_day}`}</div>
+    >{`API Calls: ${status}`}</div>
   );
 }

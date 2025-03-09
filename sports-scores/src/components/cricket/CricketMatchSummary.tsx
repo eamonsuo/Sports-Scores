@@ -32,11 +32,11 @@ export default function CricketMatchSummary({
         </tr>
         <tr>
           <td>Home Team</td>
-          <td className="py-1 text-xs">{homePlayers}</td>
+          <td className="py-1 text-xs">{homePlayers.join(", ")}</td>
         </tr>
         <tr>
           <td>Away Team</td>
-          <td className="py-1 text-xs">{awayPlayers}</td>
+          <td className="py-1 text-xs">{awayPlayers.join(", ")}</td>
         </tr>
         <tr>
           <td>Umpires</td>

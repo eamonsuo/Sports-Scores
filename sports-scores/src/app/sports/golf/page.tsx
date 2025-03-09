@@ -10,21 +10,21 @@ export default async function Page() {
 
   return (
     <div className="flex-1 overflow-y-auto px-4">
-      <GolfTourHeader
-        href="https://www.pgatour.com/leaderboard"
-        tourName="PGA Tour"
-      />
       {/* <div className="mt-4 text-black dark:text-neutral-400">
         {tournDetails.displayDate}
-      </div> */}
+      </div>
 
-      {/* <TournamentSummaryCard
+      <TournamentSummaryCard
         name={tournDetails.tournamentName}
         img={tournDetails.tournamentLogo[0]}
         status={`${tournDetails.roundDisplay} - ${tournDetails.roundStatusDisplay}`}
         top5Players={top5}
         url={`/sports/golf/pga/tournaments/${tournDetails.seasonYear}/${tournDetails.tournamentName.toLowerCase().replace(" ", "-")}/${tournDetails.id}`}
       /> */}
+      <GolfTourHeader
+        href="https://www.pgatour.com/leaderboard"
+        tourName="PGA Tour"
+      />
       <GolfTourHeader
         href="https://www.livgolf.com/leaderboard"
         tourName="LIV Golf"

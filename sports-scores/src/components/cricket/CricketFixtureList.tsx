@@ -6,12 +6,14 @@ import CricketSeriesHeader from "./CricketSeriesHeader";
 
 // Assumes data prop is already sorted in desired order
 export default function CricketFixtureList({ data }: { data: MatchSummary[] }) {
-  const current_date: Date = new Date(Date.now());
+  const current_date = new Date(Date.now());
 
-  let sectionDate: Date = new Date("2000-01-01");
-  let displayDate: boolean = false;
-  let currentMatch: boolean = false;
-  let currentDateFlag: boolean = false;
+  let sectionDate = new Date("2000-01-01");
+  let sectionSeries = "";
+  let displayDate = false;
+  let displaySeries = false;
+  let currentMatch = false;
+  let currentDateFlag = false;
 
   if (data.length === 0) {
     return <>NO DATA</>;
@@ -22,9 +24,16 @@ export default function CricketFixtureList({ data }: { data: MatchSummary[] }) {
       {data.map((item: MatchSummary) => {
         let item_date = new Date(item.startDate);
         displayDate = false;
+        displaySeries = false;
+
         if (sectionDate.toDateString() !== item_date.toDateString()) {
           sectionDate = item_date;
           displayDate = true;
+        }
+
+        if (sectionSeries !== item.seriesName) {
+          sectionSeries = item.seriesName ?? "";
+          displaySeries = true;
         }
 
         if (currentMatch) {
@@ -47,16 +56,18 @@ export default function CricketFixtureList({ data }: { data: MatchSummary[] }) {
                 currentDate={currentMatch}
               />
             )}
-            <CricketSeriesHeader
-              href={`/sports/${item.sport}/series/${item.seriesSlug}/matches#current-date`}
-              seriesName={item.seriesName ?? ""}
-            />
+            {(displaySeries || displayDate) && (
+              <CricketSeriesHeader
+                href={`/sports/cricket/series/${item.seriesSlug}/matches#current-date`}
+                seriesName={item.seriesName ?? ""}
+              />
+            )}
             <CricketMatchSummaryCard
               id={item.id}
-              hrefMatch={`/sports/${item.sport}/match/${item.seriesSlug}/${item.matchSlug}`}
+              hrefMatch={`/sports/cricket/match/${item.matchSlug}`}
               homeInfo={item.homeDetails}
               awayInfo={item.awayDetails}
-              matchSummary={item.summary}
+              matchSummary={item.summaryText}
               bottomInfo={item.otherDetail}
               venue={item.venue}
               timer={item.timer}

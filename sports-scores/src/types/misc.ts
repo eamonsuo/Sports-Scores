@@ -45,7 +45,7 @@ type NavButtonGroupProps = {
 }[];
 
 type TeamScoreDetails = {
-  img: string;
+  img?: string;
   score: string;
   name: string;
   winDrawLoss?: string;
@@ -53,11 +53,11 @@ type TeamScoreDetails = {
 
 export type MatchSummary = {
   id: number;
-  startDate: string;
+  startDate: Date;
   sport: string;
   venue: string;
-  status: string;
-  summary: string;
+  status: MatchStatus;
+  summaryText: string;
   otherDetail?: string;
   homeDetails: TeamScoreDetails;
   awayDetails: TeamScoreDetails;
@@ -66,10 +66,10 @@ export type MatchSummary = {
   seriesName?: string;
   matchSlug?: string; // Primarily used in cricket to get match details
   seriesSlug?: string; // Used to navigate to cricket series
-  winDrawLoss?: string;
+  winDrawLoss?: { win: string; draw: string; loss: string };
 };
 
-type APISettings = "status" | "fixtures" | "standings";
+export type MatchStatus = "LIVE" | "UPCOMING" | "COMPLETED";
 
 export interface SportsmonksCricket {
   data: SportsmonksMatchCricket[];

@@ -1,15 +1,15 @@
 import { getCricketImageUrl } from "@/lib/projUtils";
-import { CricketInningBatsman } from "@/types/cricket";
 import Image from "next/image";
 
-export default async function CricketScorecardBat({
-  batters,
-  total,
-  overs,
-  wickets,
-  extras,
-}: {
-  batters: CricketInningBatsman[];
+export type CricketScorecardBatProps = {
+  batters: {
+    name: string;
+    image?: string;
+    runs: number;
+    balls: number;
+    strikeRate: number;
+    dismissalText?: string;
+  }[];
   total: number;
   overs: number;
   wickets: number;
@@ -20,6 +20,12 @@ export default async function CricketScorecardBat({
     wides: number;
     noballs: number;
   };
+};
+
+export default async function CricketScorecardBat({
+  data,
+}: {
+  data: CricketScorecardBatProps;
 }) {
   return (
     <table className="w-full flex-1 dark:text-neutral-400">
@@ -33,39 +39,38 @@ export default async function CricketScorecardBat({
         </tr>
       </thead>
       <tbody className="text-center">
-        {batters.map((item) => (
-          <tr key={item.player.battingName} className="border">
-            <td>{batters.indexOf(item) + 1}</td>
+        {data.batters.map((item) => (
+          <tr key={item.name} className="border">
+            <td className="ps-2">{data.batters.indexOf(item) + 1}</td>
             <td className="flex gap-2 py-2 text-left">
               <Image
-                src={getCricketImageUrl(item.player.headshotImageUrl)}
+                src={getCricketImageUrl(item.image)}
                 alt=""
-                width={30}
-                height={30}
+                width={10}
+                height={10}
               ></Image>
               <div className="flex flex-col">
-                <p>{item.player.name}</p>
-                <p className="text-xs">{item.dismissalText?.long}</p>
+                <p>{item.name}</p>
+                <p className="text-xs">{item.dismissalText}</p>
               </div>
             </td>
             <td>{item.runs}</td>
             <td>{item.balls}</td>
-            <td>{item.strikerate}</td>
+            <td>{item.strikeRate}</td>
           </tr>
         ))}
         <tr>
           <td></td>
           <td className="pt-3 text-left">
-            Extras&nbsp;&nbsp;&nbsp;&nbsp;
-            {`b ${extras.byes}, lb ${extras.legbyes}, w ${extras.wides}, nb ${extras.noballs}`}
+            {`b ${data.extras.byes} lb ${data.extras.legbyes} w ${data.extras.wides} nb ${data.extras.noballs}`}
           </td>
-          <td className="pt-3">{extras.total}</td>
+          <td className="pt-3">{data.extras.total}</td>
         </tr>
         <tr>
           <td></td>
           <td className="py-3 text-left">Total</td>
-          <td>{`${wickets}/${total}`}</td>
-          <td>({overs})</td>
+          <td>{`${data.wickets}/${data.total}`}</td>
+          <td>({data.overs})</td>
         </tr>
       </tbody>
     </table>

@@ -33,7 +33,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.AFL,
-    link: `/sports/${SPORT.AFL}/main/matches`,
+    link: `/sports/${SPORT.AFL}/matches`,
     img: "/afl-ball.svg",
     altText: "AFL",
   },

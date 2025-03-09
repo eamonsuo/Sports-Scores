@@ -1,15 +1,18 @@
+import { fetchCricketCurrentMatches } from "@/api/cricket.api";
+import CricketFixtureList from "@/components/cricket/CricketFixtureList";
+import Placeholder from "@/components/misc/Placeholder";
+import { mapCricketCurrentMatches } from "@/lib/dataMapping";
+
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  // const scrape = await fetchCricketCurrentMatches();
+  const rawMatches = await fetchCricketCurrentMatches();
 
-  // const fixtures = mapScrape(scrape);
+  if (rawMatches === null) {
+    return <Placeholder>An error has ocurred</Placeholder>;
+  }
 
-  // return <CricketFixtureList data={fixtures} />;
-  return (
-    <iframe
-      src="https://www.google.com/search?igu=1&gws_rd=ssl&q=cricket"
-      className="w-full flex-1"
-    />
-  );
+  const fixtures = mapCricketCurrentMatches(rawMatches);
+
+  return <CricketFixtureList data={fixtures} />;
 }

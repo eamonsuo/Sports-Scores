@@ -51,7 +51,7 @@ export default function FixtureList({ data }: { data: MatchSummary[] }) {
               href={`/sports/${item.sport}/${item.id}`}
               homeInfo={item.homeDetails}
               awayInfo={item.awayDetails}
-              matchSummary={item.summary}
+              matchSummary={item.summaryText}
               bottomInfo={item.otherDetail}
               venue={item.venue}
               timer={{ display: item.timer }}

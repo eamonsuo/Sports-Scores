@@ -1,4 +1,4 @@
-import fallback from "@/../public/vercel.svg";
+import cricketBall from "@/../public/cricket-ball.svg";
 import { CricketImage, CricketMatch, CricketSeries } from "@/types/cricket";
 import { APISportsErrors, APISportsResponse, MatchSummary } from "@/types/misc";
 import { COUNTRYFLAGURLS, MATCHSTATUSAFL, MATCHSTATUSNFL } from "./constants";
@@ -117,11 +117,11 @@ export function getLocalTimeISO(startTime: string) {
     .replace(":00 ", " ");
 }
 
-export function getCricketImageUrl(slug: string) {
+export function getCricketImageUrl(slug?: string) {
   if (slug === null || slug === undefined) {
-    return fallback;
+    return cricketBall;
   }
-  return `https://p.imgci.com${slug.replace("/lsci", "") ?? "/db/PICTURES/CMS"}`;
+  return `https://lsm-static-prod.livescore.com/medium/${slug}`;
 }
 
 export function getGolfImageUrl(countryAbbr: string) {
@@ -188,4 +188,16 @@ export function compareCricketSeriesDates(
     return -1;
   }
   return 0;
+}
+
+export function dateToCustomString(date: Date) {
+  return date
+    .toLocaleDateString("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      timeZone: "Australia/Brisbane",
+    })
+    .replaceAll(",", "");
 }

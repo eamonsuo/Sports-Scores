@@ -19,12 +19,12 @@ export default async function SportsLayout({
       <NavButtonGroup
         buttons={[
           {
-            href: "/sports/afl/main/matches",
+            href: "/sports/afl/matches",
             label: "Matches",
             page: "matches",
           },
           {
-            href: "/sports/afl/main/ladder",
+            href: "/sports/afl/ladder",
             label: "Ladder",
             page: "ladder",
           },

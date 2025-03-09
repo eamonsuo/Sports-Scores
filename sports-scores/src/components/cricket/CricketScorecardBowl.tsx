@@ -1,11 +1,19 @@
 import { getCricketImageUrl } from "@/lib/projUtils";
-import { CricketInningBowler } from "@/types/cricket";
 import Image from "next/image";
+
+export type CricketScorecardBowlProps = {
+  overs: number;
+  runs: number;
+  wickets: number;
+  economy: number;
+  image?: string;
+  name: string;
+}[];
 
 export default async function CricketScorecardBowl({
   data,
 }: {
-  data: CricketInningBowler[];
+  data: CricketScorecardBowlProps;
 }) {
   return (
     <table className="w-full flex-1 dark:text-neutral-400">
@@ -21,19 +29,19 @@ export default async function CricketScorecardBowl({
       </thead>
       <tbody className="text-center">
         {data.map((item) => (
-          <tr key={item.player.battingName} className="border">
-            <td>{data.indexOf(item) + 1}</td>
+          <tr key={item.name} className="border">
+            <td className="ps-2">{data.indexOf(item) + 1}</td>
             <td className="flex gap-2 py-2 text-left">
               <Image
-                src={getCricketImageUrl(item.player.headshotImageUrl)}
+                src={getCricketImageUrl(item.image)}
                 alt=""
-                width={30}
-                height={30}
+                width={10}
+                height={10}
               ></Image>{" "}
-              {item.player.name}
+              {item.name}
             </td>
             <td>{item.overs}</td>
-            <td>{item.conceded}</td>
+            <td>{item.runs}</td>
             <td>{item.wickets}</td>
             <td>{item.economy.toFixed(2)}</td>
           </tr>
