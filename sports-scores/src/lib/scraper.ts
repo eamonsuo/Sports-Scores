@@ -1,4 +1,3 @@
-import { CricinfoResponse, CricketMatchResults } from "@/types/cricket";
 import puppeteer from "puppeteer";
 
 const jsdom = require("jsdom");
@@ -22,8 +21,7 @@ export async function scrapeNextPages(urls: string[]) {
   return (
     await Promise.all(
       urls.map(async (item) => {
-        let data =
-          await scrapeNextData<CricinfoResponse<CricketMatchResults>>(item);
+        let data = await scrapeNextData<any>(item);
         return data.props.appPageProps.data.content.matches;
       }),
     )

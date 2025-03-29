@@ -14,5 +14,6 @@ export default async function Page() {
 
   const fixtures = mapCricketCurrentMatches(rawMatches);
 
+  //Sort by start date??
   return <CricketFixtureList data={fixtures} />;
 }

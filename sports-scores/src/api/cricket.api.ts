@@ -3,6 +3,7 @@ import {
   Cricket_LiveScoreAPI_MatchesGetInnings,
   Cricket_LiveScoreAPI_MatchesGetScoreBoard,
   Cricket_LiveScoreAPI_MatchesListByDate,
+  Cricket_LiveScoreAPI_MatchesListByLeague,
   Cricket_LiveScoreAPI_TeamDetails,
 } from "@/types/cricket";
 
@@ -122,7 +123,20 @@ export async function fetchCricketMatchDetails(id: number) {
   return (await rawFixtures.json()) as Cricket_LiveScoreAPI_MatchesGetScoreBoard;
 }
 
-export async function fetchCricketSeriesMatches(url: string) {}
+export async function fetchCricketSeriesMatches(ccd: string, scd: string) {
+  const rawFixtures = await fetch(
+    `https://livescore6.p.rapidapi.com/matches/v2/list-by-league?Category=cricket&Ccd=${ccd}&Scd=${scd}&Timezone=10`,
+    {
+      headers: reqHeaders,
+    },
+  );
+
+  if (!rawFixtures.ok) {
+    return null;
+  }
+
+  return (await rawFixtures.json()) as Cricket_LiveScoreAPI_MatchesListByLeague;
+}
 
 export async function fetchCricketSeriesStandings(url: string) {}
 

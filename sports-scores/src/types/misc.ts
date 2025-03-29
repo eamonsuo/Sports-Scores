@@ -54,6 +54,7 @@ type TeamScoreDetails = {
 export type MatchSummary = {
   id: number;
   startDate: Date;
+  endDate?: Date;
   sport: string;
   venue: string;
   status: MatchStatus;

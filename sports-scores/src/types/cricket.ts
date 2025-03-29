@@ -1,3 +1,101 @@
+// Define a reusable type for a team
+export interface Team {
+  Nm: string;
+  ID: string;
+  Abr: string;
+  tbd: number;
+  Gd: number;
+  Pids: { [key: string]: string[] };
+  HasVideo: boolean;
+  TO?: number;
+}
+
+// Define a reusable type for an event
+export interface Event {
+  Eid: string;
+  Pids: { [key: string]: string };
+  Sids: { [key: string]: string };
+  Tr1?: string;
+  Tr2?: string;
+  Tr1C1?: number;
+  Tr2C1?: number;
+  Tr1C2?: number;
+  Tr2C2?: number;
+  Tr1CW1?: number;
+  Tr2CW1?: number;
+  Tr1CW2?: number;
+  Tr2CW2?: number;
+  Tr1CD1?: number;
+  Tr2CD1?: number;
+  Tr1CD2?: number;
+  Tr2CD2?: number;
+  Tr1CO1?: number;
+  Tr2CO1?: number;
+  Tr1CO2?: number;
+  Tr2CO2?: number;
+  T1: Team[];
+  T2: Team[];
+  Eps: string;
+  Esid: number;
+  EpsL: string;
+  Epr: number;
+  Ecov: number;
+  ErnInf?: string;
+  Et: number;
+  EtTx: string;
+  ECo: string;
+  Ebat?: number;
+  TPa: number;
+  TCho: number;
+  Esd: number;
+  Ese: number;
+  Exd: number;
+  LuUT: number;
+  EO: number;
+  EOX: number;
+  Ehid: number;
+  Spid: number;
+  Pid: number;
+}
+
+// Define a reusable type for league tables
+export interface LeagueTable {
+  L: {
+    Tables: {
+      LTT: number;
+      name?: string;
+      team: {
+        rnk: number;
+        Tid: string;
+        win: number;
+        winn: string;
+        wot: number;
+        Tnm: string;
+        lst: number;
+        lstn: string;
+        lreg: number;
+        lot: number;
+        lap: number;
+        drw: number;
+        drwn: string;
+        gf: number;
+        ga: number;
+        gd: number;
+        ptsn: string;
+        Ipr: number;
+        pts: number;
+        pld: number;
+        nr: string;
+        nrr: string;
+        bab: string;
+        bob: string;
+        td: string;
+      }[];
+      phrX: any[];
+    }[];
+  }[];
+}
+
 export interface Cricket_LiveScoreAPI_MatchesListByDate {
   Stages: {
     Sid: string;
@@ -8,66 +106,7 @@ export interface Cricket_LiveScoreAPI_MatchesListByDate {
     Csnm: string;
     Ccd: string;
     Scu: number;
-    Events: {
-      Eid: string;
-      Pids: { [key: string]: string };
-      Media?: {
-        [key: string]: {
-          eventId: string;
-          provider: string;
-          type: string;
-          thumbnail: string;
-          allowedCountries: string[];
-        }[];
-      };
-      Tr1: string;
-      Tr2: string;
-      Tr1C1?: number;
-      Tr2C1?: number;
-      Tr1C2?: number;
-      Tr2C2?: number;
-      Tr1CW1?: number;
-      Tr2CW1?: number;
-      Tr1CW2?: number;
-      Tr2CW2?: number;
-      Tr1CD1?: number;
-      Tr1CD2?: number;
-      Tr2CD1?: number;
-      Tr2CD2?: number;
-      Tr1CO1?: number;
-      Tr2CO1?: number;
-      Tr1CO2?: number;
-      Tr2CO2?: number;
-      T1: {
-        ID: string;
-        Nm: string;
-        Abr: string;
-      }[];
-      T2: {
-        ID: string;
-        Nm: string;
-        Abr: string;
-      }[];
-      Eps?: string;
-      Esid: number;
-      EpsL: string;
-      Epr: number;
-      Ecov: number;
-      ErnInf: string;
-      Et: number;
-      EtTx: string;
-      ECo: string;
-      Ebat?: number;
-      TPa: number;
-      TCho: number;
-      Esd: number;
-      Ese: number;
-      Exd: number;
-      EO: number;
-      EOX: number;
-      Spid: number;
-      Pid: number;
-    }[];
+    Events: Event[];
   }[];
 }
 
@@ -112,20 +151,7 @@ export interface Cricket_LiveScoreAPI_TeamDetails {
     Spid: number;
     Tid: string;
     Sids: { [key: string]: string };
-    Events: {
-      Eid: string;
-      T1: { Nm: string; ID: string; Abr: string }[];
-      T2: { Nm: string; ID: string; Abr: string }[];
-      Tr1: string;
-      Tr2: string;
-      Esid: number;
-      Eps: string;
-      Epr: number;
-      Esd: number;
-      Sid: string;
-      EO: number;
-      EOX: number;
-    }[];
+    Events: Event[];
   }[];
 }
 
@@ -226,26 +252,8 @@ export interface Cricket_LiveScoreAPI_MatchesGetScoreBoard {
   Tr2CO1: number;
   Tr1CO2: number;
   Tr2CO2: number;
-  T1: {
-    Nm: string;
-    ID: string;
-    Abr: string;
-    tbd: number;
-    Gd: number;
-    Pids: { [key: string]: string[] };
-    HasVideo: boolean;
-    TO: number;
-  }[];
-  T2: {
-    Nm: string;
-    ID: string;
-    Abr: string;
-    tbd: number;
-    Gd: number;
-    Pids: { [key: string]: string[] };
-    HasVideo: boolean;
-    TO: number;
-  }[];
+  T1: Team[];
+  T2: Team[];
   Venue: {
     id: string;
     Vnm: string;
@@ -288,4 +296,23 @@ export interface Cricket_LiveScoreAPI_MatchesGetScoreBoard {
   };
   Pid: number;
   Eloff: number;
+}
+
+export interface Cricket_LiveScoreAPI_MatchesListByLeague {
+  Stages: {
+    Sid: string;
+    Snm: string;
+    Scd: string;
+    Cid: string;
+    Cnm: string;
+    CnmT: string;
+    Csnm: string;
+    Ccd: string;
+    Scu: number;
+    Chi: number;
+    Shi: number;
+    hasDraw: boolean;
+    Events: Event[];
+    LeagueTable?: LeagueTable;
+  }[];
 }

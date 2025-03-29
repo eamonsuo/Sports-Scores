@@ -1,8 +1,11 @@
+import { CricketLadder } from "@/components/cricket/CricketSeriesLadder";
 import { AFLGame } from "@/types/afl";
 import { BaseballGame } from "@/types/baseball";
 import {
   Cricket_LiveScoreAPI_MatchesListByDate,
+  Cricket_LiveScoreAPI_MatchesListByLeague,
   Cricket_LiveScoreAPI_TeamDetails,
+  LeagueTable,
 } from "@/types/cricket";
 import { F1Session, SessionSummary } from "@/types/f1";
 import { MatchStatus, MatchSummary } from "@/types/misc";
@@ -154,6 +157,7 @@ export function mapCricketCurrentMatches(
       return {
         id: Number(event.Eid),
         startDate: sDate,
+        endDate: convertNumbertoDate(event.Ese),
         sport: SPORT.CRICKET,
         venue: "",
         status: mapCricketStatus(event.Eps),
@@ -174,7 +178,51 @@ export function mapCricketCurrentMatches(
         },
         seriesName: item.Snm,
         matchSlug: `${event.Eid}`,
-        seriesSlug: ``,
+        seriesSlug: `${item.Ccd}/${item.Scd}`,
+      } as MatchSummary;
+    });
+  });
+}
+
+export function mapCricketSeriesMatches(
+  data: Cricket_LiveScoreAPI_MatchesListByLeague,
+) {
+  return data.Stages.flatMap((item) => {
+    return item.Events.map((event) => {
+      let sDate = convertNumbertoDate(event.Esd);
+      let longFormat =
+        (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
+      let home2Ing = longFormat
+        ? `, ${event.Tr1CW2 ?? 0}/${event.Tr1C2 ?? 0}${event.Tr1CD2 === 1 ? "d" : ""}`
+        : "";
+      let away2Ing = longFormat
+        ? `, ${event.Tr2CW2 ?? 0}/${event.Tr2C2 ?? 0}${event.Tr2CD2 === 1 ? "d" : ""}`
+        : "";
+      return {
+        id: Number(event.Eid),
+        startDate: sDate,
+        endDate: convertNumbertoDate(event.Ese),
+        sport: SPORT.CRICKET,
+        venue: "",
+        status: mapCricketStatus(event.Eps),
+        summaryText:
+          event.Eps === "NS"
+            ? `Match starts at ${sDate.toLocaleTimeString("en-US")}`
+            : event.ECo,
+        otherDetail: event.ErnInf,
+        homeDetails: {
+          img: "/olympic-rings.svg",
+          score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
+          name: event.T1[0].Nm,
+        },
+        awayDetails: {
+          img: "/olympic-rings.svg",
+          score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
+          name: event.T2[0].Nm,
+        },
+        seriesName: item.Snm,
+        matchSlug: `${event.Eid}`,
+        seriesSlug: `${item.Ccd}/${item.Scd}`,
       } as MatchSummary;
     });
   });
@@ -217,6 +265,27 @@ export function mapCricketTeamMatches(
         } as MatchSummary;
       });
     });
+  });
+}
+
+export function mapCricketSeriesLadders(ladders: LeagueTable) {
+  return ladders.L[0].Tables.map((item) => {
+    return {
+      name: item.name,
+      teams: item.team.map((team) => {
+        return {
+          name: team.Tnm,
+          logo: undefined,
+          rank: team.rnk,
+          played: team.pld,
+          won: team.win,
+          drawn: team.drw,
+          lost: team.lst,
+          points: team.pts,
+          nrr: Number(team.nrr),
+        };
+      }),
+    } as CricketLadder;
   });
 }
 
