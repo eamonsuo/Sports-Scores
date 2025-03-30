@@ -26,8 +26,6 @@ export default function OldScoreChart({
   let ymin = -y.reduce((a, b) => Math.min(a, b), Infinity);
   let yrange = ymax >= ymin ? ymax : ymin;
 
-  // console.log("MAX", yrange);
-
   return (
     <>
       <p className="m-4">Score Trend</p>

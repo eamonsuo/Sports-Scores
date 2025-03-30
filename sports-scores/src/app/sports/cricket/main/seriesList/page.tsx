@@ -1,15 +1,15 @@
-import { fetchCricketAllSeries } from "@/api/cricket.api";
 import Placeholder from "@/components/misc/Placeholder";
+import { cricketAllSeries } from "@/services/cricket.service";
 import Link from "next/link";
 
-export const revalidate = 0;
-
 export default async function Page() {
-  const rawSeries = await fetchCricketAllSeries();
+  const rawSeries = await cricketAllSeries();
 
   if (rawSeries === null) {
     return <Placeholder>An error has ocurred</Placeholder>;
   }
+
+  //Update to make generic
 
   return (
     <div className="flex-1 overflow-y-auto px-4">

@@ -3,6 +3,7 @@ import puppeteer from "puppeteer";
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
+/* Scrape NextJS Functions */
 export async function scrapeNextData<T>(url: string) {
   const response = await fetch(url);
 
@@ -13,7 +14,6 @@ export async function scrapeNextData<T>(url: string) {
   const scriptNode = document.querySelector("#__NEXT_DATA__");
 
   const jsonData = JSON.parse(scriptNode?.innerHTML ?? "");
-  //   console.log(jsonData);
   return jsonData as T;
 }
 
@@ -27,20 +27,6 @@ export async function scrapeNextPages(urls: string[]) {
     )
   ).flat();
 }
-
-export async function test(url: string) {
-  const response = await fetch(url);
-
-  const html = await response.text();
-
-  const dom = new JSDOM(html);
-  const document = dom.window.document;
-
-  // console.log(document.querySelector("div.fixres__body").children.length);
-}
-// test(
-//   "https://www.skysports.com/rugby-league/competitions/telstra-premiership/fixtures",
-// );
 
 /* Puppeteer Scraping Function */
 export async function scrapeSitePuppeteer(url: string, scrapeLogic: Function) {
@@ -56,47 +42,10 @@ export async function scrapeSitePuppeteer(url: string, scrapeLogic: Function) {
   await page.goto(url, {
     waitUntil: "networkidle2",
   });
-  console.log("PAGE LOAD");
 
   let result = await scrapeLogic(page);
-
-  // console.log(result[0], result[5]);
 
   await browser.close();
 
   return result;
 }
-
-// async function scrapeNRLMatchData(page: Page) {
-//   return await page.evaluate(() => {
-//     let temp: NRLMatchSummary[] = [];
-//     const matches = document.querySelectorAll(".match");
-
-//     matches.forEach((item) => {
-//       temp.push({
-//         home: {
-//           name: item.querySelector(".match-team__name--home")?.innerText,
-//           score:
-//             item
-//               .querySelector(".match-team__score--home")
-//               ?.innerText.split("\n")[1] ?? 0,
-//         },
-//         away: {
-//           name: item.querySelector(".match-team__name--away")?.innerText,
-//           score:
-//             item
-//               .querySelector(".match-team__score--away")
-//               ?.innerText.split("\n")[1] ?? 0,
-//         },
-//         date: item.querySelector(".match-header__title")?.innerText,
-//         status: item.querySelector(".match-clock")?.innerText ?? "",
-//         venue:
-//           item.querySelector(".match-venue")?.innerText.split("\n")[1] ?? "",
-//         url:
-//           item.querySelector(".match--highlighted")?.getAttribute("href") ?? "",
-//       });
-//     });
-
-//     return temp;
-//   });
-// }

@@ -52,6 +52,8 @@ export async function fetchCricketMyTeams() {
     return null;
   }
 
+  // setRequestsUsed(rawFixtures);
+
   return matches;
 }
 
@@ -66,6 +68,8 @@ export async function fetchCricketAllSeries() {
   if (!rawFixtures.ok) {
     return null;
   }
+
+  setRequestsUsed(rawFixtures);
 
   return (await rawFixtures.json()) as Cricket_LiveScoreAPI_LeaguesListPopular;
 }
@@ -105,22 +109,26 @@ export async function fetchCricketMatchInnings(id: number) {
     return null;
   }
 
+  setRequestsUsed(rawInnings);
+
   return (await rawInnings.json()) as Cricket_LiveScoreAPI_MatchesGetInnings;
 }
 
 export async function fetchCricketMatchDetails(id: number) {
-  const rawFixtures = await fetch(
+  const rawMatch = await fetch(
     `https://livescore6.p.rapidapi.com/matches/v2/get-scoreboard?Category=cricket&Eid=${id}`,
     {
       headers: reqHeaders,
     },
   );
 
-  if (!rawFixtures.ok) {
+  if (!rawMatch.ok) {
     return null;
   }
 
-  return (await rawFixtures.json()) as Cricket_LiveScoreAPI_MatchesGetScoreBoard;
+  setRequestsUsed(rawMatch);
+
+  return (await rawMatch.json()) as Cricket_LiveScoreAPI_MatchesGetScoreBoard;
 }
 
 export async function fetchCricketSeriesMatches(ccd: string, scd: string) {
@@ -134,6 +142,8 @@ export async function fetchCricketSeriesMatches(ccd: string, scd: string) {
   if (!rawFixtures.ok) {
     return null;
   }
+
+  setRequestsUsed(rawFixtures);
 
   return (await rawFixtures.json()) as Cricket_LiveScoreAPI_MatchesListByLeague;
 }

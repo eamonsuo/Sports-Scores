@@ -1,4 +1,5 @@
 import { fetchBaseballStatus } from "@/api/baseball.api";
+import APIStatus from "@/components/misc/ApiStatus";
 import NavButtonGroup from "@/components/misc/NavButtonGroup";
 import Placeholder from "@/components/misc/Placeholder";
 
@@ -30,7 +31,7 @@ export default async function SportsLayout({
         ]}
       />
       {children}
-      {/* <APIStatus data={status} /> */}
+      <APIStatus status="N/A" />
     </div>
   );
 }
