@@ -1,3 +1,5 @@
+import { CRICKET_REQUEST_USED } from "@/api/cricket.api";
+import APIStatus from "@/components/misc/ApiStatus";
 import NavButtonGroup from "@/components/misc/NavButtonGroup";
 
 export default async function SportsLayout({
@@ -27,6 +29,7 @@ export default async function SportsLayout({
         ]}
       />
       {children}
+      <APIStatus status={`${CRICKET_REQUEST_USED}% used`} />
     </div>
   );
 }

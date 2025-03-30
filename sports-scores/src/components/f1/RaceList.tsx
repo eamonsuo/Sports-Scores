@@ -7,7 +7,6 @@ import WeekendSummaryCard from "./WeekendSummaryCard";
 export default function RaceList({ data }: { data: SessionSummary[] }) {
   const current_date: Date = new Date(Date.now());
 
-  // console.log(fixtures);
   let startDate: Date = new Date("2000-01-01");
   let displayDate: boolean = false;
   let currentMatch: boolean = false;

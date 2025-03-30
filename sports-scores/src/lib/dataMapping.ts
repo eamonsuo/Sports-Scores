@@ -1,4 +1,5 @@
 import { CricketLadder } from "@/components/cricket/CricketSeriesLadder";
+import { GolfLeaderboardPlayerRow } from "@/components/golf/TournamentLeaderboard";
 import { AFLGame } from "@/types/afl";
 import { BaseballGame } from "@/types/baseball";
 import {
@@ -8,6 +9,7 @@ import {
   LeagueTable,
 } from "@/types/cricket";
 import { F1Session, SessionSummary } from "@/types/f1";
+import { Golf_SlashGolfAPI_Leaderboard } from "@/types/golf";
 import { MatchStatus, MatchSummary } from "@/types/misc";
 import { NFLGame, NFLStanding } from "@/types/nfl";
 import { MATCHSTATUSAFL, MATCHSTATUSNFL, SPORT } from "./constants";
@@ -311,4 +313,17 @@ export function convertNumbertoDate(dateNumber: number) {
   let minute = Number(dateString.substring(10, 12));
   let second = Number(dateString.substring(12, 14));
   return new Date(year, month, day, hour, minute, second);
+}
+
+export function mapGolfLeaderboard(data: Golf_SlashGolfAPI_Leaderboard) {
+  return {
+    playerPositions: data.leaderboardRows.map((item) => {
+      return {
+        name: `${item.firstName} ${item.lastName}`,
+        position: item.position,
+        totalScore: item.total,
+        thru: item.thru,
+      } as GolfLeaderboardPlayerRow;
+    }),
+  };
 }

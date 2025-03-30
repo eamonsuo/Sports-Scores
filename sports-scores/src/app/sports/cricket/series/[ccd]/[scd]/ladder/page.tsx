@@ -2,54 +2,52 @@ import { fetchCricketSeriesMatches } from "@/api/cricket.api";
 import CricketSeriesLadder, {
   CricketLadder,
 } from "@/components/cricket/CricketSeriesLadder";
+import CricketSeriesResult from "@/components/cricket/CricketSeriesResult";
 import Placeholder from "@/components/misc/Placeholder";
 import { mapCricketSeriesLadders } from "@/lib/dataMapping";
+import { getCricketImageUrl } from "@/lib/projUtils";
+import Image from "next/image";
 
 export default async function Page(props: {
   params: Promise<{ ccd: string; scd: string }>;
 }) {
   const params = await props.params;
 
-  let rawSeries = await fetchCricketSeriesMatches(params.ccd, params.scd);
+  let seriesHeadToHead: any = null;
   let seriesLadders: CricketLadder[] | null = null;
+  let tournamentWinner: any = null;
+
+  let rawSeries = await fetchCricketSeriesMatches(params.ccd, params.scd);
+
   if (rawSeries?.Stages[0].LeagueTable != undefined) {
     seriesLadders = mapCricketSeriesLadders(rawSeries?.Stages[0].LeagueTable);
   }
 
   return (
     <div className="flex-1 overflow-y-auto px-4">
-      {/* {seriesResults !== null &&
-        !series.isTrophy &&
-        seriesResults.results.map((item) => (
+      {seriesHeadToHead != null &&
+        seriesHeadToHead.results.map((item: any) => (
           <CricketSeriesResult
             key={item.series.id}
             seriesName={item.series.name}
             homeInfo={{
-              name: homeTeam.team.name,
-              img: getCricketImageUrl(homeTeam.team.imageUrl),
-              matchesWon:
-                homeTeam.team.id === item.result.leadTeam?.id
-                  ? item.result.matchesWonByLeadTeam
-                  : item.result.matchesWonByLoserTeam,
+              name: item.home.name,
+              img: getCricketImageUrl(item.home.img),
+              matchesWon: item.home.won,
             }}
             awayInfo={{
-              name: awayTeam.team.name,
-              img: getCricketImageUrl(awayTeam.team.imageUrl),
-              matchesWon:
-                awayTeam.team.id === item.result.leadTeam?.id
-                  ? item.result.matchesWonByLeadTeam
-                  : item.result.matchesWonByLoserTeam,
+              name: item.away.name,
+              img: getCricketImageUrl(item.away.img),
+              matchesWon: item.away.won,
             }}
           ></CricketSeriesResult>
         ))}
 
-      {series.isTrophy && seriesResults?.results.length === 1 && (
+      {tournamentWinner != null && (
         <div className="flex flex-col items-center">
           <p className="pt-6 dark:text-neutral-400">TOURNAMENT WINNER </p>
           <Image
-            src={getCricketImageUrl(
-              seriesResults.results[0].result.leadTeam.imageUrl,
-            )}
+            src={getCricketImageUrl(tournamentWinner.img)}
             height={150}
             width={150}
             alt={"Winning Team"}
@@ -57,10 +55,10 @@ export default async function Page(props: {
           />
 
           <p className="text-xl dark:text-neutral-400">
-            {seriesResults.results[0].result.leadTeam.longName}{" "}
+            {tournamentWinner.name}
           </p>
         </div>
-      )} */}
+      )}
 
       {seriesLadders !== null &&
         seriesLadders.map((item) => (

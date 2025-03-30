@@ -35,8 +35,6 @@ export default async function Page(props: {
   const rawInnings = await fetchCricketMatchInnings(params.slug);
   const rawDetails = await fetchCricketMatchDetails(params.slug);
 
-  console.log(rawInnings);
-
   if (rawInnings === null || rawDetails === null) {
     return <Placeholder>An error has ocurred</Placeholder>;
   }
@@ -135,7 +133,7 @@ function mapMatchDetails(
     matchSummaryText: details.ECo,
     status: details.EpsL,
     date: dateString,
-    venue: details.Venue.Vnm,
+    venue: `${details.Venue.Vnm}, ${details.Stg.Cnm}`,
     tossResult: `${tossWinner} won the toss and chose to ${tossChoice}`,
     umpires: [""],
     pom: "",

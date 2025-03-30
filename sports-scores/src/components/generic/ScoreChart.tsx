@@ -20,8 +20,6 @@ export default function ScoreChart({
     },
   } satisfies ChartConfig;
 
-  console.log("DEV --- ", scoreDifference);
-
   let values = scoreDifference;
   values = [{ event: "Start", difference: 0 }].concat(values);
   values.push(values.at(-1) ?? { event: "End", difference: 0 });

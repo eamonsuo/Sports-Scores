@@ -1,19 +1,16 @@
-import { fetchCricketCurrentMatches } from "@/api/cricket.api";
 import CricketFixtureList from "@/components/cricket/CricketFixtureList";
 import Placeholder from "@/components/misc/Placeholder";
-import { mapCricketCurrentMatches } from "@/lib/dataMapping";
+import { cricketCurrentMatches } from "@/services/cricket.service";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const rawMatches = await fetchCricketCurrentMatches();
+  const matches = await cricketCurrentMatches();
 
-  if (rawMatches === null) {
+  if (matches === null) {
     return <Placeholder>An error has ocurred</Placeholder>;
   }
 
-  const fixtures = mapCricketCurrentMatches(rawMatches);
-
   //Sort by start date??
-  return <CricketFixtureList data={fixtures} />;
+  return <CricketFixtureList data={matches} />;
 }
