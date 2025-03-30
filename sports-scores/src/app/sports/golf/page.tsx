@@ -21,10 +21,7 @@ export default async function Page() {
         top5Players={top5}
         url={`/sports/golf/pga/tournaments/${tournDetails.seasonYear}/${tournDetails.tournamentName.toLowerCase().replace(" ", "-")}/${tournDetails.id}`}
       /> */}
-      <GolfTourHeader
-        href="https://www.pgatour.com/leaderboard"
-        tourName="PGA Tour"
-      />
+      <GolfTourHeader href="/sports/golf/pga/schedule" tourName="PGA Tour" />
       <GolfTourHeader
         href="https://www.livgolf.com/leaderboard"
         tourName="LIV Golf"

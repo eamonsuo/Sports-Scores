@@ -1,10 +1,17 @@
-import { PlayerRow } from "@/types/golf";
 import GolfPlayerImage from "./GolfPlayerImage";
+
+export type GolfLeaderboardPlayerRow = {
+  name: string;
+  position: string;
+  country: string;
+  totalScore: string;
+  thru: string;
+};
 
 export default function TournamentLeaderboard({
   players,
 }: {
-  players: PlayerRow[];
+  players: GolfLeaderboardPlayerRow[];
 }) {
   return (
     <div className="">
@@ -21,13 +28,13 @@ export default function TournamentLeaderboard({
         <tbody className="text-center">
           {players.map((item, index) => (
             <tr key={index} className="border">
-              <td className="py-2">{item.scoringData?.position}</td>
+              <td className="py-2">{item.position}</td>
               <td className="pe-2">
-                <GolfPlayerImage country={item.player?.country} />
+                <GolfPlayerImage country={item.country} />
               </td>
-              <td className="text-left">{item.player?.displayName}</td>
-              <td>{item.scoringData?.total}</td>
-              <td>{item.scoringData?.thru}</td>
+              <td className="text-left">{item.name}</td>
+              <td>{item.totalScore}</td>
+              <td>{item.thru}</td>
             </tr>
           ))}
         </tbody>

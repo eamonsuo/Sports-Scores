@@ -1,7 +1,8 @@
-import { PlayerRow } from "@/types/golf";
 import Image from "next/image";
 import Link from "next/link";
-import TournamentLeaderboard from "./TournamentLeaderboard";
+import TournamentLeaderboard, {
+  GolfLeaderboardPlayerRow,
+} from "./TournamentLeaderboard";
 
 export default function TournamentSummaryCard({
   img,
@@ -13,7 +14,7 @@ export default function TournamentSummaryCard({
   img: string;
   name: string;
   status: string;
-  top5Players: PlayerRow[];
+  top5Players: GolfLeaderboardPlayerRow[];
   url: string;
 }) {
   return (
