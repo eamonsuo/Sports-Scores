@@ -11,7 +11,7 @@ export default async function SportsLayout({
         <NavButtonGroup
           buttons={[
             {
-              href: "/sports/golf/pga/schedule",
+              href: "/sports/golf/pga/schedule#current-date",
               label: "Schedule",
               page: "schedule",
             },

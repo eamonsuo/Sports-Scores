@@ -4,12 +4,33 @@ import {
   fetchGolfSchedule,
 } from "@/api/golf.api";
 import { mapGolfLeaderboard } from "@/lib/dataMapping";
+import { GolfTournament } from "@/types/golf";
 
 export async function golfPGASchedule() {
   var rawSchedule = await fetchGolfSchedule(1, "2025");
   if (!rawSchedule) {
     return null;
   }
+
+  return rawSchedule.schedule.map((item) => {
+    var startDate = new Date(0);
+    startDate.setUTCSeconds(item.date.start.$date.$numberLong / 1000);
+
+    var endDate = new Date(0);
+    endDate.setUTCSeconds(item.date.end.$date.$numberLong / 1000);
+
+    return {
+      id: item.tournId,
+      name: item.name,
+      img: "",
+      startDate: startDate,
+      endDate: endDate,
+      sport: "golf",
+      course: [""],
+      status: item.format,
+      tourName: "pga",
+    };
+  }) as GolfTournament[];
 }
 
 export async function golfLIVSchedule() {
