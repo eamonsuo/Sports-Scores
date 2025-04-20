@@ -2,23 +2,23 @@ export interface Golf_SlashGolfAPI_Schedule {
   _id: string;
   orgId: string;
   year: string;
-  schedule: Tournament[];
+  schedule: SlashGolf_Tournament[];
   timestamp: string;
 }
 
-export interface Tournament {
+export interface SlashGolf_Tournament {
   tournId: string;
   name: string;
-  date: TournamentDate;
+  date: SlashGolf_TournamentDate;
   format?: string;
   purse?: number;
   winnersShare?: number;
   fedexCupPoints?: number;
 }
 
-export interface TournamentDate {
-  start: string;
-  end: string;
+export interface SlashGolf_TournamentDate {
+  start: { $date: { $numberLong: number } };
+  end: { $date: { $numberLong: number } };
   weekNumber: string | number;
 }
 
@@ -27,11 +27,11 @@ export interface Golf_SlashGolfAPI_Stats {
   name: string;
   year: string;
   weekNum: number;
-  rankings: PlayerRanking[];
+  rankings: SlashGolf_PlayerRanking[];
   timestamp: string;
 }
 
-export interface PlayerRanking {
+export interface SlashGolf_PlayerRanking {
   lastName: string;
   firstName: string;
   fullName: string;
@@ -55,16 +55,16 @@ export interface Golf_SlashGolfAPI_Leaderboard {
   roundStatus: string;
   lastUpdated: string;
   timestamp: string;
-  cutLines: CutLine[];
-  leaderboardRows: LeaderboardRow[];
+  cutLines: SlashGolf_CutLine[];
+  leaderboardRows: SlashGolf_LeaderboardRow[];
 }
 
-export interface CutLine {
+export interface SlashGolf_CutLine {
   cutCount: number;
   cutScore: string;
 }
 
-export interface LeaderboardRow {
+export interface SlashGolf_LeaderboardRow {
   lastName: string;
   firstName: string;
   playerId: string;
@@ -78,17 +78,29 @@ export interface LeaderboardRow {
   currentHole: number;
   startingHole: number;
   roundComplete: boolean;
-  rounds: Round[];
+  rounds: SlashGolf_Round[];
   thru: string;
   currentRound: number;
   teeTime: string;
   teeTimeTimestamp: string;
 }
 
-export interface Round {
+export interface SlashGolf_Round {
   scoreToPar: string;
   roundId: number;
   strokes: number;
   courseId: string;
   courseName: string;
+}
+
+export interface GolfTournament {
+  id: string;
+  name: string;
+  img: string;
+  startDate: Date;
+  endDate: Date;
+  sport: string;
+  course: string[];
+  status: string;
+  tourName: string; //Used for url navigation
 }
