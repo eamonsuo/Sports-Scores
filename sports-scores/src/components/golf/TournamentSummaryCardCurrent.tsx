@@ -4,7 +4,7 @@ import TournamentLeaderboard, {
   GolfLeaderboardPlayerRow,
 } from "./TournamentLeaderboard";
 
-export default function TournamentSummaryCard({
+export default function TournamentSummaryCardCurrent({
   img,
   name,
   status,

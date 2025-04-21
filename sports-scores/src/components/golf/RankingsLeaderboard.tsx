@@ -1,18 +1,19 @@
 import GolfPlayerImage from "./GolfPlayerImage";
 
-export type GolfLeaderboardPlayerRow = {
+export type GolfRankingsPlayerRow = {
   name: string;
   position: string;
   country: string;
-  totalScore: string;
-  thru: string;
-  curRound: string;
+  totalPoints: string;
+  pointsBehind: string;
 };
 
-export default function TournamentLeaderboard({
+export default function RankingsLeaderboard({
   players,
+  type,
 }: {
-  players: GolfLeaderboardPlayerRow[];
+  players: GolfRankingsPlayerRow[];
+  type: "fedex" | "owgr";
 }) {
   return (
     <div className="">
@@ -22,10 +23,9 @@ export default function TournamentLeaderboard({
             <th className="pe-2">Pos</th>
             <th className="px-2"></th>
             <th className="text-left">Name</th>
-
             <th className="px-2">Total</th>
-            <th className="px-2">Rnd</th>
-            <th className="px-2">Thru</th>
+            <th className="px-2">{type == "fedex" ? "Behind" : "Prev"}</th>
+            {/* <th className="">Wins</th> */}
           </tr>
         </thead>
         <tbody className="text-center">
@@ -36,9 +36,9 @@ export default function TournamentLeaderboard({
                 <GolfPlayerImage country={item.country} />
               </td>
               <td className="text-left">{item.name}</td>
-              <td>{item.totalScore}</td>
-              <td>{item.curRound}</td>
-              <td>{item.thru}</td>
+              <td>{item.totalPoints}</td>
+              <td>{item.pointsBehind}</td>
+              {/* <td>3</td> */}
             </tr>
           ))}
         </tbody>

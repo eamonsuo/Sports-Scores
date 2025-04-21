@@ -9,7 +9,11 @@ import {
   LeagueTable,
 } from "@/types/cricket";
 import { F1Session, SessionSummary } from "@/types/f1";
-import { Golf_SlashGolfAPI_Leaderboard } from "@/types/golf";
+import {
+  Golf_SlashGolfAPI_Leaderboard,
+  Golf_SlashGolfAPI_Schedule,
+  GolfSchedulePage,
+} from "@/types/golf";
 import { MatchStatus, MatchSummary } from "@/types/misc";
 import { NFLGame, NFLStanding } from "@/types/nfl";
 import { MATCHSTATUSAFL, MATCHSTATUSNFL, SPORT } from "./constants";
@@ -323,7 +327,38 @@ export function mapGolfLeaderboard(data: Golf_SlashGolfAPI_Leaderboard) {
         position: item.position,
         totalScore: item.total,
         thru: item.thru,
+        curRound: item.currentRoundScore,
       } as GolfLeaderboardPlayerRow;
     }),
   };
+}
+
+export function mapGolfSchedule(
+  data: Golf_SlashGolfAPI_Schedule,
+  tour: string,
+) {
+  return {
+    schedule: data.schedule.map((item) => {
+      var startDate = new Date(0);
+      startDate.setUTCSeconds(item.date.start.$date.$numberLong / 1000);
+
+      var endDate = new Date(0);
+      endDate.setUTCSeconds(item.date.end.$date.$numberLong / 1000);
+
+      return {
+        id: item.tournId,
+        name: item.name,
+        img: "",
+        startDate: startDate,
+        endDate: endDate,
+        sport: "golf",
+        course: [""],
+        status: "",
+        leader: "",
+        location: "",
+        tourName: tour,
+      };
+    }),
+    pageName: "",
+  } as GolfSchedulePage;
 }

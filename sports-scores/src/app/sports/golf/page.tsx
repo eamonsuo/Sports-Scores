@@ -26,7 +26,7 @@ export default async function Page() {
         tourName="PGA Tour"
       />
       <GolfTourHeader
-        href="https://www.livgolf.com/leaderboard"
+        href="/sports/golf/liv/schedule#current-date"
         tourName="LIV Golf"
       />
       <GolfTourHeader
@@ -37,6 +37,7 @@ export default async function Page() {
         href="https://pga.org.au/report/?tourn=auto&class=aus"
         tourName="PGA Tour of Australasia"
       />
+      <GolfTourHeader href="/sports/golf/owgr" tourName="OWGR" />
     </div>
   );
 }

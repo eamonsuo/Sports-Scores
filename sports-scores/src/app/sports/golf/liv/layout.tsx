@@ -12,21 +12,26 @@ export default async function SportsLayout({
         <div className="px-4">
           {" "}
           <GolfTourHeader
-            href="/sports/golf/pga/schedule"
-            tourName="PGA Tour"
+            href="/sports/golf/liv/schedule"
+            tourName="LIV Tour"
           />
         </div>
         <NavButtonGroup
           buttons={[
             {
-              href: "/sports/golf/pga/schedule#current-date",
+              href: "/sports/golf/liv/schedule#current-date",
               label: "Schedule",
               page: "schedule",
             },
             {
-              href: "/sports/golf/pga/fedexcup",
-              label: "FedEx Cup",
-              page: "fedexcup",
+              href: "/sports/golf/liv/standings/team",
+              label: "Player Standings",
+              page: "team",
+            },
+            {
+              href: "/sports/golf/liv/standings/player",
+              label: "Team Standings",
+              page: "player",
             },
           ]}
         />
