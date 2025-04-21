@@ -17,7 +17,12 @@ import {
 import { MatchStatus, MatchSummary } from "@/types/misc";
 import { NFLGame, NFLStanding } from "@/types/nfl";
 import { MATCHSTATUSAFL, MATCHSTATUSNFL, SPORT } from "./constants";
-import { getLocalTime, setMatchSummary, shortenTeamNames } from "./projUtils";
+import {
+  getLocalTime,
+  resolveGolfPlayersCountry,
+  setMatchSummary,
+  shortenTeamNames,
+} from "./projUtils";
 
 export function mapAFLFixtureFields(matches: AFLGame[]) {
   return matches.map(
@@ -322,12 +327,14 @@ export function convertNumbertoDate(dateNumber: number) {
 export function mapGolfLeaderboard(data: Golf_SlashGolfAPI_Leaderboard) {
   return {
     playerPositions: data.leaderboardRows.map((item) => {
+      let playerName = `${item.firstName} ${item.lastName}`;
       return {
-        name: `${item.firstName} ${item.lastName}`,
+        name: playerName,
         position: item.position,
         totalScore: item.total,
         thru: item.thru,
         curRound: item.currentRoundScore,
+        country: resolveGolfPlayersCountry(playerName),
       } as GolfLeaderboardPlayerRow;
     }),
   };

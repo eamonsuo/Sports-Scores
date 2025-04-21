@@ -4,6 +4,7 @@ import {
   fetchGolfSchedule,
 } from "@/api/golf.api";
 import { mapGolfLeaderboard, mapGolfSchedule } from "@/lib/dataMapping";
+import { resolveGolfPlayersCountry } from "@/lib/projUtils";
 import {
   GolfRankingsPage,
   SlashGolf_PlayerRanking_FedExCup,
@@ -37,9 +38,10 @@ export async function golfOWGRankings(year: string = "2025") {
   return {
     rankings: (rawRanking.rankings as SlashGolf_PlayerRanking_OWGR[]).map(
       (item) => {
+        let playerName = item.firstName + " " + item.lastName;
         return {
-          name: item.firstName + " " + item.lastName,
-          country: "",
+          name: playerName,
+          country: resolveGolfPlayersCountry(playerName),
           position: item.rank.$numberInt.toString(),
           totalPoints: item.avgPoints.$numberDouble.toString(),
           pointsBehind: item.previousRank.$numberInt.toString(),
@@ -58,10 +60,10 @@ export async function golfFedExRankings(year: string = "2025") {
   return {
     rankings: (rawRanking.rankings as SlashGolf_PlayerRanking_FedExCup[]).map(
       (item) => {
-        console.log(item);
+        let playerName = item.firstName + " " + item.lastName;
         return {
-          name: item.firstName + " " + item.lastName,
-          country: "",
+          name: playerName,
+          country: resolveGolfPlayersCountry(playerName),
           position: item.rank.$numberInt.toString(),
           totalPoints: item.totalPoints.toString(),
           pointsBehind: item.pointsBehind,
