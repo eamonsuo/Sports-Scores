@@ -175,3 +175,64 @@ export function dateToCustomString(date: Date) {
     })
     .replaceAll(",", "");
 }
+
+export function resolveGolfPlayersCountry(playerName: string) {
+  switch (playerName) {
+    case "Rory McIlroy":
+      return "NIR";
+    case "Jason Day":
+    case "Adam Scott":
+    case "Cam Davis":
+    case "Cameron Smith":
+    case "Marc Leishman":
+    case "Min Woo Lee":
+    case "Lucas Herbert":
+    case "Matt Jones":
+    case "Karl Vilips":
+    case "Aaron Baddeley":
+      return "AUS";
+    case "Scottie Scheffler":
+    case "Jordan Spieth":
+    case "Sam Burns":
+    case "Will Zalatoris":
+    case "Justin Thomas":
+    case "Patrick Cantlay":
+    case "Xander Schauffele":
+    case "Bryson DeChambeau":
+    case "Tony Finau":
+    case "Rickie Fowler":
+    case "Bubba Watson":
+    case "Tiger Woods":
+    case "Phil Mickelson":
+    case "Dustin Johnson":
+    case "Brooks Koepka":
+    case "Collin Morikawa":
+    case "Akshay Bhatia":
+    case "Sahith Theegala":
+    case "Billy Horschel":
+    case "Luke Clanton":
+    case "Max Homa":
+    case "Wyndham Clark":
+      return "USA";
+    case "Tommy Fleetwood":
+    case "Justin Rose":
+      return "ENG";
+    case "Shane Lowry":
+      return "IRE";
+    case "Sergio Garcia":
+    case "Jon Rahm":
+      return "ESP";
+    case "Joaquin Niemann":
+      return "CHI";
+    case "Hideki Matsuyama":
+      return "JPN";
+    case "Ludvig Åberg":
+      return "SWE";
+    case "Viktor Hovland":
+      return "NOR";
+    case "Tom Kim":
+      return "KOR";
+    default:
+      return "";
+  }
+}
