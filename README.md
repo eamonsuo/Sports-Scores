@@ -4,14 +4,12 @@ This is a web app which will allow you to view all results from a range of sport
 
 Currently Implemented:
 
-<!-- TODO: Update cricket -->
-
-- Cricket (My Teams (AUS, QLD, BNE), All Matches (Live and recently concluded Internationals & Favourite Series), All Series (Past 10 days - future))
-- AFL (Fixtures, Ladder, Match Details)
-- NFL (Fixtures, Ladder, Match Details)
-- F1 (Races, Driver & Team Standings, Race Results)
+- Cricket (My Teams (Bad Data), Today's Matches, Featured Series) - TODO: Update to move between dates on today's matches
+- AFL (Fixtures, Ladder, Match Details) (OLD DATA ONLY)
+- NFL (Fixtures, Ladder, Match Details) (OLD DATA ONLY)
+- F1 (Races, Driver & Team Standings, Race Results) (OLD DATA ONLY)
 - NRL (Google IFrame)
-- Golf (Google IFrame)
+- Golf (PGA Tour Schedule, Tournaments & Standings, LIV Schedule & Tournaments, OWGR Standings)
 
 To Be Implemented:
 
