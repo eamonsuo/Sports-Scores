@@ -1,10 +1,10 @@
-import { GolfTournament } from "@/types/golf";
+import { GolfSchedule } from "@/types/golf";
 import React from "react";
 import SectionDateRange from "../generic/SectionDateRange";
-import TournamentSummaryCard from "./TournamentSummaryCard";
+import TournamentSummaryCard from "./TournamentSummaryCardSchedule";
 
 // Assumes data prop is already sorted in desired order
-export default function GolfSchedule({ data }: { data: GolfTournament[] }) {
+export default function GolfScheduleList({ data }: { data: GolfSchedule[] }) {
   const current_date: Date = new Date(Date.now());
 
   let sectionDate: Date = new Date("2000-01-01");
@@ -18,7 +18,7 @@ export default function GolfSchedule({ data }: { data: GolfTournament[] }) {
 
   return (
     <div className="flex-1 overflow-y-auto px-4">
-      {data.map((item: GolfTournament) => {
+      {data.map((item: GolfSchedule) => {
         let item_date = item.startDate;
         displayDate = false;
         if (sectionDate.toDateString() !== item_date.toDateString()) {
@@ -51,7 +51,8 @@ export default function GolfSchedule({ data }: { data: GolfTournament[] }) {
               img="/vercel.svg"
               name={item.name}
               status={item.status}
-              top5Players={[]}
+              leader={item.leader}
+              location={item.location}
               url={`/sports/golf/${item.tourName}/tournament/${item.id}`}
             />
           </React.Fragment>

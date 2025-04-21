@@ -1,10 +1,10 @@
 import GolfSchedule from "@/components/golf/GolfScheduleList";
-import { golfPGASchedule } from "@/services/golf.service";
+import { golfLIVSchedule } from "@/services/golf.service";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const pageData = await golfPGASchedule();
+  const pageData = await golfLIVSchedule();
 
   if (pageData === null) {
     return <>NO DATA</>;

@@ -1,3 +1,5 @@
+import { GolfRankingsPlayerRow } from "@/components/golf/RankingsLeaderboard";
+
 export interface Golf_SlashGolfAPI_Schedule {
   _id: string;
   orgId: string;
@@ -27,24 +29,38 @@ export interface Golf_SlashGolfAPI_Stats {
   name: string;
   year: string;
   weekNum: number;
-  rankings: SlashGolf_PlayerRanking[];
+  rankings: SlashGolf_PlayerRanking_FedExCup[] | SlashGolf_PlayerRanking_OWGR[];
   timestamp: string;
 }
 
-export interface SlashGolf_PlayerRanking {
+export interface SlashGolf_PlayerRanking_FedExCup {
   lastName: string;
   firstName: string;
   fullName: string;
   playerId: string;
-  rank: number;
+  rank: { $numberInt: number };
   previousRank: number;
   events: number;
   totalPoints: number;
   avgPoints: number;
   pointsLost: number;
   pointsGained: number;
+  pointsBehind?: string;
 }
 
+export interface SlashGolf_PlayerRanking_OWGR {
+  lastName: string;
+  firstName: string;
+  fullName: string;
+  playerId: string;
+  rank: { $numberInt: number };
+  previousRank: { $numberInt: number };
+  events: number;
+  totalPoints: { $numberDouble: number };
+  avgPoints: { $numberDouble: number };
+  pointsLost: number;
+  pointsGained: number;
+}
 export interface Golf_SlashGolfAPI_Leaderboard {
   _id: string;
   orgId: string;
@@ -93,7 +109,7 @@ export interface SlashGolf_Round {
   courseName: string;
 }
 
-export interface GolfTournament {
+export interface GolfSchedule {
   id: string;
   name: string;
   img: string;
@@ -102,5 +118,15 @@ export interface GolfTournament {
   sport: string;
   course: string[];
   status: string;
+  leader: string;
+  location: string;
   tourName: string; //Used for url navigation
+}
+
+export interface GolfSchedulePage {
+  schedule: GolfSchedule[];
+}
+
+export interface GolfRankingsPage {
+  rankings: GolfRankingsPlayerRow[];
 }
