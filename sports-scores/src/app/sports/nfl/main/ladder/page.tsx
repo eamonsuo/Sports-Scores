@@ -1,6 +1,6 @@
-import { fetchNFLStandings } from "@/api/nfl.api";
 import Placeholder from "@/components/misc/Placeholder";
 import NFLLadder from "@/components/nfl/NFLLadder";
+import { fetchNFLStandings } from "@/endpoints/nfl.api";
 
 export const dynamic = "force-dynamic";
 

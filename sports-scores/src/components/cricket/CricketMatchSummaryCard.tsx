@@ -1,3 +1,4 @@
+import fallback from "@/../public/vercel.svg";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -42,7 +43,7 @@ export default function CricketMatchSummaryCard({
         <div className="m-2 grid w-full grid-cols-5 gap-2">
           <div className="content-center justify-self-start">
             <Image
-              src={homeInfo.img ?? "/vercel.svg"}
+              src={homeInfo.img ?? fallback}
               width={40}
               height={40}
               alt="Home team image"
@@ -59,7 +60,7 @@ export default function CricketMatchSummaryCard({
           </div>
           <div className="content-center justify-self-end">
             <Image
-              src={awayInfo.img ?? "/vercel.svg"}
+              src={awayInfo.img ?? fallback}
               width={40}
               height={40}
               alt="Away team image"

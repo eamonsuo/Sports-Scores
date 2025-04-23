@@ -1,17 +1,19 @@
 "use client";
-
+import fallback from "@/../public/vercel.svg";
 import Image from "next/image";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import { ChartConfig, ChartContainer } from "../ui/chart";
+
+export type ScoreDifference = { event: string; difference: number };
 
 export default function ScoreChart({
   scoreDifference,
   homeLogo,
   awayLogo,
 }: {
-  scoreDifference: { event: string; difference: number }[]; // Array of numbers representing the score difference between the home team (+) and away team (-) after each score
-  homeLogo: string;
-  awayLogo: string;
+  scoreDifference: ScoreDifference[]; // Array of numbers representing the score difference between the home team (+) and away team (-) after each score
+  homeLogo?: string;
+  awayLogo?: string;
 }) {
   const chartConfig = {
     desktop: {
@@ -33,8 +35,18 @@ export default function ScoreChart({
       <p className="m-4">Score Trend</p>
       <div className="mx-4 flex gap-2">
         <div className="flex flex-col place-content-around">
-          <Image src={homeLogo} width={15} height={15} alt="Home team image" />
-          <Image src={awayLogo} width={15} height={15} alt="Away team image" />
+          <Image
+            src={homeLogo ?? fallback}
+            width={15}
+            height={15}
+            alt="Home team image"
+          />
+          <Image
+            src={awayLogo ?? fallback}
+            width={15}
+            height={15}
+            alt="Away team image"
+          />
         </div>
         <ChartContainer config={chartConfig} className="min-h-[100px] flex-1">
           <LineChart accessibilityLayer data={values}>

@@ -1,6 +1,5 @@
 import APIStatus from "@/components/misc/ApiStatus";
 import NavButtonGroup from "@/components/misc/NavButtonGroup";
-import { CRICKET_REQUEST_USED } from "@/endpoints/cricket.api";
 
 export default async function SportsLayout({
   children,
@@ -12,24 +11,19 @@ export default async function SportsLayout({
       <NavButtonGroup
         buttons={[
           {
-            href: "myteams#current-date",
-            label: "My Teams",
-            page: "myteams",
-          },
-          {
-            href: "matches#current-date",
-            label: "All Matches",
+            href: "/sports/nrl/matches",
+            label: "Matches",
             page: "matches",
           },
           {
-            href: "seriesList",
-            label: "Series",
-            page: "series",
+            href: "/sports/nrl/ladder",
+            label: "Ladder",
+            page: "ladder",
           },
         ]}
       />
       {children}
-      <APIStatus status={`${CRICKET_REQUEST_USED}% used`} />
+      <APIStatus status="N/A" />
     </div>
   );
 }

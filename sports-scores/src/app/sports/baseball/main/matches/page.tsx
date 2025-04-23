@@ -1,6 +1,6 @@
-import { fetchBaseballFixtures } from "@/api/baseball.api";
 import FixtureList from "@/components/generic/FixtureList";
 import Placeholder from "@/components/misc/Placeholder";
+import { fetchBaseballFixtures } from "@/endpoints/baseball.api";
 import { mapBaseballFixtureFields } from "@/lib/dataMapping";
 
 export default async function Page() {

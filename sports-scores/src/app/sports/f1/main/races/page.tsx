@@ -1,6 +1,6 @@
-import { fetchAllF1Sessions } from "@/api/f1.api";
 import RaceList from "@/components/f1/RaceList";
 import Placeholder from "@/components/misc/Placeholder";
+import { fetchAllF1Sessions } from "@/endpoints/f1.api";
 import { mapF1SessionFields } from "@/lib/dataMapping";
 import { SessionSummary } from "@/types/f1";
 

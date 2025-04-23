@@ -1,8 +1,8 @@
-import { fetchNFLGame, fetchNFLGameEvents } from "@/api/nfl.api";
 import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
 import ScoreChart from "@/components/generic/ScoreChart";
 import Placeholder from "@/components/misc/Placeholder";
 import NFLScoreBreakdown from "@/components/nfl/NFLScoreBreakdown";
+import { fetchNFLGame, fetchNFLGameEvents } from "@/endpoints/nfl.api";
 import { MATCHSTATUSNFL } from "@/lib/constants";
 import { mapNFLFixtureFields } from "@/lib/dataMapping";
 

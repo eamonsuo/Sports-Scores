@@ -1,6 +1,6 @@
-import { fetchF1TeamStandings } from "@/api/f1.api";
 import F1TeamStandings from "@/components/f1/F1TeamStandings";
 import Placeholder from "@/components/misc/Placeholder";
+import { fetchF1TeamStandings } from "@/endpoints/f1.api";
 
 export const dynamic = "force-dynamic";
 

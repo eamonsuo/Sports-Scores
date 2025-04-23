@@ -1,7 +1,3 @@
-import {
-  fetchCricketMatchDetails,
-  fetchCricketMatchInnings,
-} from "@/api/cricket.api";
 import CricketMatchDetailsPage, {
   MatchDetailsPage,
 } from "@/components/cricket/CricketMatchDetailsPage";
@@ -10,6 +6,10 @@ import { CricketScorecardBatProps } from "@/components/cricket/CricketScorecardB
 import { CricketScorecardBowlProps } from "@/components/cricket/CricketScorecardBowl";
 import ClientSportsPage from "@/components/generic/ClientSportsPage";
 import Placeholder from "@/components/misc/Placeholder";
+import {
+  fetchCricketMatchDetails,
+  fetchCricketMatchInnings,
+} from "@/endpoints/cricket.api";
 import { convertNumbertoDate } from "@/lib/dataMapping";
 import { dateToCustomString } from "@/lib/projUtils";
 import {

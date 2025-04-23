@@ -44,7 +44,7 @@ type NavButtonGroupProps = {
   link: any;
 }[];
 
-type TeamScoreDetails = {
+export type TeamScoreDetails = {
   img?: string;
   score: string;
   name: string;

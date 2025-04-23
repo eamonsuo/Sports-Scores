@@ -1,9 +1,9 @@
-import { fetchCricketSeriesMatches } from "@/api/cricket.api";
 import CricketSeriesLadder, {
   CricketLadder,
 } from "@/components/cricket/CricketSeriesLadder";
 import CricketSeriesResult from "@/components/cricket/CricketSeriesResult";
 import Placeholder from "@/components/misc/Placeholder";
+import { fetchCricketSeriesMatches } from "@/endpoints/cricket.api";
 import { mapCricketSeriesLadders } from "@/lib/dataMapping";
 import { getCricketImageUrl } from "@/lib/projUtils";
 import Image from "next/image";

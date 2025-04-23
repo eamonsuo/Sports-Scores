@@ -2,7 +2,7 @@ import {
   fetchCricketAllSeries,
   fetchCricketCurrentMatches,
   fetchCricketMyTeams,
-} from "@/api/cricket.api";
+} from "@/endpoints/cricket.api";
 import {
   mapCricketCurrentMatches,
   mapCricketTeamMatches,

@@ -2,7 +2,7 @@ import {
   fetchGolfLeaderboard,
   fetchGolfRankings,
   fetchGolfSchedule,
-} from "@/api/golf.api";
+} from "@/endpoints/golf.api";
 import { mapGolfLeaderboard, mapGolfSchedule } from "@/lib/dataMapping";
 import { resolveGolfPlayersCountry } from "@/lib/projUtils";
 import {
