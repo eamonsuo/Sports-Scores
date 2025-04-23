@@ -8,7 +8,7 @@ Currently Implemented:
 - AFL (Fixtures, Ladder, Match Details) (OLD DATA ONLY)
 - NFL (Fixtures, Ladder, Match Details) (OLD DATA ONLY)
 - F1 (Races, Driver & Team Standings, Race Results) (OLD DATA ONLY)
-- NRL (Google IFrame)
+- NRL (Fixtures (recent matches), Ladder, Match Details)
 - Golf (PGA Tour Schedule, Tournaments & Standings, LIV Schedule & Tournaments, OWGR Standings)
 
 To Be Implemented:
