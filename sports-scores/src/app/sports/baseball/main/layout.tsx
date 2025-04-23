@@ -1,7 +1,7 @@
-import { fetchBaseballStatus } from "@/api/baseball.api";
 import APIStatus from "@/components/misc/ApiStatus";
 import NavButtonGroup from "@/components/misc/NavButtonGroup";
 import Placeholder from "@/components/misc/Placeholder";
+import { fetchBaseballStatus } from "@/endpoints/baseball.api";
 
 export default async function SportsLayout({
   children,

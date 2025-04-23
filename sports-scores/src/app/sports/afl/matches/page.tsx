@@ -1,6 +1,6 @@
-import { fetchAFLFixtures } from "@/api/afl.api";
 import FixtureRoundList from "@/components/generic/FixtureRoundList";
 import Placeholder from "@/components/misc/Placeholder";
+import { fetchAFLFixtures } from "@/endpoints/afl.api";
 import { mapAFLFixtureFields } from "@/lib/dataMapping";
 import { getCurrentWeek } from "@/lib/projUtils";
 

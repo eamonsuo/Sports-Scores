@@ -1,7 +1,7 @@
-import { fetchNFLStatus } from "@/api/nfl.api";
 import APIStatus from "@/components/misc/ApiStatus";
 import NavButtonGroup from "@/components/misc/NavButtonGroup";
 import Placeholder from "@/components/misc/Placeholder";
+import { fetchNFLStatus } from "@/endpoints/nfl.api";
 
 export default async function SportsLayout({
   children,

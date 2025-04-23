@@ -1,6 +1,6 @@
-import { CRICKET_REQUEST_USED } from "@/api/cricket.api";
 import APIStatus from "@/components/misc/ApiStatus";
 import NavButtonGroup from "@/components/misc/NavButtonGroup";
+import { CRICKET_REQUEST_USED } from "@/endpoints/cricket.api";
 
 export default async function SportsLayout({
   children,

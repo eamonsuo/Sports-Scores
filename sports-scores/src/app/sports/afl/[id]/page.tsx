@@ -2,7 +2,7 @@ import {
   fetchAFLGame,
   fetchAFLGameEvents,
   fetchAFLGameQuarters,
-} from "@/api/afl.api";
+} from "@/endpoints/afl.api";
 
 import AFLScoreBreakdown from "@/components/afl/AFLScoreBreakdown";
 import MatchDetailsHero from "@/components/generic/MatchDetailsHero";

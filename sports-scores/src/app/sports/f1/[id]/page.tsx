@@ -1,6 +1,6 @@
-import { fetchF1SessionResult } from "@/api/f1.api";
 import F1SessionStandings from "@/components/f1/F1SessionStandings";
 import Placeholder from "@/components/misc/Placeholder";
+import { fetchF1SessionResult } from "@/endpoints/f1.api";
 
 export default async function Page(props: { params: Promise<{ id: number }> }) {
   const params = await props.params;

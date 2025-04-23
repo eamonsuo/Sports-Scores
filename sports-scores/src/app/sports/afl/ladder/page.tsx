@@ -1,6 +1,6 @@
-import { fetchAFLStandings } from "@/api/afl.api";
 import AFLLadder from "@/components/afl/AFLLadder";
 import Placeholder from "@/components/misc/Placeholder";
+import { fetchAFLStandings } from "@/endpoints/afl.api";
 
 export const dynamic = "force-dynamic";
 

@@ -50,11 +50,13 @@ export function setMatchSummary(
   awayScore: number,
 ) {
   switch (status) {
-    case MATCHSTATUSAFL.SHORT_NS || MATCHSTATUSNFL.SHORT_NS:
+    case "notstarted":
+    case MATCHSTATUSAFL.SHORT_NS:
+    case MATCHSTATUSNFL.SHORT_NS:
       return ``;
-    case MATCHSTATUSAFL.SHORT_FT ||
-      MATCHSTATUSNFL.SHORT_FT ||
-      MATCHSTATUSNFL.SHORT_AOT:
+    case MATCHSTATUSAFL.SHORT_FT:
+    case MATCHSTATUSNFL.SHORT_FT:
+    case MATCHSTATUSNFL.SHORT_AOT:
       return calculateMatchResult(
         homeName,
         homeScore,
@@ -62,9 +64,11 @@ export function setMatchSummary(
         awayScore,
         true,
       );
-    case MATCHSTATUSAFL.SHORT_CANC || MATCHSTATUSNFL.SHORT_CANC:
+    case MATCHSTATUSAFL.SHORT_CANC:
+    case MATCHSTATUSNFL.SHORT_CANC:
       return "Match Cancelled";
-    case MATCHSTATUSAFL.SHORT_PST || MATCHSTATUSNFL.SHORT_PST:
+    case MATCHSTATUSAFL.SHORT_PST:
+    case MATCHSTATUSNFL.SHORT_PST:
       return "Match Postponed";
     default:
       return calculateMatchResult(
@@ -88,6 +92,14 @@ export function getCurrentWeek(data: MatchSummary[]) {
   });
 
   return record?.roundLabel ?? data[data.length - 1].roundLabel ?? "";
+}
+
+export function toShortTimeString(date: Date) {
+  return date
+    .toLocaleTimeString("en-US", {
+      timeZone: "Australia/Brisbane",
+    })
+    .replace(":00 ", " ");
 }
 
 //Convert to AEST
@@ -147,6 +159,15 @@ export function shortenTeamNames(team: string) {
       return "Tampa Bay Buccs";
     case "Los Angeles Chargers":
       return "LA Chargers";
+    //NRL
+    case "North Queensland Cowboys":
+      return "North QLD Cowboys";
+    case "St. George Illawarra Dragons":
+      return "St George Illawarra";
+    case "South Sydney Rabbitohs":
+      return "South Sydney Rabbits";
+    case "New Zealand Warriors":
+      return "NZ Warriors";
     default:
       return team;
   }

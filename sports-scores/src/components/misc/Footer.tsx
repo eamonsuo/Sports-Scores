@@ -27,7 +27,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.NRL,
-    link: `/sports/${SPORT.NRL}`,
+    link: `/sports/${SPORT.NRL}/matches`,
     img: "/nrl-ball.svg",
     altText: "NRL",
   },

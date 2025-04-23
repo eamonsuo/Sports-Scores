@@ -1,6 +1,6 @@
-import { fetchCricketSeriesMatches } from "@/api/cricket.api";
 import CricketFixtureList from "@/components/cricket/CricketFixtureList";
 import Placeholder from "@/components/misc/Placeholder";
+import { fetchCricketSeriesMatches } from "@/endpoints/cricket.api";
 import { mapCricketSeriesMatches } from "@/lib/dataMapping";
 
 export default async function Page(props: {

@@ -1,6 +1,6 @@
-import { fetchNFLFixtures, fetchNFLStandings } from "@/api/nfl.api";
 import FixtureRoundList from "@/components/generic/FixtureRoundList";
 import Placeholder from "@/components/misc/Placeholder";
+import { fetchNFLFixtures, fetchNFLStandings } from "@/endpoints/nfl.api";
 import { CURRENTSEASON } from "@/lib/constants";
 import { mapNFLFixtureFields } from "@/lib/dataMapping";
 import { getCurrentWeek } from "@/lib/projUtils";

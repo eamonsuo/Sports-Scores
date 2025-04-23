@@ -1,7 +1,27 @@
-import { AFLStanding } from "@/types/afl";
+import fallback from "@/../public/vercel.svg";
 import Image from "next/image";
 
-export default function AFLLadder({ data }: { data: AFLStanding[] }) {
+export type NRLStanding = {
+  position: number;
+  team: {
+    id: number;
+    name: string;
+    logo?: string;
+  };
+  points: number;
+  games: {
+    played: number;
+    win: number;
+    drawn: number;
+    lost: number;
+  };
+  scores: {
+    for: number;
+    against: number;
+  };
+};
+
+export default function NRLLadder({ data }: { data: NRLStanding[] }) {
   return (
     <div className="flex-1 overflow-y-auto px-4 dark:text-neutral-400">
       <table className="w-full">
@@ -11,7 +31,7 @@ export default function AFLLadder({ data }: { data: AFLStanding[] }) {
             <th className="px-2">Team</th>
             <th className="px-2">P</th>
             <th className="px-2">W</th>
-            <th className="px-2">%</th>
+            <th className="px-2">Diff</th>
             <th className="px-2">Pts</th>
           </tr>
         </thead>
@@ -22,10 +42,10 @@ export default function AFLLadder({ data }: { data: AFLStanding[] }) {
               <td className="text-left text-sm">
                 <div className="flex">
                   <Image
-                    src={item.team.logo}
+                    src={item.team.logo ?? fallback}
                     height={10}
                     width={15}
-                    alt={"Logo"}
+                    alt={"Team Logo"}
                     className="me-2"
                   />
                   {item.team.name}
@@ -33,10 +53,8 @@ export default function AFLLadder({ data }: { data: AFLStanding[] }) {
               </td>
               <td>{item.games.played}</td>
               <td>{item.games.win}</td>
-              <td>
-                {((item.points.for / item.points.against) * 100).toFixed(2)}
-              </td>
-              <td>{item.pts}</td>
+              <td>{item.scores.for - item.scores.against}</td>
+              <td>{item.points}</td>
             </tr>
           ))}
         </tbody>
