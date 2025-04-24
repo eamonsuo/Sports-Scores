@@ -1,8 +1,10 @@
+/* USING API_SPORTS API - DEPRECATED */
+
 import { handleAPIErrors } from "@/lib/projUtils";
 import {
   AFLGame,
   AFLGameEvents,
-  AFLGameQuarters,
+  AFLGameQuarter,
   AFLResponse,
   AFLStanding,
 } from "@/types/afl";
@@ -50,7 +52,7 @@ export async function fetchAFLGameQuarters(gameId: number) {
     },
   );
 
-  let quarters = (await rawQuarters.json()) as AFLResponse<AFLGameQuarters>;
+  let quarters = (await rawQuarters.json()) as AFLResponse<AFLGameQuarter>;
 
   if (quarters.response.length === 0) {
     return handleAPIErrors(quarters);

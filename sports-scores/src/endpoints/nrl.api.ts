@@ -85,7 +85,7 @@ export async function fetchNRLMatchIncidents(matchId: number) {
     },
   );
 
-  if (!rawMatch.ok) {
+  if (!rawMatch.ok || rawMatch.status === 204) {
     return null;
   }
 

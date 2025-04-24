@@ -1,18 +1,16 @@
 import APIStatus from "@/components/misc/ApiStatus";
 import NavButtonGroup from "@/components/misc/NavButtonGroup";
-import Placeholder from "@/components/misc/Placeholder";
-import { fetchAFLStatus } from "@/endpoints/afl.api";
 
 export default async function SportsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const status = await fetchAFLStatus();
+  // const status = await fetchAFLStatus();
 
-  if (typeof status === "string") {
-    return <Placeholder>{status}</Placeholder>;
-  }
+  // if (typeof status === "string") {
+  //   return <Placeholder>{status}</Placeholder>;
+  // }
 
   return (
     <div className="flex h-full flex-col">

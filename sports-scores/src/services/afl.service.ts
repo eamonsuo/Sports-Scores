@@ -1,22 +1,37 @@
-import { NRLStanding } from "@/components/nrl/NRLLadder";
 import {
-  fetchNRLLastMatches,
-  fetchNRLMatchDetails,
-  fetchNRLMatchIncidents,
-  fetchNRLNextMatches,
-  fetchNRLStandings,
-} from "@/endpoints/nrl.api";
+  fetchMatchDetails,
+  fetchMatchIncidents,
+  fetchTournamentLastMatches,
+  fetchTournamentNextMatches,
+  fetchTournamentStandings,
+} from "@/endpoints/sofascore.api";
 import {
   setMatchSummary,
   shortenTeamNames,
   toShortTimeString,
 } from "@/lib/projUtils";
+import {
+  AFLFixturesPage,
+  AFLLadderPage,
+  AFLMatchPage,
+  AFLStanding,
+} from "@/types/afl";
 import { MatchSummary } from "@/types/misc";
-import { NRLFixturesPage, NRLLadderPage, NRLMatchPage } from "@/types/nrl";
 
-export async function NRLMatches() {
-  const lastMatches = await fetchNRLLastMatches(2025, 0);
-  const nextMatches = await fetchNRLNextMatches(2025, 0);
+const seasonId = 71308; //2025 season
+const tournamentId = 656; //AFL Tournament ID
+
+export async function AFLMatches() {
+  const lastMatches = await fetchTournamentLastMatches(
+    tournamentId,
+    seasonId,
+    0,
+  );
+  const nextMatches = await fetchTournamentNextMatches(
+    tournamentId,
+    seasonId,
+    0,
+  );
 
   if (!lastMatches || !nextMatches) {
     return null;
@@ -37,7 +52,7 @@ export async function NRLMatches() {
             ? toShortTimeString(startDate)
             : match.status.description,
         id: match.id,
-        sport: "nrl",
+        sport: "afl",
         status: match.status.description,
         venue: "",
         summaryText: setMatchSummary(
@@ -58,11 +73,11 @@ export async function NRLMatches() {
         },
       } as MatchSummary;
     }),
-  } as NRLFixturesPage;
+  } as AFLFixturesPage;
 }
 
-export async function NRLStandings() {
-  const standings = await fetchNRLStandings(2025);
+export async function AFLStandings() {
+  const standings = await fetchTournamentStandings(tournamentId, seasonId);
 
   if (!standings) {
     return null;
@@ -72,7 +87,7 @@ export async function NRLStandings() {
     standings: standings?.standings[0].rows.map((item) => {
       return {
         position: item.position,
-        points: item.points,
+        pts: item.points,
         team: { id: item.team.id, name: shortenTeamNames(item.team.name) },
         games: {
           played: item.matches,
@@ -81,14 +96,14 @@ export async function NRLStandings() {
           drawn: item.draws,
         },
         scores: { against: item.scoresAgainst, for: item.scoresFor },
-      } as NRLStanding;
+      } as AFLStanding;
     }),
-  } as NRLLadderPage;
+  } as AFLLadderPage;
 }
 
-export async function NRLMatchDetails(matchId: number) {
-  const match = await fetchNRLMatchDetails(matchId);
-  const incidents = await fetchNRLMatchIncidents(matchId);
+export async function AFLMatchDetails(matchId: number) {
+  const match = await fetchMatchDetails(matchId);
+  const incidents = await fetchMatchIncidents(matchId);
 
   const matchDetails = match?.event;
   const scoreIncidents = incidents?.incidents
@@ -116,22 +131,29 @@ export async function NRLMatchDetails(matchId: number) {
             name: shortenTeamNames(matchDetails?.awayTeam.name),
             score: matchDetails?.awayScore?.current?.toString() ?? "0",
           },
-          scoreBreakdown: [
-            {
-              periodName: "1st Half",
-              teams: {
-                home: { score: matchDetails.homeScore?.period1 ?? "0" },
-                away: { score: matchDetails.awayScore?.period1 ?? "0" },
+          scoreBreakdown: [1, 2, 3, 4].map((quarter) => ({
+            quarter,
+            teams: {
+              home: {
+                id: matchDetails.homeTeam.id,
+                goals: undefined,
+                behinds: undefined,
+                points:
+                  (matchDetails.homeScore as Record<string, any>)[
+                    `period${quarter}`
+                  ] ?? "0",
+              },
+              away: {
+                id: matchDetails.awayTeam.id,
+                goals: undefined,
+                behinds: undefined,
+                points:
+                  (matchDetails.awayScore as Record<string, any>)[
+                    `period${quarter}`
+                  ] ?? "0",
               },
             },
-            {
-              periodName: "2nd Half",
-              teams: {
-                home: { score: matchDetails.homeScore?.period2 ?? "0" },
-                away: { score: matchDetails.awayScore?.period2 ?? "0" },
-              },
-            },
-          ],
+          })),
         },
-  } as NRLMatchPage;
+  } as AFLMatchPage;
 }

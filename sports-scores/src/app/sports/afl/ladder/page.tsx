@@ -1,15 +1,15 @@
 import AFLLadder from "@/components/afl/AFLLadder";
 import Placeholder from "@/components/misc/Placeholder";
-import { fetchAFLStandings } from "@/endpoints/afl.api";
+import { AFLStandings } from "@/services/afl.service";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const standings = await fetchAFLStandings(2024);
+  const pageData = await AFLStandings();
 
-  if (typeof standings === "string") {
-    return <Placeholder>{standings}</Placeholder>;
+  if (pageData === null) {
+    return <Placeholder>NO DATA</Placeholder>;
   }
 
-  return <AFLLadder data={standings} />;
+  return <AFLLadder data={pageData.standings} />;
 }
