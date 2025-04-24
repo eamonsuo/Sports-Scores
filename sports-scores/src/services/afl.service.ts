@@ -107,8 +107,10 @@ export async function AFLMatchDetails(matchId: number) {
 
   const matchDetails = match?.event;
   const scoreIncidents = incidents?.incidents
-    .filter((item) => item.incidentType === "goal")
-    .toReversed();
+    ? incidents?.incidents
+        .filter((item) => item.incidentType === "goal")
+        .toReversed()
+    : null;
 
   return {
     scoreEvents: !scoreIncidents
