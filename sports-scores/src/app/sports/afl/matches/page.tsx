@@ -1,21 +1,18 @@
 import FixtureRoundList from "@/components/generic/FixtureRoundList";
 import Placeholder from "@/components/misc/Placeholder";
-import { fetchAFLFixtures } from "@/endpoints/afl.api";
-import { mapAFLFixtureFields } from "@/lib/dataMapping";
 import { getCurrentWeek } from "@/lib/projUtils";
+import { AFLMatches } from "@/services/afl.service";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const fixtures = await fetchAFLFixtures(2023);
+  const pageData = await AFLMatches();
 
-  if (typeof fixtures === "string") {
-    return <Placeholder>{fixtures}</Placeholder>;
+  if (pageData === null) {
+    return <Placeholder>NO DATA</Placeholder>;
   }
 
-  const mappedFixtures = mapAFLFixtureFields(fixtures);
+  let curRound = getCurrentWeek(pageData.fixtures);
 
-  let curRound = getCurrentWeek(mappedFixtures);
-
-  return <FixtureRoundList data={mappedFixtures} curRound={curRound} />;
+  return <FixtureRoundList data={pageData.fixtures} curRound={curRound} />;
 }

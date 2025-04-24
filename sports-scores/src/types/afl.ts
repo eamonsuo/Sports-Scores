@@ -1,7 +1,22 @@
-import { APISportsResponse } from "./misc";
+import { ScoreDifference } from "@/components/generic/ScoreChart";
+import { APISportsResponse, MatchSummary, TeamScoreDetails } from "./misc";
 
-export interface AFLResponse<T> extends APISportsResponse {
-  response: T[];
+export interface AFLFixturesPage {
+  fixtures: MatchSummary[];
+}
+
+export interface AFLLadderPage {
+  standings: AFLStanding[];
+}
+
+export interface AFLMatchPage {
+  matchDetails: {
+    homeTeam: TeamScoreDetails;
+    awayTeam: TeamScoreDetails;
+    status: string;
+    scoreBreakdown: AFLGameQuarter[];
+  };
+  scoreEvents: ScoreDifference[];
 }
 
 export type AFLGame = {
@@ -76,25 +91,18 @@ export type AFLGame = {
   };
 };
 
-export type AFLGameQuarters = {
-  game: {
-    id: number;
+export type AFLGameQuarter = {
+  quarter: number;
+  teams: {
+    home: TeamQuarterStats;
+    away: TeamQuarterStats;
   };
-  quarters: [
-    {
-      quarter: number;
-      teams: {
-        home: TeamQuarterStats;
-        away: TeamQuarterStats;
-      };
-    },
-  ];
 };
 
 type TeamQuarterStats = {
   id: number;
-  goals: number;
-  behinds: number;
+  goals?: number;
+  behinds?: number;
   points: number;
 };
 
@@ -122,7 +130,7 @@ export type AFLStanding = {
   team: {
     id: number;
     name: string;
-    logo: string;
+    logo?: string;
   };
   pts: number;
   games: {
@@ -131,9 +139,14 @@ export type AFLStanding = {
     drawn: number;
     lost: number;
   };
-  points: {
+  scores: {
     for: number;
     against: number;
   };
   last_5: string;
 };
+
+//Old API Type
+export interface AFLResponse<T> extends APISportsResponse {
+  response: T[];
+}

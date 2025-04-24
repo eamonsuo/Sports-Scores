@@ -1,3 +1,4 @@
+import fallback from "@/../public/vercel.svg";
 import { AFLStanding } from "@/types/afl";
 import Image from "next/image";
 
@@ -22,7 +23,7 @@ export default function AFLLadder({ data }: { data: AFLStanding[] }) {
               <td className="text-left text-sm">
                 <div className="flex">
                   <Image
-                    src={item.team.logo}
+                    src={item.team.logo ?? fallback}
                     height={10}
                     width={15}
                     alt={"Logo"}
@@ -34,7 +35,7 @@ export default function AFLLadder({ data }: { data: AFLStanding[] }) {
               <td>{item.games.played}</td>
               <td>{item.games.win}</td>
               <td>
-                {((item.points.for / item.points.against) * 100).toFixed(2)}
+                {((item.scores.for / item.scores.against) * 100).toFixed(2)}
               </td>
               <td>{item.pts}</td>
             </tr>
