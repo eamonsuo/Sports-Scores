@@ -26,11 +26,13 @@ export default async function Page(props: { params: Promise<{ id: number }> }) {
         homeLogo={pageData.matchDetails.homeTeam.img}
         awayLogo={pageData.matchDetails.awayTeam.img}
       />
-      <ScoreChart
-        scoreDifference={pageData.scoreEvents}
-        homeLogo={pageData.matchDetails.homeTeam.img}
-        awayLogo={pageData.matchDetails.awayTeam.img}
-      />
+      {pageData.scoreEvents && (
+        <ScoreChart
+          scoreDifference={pageData.scoreEvents}
+          homeLogo={pageData.matchDetails.homeTeam.img}
+          awayLogo={pageData.matchDetails.awayTeam.img}
+        />
+      )}
     </div>
   );
 }

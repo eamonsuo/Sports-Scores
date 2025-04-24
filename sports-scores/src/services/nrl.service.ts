@@ -91,9 +91,9 @@ export async function NRLMatchDetails(matchId: number) {
   const incidents = await fetchNRLMatchIncidents(matchId);
 
   const matchDetails = match?.event;
-  const scoreIncidents = incidents?.incidents.filter(
-    (item) => item.incidentType === "goal",
-  );
+  const scoreIncidents = incidents?.incidents
+    .filter((item) => item.incidentType === "goal")
+    .toReversed();
 
   return {
     scoreEvents: !scoreIncidents
@@ -110,25 +110,25 @@ export async function NRLMatchDetails(matchId: number) {
           status: matchDetails?.status.description,
           homeTeam: {
             name: shortenTeamNames(matchDetails.homeTeam.name),
-            score: matchDetails?.homeScore.current.toString() ?? "0",
+            score: matchDetails?.homeScore?.current?.toString() ?? "0",
           },
           awayTeam: {
             name: shortenTeamNames(matchDetails?.awayTeam.name),
-            score: matchDetails?.awayScore.current.toString() ?? "0",
+            score: matchDetails?.awayScore?.current?.toString() ?? "0",
           },
           scoreBreakdown: [
             {
               periodName: "1st Half",
               teams: {
-                home: { score: matchDetails.homeScore.period1 },
-                away: { score: matchDetails.awayScore.period1 },
+                home: { score: matchDetails.homeScore?.period1 ?? "0" },
+                away: { score: matchDetails.awayScore?.period1 ?? "0" },
               },
             },
             {
               periodName: "2nd Half",
               teams: {
-                home: { score: matchDetails.homeScore.period2 },
-                away: { score: matchDetails.awayScore.period2 },
+                home: { score: matchDetails.homeScore?.period2 ?? "0" },
+                away: { score: matchDetails.awayScore?.period2 ?? "0" },
               },
             },
           ],
