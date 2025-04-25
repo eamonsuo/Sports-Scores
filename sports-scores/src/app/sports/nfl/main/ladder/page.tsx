@@ -1,15 +1,22 @@
 import Placeholder from "@/components/misc/Placeholder";
 import NFLLadder from "@/components/nfl/NFLLadder";
-import { fetchNFLStandings } from "@/endpoints/nfl.api";
+import { NFLStandings } from "@/services/nfl.service";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const standings = await fetchNFLStandings(2024);
+  const pageData = await NFLStandings();
 
-  if (typeof standings === "string") {
-    return <Placeholder>{standings}</Placeholder>;
+  if (pageData === null) {
+    return <Placeholder>NO DATA</Placeholder>;
   }
 
-  return <NFLLadder data={standings} />;
+  return (
+    <div className="flex-1 overflow-y-auto px-4">
+      {pageData.tables.map((item) => (
+        <NFLLadder key={item.tableName} data={item} />
+      ))}
+    </div>
+  );
+  return;
 }

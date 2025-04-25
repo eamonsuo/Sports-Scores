@@ -1,4 +1,47 @@
-import { APISportsResponse } from "./misc";
+import { ScoreDifference } from "@/components/generic/ScoreChart";
+import { NFLStanding } from "@/components/nfl/NFLLadder";
+import { NFLScoreBreakdown } from "@/components/nfl/NFLScoreBreakdown";
+import { APISportsResponse, MatchSummary, TeamScoreDetails } from "./misc";
+import {
+  Sofascore_Event,
+  Sofascore_Incident,
+  Sofascore_Standing,
+} from "./sofascore.api";
+
+export interface NFL_AmericanFootballApi_FixturePage_Response {
+  events: Sofascore_Event[];
+  hasNextPage: boolean;
+}
+
+export interface NFL_AmericanFootballApi_Match_Response {
+  event: Sofascore_Event;
+}
+
+export interface NFL_AmericanFootballApi_LeagueTotalStandings_Response {
+  standings: Sofascore_Standing[];
+}
+
+export interface NFL_AmericanFootballApi_MatchIncidents_Response {
+  incidents: Sofascore_Incident[];
+}
+
+export interface NFLFixturesPage {
+  fixtures: MatchSummary[];
+}
+
+export interface NFLLadderPage {
+  tables: NFLStanding[];
+}
+
+export interface NFLMatchPage {
+  matchDetails: {
+    homeTeam: TeamScoreDetails;
+    awayTeam: TeamScoreDetails;
+    status: string;
+    scoreBreakdown: NFLScoreBreakdown[];
+  };
+  scoreEvents: ScoreDifference[];
+}
 
 export interface NFLResponse<T> extends APISportsResponse {
   response: T[];
@@ -98,41 +141,6 @@ export type NFLGameEvents = {
   score: {
     home: number;
     away: number;
-  };
-};
-
-export type NFLStanding = {
-  league: NFLLeagueDetails;
-  conference: string;
-  division: string;
-  position: number;
-  team: {
-    id: number;
-    name: string;
-    logo: string;
-  };
-  won: number;
-  lost: number;
-  ties: number;
-  points: {
-    for: number;
-    against: number;
-    difference: number;
-  };
-  records: {
-    home: string;
-    road: string;
-    conference: string;
-    division: string;
-  };
-  streak: string;
-  ncaa_conference: {
-    won: number | null;
-    lost: number | null;
-    points: {
-      for: number | null;
-      against: number | null;
-    };
   };
 };
 

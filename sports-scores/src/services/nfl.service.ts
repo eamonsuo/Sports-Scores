@@ -1,22 +1,22 @@
-import { NRLStanding } from "@/components/nrl/NRLLadder";
+import { NFLStanding, NFLTeamStanding } from "@/components/nfl/NFLLadder";
 import {
-  fetchNRLLastMatches,
-  fetchNRLMatchDetails,
-  fetchNRLMatchIncidents,
-  fetchNRLNextMatches,
-  fetchNRLStandings,
-} from "@/endpoints/nrl.api";
+  fetchNFLLastMatches,
+  fetchNFLMatchDetails,
+  fetchNFLMatchIncidents,
+  fetchNFLNextMatches,
+  fetchNFLStandings,
+} from "@/endpoints/nfl.api";
 import {
   setMatchSummary,
   shortenTeamNames,
   toShortTimeString,
 } from "@/lib/projUtils";
 import { MatchSummary } from "@/types/misc";
-import { NRLFixturesPage, NRLLadderPage, NRLMatchPage } from "@/types/nrl";
+import { NFLFixturesPage, NFLLadderPage, NFLMatchPage } from "@/types/nfl";
 
-export async function NRLMatches() {
-  const lastMatches = await fetchNRLLastMatches(2025, 0);
-  const nextMatches = await fetchNRLNextMatches(2025, 0);
+export async function NFLMatches() {
+  const lastMatches = await fetchNFLLastMatches(2025, 0);
+  const nextMatches = await fetchNFLNextMatches(2025, 0);
 
   if (!lastMatches && !nextMatches) {
     return null;
@@ -31,13 +31,13 @@ export async function NRLMatches() {
 
       return {
         startDate: startDate,
-        roundLabel: `Round ${match.roundInfo.round}`,
+        roundLabel: match.roundInfo.name ?? `Week ${match.roundInfo.round}`,
         timer:
           match.status.type === "notstarted"
             ? toShortTimeString(startDate)
             : match.status.description,
         id: match.id,
-        sport: "nrl",
+        sport: "nfl",
         status: match.status.description,
         venue: "",
         summaryText: setMatchSummary(
@@ -58,37 +58,51 @@ export async function NRLMatches() {
         },
       } as MatchSummary;
     }),
-  } as NRLFixturesPage;
+  } as NFLFixturesPage;
 }
 
-export async function NRLStandings() {
-  const standings = await fetchNRLStandings(2025);
+export async function NFLStandings() {
+  const standings = await fetchNFLStandings(2025);
 
   if (!standings) {
     return null;
   }
 
   return {
-    standings: standings?.standings[0].rows.map((item) => {
-      return {
-        position: item.position,
-        points: item.points,
-        team: { id: item.team.id, name: shortenTeamNames(item.team.name) },
-        games: {
-          played: item.matches,
-          win: item.wins,
-          lost: item.losses,
-          drawn: item.draws,
-        },
-        scores: { against: item.scoresAgainst, for: item.scoresFor },
-      } as NRLStanding;
-    }),
-  } as NRLLadderPage;
+    tables: standings?.standings
+      .filter((item) => {
+        return (
+          item.name !== "AFC" && item.name !== "NFC" && item.name !== "NFL"
+        );
+      })
+      .map((table) => {
+        return {
+          tableName: table.name,
+          standings: table.rows.map((standing) => {
+            return {
+              position: standing.position,
+              played: standing.matches,
+              won: standing.wins,
+              lost: standing.losses,
+              ties: standing.draws,
+              team: {
+                id: standing.team.id,
+                name: shortenTeamNames(standing.team.name),
+              },
+              points: {
+                for: standing.scoresFor,
+                against: standing.scoresAgainst,
+              },
+            } as NFLTeamStanding;
+          }),
+        } as NFLStanding;
+      }),
+  } as NFLLadderPage;
 }
 
-export async function NRLMatchDetails(matchId: number) {
-  const match = await fetchNRLMatchDetails(matchId);
-  const incidents = await fetchNRLMatchIncidents(matchId);
+export async function NFLMatchDetails(matchId: number) {
+  const match = await fetchNFLMatchDetails(matchId);
+  const incidents = await fetchNFLMatchIncidents(matchId);
 
   const matchDetails = match?.event;
   const scoreIncidents = incidents?.incidents
@@ -120,20 +134,34 @@ export async function NRLMatchDetails(matchId: number) {
           },
           scoreBreakdown: [
             {
-              periodName: "1st Half",
+              periodName: "Q1",
               teams: {
                 home: { score: matchDetails.homeScore?.period1 ?? "0" },
                 away: { score: matchDetails.awayScore?.period1 ?? "0" },
               },
             },
             {
-              periodName: "2nd Half",
+              periodName: "Q2",
               teams: {
                 home: { score: matchDetails.homeScore?.period2 ?? "0" },
                 away: { score: matchDetails.awayScore?.period2 ?? "0" },
               },
             },
+            {
+              periodName: "Q3",
+              teams: {
+                home: { score: matchDetails.homeScore?.period3 ?? "0" },
+                away: { score: matchDetails.awayScore?.period3 ?? "0" },
+              },
+            },
+            {
+              periodName: "Q4",
+              teams: {
+                home: { score: matchDetails.homeScore?.period4 ?? "0" },
+                away: { score: matchDetails.awayScore?.period4 ?? "0" },
+              },
+            },
           ],
         },
-  } as NRLMatchPage;
+  } as NFLMatchPage;
 }

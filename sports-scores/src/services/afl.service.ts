@@ -33,7 +33,7 @@ export async function AFLMatches() {
     0,
   );
 
-  if (!lastMatches || !nextMatches) {
+  if (!lastMatches && !nextMatches) {
     return null;
   }
 

@@ -109,6 +109,8 @@ export interface Sofascore_Season {
 
 export interface Sofascore_RoundInfo {
   round: number;
+  name?: string;
+  cupRoundType?: string;
 }
 
 export interface Sofascore_Status {
@@ -222,7 +224,8 @@ export interface Sofascore_Row {
   id: number;
   losses: number;
   draws: number;
-  points: number;
+  points?: number;
+  percentage?: number;
   scoreDiffFormatted: string;
 }
 

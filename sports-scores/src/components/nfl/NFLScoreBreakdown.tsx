@@ -1,19 +1,24 @@
-import { NFLGame } from "@/types/nfl";
+import fallback from "@/../public/vercel.svg";
 import Image from "next/image";
 
+export type NFLScoreBreakdown = {
+  teams: { home: { score: number }; away: { score: number } };
+  periodName: string;
+};
+
 export default function NFLScoreBreakdown({
-  data,
+  scoreData,
   homeLogo,
   awayLogo,
 }: {
-  data: NFLGame;
-  homeLogo: string;
-  awayLogo: string;
+  scoreData: NFLScoreBreakdown[];
+  homeLogo?: string;
+  awayLogo?: string;
 }) {
   let OTFLAG = false;
-  if (data.scores.home.overtime !== null) {
-    OTFLAG = true;
-  }
+  // if (data.scores.home.overtime !== null) {
+  //   OTFLAG = true;
+  // }
   return (
     <table className="m-4 text-center dark:text-neutral-400">
       <thead>
@@ -30,25 +35,41 @@ export default function NFLScoreBreakdown({
       <tbody>
         <tr>
           <td>
-            <Image src={homeLogo} width={15} height={15} alt="Home Logo" />
+            <Image
+              src={homeLogo ?? fallback}
+              width={15}
+              height={15}
+              alt="Home Logo"
+            />
           </td>
-          <td>{data.scores.home.quarter_1}</td>
-          <td>{data.scores.home.quarter_2}</td>
-          <td>{data.scores.home.quarter_3}</td>
-          <td>{data.scores.home.quarter_4}</td>
-          {OTFLAG && <td>{data.scores.home.overtime}</td>}
-          <td>{data.scores.home.total}</td>
+          {scoreData.map((item) => (
+            <td key={item.periodName}>{item.teams.home.score}</td>
+          ))}
+          <td>
+            {scoreData.reduce(
+              (accumulator, current) => accumulator + current.teams.home.score,
+              0,
+            )}
+          </td>
         </tr>
         <tr>
           <td>
-            <Image src={awayLogo} width={15} height={15} alt="Away Logo" />
+            <Image
+              src={awayLogo ?? fallback}
+              width={15}
+              height={15}
+              alt="Away Logo"
+            />
           </td>
-          <td>{data.scores.away.quarter_1}</td>
-          <td>{data.scores.away.quarter_2}</td>
-          <td>{data.scores.away.quarter_3}</td>
-          <td>{data.scores.away.quarter_4}</td>
-          {OTFLAG && <td>{data.scores.away.overtime}</td>}
-          <td>{data.scores.away.total}</td>
+          {scoreData.map((item) => (
+            <td key={item.periodName}>{item.teams.away.score}</td>
+          ))}
+          <td>
+            {scoreData.reduce(
+              (accumulator, current) => accumulator + current.teams.away.score,
+              0,
+            )}
+          </td>
         </tr>
       </tbody>
     </table>
