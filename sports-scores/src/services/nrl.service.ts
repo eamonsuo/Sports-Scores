@@ -6,6 +6,7 @@ import {
   fetchNRLNextMatches,
   fetchNRLStandings,
 } from "@/endpoints/nrl.api";
+import { SPORT } from "@/lib/constants";
 import {
   setMatchSummary,
   shortenTeamNames,
@@ -37,7 +38,7 @@ export async function NRLMatches() {
             ? toShortTimeString(startDate)
             : match.status.description,
         id: match.id,
-        sport: "nrl",
+        sport: SPORT.NRL,
         status: match.status.description,
         venue: "",
         summaryText: setMatchSummary(

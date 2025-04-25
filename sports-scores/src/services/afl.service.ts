@@ -5,6 +5,7 @@ import {
   fetchTournamentNextMatches,
   fetchTournamentStandings,
 } from "@/endpoints/sofascore.api";
+import { SPORT } from "@/lib/constants";
 import {
   setMatchSummary,
   shortenTeamNames,
@@ -52,7 +53,7 @@ export async function AFLMatches() {
             ? toShortTimeString(startDate)
             : match.status.description,
         id: match.id,
-        sport: "afl",
+        sport: SPORT.AFL,
         status: match.status.description,
         venue: "",
         summaryText: setMatchSummary(

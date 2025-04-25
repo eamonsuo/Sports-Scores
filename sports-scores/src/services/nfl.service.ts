@@ -6,6 +6,7 @@ import {
   fetchNFLNextMatches,
   fetchNFLStandings,
 } from "@/endpoints/nfl.api";
+import { SPORT } from "@/lib/constants";
 import {
   setMatchSummary,
   shortenTeamNames,
@@ -37,7 +38,7 @@ export async function NFLMatches() {
             ? toShortTimeString(startDate)
             : match.status.description,
         id: match.id,
-        sport: "nfl",
+        sport: SPORT.NFL,
         status: match.status.description,
         venue: "",
         summaryText: setMatchSummary(
