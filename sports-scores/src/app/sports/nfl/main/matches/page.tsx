@@ -1,25 +1,18 @@
 import FixtureRoundList from "@/components/generic/FixtureRoundList";
 import Placeholder from "@/components/misc/Placeholder";
-import { fetchNFLFixtures, fetchNFLStandings } from "@/endpoints/nfl.api";
-import { CURRENTSEASON } from "@/lib/constants";
-import { mapNFLFixtureFields } from "@/lib/dataMapping";
 import { getCurrentWeek } from "@/lib/projUtils";
+import { NFLMatches } from "@/services/nfl.service";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const fixtures = await fetchNFLFixtures(CURRENTSEASON.NFL);
-  const standings = await fetchNFLStandings(CURRENTSEASON.NFL);
+  const pageData = await NFLMatches();
 
-  if (typeof fixtures === "string") {
-    return <Placeholder>{fixtures}</Placeholder>;
-  }
-  if (typeof standings === "string") {
-    return <Placeholder>{standings}</Placeholder>;
+  if (pageData === null) {
+    return <Placeholder>NO DATA</Placeholder>;
   }
 
-  const mappedFixtures = mapNFLFixtureFields(fixtures, standings);
-  let curRound = getCurrentWeek(mappedFixtures);
+  let curRound = getCurrentWeek(pageData.fixtures);
 
-  return <FixtureRoundList data={mappedFixtures} curRound={curRound} />;
+  return <FixtureRoundList data={pageData.fixtures} curRound={curRound} />;
 }

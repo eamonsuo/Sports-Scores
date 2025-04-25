@@ -2,57 +2,35 @@ import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
 import ScoreChart from "@/components/generic/ScoreChart";
 import Placeholder from "@/components/misc/Placeholder";
 import NFLScoreBreakdown from "@/components/nfl/NFLScoreBreakdown";
-import { fetchNFLGame, fetchNFLGameEvents } from "@/endpoints/nfl.api";
-import { MATCHSTATUSNFL } from "@/lib/constants";
-import { mapNFLFixtureFields } from "@/lib/dataMapping";
+import { NFLMatchDetails } from "@/services/nfl.service";
 
 export default async function Page(props: { params: Promise<{ id: number }> }) {
   const params = await props.params;
-  const rawGame = await fetchNFLGame(params.id);
-  const events = await fetchNFLGameEvents(params.id);
+  const pageData = await NFLMatchDetails(params.id);
 
-  if (typeof rawGame === "string") {
-    return <Placeholder>{rawGame}</Placeholder>;
+  if (pageData === null || pageData.matchDetails === null) {
+    return <Placeholder>NO DATA</Placeholder>;
   }
-
-  let gameStarted =
-    rawGame.game.status.short === MATCHSTATUSNFL.SHORT_NS ? false : true;
-  let scores: { event: string; difference: number }[] = [];
-
-  if (typeof events !== "string") {
-    scores = events.map((item) => {
-      return {
-        event: item.type,
-        difference: item.score.home - item.score.away,
-      };
-    });
-  }
-
-  let game = mapNFLFixtureFields([rawGame])[0];
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto">
+    <div className="flex flex-1 flex-col overflow-y-auto pb-4">
       <MatchDetailsHero
-        homeInfo={game.homeDetails}
-        awayInfo={game.awayDetails}
-        status={game.status}
+        homeInfo={pageData.matchDetails.homeTeam}
+        awayInfo={pageData.matchDetails.awayTeam}
+        status={pageData.matchDetails.status}
       />
-      {gameStarted ? (
-        <>
-          <NFLScoreBreakdown
-            data={rawGame}
-            homeLogo={rawGame.teams.home.logo}
-            awayLogo={rawGame.teams.away.logo}
-          />
-
-          <ScoreChart
-            scoreDifference={scores}
-            homeLogo={rawGame.teams.home.logo}
-            awayLogo={rawGame.teams.away.logo}
-          />
-          {/* <NFLKeyPlayerStats data={""} /> */}
-        </>
-      ) : null}
+      <NFLScoreBreakdown
+        scoreData={pageData.matchDetails.scoreBreakdown}
+        homeLogo={pageData.matchDetails.homeTeam.img}
+        awayLogo={pageData.matchDetails.awayTeam.img}
+      />
+      {pageData.scoreEvents && (
+        <ScoreChart
+          scoreDifference={pageData.scoreEvents}
+          homeLogo={pageData.matchDetails.homeTeam.img}
+          awayLogo={pageData.matchDetails.awayTeam.img}
+        />
+      )}
     </div>
   );
 }

@@ -1,81 +1,97 @@
-import { handleAPIErrors } from "@/lib/projUtils";
-import { APISportsStatusDetails } from "@/types/misc";
-import { NFLGame, NFLGameEvents, NFLResponse, NFLStanding } from "@/types/nfl";
+import {
+  NFL_AmericanFootballApi_FixturePage_Response,
+  NFL_AmericanFootballApi_LeagueTotalStandings_Response,
+  NFL_AmericanFootballApi_Match_Response,
+  NFL_AmericanFootballApi_MatchIncidents_Response,
+} from "@/types/nfl";
 
 const reqHeaders = new Headers();
-reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
+reqHeaders.append("x-rapidapi-key", `${process.env.RapidAPIKey}`);
 
-const fetchOptions = {
-  headers: reqHeaders,
-  // next: { revalidate: REVALIDATE },
-};
+//sesaon 24-25 - 60592
+//unique tourn - 9464
+//tourn regular - 41244
 
-export async function fetchNFLFixtures(season: number) {
-  const rawFixtures = await fetch(
-    `${process.env.NFL_BASEURL}/games?season=${season}&league=1`,
-    fetchOptions,
+export async function fetchNFLLastMatches(
+  season: number,
+  pageNumber: number = 0,
+) {
+  let seasonId = season == 2025 ? 60592 : 60592; //24-25 only atm
+  const rawMatches = await fetch(
+    `${process.env.NFL_BASEURL}/american-football/tournament/9464/season/${seasonId}/matches/last/${pageNumber}`,
+    {
+      headers: reqHeaders,
+    },
   );
 
-  let fixtures = (await rawFixtures.json()) as NFLResponse<NFLGame>;
-  if (fixtures.response.length === 0) {
-    return handleAPIErrors(fixtures);
+  if (!rawMatches.ok || rawMatches.status === 204) {
+    return null;
   }
 
-  return fixtures.response;
+  return (await rawMatches.json()) as NFL_AmericanFootballApi_FixturePage_Response;
 }
 
-export async function fetchNFLGame(gameId: number) {
-  const rawGame = await fetch(
-    `${process.env.NFL_BASEURL}/games?id=${gameId}`,
-    fetchOptions,
+export async function fetchNFLNextMatches(
+  season: number,
+  pageNumber: number = 0,
+) {
+  let seasonId = season == 2025 ? 60592 : 60592;
+  const rawMatches = await fetch(
+    `${process.env.NFL_BASEURL}/american-football/tournament/9464/season/${seasonId}/matches/next/${pageNumber}`,
+    {
+      headers: reqHeaders,
+    },
   );
 
-  let game = (await rawGame.json()) as NFLResponse<NFLGame>;
-  if (game.response.length === 0) {
-    return handleAPIErrors(game);
+  if (!rawMatches.ok || rawMatches.status === 204) {
+    return null;
   }
 
-  return game.response[0];
-}
-
-export async function fetchNFLStatus() {
-  const rawStatus = await fetch(
-    `${process.env.NFL_BASEURL}/status`,
-    fetchOptions,
-  );
-
-  let status = await rawStatus.json();
-  if (status.response.length === 0) {
-    return handleAPIErrors(status);
-  }
-
-  return status.response as APISportsStatusDetails;
+  return (await rawMatches.json()) as NFL_AmericanFootballApi_FixturePage_Response;
 }
 
 export async function fetchNFLStandings(season: number) {
+  let seasonId = season == 2025 ? 60592 : 60592;
   const rawStandings = await fetch(
-    `${process.env.NFL_BASEURL}/standings?season=${season}&league=1`,
-    fetchOptions,
+    `${process.env.NFL_BASEURL}/american-football/tournament/9464/season/${seasonId}/standings/total`,
+    {
+      headers: reqHeaders,
+    },
   );
 
-  let standings = (await rawStandings.json()) as NFLResponse<NFLStanding>;
-  if (standings.response.length === 0) {
-    return handleAPIErrors(standings);
+  if (!rawStandings.ok) {
+    return null;
   }
 
-  return standings.response;
+  return (await rawStandings.json()) as NFL_AmericanFootballApi_LeagueTotalStandings_Response;
 }
 
-export async function fetchNFLGameEvents(gameId: number) {
-  const rawEvents = await fetch(
-    `${process.env.NFL_BASEURL}/games/events?id=${gameId}`,
-    fetchOptions,
+export async function fetchNFLMatchDetails(matchId: number) {
+  const rawMatch = await fetch(
+    `${process.env.NFL_BASEURL}/american-football/match/${matchId}`,
+    {
+      headers: reqHeaders,
+    },
   );
 
-  let events = (await rawEvents.json()) as NFLResponse<NFLGameEvents>;
-  if (events.response.length === 0) {
-    return handleAPIErrors(events);
+  if (!rawMatch.ok) {
+    return null;
   }
 
-  return events.response;
+  return (await rawMatch.json()) as NFL_AmericanFootballApi_Match_Response;
+}
+
+export async function fetchNFLMatchIncidents(matchId: number) {
+  const rawMatch = await fetch(
+    `${process.env.NFL_BASEURL}/american-football/match/${matchId}/incidents`,
+    {
+      headers: reqHeaders,
+    },
+  );
+
+  if (!rawMatch.ok || rawMatch.status === 204) {
+    return null;
+  }
+
+  return (await rawMatch.json()) as NFL_AmericanFootballApi_MatchIncidents_Response;
 }

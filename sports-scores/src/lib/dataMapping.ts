@@ -15,8 +15,7 @@ import {
   GolfSchedulePage,
 } from "@/types/golf";
 import { MatchStatus, MatchSummary } from "@/types/misc";
-import { NFLGame, NFLStanding } from "@/types/nfl";
-import { MATCHSTATUSAFL, MATCHSTATUSNFL, SPORT } from "./constants";
+import { MATCHSTATUSAFL, SPORT } from "./constants";
 import {
   getLocalTime,
   resolveGolfPlayersCountry,
@@ -85,53 +84,6 @@ export function mapBaseballFixtureFields(matches: BaseballGame[]) {
           name: item.teams.away.name,
         },
         roundLabel: `Round ${item.week}`,
-      }) as MatchSummary,
-  );
-}
-
-export function mapNFLFixtureFields(
-  matches: NFLGame[],
-  standings?: NFLStanding[],
-) {
-  return matches.map(
-    (item: NFLGame) =>
-      ({
-        id: item.game.id,
-        startDate: new Date(
-          item.game.date.date + "T" + item.game.date.time + ":00+00:00",
-        ), //Ensures startTime is in UTC
-        sport: SPORT.NFL,
-        venue: item.game.venue.name ?? "",
-        status: "COMPLETED",
-        summaryText: setMatchSummary(
-          item.game.status.short,
-          getLocalTime(item.game.date.time),
-          item.teams.home.name ?? "",
-          item.scores.home.total ?? 0,
-          item.teams.away.name ?? "",
-          item.scores.away.total ?? 0,
-        ),
-        timer:
-          item.game.status.short === MATCHSTATUSNFL.SHORT_NS
-            ? getLocalTime(item.game.date.time)
-            : item.game.status.short,
-        homeDetails: {
-          img: item.teams.home.logo,
-          score: (item.scores.home.total ?? 0).toString(),
-          name: shortenTeamNames(item.teams.home.name ?? ""),
-          winDrawLoss: standings
-            ? `${standings.find((x) => x.team.id === item.teams.home.id)?.won}-${standings.find((x) => x.team.id === item.teams.home.id)?.ties}-${standings.find((x) => x.team.id === item.teams.home.id)?.lost}`
-            : "",
-        },
-        awayDetails: {
-          img: item.teams.away.logo,
-          score: (item.scores.away.total ?? 0).toString(),
-          name: shortenTeamNames(item.teams.away.name ?? ""),
-          winDrawLoss: standings
-            ? `${standings.find((x) => x.team.id === item.teams.away.id)?.won}-${standings.find((x) => x.team.id === item.teams.away.id)?.ties}-${standings.find((x) => x.team.id === item.teams.away.id)?.lost}`
-            : "",
-        },
-        roundLabel: `${item.game.stage === "Pre Season" ? "Pre - " : ""}${item.game.week === "Hall of Fame Weekend" ? "HOF Weekend" : item.game.week}`,
       }) as MatchSummary,
   );
 }
