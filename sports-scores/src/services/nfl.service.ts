@@ -112,6 +112,61 @@ export async function NFLMatchDetails(matchId: number) {
         .toReversed()
     : null;
 
+  let scoreDetails = !matchDetails
+    ? null
+    : {
+        status: matchDetails?.status.description,
+        homeTeam: {
+          name: shortenTeamNames(matchDetails.homeTeam.name),
+          score: matchDetails?.homeScore?.current?.toString() ?? "0",
+        },
+        awayTeam: {
+          name: shortenTeamNames(matchDetails?.awayTeam.name),
+          score: matchDetails?.awayScore?.current?.toString() ?? "0",
+        },
+
+        scoreBreakdown: [
+          {
+            periodName: "Q1",
+            teams: {
+              home: { score: matchDetails.homeScore?.period1 ?? "0" },
+              away: { score: matchDetails.awayScore?.period1 ?? "0" },
+            },
+          },
+          {
+            periodName: "Q2",
+            teams: {
+              home: { score: matchDetails.homeScore?.period2 ?? "0" },
+              away: { score: matchDetails.awayScore?.period2 ?? "0" },
+            },
+          },
+          {
+            periodName: "Q3",
+            teams: {
+              home: { score: matchDetails.homeScore?.period3 ?? "0" },
+              away: { score: matchDetails.awayScore?.period3 ?? "0" },
+            },
+          },
+          {
+            periodName: "Q4",
+            teams: {
+              home: { score: matchDetails.homeScore?.period4 ?? "0" },
+              away: { score: matchDetails.awayScore?.period4 ?? "0" },
+            },
+          },
+        ],
+      };
+
+  if (scoreDetails && matchDetails?.homeScore.overtime) {
+    scoreDetails.scoreBreakdown.push({
+      periodName: "OT",
+      teams: {
+        home: { score: matchDetails.homeScore?.overtime ?? "0" },
+        away: { score: matchDetails.awayScore?.overtime ?? "0" },
+      },
+    });
+  }
+
   return {
     scoreEvents: !scoreIncidents
       ? null
@@ -121,48 +176,6 @@ export async function NFLMatchDetails(matchId: number) {
             difference: (item.homeScore ?? 0) - (item.awayScore ?? 0),
           };
         }),
-    matchDetails: !matchDetails
-      ? null
-      : {
-          status: matchDetails?.status.description,
-          homeTeam: {
-            name: shortenTeamNames(matchDetails.homeTeam.name),
-            score: matchDetails?.homeScore?.current?.toString() ?? "0",
-          },
-          awayTeam: {
-            name: shortenTeamNames(matchDetails?.awayTeam.name),
-            score: matchDetails?.awayScore?.current?.toString() ?? "0",
-          },
-          scoreBreakdown: [
-            {
-              periodName: "Q1",
-              teams: {
-                home: { score: matchDetails.homeScore?.period1 ?? "0" },
-                away: { score: matchDetails.awayScore?.period1 ?? "0" },
-              },
-            },
-            {
-              periodName: "Q2",
-              teams: {
-                home: { score: matchDetails.homeScore?.period2 ?? "0" },
-                away: { score: matchDetails.awayScore?.period2 ?? "0" },
-              },
-            },
-            {
-              periodName: "Q3",
-              teams: {
-                home: { score: matchDetails.homeScore?.period3 ?? "0" },
-                away: { score: matchDetails.awayScore?.period3 ?? "0" },
-              },
-            },
-            {
-              periodName: "Q4",
-              teams: {
-                home: { score: matchDetails.homeScore?.period4 ?? "0" },
-                away: { score: matchDetails.awayScore?.period4 ?? "0" },
-              },
-            },
-          ],
-        },
+    matchDetails: scoreDetails,
   } as NFLMatchPage;
 }

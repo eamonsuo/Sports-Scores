@@ -57,6 +57,7 @@ export function setMatchSummary(
     case MATCHSTATUSAFL.SHORT_FT:
     case MATCHSTATUSNFL.SHORT_FT:
     case MATCHSTATUSNFL.SHORT_AOT:
+    case "finished":
       return calculateMatchResult(
         homeName,
         homeScore,

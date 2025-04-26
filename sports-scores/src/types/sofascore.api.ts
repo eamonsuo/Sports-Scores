@@ -151,6 +151,7 @@ export interface Sofascore_Score {
   period2: number;
   period3?: number;
   period4?: number;
+  overtime?: number;
   normaltime: number;
 }
 

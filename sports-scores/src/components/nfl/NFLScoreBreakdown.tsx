@@ -16,9 +16,11 @@ export default function NFLScoreBreakdown({
   awayLogo?: string;
 }) {
   let OTFLAG = false;
-  // if (data.scores.home.overtime !== null) {
-  //   OTFLAG = true;
-  // }
+  if (scoreData.length > 4) {
+    OTFLAG = true;
+  } else {
+    scoreData = scoreData.slice(0, 4);
+  }
   return (
     <table className="m-4 text-center dark:text-neutral-400">
       <thead>
