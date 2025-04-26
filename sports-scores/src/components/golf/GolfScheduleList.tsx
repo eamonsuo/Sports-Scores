@@ -19,7 +19,8 @@ export default function GolfScheduleList({ data }: { data: GolfSchedule[] }) {
   return (
     <div className="flex-1 overflow-y-auto px-4">
       {data.map((item: GolfSchedule) => {
-        let item_date = item.startDate;
+        let item_date = item.endDate;
+        let item_end_date = item.endDate;
         displayDate = false;
         if (sectionDate.toDateString() !== item_date.toDateString()) {
           sectionDate = item_date;
