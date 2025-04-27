@@ -7,7 +7,7 @@ export default function SessionSummaryCard({
   status,
 }: {
   href: string;
-  img: string;
+  img?: string;
   sessionType: string;
   status: string;
 }) {

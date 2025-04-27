@@ -1,5 +1,315 @@
+import { F1DriverStandings } from "@/components/f1/F1DriverStandings";
+import { F1TeamStandings } from "@/components/f1/F1TeamStandings";
 import { APISportsResponse } from "./misc";
 
+// Page Types
+export interface F1RacesPage {
+  sessions: SessionSummary[];
+}
+
+export interface F1SessionPage {}
+
+export interface F1DriverStandingsPage {
+  standings: F1DriverStandings[];
+}
+
+export interface F1ConstructorStandingsPage {
+  standings: F1TeamStandings[];
+}
+
+// Jolpica API Types
+export interface F1_Jolpica_Races_Response {
+  MRData: Jolpica_MRData_Races;
+}
+
+export interface F1_Jolpica_DriverStandings_Response {
+  MRData: Jolpica_MRData_Standings;
+}
+
+export interface F1_Jolpica_ConstructorStandings_Response {
+  MRData: Jolpica_MRData_ConstructorStandings;
+}
+
+export interface F1_Jolpica_RaceResults_Response {
+  MRData: Jolpica_MRData_RacesResults;
+}
+
+export interface F1_Jolpica_QualifyingResults_Response {
+  MRData: Jolpica_MRData_QualifyingResults;
+}
+
+export interface F1_Jolpica_SprintResults_Response {
+  MRData: Jolpica_MRData_SprintResults;
+}
+
+export interface Jolpica_MRData_SprintResults {
+  xmlns: string;
+  series: string;
+  url: string;
+  limit: string;
+  offset: string;
+  total: string;
+  RaceTable: Jolpica_RaceTable_SprintResults;
+}
+
+export interface Jolpica_RaceTable_SprintResults {
+  season: string;
+  Races: Jolpica_Race_SprintResults[];
+}
+
+export interface Jolpica_Race_SprintResults {
+  season: string;
+  round: string;
+  url: string;
+  raceName: string;
+  Circuit: Jolpica_Circuit;
+  date: string;
+  time: string;
+  SprintResults: Jolpica_SprintResult[];
+}
+
+export interface Jolpica_SprintResult {
+  number: string;
+  position: string;
+  positionText: string;
+  points: string;
+  Driver: Jolpica_Driver;
+  Constructor: Jolpica_Constructor;
+  grid: string;
+  laps: string;
+  status: string;
+  Time?: Jolpica_Time;
+  FastestLap?: Jolpica_FastestLap;
+}
+
+export interface Jolpica_Time {
+  millis?: string;
+  time: string;
+}
+
+export interface Jolpica_FastestLap {
+  rank: string;
+  lap: string;
+  Time: Jolpica_Time;
+}
+
+export interface Jolpica_MRData_QualifyingResults {
+  xmlns: string;
+  series: string;
+  url: string;
+  limit: string;
+  offset: string;
+  total: string;
+  RaceTable: Jolpica_RaceTable_QualifyingResults;
+}
+
+export interface Jolpica_RaceTable_QualifyingResults {
+  season: string;
+  Races: Jolpica_Race_QualifyingResults[];
+}
+
+export interface Jolpica_Race_QualifyingResults {
+  season: string;
+  round: string;
+  url: string;
+  raceName: string;
+  Circuit: Jolpica_Circuit;
+  date: string;
+  time: string;
+  QualifyingResults: Jolpica_QualifyingResult[];
+}
+
+export interface Jolpica_QualifyingResult {
+  number: string;
+  position: string;
+  Driver: Jolpica_Driver;
+  Constructor: Jolpica_Constructor;
+  Q1?: string;
+  Q2?: string;
+  Q3?: string;
+}
+
+export interface Jolpica_MRData_RacesResults {
+  xmlns: string;
+  series: string;
+  url: string;
+  limit: string;
+  offset: string;
+  total: string;
+  RaceTable: Jolpica_RaceTableResults;
+}
+
+export interface Jolpica_RaceTableResults {
+  season: string;
+  Races: Jolpica_RaceResult[];
+}
+
+export interface Jolpica_RaceResult {
+  season: string;
+  round: string;
+  url: string;
+  raceName: string;
+  Circuit: Jolpica_Circuit;
+  date: string;
+  time: string;
+  Results: Jolpica_Result[];
+}
+
+export interface Jolpica_Result {
+  number: string;
+  position: string;
+  positionText: string;
+  points: string;
+  Driver: Jolpica_Driver;
+  Constructor: Jolpica_Constructor;
+  grid: string;
+  laps: string;
+  status: string;
+  Time?: Jolpica_Time;
+  FastestLap?: Jolpica_FastestLap;
+}
+
+export interface Jolpica_Driver {
+  driverId: string;
+  permanentNumber: string;
+  code: string;
+  url: string;
+  givenName: string;
+  familyName: string;
+  dateOfBirth: string;
+  nationality: string;
+}
+
+export interface Jolpica_Time {
+  millis?: string;
+  time: string;
+}
+
+export interface Jolpica_FastestLap {
+  rank: string;
+  lap: string;
+  Time: Jolpica_Time;
+}
+
+export interface Jolpica_MRData_ConstructorStandings {
+  xmlns: string;
+  series: string;
+  url: string;
+  limit: string;
+  offset: string;
+  total: string;
+  StandingsTable: Jolpica_ConstructorStandingsTable;
+}
+
+export interface Jolpica_ConstructorStandingsTable {
+  season: string;
+  round: string;
+  StandingsLists: Jolpica_ConstructorStandingsList[];
+}
+
+export interface Jolpica_ConstructorStandingsList {
+  season: string;
+  round: string;
+  ConstructorStandings: Jolpica_ConstructorStanding[];
+}
+
+export interface Jolpica_ConstructorStanding {
+  position: string;
+  positionText: string;
+  points: string;
+  wins: string;
+  Constructor: Jolpica_Constructor; // Reusing the existing `Jolpica_Constructor` type from f1.ts
+}
+
+export interface Jolpica_MRData_Standings {
+  xmlns: string;
+  series: string;
+  url: string;
+  limit: string;
+  offset: string;
+  total: string;
+  StandingsTable: Jolpica_StandingsTable;
+}
+
+export interface Jolpica_StandingsTable {
+  season: string;
+  round: string;
+  StandingsLists: Jolpica_StandingsList[];
+}
+
+export interface Jolpica_StandingsList {
+  season: string;
+  round: string;
+  DriverStandings: Jolpica_DriverStanding[];
+}
+
+export interface Jolpica_DriverStanding {
+  position: string;
+  positionText: string;
+  points: string;
+  wins: string;
+  Driver: Jolpica_Driver; // Reusing the existing `Driver` type from f1.ts
+  Constructors: Jolpica_Constructor[];
+}
+
+export interface Jolpica_Constructor {
+  constructorId: string;
+  url: string;
+  name: string;
+  nationality: string;
+}
+
+export interface Jolpica_MRData_Races {
+  xmlns: string;
+  series: string;
+  url: string;
+  limit: string;
+  offset: string;
+  total: string;
+  RaceTable: Jolpica_RaceTable;
+}
+
+export interface Jolpica_RaceTable {
+  season: string;
+  Races: Jolpica_Race[];
+}
+
+export interface Jolpica_Race {
+  season: string;
+  round: string;
+  url: string;
+  raceName: string;
+  Circuit: Jolpica_Circuit;
+  date: string;
+  time: string;
+  FirstPractice?: Jolpica_Session;
+  SecondPractice?: Jolpica_Session;
+  ThirdPractice?: Jolpica_Session;
+  Qualifying?: Jolpica_Session;
+  Sprint?: Jolpica_Session;
+  SprintQualifying?: Jolpica_Session;
+}
+
+export interface Jolpica_Circuit {
+  circuitId: string;
+  url: string;
+  circuitName: string;
+  Location: Jolpica_Location;
+}
+
+export interface Jolpica_Location {
+  lat: string;
+  long: string;
+  locality: string;
+  country: string;
+}
+
+export interface Jolpica_Session {
+  date: string;
+  time: string;
+}
+
+//Old API Response
 export interface F1Response<T> extends APISportsResponse {
   response: T[];
 }
@@ -29,23 +339,6 @@ export type F1SessionResults = {
   grid: string;
   pits: number;
   gap: string | null;
-};
-
-export type F1TeamStandings = {
-  position: number;
-  team: Team;
-  points: number;
-  season: number;
-};
-
-export type F1DriverStandings = {
-  position: number;
-  driver: Driver;
-  team: Team;
-  points: number;
-  wins: number;
-  behind: number | null;
-  season: number;
 };
 
 type Competition = {
@@ -85,11 +378,18 @@ type Team = {
 };
 
 export type SessionSummary = {
-  id: number;
-  name: string;
-  logo: string;
+  round: number;
+  grandPrixName: string;
+  logo?: string;
   status: string;
-  type: string;
-  startDate: string;
+  sessionType:
+    | "Practice 1"
+    | "Practice 2"
+    | "Practice 3"
+    | "Qualifying"
+    | "Sprint"
+    | "Sprint Qualifying"
+    | "Race";
+  startDate: Date;
   sport: string;
 };

@@ -1,12 +1,11 @@
-import { handleAPIErrors } from "@/lib/projUtils";
 import {
-  F1DriverStandings,
-  F1Response,
-  F1Session,
-  F1SessionResults,
-  F1TeamStandings,
+  F1_Jolpica_ConstructorStandings_Response,
+  F1_Jolpica_DriverStandings_Response,
+  F1_Jolpica_QualifyingResults_Response,
+  F1_Jolpica_RaceResults_Response,
+  F1_Jolpica_Races_Response,
+  F1_Jolpica_SprintResults_Response,
 } from "@/types/f1";
-import { APISportsStatusDetails } from "@/types/misc";
 
 const reqHeaders = new Headers();
 reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
@@ -15,89 +14,98 @@ const fetchOptions = {
   headers: reqHeaders,
 };
 
-export async function fetchF1Status() {
-  const rawStatus = await fetch(
-    `${process.env.F1_BASEURL}/status`,
-    fetchOptions,
+export async function fetchF1Events(season: number) {
+  const rawEvents = await fetch(
+    `${process.env.F1_JOLPICA_BASEURL}/f1/${season}/races`,
+    // fetchOptions,
   );
 
-  let status = await rawStatus.json();
-  if (status.response.length === 0) {
-    return handleAPIErrors(status);
+  if (!rawEvents.ok) {
+    return null;
   }
 
-  return status.response as APISportsStatusDetails;
+  const jsonResponse = (await rawEvents.json()) as F1_Jolpica_Races_Response;
+
+  return jsonResponse.MRData.RaceTable.Races;
 }
 
-export async function fetchAllF1Sessions(
-  season: number,
-  timezone: string = "UTC",
-) {
-  const rawSessions = await fetch(
-    `${process.env.F1_BASEURL}/races?timezone=${timezone}&season=${season}`,
-    fetchOptions,
+export async function fetchF1RaceResult(season: number, round: number) {
+  const rawSession = await fetch(
+    `${process.env.F1_JOLPICA_BASEURL}/f1/${season}/${round}/results/`,
+    // fetchOptions,
   );
 
-  let sessions = (await rawSessions.json()) as F1Response<F1Session>;
-  if (sessions.response.length === 0) {
-    return handleAPIErrors(sessions);
+  if (!rawSession.ok) {
+    return null;
   }
 
-  return sessions.response;
+  const jsonResponse =
+    (await rawSession.json()) as F1_Jolpica_RaceResults_Response;
+
+  return jsonResponse.MRData.RaceTable.Races;
 }
 
-export async function fetchF1Races(season: number, timezone: string = "UTC") {
-  const rawRaces = await fetch(
-    `${process.env.F1_BASEURL}/races?timezone=${timezone}&season=${season}&type=Race`,
-    fetchOptions,
+export async function fetchF1QualifyingResult(season: number, round: number) {
+  const rawSession = await fetch(
+    `${process.env.F1_JOLPICA_BASEURL}/f1/${season}/${round}/qualifying/`,
+    // fetchOptions,
   );
 
-  let races = (await rawRaces.json()) as F1Response<F1Session>;
-  if (races.response.length === 0) {
-    return handleAPIErrors(races);
+  if (!rawSession.ok) {
+    return null;
   }
 
-  return races.response;
+  const jsonResponse =
+    (await rawSession.json()) as F1_Jolpica_QualifyingResults_Response;
+
+  return jsonResponse.MRData.RaceTable.Races;
 }
 
-export async function fetchF1SessionResult(raceId: number) {
-  const rawSessions = await fetch(
-    `${process.env.F1_BASEURL}/rankings/races?race=${raceId}`,
-    fetchOptions,
+export async function fetchF1SprintResult(season: number, round: number) {
+  const rawSession = await fetch(
+    `${process.env.F1_JOLPICA_BASEURL}/f1/${season}/${round}/sprint/`,
+    // fetchOptions,
   );
 
-  let results = (await rawSessions.json()) as F1Response<F1SessionResults>;
-  if (results.response.length === 0) {
-    return handleAPIErrors(results);
+  if (!rawSession.ok) {
+    return null;
   }
 
-  return results.response;
+  const jsonResponse =
+    (await rawSession.json()) as F1_Jolpica_SprintResults_Response;
+
+  return jsonResponse.MRData.RaceTable.Races;
 }
 
 export async function fetchF1DriverStandings(season: number) {
   const rawStandings = await fetch(
-    `${process.env.F1_BASEURL}/rankings/drivers?season=${season}`,
-    fetchOptions,
+    `${process.env.F1_JOLPICA_BASEURL}/f1/${season}/driverstandings`,
+    // fetchOptions,
   );
 
-  let standings = (await rawStandings.json()) as F1Response<F1DriverStandings>;
-  if (standings.response.length === 0) {
-    return handleAPIErrors(standings);
+  if (!rawStandings.ok) {
+    return null;
   }
 
-  return standings.response;
+  const jsonResponse =
+    (await rawStandings.json()) as F1_Jolpica_DriverStandings_Response;
+
+  return jsonResponse.MRData.StandingsTable.StandingsLists[0].DriverStandings;
 }
 
-export async function fetchF1TeamStandings(season: number) {
+export async function fetchF1ConstructorStandings(season: number) {
   const rawStandings = await fetch(
-    `${process.env.F1_BASEURL}/rankings/teams?season=${season}`,
-    fetchOptions,
+    `${process.env.F1_JOLPICA_BASEURL}/f1/${season}/constructorstandings`,
+    // fetchOptions,
   );
 
-  let standings = (await rawStandings.json()) as F1Response<F1TeamStandings>;
-  if (standings.response.length === 0) {
-    return handleAPIErrors(standings);
+  if (!rawStandings.ok) {
+    return null;
   }
 
-  return standings.response;
+  const jsonResponse =
+    (await rawStandings.json()) as F1_Jolpica_ConstructorStandings_Response;
+
+  return jsonResponse.MRData.StandingsTable.StandingsLists[0]
+    .ConstructorStandings;
 }

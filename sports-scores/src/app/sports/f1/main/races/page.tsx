@@ -1,21 +1,18 @@
 import RaceList from "@/components/f1/RaceList";
 import Placeholder from "@/components/misc/Placeholder";
-import { fetchAllF1Sessions } from "@/endpoints/f1.api";
-import { mapF1SessionFields } from "@/lib/dataMapping";
+import { f1EventSchedule } from "@/services/f1.service";
 import { SessionSummary } from "@/types/f1";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const races = await fetchAllF1Sessions(2024);
+  const races = await f1EventSchedule(2025);
 
-  if (typeof races === "string") {
-    return <Placeholder>{races}</Placeholder>;
+  if (races === null) {
+    return <Placeholder>NO DATA</Placeholder>;
   }
 
-  const mappedraces = mapF1SessionFields(races).sort(compareF1Sessions);
-
-  return <RaceList data={mappedraces} />;
+  return <RaceList data={races.sessions} />;
 }
 
 function compareF1Sessions(a: SessionSummary, b: SessionSummary) {

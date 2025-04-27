@@ -1,15 +1,14 @@
 import F1DriverStandings from "@/components/f1/F1DriverStandings";
 import Placeholder from "@/components/misc/Placeholder";
-import { fetchF1DriverStandings } from "@/endpoints/f1.api";
+import { f1DriverStandings } from "@/services/f1.service";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const standings = await fetchF1DriverStandings(2024);
+  const standings = await f1DriverStandings(2025);
 
-  if (typeof standings === "string") {
-    return <Placeholder>{standings}</Placeholder>;
+  if (standings === null) {
+    return <Placeholder>NO DATA</Placeholder>;
   }
-
-  return <F1DriverStandings data={standings} />;
+  return <F1DriverStandings data={standings.standings} />;
 }

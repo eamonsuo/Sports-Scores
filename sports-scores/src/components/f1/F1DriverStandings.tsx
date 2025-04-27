@@ -1,4 +1,9 @@
-import { F1DriverStandings } from "@/types/f1";
+export type F1DriverStandings = {
+  position: number;
+  driver: { id: number; name: string; img?: string };
+  points: number;
+  wins?: number;
+};
 
 export default function F1DriverStandingsTable({
   data,

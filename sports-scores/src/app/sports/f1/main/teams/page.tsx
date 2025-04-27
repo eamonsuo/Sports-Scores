@@ -1,15 +1,15 @@
 import F1TeamStandings from "@/components/f1/F1TeamStandings";
 import Placeholder from "@/components/misc/Placeholder";
-import { fetchF1TeamStandings } from "@/endpoints/f1.api";
+import { f1ConstructorStandings } from "@/services/f1.service";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const standings = await fetchF1TeamStandings(2024);
+  const standings = await f1ConstructorStandings(2025);
 
-  if (typeof standings === "string") {
-    return <Placeholder>{standings}</Placeholder>;
+  if (standings === null) {
+    return <Placeholder>NO DATA</Placeholder>;
   }
 
-  return <F1TeamStandings data={standings} />;
+  return <F1TeamStandings data={standings.standings} />;
 }
