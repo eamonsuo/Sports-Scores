@@ -1,4 +1,14 @@
-import { F1SessionResults } from "@/types/f1";
+export type F1SessionResults = {
+  driver: { id: number; name: string };
+  team: { name: string };
+  position: number;
+  time: string;
+  laps?: number;
+  grid?: string;
+  pits?: number;
+  gap?: string;
+  points?: number;
+};
 
 export default function F1SessionResultsTable({
   data,
@@ -24,7 +34,7 @@ export default function F1SessionResultsTable({
               <td>{item.driver.name}</td>
               <td>{item.grid}</td>
               <td>{item.time}</td>
-              <td>-</td>
+              <td>{item.points ?? "-"}</td>
             </tr>
           ))}
         </tbody>
