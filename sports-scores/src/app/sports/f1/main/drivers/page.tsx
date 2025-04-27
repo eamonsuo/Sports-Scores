@@ -10,5 +10,6 @@ export default async function Page() {
   if (standings === null) {
     return <Placeholder>NO DATA</Placeholder>;
   }
+
   return <F1DriverStandings data={standings.standings} />;
 }

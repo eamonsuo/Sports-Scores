@@ -16,7 +16,7 @@ const fetchOptions = {
 
 export async function fetchF1Events(season: number) {
   const rawEvents = await fetch(
-    `${process.env.F1_JOLPICA_BASEURL}/f1/${season}/races`,
+    `${process.env.F1_BASEURL}/f1/${season}/races`,
     // fetchOptions,
   );
 
@@ -31,7 +31,7 @@ export async function fetchF1Events(season: number) {
 
 export async function fetchF1RaceResult(season: number, round: number) {
   const rawSession = await fetch(
-    `${process.env.F1_JOLPICA_BASEURL}/f1/${season}/${round}/results/`,
+    `${process.env.F1_BASEURL}/f1/${season}/${round}/results/`,
     // fetchOptions,
   );
 
@@ -47,7 +47,7 @@ export async function fetchF1RaceResult(season: number, round: number) {
 
 export async function fetchF1QualifyingResult(season: number, round: number) {
   const rawSession = await fetch(
-    `${process.env.F1_JOLPICA_BASEURL}/f1/${season}/${round}/qualifying/`,
+    `${process.env.F1_BASEURL}/f1/${season}/${round}/qualifying/`,
     // fetchOptions,
   );
 
@@ -63,7 +63,7 @@ export async function fetchF1QualifyingResult(season: number, round: number) {
 
 export async function fetchF1SprintResult(season: number, round: number) {
   const rawSession = await fetch(
-    `${process.env.F1_JOLPICA_BASEURL}/f1/${season}/${round}/sprint/`,
+    `${process.env.F1_BASEURL}/f1/${season}/${round}/sprint/`,
     // fetchOptions,
   );
 
@@ -79,7 +79,7 @@ export async function fetchF1SprintResult(season: number, round: number) {
 
 export async function fetchF1DriverStandings(season: number) {
   const rawStandings = await fetch(
-    `${process.env.F1_JOLPICA_BASEURL}/f1/${season}/driverstandings`,
+    `${process.env.F1_BASEURL}/f1/${season}/driverstandings`,
     // fetchOptions,
   );
 
@@ -95,7 +95,7 @@ export async function fetchF1DriverStandings(season: number) {
 
 export async function fetchF1ConstructorStandings(season: number) {
   const rawStandings = await fetch(
-    `${process.env.F1_JOLPICA_BASEURL}/f1/${season}/constructorstandings`,
+    `${process.env.F1_BASEURL}/f1/${season}/constructorstandings`,
     // fetchOptions,
   );
 

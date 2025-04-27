@@ -1,4 +1,5 @@
 import { F1DriverStandings } from "@/components/f1/F1DriverStandings";
+import { F1SessionResults } from "@/components/f1/F1SessionStandings";
 import { F1TeamStandings } from "@/components/f1/F1TeamStandings";
 import { APISportsResponse } from "./misc";
 
@@ -7,7 +8,10 @@ export interface F1RacesPage {
   sessions: SessionSummary[];
 }
 
-export interface F1SessionPage {}
+export interface F1SessionPage {
+  results: F1SessionResults[];
+  sessionName: string;
+}
 
 export interface F1DriverStandingsPage {
   standings: F1DriverStandings[];
@@ -327,18 +331,6 @@ export type F1Session = {
   date: string;
   weather: any;
   status: string;
-};
-
-export type F1SessionResults = {
-  race: { id: number };
-  driver: Driver;
-  team: Team;
-  position: number;
-  time: string;
-  laps: number;
-  grid: string;
-  pits: number;
-  gap: string | null;
 };
 
 type Competition = {

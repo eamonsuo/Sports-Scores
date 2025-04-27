@@ -63,7 +63,7 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
             )}
 
             <SessionSummaryCard
-              href={`/sports/${item.sport}/${item.round}`}
+              href={`/sports/${item.sport}/${item.round}/${item.sessionType}`}
               sessionType={item.sessionType}
               img={item.logo}
               status={item.status}
