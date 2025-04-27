@@ -42,7 +42,9 @@ export async function fetchF1RaceResult(season: number, round: number) {
   const jsonResponse =
     (await rawSession.json()) as F1_Jolpica_RaceResults_Response;
 
-  return jsonResponse.MRData.RaceTable.Races;
+  return jsonResponse.MRData.RaceTable.Races.length > 0
+    ? jsonResponse.MRData.RaceTable.Races
+    : null;
 }
 
 export async function fetchF1QualifyingResult(season: number, round: number) {
@@ -58,7 +60,9 @@ export async function fetchF1QualifyingResult(season: number, round: number) {
   const jsonResponse =
     (await rawSession.json()) as F1_Jolpica_QualifyingResults_Response;
 
-  return jsonResponse.MRData.RaceTable.Races;
+  return jsonResponse.MRData.RaceTable.Races.length > 0
+    ? jsonResponse.MRData.RaceTable.Races
+    : null;
 }
 
 export async function fetchF1SprintResult(season: number, round: number) {
@@ -74,7 +78,9 @@ export async function fetchF1SprintResult(season: number, round: number) {
   const jsonResponse =
     (await rawSession.json()) as F1_Jolpica_SprintResults_Response;
 
-  return jsonResponse.MRData.RaceTable.Races;
+  return jsonResponse.MRData.RaceTable.Races.length > 0
+    ? jsonResponse.MRData.RaceTable.Races
+    : null;
 }
 
 export async function fetchF1DriverStandings(season: number) {
