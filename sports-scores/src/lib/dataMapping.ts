@@ -8,7 +8,6 @@ import {
   Cricket_LiveScoreAPI_TeamDetails,
   LeagueTable,
 } from "@/types/cricket";
-import { F1Session, SessionSummary } from "@/types/f1";
 import {
   Golf_SlashGolfAPI_Leaderboard,
   Golf_SlashGolfAPI_Schedule,
@@ -85,21 +84,6 @@ export function mapBaseballFixtureFields(matches: BaseballGame[]) {
         },
         roundLabel: `Round ${item.week}`,
       }) as MatchSummary,
-  );
-}
-
-export function mapF1SessionFields(sessions: F1Session[]) {
-  return sessions.map(
-    (item: F1Session) =>
-      ({
-        id: item.id,
-        name: item.competition.name,
-        logo: item.circuit.image,
-        status: item.status,
-        type: item.type,
-        startDate: item.date,
-        sport: SPORT.F1,
-      }) as SessionSummary,
   );
 }
 

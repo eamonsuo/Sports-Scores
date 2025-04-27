@@ -1,4 +1,8 @@
-import { F1TeamStandings } from "@/types/f1";
+export type F1TeamStandings = {
+  position: number;
+  team: { id: string; name: string; logo?: string };
+  points: number;
+};
 
 export default function F1TeamStandingsTable({
   data,

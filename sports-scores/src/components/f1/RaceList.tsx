@@ -22,13 +22,16 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
       {data.map((item: SessionSummary) => {
         let itemDate = new Date(item.startDate);
         let raceDate = new Date(
-          data.find((s) => s.name === item.name && s.type === "Race")
-            ?.startDate ?? "",
+          data.find(
+            (s) =>
+              s.grandPrixName === item.grandPrixName &&
+              s.sessionType === "Race",
+          )?.startDate ?? "",
         );
 
         displayDate = false;
-        if (curGrandPrix !== item.name) {
-          curGrandPrix = item.name;
+        if (curGrandPrix !== item.grandPrixName) {
+          curGrandPrix = item.grandPrixName;
           startDate = new Date(item.startDate); //Assumes data variable is sorted by date
           displayDate = true;
         }
@@ -43,7 +46,7 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
         }
 
         return (
-          <React.Fragment key={item.id}>
+          <React.Fragment key={item.sessionType + item.grandPrixName}>
             {displayDate && (
               <React.Fragment>
                 <SectionDateRange
@@ -52,7 +55,7 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
                   currentDate={currentMatch}
                 />
                 <WeekendSummaryCard
-                  grandPrix={item.name}
+                  grandPrix={item.grandPrixName}
                   img={item.logo}
                   status={""}
                 />
@@ -60,8 +63,8 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
             )}
 
             <SessionSummaryCard
-              href={`/sports/${item.sport}/${item.id}`}
-              sessionType={item.type}
+              href={`/sports/${item.sport}/${item.round}`}
+              sessionType={item.sessionType}
               img={item.logo}
               status={item.status}
             />
