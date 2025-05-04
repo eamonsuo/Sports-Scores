@@ -1,4 +1,4 @@
-import { getCricketImageUrl } from "@/lib/projUtils";
+import fallback from "@/../public/vercel.svg";
 import Image from "next/image";
 
 export type CricketLadder = {
@@ -41,7 +41,7 @@ export default function CricketSeriesLadder({ data }: { data: CricketLadder }) {
               <td className="text-left text-sm">
                 <div className="flex">
                   <Image
-                    src={getCricketImageUrl(item.logo)}
+                    src={item.logo ?? fallback}
                     height={15}
                     width={15}
                     alt={"Logo"}

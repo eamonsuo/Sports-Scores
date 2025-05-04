@@ -314,11 +314,6 @@ export function resolveGolfPlayerImage(playerName: string) {
   })();
 
   return getCountryImageUrl(countryCode);
-
-  switch (playerName) {
-    default:
-      return "";
-  }
 }
 
 export function resolveNRLImages(teamName: string) {
