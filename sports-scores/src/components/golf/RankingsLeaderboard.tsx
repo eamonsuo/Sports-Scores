@@ -1,9 +1,10 @@
-import GolfPlayerImage from "./GolfPlayerImage";
+import fallback from "@/../public/vercel.svg";
+import Image from "next/image";
 
 export type GolfRankingsPlayerRow = {
   name: string;
   position: string;
-  country: string;
+  img?: string;
   totalPoints: string;
   pointsBehind: string;
 };
@@ -33,7 +34,14 @@ export default function RankingsLeaderboard({
             <tr key={index} className="border">
               <td className="py-2">{item.position}</td>
               <td className="pe-2">
-                <GolfPlayerImage country={item.country} />
+                <div className="flex items-center justify-center">
+                  <Image
+                    src={item.img ?? fallback}
+                    height={25}
+                    width={25}
+                    alt={`Flag`}
+                  />
+                </div>
               </td>
               <td className="text-left">{item.name}</td>
               <td>{item.totalPoints}</td>

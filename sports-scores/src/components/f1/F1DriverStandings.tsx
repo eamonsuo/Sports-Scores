@@ -1,3 +1,6 @@
+import fallback from "@/../public/vercel.svg";
+import Image from "next/image";
+
 export type F1DriverStandings = {
   position: number;
   driver: { id: number; name: string; img?: string };
@@ -24,7 +27,18 @@ export default function F1DriverStandingsTable({
           {data.map((item) => (
             <tr key={item.driver.id} className="border">
               <td className="py-2 pe-2">{item.position}</td>
-              <td>{item.driver.name}</td>
+              <td className="text-left">
+                <div className="flex">
+                  <Image
+                    src={item.driver.img ?? fallback}
+                    height={10}
+                    width={15}
+                    alt={"Logo"}
+                    className="me-2"
+                  />
+                  {item.driver.name}
+                </div>
+              </td>
               <td>{item.points ?? 0}</td>
             </tr>
           ))}

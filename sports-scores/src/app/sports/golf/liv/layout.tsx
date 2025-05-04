@@ -25,12 +25,12 @@ export default async function SportsLayout({
             },
             {
               href: "/sports/golf/liv/standings/team",
-              label: "Player Standings",
+              label: "Player Stnd",
               page: "team",
             },
             {
               href: "/sports/golf/liv/standings/player",
-              label: "Team Standings",
+              label: "Team Stnd",
               page: "player",
             },
           ]}

@@ -7,6 +7,7 @@ import {
 } from "@/endpoints/sofascore.api";
 import { SPORT } from "@/lib/constants";
 import {
+  resolveAFLImages,
   setMatchSummary,
   shortenTeamNames,
   toShortTimeString,
@@ -67,10 +68,12 @@ export async function AFLMatches() {
         homeDetails: {
           name: shortenTeamNames(match.homeTeam.name),
           score: match.homeScore.current?.toString() ?? "0",
+          img: resolveAFLImages(match.homeTeam.name),
         },
         awayDetails: {
           name: shortenTeamNames(match.awayTeam.name),
           score: match.awayScore.current?.toString() ?? "0",
+          img: resolveAFLImages(match.awayTeam.name),
         },
       } as MatchSummary;
     }),
@@ -89,7 +92,11 @@ export async function AFLStandings() {
       return {
         position: item.position,
         pts: item.points,
-        team: { id: item.team.id, name: shortenTeamNames(item.team.name) },
+        team: {
+          id: item.team.id,
+          name: shortenTeamNames(item.team.name),
+          logo: resolveAFLImages(item.team.name),
+        },
         games: {
           played: item.matches,
           win: item.wins,
@@ -129,10 +136,12 @@ export async function AFLMatchDetails(matchId: number) {
           homeTeam: {
             name: shortenTeamNames(matchDetails.homeTeam.name),
             score: matchDetails?.homeScore?.current?.toString() ?? "0",
+            img: resolveAFLImages(matchDetails.homeTeam.name),
           },
           awayTeam: {
             name: shortenTeamNames(matchDetails?.awayTeam.name),
             score: matchDetails?.awayScore?.current?.toString() ?? "0",
+            img: resolveAFLImages(matchDetails.awayTeam.name),
           },
           scoreBreakdown: [1, 2, 3, 4].map((quarter) => ({
             quarter,

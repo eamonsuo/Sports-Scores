@@ -17,7 +17,7 @@ import { MatchStatus, MatchSummary } from "@/types/misc";
 import { MATCHSTATUSAFL, SPORT } from "./constants";
 import {
   getLocalTime,
-  resolveGolfPlayersCountry,
+  resolveGolfPlayerImage,
   setMatchSummary,
   shortenTeamNames,
 } from "./projUtils";
@@ -270,7 +270,7 @@ export function mapGolfLeaderboard(data: Golf_SlashGolfAPI_Leaderboard) {
         totalScore: item.total,
         thru: item.thru,
         curRound: item.currentRoundScore,
-        country: resolveGolfPlayersCountry(playerName),
+        img: resolveGolfPlayerImage(playerName),
       } as GolfLeaderboardPlayerRow;
     }),
   };

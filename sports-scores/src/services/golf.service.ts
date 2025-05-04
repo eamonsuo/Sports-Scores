@@ -4,7 +4,7 @@ import {
   fetchGolfSchedule,
 } from "@/endpoints/golf.api";
 import { mapGolfLeaderboard, mapGolfSchedule } from "@/lib/dataMapping";
-import { resolveGolfPlayersCountry } from "@/lib/projUtils";
+import { resolveGolfPlayerImage } from "@/lib/projUtils";
 import {
   GolfRankingsPage,
   SlashGolf_PlayerRanking_FedExCup,
@@ -41,7 +41,7 @@ export async function golfOWGRankings(year: string = "2025") {
         let playerName = item.firstName + " " + item.lastName;
         return {
           name: playerName,
-          country: resolveGolfPlayersCountry(playerName),
+          img: resolveGolfPlayerImage(playerName),
           position: item.rank.$numberInt.toString(),
           totalPoints: item.avgPoints.$numberDouble.toString(),
           pointsBehind: item.previousRank.$numberInt.toString(),
@@ -63,7 +63,7 @@ export async function golfFedExRankings(year: string = "2025") {
         let playerName = item.firstName + " " + item.lastName;
         return {
           name: playerName,
-          country: resolveGolfPlayersCountry(playerName),
+          img: resolveGolfPlayerImage(playerName),
           position: item.rank.$numberInt.toString(),
           totalPoints: item.totalPoints.toString(),
           pointsBehind: item.pointsBehind,

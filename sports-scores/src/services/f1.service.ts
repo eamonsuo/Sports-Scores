@@ -7,6 +7,10 @@ import {
   fetchF1SprintResult,
 } from "@/endpoints/f1.api";
 import {
+  resolveF1CountryFlagImages,
+  resolveF1TeamImages,
+} from "@/lib/projUtils";
+import {
   F1ConstructorStandingsPage,
   F1DriverStandingsPage,
   F1RacesPage,
@@ -35,6 +39,7 @@ export async function f1EventSchedule(season: number) {
           sessionType: "Practice 1",
           sport: "f1",
           status: "",
+          logo: resolveF1CountryFlagImages(item.raceName),
         });
       }
       if (item.SecondPractice) {
@@ -250,6 +255,9 @@ export async function f1DriverStandings(season: number) {
         driver: {
           id: Number(item.Driver.permanentNumber),
           name: item.Driver.givenName + " " + item.Driver.familyName,
+          img: resolveF1CountryFlagImages(
+            item.Driver.givenName + " " + item.Driver.familyName,
+          ),
         },
         position: Number(item.position),
         points: Number(item.points),
@@ -272,6 +280,7 @@ export async function f1ConstructorStandings(season: number) {
         team: {
           id: item.Constructor.constructorId,
           name: item.Constructor.name,
+          logo: resolveF1TeamImages(item.Constructor.name),
         },
         position: Number(item.position),
         points: Number(item.points),

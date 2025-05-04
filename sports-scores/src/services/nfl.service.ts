@@ -8,6 +8,7 @@ import {
 } from "@/endpoints/nfl.api";
 import { SPORT } from "@/lib/constants";
 import {
+  resolveNFLImages,
   setMatchSummary,
   shortenTeamNames,
   toShortTimeString,
@@ -16,8 +17,8 @@ import { MatchSummary } from "@/types/misc";
 import { NFLFixturesPage, NFLLadderPage, NFLMatchPage } from "@/types/nfl";
 
 export async function NFLMatches() {
-  const lastMatches = await fetchNFLLastMatches(2025, 0);
-  const nextMatches = await fetchNFLNextMatches(2025, 0);
+  const lastMatches = await fetchNFLLastMatches(2024, 0);
+  const nextMatches = await fetchNFLNextMatches(2024, 0);
 
   if (!lastMatches && !nextMatches) {
     return null;
@@ -52,10 +53,12 @@ export async function NFLMatches() {
         homeDetails: {
           name: shortenTeamNames(match.homeTeam.name),
           score: match.homeScore.current?.toString() ?? "0",
+          img: resolveNFLImages(match.homeTeam.name),
         },
         awayDetails: {
           name: shortenTeamNames(match.awayTeam.name),
           score: match.awayScore.current?.toString() ?? "0",
+          img: resolveNFLImages(match.awayTeam.name),
         },
       } as MatchSummary;
     }),
@@ -89,6 +92,7 @@ export async function NFLStandings() {
               team: {
                 id: standing.team.id,
                 name: shortenTeamNames(standing.team.name),
+                logo: resolveNFLImages(standing.team.name),
               },
               points: {
                 for: standing.scoresFor,
@@ -119,10 +123,12 @@ export async function NFLMatchDetails(matchId: number) {
         homeTeam: {
           name: shortenTeamNames(matchDetails.homeTeam.name),
           score: matchDetails?.homeScore?.current?.toString() ?? "0",
+          img: resolveNFLImages(matchDetails.homeTeam.name),
         },
         awayTeam: {
           name: shortenTeamNames(matchDetails?.awayTeam.name),
           score: matchDetails?.awayScore?.current?.toString() ?? "0",
+          img: resolveNFLImages(matchDetails.awayTeam.name),
         },
 
         scoreBreakdown: [
