@@ -22,9 +22,9 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "res.cloudinary.com",
+        hostname: "flagsapi.com",
         port: "",
-        pathname: "/pgatour-prod/**",
+        pathname: "/**",
       },
     ],
   },

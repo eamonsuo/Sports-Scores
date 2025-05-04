@@ -5,7 +5,7 @@ import CricketSeriesResult from "@/components/cricket/CricketSeriesResult";
 import Placeholder from "@/components/misc/Placeholder";
 import { fetchCricketSeriesMatches } from "@/endpoints/cricket.api";
 import { mapCricketSeriesLadders } from "@/lib/dataMapping";
-import { getCricketImageUrl } from "@/lib/projUtils";
+import { getCountryImageUrl } from "@/lib/projUtils";
 import Image from "next/image";
 
 export default async function Page(props: {
@@ -32,12 +32,12 @@ export default async function Page(props: {
             seriesName={item.series.name}
             homeInfo={{
               name: item.home.name,
-              img: getCricketImageUrl(item.home.img),
+              img: getCountryImageUrl("/vercel.svg"),
               matchesWon: item.home.won,
             }}
             awayInfo={{
               name: item.away.name,
-              img: getCricketImageUrl(item.away.img),
+              img: getCountryImageUrl("/vercel.svg"),
               matchesWon: item.away.won,
             }}
           ></CricketSeriesResult>
@@ -47,7 +47,7 @@ export default async function Page(props: {
         <div className="flex flex-col items-center">
           <p className="pt-6 dark:text-neutral-400">TOURNAMENT WINNER </p>
           <Image
-            src={getCricketImageUrl(tournamentWinner.img)}
+            src={getCountryImageUrl("/vercel.svg")}
             height={150}
             width={150}
             alt={"Winning Team"}

@@ -1,3 +1,4 @@
+import { toShortTimeString } from "@/lib/projUtils";
 import { SessionSummary } from "@/types/f1";
 import React from "react";
 import SectionDateRange from "../generic/SectionDateRange";
@@ -20,7 +21,6 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
   return (
     <div className="flex-1 overflow-y-auto px-4">
       {data.map((item: SessionSummary) => {
-        let itemDate = new Date(item.startDate);
         let raceDate = new Date(
           data.find(
             (s) =>
@@ -65,8 +65,7 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
             <SessionSummaryCard
               href={`/sports/${item.sport}/${item.round}/${item.sessionType}`}
               sessionType={item.sessionType}
-              img={item.logo}
-              status={item.status}
+              status={toShortTimeString(item.startDate)}
             />
           </React.Fragment>
         );

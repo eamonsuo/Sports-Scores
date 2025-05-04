@@ -1,3 +1,6 @@
+import fallback from "@/../public/vercel.svg";
+import Image from "next/image";
+
 export type F1TeamStandings = {
   position: number;
   team: { id: string; name: string; logo?: string };
@@ -23,7 +26,18 @@ export default function F1TeamStandingsTable({
           {data.map((item) => (
             <tr key={item.team.id} className="border">
               <td className="py-2 pe-2">{item.position}</td>
-              <td>{item.team.name}</td>
+              <td className="text-left">
+                <div className="flex">
+                  <Image
+                    src={item.team.logo ?? fallback}
+                    height={10}
+                    width={15}
+                    alt={"Logo"}
+                    className="me-2"
+                  />
+                  {item.team.name}
+                </div>
+              </td>
               <td>{item.points ?? 0}</td>
             </tr>
           ))}

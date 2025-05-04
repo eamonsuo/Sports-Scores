@@ -8,6 +8,7 @@ import {
 } from "@/endpoints/nrl.api";
 import { SPORT } from "@/lib/constants";
 import {
+  resolveNRLImages,
   setMatchSummary,
   shortenTeamNames,
   toShortTimeString,
@@ -52,10 +53,12 @@ export async function NRLMatches() {
         homeDetails: {
           name: shortenTeamNames(match.homeTeam.name),
           score: match.homeScore.current?.toString() ?? "0",
+          img: resolveNRLImages(match.homeTeam.name),
         },
         awayDetails: {
           name: shortenTeamNames(match.awayTeam.name),
           score: match.awayScore.current?.toString() ?? "0",
+          img: resolveNRLImages(match.awayTeam.name),
         },
       } as MatchSummary;
     }),
@@ -74,7 +77,11 @@ export async function NRLStandings() {
       return {
         position: item.position,
         points: item.points,
-        team: { id: item.team.id, name: shortenTeamNames(item.team.name) },
+        team: {
+          id: item.team.id,
+          name: shortenTeamNames(item.team.name),
+          logo: resolveNRLImages(item.team.name),
+        },
         games: {
           played: item.matches,
           win: item.wins,
@@ -114,10 +121,12 @@ export async function NRLMatchDetails(matchId: number) {
           homeTeam: {
             name: shortenTeamNames(matchDetails.homeTeam.name),
             score: matchDetails?.homeScore?.current?.toString() ?? "0",
+            img: resolveNRLImages(matchDetails.homeTeam.name),
           },
           awayTeam: {
             name: shortenTeamNames(matchDetails?.awayTeam.name),
             score: matchDetails?.awayScore?.current?.toString() ?? "0",
+            img: resolveNRLImages(matchDetails.awayTeam.name),
           },
           scoreBreakdown: [
             {
