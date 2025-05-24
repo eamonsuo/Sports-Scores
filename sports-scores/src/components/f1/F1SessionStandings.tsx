@@ -22,19 +22,20 @@ export default function F1SessionResultsTable({
           <tr>
             <th className="pe-2">Pos</th>
             <th className="px-2">Driver</th>
-            <th className="px-2">Grid</th>
             <th className="px-2">Gap</th>
             <th className="px-2">Pts</th>
+            <th className="px-2">Grid</th>
           </tr>
         </thead>
         <tbody className="text-center">
           {data.map((item) => (
             <tr key={item.driver.id} className="border">
               <td className="py-2 pe-2">{item.position}</td>
-              <td>{item.driver.name}</td>
-              <td>{item.grid}</td>
+              <td className="text-left">{item.driver.name}</td>
               <td>{item.time}</td>
-              <td>{item.points ?? "-"}</td>
+
+              <td>{item.points}</td>
+              <td>{item.grid}</td>
             </tr>
           ))}
         </tbody>

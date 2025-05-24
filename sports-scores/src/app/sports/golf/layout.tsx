@@ -1,3 +1,4 @@
+import APIStatus from "@/components/misc/ApiStatus";
 import NavButtonGroup from "@/components/misc/NavButtonGroup";
 
 export default async function SportsLayout({
@@ -17,6 +18,7 @@ export default async function SportsLayout({
         ]}
       />
       {children}
+      <APIStatus status="N/A" />
     </div>
   );
 }

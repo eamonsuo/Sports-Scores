@@ -46,6 +46,65 @@ export interface F1_Jolpica_SprintResults_Response {
   MRData: Jolpica_MRData_SprintResults;
 }
 
+//Response is an array
+export interface F1_OpenF1_Positions_Response {
+  date: string;
+  driver_number: number;
+  meeting_key: number;
+  position: number;
+  session_key: number;
+}
+
+//Response is an array
+export interface F1_OpenF1_Drivers_Response {
+  broadcast_name: string;
+  country_code: string;
+  driver_number: number;
+  first_name: string;
+  full_name: string;
+  headshot_url: string;
+  last_name: string;
+  meeting_key: number;
+  name_acronym: string;
+  session_key: number;
+  team_colour: string;
+  team_name: string;
+}
+
+//Response is an array
+export interface F1_OpenF1_Meetings_Response {
+  circuit_key: number;
+  circuit_short_name: string;
+  country_code: string;
+  country_key: number;
+  country_name: string;
+  date_start: string;
+  gmt_offset: string;
+  location: string;
+  meeting_key: number;
+  meeting_name: string;
+  meeting_official_name: string;
+  year: number;
+}
+
+//Response is an array
+export interface F1_OpenF1_Sessions_Response {
+  circuit_key: number;
+  circuit_short_name: string;
+  country_code: string;
+  country_key: number;
+  country_name: string;
+  date_end: string;
+  date_start: string;
+  gmt_offset: string;
+  location: string;
+  meeting_key: number;
+  session_key: number;
+  session_name: string;
+  session_type: string;
+  year: number;
+}
+
 export interface Jolpica_MRData_SprintResults {
   xmlns: string;
   series: string;
@@ -374,14 +433,18 @@ export type SessionSummary = {
   grandPrixName: string;
   logo?: string;
   status: string;
-  sessionType:
-    | "Practice 1"
-    | "Practice 2"
-    | "Practice 3"
-    | "Qualifying"
-    | "Sprint"
-    | "Sprint Qualifying"
-    | "Race";
+  sessionType: F1SessionType;
+  sessionName?: string;
   startDate: Date;
   sport: string;
 };
+
+export enum F1SessionType {
+  Practice1 = "Practice-1",
+  Practice2 = "Practice-2",
+  Practice3 = "Practice-3",
+  Qualifying = "Qualifying",
+  Sprint = "Sprint",
+  SprintQualifying = "Sprint-Qualifying",
+  Race = "Race",
+}
