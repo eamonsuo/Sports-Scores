@@ -167,259 +167,264 @@ type SportsmonksMatchCricket = {
   };
 };
 
-export type CountryFlagCode =
-  | "AD"
-  | "AE"
-  | "AF"
-  | "AG"
-  | "AI"
-  | "AL"
-  | "AM"
-  | "AO"
-  | "AQ"
-  | "AR"
-  | "AS"
-  | "AT"
-  | "AU"
-  | "AW"
-  | "AX"
-  | "AZ"
-  | "BA"
-  | "BB"
-  | "BD"
-  | "BE"
-  | "BF"
-  | "BG"
-  | "BH"
-  | "BI"
-  | "BJ"
-  | "BL"
-  | "BM"
-  | "BN"
-  | "BO"
-  | "BQ"
-  | "BR"
-  | "BS"
-  | "BT"
-  | "BV"
-  | "BW"
-  | "BY"
-  | "BZ"
-  | "CA"
-  | "CC"
-  | "CD"
-  | "CF"
-  | "CG"
-  | "CH"
-  | "CI"
-  | "CK"
-  | "CL"
-  | "CM"
-  | "CN"
-  | "CO"
-  | "CR"
-  | "CU"
-  | "CV"
-  | "CW"
-  | "CX"
-  | "CY"
-  | "CZ"
-  | "DE"
-  | "DJ"
-  | "DK"
-  | "DM"
-  | "DO"
-  | "DZ"
-  | "EC"
-  | "EE"
-  | "EG"
-  | "EH"
-  | "ER"
-  | "ES"
-  | "ET"
-  | "FI"
-  | "FJ"
-  | "FM"
-  | "FO"
-  | "FR"
-  | "GA"
-  | "GB"
-  | "GD"
-  | "GE"
-  | "GF"
-  | "GG"
-  | "GH"
-  | "GI"
-  | "GL"
-  | "GM"
-  | "GN"
-  | "GP"
-  | "GQ"
-  | "GR"
-  | "GT"
-  | "GU"
-  | "GW"
-  | "GY"
-  | "HK"
-  | "HM"
-  | "HN"
-  | "HR"
-  | "HT"
-  | "HU"
-  | "ID"
-  | "IE"
-  | "IL"
-  | "IM"
-  | "IN"
-  | "IO"
-  | "IQ"
-  | "IR"
-  | "IS"
-  | "IT"
-  | "JE"
-  | "JM"
-  | "JO"
-  | "JP"
-  | "KE"
-  | "KG"
-  | "KH"
-  | "KI"
-  | "KM"
-  | "KN"
-  | "KP"
-  | "KR"
-  | "KW"
-  | "KY"
-  | "KZ"
-  | "LA"
-  | "LB"
-  | "LC"
-  | "LI"
-  | "LK"
-  | "LR"
-  | "LS"
-  | "LT"
-  | "LU"
-  | "LV"
-  | "LY"
-  | "MA"
-  | "MC"
-  | "MD"
-  | "ME"
-  | "MF"
-  | "MG"
-  | "MH"
-  | "MK"
-  | "ML"
-  | "MM"
-  | "MN"
-  | "MO"
-  | "MP"
-  | "MQ"
-  | "MR"
-  | "MS"
-  | "MT"
-  | "MU"
-  | "MV"
-  | "MW"
-  | "MX"
-  | "MY"
-  | "MZ"
-  | "NA"
-  | "NC"
-  | "NE"
-  | "NF"
-  | "NG"
-  | "NI"
-  | "NL"
-  | "NO"
-  | "NP"
-  | "NR"
-  | "NU"
-  | "NZ"
-  | "OM"
-  | "PA"
-  | "PE"
-  | "PF"
-  | "PG"
-  | "PH"
-  | "PK"
-  | "PL"
-  | "PM"
-  | "PN"
-  | "PR"
-  | "PT"
-  | "PW"
-  | "PY"
-  | "QA"
-  | "RE"
-  | "RO"
-  | "RS"
-  | "RU"
-  | "RW"
-  | "SA"
-  | "SB"
-  | "SC"
-  | "SD"
-  | "SE"
-  | "SG"
-  | "SH"
-  | "SI"
-  | "SJ"
-  | "SK"
-  | "SL"
-  | "SM"
-  | "SN"
-  | "SO"
-  | "SR"
-  | "SS"
-  | "ST"
-  | "SV"
-  | "SX"
-  | "SY"
-  | "SZ"
-  | "TC"
-  | "TD"
-  | "TF"
-  | "TG"
-  | "TH"
-  | "TJ"
-  | "TK"
-  | "TL"
-  | "TM"
-  | "TN"
-  | "TO"
-  | "TR"
-  | "TT"
-  | "TV"
-  | "TZ"
-  | "UA"
-  | "UG"
-  | "UM"
-  | "US"
-  | "UY"
-  | "UZ"
-  | "VA"
-  | "VC"
-  | "VE"
-  | "VG"
-  | "VI"
-  | "VN"
-  | "VU"
-  | "WF"
-  | "WS"
-  | "YE"
-  | "YT"
-  | "ZA"
-  | "ZM"
-  | "ZW"
-  // Additional codes used by FlagsAPI
-  | "AH"
-  | "AK"
-  | "AN"
-  | "EU"
-  | "IC"
-  | "NY"
-  | "XK"
-  // Fallback
-  | "/vercel.svg";
+export enum CountryFlagCode {
+  Afghanistan = "af",
+  AlandIslands = "ax",
+  Albania = "al",
+  Alaska = "ak",
+  Algeria = "dz",
+  AmericanSamoa = "as",
+  Andorra = "ad",
+  Angola = "ao",
+  Anguilla = "ai",
+  Antarctica = "aq",
+  AntarcticaHeard = "ah",
+  AntiguaAndBarbuda = "ag",
+  Argentina = "ar",
+  Armenia = "am",
+  Aruba = "aw",
+  Australia = "au",
+  Austria = "at",
+  Azerbaijan = "az",
+  Bahamas = "bs",
+  Bahrain = "bh",
+  Bangladesh = "bd",
+  Barbados = "bb",
+  Belarus = "by",
+  Belgium = "be",
+  Belize = "bz",
+  Benin = "bj",
+  Bermuda = "bm",
+  Bhutan = "bt",
+  Bolivia = "bo",
+  BonaireSintEustatiusSaba = "bq",
+  BosniaAndHerzegovina = "ba",
+  Botswana = "bw",
+  BouvetIsland = "bv",
+  Brazil = "br",
+  BritishIndianOceanTerritory = "io",
+  BritishVirginIslands = "vg",
+  BruneiDarussalam = "bn",
+  Bulgaria = "bg",
+  BurkinaFaso = "bf",
+  Burundi = "bi",
+  CaboVerde = "cv",
+  Cambodia = "kh",
+  Cameroon = "cm",
+  Canada = "ca",
+  CanaryIslands = "ic",
+  CaymanIslands = "ky",
+  CentralAfricanRepublic = "cf",
+  Chad = "td",
+  Chile = "cl",
+  China = "cn",
+  ChristmasIsland = "cx",
+  CocosKeelingIslands = "cc",
+  Colombia = "co",
+  Comoros = "km",
+  Congo = "cg",
+  CongoDemocraticRepublic = "cd",
+  CookIslands = "ck",
+  CostaRica = "cr",
+  CoteDIvoire = "ci",
+  Croatia = "hr",
+  Cuba = "cu",
+  Curacao = "cw",
+  Cyprus = "cy",
+  Czechia = "cz",
+  Denmark = "dk",
+  Djibouti = "dj",
+  Dominica = "dm",
+  DominicanRepublic = "do",
+  Ecuador = "ec",
+  Egypt = "eg",
+  ElSalvador = "sv",
+  England = "gb-eng",
+  EquatorialGuinea = "gq",
+  Eritrea = "er",
+  Estonia = "ee",
+  Eswatini = "sz",
+  Ethiopia = "et",
+  EuropeanUnion = "eu",
+  FaroeIslands = "fo",
+  Fiji = "fj",
+  Finland = "fi",
+  France = "fr",
+  FrenchGuiana = "gf",
+  FrenchPolynesia = "pf",
+  FrenchSouthernTerritories = "tf",
+  Gabon = "ga",
+  Gambia = "gm",
+  Georgia = "ge",
+  Germany = "de",
+  Ghana = "gh",
+  Gibraltar = "gi",
+  Greece = "gr",
+  Greenland = "gl",
+  Grenada = "gd",
+  Guadeloupe = "gp",
+  Guam = "gu",
+  Guatemala = "gt",
+  Guernsey = "gg",
+  Guinea = "gn",
+  GuineaBissau = "gw",
+  Guyana = "gy",
+  Haiti = "ht",
+  HeardIslandAndMcDonaldIslands = "hm",
+  HolySee = "va",
+  Honduras = "hn",
+  HongKong = "hk",
+  Hungary = "hu",
+  Iceland = "is",
+  India = "in",
+  Indonesia = "id",
+  Iran = "ir",
+  Iraq = "iq",
+  Ireland = "ie",
+  IsleOfMan = "im",
+  Israel = "il",
+  Italy = "it",
+  Jamaica = "jm",
+  Japan = "jp",
+  Jersey = "je",
+  Jordan = "jo",
+  Kazakhstan = "kz",
+  Kenya = "ke",
+  Kiribati = "ki",
+  KoreaNorth = "kp",
+  KoreaSouth = "kr",
+  Kosovo = "xk",
+  Kuwait = "kw",
+  Kyrgyzstan = "kg",
+  Laos = "la",
+  Latvia = "lv",
+  Lebanon = "lb",
+  Lesotho = "ls",
+  Liberia = "lr",
+  Libya = "ly",
+  Liechtenstein = "li",
+  Lithuania = "lt",
+  Luxembourg = "lu",
+  Macao = "mo",
+  Madagascar = "mg",
+  Malawi = "mw",
+  Malaysia = "my",
+  Maldives = "mv",
+  Mali = "ml",
+  Malta = "mt",
+  MarshallIslands = "mh",
+  Martinique = "mq",
+  Mauritania = "mr",
+  Mauritius = "mu",
+  Mayotte = "yt",
+  Mexico = "mx",
+  Micronesia = "fm",
+  Moldova = "md",
+  Monaco = "mc",
+  Mongolia = "mn",
+  Montenegro = "me",
+  Montserrat = "ms",
+  Morocco = "ma",
+  Mozambique = "mz",
+  Myanmar = "mm",
+  Namibia = "na",
+  Nauru = "nr",
+  Nepal = "np",
+  Netherlands = "nl",
+  NetherlandsAntilles = "an",
+  NewCaledonia = "nc",
+  NewYork = "ny",
+  NewZealand = "nz",
+  Nicaragua = "ni",
+  Niger = "ne",
+  Nigeria = "ng",
+  Niue = "nu",
+  NorfolkIsland = "nf",
+  NorthMacedonia = "mk",
+  NorthernIreland = "gb-nir",
+  NorthernMarianaIslands = "mp",
+  Norway = "no",
+  Oman = "om",
+  Pakistan = "pk",
+  Palau = "pw",
+  Panama = "pa",
+  PapuaNewGuinea = "pg",
+  Paraguay = "py",
+  Peru = "pe",
+  Philippines = "ph",
+  Pitcairn = "pn",
+  Poland = "pl",
+  Portugal = "pt",
+  PuertoRico = "pr",
+  Qatar = "qa",
+  Reunion = "re",
+  Romania = "ro",
+  Russia = "ru",
+  Rwanda = "rw",
+  SaintBarthelemy = "bl",
+  SaintHelena = "sh",
+  SaintKittsAndNevis = "kn",
+  SaintLucia = "lc",
+  SaintMartin = "mf",
+  SaintPierreAndMiquelon = "pm",
+  SaintVincentAndGrenadines = "vc",
+  Samoa = "ws",
+  SanMarino = "sm",
+  SaoTomeAndPrincipe = "st",
+  SaudiArabia = "sa",
+  Scotland = "gb-sct",
+  Senegal = "sn",
+  Serbia = "rs",
+  Seychelles = "sc",
+  SierraLeone = "sl",
+  Singapore = "sg",
+  SintMaarten = "sx",
+  Slovakia = "sk",
+  Slovenia = "si",
+  SolomonIslands = "sb",
+  Somalia = "so",
+  SouthAfrica = "za",
+  SouthSudan = "ss",
+  Spain = "es",
+  SriLanka = "lk",
+  Sudan = "sd",
+  Suriname = "sr",
+  SvalbardAndJanMayen = "sj",
+  Sweden = "se",
+  Switzerland = "ch",
+  Syria = "sy",
+  Taiwan = "tw",
+  Tajikistan = "tj",
+  Tanzania = "tz",
+  Thailand = "th",
+  TimorLeste = "tl",
+  Togo = "tg",
+  Tokelau = "tk",
+  Tonga = "to",
+  TrinidadAndTobago = "tt",
+  Tunisia = "tn",
+  Turkey = "tr",
+  Turkmenistan = "tm",
+  TurksAndCaicosIslands = "tc",
+  Tuvalu = "tv",
+  Uganda = "ug",
+  Ukraine = "ua",
+  UnitedArabEmirates = "ae",
+  UnitedKingdom = "gb",
+  UnitedStates = "us",
+  UnitedStatesMinorOutlyingIslands = "um",
+  Uruguay = "uy",
+  USVirginIslands = "vi",
+  Uzbekistan = "uz",
+  Vanuatu = "vu",
+  VaticanCity = "va",
+  Venezuela = "ve",
+  Vercel = "/vercel.svg",
+  Vietnam = "vn",
+  Wales = "gb-wal",
+  WallisAndFutuna = "wf",
+  WesternSahara = "eh",
+  Yemen = "ye",
+  Zambia = "zm",
+  Zimbabwe = "zw",
+}

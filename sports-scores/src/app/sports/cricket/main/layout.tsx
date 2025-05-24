@@ -12,17 +12,17 @@ export default async function SportsLayout({
       <NavButtonGroup
         buttons={[
           {
-            href: "myteams#current-date",
+            href: "/sports/cricket/main/myteams#current-date",
             label: "My Teams",
             page: "myteams",
           },
           {
-            href: "matches#current-date",
+            href: "/sports/cricket/main/matches/today",
             label: "All Matches",
             page: "matches",
           },
           {
-            href: "seriesList",
+            href: "/sports/cricket/main/seriesList",
             label: "Series",
             page: "series",
           },

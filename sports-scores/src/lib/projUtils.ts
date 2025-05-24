@@ -133,16 +133,12 @@ export function getLocalTimeISO(startTime: string) {
     .replace(":00 ", " ");
 }
 
-export function getCountryImageUrl(countryCode: CountryFlagCode) {
-  if (
-    countryCode === null ||
-    countryCode === undefined ||
-    countryCode === "/vercel.svg"
-  ) {
+export function getCountryImageUrl(countryCode?: CountryFlagCode) {
+  if (countryCode === null || countryCode === undefined) {
     return "/vercel.svg";
   }
 
-  return `https://flagsapi.com/${countryCode}/flat/64.png`;
+  return `https://flagcdn.com/${countryCode}.svg`;
 }
 
 export function shortenTeamNames(team: string) {
@@ -198,9 +194,8 @@ export function dateToCustomString(date: Date) {
 }
 
 export function resolveGolfPlayerImage(playerName: string) {
-  var countryCode: CountryFlagCode = (() => {
+  var countryCode = (() => {
     switch (playerName) {
-      // Australia (AU)
       case "Min Woo Lee":
       case "Jason Day":
       case "Adam Scott":
@@ -213,9 +208,8 @@ export function resolveGolfPlayerImage(playerName: string) {
       case "Aaron Baddeley":
       case "Ryan Ruffels":
       case "Elvis Smylie":
-        return "AU";
+        return CountryFlagCode.Australia;
 
-      // United States (US)
       case "Scottie Scheffler":
       case "Xander Schauffele":
       case "Collin Morikawa":
@@ -248,86 +242,127 @@ export function resolveGolfPlayerImage(playerName: string) {
       case "Michael Kim":
       case "Cameron Young":
       case "Patrick Reed":
-        return "US";
+        return CountryFlagCode.UnitedStates;
 
-      // United Kingdom (GB)
-      case "Rory McIlroy": // Northern Ireland
       case "Tommy Fleetwood":
       case "Justin Rose":
       case "Tyrrell Hatton":
-      case "Robert MacIntyre": // Scotland
       case "Aaron Rai":
       case "Matt Fitzpatrick":
-        return "GB";
+        return CountryFlagCode.England;
 
-      // Sweden (SE)
-      case "Ludvig Åberg":
-        return "SE";
-
-      // Japan (JP)
-      case "Hideki Matsuyama":
-        return "JP";
-
-      // Norway (NO)
-      case "Viktor Hovland":
-        return "NO";
-
-      // Ireland (IE)
       case "Shane Lowry":
-        return "IE";
+        return CountryFlagCode.Ireland;
+      case "Rory McIlroy":
+        return CountryFlagCode.NorthernIreland;
+      case "Robert MacIntyre":
+        return CountryFlagCode.Scotland;
 
-      // Austria (AT)
+      case "Ludvig Åberg":
+        return CountryFlagCode.Sweden;
+
+      case "Hideki Matsuyama":
+        return CountryFlagCode.Japan;
+
+      case "Viktor Hovland":
+        return CountryFlagCode.Norway;
+
       case "Sepp Straka":
-        return "AT";
+        return CountryFlagCode.Austria;
 
-      // South Korea (KR)
       case "Sungjae Im":
       case "Tom Kim":
       case "Byeong Hun An":
-        return "KR";
+        return CountryFlagCode.KoreaSouth;
 
-      // Canada (CA)
       case "Corey Conners":
-        return "CA";
+        return CountryFlagCode.Canada;
 
-      // Spain (ES)
       case "Sergio Garcia":
       case "Jon Rahm":
       case "David Puig":
-        return "ES";
+        return CountryFlagCode.Spain;
 
-      //Chilie (CL)
       case "Joaquin Niemann":
-        return "CL";
+        return CountryFlagCode.Chile;
 
-      // Japan (JP)
-      case "Hideki Matsuyama":
-        return "JP";
-
-      // South Africa (ZA)
       case "Louis Oosthuizen":
       case "Branden Grace":
       case "Charl Schwartzel":
-        return "ZA";
+        return CountryFlagCode.SouthAfrica;
 
-      //Belgium (BE)
       case "Thomas Pieters":
       case "Thomas Detry":
-        return "BE";
+        return CountryFlagCode.Belgium;
 
-      // Denmark (DK)
       case "Thorbjørn Olesen":
       case "Rasmus Højgaard":
       case "Nicolai Højgaard":
-        return "DK";
+        return CountryFlagCode.Denmark;
 
-      // France (FR)
       case "Victor Perez":
       case "Matthieu Pavon":
-        return "FR";
+        return CountryFlagCode.France;
+
+      case "Abraham Ancer":
+        return CountryFlagCode.Mexico;
+    }
+  })();
+
+  return getCountryImageUrl(countryCode);
+}
+
+export function resolveGolfTournamentImage(tournamentName: string) {
+  var countryCode = (() => {
+    switch (tournamentName) {
+      // PGA Tour
+      case "Mexico Open at VidantaWorld":
+      case "World Wide Technology Championship":
+        return CountryFlagCode.Mexico;
+
+      case "Puerto Rico Open":
+        return CountryFlagCode.PuertoRico;
+
+      case "Corales Puntacana Championshi":
+        return CountryFlagCode.DominicanRepublic;
+
+      case "The Open Championship":
+        return CountryFlagCode.UnitedKingdom;
+      case "Genesis Scottish Open":
+        return CountryFlagCode.Scotland;
+
+      case "RBC Canadian Open":
+        return CountryFlagCode.Canada;
+
+      case "Baycurrent Classic":
+        return CountryFlagCode.Japan;
+
+      case "Butterfield Bermuda Championship":
+        return CountryFlagCode.Bermuda;
+
+      case "Hero World Challenge":
+        return CountryFlagCode.Bahamas;
+
+      // LIV Golf
+      case "Riyadh":
+        return CountryFlagCode.SaudiArabia;
+      case "Adelaide":
+        return CountryFlagCode.Australia;
+      case "Hong Kong":
+        return CountryFlagCode.HongKong;
+      case "Singapore":
+        return CountryFlagCode.Singapore;
+      case "Mexico City":
+        return CountryFlagCode.Mexico;
+      case "Korea":
+        return CountryFlagCode.KoreaSouth;
+      case "Andalucía":
+        return CountryFlagCode.Spain;
+      case "United Kingdom":
+        return CountryFlagCode.UnitedKingdom;
 
       default:
-        return "/vercel.svg";
+        return CountryFlagCode.UnitedStates;
     }
   })();
 
@@ -490,81 +525,79 @@ export function resolveNFLImages(teamName: string) {
 }
 
 export function resolveF1CountryFlagImages(name: string) {
-  var countryCode: CountryFlagCode = (() => {
+  var countryCode = (() => {
     switch (name) {
       case "Australian Grand Prix":
       case "Oscar Piastri":
       case "Jack Doohan":
-        return "AU";
+        return CountryFlagCode.Australia;
       case "Bahrain Grand Prix":
-        return "BH";
+        return CountryFlagCode.Bahrain;
       case "Chinese Grand Prix":
-        return "CN";
+        return CountryFlagCode.China;
       case "Azerbaijan Grand Prix":
-        return "AZ";
+        return CountryFlagCode.Azerbaijan;
       case "Emilia Romagna Grand Prix":
       case "Italian Grand Prix":
       case "Andrea Kimi Antonelli":
-        return "IT";
+        return CountryFlagCode.Italy;
       case "Monaco Grand Prix":
       case "Charles Leclerc":
-        return "MC";
+        return CountryFlagCode.Monaco;
       case "Spanish Grand Prix":
       case "Carlos Sainz":
       case "Fernando Alonso":
-        return "ES";
+        return CountryFlagCode.Spain;
       case "Canadian Grand Prix":
       case "Lance Stroll":
-        return "CA";
+        return CountryFlagCode.Canada;
       case "Austrian Grand Prix":
-        return "AT";
+        return CountryFlagCode.Austria;
       case "British Grand Prix":
       case "Lando Norris":
       case "George Russell":
       case "Lewis Hamilton":
       case "Oliver Bearman":
-        return "GB";
+        return CountryFlagCode.UnitedKingdom;
       case "Hungarian Grand Prix":
-        return "HU";
+        return CountryFlagCode.Hungary;
       case "Belgian Grand Prix":
-        return "BE";
+        return CountryFlagCode.Belgium;
       case "Dutch Grand Prix":
       case "Max Verstappen":
-        return "NL";
+        return CountryFlagCode.Netherlands;
       case "Singapore Grand Prix":
-        return "SG";
+        return CountryFlagCode.Singapore;
       case "Japanese Grand Prix":
       case "Yuki Tsunoda":
-        return "JP";
+        return CountryFlagCode.Japan;
       case "Qatar Grand Prix":
-        return "QA";
+        return CountryFlagCode.Qatar;
       case "Miami Grand Prix":
       case "United States Grand Prix":
       case "Las Vegas Grand Prix":
-        return "US";
+        return CountryFlagCode.UnitedStates;
       case "Mexico City Grand Prix":
-        return "MX";
+        return CountryFlagCode.Mexico;
       case "São Paulo Grand Prix":
       case "Gabriel Bortoleto":
-        return "BR";
+        return CountryFlagCode.Brazil;
       case "Saudi Arabian Grand Prix":
-        return "SA";
+        return CountryFlagCode.SaudiArabia;
       case "Abu Dhabi Grand Prix":
-        return "AE";
+        return CountryFlagCode.UnitedArabEmirates;
       case "Alexander Albon":
-        return "TH";
+        return CountryFlagCode.Thailand;
       case "Nico Hülkenberg":
-        return "DE";
+        return CountryFlagCode.Germany;
       case "Liam Lawson":
-        return "NZ";
+        return CountryFlagCode.NewZealand;
       case "Esteban Ocon":
       case "Pierre Gasly":
       case "Isack Hadjar":
-        return "FR";
+        return CountryFlagCode.France;
       case "Franco Colapinto":
-        return "AR";
-      default:
-        return "/vercel.svg";
+        return CountryFlagCode.Argentina;
     }
   })();
 

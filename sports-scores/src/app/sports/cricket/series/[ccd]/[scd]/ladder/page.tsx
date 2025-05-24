@@ -32,12 +32,12 @@ export default async function Page(props: {
             seriesName={item.series.name}
             homeInfo={{
               name: item.home.name,
-              img: getCountryImageUrl("/vercel.svg"),
+              img: getCountryImageUrl(),
               matchesWon: item.home.won,
             }}
             awayInfo={{
               name: item.away.name,
-              img: getCountryImageUrl("/vercel.svg"),
+              img: getCountryImageUrl(),
               matchesWon: item.away.won,
             }}
           ></CricketSeriesResult>
@@ -47,7 +47,7 @@ export default async function Page(props: {
         <div className="flex flex-col items-center">
           <p className="pt-6 dark:text-neutral-400">TOURNAMENT WINNER </p>
           <Image
-            src={getCountryImageUrl("/vercel.svg")}
+            src={getCountryImageUrl()}
             height={150}
             width={150}
             alt={"Winning Team"}

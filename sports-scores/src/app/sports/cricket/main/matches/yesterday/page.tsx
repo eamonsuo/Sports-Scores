@@ -5,7 +5,7 @@ import { cricketCurrentMatches } from "@/services/cricket.service";
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const matches = await cricketCurrentMatches();
+  const matches = await cricketCurrentMatches("YESTERDAY");
 
   if (matches === null) {
     return <Placeholder>An error has ocurred</Placeholder>;
