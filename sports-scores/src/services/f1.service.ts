@@ -1,11 +1,17 @@
+import { F1SessionResults } from "@/components/f1/F1SessionStandings";
 import {
   fetchF1ConstructorStandings,
+  fetchF1DriverDetails,
   fetchF1DriverStandings,
   fetchF1Events,
+  fetchF1Meetings,
+  fetchF1Positions,
   fetchF1QualifyingResult,
   fetchF1RaceResult,
+  fetchF1Sessions,
   fetchF1SprintResult,
 } from "@/endpoints/f1.api";
+import { SPORT } from "@/lib/constants";
 import {
   resolveF1CountryFlagImages,
   resolveF1TeamImages,
@@ -15,6 +21,7 @@ import {
   F1DriverStandingsPage,
   F1RacesPage,
   F1SessionPage,
+  F1SessionType,
   SessionSummary,
 } from "@/types/f1";
 
@@ -36,7 +43,8 @@ export async function f1EventSchedule(season: number) {
           startDate: new Date(
             item.FirstPractice.date + "T" + item.FirstPractice.time,
           ),
-          sessionType: "Practice 1",
+          sessionType: F1SessionType.Practice1,
+          sessionName: F1SessionType.Practice1.replace("-", " "),
           sport: "f1",
           status: "",
           logo: resolveF1CountryFlagImages(item.raceName),
@@ -49,7 +57,8 @@ export async function f1EventSchedule(season: number) {
           startDate: new Date(
             item.SecondPractice.date + "T" + item.SecondPractice.time,
           ),
-          sessionType: "Practice 2",
+          sessionType: F1SessionType.Practice2,
+          sessionName: F1SessionType.Practice2.replace("-", " "),
           sport: "f1",
           status: "",
         });
@@ -61,7 +70,8 @@ export async function f1EventSchedule(season: number) {
           startDate: new Date(
             item.ThirdPractice.date + "T" + item.ThirdPractice.time,
           ),
-          sessionType: "Practice 3",
+          sessionType: F1SessionType.Practice3,
+          sessionName: F1SessionType.Practice3.replace("-", " "),
           sport: "f1",
           status: "",
         });
@@ -73,7 +83,8 @@ export async function f1EventSchedule(season: number) {
           startDate: new Date(
             item.SprintQualifying.date + "T" + item.SprintQualifying.time,
           ),
-          sessionType: "Sprint Qualifying",
+          sessionType: F1SessionType.SprintQualifying,
+          sessionName: F1SessionType.SprintQualifying.replace("-", " "),
           sport: "f1",
           status: "",
         });
@@ -83,7 +94,7 @@ export async function f1EventSchedule(season: number) {
           round: Number(item.round),
           grandPrixName: item.raceName,
           startDate: new Date(item.Sprint.date + "T" + item.Sprint.time),
-          sessionType: "Sprint",
+          sessionType: F1SessionType.Sprint,
           sport: "f1",
           status: "",
         });
@@ -95,8 +106,8 @@ export async function f1EventSchedule(season: number) {
           startDate: new Date(
             item.Qualifying.date + "T" + item.Qualifying.time,
           ),
-          sessionType: "Qualifying",
-          sport: "f1",
+          sessionType: F1SessionType.Qualifying,
+          sport: SPORT.F1,
           status: "",
         });
       }
@@ -105,7 +116,8 @@ export async function f1EventSchedule(season: number) {
         round: Number(item.round),
         grandPrixName: item.raceName,
         startDate: new Date(item.date + "T" + item.time),
-        sessionType: "Race",
+        sessionType: F1SessionType.Race,
+        sessionName: F1SessionType.Race,
         sport: "f1",
         status: "",
       });
@@ -118,17 +130,78 @@ export async function f1EventSchedule(season: number) {
 export async function f1SessionResults(
   season: number,
   round: number,
-  sessionType: string,
+  sessionType: F1SessionType,
 ) {
   let rawSession;
   let raceLaps: string;
 
   switch (sessionType) {
-    case "Practice 1":
-    case "Practice 2":
-    case "Practice 3":
-    case "Sprint Qualifying":
-      return null;
+    case F1SessionType.Practice1:
+    case F1SessionType.Practice2:
+    case F1SessionType.Practice3:
+    case F1SessionType.SprintQualifying:
+      const meetings = await fetchF1Meetings(season);
+
+      const curMeeting = meetings?.[round];
+
+      const curSession = await fetchF1Sessions(
+        season,
+        curMeeting?.meeting_key,
+        sessionType.replace("-", " "),
+      );
+
+      const rawPosition =
+        (await fetchF1Positions(
+          curSession?.[0]?.session_key,
+          undefined,
+          undefined,
+          undefined,
+          curMeeting?.meeting_key,
+        )) ?? undefined;
+      const driver = await fetchF1DriverDetails(
+        rawPosition?.[0]?.session_key,
+        undefined,
+      );
+
+      if (!rawPosition) {
+        return null;
+      }
+
+      const distinctPositions = Array.from(
+        new Set(rawPosition.map((item) => item.position)),
+      );
+
+      const mostRecentPositions = distinctPositions
+        .map((position) => {
+          return rawPosition
+            .filter((item) => item.position === position)
+            .reduce((latest, current) => {
+              return new Date(latest.date) > new Date(current.date)
+                ? latest
+                : current;
+            });
+        })
+        .sort((a, b) => a.position - b.position);
+
+      return {
+        results: mostRecentPositions.map((item) => {
+          let driverDetails = driver?.find(
+            (x) => x.driver_number === item.driver_number,
+          );
+
+          return {
+            position: item.position,
+            driver: {
+              id: item.driver_number,
+              name: driverDetails?.first_name + " " + driverDetails?.last_name,
+            },
+            // laps: Number(item.laps),
+            time: "",
+            team: { name: driverDetails?.team_name ?? "Unknown" },
+          } as F1SessionResults;
+        }),
+        sessionName: sessionType,
+      } as F1SessionPage;
     case "Sprint":
       rawSession = await fetchF1SprintResult(season, round);
 
@@ -156,7 +229,7 @@ export async function f1SessionResults(
             grid: item.grid,
             laps: Number(item.laps),
             time: item.Time ? lappedStatus + item.Time.time : item.status,
-            pits: 0,
+            // pits: 0,
             team: { name: item.Constructor.name },
             points: Number(item.points),
           };
@@ -230,7 +303,7 @@ export async function f1SessionResults(
             grid: item.grid,
             laps: Number(item.laps),
             time: item.Time ? lappedStatus + item.Time.time : item.status,
-            pits: 0,
+            // pits: 0,
             team: { name: item.Constructor.name },
             points: Number(item.points),
           };

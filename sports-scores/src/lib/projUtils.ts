@@ -211,6 +211,8 @@ export function resolveGolfPlayerImage(playerName: string) {
       case "Matt Jones":
       case "Karl Vilips":
       case "Aaron Baddeley":
+      case "Ryan Ruffels":
+      case "Elvis Smylie":
         return "AU";
 
       // United States (US)
@@ -244,6 +246,8 @@ export function resolveGolfPlayerImage(playerName: string) {
       case "Max Homa":
       case "Andrew Novak":
       case "Michael Kim":
+      case "Cameron Young":
+      case "Patrick Reed":
         return "US";
 
       // United Kingdom (GB)
@@ -253,6 +257,7 @@ export function resolveGolfPlayerImage(playerName: string) {
       case "Tyrrell Hatton":
       case "Robert MacIntyre": // Scotland
       case "Aaron Rai":
+      case "Matt Fitzpatrick":
         return "GB";
 
       // Sweden (SE)
@@ -278,6 +283,7 @@ export function resolveGolfPlayerImage(playerName: string) {
       // South Korea (KR)
       case "Sungjae Im":
       case "Tom Kim":
+      case "Byeong Hun An":
         return "KR";
 
       // Canada (CA)
@@ -287,6 +293,7 @@ export function resolveGolfPlayerImage(playerName: string) {
       // Spain (ES)
       case "Sergio Garcia":
       case "Jon Rahm":
+      case "David Puig":
         return "ES";
 
       //Chilie (CL)
@@ -307,6 +314,17 @@ export function resolveGolfPlayerImage(playerName: string) {
       case "Thomas Pieters":
       case "Thomas Detry":
         return "BE";
+
+      // Denmark (DK)
+      case "Thorbjørn Olesen":
+      case "Rasmus Højgaard":
+      case "Nicolai Højgaard":
+        return "DK";
+
+      // France (FR)
+      case "Victor Perez":
+      case "Matthieu Pavon":
+        return "FR";
 
       default:
         return "/vercel.svg";
@@ -543,6 +561,8 @@ export function resolveF1CountryFlagImages(name: string) {
       case "Pierre Gasly":
       case "Isack Hadjar":
         return "FR";
+      case "Franco Colapinto":
+        return "AR";
       default:
         return "/vercel.svg";
     }
@@ -554,11 +574,11 @@ export function resolveF1CountryFlagImages(name: string) {
 export function resolveF1TeamImages(teamName: string) {
   switch (teamName) {
     case "Red Bull":
-      return "/f1/redbull.png";
+      return "/f1/redbull-f1.svg";
     case "Mercedes":
-      return "/f1/mercedes.png";
+      return "/f1/mercedes-benz.svg";
     case "Ferrari":
-      return "/f1/ferrari.svg";
+      return "/f1/ferrari-f1.svg";
     case "McLaren":
       return "/f1/mclaren.png";
     case "Alpine F1 Team":
@@ -566,13 +586,13 @@ export function resolveF1TeamImages(teamName: string) {
     case "Aston Martin":
       return "/f1/astonmartin.svg";
     case "RB F1 Team":
-      return "/f1/rb.webp";
+      return "/f1/racing-bulls-f1.svg";
     case "Sauber":
       return "/f1/sauber.webp";
     case "Haas F1 Team":
       return "/f1/haas.png";
     case "Williams":
-      return "/f1/williams.webp";
+      return "/f1/williams-f1.svg";
     default:
       return "/vercel.svg";
   }
