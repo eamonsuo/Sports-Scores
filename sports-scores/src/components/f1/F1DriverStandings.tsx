@@ -31,8 +31,8 @@ export default function F1DriverStandingsTable({
                 <div className="flex">
                   <Image
                     src={item.driver.img ?? fallback}
-                    height={10}
-                    width={15}
+                    height={20}
+                    width={20}
                     alt={"Logo"}
                     className="me-2"
                   />

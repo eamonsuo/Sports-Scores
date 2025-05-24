@@ -18,6 +18,7 @@ import { MATCHSTATUSAFL, SPORT } from "./constants";
 import {
   getLocalTime,
   resolveGolfPlayerImage,
+  resolveGolfTournamentImage,
   setMatchSummary,
   shortenTeamNames,
 } from "./projUtils";
@@ -263,11 +264,21 @@ export function convertNumbertoDate(dateNumber: number) {
 export function mapGolfLeaderboard(data: Golf_SlashGolfAPI_Leaderboard) {
   return {
     playerPositions: data.leaderboardRows.map((item) => {
-      let playerName = `${item.firstName} ${item.lastName}`;
+      let playerName =
+        item.players === undefined
+          ? `${item.firstName} ${item.lastName}${item.isAmateur ? " (A)" : ""}`
+          : item.players
+              .map(
+                (item) =>
+                  `${item.firstName} ${item.lastName}${item.isAmateur ? " (A)" : ""}`,
+              )
+              .join(", ");
       return {
         name: playerName,
         position: item.position,
-        totalScore: item.total,
+        totalScore: item.roundComplete
+          ? item.total
+          : Number(item.total) + Number(item.currentRoundScore),
         thru: item.thru,
         curRound: item.currentRoundScore,
         img: resolveGolfPlayerImage(playerName),
@@ -291,7 +302,7 @@ export function mapGolfSchedule(
       return {
         id: item.tournId,
         name: item.name,
-        img: "",
+        img: resolveGolfTournamentImage(item.name),
         startDate: startDate,
         endDate: endDate,
         sport: "golf",

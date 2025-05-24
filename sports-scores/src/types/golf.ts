@@ -99,6 +99,12 @@ export interface SlashGolf_LeaderboardRow {
   currentRound: number;
   teeTime: string;
   teeTimeTimestamp: string;
+  players: {
+    playerId: string;
+    firstName: string;
+    lastName: string;
+    isAmateur: boolean;
+  }[];
 }
 
 export interface SlashGolf_Round {

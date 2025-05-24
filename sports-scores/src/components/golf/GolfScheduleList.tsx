@@ -49,7 +49,7 @@ export default function GolfScheduleList({ data }: { data: GolfSchedule[] }) {
               />
             )}
             <TournamentSummaryCard
-              img="/vercel.svg"
+              img={item.img}
               name={item.name}
               status={item.status}
               leader={item.leader}

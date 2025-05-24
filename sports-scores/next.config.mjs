@@ -22,7 +22,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "flagsapi.com",
+        hostname: "flagcdn.com",
         port: "",
         pathname: "/**",
       },

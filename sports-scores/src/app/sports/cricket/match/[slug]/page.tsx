@@ -41,7 +41,11 @@ export default async function Page(props: {
 
   const detailsPage = mapMatchDetails(rawDetails, rawInnings);
   const scorecardPage = mapScorecardDetails(rawInnings);
-  let optionsOverall = pageSettings(detailsPage, scorecardPage, "");
+  let optionsOverall = pageSettings(
+    detailsPage,
+    scorecardPage,
+    `${rawDetails.Stg.Ccd}/${rawDetails.Stg.Scd}`,
+  );
 
   return (
     <ClientSportsPage
@@ -84,7 +88,7 @@ function pageSettings(
     },
     {
       btnLabel: `Series`,
-      component: seriesComponents(""),
+      component: seriesComponents(matchSeries),
       state: "series",
     },
   ];

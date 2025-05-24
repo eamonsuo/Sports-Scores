@@ -8,8 +8,10 @@ import {
   mapCricketTeamMatches,
 } from "@/lib/dataMapping";
 
-export async function cricketCurrentMatches() {
-  const rawMatches = await fetchCricketCurrentMatches();
+export async function cricketCurrentMatches(
+  date: "TODAY" | "YESTERDAY" | "TOMORROW",
+) {
+  const rawMatches = await fetchCricketCurrentMatches(date);
 
   if (rawMatches === null) {
     return null;
