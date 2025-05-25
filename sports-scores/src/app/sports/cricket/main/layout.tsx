@@ -9,6 +9,7 @@ export default async function SportsLayout({
   children: React.ReactNode;
 }) {
   var quota = getGlobalApiQuota(SPORT.CRICKET);
+
   return (
     <div className="flex h-full flex-col">
       <NavButtonGroup
