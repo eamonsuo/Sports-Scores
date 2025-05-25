@@ -5,7 +5,6 @@ import {
   fetchTournamentNextMatches,
   fetchTournamentStandings,
 } from "@/endpoints/sofascore.api";
-import { SPORT } from "@/lib/constants";
 import {
   resolveAFLImages,
   setMatchSummary,
@@ -18,7 +17,7 @@ import {
   AFLMatchPage,
   AFLStanding,
 } from "@/types/afl";
-import { MatchSummary } from "@/types/misc";
+import { MatchSummary, SPORT } from "@/types/misc";
 
 const seasonId = 71308; //2025 season
 const tournamentId = 656; //AFL Tournament ID

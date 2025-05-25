@@ -167,6 +167,17 @@ type SportsmonksMatchCricket = {
   };
 };
 
+export enum SPORT {
+  AFL = "afl",
+  BASEBALL = "baseball",
+  CRICKET = "cricket",
+  NFL = "nfl",
+  F1 = "f1",
+  NRL = "nrl",
+  GOLF = "golf",
+  OLYMPICS = "olympics",
+}
+
 export enum CountryFlagCode {
   Afghanistan = "af",
   AlandIslands = "ax",

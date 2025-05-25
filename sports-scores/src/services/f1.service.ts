@@ -11,7 +11,6 @@ import {
   fetchF1Sessions,
   fetchF1SprintResult,
 } from "@/endpoints/f1.api";
-import { SPORT } from "@/lib/constants";
 import {
   resolveF1CountryFlagImages,
   resolveF1TeamImages,
@@ -24,6 +23,7 @@ import {
   F1SessionType,
   SessionSummary,
 } from "@/types/f1";
+import { SPORT } from "@/types/misc";
 
 export async function f1EventSchedule(season: number) {
   const rawEvents = await fetchF1Events(season);

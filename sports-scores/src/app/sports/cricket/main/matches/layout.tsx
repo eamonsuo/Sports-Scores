@@ -28,7 +28,6 @@ export default async function SportsLayout({
           ]}
         />
         {children}
-        {/* <APIStatus status={`${CRICKET_REQUEST_USED}% used`} /> */}
       </div>
     </div>
   );

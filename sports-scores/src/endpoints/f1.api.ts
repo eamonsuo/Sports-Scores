@@ -18,6 +18,18 @@ const fetchOptions = {
   headers: reqHeaders,
 };
 
+// function updateQuota(response: Response) {
+//   const limit = response.headers.get("x-ratelimit-requests-limit");
+//   const remaining = response.headers.get("x-ratelimit-requests-remaining");
+//   if (remaining && limit) {
+//     updateGlobalApiQuota(
+//       parseInt(remaining, 10),
+//       parseInt(limit, 10),
+//       SPORT.F1,
+//     );
+//   }
+// }
+
 export async function fetchF1Events(season: number) {
   const rawEvents = await fetch(
     `${process.env.F1_BASEURL}/f1/${season}/races`,

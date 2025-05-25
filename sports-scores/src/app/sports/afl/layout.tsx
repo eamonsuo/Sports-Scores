@@ -1,16 +1,14 @@
 import APIStatus from "@/components/misc/ApiStatus";
 import NavButtonGroup from "@/components/misc/NavButtonGroup";
+import { getGlobalApiQuota } from "@/lib/apiCounter";
+import { SPORT } from "@/types/misc";
 
-export default async function SportsLayout({
+export default function SportsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // const status = await fetchAFLStatus();
-
-  // if (typeof status === "string") {
-  //   return <Placeholder>{status}</Placeholder>;
-  // }
+  var quota = getGlobalApiQuota(SPORT.AFL);
 
   return (
     <div className="flex h-full flex-col">
@@ -29,7 +27,10 @@ export default async function SportsLayout({
         ]}
       />
       {children}
-      <APIStatus status="N/A" />
+      <APIStatus
+        status={quota?.percentUsed.toString() ?? ""}
+        reset="per month"
+      />
     </div>
   );
 }

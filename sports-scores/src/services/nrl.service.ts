@@ -6,14 +6,13 @@ import {
   fetchNRLNextMatches,
   fetchNRLStandings,
 } from "@/endpoints/nrl.api";
-import { SPORT } from "@/lib/constants";
 import {
   resolveNRLImages,
   setMatchSummary,
   shortenTeamNames,
   toShortTimeString,
 } from "@/lib/projUtils";
-import { MatchSummary } from "@/types/misc";
+import { MatchSummary, SPORT } from "@/types/misc";
 import { NRLFixturesPage, NRLLadderPage, NRLMatchPage } from "@/types/nrl";
 
 export async function NRLMatches() {

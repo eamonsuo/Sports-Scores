@@ -1,3 +1,4 @@
+import { updateGlobalApiQuota } from "@/lib/apiCounter";
 import {
   Cricket_LiveScoreAPI_LeaguesListPopular,
   Cricket_LiveScoreAPI_MatchesGetInnings,
@@ -6,8 +7,7 @@ import {
   Cricket_LiveScoreAPI_MatchesListByLeague,
   Cricket_LiveScoreAPI_TeamDetails,
 } from "@/types/cricket";
-
-export let CRICKET_REQUEST_USED: number = 0;
+import { SPORT } from "@/types/misc";
 
 const SERIES_IDS = [
   1445395, //Darwin T20 Series
@@ -30,6 +30,18 @@ reqHeaders.append(
   "8f40076dbdmsh686515dc9514f65p12718djsn07eae920cba7",
 );
 
+function updateQuota(response: Response) {
+  const limit = response.headers.get("x-ratelimit-requests-limit");
+  const remaining = response.headers.get("x-ratelimit-requests-remaining");
+  if (remaining && limit) {
+    updateGlobalApiQuota(
+      parseInt(remaining, 10),
+      parseInt(limit, 10),
+      SPORT.CRICKET,
+    );
+  }
+}
+
 export async function fetchCricketMyTeams() {
   let matches: Cricket_LiveScoreAPI_TeamDetails[] = [];
 
@@ -45,14 +57,14 @@ export async function fetchCricketMyTeams() {
       matches.push(
         (await rawFixtures.json()) as Cricket_LiveScoreAPI_TeamDetails,
       );
+
+      updateQuota(rawFixtures);
     }
   }
 
   if (matches.length <= 0) {
     return null;
   }
-
-  // setRequestsUsed(rawFixtures);
 
   return matches;
 }
@@ -69,7 +81,7 @@ export async function fetchCricketAllSeries() {
     return null;
   }
 
-  setRequestsUsed(rawFixtures);
+  updateQuota(rawFixtures);
 
   return (await rawFixtures.json()) as Cricket_LiveScoreAPI_LeaguesListPopular;
 }
@@ -103,7 +115,7 @@ export async function fetchCricketCurrentMatches(
     return null;
   }
 
-  setRequestsUsed(rawFixtures);
+  updateQuota(rawFixtures);
 
   return (await rawFixtures.json()) as Cricket_LiveScoreAPI_MatchesListByDate;
 }
@@ -120,7 +132,7 @@ export async function fetchCricketMatchInnings(id: number) {
     return null;
   }
 
-  setRequestsUsed(rawInnings);
+  updateQuota(rawInnings);
 
   return (await rawInnings.json()) as Cricket_LiveScoreAPI_MatchesGetInnings;
 }
@@ -137,7 +149,7 @@ export async function fetchCricketMatchDetails(id: number) {
     return null;
   }
 
-  setRequestsUsed(rawMatch);
+  updateQuota(rawMatch);
 
   return (await rawMatch.json()) as Cricket_LiveScoreAPI_MatchesGetScoreBoard;
 }
@@ -154,21 +166,9 @@ export async function fetchCricketSeriesMatches(ccd: string, scd: string) {
     return null;
   }
 
-  setRequestsUsed(rawFixtures);
+  updateQuota(rawFixtures);
 
   return (await rawFixtures.json()) as Cricket_LiveScoreAPI_MatchesListByLeague;
 }
 
 export async function fetchCricketSeriesStandings(url: string) {}
-
-function setRequestsUsed(apiResponse: Response) {
-  var requestsRemain = apiResponse.headers.get(
-    "x-ratelimit-requests-remaining",
-  );
-  var requestsTotal = apiResponse.headers.get("x-ratelimit-requests-limit");
-
-  if (requestsRemain !== null && requestsTotal !== null) {
-    CRICKET_REQUEST_USED =
-      (1 - Number(requestsRemain) / Number(requestsTotal)) * 100;
-  }
-}

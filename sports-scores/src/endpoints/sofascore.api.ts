@@ -1,3 +1,5 @@
+import { updateGlobalApiQuota } from "@/lib/apiCounter";
+import { SPORT } from "@/types/misc";
 import {
   Sofascore_FixturePage_Response,
   Sofascore_LeagueTotalStandings_Response,
@@ -7,6 +9,18 @@ import {
 
 const reqHeaders = new Headers();
 reqHeaders.append("x-rapidapi-key", process.env.RapidAPIKey ?? "");
+
+function updateQuota(response: Response) {
+  const limit = response.headers.get("x-ratelimit-requests-limit");
+  const remaining = response.headers.get("x-ratelimit-requests-remaining");
+  if (remaining && limit) {
+    updateGlobalApiQuota(
+      parseInt(remaining, 10),
+      parseInt(limit, 10),
+      SPORT.AFL,
+    );
+  }
+}
 
 export async function fetchTournamentLastMatches(
   tournamentId: number,
@@ -23,6 +37,8 @@ export async function fetchTournamentLastMatches(
   if (!rawMatches.ok) {
     return null;
   }
+
+  updateQuota(rawMatches);
 
   return (await rawMatches.json()) as Sofascore_FixturePage_Response;
 }
@@ -43,6 +59,8 @@ export async function fetchTournamentNextMatches(
     return null;
   }
 
+  updateQuota(rawMatches);
+
   return (await rawMatches.json()) as Sofascore_FixturePage_Response;
 }
 
@@ -61,6 +79,8 @@ export async function fetchTournamentStandings(
     return null;
   }
 
+  updateQuota(rawStandings);
+
   return (await rawStandings.json()) as Sofascore_LeagueTotalStandings_Response;
 }
 
@@ -76,6 +96,8 @@ export async function fetchMatchDetails(matchId: number) {
     return null;
   }
 
+  updateQuota(rawMatch);
+
   return (await rawMatch.json()) as Sofascore_Match_Response;
 }
 
@@ -90,6 +112,8 @@ export async function fetchMatchIncidents(matchId: number) {
   if (!rawMatch.ok || rawMatch.status === 204) {
     return null;
   }
+
+  updateQuota(rawMatch);
 
   return (await rawMatch.json()) as Sofascore_MatchIncidents_Response;
 }

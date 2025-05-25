@@ -1,3 +1,5 @@
+import { updateGlobalApiQuota } from "@/lib/apiCounter";
+import { SPORT } from "@/types/misc";
 import {
   NFL_AmericanFootballApi_FixturePage_Response,
   NFL_AmericanFootballApi_LeagueTotalStandings_Response,
@@ -11,6 +13,18 @@ reqHeaders.append("x-rapidapi-key", `${process.env.RapidAPIKey}`);
 //sesaon 24-25 - 60592
 //unique tourn - 9464
 //tourn regular - 41244
+
+function updateQuota(response: Response) {
+  const limit = response.headers.get("x-ratelimit-requests-limit");
+  const remaining = response.headers.get("x-ratelimit-requests-remaining");
+  if (remaining && limit) {
+    updateGlobalApiQuota(
+      parseInt(remaining, 10),
+      parseInt(limit, 10),
+      SPORT.NFL,
+    );
+  }
+}
 
 export async function fetchNFLLastMatches(
   season: number,
@@ -27,6 +41,8 @@ export async function fetchNFLLastMatches(
   if (!rawMatches.ok || rawMatches.status === 204) {
     return null;
   }
+
+  updateQuota(rawMatches);
 
   return (await rawMatches.json()) as NFL_AmericanFootballApi_FixturePage_Response;
 }
@@ -47,6 +63,8 @@ export async function fetchNFLNextMatches(
     return null;
   }
 
+  updateQuota(rawMatches);
+
   return (await rawMatches.json()) as NFL_AmericanFootballApi_FixturePage_Response;
 }
 
@@ -63,6 +81,8 @@ export async function fetchNFLStandings(season: number) {
     return null;
   }
 
+  updateQuota(rawStandings);
+
   return (await rawStandings.json()) as NFL_AmericanFootballApi_LeagueTotalStandings_Response;
 }
 
@@ -78,6 +98,8 @@ export async function fetchNFLMatchDetails(matchId: number) {
     return null;
   }
 
+  updateQuota(rawMatch);
+
   return (await rawMatch.json()) as NFL_AmericanFootballApi_Match_Response;
 }
 
@@ -92,6 +114,8 @@ export async function fetchNFLMatchIncidents(matchId: number) {
   if (!rawMatch.ok || rawMatch.status === 204) {
     return null;
   }
+
+  updateQuota(rawMatch);
 
   return (await rawMatch.json()) as NFL_AmericanFootballApi_MatchIncidents_Response;
 }
