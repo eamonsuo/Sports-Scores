@@ -1,3 +1,5 @@
+import { updateGlobalApiQuota } from "@/lib/apiCounter";
+import { SPORT } from "@/types/misc";
 import {
   NRL_RugbyAPI2_FixturePage_Response,
   NRL_RugbyAPI2_LeagueTotalStandings_Response,
@@ -7,6 +9,18 @@ import {
 
 const reqHeaders = new Headers();
 reqHeaders.append("x-rapidapi-key", process.env.RapidAPIKey ?? "");
+
+function updateQuota(response: Response) {
+  const limit = response.headers.get("x-ratelimit-requests-limit");
+  const remaining = response.headers.get("x-ratelimit-requests-remaining");
+  if (remaining && limit) {
+    updateGlobalApiQuota(
+      parseInt(remaining, 10),
+      parseInt(limit, 10),
+      SPORT.NRL,
+    );
+  }
+}
 
 export async function fetchNRLLastMatches(
   season: number,
@@ -23,6 +37,8 @@ export async function fetchNRLLastMatches(
   if (!rawMatches.ok) {
     return null;
   }
+
+  updateQuota(rawMatches);
 
   return (await rawMatches.json()) as NRL_RugbyAPI2_FixturePage_Response;
 }
@@ -43,6 +59,8 @@ export async function fetchNRLNextMatches(
     return null;
   }
 
+  updateQuota(rawMatches);
+
   return (await rawMatches.json()) as NRL_RugbyAPI2_FixturePage_Response;
 }
 
@@ -59,6 +77,8 @@ export async function fetchNRLStandings(season: number) {
     return null;
   }
 
+  updateQuota(rawStandings);
+
   return (await rawStandings.json()) as NRL_RugbyAPI2_LeagueTotalStandings_Response;
 }
 
@@ -74,6 +94,8 @@ export async function fetchNRLMatchDetails(matchId: number) {
     return null;
   }
 
+  updateQuota(rawMatch);
+
   return (await rawMatch.json()) as NRL_RugbyAPI2_Match_Response;
 }
 
@@ -88,6 +110,8 @@ export async function fetchNRLMatchIncidents(matchId: number) {
   if (!rawMatch.ok || rawMatch.status === 204) {
     return null;
   }
+
+  updateQuota(rawMatch);
 
   return (await rawMatch.json()) as NRL_RugbyAPI2_MatchIncidents_Response;
 }

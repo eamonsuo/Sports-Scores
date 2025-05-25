@@ -6,14 +6,13 @@ import {
   fetchNFLNextMatches,
   fetchNFLStandings,
 } from "@/endpoints/nfl.api";
-import { SPORT } from "@/lib/constants";
 import {
   resolveNFLImages,
   setMatchSummary,
   shortenTeamNames,
   toShortTimeString,
 } from "@/lib/projUtils";
-import { MatchSummary } from "@/types/misc";
+import { MatchSummary, SPORT } from "@/types/misc";
 import { NFLFixturesPage, NFLLadderPage, NFLMatchPage } from "@/types/nfl";
 
 export async function NFLMatches() {

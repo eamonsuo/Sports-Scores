@@ -52,17 +52,6 @@ export const MATCHSTATUSNFL = {
   LONG_PST: "Postponed",
 };
 
-export const SPORT = {
-  AFL: "afl",
-  BASEBALL: "baseball",
-  CRICKET: "cricket",
-  NFL: "nfl",
-  F1: "f1",
-  NRL: "nrl",
-  GOLF: "golf",
-  OLYMPICS: "olympics",
-};
-
 export const APICALLS = {
   STATUS: "status",
   FIXTURES: "fixtures",

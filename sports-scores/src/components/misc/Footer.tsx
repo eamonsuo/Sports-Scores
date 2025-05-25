@@ -1,9 +1,9 @@
 "use client";
-import { SPORT } from "@/lib/constants";
 import Link from "next/link";
 import { useState } from "react";
 
 import { cn } from "@/lib/utils";
+import { SPORT } from "@/types/misc";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "./Avatar";
 

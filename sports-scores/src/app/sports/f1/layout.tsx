@@ -6,12 +6,6 @@ export default async function SportsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // const status = await fetchF1Status();
-
-  // if (typeof status === "string") {
-  //   return <Placeholder>{status}</Placeholder>;
-  // }
-
   return (
     <div className="flex h-full flex-col">
       <NavButtonGroup
@@ -34,7 +28,7 @@ export default async function SportsLayout({
         ]}
       />
       {children}
-      <APIStatus status="N/A" />
+      <APIStatus status="0" />
     </div>
   );
 }

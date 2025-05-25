@@ -13,8 +13,8 @@ import {
   Golf_SlashGolfAPI_Schedule,
   GolfSchedulePage,
 } from "@/types/golf";
-import { MatchStatus, MatchSummary } from "@/types/misc";
-import { MATCHSTATUSAFL, SPORT } from "./constants";
+import { MatchStatus, MatchSummary, SPORT } from "@/types/misc";
+import { MATCHSTATUSAFL } from "./constants";
 import {
   getLocalTime,
   resolveGolfPlayerImage,

@@ -2,9 +2,11 @@ import { clsx } from "clsx";
 
 export default function APIStatus({
   status,
+  reset,
   className,
 }: {
-  status: string;
+  status: number | string;
+  reset?: string;
   className?: string;
 }) {
   return (
@@ -13,6 +15,6 @@ export default function APIStatus({
         "p-1 dark:bg-neutral-900 dark:text-neutral-400",
         className,
       )}
-    >{`API Calls: ${status}`}</div>
+    >{`API Calls: ${status}% used (${reset})`}</div>
   );
 }
