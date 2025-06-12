@@ -276,9 +276,7 @@ export function mapGolfLeaderboard(data: Golf_SlashGolfAPI_Leaderboard) {
       return {
         name: playerName,
         position: item.position,
-        totalScore: item.roundComplete
-          ? item.total
-          : Number(item.total) + Number(item.currentRoundScore),
+        totalScore: item.total,
         thru: item.thru,
         curRound: item.currentRoundScore,
         img: resolveGolfPlayerImage(playerName),
