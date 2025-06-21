@@ -176,6 +176,14 @@ export enum SPORT {
   NRL = "nrl",
   GOLF = "golf",
   OLYMPICS = "olympics",
+  FOOTBALL = "football",
+  SURFING = "surfing",
+  TENNIS = "tennis",
+  BASKETBALL = "basketball",
+  ICE_HOCKEY = "ice-hockey",
+  NETBALL = "netball",
+  RUGBY_UNION = "rugby-union",
+  CYCLING = "cycling",
 }
 
 export enum CountryFlagCode {
