@@ -27,10 +27,7 @@ export default function SportsLayout({
         ]}
       />
       {children}
-      <APIStatus
-        status={quota?.percentUsed.toString() ?? ""}
-        reset="per month"
-      />
+      <APIStatus status={quota?.percentUsed ?? "N/A"} reset="per month" />
     </div>
   );
 }
