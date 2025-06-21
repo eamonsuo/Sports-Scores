@@ -27,7 +27,6 @@ export default function RootLayout({
         type="image/png"
         sizes="32x32"
       />
-      <meta name="apple-mobile-web-app-capable" content="yes" />
       {/* Dark mode enabled */}
       <body className={inter.className}>
         {/* Set to Dynamic view height aka height of browser minus any browser things. Helps on
