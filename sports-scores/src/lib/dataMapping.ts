@@ -278,7 +278,11 @@ export function mapGolfLeaderboard(data: Golf_SlashGolfAPI_Leaderboard) {
         position: item.position,
         totalScore: item.total,
         thru: item.thru,
-        curRound: item.currentRoundScore,
+        curRound:
+          Number(item.currentRoundScore) > 0 &&
+          item.currentRoundScore[0] !== "+"
+            ? "+" + item.currentRoundScore
+            : item.currentRoundScore,
         img: resolveGolfPlayerImage(playerName),
       } as GolfLeaderboardPlayerRow;
     }),

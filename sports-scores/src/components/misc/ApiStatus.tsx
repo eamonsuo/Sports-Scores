@@ -2,7 +2,7 @@ import { clsx } from "clsx";
 
 export default function APIStatus({
   status,
-  reset,
+  reset = "N/A",
   className,
 }: {
   status: number | string;

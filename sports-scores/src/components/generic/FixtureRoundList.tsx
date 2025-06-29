@@ -1,8 +1,9 @@
 "use client";
 
-import { MATCHSTATUSAFL, MATCHSTATUSNFL } from "@/lib/constants";
-import { MatchSummary } from "@/types/misc";
+import fallback from "@/../public/vercel.svg";
+import { RoundDetails } from "@/types/misc";
 import { clsx } from "clsx";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import FixtureList from "./FixtureList";
 
@@ -10,13 +11,14 @@ export default function FixtureRoundList({
   data,
   curRound,
 }: {
-  data: MatchSummary[];
+  data: RoundDetails[];
   curRound: string;
 }) {
   const [round, setRound] = useState(curRound); //need to put in parent so that it only gets set once. Need to change page structure?
   const btnListRef = useRef<HTMLDivElement>(null); //Ref for the div which contains all round buttons
   const initialBtn = useRef<HTMLButtonElement>(null); //Ref for btn of curRound
-  let roundLabels = [...new Set(data.map((item) => item.roundLabel ?? ""))];
+
+  const roundLabels = data.map((item) => item.roundLabel);
 
   useEffect(() => {
     //Ensure the curRound is scrolled into the centre of view on page load
@@ -97,13 +99,25 @@ export default function FixtureRoundList({
         className="flex-1 overflow-y-auto"
       >
         <FixtureList
-          data={data.filter(
-            (item) =>
-              item.roundLabel === round &&
-              item.status !== MATCHSTATUSAFL.LONG_CANC &&
-              item.status !== MATCHSTATUSNFL.LONG_CANC,
-          )}
+          data={data.find((item) => item.roundLabel === round)?.matches ?? []}
         />
+        {(data.find((item) => item.roundLabel === round)?.byes?.length ??
+        0 > 0) ? (
+          <div className="flex items-center gap-1 overflow-x-auto p-4 dark:text-neutral-400">
+            Bye:{" "}
+            {data
+              .find((item) => item.roundLabel === round)
+              ?.byes?.map((x) => (
+                <Image
+                  key={x.name}
+                  src={x.img ?? fallback}
+                  width={25}
+                  height={25}
+                  alt="Bye team"
+                />
+              ))}
+          </div>
+        ) : null}
       </div>
     </>
   );

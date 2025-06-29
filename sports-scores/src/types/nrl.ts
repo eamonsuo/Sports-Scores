@@ -1,7 +1,7 @@
 import { ScoreDifference } from "@/components/generic/ScoreChart";
 import { NRLStanding } from "@/components/nrl/NRLLadder";
 import { NRLScoreBreakdown } from "@/components/nrl/NRLScoreBreakdown";
-import { MatchSummary, TeamScoreDetails } from "./misc";
+import { RoundDetails, TeamScoreDetails } from "./misc";
 import {
   Sofascore_Event,
   Sofascore_Incident,
@@ -26,7 +26,8 @@ export interface NRL_RugbyAPI2_MatchIncidents_Response {
 }
 
 export interface NRLFixturesPage {
-  fixtures: MatchSummary[];
+  fixtures: RoundDetails[];
+  currentRound: string;
 }
 
 export interface NRLLadderPage {

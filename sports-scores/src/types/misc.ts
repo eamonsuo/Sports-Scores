@@ -72,6 +72,12 @@ export type MatchSummary = {
 
 export type MatchStatus = "LIVE" | "UPCOMING" | "COMPLETED";
 
+export interface RoundDetails {
+  matches: MatchSummary[];
+  roundLabel: string;
+  byes?: { name?: string; img?: string }[];
+}
+
 export interface SportsmonksCricket {
   data: SportsmonksMatchCricket[];
   links: any;

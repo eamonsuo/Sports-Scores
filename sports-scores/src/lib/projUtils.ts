@@ -6,6 +6,8 @@ import {
 } from "@/types/misc";
 import { MATCHSTATUSAFL, MATCHSTATUSNFL } from "./constants";
 
+const fallback = "/vercel.svg";
+
 export function setMatchStatusCricket(status: string) {
   switch (status) {
     case "Aban.":
@@ -135,7 +137,7 @@ export function getLocalTimeISO(startTime: string) {
 
 export function getCountryImageUrl(countryCode?: CountryFlagCode) {
   if (countryCode === null || countryCode === undefined) {
-    return "/vercel.svg";
+    return fallback;
   }
 
   return `https://flagcdn.com/${countryCode}.svg`;
@@ -193,6 +195,39 @@ export function dateToCustomString(date: Date) {
     .replaceAll(",", "");
 }
 
+export function resolveGolfTeamImage(teamName: string) {
+  switch (teamName) {
+    case "4ACES GC":
+      return "/liv/4aces.webp";
+    case "LEGION XIII":
+      return "/liv/legion13.webp";
+    case "CRUSHERS GC":
+      return "/liv/crushers.webp";
+    case "STINGER GC":
+      return "/liv/stinger.webp";
+    case "FIREBALLS GC":
+      return "/liv/fireballs.webp";
+    case "CLEEKS GOLF CLUB":
+      return "/liv/cleeks.webp";
+    case "TORQUE GC":
+      return "/liv/torque.webp";
+    case "RIPPER GC":
+      return "/liv/ripper.webp";
+    case "HYFLYERS GC":
+      return "/liv/hyflyers.webp";
+    case "MAJESTICKS GC":
+      return "/liv/majesticks.webp";
+    case "RANGEGOATS GC":
+      return "/liv/rangegoats.webp";
+    case "SMASH GC":
+      return "/liv/smash.webp";
+    case "IRON HEADS GC":
+      return "/liv/ironheads.webp";
+    default:
+      return fallback;
+  }
+}
+
 export function resolveGolfPlayerImage(playerName: string) {
   var countryCode = (() => {
     switch (playerName) {
@@ -209,6 +244,9 @@ export function resolveGolfPlayerImage(playerName: string) {
       case "Ryan Ruffels":
       case "Elvis Smylie":
         return CountryFlagCode.Australia;
+
+      case "Ryan Fox":
+        return CountryFlagCode.NewZealand;
 
       case "Scottie Scheffler":
       case "Xander Schauffele":
@@ -242,6 +280,13 @@ export function resolveGolfPlayerImage(playerName: string) {
       case "Michael Kim":
       case "Cameron Young":
       case "Patrick Reed":
+      case "Ben Griffin":
+      case "Harold Varner III":
+      case "Kevin Kisner":
+      case "Matt Kuchar":
+      case "Kevin Na":
+      case "Gary Woodland":
+      case "Lucas Glover":
         return CountryFlagCode.UnitedStates;
 
       case "Tommy Fleetwood":
@@ -249,6 +294,9 @@ export function resolveGolfPlayerImage(playerName: string) {
       case "Tyrrell Hatton":
       case "Aaron Rai":
       case "Matt Fitzpatrick":
+      case "Paul Casey":
+      case "Lee Westwood":
+      case "Ian Poulter":
         return CountryFlagCode.England;
 
       case "Shane Lowry":
@@ -259,6 +307,7 @@ export function resolveGolfPlayerImage(playerName: string) {
         return CountryFlagCode.Scotland;
 
       case "Ludvig Åberg":
+      case "Henrik Stenson":
         return CountryFlagCode.Sweden;
 
       case "Hideki Matsuyama":
@@ -273,6 +322,7 @@ export function resolveGolfPlayerImage(playerName: string) {
       case "Sungjae Im":
       case "Tom Kim":
       case "Byeong Hun An":
+      case "Si Woo Kim":
         return CountryFlagCode.KoreaSouth;
 
       case "Corey Conners":
@@ -284,6 +334,7 @@ export function resolveGolfPlayerImage(playerName: string) {
         return CountryFlagCode.Spain;
 
       case "Joaquin Niemann":
+      case "Mito Pereira":
         return CountryFlagCode.Chile;
 
       case "Louis Oosthuizen":
@@ -305,7 +356,11 @@ export function resolveGolfPlayerImage(playerName: string) {
         return CountryFlagCode.France;
 
       case "Abraham Ancer":
+      case "Carlos Ortiz":
         return CountryFlagCode.Mexico;
+
+      case "Adrian Meronk":
+        return CountryFlagCode.Poland;
     }
   })();
 
@@ -406,7 +461,7 @@ export function resolveNRLImages(teamName: string) {
     case "Wests Tigers":
       return "/nrl/tigers.svg";
     default:
-      return "/vercel.svg";
+      return fallback;
   }
 }
 
@@ -449,7 +504,7 @@ export function resolveAFLImages(teamName: string) {
     case "Western Bulldogs":
       return "/afl/bulldogs.svg";
     default:
-      return "/vercel.svg";
+      return fallback;
   }
 }
 
@@ -520,7 +575,7 @@ export function resolveNFLImages(teamName: string) {
     case "Washington Commanders":
       return "/nfl/commanders.svg";
     default:
-      return "/vercel.svg";
+      return fallback;
   }
 }
 
@@ -627,6 +682,6 @@ export function resolveF1TeamImages(teamName: string) {
     case "Williams":
       return "/f1/williams-f1.svg";
     default:
-      return "/vercel.svg";
+      return fallback;
   }
 }
