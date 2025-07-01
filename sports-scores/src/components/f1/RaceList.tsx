@@ -12,7 +12,7 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
     const scrollToAnchor = () => {
       const element = document.getElementById("current-date");
       if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
         return true;
       }
       return false;
