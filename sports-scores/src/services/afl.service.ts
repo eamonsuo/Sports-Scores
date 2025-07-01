@@ -6,8 +6,8 @@ import {
   fetchTournamentStandings,
 } from "@/endpoints/sofascore.api";
 import { aflTeamNames } from "@/lib/constants";
+import { resolveAFLImages } from "@/lib/imageMapping";
 import {
-  resolveAFLImages,
   setMatchSummary,
   shortenTeamNames,
   toShortTimeString,

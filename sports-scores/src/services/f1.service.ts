@@ -14,7 +14,7 @@ import {
 import {
   resolveF1CountryFlagImages,
   resolveF1TeamImages,
-} from "@/lib/projUtils";
+} from "@/lib/imageMapping";
 import {
   F1ConstructorStandingsPage,
   F1DriverStandingsPage,

@@ -7,8 +7,8 @@ import {
   fetchNRLStandings,
 } from "@/endpoints/nrl.api";
 import { nrlTeamNames } from "@/lib/constants";
+import { resolveNRLImages } from "@/lib/imageMapping";
 import {
-  resolveNRLImages,
   setMatchSummary,
   shortenTeamNames,
   toShortTimeString,

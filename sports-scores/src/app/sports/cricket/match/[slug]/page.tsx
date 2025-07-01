@@ -11,6 +11,7 @@ import {
   fetchCricketMatchInnings,
 } from "@/endpoints/cricket.api";
 import { convertNumbertoDate } from "@/lib/dataMapping";
+import { resolveCountryImage } from "@/lib/imageMapping";
 import { dateToCustomString } from "@/lib/projUtils";
 import {
   Cricket_LiveScoreAPI_MatchesGetInnings,
@@ -141,9 +142,17 @@ function mapMatchDetails(
     tossResult: `${tossWinner} won the toss and chose to ${tossChoice}`,
     umpires: [""],
     pom: "",
-    homeInfo: { name: details.T1[0].Nm, score: `${home1Ing}${home2Ing}` },
+    homeInfo: {
+      name: details.T1[0].Nm,
+      score: `${home1Ing}${home2Ing}`,
+      img: resolveCountryImage(details.T1[0].Nm),
+    },
     homePlayers: homePlayers,
-    awayInfo: { name: details.T2[0].Nm, score: `${away1Ing}${away2Ing}` },
+    awayInfo: {
+      name: details.T2[0].Nm,
+      score: `${away1Ing}${away2Ing}`,
+      img: resolveCountryImage(details.T2[0].Nm),
+    },
     awayPlayers: awayPlayers,
   } as MatchDetailsPage;
 }

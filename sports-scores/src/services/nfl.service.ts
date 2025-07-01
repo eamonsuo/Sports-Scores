@@ -7,8 +7,8 @@ import {
   fetchNFLStandings,
 } from "@/endpoints/nfl.api";
 import { nflTeamNames } from "@/lib/constants";
+import { resolveNFLImages } from "@/lib/imageMapping";
 import {
-  resolveNFLImages,
   setMatchSummary,
   shortenTeamNames,
   toShortTimeString,

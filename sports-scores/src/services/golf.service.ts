@@ -5,7 +5,10 @@ import {
   fetchGolfSchedule,
 } from "@/endpoints/golf.api";
 import { mapGolfLeaderboard, mapGolfSchedule } from "@/lib/dataMapping";
-import { resolveGolfPlayerImage, resolveGolfTeamImage } from "@/lib/projUtils";
+import {
+  resolveGolfPlayerImage,
+  resolveGolfTeamImage,
+} from "@/lib/imageMapping";
 import {
   GolfRankingsPage,
   SlashGolf_PlayerRanking_FedExCup,

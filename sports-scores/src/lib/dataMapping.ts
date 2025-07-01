@@ -16,12 +16,11 @@ import {
 import { MatchStatus, MatchSummary, SPORT } from "@/types/misc";
 import { MATCHSTATUSAFL } from "./constants";
 import {
-  getLocalTime,
+  resolveCountryImage,
   resolveGolfPlayerImage,
   resolveGolfTournamentImage,
-  setMatchSummary,
-  shortenTeamNames,
-} from "./projUtils";
+} from "./imageMapping";
+import { getLocalTime, setMatchSummary, shortenTeamNames } from "./projUtils";
 
 export function mapAFLFixtureFields(matches: AFLGame[]) {
   return matches.map(
@@ -115,12 +114,12 @@ export function mapCricketCurrentMatches(
             : event.ECo,
         otherDetail: event.ErnInf,
         homeDetails: {
-          img: "/olympic-rings.svg",
+          img: resolveCountryImage(event.T1[0].Nm),
           score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
           name: event.T1[0].Nm,
         },
         awayDetails: {
-          img: "/olympic-rings.svg",
+          img: resolveCountryImage(event.T2[0].Nm),
           score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
           name: event.T2[0].Nm,
         },
