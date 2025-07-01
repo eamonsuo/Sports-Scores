@@ -1,3 +1,4 @@
+import ClientSportsPage from "@/components/generic/ClientSportsPage";
 import TournamentLeaderboard from "@/components/golf/TournamentLeaderboard";
 import Placeholder from "@/components/misc/Placeholder";
 import { golfLIVTournamentLeaderboard } from "@/services/golf.service";
@@ -13,9 +14,37 @@ export default async function Page(props: {
   if (!leaderboard) {
     return <Placeholder>No Data</Placeholder>;
   }
+
+  const pageSettings = [
+    {
+      btnLabel: `Players`,
+      component: (
+        <div className="overflow-y-auto px-4">
+          <TournamentLeaderboard
+            players={leaderboard?.playerLeaderboard.playerPositions}
+          />
+        </div>
+      ),
+      state: "players",
+    },
+    {
+      btnLabel: `Teams`,
+      component: (
+        <div className="overflow-y-auto px-4">
+          <TournamentLeaderboard players={leaderboard?.teamLeaderboard} />
+        </div>
+      ),
+      state: "teams",
+    },
+  ];
+
   return (
-    <div className="flex-1 overflow-y-auto px-4">
-      <TournamentLeaderboard players={leaderboard?.playerPositions} />
+    <div className="overflow-y-auto">
+      <ClientSportsPage
+        apiStatus={<></>}
+        options={pageSettings}
+        defaultState="players"
+      />
     </div>
   );
 }

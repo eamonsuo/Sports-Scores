@@ -1,7 +1,7 @@
 import { ScoreDifference } from "@/components/generic/ScoreChart";
 import { NFLStanding } from "@/components/nfl/NFLLadder";
 import { NFLScoreBreakdown } from "@/components/nfl/NFLScoreBreakdown";
-import { APISportsResponse, MatchSummary, TeamScoreDetails } from "./misc";
+import { APISportsResponse, RoundDetails, TeamScoreDetails } from "./misc";
 import {
   Sofascore_Event,
   Sofascore_Incident,
@@ -26,7 +26,8 @@ export interface NFL_AmericanFootballApi_MatchIncidents_Response {
 }
 
 export interface NFLFixturesPage {
-  fixtures: MatchSummary[];
+  fixtures: RoundDetails[];
+  currentRound: string;
 }
 
 export interface NFLLadderPage {

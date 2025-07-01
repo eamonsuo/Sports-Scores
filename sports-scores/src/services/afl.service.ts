@@ -5,8 +5,9 @@ import {
   fetchTournamentNextMatches,
   fetchTournamentStandings,
 } from "@/endpoints/sofascore.api";
+import { aflTeamNames } from "@/lib/constants";
+import { resolveAFLImages } from "@/lib/imageMapping";
 import {
-  resolveAFLImages,
   setMatchSummary,
   shortenTeamNames,
   toShortTimeString,
@@ -17,7 +18,7 @@ import {
   AFLMatchPage,
   AFLStanding,
 } from "@/types/afl";
-import { MatchSummary, SPORT } from "@/types/misc";
+import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
 
 const seasonId = 71308; //2025 season
 const tournamentId = 656; //AFL Tournament ID
@@ -38,44 +39,68 @@ export async function AFLMatches() {
     return null;
   }
 
-  const matches = lastMatches?.events.concat(nextMatches?.events ?? []) ?? [];
+  const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
+  const rounds = [...new Set(matches.map((item) => item.roundInfo.round ?? 0))];
 
   return {
-    fixtures: matches.map((match) => {
-      var startDate = new Date(0);
-      startDate.setUTCSeconds(match.startTimestamp);
+    fixtures: rounds.map((round) => {
+      //Get all teams playing in the round
+      let teams = matches
+        .filter((item) => item.roundInfo.round === round)
+        .flatMap((game) => [game.homeTeam.name, game.awayTeam.name]);
 
       return {
-        startDate: startDate,
-        roundLabel: `Round ${match.roundInfo.round}`,
-        timer:
-          match.status.type === "notstarted"
-            ? toShortTimeString(startDate)
-            : match.status.description,
-        id: match.id,
-        sport: SPORT.AFL,
-        status: match.status.description,
-        venue: "",
-        summaryText: setMatchSummary(
-          match.status.type,
-          toShortTimeString(startDate),
-          match.homeTeam.name,
-          match.homeScore.current,
-          match.awayTeam.name,
-          match.awayScore.current,
-        ),
-        homeDetails: {
-          name: shortenTeamNames(match.homeTeam.name),
-          score: match.homeScore.current?.toString() ?? "0",
-          img: resolveAFLImages(match.homeTeam.name),
-        },
-        awayDetails: {
-          name: shortenTeamNames(match.awayTeam.name),
-          score: match.awayScore.current?.toString() ?? "0",
-          img: resolveAFLImages(match.awayTeam.name),
-        },
-      } as MatchSummary;
+        matches: matches
+          .filter((item) => item.roundInfo.round === round)
+          .map((match) => {
+            var startDate = new Date(0);
+            startDate.setUTCSeconds(match.startTimestamp);
+
+            return {
+              startDate: startDate,
+              roundLabel: `Round ${match.roundInfo.round}`,
+              timer:
+                match.status.type === "notstarted"
+                  ? toShortTimeString(startDate)
+                  : match.status.description,
+              id: match.id,
+              sport: SPORT.AFL,
+              status: match.status.description,
+              venue: "",
+              summaryText: setMatchSummary(
+                match.status.type,
+                toShortTimeString(startDate),
+                match.homeTeam.name,
+                match.homeScore.current,
+                match.awayTeam.name,
+                match.awayScore.current,
+              ),
+              homeDetails: {
+                name: shortenTeamNames(match.homeTeam.name),
+                score: match.homeScore.current?.toString() ?? "0",
+                img: resolveAFLImages(match.homeTeam.name),
+              },
+              awayDetails: {
+                name: shortenTeamNames(match.awayTeam.name),
+                score: match.awayScore.current?.toString() ?? "0",
+                img: resolveAFLImages(match.awayTeam.name),
+              },
+            } as MatchSummary;
+          }),
+        roundLabel: `Round ${round}`,
+        byes: aflTeamNames
+          .filter((x) => !teams.includes(x))
+          .map((team) => {
+            return { name: team, img: resolveAFLImages(team) };
+          }),
+      } as RoundDetails;
     }),
+
+    currentRound: `Round ${
+      nextMatches?.events[0]?.roundInfo.round ??
+      lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo.round ??
+      0
+    }`,
   } as AFLFixturesPage;
 }
 

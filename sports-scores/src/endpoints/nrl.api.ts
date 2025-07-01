@@ -23,10 +23,9 @@ function updateQuota(response: Response) {
 }
 
 export async function fetchNRLLastMatches(
-  season: number,
+  seasonId: number,
   pageNumber: number = 0,
 ) {
-  let seasonId = season == 2025 ? 69277 : 56749; //If not 2025 then 2024 season
   const rawMatches = await fetch(
     `${process.env.NRL_BASEURL}/rugby/tournament/294/season/${seasonId}/matches/last/${pageNumber}`,
     {
@@ -44,10 +43,9 @@ export async function fetchNRLLastMatches(
 }
 
 export async function fetchNRLNextMatches(
-  season: number,
+  seasonId: number,
   pageNumber: number = 0,
 ) {
-  let seasonId = season == 2025 ? 69277 : 39630;
   const rawMatches = await fetch(
     `${process.env.NRL_BASEURL}/rugby/tournament/294/season/${seasonId}/matches/next/${pageNumber}`,
     {
@@ -64,8 +62,7 @@ export async function fetchNRLNextMatches(
   return (await rawMatches.json()) as NRL_RugbyAPI2_FixturePage_Response;
 }
 
-export async function fetchNRLStandings(season: number) {
-  let seasonId = season == 2025 ? 69277 : 39630;
+export async function fetchNRLStandings(seasonId: number) {
   const rawStandings = await fetch(
     `${process.env.NRL_BASEURL}/rugby/tournament/294/season/${seasonId}/standings/total`,
     {

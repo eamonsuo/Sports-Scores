@@ -73,6 +73,14 @@ export interface Golf_SlashGolfAPI_Leaderboard {
   timestamp: string;
   cutLines: SlashGolf_CutLine[];
   leaderboardRows: SlashGolf_LeaderboardRow[];
+  teams?: SlashGolf_LeaderboardTeams[];
+}
+
+export interface SlashGolf_LeaderboardTeams {
+  teamId: string;
+  name: string;
+  totalScore: string;
+  position: string;
 }
 
 export interface SlashGolf_CutLine {

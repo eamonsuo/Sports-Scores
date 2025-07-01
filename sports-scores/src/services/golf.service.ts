@@ -1,10 +1,14 @@
+import { GolfLeaderboardPlayerRow } from "@/components/golf/TournamentLeaderboard";
 import {
   fetchGolfLeaderboard,
   fetchGolfRankings,
   fetchGolfSchedule,
 } from "@/endpoints/golf.api";
 import { mapGolfLeaderboard, mapGolfSchedule } from "@/lib/dataMapping";
-import { resolveGolfPlayerImage } from "@/lib/projUtils";
+import {
+  resolveGolfPlayerImage,
+  resolveGolfTeamImage,
+} from "@/lib/imageMapping";
 import {
   GolfRankingsPage,
   SlashGolf_PlayerRanking_FedExCup,
@@ -96,5 +100,18 @@ export async function golfLIVTournamentLeaderboard(
     return null;
   }
 
-  return mapGolfLeaderboard(rawLeaderboard);
+  return {
+    playerLeaderboard: mapGolfLeaderboard(rawLeaderboard),
+    teamLeaderboard:
+      rawLeaderboard.teams?.map((item) => {
+        return {
+          name: item.name,
+          position: item.position,
+          totalScore: item.totalScore,
+          thru: "",
+          curRound: "",
+          img: resolveGolfTeamImage(item.name),
+        } as GolfLeaderboardPlayerRow;
+      }) ?? [],
+  };
 }

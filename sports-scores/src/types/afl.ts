@@ -1,8 +1,9 @@
 import { ScoreDifference } from "@/components/generic/ScoreChart";
-import { APISportsResponse, MatchSummary, TeamScoreDetails } from "./misc";
+import { APISportsResponse, RoundDetails, TeamScoreDetails } from "./misc";
 
 export interface AFLFixturesPage {
-  fixtures: MatchSummary[];
+  fixtures: RoundDetails[];
+  currentRound: string;
 }
 
 export interface AFLLadderPage {

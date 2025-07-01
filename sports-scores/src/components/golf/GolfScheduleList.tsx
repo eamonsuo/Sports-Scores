@@ -1,10 +1,37 @@
+"use client";
+
 import { GolfSchedule } from "@/types/golf";
-import React from "react";
+import React, { useEffect } from "react";
 import SectionDateRange from "../generic/SectionDateRange";
 import TournamentSummaryCard from "./TournamentSummaryCardSchedule";
 
 // Assumes data prop is already sorted in desired order
 export default function GolfScheduleList({ data }: { data: GolfSchedule[] }) {
+  useEffect(() => {
+    const scrollToAnchor = () => {
+      const element = document.getElementById("current-date");
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+        return true;
+      }
+      return false;
+    };
+
+    // Try immediately
+    if (!scrollToAnchor()) {
+      // If not found, retry with intervals
+      const maxRetries = 10;
+      let retryCount = 0;
+
+      const retryInterval = setInterval(() => {
+        if (scrollToAnchor() || retryCount >= maxRetries) {
+          clearInterval(retryInterval);
+        }
+        retryCount++;
+      }, 100);
+    }
+  }, []);
+
   const current_date: Date = new Date(Date.now());
 
   let sectionDate: Date = new Date("2000-01-01");
@@ -20,7 +47,6 @@ export default function GolfScheduleList({ data }: { data: GolfSchedule[] }) {
     <div className="flex-1 overflow-y-auto px-4">
       {data.map((item: GolfSchedule) => {
         let item_date = item.endDate;
-        let item_end_date = item.endDate;
         displayDate = false;
         if (sectionDate.toDateString() !== item_date.toDateString()) {
           sectionDate = item_date;

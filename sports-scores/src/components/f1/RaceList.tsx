@@ -1,11 +1,38 @@
+"use client";
+
 import { toShortTimeString } from "@/lib/projUtils";
 import { SessionSummary } from "@/types/f1";
-import React from "react";
+import React, { useEffect } from "react";
 import SectionDateRange from "../generic/SectionDateRange";
 import SessionSummaryCard from "./SessionSummaryCard";
 import WeekendSummaryCard from "./WeekendSummaryCard";
 
 export default function RaceList({ data }: { data: SessionSummary[] }) {
+  useEffect(() => {
+    const scrollToAnchor = () => {
+      const element = document.getElementById("current-date");
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+        return true;
+      }
+      return false;
+    };
+
+    // Try immediately
+    if (!scrollToAnchor()) {
+      // If not found, retry with intervals
+      const maxRetries = 10;
+      let retryCount = 0;
+
+      const retryInterval = setInterval(() => {
+        if (scrollToAnchor() || retryCount >= maxRetries) {
+          clearInterval(retryInterval);
+        }
+        retryCount++;
+      }, 100);
+    }
+  }, []);
+
   const current_date: Date = new Date(Date.now());
 
   let startDate: Date = new Date("2000-01-01");

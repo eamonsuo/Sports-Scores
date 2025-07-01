@@ -10,9 +10,7 @@ import {
 const reqHeaders = new Headers();
 reqHeaders.append("x-rapidapi-key", `${process.env.RapidAPIKey}`);
 
-//sesaon 24-25 - 60592
 //unique tourn - 9464
-//tourn regular - 41244
 
 function updateQuota(response: Response) {
   const limit = response.headers.get("x-ratelimit-requests-limit");
@@ -27,10 +25,9 @@ function updateQuota(response: Response) {
 }
 
 export async function fetchNFLLastMatches(
-  season: number,
+  seasonId: number,
   pageNumber: number = 0,
 ) {
-  let seasonId = season == 2025 ? 60592 : 60592; //24-25 only atm
   const rawMatches = await fetch(
     `${process.env.NFL_BASEURL}/american-football/tournament/9464/season/${seasonId}/matches/last/${pageNumber}`,
     {
@@ -48,10 +45,9 @@ export async function fetchNFLLastMatches(
 }
 
 export async function fetchNFLNextMatches(
-  season: number,
+  seasonId: number,
   pageNumber: number = 0,
 ) {
-  let seasonId = season == 2025 ? 60592 : 60592;
   const rawMatches = await fetch(
     `${process.env.NFL_BASEURL}/american-football/tournament/9464/season/${seasonId}/matches/next/${pageNumber}`,
     {
@@ -68,8 +64,7 @@ export async function fetchNFLNextMatches(
   return (await rawMatches.json()) as NFL_AmericanFootballApi_FixturePage_Response;
 }
 
-export async function fetchNFLStandings(season: number) {
-  let seasonId = season == 2025 ? 60592 : 60592;
+export async function fetchNFLStandings(seasonId: number) {
   const rawStandings = await fetch(
     `${process.env.NFL_BASEURL}/american-football/tournament/9464/season/${seasonId}/standings/total`,
     {

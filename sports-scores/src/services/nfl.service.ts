@@ -6,67 +6,115 @@ import {
   fetchNFLNextMatches,
   fetchNFLStandings,
 } from "@/endpoints/nfl.api";
+import { nflTeamNames } from "@/lib/constants";
+import { resolveNFLImages } from "@/lib/imageMapping";
 import {
-  resolveNFLImages,
   setMatchSummary,
   shortenTeamNames,
   toShortTimeString,
 } from "@/lib/projUtils";
-import { MatchSummary, SPORT } from "@/types/misc";
+import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
 import { NFLFixturesPage, NFLLadderPage, NFLMatchPage } from "@/types/nfl";
 
+//sesaon 24-25 - 60592
+//season 25-26 - 75522
+
+const seasonId = 75522; //25-26
+
 export async function NFLMatches() {
-  const lastMatches = await fetchNFLLastMatches(2024, 0);
-  const nextMatches = await fetchNFLNextMatches(2024, 0);
+  const lastMatches = await fetchNFLLastMatches(seasonId, 0);
+  const nextMatches = await fetchNFLNextMatches(seasonId, 0);
 
   if (!lastMatches && !nextMatches) {
     return null;
   }
 
-  const matches = lastMatches?.events.concat(nextMatches?.events ?? []) ?? [];
+  const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
+  const rounds = [
+    ...new Set(
+      matches.map((item) => item.roundInfo.name ?? item.roundInfo.round),
+    ),
+  ];
 
   return {
-    fixtures: matches.map((match) => {
-      var startDate = new Date(0);
-      startDate.setUTCSeconds(match.startTimestamp);
+    fixtures: rounds.map((round) => {
+      //Get all teams playing in the round
+      let teams = matches
+        .filter(
+          (item) =>
+            item.roundInfo.round === round || item.roundInfo.name === round,
+        )
+        .flatMap((game) => [game.homeTeam.name, game.awayTeam.name]);
 
       return {
-        startDate: startDate,
-        roundLabel: match.roundInfo.name ?? `Week ${match.roundInfo.round}`,
-        timer:
-          match.status.type === "notstarted"
-            ? toShortTimeString(startDate)
-            : match.status.description,
-        id: match.id,
-        sport: SPORT.NFL,
-        status: match.status.description,
-        venue: "",
-        summaryText: setMatchSummary(
-          match.status.type,
-          toShortTimeString(startDate),
-          match.homeTeam.name,
-          match.homeScore.current,
-          match.awayTeam.name,
-          match.awayScore.current,
-        ),
-        homeDetails: {
-          name: shortenTeamNames(match.homeTeam.name),
-          score: match.homeScore.current?.toString() ?? "0",
-          img: resolveNFLImages(match.homeTeam.name),
-        },
-        awayDetails: {
-          name: shortenTeamNames(match.awayTeam.name),
-          score: match.awayScore.current?.toString() ?? "0",
-          img: resolveNFLImages(match.awayTeam.name),
-        },
-      } as MatchSummary;
+        matches: matches
+          .filter(
+            (item) =>
+              item.roundInfo.round === round || item.roundInfo.name === round,
+          )
+          .map((match) => {
+            var startDate = new Date(0);
+            startDate.setUTCSeconds(match.startTimestamp);
+
+            return {
+              startDate: startDate,
+              roundLabel:
+                match.roundInfo.name ?? `Week ${match.roundInfo.round}`,
+              timer:
+                match.status.type === "notstarted"
+                  ? toShortTimeString(startDate)
+                  : match.status.description,
+              id: match.id,
+              sport: SPORT.NFL,
+              status: match.status.description,
+              venue: "",
+              summaryText: setMatchSummary(
+                match.status.type,
+                toShortTimeString(startDate),
+                match.homeTeam.name,
+                match.homeScore.current,
+                match.awayTeam.name,
+                match.awayScore.current,
+              ),
+              homeDetails: {
+                name: shortenTeamNames(match.homeTeam.name),
+                score: match.homeScore.current?.toString() ?? "0",
+                img: resolveNFLImages(match.homeTeam.name),
+              },
+              awayDetails: {
+                name: shortenTeamNames(match.awayTeam.name),
+                score: match.awayScore.current?.toString() ?? "0",
+                img: resolveNFLImages(match.awayTeam.name),
+              },
+            } as MatchSummary;
+          }),
+        roundLabel: typeof round === "string" ? round : `Week ${round}`,
+        byes:
+          typeof round !== "string"
+            ? nflTeamNames
+                .filter((x) => !teams.includes(x))
+                .map((team) => {
+                  return { name: team, img: resolveNFLImages(team) };
+                })
+            : [],
+      } as RoundDetails;
     }),
+
+    currentRound:
+      (nextMatches?.events[0]?.roundInfo.name ??
+      nextMatches?.events[0]?.roundInfo.round !== undefined)
+        ? `Week ${
+            nextMatches?.events[0]?.roundInfo.round ??
+            lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo
+              .round ??
+            0
+          }`
+        : lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo.name,
   } as NFLFixturesPage;
 }
 
 export async function NFLStandings() {
-  const standings = await fetchNFLStandings(2025);
-
+  const standings = await fetchNFLStandings(seasonId);
   if (!standings) {
     return null;
   }
