@@ -11,8 +11,10 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
   useEffect(() => {
     const scrollToAnchor = () => {
       const element = document.getElementById("current-date");
+      const y = element?.getBoundingClientRect().top ?? 0 + window.scrollY - 10;
       if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "start" });
+        // element.scrollIntoView({ behavior: "smooth" });
+        window.scrollTo({ top: y, behavior: "smooth" });
         return true;
       }
       return false;
