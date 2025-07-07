@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: "Sports Scores App",
   description: "An app to track scores for all your sports",
   icons: "favicon.ico",
+  manifest: "/web.manifest",
 };
 
 export default function RootLayout({
