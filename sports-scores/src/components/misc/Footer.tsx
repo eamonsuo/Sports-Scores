@@ -16,106 +16,106 @@ const footerLinks: {
   {
     sport: "abc news",
     link: "https://www.abc.net.au/news/sport",
-    img: "/abc-news-logo.svg",
+    img: "/footer/abc-news-logo.svg",
     altText: "ABC News",
   },
   {
     sport: SPORT.CRICKET,
     link: `/sports/${SPORT.CRICKET}/main/matches/today`,
-    img: "/cricket-ball.svg",
+    img: "/footer/cricket-ball.svg",
     altText: "Cricket",
   },
   {
     sport: SPORT.NRL,
     link: `/sports/${SPORT.NRL}/matches`,
-    img: "/nrl-ball.svg",
+    img: "/footer/nrl-ball.svg",
     altText: "NRL",
   },
   {
     sport: SPORT.AFL,
     link: `/sports/${SPORT.AFL}/matches`,
-    img: "/afl-ball.svg",
+    img: "/footer/afl-ball.svg",
     altText: "AFL",
   },
   {
     sport: SPORT.NFL,
     link: `/sports/${SPORT.NFL}/main/matches`,
-    img: "/american-football.svg",
+    img: "/footer/american-football.svg",
     altText: "NFL",
   },
   {
     sport: SPORT.F1,
     link: `/sports/${SPORT.F1}/main/races#current-date`,
-    img: "/f1-helmet.svg",
+    img: "/footer/f1-helmet.svg",
     altText: "F1",
   },
   {
     sport: SPORT.GOLF,
     link: `/sports/${SPORT.GOLF}`,
-    img: "/golf-ball.svg",
+    img: "/footer/golf-ball.svg",
     altText: "Golf",
   },
   {
     sport: SPORT.CYCLING,
     // link: `/sports/${SPORT.CYCLING}`,
     link: `https://www.flashscore.com.au/cycling/`,
-    img: "/bike.svg",
+    img: "/footer/bike.svg",
     altText: "Cycling",
   },
   {
     sport: SPORT.FOOTBALL,
     // link: `/sports/${SPORT.FOOTBALL}`,
     link: `https://www.livescore.com/en/`,
-    img: "/football.svg",
+    img: "/footer/football.svg",
     altText: "Football",
   },
   {
     sport: SPORT.SURFING,
     // link: `/sports/${SPORT.SURFING}`,
     link: `https://www.worldsurfleague.com/events`,
-    img: "/surfboard.svg",
+    img: "/footer/surfboard.svg",
     altText: "Surfing",
   },
   {
     sport: SPORT.TENNIS,
     // link: `/sports/${SPORT.TENNIS}`,
     link: `https://www.livescore.com/en/tennis/`,
-    img: "/tennis.svg",
+    img: "/footer/tennis.svg",
     altText: "Tennis",
   },
   {
     sport: SPORT.BASEBALL,
     // link: `/sports/${SPORT.BASEBALL}/main/matches`,
     link: `https://www.flashscore.com.au/baseball/`,
-    img: "/baseball.svg",
+    img: "/footer/baseball.svg",
     altText: "Baseball",
   },
   {
     sport: SPORT.BASKETBALL,
     // link: `/sports/${SPORT.BASKETBALL}`,
     link: `https://www.livescore.com/en/basketball/`,
-    img: "/basketball.svg",
+    img: "/footer/basketball.svg",
     altText: "Basketball",
   },
   {
     sport: SPORT.ICE_HOCKEY,
     // link: `/sports/${SPORT.ICE_HOCKEY}`,
     link: `https://www.livescore.com/en/hockey/`,
-    img: "/hockey-puck.svg",
+    img: "/footer/hockey-puck.svg",
     altText: "Hockey",
   },
   {
     sport: SPORT.NETBALL,
     // link: `/sports/${SPORT.NETBALL}`,
     link: `https://www.flashscore.com.au/netball/`,
-    img: "/netball.png",
+    img: "/footer/netball.png",
     altText: "Netball",
   },
   {
     sport: SPORT.RUGBY_UNION,
     // link: `/sports/${SPORT.RUGBY_UNION}`,
     link: `https://www.flashscore.com.au/rugby/`,
-    img: "/union.png",
+    img: "/footer/union.png",
     altText: "Rugby Union",
   },
   {
@@ -129,7 +129,7 @@ const footerLinks: {
 export default function Footer() {
   const [curSport, setCurSport] = useState("");
   return (
-    <footer className="hideScroll flex h-16 w-full flex-row place-items-center gap-2 overflow-auto bg-gray-200 p-1 dark:bg-neutral-900">
+    <footer className="hideScroll flex h-32 w-full flex-row place-items-center gap-2 overflow-auto bg-gray-200 p-1 dark:bg-neutral-900">
       {footerLinks.map((item) => (
         <Link
           key={item.sport}
