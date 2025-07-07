@@ -14,7 +14,7 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
       if (element) {
         element.scrollIntoView({
           behavior: "smooth",
-          block: "center",
+          block: "start",
           inline: "nearest",
         });
         return true;

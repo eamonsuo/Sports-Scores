@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev-https": "next dev --experimental-https"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.0",
@@ -19,19 +20,21 @@
     "next": "15.0.2",
     "plotly.js": "^2.33.0",
     "puppeteer": "^23.11.1",
-    "react": "19.0.0-rc-02c0e824-20241028",
+    "react": "^18.3.1",
     "react-content-loader": "^7.0.2",
-    "react-dom": "19.0.0-rc-02c0e824-20241028",
+    "react-dom": "^18.3.1",
     "react-plotly.js": "^2.6.0",
     "recharts": "^2.13.2",
     "tailwind-merge": "^2.5.4",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "web-push": "^3.6.7"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "npm:types-react@19.0.0-rc.1",
     "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
     "@types/react-plotly.js": "^2.6.3",
+    "@types/web-push": "^3.6.4",
     "autoprefixer": "^10.4.20",
     "eslint": "^8",
     "eslint-config-next": "15.0.2",
