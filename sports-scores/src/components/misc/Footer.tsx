@@ -129,28 +129,33 @@ const footerLinks: {
 export default function Footer() {
   const [curSport, setCurSport] = useState("");
   return (
-    <footer className="hideScroll flex h-16 w-full flex-row place-items-center gap-2 overflow-auto bg-gray-200 p-2 dark:bg-neutral-900">
-      {footerLinks.map((item) => (
-        <Link
-          key={item.sport}
-          href={item.link}
-          onClick={() => setCurSport(item.sport)}
-        >
-          <Avatar
-            className={cn(
-              "size-11 p-[6px]",
-              curSport === item.sport
-                ? "bg-gray-500 dark:bg-neutral-400"
-                : "bg-gray-400 dark:bg-neutral-600",
-            )}
+    <footer className="bg-gray-200 dark:bg-neutral-900">
+      <div className="hideScroll flex h-16 w-full flex-row place-items-center gap-2 overflow-auto p-2">
+        {footerLinks.map((item) => (
+          <Link
+            key={item.sport}
+            href={item.link}
+            onClick={() => setCurSport(item.sport)}
           >
-            <AvatarImage src={item.img} alt={item.sport} />
-            <AvatarFallback>
-              <Image src={"/vercel.svg"} width={30} height={10} alt="" />
-            </AvatarFallback>
-          </Avatar>
-        </Link>
-      ))}
+            <Avatar
+              className={cn(
+                "size-11 p-[6px]",
+                curSport === item.sport
+                  ? "bg-gray-500 dark:bg-neutral-400"
+                  : "bg-gray-400 dark:bg-neutral-600",
+              )}
+            >
+              <AvatarImage src={item.img} alt={item.sport} />
+              <AvatarFallback>
+                <Image src={"/vercel.svg"} width={30} height={10} alt="" />
+              </AvatarFallback>
+            </Avatar>
+          </Link>
+        ))}
+      </div>
+      <div className="h-6 dark:bg-neutral-900">
+        <hr></hr>
+      </div>
     </footer>
   );
 }
