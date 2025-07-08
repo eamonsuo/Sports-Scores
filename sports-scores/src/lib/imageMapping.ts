@@ -495,6 +495,8 @@ export function resolveF1TeamImages(teamName: string) {
 }
 
 export function resolveCountryImage(countryName: string) {
+  countryName = countryName.replace(" W", "").replace(" A", ""); //Relevant for cricket teams
+
   var countryCode = (() => {
     switch (countryName) {
       case "Afghanistan":
@@ -535,6 +537,8 @@ export function resolveCountryImage(countryName: string) {
         return CountryFlagCode.France;
       case "Germany":
         return CountryFlagCode.Germany;
+      case "Guernsey":
+        return CountryFlagCode.Guernsey;
       case "Hong Kong":
         return CountryFlagCode.HongKong;
       case "Hungary":
@@ -547,6 +551,8 @@ export function resolveCountryImage(countryName: string) {
         return CountryFlagCode.Italy;
       case "Japan":
         return CountryFlagCode.Japan;
+      case "Jersey":
+        return CountryFlagCode.Jersey;
       case "Kenya":
         return CountryFlagCode.Kenya;
       case "Korea":
