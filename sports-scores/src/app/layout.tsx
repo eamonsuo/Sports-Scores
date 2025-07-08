@@ -10,17 +10,15 @@ export const metadata: Metadata = {
   title: "Sports Scores App",
   description: "An app to track scores for all your sports",
   icons: "favicon.ico",
+  manifest: "/web.manifest",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  // let t = window.matchMedia("(prefers-color-scheme: dark)").matches;
-
   return (
     <html lang="en" className="dark">
       <link rel="icon" href="/favicon.ico" sizes="any" />
-      <link rel="icon" href="/icon?icon.ico" type="image/ico" sizes="32x32" />
       <link
         rel="apple-touch-icon"
         href="/apple-icon?apple-icon.png"

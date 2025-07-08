@@ -11,7 +11,7 @@ export default function GolfScheduleList({ data }: { data: GolfSchedule[] }) {
     const scrollToAnchor = () => {
       const element = document.getElementById("current-date");
       if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+        element.scrollIntoView(true);
         return true;
       }
       return false;

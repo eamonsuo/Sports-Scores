@@ -1,0 +1,17 @@
+{
+  "name": "Sports Scores",
+  "short_name": "SportsScores",
+  "description": "An app to track results for all your sports",
+  "id": "SportsScoresApp",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    {
+      "src": "largeImage.png",
+      "sizes": "600x600",
+      "type": "image/png"
+    }
+  ]
+}
