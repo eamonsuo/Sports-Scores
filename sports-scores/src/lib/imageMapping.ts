@@ -495,8 +495,6 @@ export function resolveF1TeamImages(teamName: string) {
 }
 
 export function resolveCountryImage(countryName: string) {
-  countryName = countryName.replace(/\s[WA]$/, ""); //Relevant for cricket teams
-
   var countryCode = (() => {
     switch (countryName) {
       case "Afghanistan":

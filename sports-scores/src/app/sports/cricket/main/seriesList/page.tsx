@@ -16,7 +16,7 @@ export default async function Page() {
       {rawSeries.Stages.map((item) => (
         <div className="mt-4" key={item.Sid}>
           <Link
-            href={`/sports/cricket/series/${item.Sid}/matches`}
+            href={`/sports/cricket/series/${item.Ccd}/${item.Scd}/matches`}
             className="mt-4 flex rounded-md border border-gray-300 p-2 shadow-sm active:bg-gray-300 dark:border-neutral-500 dark:text-neutral-500 dark:active:bg-neutral-700"
           >
             <div className="me-2 content-center">
