@@ -3,9 +3,7 @@ import CricketSeriesLadder, {
 } from "@/components/cricket/CricketSeriesLadder";
 import CricketSeriesResult from "@/components/cricket/CricketSeriesResult";
 import Placeholder from "@/components/misc/Placeholder";
-import { fetchCricketSeriesMatches } from "@/endpoints/cricket.api";
-import { mapCricketSeriesLadders } from "@/lib/dataMapping";
-import { getCountryImageUrl } from "@/lib/projUtils";
+import { cricketSeriesResults } from "@/services/cricket.service";
 import Image from "next/image";
 
 export default async function Page(props: {
@@ -17,11 +15,7 @@ export default async function Page(props: {
   let seriesLadders: CricketLadder[] | null = null;
   let tournamentWinner: any = null;
 
-  let rawSeries = await fetchCricketSeriesMatches(params.ccd, params.scd);
-
-  if (rawSeries?.Stages[0].LeagueTable != undefined) {
-    seriesLadders = mapCricketSeriesLadders(rawSeries?.Stages[0].LeagueTable);
-  }
+  seriesLadders = await cricketSeriesResults(params.ccd, params.scd);
 
   return (
     <div className="flex-1 overflow-y-auto px-4">
@@ -32,22 +26,22 @@ export default async function Page(props: {
             seriesName={item.series.name}
             homeInfo={{
               name: item.home.name,
-              img: getCountryImageUrl(),
+              img: item.home.img,
               matchesWon: item.home.won,
             }}
             awayInfo={{
               name: item.away.name,
-              img: getCountryImageUrl(),
+              img: item.away.img,
               matchesWon: item.away.won,
             }}
-          ></CricketSeriesResult>
+          />
         ))}
 
       {tournamentWinner != null && (
         <div className="flex flex-col items-center">
           <p className="pt-6 dark:text-neutral-400">TOURNAMENT WINNER </p>
           <Image
-            src={getCountryImageUrl()}
+            src={tournamentWinner.img}
             height={150}
             width={150}
             alt={"Winning Team"}

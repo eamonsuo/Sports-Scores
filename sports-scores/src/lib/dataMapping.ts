@@ -1,8 +1,14 @@
+import { CricketScorecardPage } from "@/app/sports/cricket/match/[slug]/page";
+import { MatchDetailsPage } from "@/components/cricket/CricketMatchDetailsPage";
+import { CricketScorecardBatProps } from "@/components/cricket/CricketScorecardBat";
+import { CricketScorecardBowlProps } from "@/components/cricket/CricketScorecardBowl";
 import { CricketLadder } from "@/components/cricket/CricketSeriesLadder";
 import { GolfLeaderboardPlayerRow } from "@/components/golf/TournamentLeaderboard";
 import { AFLGame } from "@/types/afl";
 import { BaseballGame } from "@/types/baseball";
 import {
+  Cricket_LiveScoreAPI_MatchesGetInnings,
+  Cricket_LiveScoreAPI_MatchesGetScoreBoard,
   Cricket_LiveScoreAPI_MatchesListByDate,
   Cricket_LiveScoreAPI_MatchesListByLeague,
   Cricket_LiveScoreAPI_TeamDetails,
@@ -20,7 +26,12 @@ import {
   resolveGolfPlayerImage,
   resolveGolfTournamentImage,
 } from "./imageMapping";
-import { getLocalTime, setMatchSummary, shortenTeamNames } from "./projUtils";
+import {
+  dateToCustomString,
+  getLocalTime,
+  setMatchSummary,
+  shortenTeamNames,
+} from "./projUtils";
 
 export function mapAFLFixtureFields(matches: AFLGame[]) {
   return matches.map(
@@ -114,12 +125,12 @@ export function mapCricketCurrentMatches(
             : event.ECo,
         otherDetail: event.ErnInf,
         homeDetails: {
-          img: resolveCountryImage(event.T1[0].Nm),
+          img: resolveCountryImage(event.T1[0].Nm.replace(/\s(W|A|U19)$/i, "")),
           score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
           name: event.T1[0].Nm,
         },
         awayDetails: {
-          img: resolveCountryImage(event.T2[0].Nm),
+          img: resolveCountryImage(event.T2[0].Nm.replace(/\s(W|A|U19)$/i, "")),
           score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
           name: event.T2[0].Nm,
         },
@@ -158,12 +169,12 @@ export function mapCricketSeriesMatches(
             : event.ECo,
         otherDetail: event.ErnInf,
         homeDetails: {
-          img: "/olympic-rings.svg",
+          img: resolveCountryImage(event.T1[0].Nm.replace(/\s(W|A|U19)$/i, "")),
           score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
           name: event.T1[0].Nm,
         },
         awayDetails: {
-          img: "/olympic-rings.svg",
+          img: resolveCountryImage(event.T2[0].Nm.replace(/\s(W|A|U19)$/i, "")),
           score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
           name: event.T2[0].Nm,
         },
@@ -222,7 +233,7 @@ export function mapCricketSeriesLadders(ladders: LeagueTable) {
       teams: item.team.map((team) => {
         return {
           name: team.Tnm,
-          logo: undefined,
+          logo: resolveCountryImage(team.Tnm.replace(/\s(W|A|U19)$/i, "")),
           rank: team.rnk,
           played: team.pld,
           won: team.win,
@@ -234,6 +245,127 @@ export function mapCricketSeriesLadders(ladders: LeagueTable) {
       }),
     } as CricketLadder;
   });
+}
+
+export function mapMatchDetails(
+  details: Cricket_LiveScoreAPI_MatchesGetScoreBoard,
+  innings: Cricket_LiveScoreAPI_MatchesGetInnings,
+) {
+  let homePlayers =
+    Object.keys(innings).length === 0
+      ? ["No Team Data"]
+      : innings.Prns.toSpliced(10, 11).map((item) => item.Snm);
+  let awayPlayers =
+    Object.keys(innings).length === 0
+      ? ["No Team Data"]
+      : innings.Prns.toSpliced(0, 11).map((item) => item.Snm);
+  let startDate = dateToCustomString(convertNumbertoDate(details.Esd));
+  let endDate = dateToCustomString(convertNumbertoDate(details.Ese));
+  let dateString =
+    details.Esd === details.Ese ? `${startDate}` : `${startDate} - ${endDate}`;
+  let tossChoice = details.TCho === 1 ? "bat" : "bowl";
+  let tossWinner = details.TPa === 1 ? details.T1[0].Nm : details.T2[0].Nm;
+  let longFormat =
+    (details.Tr1C1 && details.Tr1C2) || (details.Tr2C1 && details.Tr2C2);
+  let home1Ing = `${details.Tr1CW1 ?? 0}/${details.Tr1C1 ?? 0}${details.Tr1CD1 === 1 ? "d" : ""}`;
+  let away1Ing = `${details.Tr2CW1 ?? 0}/${details.Tr2C1 ?? 0}${details.Tr2CD1 === 1 ? "d" : ""}`;
+  let home2Ing = longFormat
+    ? ` & ${details.Tr1CW2 ?? 0}/${details.Tr1C2 ?? 0}${details.Tr1CD2 === 1 ? "d" : ""}`
+    : "";
+  let away2Ing = longFormat
+    ? ` & ${details.Tr2CW2 ?? 0}/${details.Tr2C2 ?? 0}${details.Tr2CD2 === 1 ? "d" : ""}`
+    : "";
+
+  return {
+    matchSummaryText: details.ECo,
+    status: details.EpsL,
+    date: dateString,
+    venue: `${details.Venue.Vnm}, ${details.Stg.Cnm}`,
+    tossResult: `${tossWinner} won the toss and chose to ${tossChoice}`,
+    umpires: [""],
+    pom: "",
+    homeInfo: {
+      name: details.T1[0].Nm,
+      score: `${home1Ing}${home2Ing}`,
+      img: resolveCountryImage(details.T1[0].Nm.replace(/\s(W|A|U19)$/i, "")),
+    },
+    homePlayers: homePlayers,
+    awayInfo: {
+      name: details.T2[0].Nm,
+      score: `${away1Ing}${away2Ing}`,
+      img: resolveCountryImage(details.T2[0].Nm.replace(/\s(W|A|U19)$/i, "")),
+    },
+    awayPlayers: awayPlayers,
+  } as MatchDetailsPage;
+}
+
+export function mapScorecardDetails(
+  data: Cricket_LiveScoreAPI_MatchesGetInnings,
+) {
+  if (Object.keys(data).length === 0) {
+    return {
+      matchState: "LIVE",
+      data: [],
+    } as CricketScorecardPage;
+  }
+
+  const inningsData = data.SDInn.map((item) => {
+    let inningTile = item.Ti.replace(" INN", "").split(" ");
+
+    return {
+      inningLabel: `${inningTile[1].toLowerCase()} ${inningTile[0]}`,
+      inningBatters: {
+        batters: item.Bat.map((x) => {
+          return {
+            name:
+              data.Prns.find((p) => p.Pid === x.Pid.toString())?.Snm ??
+              "Unknown",
+            runs: x.R,
+            balls: x.B,
+            strikeRate: x.Sr,
+            dismissalText:
+              x.LpTx === "did not bat"
+                ? ""
+                : x.LpTx.replace(
+                    "[F]",
+                    data.Prns.find((p) => p.Pid === x.Fid.toString())?.Ln ??
+                      "Unknown",
+                  ).replace(
+                    "[B]",
+                    data.Prns.find((p) => p.Pid === x.Bid.toString())?.Ln ??
+                      "Unknown",
+                  ),
+          };
+        }),
+        total: item.Pt,
+        extras: {
+          byes: item.B,
+          legbyes: item.LB,
+          noballs: item.NB,
+          wides: item.WB,
+          total: item.Ex,
+        },
+        overs: item.Ov,
+        wickets: item.Wk,
+      } as CricketScorecardBatProps,
+      inningBowlers: item.Bow.map((bowl) => {
+        return {
+          name:
+            data.Prns.find((p) => p.Pid === bowl.Pid.toString())?.Snm ??
+            "Unknown",
+          overs: bowl.Ov,
+          runs: bowl.R,
+          wickets: bowl.Wk,
+          economy: bowl.Er,
+        };
+      }) as CricketScorecardBowlProps,
+    };
+  });
+
+  return {
+    matchState: "LIVE",
+    data: inningsData,
+  } as CricketScorecardPage;
 }
 
 function mapCricketStatus(status?: string): MatchStatus {
