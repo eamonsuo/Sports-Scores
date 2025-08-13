@@ -15,4 +15,4 @@ To Be Implemented:
 
 - Football
 - WSL, Tennis, NBA & NHL & MLB (Playoff Picture only), Netball, Union, Olympics
-- Other leagues (WAFL, WNRL, State of Origin, LPGA, AusPGA, European Tour, )
+- Other leagues (AFLW, NRLW, State of Origin, LPGA, AusPGA, European Tour, )
