@@ -2,8 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
-import { GOLF_TOURS } from "@/app/sports/golf/layout";
-import { RUGBY_LEAGUE_LEAGUES } from "@/app/sports/rugby-league/layout";
+import { GOLF_TOURS, RUGBY_LEAGUE_LEAGUES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { SPORT } from "@/types/misc";
 import Image from "next/image";

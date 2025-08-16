@@ -32,7 +32,7 @@ export async function NFLMatches() {
   const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
   const rounds = [
     ...new Set(
-      matches.map((item) => item.roundInfo.name ?? item.roundInfo.round),
+      matches.map((item) => item.roundInfo?.name ?? item.roundInfo?.round),
     ),
   ];
 
@@ -42,7 +42,7 @@ export async function NFLMatches() {
       let teams = matches
         .filter(
           (item) =>
-            item.roundInfo.round === round || item.roundInfo.name === round,
+            item.roundInfo?.round === round || item.roundInfo?.name === round,
         )
         .flatMap((game) => [game.homeTeam.name, game.awayTeam.name]);
 
@@ -50,7 +50,7 @@ export async function NFLMatches() {
         matches: matches
           .filter(
             (item) =>
-              item.roundInfo.round === round || item.roundInfo.name === round,
+              item.roundInfo?.round === round || item.roundInfo?.name === round,
           )
           .map((match) => {
             var startDate = new Date(0);
@@ -59,7 +59,7 @@ export async function NFLMatches() {
             return {
               startDate: startDate,
               roundLabel:
-                match.roundInfo.name ?? `Week ${match.roundInfo.round}`,
+                match.roundInfo?.name ?? `Week ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
                   ? toShortTimeString(startDate)
@@ -101,15 +101,15 @@ export async function NFLMatches() {
     }),
 
     currentRound:
-      (nextMatches?.events[0]?.roundInfo.name ??
-      nextMatches?.events[0]?.roundInfo.round !== undefined)
+      (nextMatches?.events[0]?.roundInfo?.name ??
+      nextMatches?.events[0]?.roundInfo?.round !== undefined)
         ? `Week ${
-            nextMatches?.events[0]?.roundInfo.round ??
+            nextMatches?.events[0]?.roundInfo?.round ??
             lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo
-              .round ??
+              ?.round ??
             0
           }`
-        : lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo.name,
+        : lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo?.name,
   } as NFLFixturesPage;
 }
 

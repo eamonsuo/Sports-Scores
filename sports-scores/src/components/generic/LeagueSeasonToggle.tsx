@@ -13,16 +13,18 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
+export type LeagueSeasonConfig = {
+  name: string;
+  slug: string;
+  seasons: { name: string; slug: string }[];
+};
+
 export default function LeagueSeasonToggle({
   sport,
   leagues,
 }: {
   sport: SPORT;
-  leagues: {
-    name: string;
-    slug: string;
-    seasons: { name: string; slug: string }[];
-  }[];
+  leagues: LeagueSeasonConfig[];
 }) {
   const [selectedLeague, setSelectedLeague] = useState(leagues[0]);
   const [selectedSeason, setSelectedSeason] = useState(leagues[0].seasons[0]);
