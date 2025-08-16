@@ -65,7 +65,7 @@ export type MatchSummary = {
   roundLabel?: string;
   timer: string;
   seriesName?: string;
-  matchSlug?: string; // Primarily used in cricket to get match details
+  matchSlug?: string;
   seriesSlug?: string; // Used to navigate to cricket series
   winDrawLoss?: { win: string; draw: string; loss: string };
 };
@@ -179,7 +179,7 @@ export enum SPORT {
   CRICKET = "cricket",
   NFL = "nfl",
   F1 = "f1",
-  NRL = "nrl",
+  RUGBY_LEAGUE = "rugby-league",
   GOLF = "golf",
   OLYMPICS = "olympics",
   FOOTBALL = "football",

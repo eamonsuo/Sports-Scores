@@ -1,4 +1,3 @@
-import GolfTourHeader from "@/components/golf/GolfTourHeader";
 import NavButtonGroup from "@/components/misc/NavButtonGroup";
 
 export default async function SportsLayout({
@@ -9,13 +8,6 @@ export default async function SportsLayout({
   return (
     <div className="flex-1 overflow-y-auto">
       <div className="flex h-full flex-col">
-        <div className="px-4">
-          {" "}
-          <GolfTourHeader
-            href="/sports/golf/liv/schedule"
-            tourName="LIV Tour"
-          />
-        </div>
         <NavButtonGroup
           buttons={[
             {

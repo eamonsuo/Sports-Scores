@@ -48,7 +48,7 @@ export default function FixtureList({ data }: { data: MatchSummary[] }) {
             )}
             <MatchSummaryCard
               id={item.id}
-              href={`/sports/${item.sport}/${item.id}`}
+              href={`/sports/${item.sport}/${item.matchSlug ?? item.id}`}
               homeInfo={item.homeDetails}
               awayInfo={item.awayDetails}
               matchSummary={item.summaryText}

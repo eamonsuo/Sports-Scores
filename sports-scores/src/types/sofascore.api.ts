@@ -17,7 +17,7 @@ export interface Sofascore_MatchIncidents_Response {
 export interface Sofascore_Event {
   tournament: Sofascore_Tournament;
   season: Sofascore_Season;
-  roundInfo: Sofascore_RoundInfo;
+  roundInfo?: Sofascore_RoundInfo;
   customId: string;
   status: Sofascore_Status;
   winnerCode: number;

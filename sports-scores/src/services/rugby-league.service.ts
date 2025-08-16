@@ -1,11 +1,11 @@
-import { NRLStanding } from "@/components/nrl/NRLLadder";
+import { RugbyLeagueStanding } from "@/components/rugby-league/NRLLadder";
 import {
-  fetchNRLLastMatches,
-  fetchNRLMatchDetails,
-  fetchNRLMatchIncidents,
-  fetchNRLNextMatches,
-  fetchNRLStandings,
-} from "@/endpoints/nrl.api";
+  fetchRugbyLeagueLastMatches,
+  fetchRugbyLeagueMatchDetails,
+  fetchRugbyLeagueMatchIncidents,
+  fetchRugbyLeagueNextMatches,
+  fetchRugbyLeagueStandings,
+} from "@/endpoints/rugby-league.api";
 import { nrlTeamNames } from "@/lib/constants";
 import { resolveNRLImages } from "@/lib/imageMapping";
 import {
@@ -14,44 +14,65 @@ import {
   toShortTimeString,
 } from "@/lib/projUtils";
 import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
-import { NRLFixturesPage, NRLLadderPage, NRLMatchPage } from "@/types/nrl";
+import {
+  RugbyLeagueFixturesPage,
+  RugbyLeagueLadderPage,
+  RugbyLeagueMatchPage,
+} from "@/types/rugby-league";
 
-const seasonId = 69277; // 2025 NRL Season
-
-export async function NRLMatches() {
-  const lastMatches = await fetchNRLLastMatches(seasonId, 0);
-  const nextMatches = await fetchNRLNextMatches(seasonId, 0);
+export async function rugbyLeagueMatches(
+  tournamentId: number,
+  seasonId: number,
+) {
+  const lastMatches = await fetchRugbyLeagueLastMatches(
+    tournamentId,
+    seasonId,
+    0,
+  );
+  const nextMatches = await fetchRugbyLeagueNextMatches(
+    tournamentId,
+    seasonId,
+    0,
+  );
 
   if (!lastMatches && !nextMatches) {
     return null;
   }
 
   const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
-  const rounds = [...new Set(matches.map((item) => item.roundInfo.round ?? 0))];
+
+  for (let i = 1; i < matches.length; i++) {
+    if (matches[i].roundInfo === undefined) {
+      matches[i].roundInfo = { round: 0 };
+    }
+  }
+
+  const rounds = [...new Set(matches.map((item) => item.roundInfo?.round))];
 
   return {
     fixtures: rounds.map((round) => {
       //Get all teams playing in the round
       let teams = matches
-        .filter((item) => item.roundInfo.round === round)
+        .filter((item) => item.roundInfo?.round === round)
         .flatMap((game) => [game.homeTeam.name, game.awayTeam.name]);
 
       return {
         matches: matches
-          .filter((item) => item.roundInfo.round === round)
+          .filter((item) => item.roundInfo?.round === round)
           .map((match) => {
             var startDate = new Date(0);
             startDate.setUTCSeconds(match.startTimestamp);
 
             return {
               startDate: startDate,
-              roundLabel: `Round ${match.roundInfo.round}`,
+              roundLabel: `Round ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
                   ? toShortTimeString(startDate)
                   : match.status.description,
               id: match.id,
-              sport: SPORT.NRL,
+              matchSlug: `${tournamentId}/${seasonId}/${match.id}`,
+              sport: SPORT.RUGBY_LEAGUE,
               status: match.status.description,
               venue: "",
               summaryText: setMatchSummary(
@@ -84,15 +105,18 @@ export async function NRLMatches() {
     }),
 
     currentRound: `Round ${
-      nextMatches?.events[0]?.roundInfo.round ??
-      lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo.round ??
+      nextMatches?.events[0]?.roundInfo?.round ??
+      lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo?.round ??
       0
     }`,
-  } as NRLFixturesPage;
+  } as RugbyLeagueFixturesPage;
 }
 
-export async function NRLStandings() {
-  const standings = await fetchNRLStandings(seasonId);
+export async function rugbyLeagueStandings(
+  tournamentId: number,
+  seasonId: number,
+) {
+  const standings = await fetchRugbyLeagueStandings(tournamentId, seasonId);
 
   if (!standings) {
     return null;
@@ -115,14 +139,14 @@ export async function NRLStandings() {
           drawn: item.draws,
         },
         scores: { against: item.scoresAgainst, for: item.scoresFor },
-      } as NRLStanding;
+      } as RugbyLeagueStanding;
     }),
-  } as NRLLadderPage;
+  } as RugbyLeagueLadderPage;
 }
 
-export async function NRLMatchDetails(matchId: number) {
-  const match = await fetchNRLMatchDetails(matchId);
-  const incidents = await fetchNRLMatchIncidents(matchId);
+export async function rugbyLeagueMatchDetails(matchId: number) {
+  const match = await fetchRugbyLeagueMatchDetails(matchId);
+  const incidents = await fetchRugbyLeagueMatchIncidents(matchId);
 
   const matchDetails = match?.event;
   const scoreIncidents = incidents?.incidents
@@ -171,5 +195,5 @@ export async function NRLMatchDetails(matchId: number) {
             },
           ],
         },
-  } as NRLMatchPage;
+  } as RugbyLeagueMatchPage;
 }

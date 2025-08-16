@@ -1,7 +1,7 @@
 import fallback from "@/../public/vercel.svg";
 import Image from "next/image";
 
-export type NRLStanding = {
+export type RugbyLeagueStanding = {
   position: number;
   team: {
     id: number;
@@ -21,7 +21,7 @@ export type NRLStanding = {
   };
 };
 
-export default function NRLLadder({ data }: { data: NRLStanding[] }) {
+export default function NRLLadder({ data }: { data: RugbyLeagueStanding[] }) {
   return (
     <div className="flex-1 overflow-y-auto px-4 dark:text-neutral-400">
       <table className="w-full">
