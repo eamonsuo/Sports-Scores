@@ -4,8 +4,6 @@ This is a web app which will allow you to view all results from a range of sport
 
 Currently Implemented:
 
-<!-- TODO: Update cricket -->
-
 - Cricket (My Teams (AUS, QLD, BNE), All Matches (Live and recently concluded Internationals & Favourite Series), All Series (Past 10 days - future))
 - AFL (Fixtures, Ladder, Match Details)
 - NFL (Fixtures, Ladder, Match Details)

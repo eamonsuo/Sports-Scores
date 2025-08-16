@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { useState } from "react";
 
+import { GOLF_TOURS } from "@/app/sports/golf/layout";
+import { RUGBY_LEAGUE_LEAGUES } from "@/app/sports/rugby-league/layout";
 import { cn } from "@/lib/utils";
 import { SPORT } from "@/types/misc";
 import Image from "next/image";
@@ -26,8 +28,8 @@ const footerLinks: {
     altText: "Cricket",
   },
   {
-    sport: SPORT.NRL,
-    link: `/sports/${SPORT.NRL}/matches`,
+    sport: SPORT.RUGBY_LEAGUE,
+    link: `/sports/${SPORT.RUGBY_LEAGUE}/${RUGBY_LEAGUE_LEAGUES[0].slug}/${RUGBY_LEAGUE_LEAGUES[0].seasons[0].slug}/matches`,
     img: "/footer/nrl-ball.svg",
     altText: "NRL",
   },
@@ -51,7 +53,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.GOLF,
-    link: `/sports/${SPORT.GOLF}`,
+    link: `/sports/${SPORT.GOLF}/${GOLF_TOURS[0].slug}/${GOLF_TOURS[0].seasons[0].slug}/schedule`,
     img: "/footer/golf-ball.svg",
     altText: "Golf",
   },
@@ -72,7 +74,7 @@ const footerLinks: {
   {
     sport: SPORT.SURFING,
     // link: `/sports/${SPORT.SURFING}`,
-    link: `https://www.worldsurfleague.com/events`,
+    link: `https://www.worldsurfleague.com/events/2025/ct`,
     img: "/footer/surfboard.svg",
     altText: "Surfing",
   },

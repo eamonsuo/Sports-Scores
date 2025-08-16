@@ -31,6 +31,7 @@ import {
   getLocalTime,
   setMatchSummary,
   shortenTeamNames,
+  toShortTimeString,
 } from "./projUtils";
 
 export function mapAFLFixtureFields(matches: AFLGame[]) {
@@ -121,7 +122,7 @@ export function mapCricketCurrentMatches(
         status: mapCricketStatus(event.Eps),
         summaryText:
           event.Eps === "NS"
-            ? `Match starts at ${sDate.toLocaleTimeString("en-US")}`
+            ? `Match starts at ${toShortTimeString(sDate)}`
             : event.ECo,
         otherDetail: event.ErnInf,
         homeDetails: {
@@ -165,7 +166,7 @@ export function mapCricketSeriesMatches(
         status: mapCricketStatus(event.Eps),
         summaryText:
           event.Eps === "NS"
-            ? `Match starts at ${sDate.toLocaleTimeString("en-US")}`
+            ? `Match starts at ${toShortTimeString(sDate)}`
             : event.ECo,
         otherDetail: event.ErnInf,
         homeDetails: {

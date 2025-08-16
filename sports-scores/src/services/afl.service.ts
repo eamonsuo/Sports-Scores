@@ -40,25 +40,32 @@ export async function AFLMatches() {
   }
 
   const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
-  const rounds = [...new Set(matches.map((item) => item.roundInfo.round ?? 0))];
+
+  for (let i = 1; i < matches.length; i++) {
+    if (matches[i].roundInfo === undefined) {
+      matches[i].roundInfo = { round: 0 };
+    }
+  }
+
+  const rounds = [...new Set(matches.map((item) => item.roundInfo?.round))];
 
   return {
     fixtures: rounds.map((round) => {
       //Get all teams playing in the round
       let teams = matches
-        .filter((item) => item.roundInfo.round === round)
+        .filter((item) => item.roundInfo?.round === round)
         .flatMap((game) => [game.homeTeam.name, game.awayTeam.name]);
 
       return {
         matches: matches
-          .filter((item) => item.roundInfo.round === round)
+          .filter((item) => item.roundInfo?.round === round)
           .map((match) => {
             var startDate = new Date(0);
             startDate.setUTCSeconds(match.startTimestamp);
 
             return {
               startDate: startDate,
-              roundLabel: `Round ${match.roundInfo.round}`,
+              roundLabel: `Round ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
                   ? toShortTimeString(startDate)
@@ -97,8 +104,8 @@ export async function AFLMatches() {
     }),
 
     currentRound: `Round ${
-      nextMatches?.events[0]?.roundInfo.round ??
-      lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo.round ??
+      nextMatches?.events[0]?.roundInfo?.round ??
+      lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo?.round ??
       0
     }`,
   } as AFLFixturesPage;

@@ -23,7 +23,7 @@ export function getGlobalApiQuota(sport: SPORT): ApiQuotaInfo | null {
   switch (sport) {
     case SPORT.AFL:
       return globalThis.aflApiQuota;
-    case SPORT.NRL:
+    case SPORT.RUGBY_LEAGUE:
       return globalThis.nrlApiQuota;
     case SPORT.NFL:
       return globalThis.nflApiQuota;
@@ -48,7 +48,7 @@ export function updateGlobalApiQuota(
       globalThis.aflApiQuota = {
         percentUsed,
       };
-    case SPORT.NRL:
+    case SPORT.RUGBY_LEAGUE:
       globalThis.nrlApiQuota = {
         percentUsed,
       };

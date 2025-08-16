@@ -95,6 +95,8 @@ export function resolveGolfPlayerImage(playerName: string) {
       case "Kevin Na":
       case "Gary Woodland":
       case "Lucas Glover":
+      case "Harris English":
+      case "Chris Gotterup":
         return CountryFlagCode.UnitedStates;
 
       case "Tommy Fleetwood":
@@ -105,6 +107,7 @@ export function resolveGolfPlayerImage(playerName: string) {
       case "Paul Casey":
       case "Lee Westwood":
       case "Ian Poulter":
+      case "Harry Hall":
         return CountryFlagCode.England;
 
       case "Shane Lowry":
@@ -134,6 +137,7 @@ export function resolveGolfPlayerImage(playerName: string) {
         return CountryFlagCode.KoreaSouth;
 
       case "Corey Conners":
+      case "Nick Taylor":
         return CountryFlagCode.Canada;
 
       case "Sergio Garcia":
@@ -148,6 +152,7 @@ export function resolveGolfPlayerImage(playerName: string) {
       case "Louis Oosthuizen":
       case "Branden Grace":
       case "Charl Schwartzel":
+      case "Aldrich Potgieter":
         return CountryFlagCode.SouthAfrica;
 
       case "Thomas Pieters":
@@ -169,6 +174,9 @@ export function resolveGolfPlayerImage(playerName: string) {
 
       case "Adrian Meronk":
         return CountryFlagCode.Poland;
+
+      case "Anirban Lahiri":
+        return CountryFlagCode.India;
     }
   })();
 

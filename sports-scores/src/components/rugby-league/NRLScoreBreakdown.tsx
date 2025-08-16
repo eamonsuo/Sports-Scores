@@ -1,7 +1,7 @@
 import fallback from "@/../public/vercel.svg";
 import Image from "next/image";
 
-export type NRLScoreBreakdown = {
+export type RugbyLeagueScoreBreakdown = {
   teams: { home: { score: number }; away: { score: number } };
   periodName: string;
 };
@@ -11,7 +11,7 @@ export default function NRLScoreBreakdown({
   homeLogo,
   awayLogo,
 }: {
-  scoreData: NRLScoreBreakdown[];
+  scoreData: RugbyLeagueScoreBreakdown[];
   homeLogo?: string;
   awayLogo?: string;
 }) {
