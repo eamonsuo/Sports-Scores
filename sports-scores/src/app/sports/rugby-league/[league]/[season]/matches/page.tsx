@@ -5,10 +5,10 @@ import { rugbyLeagueMatches } from "@/services/rugby-league.service";
 // export const dynamic = "force-dynamic";
 
 export default async function Page(props: {
-  params: Promise<{ league: string; year: string }>;
+  params: Promise<{ league: string; season: string }>;
 }) {
-  const { league, year } = await props.params;
-  const pageData = await rugbyLeagueMatches(Number(league), Number(year));
+  const { league, season } = await props.params;
+  const pageData = await rugbyLeagueMatches(Number(league), Number(season));
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;
