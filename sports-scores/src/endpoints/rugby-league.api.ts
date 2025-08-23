@@ -3,6 +3,7 @@
 import { updateGlobalApiQuota } from "@/lib/apiCounter";
 import { SPORT } from "@/types/misc";
 import {
+  RugbyLeague_RugbyAPI2_CategorySchedules_Response,
   RugbyLeague_RugbyAPI2_FixturePage_Response,
   RugbyLeague_RugbyAPI2_LeagueTotalStandings_Response,
   RugbyLeague_RugbyAPI2_Match_Response,
@@ -118,4 +119,31 @@ export async function fetchRugbyLeagueMatchIncidents(matchId: number) {
   updateQuota(rawMatch);
 
   return (await rawMatch.json()) as RugbyLeague_RugbyAPI2_MatchIncidents_Response;
+}
+
+export async function fetchRugbyLeagueCurrentMatches(
+  date: "TODAY" | "YESTERDAY" | "TOMORROW",
+  categoryId: number,
+) {
+  let curDate = new Date();
+  if (date === "YESTERDAY") {
+    curDate.setDate(curDate.getDate() - 1);
+  } else if (date === "TOMORROW") {
+    curDate.setDate(curDate.getDate() + 1);
+  }
+
+  const rawFixtures = await fetch(
+    `${process.env.NRL_BASEURL}/rugby/category/${categoryId}/events/${curDate.getDate()}/${curDate.getMonth() + 1}/${curDate.getFullYear()}`,
+    {
+      headers: reqHeaders,
+    },
+  );
+
+  if (!rawFixtures.ok || rawFixtures.status === 204) {
+    return null;
+  }
+
+  updateQuota(rawFixtures);
+
+  return (await rawFixtures.json()) as RugbyLeague_RugbyAPI2_CategorySchedules_Response;
 }

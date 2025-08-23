@@ -2,7 +2,12 @@
 import Link from "next/link";
 import { useState } from "react";
 
-import { GOLF_TOURS, RUGBY_LEAGUE_LEAGUES } from "@/lib/constants";
+import {
+  AMERICAN_FOOTBALL_LEAGUES,
+  AUSSIE_RULES_LEAGUES,
+  GOLF_TOURS,
+  RUGBY_LEAGUE_LEAGUES,
+} from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { SPORT } from "@/types/misc";
 import Image from "next/image";
@@ -33,16 +38,16 @@ const footerLinks: {
     altText: "NRL",
   },
   {
-    sport: SPORT.AFL,
-    link: `/sports/${SPORT.AFL}/matches`,
+    sport: SPORT.AUSSIE_RULES,
+    link: `/sports/${SPORT.AUSSIE_RULES}/${AUSSIE_RULES_LEAGUES[0].slug}/${AUSSIE_RULES_LEAGUES[0].seasons[0].slug}/matches`,
     img: "/footer/afl-ball.svg",
-    altText: "AFL",
+    altText: "AUSSIE RULES",
   },
   {
-    sport: SPORT.NFL,
-    link: `/sports/${SPORT.NFL}/main/matches`,
+    sport: SPORT.AMERICAN_FOOTBALL,
+    link: `/sports/${SPORT.AMERICAN_FOOTBALL}/${AMERICAN_FOOTBALL_LEAGUES[0].slug}/${AMERICAN_FOOTBALL_LEAGUES[0].seasons[0].slug}/matches`,
     img: "/footer/american-football.svg",
-    altText: "NFL",
+    altText: "AMERICAN FOOTBALL",
   },
   {
     sport: SPORT.F1,

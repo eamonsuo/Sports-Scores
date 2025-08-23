@@ -62,25 +62,3 @@ interface Scores {
   home: ScoresDetail;
   away: ScoresDetail;
 }
-
-export type AFLGameQuarters = {
-  game: {
-    id: number;
-  };
-  quarters: [
-    {
-      quarter: number;
-      teams: {
-        home: TeamQuarterStats;
-        away: TeamQuarterStats;
-      };
-    },
-  ];
-};
-
-type TeamQuarterStats = {
-  id: number;
-  goals: number;
-  behinds: number;
-  points: number;
-};

@@ -1,14 +1,14 @@
+import AmericanFootballScoreBreakdown from "@/components/american-football/AmericanFootballScoreBreakdown";
 import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
 import ScoreChart from "@/components/generic/ScoreChart";
 import Placeholder from "@/components/misc/Placeholder";
-import NRLScoreBreakdown from "@/components/rugby-league/NRLScoreBreakdown";
-import { rugbyLeagueMatchDetails } from "@/services/rugby-league.service";
+import { americanFootballMatchDetails } from "@/services/american-football.service";
 
 export default async function Page(props: {
   params: Promise<{ league: string; season: string; id: string }>;
 }) {
   const { league, season, id } = await props.params;
-  const pageData = await rugbyLeagueMatchDetails(Number(id));
+  const pageData = await americanFootballMatchDetails(Number(id));
 
   if (pageData === null || pageData.matchDetails === null) {
     return <Placeholder>NO DATA</Placeholder>;
@@ -21,7 +21,7 @@ export default async function Page(props: {
         awayInfo={pageData.matchDetails.awayTeam}
         status={pageData.matchDetails.status}
       />
-      <NRLScoreBreakdown
+      <AmericanFootballScoreBreakdown
         scoreData={pageData.matchDetails.scoreBreakdown}
         homeLogo={pageData.matchDetails.homeTeam.img}
         awayLogo={pageData.matchDetails.awayTeam.img}

@@ -5,14 +5,13 @@ This is a web app which will allow you to view all results from a range of sport
 Currently Implemented:
 
 - Cricket (My Teams (Bad Data), Today's Matches, Featured Series)
-- NRL (Fixtures, Ladder, Match Details)
-- AFL (Fixtures, Ladder, Match Details) 
-- NFL (Fixtures, Ladder, Match Details) 
+- Rugby League (NRL, NRLW, State of Origin, QLD Cup, NSW Cup, Super League) - Fixtures, Ladder, Match Details
+- Aussie Rules (AFL, AFLW, VFL, SANFL, WAFL, AFL Pre-Season) - Fixtures, Ladder, Match Details
+- American Football (Fixtures, Ladder, Match Details)
 - F1 (Session Results, Driver & Team Standings)
 - Golf (PGA Tour (Schedule, Scoreboards, Standings), LIV (Schedule, Scoreboards), OWGR)
 
 To Be Implemented:
 
 - Football
-- WSL, Tennis, NBA & NHL & MLB (Playoff Picture only), Netball, Union, Olympics
-- Other leagues (AFLW, NRLW, State of Origin, LPGA, AusPGA, European Tour, )
+- Surfing (WSL), Tennis, Basketball (NBA, NBL, WNBA, WNBL) & Ice Hockey (NHL, AIHL) & Baseball (MLB, ALB) (Playoff Picture only), Netball (Super Netball, Internationals), Union (Super Rugby, Internationals), Olympics, Other Golf Leagues (LPGA, AusPGA, European Tour)

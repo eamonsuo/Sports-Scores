@@ -25,6 +25,10 @@ export interface RugbyLeague_RugbyAPI2_MatchIncidents_Response {
   incidents: Sofascore_Incident[];
 }
 
+export interface RugbyLeague_RugbyAPI2_CategorySchedules_Response {
+  events: Sofascore_Event[];
+}
+
 export interface RugbyLeagueFixturesPage {
   fixtures: RoundDetails[];
   currentRound: string;
@@ -42,4 +46,9 @@ export interface RugbyLeagueMatchPage {
     scoreBreakdown: RugbyLeagueScoreBreakdown[];
   };
   scoreEvents: ScoreDifference[];
+}
+
+export interface RugbyLeagueTodayPage {
+  fixtures: RoundDetails[];
+  currentRound: string;
 }

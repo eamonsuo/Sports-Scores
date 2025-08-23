@@ -174,10 +174,10 @@ type SportsmonksMatchCricket = {
 };
 
 export enum SPORT {
-  AFL = "afl",
+  AUSSIE_RULES = "aussie-rules",
   BASEBALL = "baseball",
   CRICKET = "cricket",
-  NFL = "nfl",
+  AMERICAN_FOOTBALL = "american-football",
   F1 = "f1",
   RUGBY_LEAGUE = "rugby-league",
   GOLF = "golf",

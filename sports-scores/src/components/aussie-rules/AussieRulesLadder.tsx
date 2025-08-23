@@ -1,27 +1,12 @@
 import fallback from "@/../public/vercel.svg";
+import { AussieRulesStanding } from "@/types/aussie-rules";
 import Image from "next/image";
 
-export type RugbyLeagueStanding = {
-  position: number;
-  team: {
-    id: number;
-    name: string;
-    logo?: string;
-  };
-  points: number;
-  games: {
-    played: number;
-    win: number;
-    drawn: number;
-    lost: number;
-  };
-  scores: {
-    for: number;
-    against: number;
-  };
-};
-
-export default function NRLLadder({ data }: { data: RugbyLeagueStanding[] }) {
+export default function AussieRulesLadder({
+  data,
+}: {
+  data: AussieRulesStanding[];
+}) {
   return (
     <div className="flex-1 overflow-y-auto px-4 dark:text-neutral-400">
       <table className="w-full">
@@ -31,7 +16,7 @@ export default function NRLLadder({ data }: { data: RugbyLeagueStanding[] }) {
             <th className="px-2">Team</th>
             <th className="px-2">P</th>
             <th className="px-2">W</th>
-            <th className="px-2">Diff</th>
+            <th className="px-2">%</th>
             <th className="px-2">Pts</th>
           </tr>
         </thead>
@@ -48,7 +33,7 @@ export default function NRLLadder({ data }: { data: RugbyLeagueStanding[] }) {
                     src={item.team.logo ?? fallback}
                     height={10}
                     width={15}
-                    alt={"Team Logo"}
+                    alt={"Logo"}
                     className="me-2"
                   />
                   {item.team.name}
@@ -56,8 +41,10 @@ export default function NRLLadder({ data }: { data: RugbyLeagueStanding[] }) {
               </td>
               <td>{item.games.played}</td>
               <td>{item.games.win}</td>
-              <td>{item.scores.for - item.scores.against}</td>
-              <td>{item.points}</td>
+              <td>
+                {((item.scores.for / item.scores.against) * 100).toFixed(2)}
+              </td>
+              <td>{item.pts}</td>
             </tr>
           ))}
         </tbody>

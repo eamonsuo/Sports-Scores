@@ -1,7 +1,7 @@
 import LeagueSeasonToggle from "@/components/generic/LeagueSeasonToggle";
 import APIStatus from "@/components/misc/ApiStatus";
 import { getGlobalApiQuota } from "@/lib/apiCounter";
-import { RUGBY_LEAGUE_LEAGUES } from "@/lib/constants";
+import { AUSSIE_RULES_LEAGUES } from "@/lib/constants";
 import { SPORT } from "@/types/misc";
 
 export default async function SportsLayout({
@@ -9,17 +9,17 @@ export default async function SportsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  var quota = getGlobalApiQuota(SPORT.RUGBY_LEAGUE);
+  var quota = getGlobalApiQuota(SPORT.AUSSIE_RULES);
 
   return (
     <div className="flex h-full flex-col">
       <LeagueSeasonToggle
-        sport={SPORT.RUGBY_LEAGUE}
-        leagues={RUGBY_LEAGUE_LEAGUES}
+        sport={SPORT.AUSSIE_RULES}
+        leagues={AUSSIE_RULES_LEAGUES}
       />
 
       {children}
-      <APIStatus status={quota?.percentUsed ?? "N/A"} reset="per day" />
+      <APIStatus status={quota?.percentUsed ?? "N/A"} reset="per month" />
     </div>
   );
 }

@@ -4,7 +4,6 @@ import { CricketScorecardBatProps } from "@/components/cricket/CricketScorecardB
 import { CricketScorecardBowlProps } from "@/components/cricket/CricketScorecardBowl";
 import { CricketLadder } from "@/components/cricket/CricketSeriesLadder";
 import { GolfLeaderboardPlayerRow } from "@/components/golf/TournamentLeaderboard";
-import { AFLGame } from "@/types/afl";
 import { BaseballGame } from "@/types/baseball";
 import {
   Cricket_LiveScoreAPI_MatchesGetInnings,
@@ -20,55 +19,12 @@ import {
   GolfSchedulePage,
 } from "@/types/golf";
 import { MatchStatus, MatchSummary, SPORT } from "@/types/misc";
-import { MATCHSTATUSAFL } from "./constants";
 import {
   resolveCountryImage,
   resolveGolfPlayerImage,
   resolveGolfTournamentImage,
 } from "./imageMapping";
-import {
-  dateToCustomString,
-  getLocalTime,
-  setMatchSummary,
-  shortenTeamNames,
-  toShortTimeString,
-} from "./projUtils";
-
-export function mapAFLFixtureFields(matches: AFLGame[]) {
-  return matches.map(
-    (item: AFLGame) =>
-      ({
-        id: item.game.id,
-        startDate: new Date(item.date),
-        sport: SPORT.AFL,
-        venue: item.venue,
-        status: "COMPLETED",
-        summaryText: setMatchSummary(
-          item.status.short,
-          getLocalTime(item.time),
-          item.teams.home.name,
-          item.scores.home.score,
-          item.teams.away.name,
-          item.scores.away.score,
-        ),
-        timer:
-          item.status.short === MATCHSTATUSAFL.SHORT_NS
-            ? getLocalTime(item.time)
-            : item.status.short,
-        homeDetails: {
-          img: item.teams.home.logo,
-          score: item.scores.home.score.toString(),
-          name: shortenTeamNames(item.teams.home.name),
-        },
-        awayDetails: {
-          img: item.teams.away.logo,
-          score: item.scores.away.score.toString(),
-          name: shortenTeamNames(item.teams.away.name),
-        },
-        roundLabel: `Round ${item.week}`,
-      }) as MatchSummary,
-  );
-}
+import { dateToCustomString, getLocalTime } from "./projUtils";
 
 export function mapBaseballFixtureFields(matches: BaseballGame[]) {
   return matches.map(
@@ -81,7 +37,7 @@ export function mapBaseballFixtureFields(matches: BaseballGame[]) {
         status: item.status.long,
         summaryText: "",
         timer:
-          item.status.short === MATCHSTATUSAFL.SHORT_NS
+          item.status.short === "NS"
             ? getLocalTime(item.time)
             : item.status.short,
         homeDetails: {
@@ -122,16 +78,20 @@ export function mapCricketCurrentMatches(
         status: mapCricketStatus(event.Eps),
         summaryText:
           event.Eps === "NS"
-            ? `Match starts at ${toShortTimeString(sDate)}`
+            ? `Match starts at ${sDate.toLocaleTimeString("en-US").replace(":00 ", " ")}`
             : event.ECo,
         otherDetail: event.ErnInf,
         homeDetails: {
-          img: resolveCountryImage(event.T1[0].Nm.replace(/\s(W|A|U19)$/i, "")),
+          img: resolveCountryImage(
+            event.T1[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
+          ),
           score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
           name: event.T1[0].Nm,
         },
         awayDetails: {
-          img: resolveCountryImage(event.T2[0].Nm.replace(/\s(W|A|U19)$/i, "")),
+          img: resolveCountryImage(
+            event.T2[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
+          ),
           score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
           name: event.T2[0].Nm,
         },
@@ -166,7 +126,7 @@ export function mapCricketSeriesMatches(
         status: mapCricketStatus(event.Eps),
         summaryText:
           event.Eps === "NS"
-            ? `Match starts at ${toShortTimeString(sDate)}`
+            ? `Match starts at ${sDate.toLocaleTimeString("en-US").replace(":00 ", " ")}`
             : event.ECo,
         otherDetail: event.ErnInf,
         homeDetails: {

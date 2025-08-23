@@ -5,6 +5,7 @@ import {
   Sofascore_LeagueTotalStandings_Response,
   Sofascore_Match_Response,
   Sofascore_MatchIncidents_Response,
+  Sofascore_ScheduledEvents_Response,
 } from "@/types/sofascore.api";
 
 const reqHeaders = new Headers();
@@ -17,7 +18,7 @@ function updateQuota(response: Response) {
     updateGlobalApiQuota(
       parseInt(remaining, 10),
       parseInt(limit, 10),
-      SPORT.AFL,
+      SPORT.AUSSIE_RULES,
     );
   }
 }
@@ -116,4 +117,22 @@ export async function fetchMatchIncidents(matchId: number) {
   updateQuota(rawMatch);
 
   return (await rawMatch.json()) as Sofascore_MatchIncidents_Response;
+}
+
+export async function fetchScheduledEvents(categoryId: number, date?: string) {
+  // Date must be formatted as yyyy-mm-dd
+  const rawMatch = await fetch(
+    `${process.env.SOFASCORE_API_BASEURL}/tournaments/get-scheduled-events?categoryId=${categoryId}${date ? `&date=${date}` : ""}`,
+    {
+      headers: reqHeaders,
+    },
+  );
+
+  if (!rawMatch.ok || rawMatch.status === 204) {
+    return null;
+  }
+
+  updateQuota(rawMatch);
+
+  return (await rawMatch.json()) as Sofascore_ScheduledEvents_Response;
 }
