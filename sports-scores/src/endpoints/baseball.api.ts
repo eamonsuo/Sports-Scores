@@ -59,6 +59,5 @@ export async function fetchBaseballStandings(season: number) {
     fetchOptions,
   );
 
-  let standings = await rawStandings.json(); // as AFLResponse<AFLStanding>;
-  // return standings.response;
+  let standings = await rawStandings.json();
 }

@@ -1,14 +1,20 @@
 import FixtureRoundList from "@/components/generic/FixtureRoundList";
 import Placeholder from "@/components/misc/Placeholder";
-import { rugbyLeagueMatches } from "@/services/rugby-league.service";
+import { americanFootballMatches } from "@/services/american-football.service";
+
+export const dynamic = "force-dynamic";
 
 export default async function Page(props: {
   params: Promise<{ league: string; season: string }>;
 }) {
   const { league, season } = await props.params;
-  const pageData = await rugbyLeagueMatches(Number(league), Number(season));
 
-  if (pageData === null) {
+  const pageData = await americanFootballMatches(
+    Number(league),
+    Number(season),
+  );
+
+  if (pageData === null || pageData.fixtures.length === 0) {
     return <Placeholder>NO DATA</Placeholder>;
   }
 

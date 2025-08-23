@@ -281,35 +281,44 @@ export function resolveNRLImages(teamName: string) {
   }
 }
 
-export function resolveAFLImages(teamName: string) {
+export function resolveAussieRulesImages(teamName: string) {
   switch (teamName) {
     case "Adelaide Crows":
       return "/afl/crows.svg";
     case "Brisbane Lions":
+    case "Brisbane Lions II":
       return "/afl/lions.svg";
     case "Carlton Blues":
+    case "Carlton Blues II":
       return "/afl/blues.svg";
     case "Collingwood Magpies":
+    case "Collingwood Magpies II":
       return "/afl/magpies.svg";
     case "Essendon Bombers":
+    case "Essendon Bombers II":
       return "/afl/bombers.svg";
     case "Fremantle Dockers":
       return "/afl/dockers.svg";
     case "Geelong Cats":
+    case "Geelong Cats II":
       return "/afl/cats.svg";
     case "Gold Coast Suns":
+    case "Gold Coast Suns II":
       return "/afl/suns.svg";
     case "GWS Giants":
+    case "GWS Giants II":
       return "/afl/giants.svg";
     case "Hawthorn Hawks":
       return "/afl/hawks.svg";
     case "Melbourne Demons":
       return "/afl/demons.svg";
     case "North Melbourne":
+    case "North Melbourne Kangaroos II":
       return "/afl/kangaroos.svg";
     case "Port Adelaide Power":
       return "/afl/power.svg";
     case "Richmond Tigers":
+    case "Richmond Tigers II":
       return "/afl/tigers.svg";
     case "St Kilda Saints":
       return "/afl/saints.svg";
@@ -565,6 +574,8 @@ export function resolveCountryImage(countryName: string) {
       case "South Korea":
       case "Korea South":
         return CountryFlagCode.KoreaSouth;
+      case "Kuwait":
+        return CountryFlagCode.Kuwait;
       case "Mexico":
         return CountryFlagCode.Mexico;
       case "Monaco":

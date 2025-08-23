@@ -1,96 +1,6 @@
 import { LeagueSeasonConfig } from "@/components/generic/LeagueSeasonToggle";
 
-export const CURRENTSEASON = {
-  NFL: 2024,
-};
-
-export const MATCHSTATUSAFL = {
-  SHORT_NS: "NS",
-  SHORT_Q1: "Q1",
-  SHORT_Q2: "Q2",
-  SHORT_Q3: "Q3",
-  SHORT_Q4: "Q4",
-  SHORT_QT: "QT",
-  SHORT_ER: "ER",
-  SHORT_FT: "FT",
-  SHORT_HT: "HT",
-  SHORT_CANC: "CANC",
-  SHORT_PST: "PST",
-  LONG_NS: "Not Started",
-  LONG_Q1: "1st Quarter",
-  LONG_Q2: "2nd Quarter",
-  LONG_Q3: "3rd Quarter",
-  LONG_Q4: "4th Quarter",
-  LONG_QT: "Quarter Time",
-  LONG_ER: "End Of Regulation",
-  LONG_FT: "Full Time",
-  LONG_HT: "Half Time",
-  LONG_CANC: "Cancelled",
-  LONG_PST: "Postponed",
-};
-
-export const MATCHSTATUSNFL = {
-  SHORT_NS: "NS",
-  SHORT_Q1: "Q1",
-  SHORT_Q2: "Q2",
-  SHORT_Q3: "Q3",
-  SHORT_Q4: "Q4",
-  SHORT_OT: "OT",
-  SHORT_FT: "FT",
-  SHORT_HT: "HT",
-  SHORT_AOT: "AOT",
-  SHORT_CANC: "CANC",
-  SHORT_PST: "PST",
-  LONG_NS: "Not Started",
-  LONG_Q1: "First Quarter",
-  LONG_Q2: "Second Quarter",
-  LONG_Q3: "Third Quarter",
-  LONG_Q4: "Fourth Quarter",
-  LONG_OT: "Overtime",
-  LONG_AOT: "After Over Time",
-  LONG_FT: "Finished",
-  LONG_HT: "Halftime",
-  LONG_CANC: "Cancelled",
-  LONG_PST: "Postponed",
-};
-
-export const APICALLS = {
-  STATUS: "status",
-  FIXTURES: "fixtures",
-  STANDINGS: "standings",
-};
-
-// const currencies = ["AUD", "USD"] as const;
-
-// type Currency = (typeof currencies)[number];
-
-export const COUNTRYFLAGURLS = {
-  AUS: "/lsci/db/PICTURES/CMS/340400/340493.png",
-  USA: "/lsci/db/PICTURES/CMS/381800/381853.png",
-  ENG: "/lsci/db/PICTURES/CMS/381800/381894.png",
-  RSA: "/lsci/db/PICTURES/CMS/382700/382733.png",
-  CAN: "/lsci/db/PICTURES/CMS/381800/381855.png",
-  KOR: "/lsci/db/PICTURES/CMS/313200/313209.logo.png",
-  JPN: "/lsci/db/PICTURES/CMS/360500/360559.png",
-  SWE: "/lsci/db/PICTURES/CMS/313200/313214.logo.png",
-  AUT: "/lsci/db/PICTURES/CMS/382600/382657.png",
-  ITA: "/lsci/db/PICTURES/CMS/313100/313151.logo.png",
-  MEX: "/lsci/db/PICTURES/CMS/388900/388974.png",
-  PHI: "/lsci/db/PICTURES/CMS/313200/313201.logo.png",
-  GER: "/lsci/db/PICTURES/CMS/313100/313155.logo.png",
-  COL: "/lsci/db/PICTURES/CMS/369200/369244.png",
-  FRA: "/lsci/db/PICTURES/CMS/383000/383036.png",
-  CHN: "/lsci/db/PICTURES/CMS/383900/383962.png",
-  CHI: "/lsci/db/PICTURES/CMS/313100/313164.logo.png",
-  ESP: "/lsci/db/PICTURES/CMS/313200/313211.logo.png",
-  ARG: "/lsci/db/PICTURES/CMS/313100/313142.logo.png",
-  NOR: "/lsci/db/PICTURES/CMS/313100/313199.logo.png",
-  FIN: "/lsci/db/PICTURES/CMS/383000/383045.png",
-  BEL: "/lsci/db/PICTURES/CMS/313100/313162.logo.png",
-  IRE: "/lsci/db/PICTURES/CMS/313100/313149.logo.png",
-};
-
-export const nrlTeamNames = [
+export const NRL_TEAM_NAMES = [
   "Brisbane Broncos",
   "Canberra Raiders",
   "Canterbury Bulldogs",
@@ -110,7 +20,7 @@ export const nrlTeamNames = [
   "Wests Tigers",
 ];
 
-export const aflTeamNames = [
+export const AFL_TEAM_NAMES = [
   "Adelaide Crows",
   "Brisbane Lions",
   "Carlton Blues",
@@ -131,7 +41,7 @@ export const aflTeamNames = [
   "Western Bulldogs",
 ];
 
-export const nflTeamNames = [
+export const NFL_TEAM_NAMES = [
   "Arizona Cardinals",
   "Atlanta Falcons",
   "Baltimore Ravens",
@@ -317,6 +227,154 @@ export const RUGBY_LEAGUE_LEAGUES = [
     seasons: [
       { name: "2025", slug: "69930" },
       { name: "2024", slug: "57044" },
+    ],
+  },
+] as LeagueSeasonConfig[];
+
+export const AUSSIE_RULES_LEAGUES = [
+  {
+    name: "AFL",
+    slug: "656",
+    seasons: [
+      { name: "2025", slug: "71308" },
+      { name: "2024", slug: "58226" },
+      { name: "2023", slug: "47887" },
+      { name: "2022", slug: "39988" },
+      { name: "2021", slug: "35137" },
+      { name: "2020", slug: "26039" },
+      { name: "2019", slug: "19486" },
+      { name: "2018", slug: "15780" },
+      { name: "2017", slug: "13037" },
+      { name: "2016", slug: "11060" },
+      { name: "2015", slug: "9775" },
+      { name: "2014", slug: "7608" },
+      { name: "2013", slug: "5633" },
+      { name: "2012", slug: "4090" },
+      { name: "2011", slug: "3166" },
+      { name: "2010", slug: "2594" },
+      { name: "2009", slug: "2099" },
+      { name: "2008", slug: "1153" },
+      { name: "2007", slug: "42987" },
+    ],
+  },
+  {
+    name: "AFLW",
+    slug: "10159",
+    seasons: [
+      { name: "2025", slug: "76123" },
+      { name: "2024", slug: "64462" },
+      { name: "2023", slug: "54077" },
+      { name: "2022 S7", slug: "45127" },
+      { name: "2022", slug: "40037" },
+      { name: "2021", slug: "35108" },
+      { name: "2020", slug: "26102" },
+      { name: "2019", slug: "20117" },
+      { name: "2018", slug: "15781" },
+      { name: "2017", slug: "12890" },
+    ],
+  },
+  {
+    name: "VFL",
+    slug: "25506",
+    seasons: [
+      { name: "2025", slug: "73301" },
+      { name: "2024", slug: "57568" },
+    ],
+  },
+  {
+    name: "SANFL",
+    slug: "20126",
+    seasons: [
+      { name: "2025", slug: "71309" },
+      { name: "2024", slug: "59236" },
+    ],
+  },
+  {
+    name: "WAFL",
+    slug: "20160",
+    seasons: [
+      { name: "2025", slug: "71310" },
+      { name: "2024", slug: "59237" },
+    ],
+  },
+  {
+    name: "AFL Preseason",
+    slug: "22064",
+    seasons: [
+      { name: "2025", slug: "71941" },
+      { name: "2024", slug: "58764" },
+    ],
+  },
+  {
+    name: "AFL All Stars",
+    slug: "25029",
+    seasons: [{ name: "2025", slug: "72022" }],
+  },
+] as LeagueSeasonConfig[];
+
+export const AMERICAN_FOOTBALL_LEAGUES = [
+  {
+    name: "NFL",
+    slug: "9464",
+    seasons: [
+      { name: "25/26", slug: "75522" },
+      { name: "24/25", slug: "60592" },
+      { name: "23/24", slug: "51361" },
+      { name: "22/23", slug: "46786" },
+      { name: "21/22", slug: "36422" },
+      { name: "20/21", slug: "27719" },
+      { name: "19/20", slug: "23303" },
+      { name: "18/19", slug: "16754" },
+      { name: "17/18", slug: "13091" },
+      { name: "16/17", slug: "11386" },
+      { name: "15/16", slug: "10155" },
+      { name: "14/15", slug: "9717" },
+      { name: "13/14", slug: "9716" },
+      { name: "12/13", slug: "9715" },
+      { name: "11/12", slug: "9714" },
+      { name: "10/11", slug: "9713" },
+      { name: "09/10", slug: "9712" },
+      { name: "08/09", slug: "9711" },
+      { name: "07/08", slug: "9710" },
+      { name: "06/07", slug: "9709" },
+      { name: "05/06", slug: "9708" },
+      { name: "04/05", slug: "9707" },
+      { name: "03/04", slug: "9706" },
+      { name: "02/03", slug: "9705" },
+      { name: "01/02", slug: "36659" },
+    ],
+  },
+  {
+    name: "NFL Preseason",
+    slug: "9465",
+    seasons: [
+      { name: "2025", slug: "75587" },
+      { name: "2024", slug: "59432" },
+      { name: "2023", slug: "51364" },
+    ],
+  },
+  {
+    name: "NCAA, Regular Season",
+    slug: "19510",
+    seasons: [
+      { name: "25/26", slug: "74693" },
+      { name: "24/25", slug: "59703" },
+    ],
+  },
+  {
+    name: "NCAA Division I, FBS Post Season",
+    slug: "19750",
+    seasons: [
+      { name: "24/25", slug: "69101" },
+      { name: "23/24", slug: "57012" },
+    ],
+  },
+  {
+    name: "NCAA Division I, FCS National Championship",
+    slug: "19717",
+    seasons: [
+      { name: "24/25", slug: "69309" },
+      { name: "23/24", slug: "56827" },
     ],
   },
 ] as LeagueSeasonConfig[];

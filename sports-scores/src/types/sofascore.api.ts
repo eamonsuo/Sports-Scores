@@ -14,6 +14,10 @@ export interface Sofascore_MatchIncidents_Response {
   incidents: Sofascore_Incident[];
 }
 
+export interface Sofascore_ScheduledEvents_Response {
+  events: Sofascore_Event[];
+}
+
 export interface Sofascore_Event {
   tournament: Sofascore_Tournament;
   season: Sofascore_Season;

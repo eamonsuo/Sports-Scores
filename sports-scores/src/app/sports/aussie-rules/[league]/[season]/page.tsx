@@ -6,5 +6,5 @@ export default async function Page(props: {
 }) {
   const { league, season } = await props.params;
 
-  redirect(`/sports/${SPORT.RUGBY_LEAGUE}/${league}/${season}/matches`);
+  redirect(`/sports/${SPORT.AUSSIE_RULES}/${league}/${season}/matches`);
 }

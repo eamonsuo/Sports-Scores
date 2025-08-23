@@ -1,5 +1,5 @@
 import { ScoreDifference } from "@/components/generic/ScoreChart";
-import { APISportsResponse, RoundDetails, TeamScoreDetails } from "./misc";
+import { RoundDetails, TeamScoreDetails } from "./misc";
 
 export interface AussieRulesFixturesPage {
   fixtures: RoundDetails[];
@@ -147,7 +147,7 @@ export type AussieRulesStanding = {
   last_5: string;
 };
 
-//Old API Type
-export interface AussieRulesResponse<T> extends APISportsResponse {
-  response: T[];
+export interface AussieRulesTodayPage {
+  fixtures: RoundDetails[];
+  currentRound: string;
 }

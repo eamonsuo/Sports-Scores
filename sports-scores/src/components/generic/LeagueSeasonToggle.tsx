@@ -2,7 +2,6 @@
 
 import { SPORT } from "@/types/misc";
 import { ChevronDownIcon } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "../misc/Button";
@@ -28,11 +27,11 @@ export default function LeagueSeasonToggle({
 }) {
   const [selectedLeague, setSelectedLeague] = useState(leagues[0]);
   const [selectedSeason, setSelectedSeason] = useState(leagues[0].seasons[0]);
+  const [todayActive, setTodayActive] = useState(false);
   const router = useRouter();
 
   // Helper to redirect to the correct route
   const redirectToRoute = (league: string, season: string) => {
-    console.log(league);
     router.push(`/sports/${sport}/${league}/${season}`);
   };
 
@@ -40,25 +39,30 @@ export default function LeagueSeasonToggle({
   const handleLeagueChange = (league: (typeof leagues)[0]) => {
     setSelectedLeague(league);
     setSelectedSeason(league.seasons[0]);
-    console.log(league);
+    setTodayActive(false);
     redirectToRoute(league.slug, league.seasons[0].slug);
   };
 
   // When "Today" is clicked, reset to first league and its first season
   const handleTodayClick = () => {
-    setSelectedLeague(leagues[0]);
-    setSelectedSeason(leagues[0].seasons[0]);
+    if (!todayActive) {
+      setTodayActive(true);
+      router.push(`/sports/${sport}/today`);
+    } else {
+      setTodayActive(false);
+      redirectToRoute(selectedLeague.slug, selectedSeason.slug);
+    }
   };
 
   return (
     <div className="flex items-center justify-center gap-4 bg-neutral-100 py-4 dark:bg-neutral-900">
-      <Link
-        href={`/sports/${sport}/today`}
-        className="rounded bg-neutral-700 px-4 py-2 text-white transition hover:bg-neutral-800 dark:bg-neutral-700 dark:text-neutral-100 dark:hover:bg-neutral-500"
+      <Button
+        variant="outline"
+        className="rounded bg-neutral-600 px-4 py-2"
         onClick={handleTodayClick}
       >
-        Today
-      </Link>
+        {todayActive ? "Fixtures" : "Today"}
+      </Button>
       {/* League Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

@@ -8,7 +8,7 @@ export default function Page() {
           src={"/afl-ball.svg"}
           width={30}
           height={30}
-          alt="AFL ball"
+          alt="Aussie Rules ball"
           className="text-center"
         ></Image>
         Icons made from{" "}

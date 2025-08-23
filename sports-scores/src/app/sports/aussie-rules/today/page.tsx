@@ -1,11 +1,11 @@
 import FixtureRoundList from "@/components/generic/FixtureRoundList";
 import Placeholder from "@/components/misc/Placeholder";
-import { rugbyLeagueCurrentMatches } from "@/services/rugby-league.service";
+import { aussieRulesCurrentMatches } from "@/services/aussie-rules.service";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const pageData = await rugbyLeagueCurrentMatches("TODAY");
+  const pageData = await aussieRulesCurrentMatches("TODAY");
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;

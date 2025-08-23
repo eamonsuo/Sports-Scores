@@ -21,11 +21,11 @@ if (!globalThis.aflApiQuota) {
 
 export function getGlobalApiQuota(sport: SPORT): ApiQuotaInfo | null {
   switch (sport) {
-    case SPORT.AFL:
+    case SPORT.AUSSIE_RULES:
       return globalThis.aflApiQuota;
     case SPORT.RUGBY_LEAGUE:
       return globalThis.nrlApiQuota;
-    case SPORT.NFL:
+    case SPORT.AMERICAN_FOOTBALL:
       return globalThis.nflApiQuota;
     case SPORT.CRICKET:
       return globalThis.cricketApiQuota;
@@ -44,7 +44,7 @@ export function updateGlobalApiQuota(
   let percentUsed = Math.round((1 - requestsRemaining / requestsLimit) * 100);
 
   switch (sport) {
-    case SPORT.AFL:
+    case SPORT.AUSSIE_RULES:
       globalThis.aflApiQuota = {
         percentUsed,
       };
@@ -52,7 +52,7 @@ export function updateGlobalApiQuota(
       globalThis.nrlApiQuota = {
         percentUsed,
       };
-    case SPORT.NFL:
+    case SPORT.AMERICAN_FOOTBALL:
       globalThis.nflApiQuota = {
         percentUsed,
       };

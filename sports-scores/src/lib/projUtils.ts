@@ -4,7 +4,6 @@ import {
   CountryFlagCode,
   MatchSummary,
 } from "@/types/misc";
-import { MATCHSTATUSAFL, MATCHSTATUSNFL } from "./constants";
 
 const fallback = "/vercel.svg";
 
@@ -43,7 +42,9 @@ export function calculateMatchResult(
   }
 
   return winningMargin == 0
-    ? "Match Drawn"
+    ? finished
+      ? "Match Drawn"
+      : `${homeName} ${description} ${0}`
     : `${winningTeam} ${description} ${winningMargin}`;
 }
 
@@ -57,12 +58,7 @@ export function setMatchSummary(
 ) {
   switch (status) {
     case "notstarted":
-    case MATCHSTATUSAFL.SHORT_NS:
-    case MATCHSTATUSNFL.SHORT_NS:
       return ``;
-    case MATCHSTATUSAFL.SHORT_FT:
-    case MATCHSTATUSNFL.SHORT_FT:
-    case MATCHSTATUSNFL.SHORT_AOT:
     case "finished":
       return calculateMatchResult(
         homeName,
@@ -71,11 +67,7 @@ export function setMatchSummary(
         awayScore,
         true,
       );
-    case MATCHSTATUSAFL.SHORT_CANC:
-    case MATCHSTATUSNFL.SHORT_CANC:
-      return "Match Cancelled";
-    case MATCHSTATUSAFL.SHORT_PST:
-    case MATCHSTATUSNFL.SHORT_PST:
+    case "postponed":
       return "Match Postponed";
     default:
       return calculateMatchResult(
@@ -150,6 +142,8 @@ export function shortenTeamNames(team: string) {
       return "GWS Giants";
     case "North Melbourne Kangaroos":
       return "North Melbourne";
+    case "North Melbourne Kangaroos II":
+      return "North Melbourne II";
     //NFL
     case "Washington Commanders":
       return "Washington Comm.";
