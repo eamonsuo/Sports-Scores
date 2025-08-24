@@ -6,6 +6,7 @@ import {
   AMERICAN_FOOTBALL_LEAGUES,
   AUSSIE_RULES_LEAGUES,
   GOLF_TOURS,
+  MOTORSPORT_CATEGORIES,
   RUGBY_LEAGUE_LEAGUES,
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -35,7 +36,7 @@ const footerLinks: {
     sport: SPORT.RUGBY_LEAGUE,
     link: `/sports/${SPORT.RUGBY_LEAGUE}/${RUGBY_LEAGUE_LEAGUES[0].slug}/${RUGBY_LEAGUE_LEAGUES[0].seasons[0].slug}/matches`,
     img: "/footer/nrl-ball.svg",
-    altText: "NRL",
+    altText: "RUGBY LEAGUE",
   },
   {
     sport: SPORT.AUSSIE_RULES,
@@ -50,10 +51,10 @@ const footerLinks: {
     altText: "AMERICAN FOOTBALL",
   },
   {
-    sport: SPORT.F1,
-    link: `/sports/${SPORT.F1}/main/races#current-date`,
+    sport: SPORT.MOTORSPORT,
+    link: `/sports/${SPORT.MOTORSPORT}/${MOTORSPORT_CATEGORIES[0].slug}/main/races`,
     img: "/footer/f1-helmet.svg",
-    altText: "F1",
+    altText: "MOTORSPORT",
   },
   {
     sport: SPORT.GOLF,

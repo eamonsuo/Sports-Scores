@@ -178,7 +178,7 @@ export enum SPORT {
   BASEBALL = "baseball",
   CRICKET = "cricket",
   AMERICAN_FOOTBALL = "american-football",
-  F1 = "f1",
+  MOTORSPORT = "motorsport",
   RUGBY_LEAGUE = "rugby-league",
   GOLF = "golf",
   OLYMPICS = "olympics",

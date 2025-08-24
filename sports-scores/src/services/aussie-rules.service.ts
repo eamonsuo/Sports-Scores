@@ -61,6 +61,7 @@ export async function aussieRulesMatches(league: number, season: number) {
                   ? toShortTimeString(startDate)
                   : match.status.description,
               id: match.id,
+              matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
               sport: SPORT.AUSSIE_RULES,
               status: match.status.description,
               venue: "",

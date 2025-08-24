@@ -1,6 +1,6 @@
-import { F1DriverStandings } from "@/components/f1/F1DriverStandings";
-import { F1SessionResults } from "@/components/f1/F1SessionStandings";
-import { F1TeamStandings } from "@/components/f1/F1TeamStandings";
+import { F1DriverStandings } from "@/components/motorsport/f1/F1DriverStandings";
+import { F1SessionResults } from "@/components/motorsport/f1/F1SessionStandings";
+import { F1TeamStandings } from "@/components/motorsport/f1/F1TeamStandings";
 import { APISportsResponse } from "./misc";
 
 // Page Types

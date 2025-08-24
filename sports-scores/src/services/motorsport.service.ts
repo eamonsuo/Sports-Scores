@@ -1,4 +1,4 @@
-import { F1SessionResults } from "@/components/f1/F1SessionStandings";
+import { F1SessionResults } from "@/components/motorsport/f1/F1SessionStandings";
 import {
   fetchF1ConstructorStandings,
   fetchF1DriverDetails,
@@ -45,7 +45,7 @@ export async function f1EventSchedule(season: number) {
           ),
           sessionType: F1SessionType.Practice1,
           sessionName: F1SessionType.Practice1.replace("-", " "),
-          sport: "f1",
+          sport: `${SPORT.MOTORSPORT}/f1`,
           status: "",
           logo: resolveF1CountryFlagImages(item.raceName),
         });
@@ -59,7 +59,7 @@ export async function f1EventSchedule(season: number) {
           ),
           sessionType: F1SessionType.Practice2,
           sessionName: F1SessionType.Practice2.replace("-", " "),
-          sport: "f1",
+          sport: `${SPORT.MOTORSPORT}/f1`,
           status: "",
         });
       }
@@ -72,7 +72,7 @@ export async function f1EventSchedule(season: number) {
           ),
           sessionType: F1SessionType.Practice3,
           sessionName: F1SessionType.Practice3.replace("-", " "),
-          sport: "f1",
+          sport: `${SPORT.MOTORSPORT}/f1`,
           status: "",
         });
       }
@@ -85,7 +85,7 @@ export async function f1EventSchedule(season: number) {
           ),
           sessionType: F1SessionType.SprintQualifying,
           sessionName: F1SessionType.SprintQualifying.replace("-", " "),
-          sport: "f1",
+          sport: `${SPORT.MOTORSPORT}/f1`,
           status: "",
         });
       }
@@ -95,7 +95,7 @@ export async function f1EventSchedule(season: number) {
           grandPrixName: item.raceName,
           startDate: new Date(item.Sprint.date + "T" + item.Sprint.time),
           sessionType: F1SessionType.Sprint,
-          sport: "f1",
+          sport: `${SPORT.MOTORSPORT}/f1`,
           status: "",
         });
       }
@@ -107,7 +107,7 @@ export async function f1EventSchedule(season: number) {
             item.Qualifying.date + "T" + item.Qualifying.time,
           ),
           sessionType: F1SessionType.Qualifying,
-          sport: SPORT.F1,
+          sport: `${SPORT.MOTORSPORT}/f1`,
           status: "",
         });
       }
@@ -118,7 +118,7 @@ export async function f1EventSchedule(season: number) {
         startDate: new Date(item.date + "T" + item.time),
         sessionType: F1SessionType.Race,
         sessionName: F1SessionType.Race,
-        sport: "f1",
+        sport: `${SPORT.MOTORSPORT}/f1`,
         status: "",
       });
 
