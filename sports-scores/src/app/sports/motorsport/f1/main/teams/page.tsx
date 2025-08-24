@@ -1,6 +1,6 @@
-import F1TeamStandings from "@/components/f1/F1TeamStandings";
 import Placeholder from "@/components/misc/Placeholder";
-import { f1ConstructorStandings } from "@/services/f1.service";
+import F1TeamStandings from "@/components/motorsport/f1/F1TeamStandings";
+import { f1ConstructorStandings } from "@/services/motorsport.service";
 
 export const dynamic = "force-dynamic";
 

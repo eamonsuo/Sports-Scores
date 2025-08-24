@@ -1,5 +1,4 @@
-import { ScoreDifference } from "@/components/generic/ScoreChart";
-import { APISportsResponse, RoundDetails, TeamScoreDetails } from "./misc";
+import { RoundDetails } from "./misc";
 
 export interface AussieRulesFixturesPage {
   fixtures: RoundDetails[];
@@ -9,103 +8,6 @@ export interface AussieRulesFixturesPage {
 export interface AussieRulesLadderPage {
   standings: AussieRulesStanding[];
 }
-
-export interface AussieRulesMatchPage {
-  matchDetails: {
-    homeTeam: TeamScoreDetails;
-    awayTeam: TeamScoreDetails;
-    status: string;
-    scoreBreakdown: AussieRulesGameQuarter[];
-  };
-  scoreEvents: ScoreDifference[];
-}
-
-export type AussieRulesGame = {
-  game: {
-    id: number;
-  };
-  league: {
-    id: number;
-    season: number;
-  };
-  date: string;
-  time: string;
-  timestamp: string;
-  timezone: string;
-  round: string;
-  week: number;
-  venue: string;
-  attendance: number;
-  status: {
-    long:
-      | "Not Started"
-      | "1st Quarter"
-      | "2nd Quarter"
-      | "3rd Quarter"
-      | "4th Quarter"
-      | "Quarter Time"
-      | "End Of Regulation"
-      | "Full Time"
-      | "Half Time"
-      | "Cancelled"
-      | "Postponed";
-    short:
-      | "NS"
-      | "Q1"
-      | "Q2"
-      | "Q3"
-      | "Q4"
-      | "QT"
-      | "ER"
-      | "FT"
-      | "HT"
-      | "CANC"
-      | "PST";
-  };
-  teams: {
-    home: {
-      id: number;
-      name: string;
-      logo: string;
-    };
-    away: {
-      id: number;
-      name: string;
-      logo: string;
-    };
-  };
-  scores: {
-    home: {
-      score: number;
-      goals: number;
-      behinds: number;
-      psgoals: number;
-      psbehinds: number;
-    };
-    away: {
-      score: number;
-      goals: number;
-      behinds: number;
-      psgoals: number;
-      psbehinds: number;
-    };
-  };
-};
-
-export type AussieRulesGameQuarter = {
-  quarter: number;
-  teams: {
-    home: TeamQuarterStats;
-    away: TeamQuarterStats;
-  };
-};
-
-type TeamQuarterStats = {
-  id: number;
-  goals?: number;
-  behinds?: number;
-  points: number;
-};
 
 export type AussieRulesGameEvents = {
   game: {
@@ -146,8 +48,3 @@ export type AussieRulesStanding = {
   };
   last_5: string;
 };
-
-//Old API Type
-export interface AussieRulesResponse<T> extends APISportsResponse {
-  response: T[];
-}

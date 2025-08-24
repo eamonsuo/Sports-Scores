@@ -1,6 +1,6 @@
-import F1SessionStandings from "@/components/f1/F1SessionStandings";
 import Placeholder from "@/components/misc/Placeholder";
-import { f1SessionResults } from "@/services/f1.service";
+import F1SessionStandings from "@/components/motorsport/f1/F1SessionStandings";
+import { f1SessionResults } from "@/services/motorsport.service";
 import { F1SessionType } from "@/types/f1";
 
 export default async function Page(props: {

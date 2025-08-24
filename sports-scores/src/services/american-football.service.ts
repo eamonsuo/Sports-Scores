@@ -75,6 +75,7 @@ export async function americanFootballMatches(league: number, season: number) {
                   ? toShortTimeString(startDate)
                   : match.status.description,
               id: match.id,
+              matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
               sport: SPORT.AMERICAN_FOOTBALL,
               status: match.status.description,
               venue: "",
@@ -299,6 +300,7 @@ export async function americanFootballCurrentMatches(
                   ? toShortTimeString(startDate)
                   : match.status.description,
               id: match.id,
+              matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
               sport: SPORT.AMERICAN_FOOTBALL,
               status: match.status.description,
               venue: "",
