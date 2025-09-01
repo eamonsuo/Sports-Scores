@@ -52,7 +52,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.MOTORSPORT,
-    link: `/sports/${SPORT.MOTORSPORT}/${MOTORSPORT_CATEGORIES[0].slug}/main/races`,
+    link: `/sports/${SPORT.MOTORSPORT}/${MOTORSPORT_CATEGORIES[0].slug}/${MOTORSPORT_CATEGORIES[0].seasons[0].slug}/races`,
     img: "/footer/f1-helmet.svg",
     altText: "MOTORSPORT",
   },

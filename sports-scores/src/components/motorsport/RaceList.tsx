@@ -90,7 +90,7 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
             )}
 
             <SessionSummaryCard
-              href={`/sports/${item.sport}/${item.round}/${item.sessionType}`}
+              href={`/sports/${item.sport}/${item.sessionSlug}`}
               sessionType={item.sessionName ?? item.sessionType}
               status={toShortTimeString(item.startDate)}
             />
