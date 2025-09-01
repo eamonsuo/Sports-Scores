@@ -80,12 +80,16 @@ export const MOTORSPORT_CATEGORIES = [
   {
     name: "Formula 1",
     slug: "f1",
-    seasons: [{ name: "2025", slug: "" }],
+    seasons: [
+      { name: "2025", slug: "2025" },
+      { name: "2024", slug: "2024" },
+      { name: "2023", slug: "2023" },
+    ],
   },
   {
     name: "Supercars",
     slug: "supercars",
-    seasons: [{ name: "2025", slug: "" }],
+    seasons: [{ name: "2025", slug: "2025" }],
   },
 ] as LeagueSeasonConfig[];
 

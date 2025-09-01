@@ -4,11 +4,11 @@ import { f1SessionResults } from "@/services/motorsport.service";
 import { F1SessionType } from "@/types/f1";
 
 export default async function Page(props: {
-  params: Promise<{ round: number; session: F1SessionType }>;
+  params: Promise<{ season: string; round: number; session: F1SessionType }>;
 }) {
   const params = await props.params;
   const sessionResults = await f1SessionResults(
-    2025,
+    Number(params.season),
     params.round,
     params.session,
   );

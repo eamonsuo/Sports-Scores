@@ -48,6 +48,7 @@ export async function f1EventSchedule(season: number) {
           sport: `${SPORT.MOTORSPORT}/f1`,
           status: "",
           logo: resolveF1CountryFlagImages(item.raceName),
+          sessionSlug: `${season}/${item.round}/${F1SessionType.Practice1}`,
         });
       }
       if (item.SecondPractice) {
@@ -61,6 +62,7 @@ export async function f1EventSchedule(season: number) {
           sessionName: F1SessionType.Practice2.replace("-", " "),
           sport: `${SPORT.MOTORSPORT}/f1`,
           status: "",
+          sessionSlug: `${season}/${item.round}/${F1SessionType.Practice2}`,
         });
       }
       if (item.ThirdPractice) {
@@ -74,6 +76,7 @@ export async function f1EventSchedule(season: number) {
           sessionName: F1SessionType.Practice3.replace("-", " "),
           sport: `${SPORT.MOTORSPORT}/f1`,
           status: "",
+          sessionSlug: `${season}/${item.round}/${F1SessionType.Practice3}`,
         });
       }
       if (item.SprintQualifying) {
@@ -87,6 +90,7 @@ export async function f1EventSchedule(season: number) {
           sessionName: F1SessionType.SprintQualifying.replace("-", " "),
           sport: `${SPORT.MOTORSPORT}/f1`,
           status: "",
+          sessionSlug: `${season}/${item.round}/${F1SessionType.SprintQualifying}`,
         });
       }
       if (item.Sprint) {
@@ -97,6 +101,7 @@ export async function f1EventSchedule(season: number) {
           sessionType: F1SessionType.Sprint,
           sport: `${SPORT.MOTORSPORT}/f1`,
           status: "",
+          sessionSlug: `${season}/${item.round}/${F1SessionType.Sprint}`,
         });
       }
       if (item.Qualifying) {
@@ -109,6 +114,7 @@ export async function f1EventSchedule(season: number) {
           sessionType: F1SessionType.Qualifying,
           sport: `${SPORT.MOTORSPORT}/f1`,
           status: "",
+          sessionSlug: `${season}/${item.round}/${F1SessionType.Qualifying}`,
         });
       }
 
@@ -120,6 +126,7 @@ export async function f1EventSchedule(season: number) {
         sessionName: F1SessionType.Race,
         sport: `${SPORT.MOTORSPORT}/f1`,
         status: "",
+        sessionSlug: `${season}/${item.round}/${F1SessionType.Race}`,
       });
 
       return gpSessions;

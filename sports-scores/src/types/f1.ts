@@ -437,6 +437,7 @@ export type SessionSummary = {
   sessionName?: string;
   startDate: Date;
   sport: string;
+  sessionSlug?: string;
 };
 
 export enum F1SessionType {
