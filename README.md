@@ -7,8 +7,8 @@ Currently Implemented:
 - Cricket (My Teams (Bad Data), Today's Matches, Featured Series)
 - Rugby League (NRL, NRLW, State of Origin, QLD Cup, NSW Cup, Super League) - Fixtures, Ladder, Match Details
 - Aussie Rules (AFL, AFLW, VFL, SANFL, WAFL, AFL Pre-Season) - Fixtures, Ladder, Match Details
-- American Football (Fixtures, Ladder, Match Details)
-- F1 (Session Results, Driver & Team Standings)
+- American Football (NFL, NFL Preseason, NCAA) - Fixtures, Ladder, Match Details
+- Motorsport (F1) - Session Results, Driver & Team Standings
 - Golf (PGA Tour (Schedule, Scoreboards, Standings), LIV (Schedule, Scoreboards), OWGR)
 
 To Be Implemented:
