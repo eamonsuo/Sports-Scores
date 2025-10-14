@@ -58,49 +58,51 @@ export function mapBaseballFixtureFields(matches: BaseballGame[]) {
 export function mapCricketCurrentMatches(
   data: Cricket_LiveScoreAPI_MatchesListByDate,
 ) {
-  return data.Stages.flatMap((item) => {
-    return item.Events.map((event) => {
-      let sDate = convertNumbertoDate(event.Esd);
-      let longFormat =
-        (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
-      let home2Ing = longFormat
-        ? `, ${event.Tr1CW2 ?? 0}/${event.Tr1C2 ?? 0}${event.Tr1CD2 === 1 ? "d" : ""}`
-        : "";
-      let away2Ing = longFormat
-        ? `, ${event.Tr2CW2 ?? 0}/${event.Tr2C2 ?? 0}${event.Tr2CD2 === 1 ? "d" : ""}`
-        : "";
-      return {
-        id: Number(event.Eid),
-        startDate: sDate,
-        endDate: convertNumbertoDate(event.Ese),
-        sport: SPORT.CRICKET,
-        venue: "",
-        status: mapCricketStatus(event.Eps),
-        summaryText:
-          event.Eps === "NS"
-            ? `Match starts at ${sDate.toLocaleTimeString("en-US").replace(":00 ", " ")}`
-            : event.ECo,
-        otherDetail: event.ErnInf,
-        homeDetails: {
-          img: resolveCountryImage(
-            event.T1[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
-          ),
-          score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
-          name: event.T1[0].Nm,
-        },
-        awayDetails: {
-          img: resolveCountryImage(
-            event.T2[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
-          ),
-          score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
-          name: event.T2[0].Nm,
-        },
-        seriesName: item.Snm,
-        matchSlug: `${event.Eid}`,
-        seriesSlug: `${item.Ccd}/${item.Scd}`,
-      } as MatchSummary;
-    });
-  });
+  return data.Stages.filter((series) => !/CSA/.test(series.Snm)).flatMap(
+    (item) => {
+      return item.Events.map((event) => {
+        let sDate = convertNumbertoDate(event.Esd);
+        let longFormat =
+          (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
+        let home2Ing = longFormat
+          ? `, ${event.Tr1CW2 ?? 0}/${event.Tr1C2 ?? 0}${event.Tr1CD2 === 1 ? "d" : ""}`
+          : "";
+        let away2Ing = longFormat
+          ? `, ${event.Tr2CW2 ?? 0}/${event.Tr2C2 ?? 0}${event.Tr2CD2 === 1 ? "d" : ""}`
+          : "";
+        return {
+          id: Number(event.Eid),
+          startDate: sDate,
+          endDate: convertNumbertoDate(event.Ese),
+          sport: SPORT.CRICKET,
+          venue: "",
+          status: mapCricketStatus(event.Eps),
+          summaryText:
+            event.Eps === "NS"
+              ? `Match starts at ${sDate.toLocaleTimeString("en-US").replace(":00 ", " ")}`
+              : event.ECo,
+          otherDetail: event.ErnInf,
+          homeDetails: {
+            img: resolveCountryImage(
+              event.T1[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
+            ),
+            score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
+            name: event.T1[0].Nm,
+          },
+          awayDetails: {
+            img: resolveCountryImage(
+              event.T2[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
+            ),
+            score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
+            name: event.T2[0].Nm,
+          },
+          seriesName: item.Snm,
+          matchSlug: `${event.Eid}`,
+          seriesSlug: `${item.Ccd}/${item.Scd}`,
+        } as MatchSummary;
+      });
+    },
+  );
 }
 
 export function mapCricketSeriesMatches(
@@ -212,14 +214,15 @@ export function mapMatchDetails(
   details: Cricket_LiveScoreAPI_MatchesGetScoreBoard,
   innings: Cricket_LiveScoreAPI_MatchesGetInnings,
 ) {
+  const middlePlayerIndex = Math.ceil(innings.Prns.length / 2);
   let homePlayers =
     Object.keys(innings).length === 0
       ? ["No Team Data"]
-      : innings.Prns.toSpliced(10, 11).map((item) => item.Snm);
+      : innings.Prns.slice(0, middlePlayerIndex).map((item) => item.Snm);
   let awayPlayers =
     Object.keys(innings).length === 0
       ? ["No Team Data"]
-      : innings.Prns.toSpliced(0, 11).map((item) => item.Snm);
+      : innings.Prns.slice(middlePlayerIndex).map((item) => item.Snm);
   let startDate = dateToCustomString(convertNumbertoDate(details.Esd));
   let endDate = dateToCustomString(convertNumbertoDate(details.Ese));
   let dateString =

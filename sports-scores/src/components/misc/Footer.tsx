@@ -71,7 +71,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.FOOTBALL,
-    // link: `/sports/${SPORT.FOOTBALL}`,
+    // link: `/sports/${SPORT.FOOTBALL}/${FOOTBALL_LEAGUES[0].slug}/${FOOTBALL_LEAGUES[0].seasons[0].slug}/matches`,
     link: `https://www.livescore.com/en/`,
     img: "/footer/football.svg",
     altText: "Football",
