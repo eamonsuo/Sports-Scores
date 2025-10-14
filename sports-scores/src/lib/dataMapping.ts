@@ -20,7 +20,7 @@ import {
 } from "@/types/golf";
 import { MatchStatus, MatchSummary, SPORT } from "@/types/misc";
 import {
-  resolveCountryImage,
+  resolveCricketTeamImages,
   resolveGolfPlayerImage,
   resolveGolfTournamentImage,
 } from "./imageMapping";
@@ -83,14 +83,14 @@ export function mapCricketCurrentMatches(
               : event.ECo,
           otherDetail: event.ErnInf,
           homeDetails: {
-            img: resolveCountryImage(
+            img: resolveCricketTeamImages(
               event.T1[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
             ),
             score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
             name: event.T1[0].Nm,
           },
           awayDetails: {
-            img: resolveCountryImage(
+            img: resolveCricketTeamImages(
               event.T2[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
             ),
             score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
@@ -132,12 +132,16 @@ export function mapCricketSeriesMatches(
             : event.ECo,
         otherDetail: event.ErnInf,
         homeDetails: {
-          img: resolveCountryImage(event.T1[0].Nm.replace(/\s(W|A|U19)$/i, "")),
+          img: resolveCricketTeamImages(
+            event.T1[0].Nm.replace(/\s(W|A|U19)$/i, ""),
+          ),
           score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
           name: event.T1[0].Nm,
         },
         awayDetails: {
-          img: resolveCountryImage(event.T2[0].Nm.replace(/\s(W|A|U19)$/i, "")),
+          img: resolveCricketTeamImages(
+            event.T2[0].Nm.replace(/\s(W|A|U19)$/i, ""),
+          ),
           score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
           name: event.T2[0].Nm,
         },
@@ -196,7 +200,7 @@ export function mapCricketSeriesLadders(ladders: LeagueTable) {
       teams: item.team.map((team) => {
         return {
           name: team.Tnm,
-          logo: resolveCountryImage(team.Tnm.replace(/\s(W|A|U19)$/i, "")),
+          logo: resolveCricketTeamImages(team.Tnm.replace(/\s(W|A|U19)$/i, "")),
           rank: team.rnk,
           played: team.pld,
           won: team.win,
@@ -251,13 +255,17 @@ export function mapMatchDetails(
     homeInfo: {
       name: details.T1[0].Nm,
       score: `${home1Ing}${home2Ing}`,
-      img: resolveCountryImage(details.T1[0].Nm.replace(/\s(W|A|U19)$/i, "")),
+      img: resolveCricketTeamImages(
+        details.T1[0].Nm.replace(/\s(W|A|U19)$/i, ""),
+      ),
     },
     homePlayers: homePlayers,
     awayInfo: {
       name: details.T2[0].Nm,
       score: `${away1Ing}${away2Ing}`,
-      img: resolveCountryImage(details.T2[0].Nm.replace(/\s(W|A|U19)$/i, "")),
+      img: resolveCricketTeamImages(
+        details.T2[0].Nm.replace(/\s(W|A|U19)$/i, ""),
+      ),
     },
     awayPlayers: awayPlayers,
   } as MatchDetailsPage;

@@ -511,6 +511,48 @@ export function resolveF1TeamImages(teamName: string) {
   }
 }
 
+export function resolveCricketTeamImages(teamName: string) {
+  switch (teamName) {
+    case "Queensland":
+      return "https://static-files.cricket-australia.pulselive.com/flag/120/1205@2x.png";
+    case "Queensland Fire":
+      return "https://static-files.cricket-australia.pulselive.com/flag/120/89@2x.png";
+    case "New South Wales":
+      return "https://static-files.cricket-australia.pulselive.com/flag/120/674@2x.png";
+    case "New South Wales Breakers":
+      return "https://static-files.cricket-australia.pulselive.com/flag/120/90@2x.png";
+    case "Tasmania":
+      return "https://static-files.cricket-australia.pulselive.com/flag/120/85@2x.png";
+    case "Victoria":
+      return "https://static-files.cricket-australia.pulselive.com/flag/120/82@2x.png";
+    case "South Australia":
+    case "South Australian Scorpions":
+      return "https://static-files.cricket-australia.pulselive.com/flag/120/1214@2x.png";
+    case "ACT Meteors":
+      return "https://static-files.cricket-australia.pulselive.com/flag/120/92@2x.png";
+    case "Western Australia":
+      return "https://static-files.cricket-australia.pulselive.com/flag/120/83@2x.png";
+    case "Brisbane Heat":
+      return "https://static-files.cricket-australia.pulselive.com/flag/120/100@2x.png";
+    case "Melbourne Stars":
+      return "https://static-files.cricket-australia.pulselive.com/flag/120/97@2x.png";
+    case "Melbourne Renegades":
+      return "https://static-files.cricket-australia.pulselive.com/flag/120/101@2x.png";
+    case "Sydney Sixers":
+      return "https://static-files.cricket-australia.pulselive.com/flag/120/98@2x.png";
+    case "Sydney Thunder":
+      return "https://static-files.cricket-australia.pulselive.com/flag/120/102@2x.png";
+    case "Hobart Hurricanes":
+      return "https://static-files.cricket-australia.pulselive.com/flag/120/96@2x.png";
+    case "Adelaide Strikers":
+      return "https://static-files.cricket-australia.pulselive.com/flag/120/99@2x.png";
+    case "Perth Scorchers":
+      return "https://static-files.cricket-australia.pulselive.com/flag/120/95@2x.png";
+    default:
+      return resolveCountryImage(teamName) ?? fallback;
+  }
+}
+
 export function resolveCountryImage(countryName: string) {
   var countryCode = (() => {
     switch (countryName) {
