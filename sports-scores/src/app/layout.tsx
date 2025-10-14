@@ -23,7 +23,7 @@ export default function RootLayout({
         rel="apple-touch-icon"
         href="/apple-icon?apple-icon.png"
         type="image/png"
-        sizes="32x32"
+        sizes="64x64"
       />
       {/* Dark mode enabled */}
       <body className={inter.className}>

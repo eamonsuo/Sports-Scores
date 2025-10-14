@@ -106,8 +106,8 @@ export async function rugbyLeagueMatches(
     }),
 
     currentRound: `Round ${
-      nextMatches?.events[0]?.roundInfo?.round ??
-      lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo?.round ??
+      nextMatches?.events?.[0]?.roundInfo?.round ??
+      lastMatches?.events?.[lastMatches?.events.length - 1]?.roundInfo?.round ??
       0
     }`,
   } as RugbyLeagueFixturesPage;

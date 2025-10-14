@@ -93,8 +93,8 @@ export async function aussieRulesMatches(league: number, season: number) {
     }),
 
     currentRound: `Round ${
-      nextMatches?.events[0]?.roundInfo?.round ??
-      lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo?.round ??
+      nextMatches?.events?.[0]?.roundInfo?.round ??
+      lastMatches?.events?.[lastMatches?.events.length - 1]?.roundInfo?.round ??
       0
     }`,
   } as AussieRulesFixturesPage;

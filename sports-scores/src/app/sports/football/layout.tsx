@@ -1,44 +1,22 @@
 import LeagueSeasonToggle from "@/components/generic/LeagueSeasonToggle";
 import APIStatus from "@/components/misc/ApiStatus";
+import { getGlobalApiQuota } from "@/lib/apiCounter";
+import { FOOTBALL_LEAGUES } from "@/lib/constants";
 import { SPORT } from "@/types/misc";
-import React from "react";
 
-const leagues = [
-  {
-    name: "Premier League",
-    slug: "premier-league",
-    seasons: [
-      { name: "2025", slug: "2025" },
-      { name: "2024", slug: "2024" },
-      { name: "2023", slug: "2023" },
-      { name: "2022", slug: "2022" },
-    ],
-  },
-  {
-    name: "La Liga",
-    slug: "la-liga",
-    seasons: [
-      { name: "2025", slug: "2025" },
-      { name: "2024", slug: "2024" },
-    ],
-  },
-  {
-    name: "Bundesliga",
-    slug: "bundesliga",
-    seasons: [{ name: "2025", slug: "2025" }],
-  },
-];
-
-export default function SportsLayout({
+export default async function SportsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  var quota = getGlobalApiQuota(SPORT.FOOTBALL);
+
   return (
-    <div className="flex h-full w-full flex-col">
-      <LeagueSeasonToggle leagues={leagues} sport={SPORT.FOOTBALL} />
-      <main className="w-full">{children}</main>
-      <APIStatus status="N/A" reset="per month" />
+    <div className="flex h-full flex-col">
+      <LeagueSeasonToggle sport={SPORT.FOOTBALL} leagues={FOOTBALL_LEAGUES} />
+
+      {children}
+      <APIStatus status={quota?.percentUsed ?? "N/A"} reset="per day" />
     </div>
   );
 }

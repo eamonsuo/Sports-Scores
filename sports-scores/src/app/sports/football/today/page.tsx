@@ -1,13 +1,22 @@
 import Placeholder from "@/components/misc/Placeholder";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page() {
-  //   const params = await props.params;
+  // const pageData = await rugbyLeagueCurrentMatches("TODAY");
 
-  //   let matches = await cricketSeriesDetails(params.ccd, params.scd);
+  // if (pageData === null) {
+  //   return <Placeholder>NO DATA</Placeholder>;
+  // }
 
-  //   if (matches == null) {
-  //     return <Placeholder>An error has ocurred</Placeholder>;
-  //   }
-
-  return <Placeholder>Placeholder - today</Placeholder>;
+  return (
+    <Placeholder>Not implemented</Placeholder>
+    // <>
+    //   <span className="mt-4"></span>
+    //   <FixtureRoundList
+    //     data={pageData.fixtures}
+    //     curRound={pageData.currentRound}
+    //   />
+    // </>
+  );
 }

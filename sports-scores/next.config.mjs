@@ -26,6 +26,12 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "static-files.cricket-australia.pulselive.com",
+        port: "",
+        pathname: "/flag/**",
+      },
     ],
   },
   logging: {
