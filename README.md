@@ -14,4 +14,4 @@ Currently Implemented:
 To Be Implemented:
 
 - Football
-- Surfing (WSL), Tennis, Basketball (NBA, NBL, WNBA, WNBL) & Ice Hockey (NHL, AIHL) & Baseball (MLB, ALB) (Playoff Picture only), Netball (Super Netball, Internationals), Union (Super Rugby, Internationals), Olympics, Other Golf Leagues (LPGA, AusPGA, European Tour)
+- Surfing (WSL), Tennis, Basketball (NBA, NBL, WNBA, WNBL) & Ice Hockey (NHL, AIHL) & Baseball (MLB, ALB), Netball (Super Netball, Internationals), Union (Super Rugby, Internationals), Olympics, Other Golf Leagues (LPGA, AusPGA, European Tour)
