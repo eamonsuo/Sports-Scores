@@ -2,8 +2,8 @@ import { CricketScorecardPage } from "@/app/sports/cricket/match/[slug]/page";
 import { MatchDetailsPage } from "@/components/cricket/CricketMatchDetailsPage";
 import {
   fetchCricketAllSeries,
-  fetchCricketCurrentMatches,
   fetchCricketMatchDetails,
+  fetchCricketMatchesByDate,
   fetchCricketMatchInnings,
   fetchCricketMyTeams,
   fetchCricketSeriesMatches,
@@ -17,14 +17,14 @@ import {
   mapScorecardDetails,
 } from "@/lib/dataMapping";
 
-export async function cricketCurrentMatches(
-  date: "TODAY" | "YESTERDAY" | "TOMORROW",
-) {
-  const rawMatches = await fetchCricketCurrentMatches(date);
-
-  if (rawMatches === null) {
-    return null;
-  }
+// Fetch matches for a specific date
+export async function cricketMatchesByDate(date: Date) {
+  const rawMatches = await fetchCricketMatchesByDate(
+    date.getFullYear(),
+    date.getMonth() + 1,
+    date.getDate(),
+  );
+  if (!rawMatches || !rawMatches.Stages) return null;
 
   return mapCricketCurrentMatches(rawMatches);
 }

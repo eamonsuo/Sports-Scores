@@ -28,7 +28,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.CRICKET,
-    link: `/sports/${SPORT.CRICKET}/main/matches/today`,
+    link: `/sports/${SPORT.CRICKET}/main/matches`,
     img: "/footer/cricket-ball.svg",
     altText: "Cricket",
   },
@@ -46,7 +46,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.AMERICAN_FOOTBALL,
-    link: `/sports/${SPORT.AMERICAN_FOOTBALL}/${AMERICAN_FOOTBALL_LEAGUES[0].slug}/${AMERICAN_FOOTBALL_LEAGUES[0].seasons[0].slug}/matches`,
+    link: `/sports/${SPORT.AMERICAN_FOOTBALL}/${AMERICAN_FOOTBALL_LEAGUES[0].slug}/${AMERICAN_FOOTBALL_LEAGUES[0].seasons[0].slug}/matches#current-date`,
     img: "/footer/american-football.svg",
     altText: "AMERICAN FOOTBALL",
   },

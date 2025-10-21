@@ -21,7 +21,13 @@ export type RugbyLeagueStanding = {
   };
 };
 
-export default function NRLLadder({ data }: { data: RugbyLeagueStanding[] }) {
+export default function NRLLadder({
+  data,
+  qualifyingPosition,
+}: {
+  data: RugbyLeagueStanding[];
+  qualifyingPosition: number;
+}) {
   return (
     <div className="flex-1 overflow-y-auto px-4 dark:text-neutral-400">
       <table className="w-full">
@@ -39,7 +45,7 @@ export default function NRLLadder({ data }: { data: RugbyLeagueStanding[] }) {
           {data.map((item, idx) => (
             <tr
               key={item.team.id}
-              className={`border ${idx === 8 ? "border-t-4 border-t-red-600" : ""}`}
+              className={`border ${idx === qualifyingPosition ? "border-t-4 border-t-red-600" : ""}`}
             >
               <td className="py-2 pe-2">{item.position}</td>
               <td className="text-left text-sm">

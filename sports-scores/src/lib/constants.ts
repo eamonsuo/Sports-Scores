@@ -151,6 +151,7 @@ export const RUGBY_LEAGUE_LEAGUES = [
       { name: "2008", slug: "1153" },
       { name: "2007", slug: "42987" },
     ],
+    qualifyingPosition: 8,
   },
   {
     name: "NRLW",
@@ -160,6 +161,8 @@ export const RUGBY_LEAGUE_LEAGUES = [
       { name: "2024", slug: "56809" },
       { name: "2023", slug: "51393" },
     ],
+
+    qualifyingPosition: 6,
   },
   {
     name: "State of Origin",
@@ -199,6 +202,7 @@ export const RUGBY_LEAGUE_LEAGUES = [
       { name: "2016", slug: "11366" },
       { name: "2015", slug: "10176" },
     ],
+    qualifyingPosition: 8,
   },
   {
     name: "New South Wales Cup",
@@ -207,6 +211,7 @@ export const RUGBY_LEAGUE_LEAGUES = [
       { name: "2025", slug: "69962" },
       { name: "2024", slug: "57568" },
     ],
+    qualifyingPosition: 8,
   },
   {
     name: "World Cup",
@@ -219,14 +224,20 @@ export const RUGBY_LEAGUE_LEAGUES = [
     seasons: [{ name: "2022", slug: "42991" }],
   },
   {
-    name: "Pacific Championship",
+    name: "Pacific Champs",
     slug: "13667",
-    seasons: [{ name: "2024", slug: "66664" }],
+    seasons: [
+      { name: "2025", slug: "81655" },
+      { name: "2024", slug: "66664" },
+    ],
   },
   {
-    name: "Pacific Championship - Women",
+    name: "Pacific Champs W",
     slug: "21300",
-    seasons: [{ name: "2024", slug: "66683" }],
+    seasons: [
+      { name: "2025", slug: "881656" },
+      { name: "2024", slug: "66683" },
+    ],
   },
   {
     name: "Int. Friendly Games",
@@ -245,6 +256,7 @@ export const RUGBY_LEAGUE_LEAGUES = [
       { name: "2025", slug: "69930" },
       { name: "2024", slug: "57044" },
     ],
+    qualifyingPosition: 6,
   },
 ] as LeagueSeasonConfig[];
 
@@ -273,6 +285,7 @@ export const AUSSIE_RULES_LEAGUES = [
       { name: "2008", slug: "1153" },
       { name: "2007", slug: "42987" },
     ],
+    qualifyingPosition: 8,
   },
   {
     name: "AFLW",
@@ -289,6 +302,7 @@ export const AUSSIE_RULES_LEAGUES = [
       { name: "2018", slug: "15781" },
       { name: "2017", slug: "12890" },
     ],
+    qualifyingPosition: 8,
   },
   {
     name: "VFL",
@@ -297,6 +311,7 @@ export const AUSSIE_RULES_LEAGUES = [
       { name: "2025", slug: "73301" },
       { name: "2024", slug: "57568" },
     ],
+    qualifyingPosition: 8,
   },
   {
     name: "SANFL",
@@ -305,6 +320,7 @@ export const AUSSIE_RULES_LEAGUES = [
       { name: "2025", slug: "71309" },
       { name: "2024", slug: "59236" },
     ],
+    qualifyingPosition: 5,
   },
   {
     name: "WAFL",
@@ -313,6 +329,7 @@ export const AUSSIE_RULES_LEAGUES = [
       { name: "2025", slug: "71310" },
       { name: "2024", slug: "59237" },
     ],
+    qualifyingPosition: 5,
   },
   {
     name: "AFL Preseason",

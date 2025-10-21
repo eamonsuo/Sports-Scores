@@ -20,7 +20,7 @@ export default async function SportsLayout({
             page: "myteams",
           },
           {
-            href: "/sports/cricket/main/matches/today",
+            href: "/sports/cricket/main/matches",
             label: "All Matches",
             page: "matches",
           },

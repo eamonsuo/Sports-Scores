@@ -136,13 +136,7 @@ export async function americanFootballStandings(
 
   return {
     tables: standings?.standings
-      .filter((item) => {
-        return (
-          item.name !== "AFC" &&
-          item.name !== "NFC" &&
-          item.name !== "AmericanFootball"
-        );
-      })
+      .sort((a, b) => b.name.localeCompare(a.name))
       .map((table) => {
         return {
           tableName: table.name,
