@@ -8,6 +8,7 @@ export interface AussieRulesFixturesPage {
 
 export interface AussieRulesLadderPage {
   standings: AussieRulesStanding[];
+  qualifyingPosition: number;
 }
 
 export interface AussieRulesMatchPage {

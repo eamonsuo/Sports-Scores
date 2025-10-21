@@ -20,7 +20,7 @@ export default function CricketFixtureList({ data }: { data: MatchSummary[] }) {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto px-4">
+    <div className="flex-1 px-4">
       {data.map((item: MatchSummary) => {
         let item_date = new Date(item.startDate);
         displayDate = false;
@@ -53,6 +53,11 @@ export default function CricketFixtureList({ data }: { data: MatchSummary[] }) {
             {displayDate && (
               <SectionDate
                 sectionDate={sectionDate}
+                endDate={
+                  item?.endDate?.getUTCDate() === item.startDate.getUTCDate()
+                    ? undefined
+                    : item.endDate
+                }
                 currentDate={currentMatch}
               />
             )}

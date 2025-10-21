@@ -142,6 +142,9 @@ export async function rugbyLeagueStandings(
         scores: { against: item.scoresAgainst, for: item.scoresFor },
       } as RugbyLeagueStanding;
     }),
+    qualifyingPosition:
+      RUGBY_LEAGUE_LEAGUES.find((l) => Number(l.slug) === tournamentId)
+        ?.qualifyingPosition ?? -1,
   } as RugbyLeagueLadderPage;
 }
 

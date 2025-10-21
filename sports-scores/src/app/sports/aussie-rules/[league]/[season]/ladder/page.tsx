@@ -14,5 +14,10 @@ export default async function Page(props: {
     return <Placeholder>NO DATA</Placeholder>;
   }
 
-  return <AussieRulesLadder data={pageData.standings} />;
+  return (
+    <AussieRulesLadder
+      data={pageData.standings}
+      qualifyingPosition={pageData.qualifyingPosition}
+    />
+  );
 }

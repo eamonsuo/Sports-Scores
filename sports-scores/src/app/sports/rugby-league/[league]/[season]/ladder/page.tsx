@@ -12,5 +12,10 @@ export default async function Page(props: {
     return <Placeholder>NO DATA</Placeholder>;
   }
 
-  return <NRLLadder data={pageData.standings} />;
+  return (
+    <NRLLadder
+      data={pageData.standings}
+      qualifyingPosition={pageData.qualifyingPosition}
+    />
+  );
 }

@@ -54,7 +54,7 @@ export async function getLeagueById(id: string) {
 export async function fetchFootballFixturesByLeague(leagueId: string) {
   return (await fetchFootballApi(
     `/football-get-all-matches-by-league?leagueid=${leagueId}`,
-  )) as FootballLive_AllLeagueFixtures;
+  )) as FootballLive_AllLeagueFixtures_Response;
 }
 
 export async function getFixtureById(fixtureId: string) {
@@ -64,5 +64,5 @@ export async function getFixtureById(fixtureId: string) {
 export async function fetchFootballStandingsByLeague(leagueId: string) {
   return (await fetchFootballApi(
     `/football-get-standing-all?leagueid=${leagueId}`,
-  )) as FootballLive_StandingsResponse;
+  )) as FootballLive_Standings_Response;
 }

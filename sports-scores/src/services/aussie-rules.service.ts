@@ -126,6 +126,9 @@ export async function aussieRulesStandings(league: number, season: number) {
         scores: { against: item.scoresAgainst, for: item.scoresFor },
       } as AussieRulesStanding;
     }),
+    qualifyingPosition:
+      AUSSIE_RULES_LEAGUES.find((l) => Number(l.slug) === league)
+        ?.qualifyingPosition ?? -1,
   } as AussieRulesLadderPage;
 }
 

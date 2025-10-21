@@ -1,5 +1,3 @@
-// ...existing code...
-// This file was renamed from nrl.api.ts
 import { updateGlobalApiQuota } from "@/lib/apiCounter";
 import { SPORT } from "@/types/misc";
 import {
@@ -37,7 +35,7 @@ export async function fetchRugbyLeagueLastMatches(
     },
   );
 
-  if (!rawMatches.ok) {
+  if (!rawMatches.ok || rawMatches.status === 204) {
     return null;
   }
 

@@ -277,7 +277,7 @@ export function resolveNRLImages(teamName: string) {
     case "Wests Tigers":
       return "/nrl/tigers.svg";
     default:
-      return fallback;
+      return resolveCountryImage(teamName) ?? fallback;
   }
 }
 
@@ -584,12 +584,16 @@ export function resolveCountryImage(countryName: string) {
         return CountryFlagCode.Chile;
       case "China":
         return CountryFlagCode.China;
+      case "Cook Islands":
+        return CountryFlagCode.CookIslands;
       case "Denmark":
         return CountryFlagCode.Denmark;
       case "Dominican Republic":
         return CountryFlagCode.DominicanRepublic;
       case "England":
         return CountryFlagCode.England;
+      case "Fiji":
+        return CountryFlagCode.Fiji;
       case "France":
         return CountryFlagCode.France;
       case "Germany":
@@ -646,6 +650,8 @@ export function resolveCountryImage(countryName: string) {
         return CountryFlagCode.PuertoRico;
       case "Qatar":
         return CountryFlagCode.Qatar;
+      case "Samoa":
+        return CountryFlagCode.Samoa;
       case "Saudi Arabia":
         return CountryFlagCode.SaudiArabia;
       case "Scotland":
@@ -662,6 +668,8 @@ export function resolveCountryImage(countryName: string) {
         return CountryFlagCode.Sweden;
       case "Thailand":
         return CountryFlagCode.Thailand;
+      case "Tonga":
+        return CountryFlagCode.Tonga;
       case "United Arab Emirates":
         return CountryFlagCode.UnitedArabEmirates;
       case "United Kingdom":

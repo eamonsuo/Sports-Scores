@@ -86,37 +86,21 @@ export async function fetchCricketAllSeries() {
   return (await rawFixtures.json()) as Cricket_LiveScoreAPI_LeaguesListPopular;
 }
 
-export async function fetchCricketCurrentMatches(
-  date: "TODAY" | "YESTERDAY" | "TOMORROW",
+export async function fetchCricketMatchesByDate(
+  year: number,
+  month: number,
+  day: number,
 ) {
-  let curDate = new Date();
-  if (date === "YESTERDAY") {
-    curDate.setDate(curDate.getDate() - 1);
-  } else if (date === "TOMORROW") {
-    curDate.setDate(curDate.getDate() + 1);
-  }
-
-  let dateString = curDate
-    .toLocaleDateString("en-GB", { timeZone: "Australia/Brisbane" })
-    .split("/");
-  let month = curDate.getMonth() + 1;
-  let monthStr = month < 10 ? "0" + month : month;
-  let day = curDate.getDate();
-  let dayStr = day < 10 ? "0" + day : day;
-
   const rawFixtures = await fetch(
-    `https://livescore6.p.rapidapi.com/matches/v2/list-by-date?Category=cricket&Date=${curDate.getFullYear()}${dateString[1]}${dateString[0]}&Timezone=10`,
+    `https://livescore6.p.rapidapi.com/matches/v2/list-by-date?Category=cricket&Date=${year}${month}${day}&Timezone=10`,
     {
       headers: reqHeaders,
     },
   );
-
   if (!rawFixtures.ok) {
     return null;
   }
-
   updateQuota(rawFixtures);
-
   return (await rawFixtures.json()) as Cricket_LiveScoreAPI_MatchesListByDate;
 }
 

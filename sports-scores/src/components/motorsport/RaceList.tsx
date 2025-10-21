@@ -1,6 +1,5 @@
 "use client";
 
-import { toShortTimeString } from "@/lib/projUtils";
 import { SessionSummary } from "@/types/f1";
 import React, { useEffect } from "react";
 import SectionDateRange from "../generic/SectionDateRange";
@@ -92,7 +91,7 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
             <SessionSummaryCard
               href={`/sports/${item.sport}/${item.sessionSlug}`}
               sessionType={item.sessionName ?? item.sessionType}
-              status={toShortTimeString(item.startDate)}
+              status={item.status}
             />
           </React.Fragment>
         );

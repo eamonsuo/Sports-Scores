@@ -55,54 +55,56 @@ export function mapBaseballFixtureFields(matches: BaseballGame[]) {
   );
 }
 
+const excludedSeries = ["CSA", "The Ford", "County"];
+
 export function mapCricketCurrentMatches(
   data: Cricket_LiveScoreAPI_MatchesListByDate,
 ) {
-  return data.Stages.filter((series) => !/CSA/.test(series.Snm)).flatMap(
-    (item) => {
-      return item.Events.map((event) => {
-        let sDate = convertNumbertoDate(event.Esd);
-        let longFormat =
-          (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
-        let home2Ing = longFormat
-          ? `, ${event.Tr1CW2 ?? 0}/${event.Tr1C2 ?? 0}${event.Tr1CD2 === 1 ? "d" : ""}`
-          : "";
-        let away2Ing = longFormat
-          ? `, ${event.Tr2CW2 ?? 0}/${event.Tr2C2 ?? 0}${event.Tr2CD2 === 1 ? "d" : ""}`
-          : "";
-        return {
-          id: Number(event.Eid),
-          startDate: sDate,
-          endDate: convertNumbertoDate(event.Ese),
-          sport: SPORT.CRICKET,
-          venue: "",
-          status: mapCricketStatus(event.Eps),
-          summaryText:
-            event.Eps === "NS"
-              ? `Match starts at ${sDate.toLocaleTimeString("en-US").replace(":00 ", " ")}`
-              : event.ECo,
-          otherDetail: event.ErnInf,
-          homeDetails: {
-            img: resolveCricketTeamImages(
-              event.T1[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
-            ),
-            score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
-            name: event.T1[0].Nm,
-          },
-          awayDetails: {
-            img: resolveCricketTeamImages(
-              event.T2[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
-            ),
-            score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
-            name: event.T2[0].Nm,
-          },
-          seriesName: item.Snm,
-          matchSlug: `${event.Eid}`,
-          seriesSlug: `${item.Ccd}/${item.Scd}`,
-        } as MatchSummary;
-      });
-    },
-  );
+  return data.Stages.filter(
+    (series) => !excludedSeries.some((str) => series.Snm.includes(str)),
+  ).flatMap((item) => {
+    return item.Events.map((event) => {
+      let sDate = convertNumbertoDate(event.Esd);
+      let longFormat =
+        (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
+      let home2Ing = longFormat
+        ? `, ${event.Tr1CW2 ?? 0}/${event.Tr1C2 ?? 0}${event.Tr1CD2 === 1 ? "d" : ""}`
+        : "";
+      let away2Ing = longFormat
+        ? `, ${event.Tr2CW2 ?? 0}/${event.Tr2C2 ?? 0}${event.Tr2CD2 === 1 ? "d" : ""}`
+        : "";
+      return {
+        id: Number(event.Eid),
+        startDate: sDate,
+        endDate: convertNumbertoDate(event.Ese),
+        sport: SPORT.CRICKET,
+        venue: "",
+        status: mapCricketStatus(event.Eps),
+        summaryText:
+          event.Eps === "NS"
+            ? `Match starts at ${sDate.toLocaleTimeString("en-US").replace(":00 ", " ")}`
+            : event.ECo,
+        otherDetail: event.ErnInf,
+        homeDetails: {
+          img: resolveCricketTeamImages(
+            event.T1[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
+          ),
+          score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
+          name: event.T1[0].Nm,
+        },
+        awayDetails: {
+          img: resolveCricketTeamImages(
+            event.T2[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
+          ),
+          score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
+          name: event.T2[0].Nm,
+        },
+        seriesName: item.Snm,
+        matchSlug: `${event.Eid}`,
+        seriesSlug: `${item.Ccd}/${item.Scd}`,
+      } as MatchSummary;
+    });
+  });
 }
 
 export function mapCricketSeriesMatches(

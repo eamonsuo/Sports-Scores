@@ -16,6 +16,7 @@ export type LeagueSeasonConfig = {
   name: string;
   slug: string;
   seasons: { name: string; slug: string }[];
+  qualifyingPosition?: number;
 };
 
 export default function LeagueSeasonToggle({
