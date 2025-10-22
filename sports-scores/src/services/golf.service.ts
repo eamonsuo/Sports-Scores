@@ -4,13 +4,16 @@ import {
   fetchGolfRankings,
   fetchGolfSchedule,
 } from "@/endpoints/golf.api";
-import { mapGolfLeaderboard, mapGolfSchedule } from "@/lib/dataMapping";
 import {
   resolveGolfPlayerImage,
   resolveGolfTeamImage,
+  resolveGolfTournamentImage,
 } from "@/lib/imageMapping";
 import {
+  Golf_SlashGolfAPI_Leaderboard,
+  Golf_SlashGolfAPI_Schedule,
   GolfRankingsPage,
+  GolfSchedulePage,
   SlashGolf_PlayerRanking_FedExCup,
   SlashGolf_PlayerRanking_OWGR,
 } from "@/types/golf";
@@ -69,7 +72,7 @@ export async function golfFedExRankings(year: string = "2025") {
           name: playerName,
           img: resolveGolfPlayerImage(playerName),
           position: item.rank.$numberInt.toString(),
-          totalPoints: item.totalPoints.toString(),
+          totalPoints: item.totalPoints?.toString() ?? "",
           pointsBehind: item.pointsBehind,
         };
       },
@@ -114,4 +117,62 @@ export async function golfLIVTournamentLeaderboard(
         } as GolfLeaderboardPlayerRow;
       }) ?? [],
   };
+}
+
+export function mapGolfLeaderboard(data: Golf_SlashGolfAPI_Leaderboard) {
+  return {
+    playerPositions: data.leaderboardRows.map((item) => {
+      let playerName =
+        item.players === undefined
+          ? `${item.firstName} ${item.lastName}${item.isAmateur ? " (A)" : ""}`
+          : item.players
+              .map(
+                (item) =>
+                  `${item.firstName} ${item.lastName}${item.isAmateur ? " (A)" : ""}`,
+              )
+              .join(", ");
+      return {
+        name: playerName,
+        position: item.position,
+        totalScore: item.total,
+        thru: item.thru,
+        curRound:
+          Number(item.currentRoundScore) > 0 &&
+          item.currentRoundScore[0] !== "+"
+            ? "+" + item.currentRoundScore
+            : item.currentRoundScore,
+        img: resolveGolfPlayerImage(playerName),
+      } as GolfLeaderboardPlayerRow;
+    }),
+  };
+}
+
+export function mapGolfSchedule(
+  data: Golf_SlashGolfAPI_Schedule,
+  tour: string,
+) {
+  return {
+    schedule: data.schedule.map((item) => {
+      var startDate = new Date(0);
+      startDate.setUTCSeconds(item.date.start.$date.$numberLong / 1000);
+
+      var endDate = new Date(0);
+      endDate.setUTCSeconds(item.date.end.$date.$numberLong / 1000);
+
+      return {
+        id: item.tournId,
+        name: item.name,
+        img: resolveGolfTournamentImage(item.name),
+        startDate: startDate,
+        endDate: endDate,
+        sport: "golf",
+        course: [""],
+        status: "",
+        leader: "",
+        location: "",
+        tourName: tour,
+      };
+    }),
+    pageName: "",
+  } as GolfSchedulePage;
 }

@@ -9,7 +9,20 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Sports Scores App",
   description: "An app to track scores for all your sports",
-  icons: "favicon.ico",
+  icons: [
+    {
+      rel: "icon",
+      url: "/favicon.ico",
+      type: "image/png",
+      sizes: "64x64",
+    },
+    {
+      rel: "apple-touch-icon",
+      url: "/apple-touch-icon.png",
+      type: "image/png",
+      sizes: "180x180",
+    },
+  ],
   manifest: "/web.manifest",
 };
 
@@ -18,12 +31,12 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className="dark">
-      <link rel="icon" href="/favicon.ico" sizes="any" />
+      <link rel="icon" href="/favicon.ico" sizes="64x64" />
       <link
         rel="apple-touch-icon"
-        href="/apple-icon?apple-icon.png"
+        href="/apple-touch-icon.png"
         type="image/png"
-        sizes="64x64"
+        sizes="180x180"
       />
       {/* Dark mode enabled */}
       <body className={inter.className}>
