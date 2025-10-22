@@ -1,6 +1,6 @@
 {
   "name": "Sports Scores",
-  "short_name": "SportsScores",
+  "short_name": "Sports Scores",
   "description": "An app to track results for all your sports",
   "id": "SportsScoresApp",
   "start_url": "/",
