@@ -205,7 +205,7 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
       return {
         id: Number(event.Eid),
         startDate: sDate,
-        endDate: convertNumbertoDate(event.Ese),
+        endDate: convertNumbertoDate(event.Ese ?? event.Esd),
         sport: SPORT.CRICKET,
         venue: "",
         status: mapCricketStatus(event.Eps),
