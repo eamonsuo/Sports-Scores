@@ -5,6 +5,8 @@ import { cricketMatchesByDate } from "@/services/cricket.service";
 import { MatchSummary } from "@/types/misc";
 import { useEffect, useRef, useState } from "react";
 
+export const dynamic = "force-dynamic";
+
 export default function InfiniteCricketMatches() {
   const [mounted, setMounted] = useState(false);
   const [matchSummaries, setMatchSummaries] = useState<MatchSummary[]>([]);
