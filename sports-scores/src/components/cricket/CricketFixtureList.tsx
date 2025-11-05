@@ -1,6 +1,7 @@
 import SectionDate from "@/components/generic/SectionDate";
 import { MatchSummary } from "@/types/misc";
 import React from "react";
+import SectionDateRange from "../generic/SectionDateRange";
 import CricketMatchSummaryCard from "./CricketMatchSummaryCard";
 import CricketSeriesHeader from "./CricketSeriesHeader";
 
@@ -50,17 +51,19 @@ export default function CricketFixtureList({ data }: { data: MatchSummary[] }) {
 
         return (
           <React.Fragment key={item.id}>
-            {displayDate && (
-              <SectionDate
-                sectionDate={sectionDate}
-                endDate={
-                  item?.endDate?.getUTCDate() === item.startDate.getUTCDate()
-                    ? undefined
-                    : item.endDate
-                }
-                currentDate={currentMatch}
-              />
-            )}
+            {displayDate &&
+              (item?.endDate?.getUTCDate() === item.startDate.getUTCDate() ? (
+                <SectionDate
+                  sectionDate={sectionDate}
+                  currentDate={currentMatch}
+                />
+              ) : (
+                <SectionDateRange
+                  dateFrom={item.startDate}
+                  dateTo={item?.endDate ?? item.startDate}
+                  currentDate={currentMatch}
+                />
+              ))}
             {(displaySeries || displayDate) && (
               <CricketSeriesHeader
                 href={`/sports/cricket/series/${item.seriesSlug}/matches#current-date`}

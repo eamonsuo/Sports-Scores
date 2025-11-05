@@ -12,7 +12,7 @@ import {
   fetchCricketSeriesMatches,
 } from "@/endpoints/cricket.api";
 import { resolveCricketTeamImages } from "@/lib/imageMapping";
-import { dateToCustomString } from "@/lib/projUtils";
+import { dateToCustomString, toShortTimeString } from "@/lib/projUtils";
 import {
   Cricket_LiveScoreAPI_MatchesGetInnings,
   Cricket_LiveScoreAPI_MatchesGetScoreBoard,
@@ -23,18 +23,18 @@ const excludedSeries = ["CSA", "The Ford", "County"];
 
 // Fetch matches for a specific date
 export async function cricketMatchesByDate(date: Date) {
-  const rawMatches = await fetchCricketMatchesByDate(
-    date.getFullYear(),
-    date.getMonth() + 1,
-    date.getDate(),
-  );
+  const dateString = `${date.getFullYear()}${(date.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}${date.getDate().toString().padStart(2, "0")}`;
+
+  const rawMatches = await fetchCricketMatchesByDate(dateString);
   if (!rawMatches || !rawMatches.Stages) return null;
 
   return rawMatches.Stages.filter(
     (series) => !excludedSeries.some((str) => series.Snm.includes(str)),
   ).flatMap((item) => {
     return item.Events.map((event) => {
-      let sDate = convertNumbertoDate(event.Esd);
+      let sDate = convertNumbertoDate(event.Esd, false);
       let longFormat =
         (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
       let home2Ing = longFormat
@@ -43,16 +43,17 @@ export async function cricketMatchesByDate(date: Date) {
       let away2Ing = longFormat
         ? `, ${event.Tr2CW2 ?? 0}/${event.Tr2C2 ?? 0}${event.Tr2CD2 === 1 ? "d" : ""}`
         : "";
+
       return {
         id: Number(event.Eid),
         startDate: sDate,
-        endDate: convertNumbertoDate(event.Ese),
+        endDate: convertNumbertoDate(event.Ese, false),
         sport: SPORT.CRICKET,
         venue: "",
         status: mapCricketStatus(event.Eps),
         summaryText:
           event.Eps === "NS"
-            ? `Match starts at ${sDate.toLocaleTimeString("en-US").replace(":00 ", " ")}`
+            ? `Match starts at ${toShortTimeString(sDate)}`
             : event.ECo,
         otherDetail: event.ErnInf,
         homeDetails: {
@@ -87,7 +88,7 @@ export async function cricketMyTeamsMatches() {
   return rawTeamDetails.flatMap((a) => {
     return a.Stages.flatMap((item) => {
       return item.Events.map((event) => {
-        let sDate = convertNumbertoDate(event.Esd);
+        let sDate = convertNumbertoDate(event.Esd, true);
         // let longFormat =
         //   (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
         // let home2Ing = longFormat
@@ -193,7 +194,7 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
 
   return rawMatches.Stages.flatMap((item) => {
     return item.Events.map((event) => {
-      let sDate = convertNumbertoDate(event.Esd);
+      let sDate = convertNumbertoDate(event.Esd, false);
       let longFormat =
         (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
       let home2Ing = longFormat
@@ -202,16 +203,17 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
       let away2Ing = longFormat
         ? `, ${event.Tr2CW2 ?? 0}/${event.Tr2C2 ?? 0}${event.Tr2CD2 === 1 ? "d" : ""}`
         : "";
+
       return {
         id: Number(event.Eid),
         startDate: sDate,
-        endDate: convertNumbertoDate(event.Ese),
+        endDate: convertNumbertoDate(event.Ese ?? event.Esd, false),
         sport: SPORT.CRICKET,
         venue: "",
         status: mapCricketStatus(event.Eps),
         summaryText:
           event.Eps === "NS"
-            ? `Match starts at ${sDate.toLocaleTimeString("en-US").replace(":00 ", " ")}`
+            ? `Match starts at ${toShortTimeString(sDate)}`
             : event.ECo,
         otherDetail: event.ErnInf,
         homeDetails: {
@@ -253,7 +255,7 @@ export function mapMatchDetails(
   details: Cricket_LiveScoreAPI_MatchesGetScoreBoard,
   innings: Cricket_LiveScoreAPI_MatchesGetInnings,
 ) {
-  const middlePlayerIndex = Math.ceil(innings.Prns.length / 2);
+  const middlePlayerIndex = Math.ceil(innings.Prns?.length ?? 0 / 2);
   let homePlayers =
     Object.keys(innings).length === 0
       ? ["No Team Data"]
@@ -262,8 +264,8 @@ export function mapMatchDetails(
     Object.keys(innings).length === 0
       ? ["No Team Data"]
       : innings.Prns.slice(middlePlayerIndex).map((item) => item.Snm);
-  let startDate = dateToCustomString(convertNumbertoDate(details.Esd));
-  let endDate = dateToCustomString(convertNumbertoDate(details.Ese));
+  let startDate = dateToCustomString(convertNumbertoDate(details.Esd, true));
+  let endDate = dateToCustomString(convertNumbertoDate(details.Ese, true));
   let dateString =
     details.Esd === details.Ese ? `${startDate}` : `${startDate} - ${endDate}`;
   let tossChoice = details.TCho === 1 ? "bat" : "bowl";
@@ -375,7 +377,7 @@ export function mapScorecardDetails(
   } as CricketScorecardPage;
 }
 
-export function convertNumbertoDate(dateNumber: number) {
+export function convertNumbertoDate(dateNumber: number, utcDate: boolean) {
   let dateString = dateNumber.toString();
   let year = Number(dateString.substring(0, 4));
   let month = Number(dateString.substring(4, 6)) - 1;
@@ -383,5 +385,7 @@ export function convertNumbertoDate(dateNumber: number) {
   let hour = Number(dateString.substring(8, 10));
   let minute = Number(dateString.substring(10, 12));
   let second = Number(dateString.substring(12, 14));
-  return new Date(year, month, day, hour, minute, second);
+  return utcDate
+    ? new Date(Date.UTC(year, month, day, hour, minute, second))
+    : new Date(year, month, day, hour, minute, second);
 }

@@ -87,12 +87,10 @@ export async function fetchCricketAllSeries() {
 }
 
 export async function fetchCricketMatchesByDate(
-  year: number,
-  month: number,
-  day: number,
+  date: string, //Formatted as yyyymmdd
 ) {
   const rawFixtures = await fetch(
-    `https://livescore6.p.rapidapi.com/matches/v2/list-by-date?Category=cricket&Date=${year}${month}${day}&Timezone=10`,
+    `https://livescore6.p.rapidapi.com/matches/v2/list-by-date?Category=cricket&Date=${date}&Timezone=10`,
     {
       headers: reqHeaders,
     },

@@ -5,6 +5,8 @@ import { cricketMatchesByDate } from "@/services/cricket.service";
 import { MatchSummary } from "@/types/misc";
 import { useEffect, useRef, useState } from "react";
 
+export const dynamic = "force-dynamic";
+
 export default function InfiniteCricketMatches() {
   const [mounted, setMounted] = useState(false);
   const [matchSummaries, setMatchSummaries] = useState<MatchSummary[]>([]);
@@ -93,7 +95,7 @@ export default function InfiniteCricketMatches() {
   }
 
   return (
-    <div className="flex flex-1 flex-col items-center overflow-y-auto">
+    <div className="flex flex-1 flex-col overflow-y-auto">
       <div className="m-4 flex justify-center">
         <button
           className={
@@ -106,7 +108,7 @@ export default function InfiniteCricketMatches() {
           onClick={handleLoadPrevious}
           disabled={loading}
         >
-          {loading ? "Loading..." : "Load previous results"}
+          {loading ? "Loading..." : "Load previous day"}
         </button>
       </div>
       {/* Attach ref to the first record of the current day */}
@@ -114,10 +116,7 @@ export default function InfiniteCricketMatches() {
 
       <CricketFixtureList data={matchSummaries} />
 
-      <div
-        ref={loaderRef}
-        className="m-4 flex h-10 items-center justify-center"
-      >
+      <div ref={loaderRef} className="m-4 flex items-center justify-center">
         <button
           className={
             "rounded-md px-4 py-2 text-center transition-colors duration-150 focus:relative " +
@@ -129,7 +128,7 @@ export default function InfiniteCricketMatches() {
           onClick={handleLoadNext}
           disabled={loading}
         >
-          {loading ? "Loading..." : "Load more matches"}
+          {loading ? "Loading..." : "Load next day"}
         </button>
       </div>
     </div>

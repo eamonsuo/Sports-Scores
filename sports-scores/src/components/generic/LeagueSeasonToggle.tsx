@@ -55,6 +55,10 @@ export default function LeagueSeasonToggle({
     }
   };
 
+  // Helper to truncate long names
+  const truncateName = (name: string, maxLength = 14) =>
+    name.length > maxLength ? name.slice(0, maxLength - 3) + "..." : name;
+
   return (
     <div className="flex items-center justify-center gap-4 bg-neutral-100 py-4 dark:bg-neutral-900">
       <Button
@@ -68,7 +72,7 @@ export default function LeagueSeasonToggle({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="justify-between">
-            {selectedLeague.name}
+            {truncateName(selectedLeague.name)}
             <ChevronDownIcon className="ml-2 h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -104,7 +108,6 @@ export default function LeagueSeasonToggle({
               key={season.slug}
               onClick={() => {
                 setSelectedSeason(season);
-                console.log(selectedLeague);
                 redirectToRoute(selectedLeague.slug, season.slug);
               }}
             >

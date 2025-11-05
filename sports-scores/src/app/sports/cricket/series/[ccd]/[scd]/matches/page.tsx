@@ -13,5 +13,9 @@ export default async function Page(props: {
     return <Placeholder>An error has ocurred</Placeholder>;
   }
 
-  return <CricketFixtureList data={matches} />;
+  return (
+    <div className="flex flex-1 flex-col overflow-y-auto">
+      <CricketFixtureList data={matches} />
+    </div>
+  );
 }
