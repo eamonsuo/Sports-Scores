@@ -1,22 +1,21 @@
+import FixtureRoundList from "@/components/generic/FixtureRoundList";
 import Placeholder from "@/components/misc/Placeholder";
+import { footballCurrentMatches } from "@/services/football.service";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  // const pageData = await rugbyLeagueCurrentMatches("TODAY");
+  const curDate = new Date();
+  const pageData = await footballCurrentMatches(curDate);
 
-  // if (pageData === null) {
-  //   return <Placeholder>NO DATA</Placeholder>;
-  // }
+  if (pageData === null) {
+    return <Placeholder>NO DATA</Placeholder>;
+  }
 
   return (
-    <Placeholder>Not implemented</Placeholder>
-    // <>
-    //   <span className="mt-4"></span>
-    //   <FixtureRoundList
-    //     data={pageData.fixtures}
-    //     curRound={pageData.currentRound}
-    //   />
-    // </>
+    <FixtureRoundList
+      data={pageData.fixtures}
+      curRound={pageData.currentRound}
+    />
   );
 }

@@ -255,7 +255,7 @@ export function mapMatchDetails(
   details: Cricket_LiveScoreAPI_MatchesGetScoreBoard,
   innings: Cricket_LiveScoreAPI_MatchesGetInnings,
 ) {
-  const middlePlayerIndex = Math.ceil(innings.Prns?.length ?? 0 / 2);
+  const middlePlayerIndex = Math.ceil((innings.Prns?.length ?? 0) / 2);
   let homePlayers =
     Object.keys(innings).length === 0
       ? ["No Team Data"]

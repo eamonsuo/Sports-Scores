@@ -553,6 +553,20 @@ export function resolveCricketTeamImages(teamName: string) {
   }
 }
 
+export function resolveFootballTeamImage(teamName: string) {
+  switch (teamName) {
+    default:
+      return resolveCountryImage(teamName) ?? fallback;
+  }
+}
+
+export function resolveBaseballTeamImage(teamName: string) {
+  switch (teamName) {
+    default:
+      return resolveCountryImage(teamName) ?? fallback;
+  }
+}
+
 export function resolveCountryImage(countryName: string) {
   var countryCode = (() => {
     switch (countryName) {

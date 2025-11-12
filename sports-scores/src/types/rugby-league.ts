@@ -35,7 +35,7 @@ export interface RugbyLeagueFixturesPage {
 }
 
 export interface RugbyLeagueLadderPage {
-  standings: RugbyLeagueStanding[];
+  standings: RugbyLeagueStanding[][];
   qualifyingPosition: number;
 }
 

@@ -1,64 +1,53 @@
-import { APISportsResponse } from "./misc";
+import { BaseballStanding } from "@/components/baseball/BaseballLadder";
+import { BaseballScoreBreakdown } from "@/components/baseball/BaseballScoreBreakdown";
+import { RoundDetails, TeamScoreDetails } from "./misc";
+import {
+  Sofascore_Event,
+  Sofascore_Incident,
+  Sofascore_Standing,
+} from "./sofascore.api";
 
-export interface BaseballResponse<T> extends APISportsResponse {
-  response: T[];
+export interface Baseball_BaseballApi_FixturePage_Response {
+  events: Sofascore_Event[];
+  hasNextPage: boolean;
 }
 
-export interface BaseballGame {
-  id: number;
-  date: string;
-  time: string;
-  timestamp: number;
-  timezone: string;
-  week: number | null;
-  status: Status;
-  country: Country;
-  league: League;
-  teams: {
-    home: Team;
-    away: Team;
+export interface Baseball_BaseballApi_Match_Response {
+  event: Sofascore_Event;
+}
+
+export interface Baseball_BaseballApi_LeagueTotalStandings_Response {
+  standings: Sofascore_Standing[];
+}
+
+export interface Baseball_BaseballApi_MatchIncidents_Response {
+  incidents: Sofascore_Incident[];
+}
+
+export interface Baseball_BaseballApi_MatchSchedules_Response {
+  events: Sofascore_Event[];
+}
+
+export interface BaseballFixturesPage {
+  fixtures: RoundDetails[];
+  currentRound: string;
+}
+
+export interface BaseballLadderPage {
+  tables: BaseballStanding[];
+}
+
+export interface BaseballMatchPage {
+  matchDetails: {
+    homeTeam: TeamScoreDetails;
+    awayTeam: TeamScoreDetails;
+    status: string;
+    scoreBreakdown: BaseballScoreBreakdown[];
   };
-  scores: Scores;
+  // scoreEvents: ScoreDifference[];
 }
 
-interface Status {
-  long: string; //Add values in
-  short: string;
-}
-
-interface Country {
-  id: number;
-  name: string;
-  code: string;
-  flag: string;
-}
-
-interface League {
-  id: number;
-  name: string;
-  type: string;
-  logo: string;
-  season: number;
-}
-
-interface Team {
-  id: number;
-  name: string;
-  logo: string;
-}
-
-interface Innings {
-  [key: string]: number | null;
-}
-
-interface ScoresDetail {
-  hits: number | null;
-  errors: number | null;
-  innings: Innings;
-  total: number | null;
-}
-
-interface Scores {
-  home: ScoresDetail;
-  away: ScoresDetail;
+export interface BaseballTodayPage {
+  fixtures: RoundDetails[];
+  currentRound: string;
 }

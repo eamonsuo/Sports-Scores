@@ -13,9 +13,14 @@ export default async function Page(props: {
   }
 
   return (
-    <NRLLadder
-      data={pageData.standings}
-      qualifyingPosition={pageData.qualifyingPosition}
-    />
+    <>
+      {pageData.standings.map((table, index) => (
+        <NRLLadder
+          key={index}
+          data={table}
+          qualifyingPosition={pageData.qualifyingPosition}
+        />
+      ))}
+    </>
   );
 }
