@@ -1,14 +1,13 @@
-import FootballScoreBreakdown from "@/components/football/FootballScoreBreakdown";
+import BaseballScoreBreakdown from "@/components/baseball/BaseballScoreBreakdown";
 import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
-import ScoreChart from "@/components/generic/ScoreChart";
 import Placeholder from "@/components/misc/Placeholder";
-import { footballMatchDetails } from "@/services/football.service";
+import { baseballMatchDetails } from "@/services/baseball.service";
 
 export default async function Page(props: {
   params: Promise<{ league: string; season: string; id: string }>;
 }) {
   const { league, season, id } = await props.params;
-  const pageData = await footballMatchDetails(Number(id));
+  const pageData = await baseballMatchDetails(Number(id));
 
   if (pageData === null || pageData.matchDetails === null) {
     return <Placeholder>NO DATA</Placeholder>;
@@ -21,18 +20,18 @@ export default async function Page(props: {
         awayInfo={pageData.matchDetails.awayTeam}
         status={pageData.matchDetails.status}
       />
-      <FootballScoreBreakdown
+      <BaseballScoreBreakdown
         scoreData={pageData.matchDetails.scoreBreakdown}
         homeLogo={pageData.matchDetails.homeTeam.img}
         awayLogo={pageData.matchDetails.awayTeam.img}
       />
-      {pageData.scoreEvents && (
+      {/* {pageData.scoreEvents && (
         <ScoreChart
           scoreDifference={pageData.scoreEvents}
           homeLogo={pageData.matchDetails.homeTeam.img}
           awayLogo={pageData.matchDetails.awayTeam.img}
         />
-      )}
+      )} */}
     </div>
   );
 }

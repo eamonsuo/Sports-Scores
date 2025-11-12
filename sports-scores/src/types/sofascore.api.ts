@@ -155,6 +155,11 @@ export interface Sofascore_Score {
   period2: number;
   period3?: number;
   period4?: number;
+  period5?: number;
+  period6?: number;
+  period7?: number;
+  period8?: number;
+  period9?: number;
   overtime?: number;
   normaltime: number;
 }
@@ -228,9 +233,10 @@ export interface Sofascore_Row {
   scoresAgainst: number;
   id: number;
   losses: number;
-  draws: number;
+  draws?: number;
   points?: number;
   percentage?: number;
+  streak?: number;
   scoreDiffFormatted: string;
 }
 

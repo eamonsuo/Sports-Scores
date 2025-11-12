@@ -5,6 +5,8 @@ import { useState } from "react";
 import {
   AMERICAN_FOOTBALL_LEAGUES,
   AUSSIE_RULES_LEAGUES,
+  BASEBALL_LEAGUES,
+  FOOTBALL_LEAGUES,
   GOLF_TOURS,
   MOTORSPORT_CATEGORIES,
   RUGBY_LEAGUE_LEAGUES,
@@ -63,18 +65,18 @@ const footerLinks: {
     altText: "Golf",
   },
   {
-    sport: SPORT.CYCLING,
-    // link: `/sports/${SPORT.CYCLING}`,
-    link: `https://www.flashscore.com.au/cycling/`,
-    img: "/footer/bike.svg",
-    altText: "Cycling",
-  },
-  {
     sport: SPORT.FOOTBALL,
-    // link: `/sports/${SPORT.FOOTBALL}/${FOOTBALL_LEAGUES[0].slug}/${FOOTBALL_LEAGUES[0].seasons[0].slug}/matches`,
-    link: `https://www.livescore.com/en/`,
+    link: `/sports/${SPORT.FOOTBALL}/${FOOTBALL_LEAGUES[0].slug}/${FOOTBALL_LEAGUES[0].seasons[0].slug}/matches`,
+    // link: `https://www.livescore.com/en/`,
     img: "/footer/football.svg",
     altText: "Football",
+  },
+  {
+    sport: SPORT.BASEBALL,
+    link: `/sports/${SPORT.BASEBALL}/${BASEBALL_LEAGUES[0].slug}/${BASEBALL_LEAGUES[0].seasons[0].slug}/matches`,
+    // link: `https://www.flashscore.com.au/baseball/`,
+    img: "/footer/baseball.svg",
+    altText: "Baseball",
   },
   {
     sport: SPORT.SURFING,
@@ -91,12 +93,13 @@ const footerLinks: {
     altText: "Tennis",
   },
   {
-    sport: SPORT.BASEBALL,
-    // link: `/sports/${SPORT.BASEBALL}/main/matches`,
-    link: `https://www.flashscore.com.au/baseball/`,
-    img: "/footer/baseball.svg",
-    altText: "Baseball",
+    sport: SPORT.CYCLING,
+    // link: `/sports/${SPORT.CYCLING}`,
+    link: `https://www.flashscore.com.au/cycling/`,
+    img: "/footer/bike.svg",
+    altText: "Cycling",
   },
+
   {
     sport: SPORT.BASKETBALL,
     // link: `/sports/${SPORT.BASKETBALL}`,
@@ -104,6 +107,7 @@ const footerLinks: {
     img: "/footer/basketball.svg",
     altText: "Basketball",
   },
+
   {
     sport: SPORT.ICE_HOCKEY,
     // link: `/sports/${SPORT.ICE_HOCKEY}`,

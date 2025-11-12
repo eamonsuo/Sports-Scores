@@ -1,10 +1,12 @@
-// Free API Live Football Data - RapidAPI
-// https://rapidapi.com/Creativesdev/api/free-api-live-football-data
-
 import { updateGlobalApiQuota } from "@/lib/apiCounter";
+import {
+  Football_FootApi_FixturePage_Response,
+  Football_FootApi_LeagueTotalStandings_Response,
+  Football_FootApi_Match_Response,
+  Football_FootApi_MatchIncidents_Response,
+  Football_FootApi_MatchSchedules_Response,
+} from "@/types/football";
 import { SPORT } from "@/types/misc";
-
-const BASE_URL = "https://free-api-live-football-data.p.rapidapi.com";
 
 function updateQuota(response: Response) {
   const limit = response.headers.get("x-ratelimit-requests-limit");
@@ -19,7 +21,7 @@ function updateQuota(response: Response) {
 }
 
 async function fetchFootballApi(endpoint: string) {
-  const url = BASE_URL + endpoint;
+  const url = process.env.FOOTBALL_BASEURL + endpoint;
   const res = await fetch(url, {
     method: "GET",
     headers: {
@@ -27,7 +29,7 @@ async function fetchFootballApi(endpoint: string) {
     },
   });
 
-  if (!res.ok) {
+  if (!res.ok || res.status === 204) {
     return null;
   }
 
@@ -36,33 +38,49 @@ async function fetchFootballApi(endpoint: string) {
   return res.json();
 }
 
-// Example endpoints
-export async function getMajorLeagues() {
-  return (await fetchFootballApi("/football-get-all-leagues")) as string[];
-}
-
-export async function getCountryLeagues() {
+export async function fetchFootballLastMatches(
+  tournamentId: number,
+  seasonId: number,
+  pageNumber: number = 0,
+) {
   return (await fetchFootballApi(
-    "/football-get-all-leagues-with-countries",
-  )) as string[];
+    `/tournament/${tournamentId}/season/${seasonId}/matches/last/${pageNumber}`,
+  )) as Football_FootApi_FixturePage_Response;
 }
 
-export async function getLeagueById(id: string) {
-  return fetchFootballApi("/leagues");
-}
-
-export async function fetchFootballFixturesByLeague(leagueId: string) {
+export async function fetchFootballNextMatches(
+  tournamentId: number,
+  seasonId: number,
+  pageNumber: number = 0,
+) {
   return (await fetchFootballApi(
-    `/football-get-all-matches-by-league?leagueid=${leagueId}`,
-  )) as FootballLive_AllLeagueFixtures_Response;
+    `/tournament/${tournamentId}/season/${seasonId}/matches/next/${pageNumber}`,
+  )) as Football_FootApi_FixturePage_Response;
 }
 
-export async function getFixtureById(fixtureId: string) {
-  return fetchFootballApi("/fixtures");
-}
-
-export async function fetchFootballStandingsByLeague(leagueId: string) {
+export async function fetchFootballStandings(
+  tournamentId: number,
+  seasonId: number,
+) {
   return (await fetchFootballApi(
-    `/football-get-standing-all?leagueid=${leagueId}`,
-  )) as FootballLive_Standings_Response;
+    `/tournament/${tournamentId}/season/${seasonId}/standings/total`,
+  )) as Football_FootApi_LeagueTotalStandings_Response;
+}
+
+export async function fetchFootballMatchDetails(matchId: number) {
+  return (await fetchFootballApi(
+    `/match/${matchId}`,
+  )) as Football_FootApi_Match_Response;
+}
+
+export async function fetchFootballMatchIncidents(matchId: number) {
+  return (await fetchFootballApi(
+    `/match/${matchId}/incidents`,
+  )) as Football_FootApi_MatchIncidents_Response;
+}
+
+export async function fetchFootballCurrentMatches(date: Date) {
+  return (await fetchFootballApi(
+    `/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+  )) as Football_FootApi_MatchSchedules_Response;
 }

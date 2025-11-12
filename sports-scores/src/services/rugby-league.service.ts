@@ -124,24 +124,26 @@ export async function rugbyLeagueStandings(
   }
 
   return {
-    standings: standings?.standings[0].rows.map((item) => {
-      return {
-        position: item.position,
-        points: item.points,
-        team: {
-          id: item.team.id,
-          name: shortenTeamNames(item.team.name),
-          logo: resolveNRLImages(item.team.name),
-        },
-        games: {
-          played: item.matches,
-          win: item.wins,
-          lost: item.losses,
-          drawn: item.draws,
-        },
-        scores: { against: item.scoresAgainst, for: item.scoresFor },
-      } as RugbyLeagueStanding;
-    }),
+    standings: standings?.standings.map((table) =>
+      table.rows.map((item) => {
+        return {
+          position: item.position,
+          points: item.points,
+          team: {
+            id: item.team.id,
+            name: shortenTeamNames(item.team.name),
+            logo: resolveNRLImages(item.team.name),
+          },
+          games: {
+            played: item.matches,
+            win: item.wins,
+            lost: item.losses,
+            drawn: item.draws,
+          },
+          scores: { against: item.scoresAgainst, for: item.scoresFor },
+        } as RugbyLeagueStanding;
+      }),
+    ),
     qualifyingPosition:
       RUGBY_LEAGUE_LEAGUES.find((l) => Number(l.slug) === tournamentId)
         ?.qualifyingPosition ?? -1,

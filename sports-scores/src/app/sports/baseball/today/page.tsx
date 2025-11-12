@@ -1,12 +1,12 @@
 import FixtureRoundList from "@/components/generic/FixtureRoundList";
 import Placeholder from "@/components/misc/Placeholder";
-import { footballMatches } from "@/services/football.service";
+import { baseballCurrentMatches } from "@/services/baseball.service";
 
-export default async function Page(props: {
-  params: Promise<{ league: string; season: string }>;
-}) {
-  const { league, season } = await props.params;
-  const pageData = await footballMatches(Number(league), Number(season));
+export const dynamic = "force-dynamic";
+
+export default async function Page() {
+  const curDate = new Date();
+  const pageData = await baseballCurrentMatches(curDate);
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;

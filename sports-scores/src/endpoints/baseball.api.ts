@@ -1,63 +1,85 @@
-import { handleAPIErrors } from "@/lib/projUtils";
-import { BaseballGame, BaseballResponse } from "@/types/baseball";
-import { APISportsStatusDetails } from "@/types/misc";
+import { updateGlobalApiQuota } from "@/lib/apiCounter";
+import {
+  Baseball_BaseballApi_FixturePage_Response,
+  Baseball_BaseballApi_LeagueTotalStandings_Response,
+  Baseball_BaseballApi_Match_Response,
+  Baseball_BaseballApi_MatchSchedules_Response,
+} from "@/types/baseball";
+import { SPORT } from "@/types/misc";
 
-const reqHeaders = new Headers();
-reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
-
-const fetchOptions = {
-  headers: reqHeaders,
-  // next: { revalidate: REVALIDATE },
-  //  cache: 'no-store'
-};
-
-export async function fetchBaseballFixtures(season: number) {
-  const rawFixtures = await fetch(
-    `${process.env.BASEBALL_BASEURL}/games?season=${season}&league=1`,
-    fetchOptions,
-  );
-
-  let fixtures = (await rawFixtures.json()) as BaseballResponse<BaseballGame>;
-  if (fixtures.response.length === 0) {
-    return handleAPIErrors(fixtures);
+function updateQuota(response: Response) {
+  const limit = response.headers.get("x-ratelimit-requests-limit");
+  const remaining = response.headers.get("x-ratelimit-requests-remaining");
+  if (remaining && limit) {
+    updateGlobalApiQuota(
+      parseInt(remaining, 10),
+      parseInt(limit, 10),
+      SPORT.BASEBALL,
+    );
   }
-
-  return fixtures.response;
 }
 
-export async function fetchBaseballGame(gameId: number) {
-  const rawGame = await fetch(
-    `${process.env.BASEBALL_BASEURL}/games?id=${gameId}`,
-    fetchOptions,
-  );
+async function fetchBaseballApi(endpoint: string) {
+  const url = process.env.BASEBALL_BASEURL + endpoint;
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Key": process.env.RapidAPIKey ?? "",
+    },
+  });
 
-  let game = (await rawGame.json()) as BaseballResponse<BaseballGame>;
-  if (game.response.length === 0) {
-    return handleAPIErrors(game);
+  if (!res.ok || res.status === 204) {
+    return null;
   }
 
-  return game.response[0];
+  updateQuota(res);
+
+  return res.json();
 }
 
-export async function fetchBaseballStatus() {
-  const rawStatus = await fetch(
-    `${process.env.BASEBALL_BASEURL}/status`,
-    fetchOptions,
-  );
-
-  let status = await rawStatus.json();
-  if (status.response.length === 0) {
-    return handleAPIErrors(status);
-  }
-
-  return status.response as APISportsStatusDetails;
+export async function fetchBaseballLastMatches(
+  tournamentId: number,
+  seasonId: number,
+  pageNumber: number = 0,
+) {
+  return (await fetchBaseballApi(
+    `/baseball/tournament/${tournamentId}/season/${seasonId}/matches/last/${pageNumber}`,
+  )) as Baseball_BaseballApi_FixturePage_Response;
 }
 
-export async function fetchBaseballStandings(season: number) {
-  const rawStandings = await fetch(
-    `${process.env.BASEBALL_BASEURL}/standings?season=${season}&league=1`,
-    fetchOptions,
-  );
+export async function fetchBaseballNextMatches(
+  tournamentId: number,
+  seasonId: number,
+  pageNumber: number = 0,
+) {
+  return (await fetchBaseballApi(
+    `/baseball/tournament/${tournamentId}/season/${seasonId}/matches/next/${pageNumber}`,
+  )) as Baseball_BaseballApi_FixturePage_Response;
+}
 
-  let standings = await rawStandings.json();
+export async function fetchBaseballStandings(
+  tournamentId: number,
+  seasonId: number,
+) {
+  return (await fetchBaseballApi(
+    `/baseball/tournament/${tournamentId}/season/${seasonId}/standings/total`,
+  )) as Baseball_BaseballApi_LeagueTotalStandings_Response;
+}
+
+export async function fetchBaseballMatchDetails(matchId: number) {
+  return (await fetchBaseballApi(
+    `/baseball/match/${matchId}`,
+  )) as Baseball_BaseballApi_Match_Response;
+}
+
+// export async function fetchBaseballMatchIncidents(matchId: number) {
+//   return (await fetchBaseballApi(
+//     `/match/${matchId}/incidents`,
+//   )) as Baseball_BaseballApi_MatchIncidents_Response;
+// }
+
+export async function fetchBaseballCurrentMatches(date: Date) {
+  return (await fetchBaseballApi(
+    `/baseball/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+  )) as Baseball_BaseballApi_MatchSchedules_Response;
 }
