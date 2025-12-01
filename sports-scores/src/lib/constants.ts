@@ -416,7 +416,7 @@ export const AMERICAN_FOOTBALL_LEAGUES = [
 export const FOOTBALL_LEAGUES = [
   //Australia - category 34
   {
-    name: "A-League Men",
+    name: "🇦🇺 A-League Men",
     slug: "136",
     seasons: [
       { name: "25/26", slug: "82603" },
@@ -446,28 +446,18 @@ export const FOOTBALL_LEAGUES = [
     seasons: [{ name: "2025", slug: "81331" }],
   },
   {
-    name: "QLD Kappa Pro Series",
-    slug: "24883",
-    seasons: [{ name: "2025", slug: "71620" }],
+    name: "Australia Men",
+    slug: "team/4741",
+    seasons: [{ name: "--", slug: "" }],
   },
   {
-    name: "NPL QLD",
-    slug: "1268",
-    seasons: [{ name: "2025", slug: "70470" }],
+    name: "Australia Women",
+    slug: "team/7410",
+    seasons: [{ name: "--", slug: "" }],
   },
-  //   {
-  //     name: "QLD Premier League 1",
-  //     slug: "",
-  //     seasons: [{ name: "2025", slug: "https://footballqueensland.com.au/fqpl-1/" }],
-  //   },
-  // {
-  //     name: "QLD Premier League 2",
-  //     slug: "",
-  //     seasons: [{ name: "2025", slug: "https://footballqueensland.com.au/fqpl-2/" }],
-  //   },
   //England - category 1
   {
-    name: "Premier League",
+    name: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League",
     slug: "17",
     seasons: [
       { name: "25/26", slug: "76986" },
@@ -491,16 +481,6 @@ export const FOOTBALL_LEAGUES = [
     ],
   },
   {
-    name: "League One",
-    slug: "24",
-    seasons: [{ name: "25/26", slug: "77352" }],
-  },
-  {
-    name: "League Two",
-    slug: "25",
-    seasons: [{ name: "25/26", slug: "77351" }],
-  },
-  {
     name: "FA Cup",
     slug: "19",
     seasons: [{ name: "25/26", slug: "82557" }],
@@ -515,9 +495,77 @@ export const FOOTBALL_LEAGUES = [
     slug: "21",
     seasons: [{ name: "25/26", slug: "77500" }],
   },
+  // France - category 7
+  {
+    name: "🇫🇷 League 1",
+    slug: "34",
+    seasons: [{ name: "25/26", slug: "77356" }],
+  },
+  // Germany - category 30
+  {
+    name: "🇩🇪 Bundesliga",
+    slug: "35",
+    seasons: [{ name: "25/26", slug: "77333" }],
+  },
+  // Italy - category 31
+  {
+    name: "🇮🇹 Serie A",
+    slug: "23",
+    seasons: [{ name: "25/26", slug: "76457" }],
+  },
+  // Spain - category 32
+  {
+    name: "🇪🇸 La Liga",
+    slug: "8",
+    seasons: [{ name: "25/26", slug: "77559" }],
+  },
+  // USA - category 26
+  {
+    name: "🇺🇸 MLS",
+    slug: "242",
+    seasons: [{ name: "2025", slug: "70158" }],
+  },
+  {
+    name: "NWSL",
+    slug: "1690",
+    seasons: [{ name: "2025", slug: "71412" }],
+  },
+
+  //Australia - category 34
+  // {
+  //   name: "QLD Kappa Pro Series",
+  //   slug: "24883",
+  //   seasons: [{ name: "2025", slug: "71620" }],
+  // },
+  // {
+  //   name: "NPL QLD",
+  //   slug: "1268",
+  //   seasons: [{ name: "2025", slug: "70470" }],
+  // },
+  //   {
+  //     name: "QLD Premier League 1",
+  //     slug: "",
+  //     seasons: [{ name: "2025", slug: "https://footballqueensland.com.au/fqpl-1/" }],
+  //   },
+  // {
+  //     name: "QLD Premier League 2",
+  //     slug: "",
+  //     seasons: [{ name: "2025", slug: "https://footballqueensland.com.au/fqpl-2/" }],
+  //   },
+  //England - category 1
+  // {
+  //   name: "League One",
+  //   slug: "24",
+  //   seasons: [{ name: "25/26", slug: "77352" }],
+  // },
+  // {
+  //   name: "League Two",
+  //   slug: "25",
+  //   seasons: [{ name: "25/26", slug: "77351" }],
+  // },
   // International - category 1468
   {
-    name: "FIFA World Cup",
+    name: "🌏 FIFA World Cup",
     slug: "16",
     seasons: [
       { name: "2026", slug: "58210" },
@@ -525,35 +573,48 @@ export const FOOTBALL_LEAGUES = [
     ],
   },
   {
+    name: "FIFA World Cup Qualifiers",
+    slug: "fifaQualifiers",
+    seasons: [{ name: "2026", slug: "" }],
+  },
+  {
     name: "FIFA Women's World Cup",
     slug: "290",
-    seasons: [{ name: "2023", slug: "46930" }],
+    seasons: [
+      { name: "2023", slug: "46930" },
+      { name: "2027", slug: "" },
+    ],
   },
   {
-    name: "FIFA World Cup Qualifier Playoffs",
-    slug: "10618",
-    seasons: [{ name: "2022", slug: "41103" }],
+    name: "FIFA Women's World Cup Qualifiers",
+    slug: "fifaWQualifiers",
+    seasons: [{ name: "2027", slug: "" }],
   },
-  {
-    name: "Olympic Games - Men",
-    slug: "436",
-    seasons: [{ name: "2024", slug: "59243" }],
-  },
-  {
-    name: "Olympic Games - Women",
-    slug: "437",
-    seasons: [{ name: "2024", slug: "59242" }],
-  },
-  {
-    name: "International Friendlies - Men",
-    slug: "851",
-    seasons: [{ name: "2025", slug: "69578" }],
-  },
-  {
-    name: "International Friendlies - Women",
-    slug: "852",
-    seasons: [{ name: "2025", slug: "69579" }],
-  },
+  // {
+  //   name: "FIFA World Cup Qualifier Playoffs",
+  //   slug: "10618",
+  //   seasons: [{ name: "2022", slug: "41103" }],
+  // },
+  // {
+  //  name: "Olympic Games - Men",
+  //   slug: "436",
+  //   seasons: [{ name: "2024", slug: "59243" }],
+  // },
+  // {
+  //   name: "Olympic Games - Women",
+  //   slug: "437",
+  //   seasons: [{ name: "2024", slug: "59242" }],
+  // },
+  // {
+  //   name: "International Friendlies - Men",
+  //   slug: "851",
+  //   seasons: [{ name: "2025", slug: "69578" }],
+  // },
+  // {
+  //   name: "International Friendlies - Women",
+  //   slug: "852",
+  //   seasons: [{ name: "2025", slug: "69579" }],
+  // },
   {
     name: "FIFA Intercontinental Cup",
     slug: "23674",
@@ -566,7 +627,7 @@ export const FOOTBALL_LEAGUES = [
   },
   // Asia - 1467
   {
-    name: "AFC Asian Cup",
+    name: "🌏 AFC Asian Cup",
     slug: "246",
     seasons: [{ name: "2023", slug: "51384" }],
   },
@@ -575,11 +636,11 @@ export const FOOTBALL_LEAGUES = [
     slug: "1692",
     seasons: [{ name: "2026", slug: "79569" }],
   },
-  {
-    name: "AFC World Cup Qualifiers",
-    slug: "308",
-    seasons: [{ name: "23-25", slug: "53508" }],
-  },
+  // {
+  //   name: "AFC World Cup Qualifiers",
+  //   slug: "308",
+  //   seasons: [{ name: "23-25", slug: "53508" }],
+  // },
   {
     name: "AFC Champions League Elite",
     slug: "463",
@@ -598,9 +659,14 @@ export const FOOTBALL_LEAGUES = [
   },
   // Europe - category 1465
   {
-    name: "UEFA Champions League",
+    name: "🇪🇺 UEFA Champions League",
     slug: "7",
     seasons: [{ name: "25/26", slug: "76953" }],
+  },
+  {
+    name: "UEFA Women's Champions League",
+    slug: "696",
+    seasons: [{ name: "25/26", slug: "77328" }],
   },
   {
     name: "UEFA Europa League",
@@ -612,11 +678,7 @@ export const FOOTBALL_LEAGUES = [
     slug: "17015",
     seasons: [{ name: "25/26", slug: "76960" }],
   },
-  {
-    name: "UEFA Women's Champions League",
-    slug: "696",
-    seasons: [{ name: "25/26", slug: "77328" }],
-  },
+
   {
     name: "UEFA European Championship",
     slug: "1",
@@ -627,51 +689,17 @@ export const FOOTBALL_LEAGUES = [
     slug: "477",
     seasons: [{ name: "2025", slug: "69935" }],
   },
-  {
-    name: "UEFA World Cup Qualifiers",
-    slug: "11",
-    seasons: [{ name: "2026", slug: "69427" }],
-  },
-  {
-    name: "UEFA Women's World Cup Qualifiers",
-    slug: "780",
-    seasons: [{ name: "2022", slug: "38585" }],
-  },
-  // France - category 7
-  {
-    name: "League 1",
-    slug: "34",
-    seasons: [{ name: "25/26", slug: "77356" }],
-  },
-  // Germany - category 30
-  {
-    name: "Bundesliga",
-    slug: "35",
-    seasons: [{ name: "25/26", slug: "77333" }],
-  },
-  // Italy - category 31
-  {
-    name: "Serie A",
-    slug: "23",
-    seasons: [{ name: "25/26", slug: "76457" }],
-  },
-  // Spain - category 32
-  {
-    name: "La Liga",
-    slug: "8",
-    seasons: [{ name: "25/26", slug: "77559" }],
-  },
-  // USA - category 26
-  {
-    name: "MLS",
-    slug: "242",
-    seasons: [{ name: "2025", slug: "70158" }],
-  },
-  {
-    name: "NWSL",
-    slug: "1690",
-    seasons: [{ name: "2025", slug: "71412" }],
-  },
+  // {
+  //   name: "UEFA World Cup Qualifiers",
+  //   slug: "11",
+  //   seasons: [{ name: "2026", slug: "69427" }],
+  // },
+  // {
+  //   name: "UEFA Women's World Cup Qualifiers",
+  //   slug: "780",
+  //   seasons: [{ name: "2022", slug: "38585" }],
+  // },
+
   // North & Central America - category 1469
   // South America - category 1470
   // Africa - category 1466

@@ -32,6 +32,12 @@ const nextConfig = {
         port: "",
         pathname: "/flag/**",
       },
+      {
+        protocol: "https",
+        hostname: "assets.baseball.com.au",
+        port: "",
+        pathname: "/uploads/**",
+      },
     ],
   },
   logging: {

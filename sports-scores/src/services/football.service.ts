@@ -6,6 +6,8 @@ import {
   fetchFootballMatchIncidents,
   fetchFootballNextMatches,
   fetchFootballStandings,
+  fetchFootballTeamLastMatches,
+  fetchFootballTeamNextMatches,
 } from "@/endpoints/football.api";
 import { FOOTBALL_LEAGUES } from "@/lib/constants";
 import { resolveFootballTeamImage } from "@/lib/imageMapping";
@@ -18,6 +20,7 @@ import {
   FootballFixturesPage,
   FootballLadderPage,
   FootballMatchPage,
+  FootballTeamFixturesPage,
   FootballTodayPage,
 } from "@/types/football";
 import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
@@ -52,7 +55,7 @@ export async function footballMatches(tournamentId: number, seasonId: number) {
         matches: matches
           .filter((item) => item.roundInfo?.round === round)
           .map((match) => {
-            var startDate = new Date(0);
+            let startDate = new Date(0);
             startDate.setUTCSeconds(match.startTimestamp);
 
             return {
@@ -100,6 +103,58 @@ export async function footballMatches(tournamentId: number, seasonId: number) {
       0
     }`,
   } as FootballFixturesPage;
+}
+
+export async function footballTeamMatches(teamId: number) {
+  const lastMatches = await fetchFootballTeamLastMatches(teamId, 0);
+
+  const nextMatches = await fetchFootballTeamNextMatches(teamId, 0);
+
+  if (!lastMatches && !nextMatches) {
+    return null;
+  }
+
+  const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
+
+  return {
+    fixtures: matches.toReversed().map((match) => {
+      let startDate = new Date(0);
+      startDate.setUTCSeconds(match.startTimestamp);
+
+      return {
+        startDate: startDate,
+        // roundLabel: `Round ${match?.roundInfo?.round ?? "--"}`,
+        timer:
+          match.status.type === "notstarted"
+            ? toShortTimeString(startDate)
+            : match.status.description,
+        id: match.id,
+        matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
+        sport: SPORT.FOOTBALL,
+        status: match.status.description,
+        venue: "",
+        summaryText: setMatchSummary(
+          match.status.type,
+          toShortTimeString(startDate),
+          match.homeTeam.name,
+          match.homeScore.current,
+          match.awayTeam.name,
+          match.awayScore.current,
+        ),
+        homeDetails: {
+          name: shortenTeamNames(match.homeTeam.name),
+          score: match.homeScore.current?.toString() ?? "0",
+          img: resolveFootballTeamImage(match.homeTeam.name),
+        },
+        awayDetails: {
+          name: shortenTeamNames(match.awayTeam.name),
+          score: match.awayScore.current?.toString() ?? "0",
+          img: resolveFootballTeamImage(match.awayTeam.name),
+        },
+        otherDetail: match.tournament.name,
+      } as MatchSummary;
+    }),
+  } as FootballTeamFixturesPage;
 }
 
 export async function footballStandings(
@@ -230,7 +285,7 @@ export async function footballCurrentMatches(
         matches: matches.events
           .filter((item) => item.tournament.uniqueTournament.id === leagueId)
           .map((match) => {
-            var startDate = new Date(0);
+            let startDate = new Date(0);
             startDate.setUTCSeconds(match.startTimestamp);
 
             return {

@@ -84,3 +84,21 @@ export async function fetchFootballCurrentMatches(date: Date) {
     `/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
   )) as Football_FootApi_MatchSchedules_Response;
 }
+
+export async function fetchFootballTeamLastMatches(
+  teamId: number,
+  pageNumber: number = 0,
+) {
+  return (await fetchFootballApi(
+    `/team/${teamId}/matches/previous/${pageNumber}`,
+  )) as Football_FootApi_FixturePage_Response;
+}
+
+export async function fetchFootballTeamNextMatches(
+  teamId: number,
+  pageNumber: number = 0,
+) {
+  return (await fetchFootballApi(
+    `/team/${teamId}/matches/next/${pageNumber}`,
+  )) as Football_FootApi_FixturePage_Response;
+}
