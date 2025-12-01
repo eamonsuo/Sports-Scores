@@ -30,7 +30,9 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
+    
     <html lang="en" className="dark">
+      {/* Dark mode enabled */}
       <link rel="icon" href="/favicon.ico" sizes="64x64" />
       <link
         rel="apple-touch-icon"
@@ -38,7 +40,7 @@ export default function RootLayout({
         type="image/png"
         sizes="180x180"
       />
-      {/* Dark mode enabled */}
+      
       <body className={inter.className}>
         {/* Set to Dynamic view height aka height of browser minus any browser things. Helps on
          mobile where safari search overhangs regular view height*/}

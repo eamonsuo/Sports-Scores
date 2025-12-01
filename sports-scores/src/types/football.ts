@@ -1,5 +1,5 @@
 import { ScoreDifference } from "@/components/generic/ScoreChart";
-import { RoundDetails, TeamScoreDetails } from "./misc";
+import { MatchSummary, RoundDetails, TeamScoreDetails } from "./misc";
 import {
   Sofascore_Event,
   Sofascore_Incident,
@@ -30,6 +30,10 @@ export interface Football_FootApi_MatchSchedules_Response {
 export interface FootballFixturesPage {
   fixtures: RoundDetails[];
   currentRound: string;
+}
+
+export interface FootballTeamFixturesPage {
+  fixtures: MatchSummary[];
 }
 
 export interface FootballLadderPage {

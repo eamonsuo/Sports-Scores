@@ -6,5 +6,16 @@ export default async function Page(props: {
 }) {
   const { league, season } = await props.params;
 
-  redirect(`/sports/${SPORT.FOOTBALL}/${league}/${season}/matches`);
+  switch (league) {
+    case "fifaQualifiers":
+      redirect(
+        `https://en.wikipedia.org/wiki/2026_FIFA_World_Cup_qualification`,
+      );
+    case "fifaWQualifiers":
+      redirect(
+        `https://en.wikipedia.org/wiki/2027_FIFA_Women%27s_World_Cup_qualification`,
+      );
+    default:
+      redirect(`/sports/${SPORT.FOOTBALL}/${league}/${season}/matches`);
+  }
 }
