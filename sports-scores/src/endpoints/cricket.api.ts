@@ -25,10 +25,7 @@ const MY_TEAMS_IDs = [
 ];
 
 const reqHeaders = new Headers();
-reqHeaders.append(
-  "x-rapidapi-key",
-  "8f40076dbdmsh686515dc9514f65p12718djsn07eae920cba7",
-);
+reqHeaders.append("x-rapidapi-key", `${process.env.RapidAPIKey}`);
 
 function updateQuota(response: Response) {
   const limit = response.headers.get("x-ratelimit-requests-limit");
@@ -47,7 +44,7 @@ export async function fetchCricketMyTeams() {
 
   for (let i = 0; i < MY_TEAMS_IDs.length; i++) {
     const rawFixtures = await fetch(
-      `https://livescore6.p.rapidapi.com/teams/detail?ID=${MY_TEAMS_IDs[i]}`,
+      `${process.env.CRICKET_BASEURL}/teams/detail?ID=${MY_TEAMS_IDs[i]}`,
       {
         headers: reqHeaders,
       },
@@ -71,7 +68,7 @@ export async function fetchCricketMyTeams() {
 
 export async function fetchCricketAllSeries() {
   const rawFixtures = await fetch(
-    `https://livescore6.p.rapidapi.com/leagues/v2/list-popular?Category=cricket`,
+    `${process.env.CRICKET_BASEURL}/leagues/v2/list-popular?Category=cricket`,
     {
       headers: reqHeaders,
     },
@@ -90,7 +87,7 @@ export async function fetchCricketMatchesByDate(
   date: string, //Formatted as yyyymmdd
 ) {
   const rawFixtures = await fetch(
-    `https://livescore6.p.rapidapi.com/matches/v2/list-by-date?Category=cricket&Date=${date}&Timezone=10`,
+    `${process.env.CRICKET_BASEURL}/matches/v2/list-by-date?Category=cricket&Date=${date}&Timezone=10`,
     {
       headers: reqHeaders,
     },
@@ -104,7 +101,7 @@ export async function fetchCricketMatchesByDate(
 
 export async function fetchCricketMatchInnings(id: number) {
   const rawInnings = await fetch(
-    `https://livescore6.p.rapidapi.com/matches/v2/get-innings?Category=cricket&Eid=${id}`,
+    `${process.env.CRICKET_BASEURL}/matches/v2/get-innings?Category=cricket&Eid=${id}`,
     {
       headers: reqHeaders,
     },
@@ -121,7 +118,7 @@ export async function fetchCricketMatchInnings(id: number) {
 
 export async function fetchCricketMatchDetails(id: number) {
   const rawMatch = await fetch(
-    `https://livescore6.p.rapidapi.com/matches/v2/get-scoreboard?Category=cricket&Eid=${id}`,
+    `${process.env.CRICKET_BASEURL}/matches/v2/get-scoreboard?Category=cricket&Eid=${id}`,
     {
       headers: reqHeaders,
     },
@@ -138,7 +135,7 @@ export async function fetchCricketMatchDetails(id: number) {
 
 export async function fetchCricketSeriesMatches(ccd: string, scd: string) {
   const rawFixtures = await fetch(
-    `https://livescore6.p.rapidapi.com/matches/v2/list-by-league?Category=cricket&Ccd=${ccd}&Scd=${scd}&Timezone=10`,
+    `${process.env.CRICKET_BASEURL}/matches/v2/list-by-league?Category=cricket&Ccd=${ccd}&Scd=${scd}&Timezone=10`,
     {
       headers: reqHeaders,
     },

@@ -425,7 +425,7 @@ export const FOOTBALL_LEAGUES = [
     qualifyingPosition: 6,
   },
   {
-    name: "A-League Women",
+    name: "🇦🇺 A-League Women",
     slug: "1894",
     seasons: [
       { name: "25/26", slug: "82605" },
@@ -433,7 +433,7 @@ export const FOOTBALL_LEAGUES = [
     ],
   },
   {
-    name: "Australia Cup",
+    name: "🇦🇺 Australia Cup",
     slug: "1786",
     seasons: [
       { name: "2025", slug: "75270" },
@@ -441,17 +441,17 @@ export const FOOTBALL_LEAGUES = [
     ],
   },
   {
-    name: "Australian Championship",
+    name: "🇦🇺 Australian Championship",
     slug: "29010",
     seasons: [{ name: "2025", slug: "81331" }],
   },
   {
-    name: "Australia Men",
+    name: "🇦🇺 Australia Men",
     slug: "team/4741",
     seasons: [{ name: "--", slug: "" }],
   },
   {
-    name: "Australia Women",
+    name: "🇦🇺 Australia Women",
     slug: "team/7410",
     seasons: [{ name: "--", slug: "" }],
   },
@@ -465,7 +465,7 @@ export const FOOTBALL_LEAGUES = [
     ],
   },
   {
-    name: "WSL",
+    name: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 WSL",
     slug: "1044",
     seasons: [
       { name: "25/26", slug: "79227" },
@@ -473,7 +473,7 @@ export const FOOTBALL_LEAGUES = [
     ],
   },
   {
-    name: "Championship",
+    name: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Championship",
     slug: "18",
     seasons: [
       { name: "25/26", slug: "77347" },
@@ -481,17 +481,17 @@ export const FOOTBALL_LEAGUES = [
     ],
   },
   {
-    name: "FA Cup",
+    name: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 FA Cup",
     slug: "19",
     seasons: [{ name: "25/26", slug: "82557" }],
   },
   {
-    name: "Women's FA Cup",
+    name: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Women's FA Cup",
     slug: "11666",
     seasons: [{ name: "25/26", slug: "84634" }],
   },
   {
-    name: "EFL Cup",
+    name: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 EFL Cup",
     slug: "21",
     seasons: [{ name: "25/26", slug: "77500" }],
   },
@@ -526,7 +526,7 @@ export const FOOTBALL_LEAGUES = [
     seasons: [{ name: "2025", slug: "70158" }],
   },
   {
-    name: "NWSL",
+    name: "🇺🇸 NWSL",
     slug: "1690",
     seasons: [{ name: "2025", slug: "71412" }],
   },
@@ -565,7 +565,7 @@ export const FOOTBALL_LEAGUES = [
   // },
   // International - category 1468
   {
-    name: "🌏 FIFA World Cup",
+    name: "🌍 FIFA World Cup",
     slug: "16",
     seasons: [
       { name: "2026", slug: "58210" },
@@ -573,12 +573,12 @@ export const FOOTBALL_LEAGUES = [
     ],
   },
   {
-    name: "FIFA World Cup Qualifiers",
+    name: "🌍 FIFA World Cup Qualifiers",
     slug: "fifaQualifiers",
     seasons: [{ name: "2026", slug: "" }],
   },
   {
-    name: "FIFA Women's World Cup",
+    name: "🌍 FIFA Women's World Cup",
     slug: "290",
     seasons: [
       { name: "2023", slug: "46930" },
@@ -586,7 +586,7 @@ export const FOOTBALL_LEAGUES = [
     ],
   },
   {
-    name: "FIFA Women's World Cup Qualifiers",
+    name: "🌍 FIFA Women's World Cup Qualifiers",
     slug: "fifaWQualifiers",
     seasons: [{ name: "2027", slug: "" }],
   },
@@ -616,12 +616,12 @@ export const FOOTBALL_LEAGUES = [
   //   seasons: [{ name: "2025", slug: "69579" }],
   // },
   {
-    name: "FIFA Intercontinental Cup",
+    name: "🌍 FIFA Intercontinental Cup",
     slug: "23674",
     seasons: [{ name: "2025", slug: "78702" }],
   },
   {
-    name: "FIFA Club World Cup",
+    name: "🌍 FIFA Club World Cup",
     slug: "357",
     seasons: [{ name: "2025", slug: "69619" }],
   },
@@ -632,7 +632,7 @@ export const FOOTBALL_LEAGUES = [
     seasons: [{ name: "2023", slug: "51384" }],
   },
   {
-    name: "AFC Asian Cup - Women",
+    name: "🌏 AFC Asian Cup - Women",
     slug: "1692",
     seasons: [{ name: "2026", slug: "79569" }],
   },
@@ -642,7 +642,7 @@ export const FOOTBALL_LEAGUES = [
   //   seasons: [{ name: "23-25", slug: "53508" }],
   // },
   {
-    name: "AFC Champions League Elite",
+    name: "🌏 AFC Champions League Elite",
     slug: "463",
     seasons: [
       { name: "25/26", slug: "77010" },
@@ -650,7 +650,7 @@ export const FOOTBALL_LEAGUES = [
     ],
   },
   {
-    name: "AFC Women's Champions League",
+    name: "🌏 AFC Women's Champions League",
     slug: "23009",
     seasons: [
       { name: "25/26", slug: "77726" },
@@ -664,28 +664,28 @@ export const FOOTBALL_LEAGUES = [
     seasons: [{ name: "25/26", slug: "76953" }],
   },
   {
-    name: "UEFA Women's Champions League",
+    name: "🇪🇺 UEFA Women's Champions League",
     slug: "696",
     seasons: [{ name: "25/26", slug: "77328" }],
   },
   {
-    name: "UEFA Europa League",
+    name: "🇪🇺 UEFA Europa League",
     slug: "679",
     seasons: [{ name: "25/26", slug: "76984" }],
   },
   {
-    name: "UEFA Conference League",
+    name: "🇪🇺 UEFA Conference League",
     slug: "17015",
     seasons: [{ name: "25/26", slug: "76960" }],
   },
 
   {
-    name: "UEFA European Championship",
+    name: "🇪🇺 UEFA European Championship",
     slug: "1",
     seasons: [{ name: "2024", slug: "56953" }],
   },
   {
-    name: "UEFA European Women's Championship",
+    name: "🇪🇺 UEFA European Women's Championship",
     slug: "477",
     seasons: [{ name: "2025", slug: "69935" }],
   },
@@ -736,5 +736,49 @@ export const BASEBALL_LEAGUES = [
     name: "WBSC Premier12",
     slug: "11206",
     seasons: [{ name: "2024", slug: "65281" }],
+  },
+] as LeagueSeasonConfig[];
+
+export const BASKETBALL_LEAGUES = [
+  {
+    name: "NBL",
+    slug: "1524",
+    seasons: [
+      { name: "25/26", slug: "77205" },
+      { name: "24/25", slug: "61848" },
+    ],
+    qualifyingPosition: 6,
+  },
+  {
+    name: "WNBL",
+    slug: "1506",
+    seasons: [
+      { name: "25/26", slug: "77204" },
+      { name: "24/25", slug: "66424" },
+    ],
+  },
+  {
+    name: "NBA",
+    slug: "132",
+    seasons: [
+      { name: "25/26", slug: "80229" },
+      { name: "24/25", slug: "65360" },
+    ],
+  },
+  // {
+  //   name: "NBA Cup",
+  //   slug: "132",
+  //   seasons: [
+  //     { name: "25/26", slug: "84238" },
+  //     { name: "24/25", slug: "84238" },
+  //   ],
+  // },
+  {
+    name: "WNBA",
+    slug: "486",
+    seasons: [
+      { name: "2025", slug: "69751" },
+      { name: "2024", slug: "57477" },
+    ],
   },
 ] as LeagueSeasonConfig[];

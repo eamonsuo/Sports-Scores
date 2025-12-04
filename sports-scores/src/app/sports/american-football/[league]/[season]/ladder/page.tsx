@@ -36,98 +36,22 @@ export default async function Page(props: {
 
 function getNFLPlayoffPicture(NFLTables: AmericanFootballStanding[]) {
   // --------- AFC ------------
-  const afcStandings = NFLTables.find(
-    (t) => t.tableName === "NFL 25/26, AFC",
-  )?.standings; //Get the conference standings
-  const afcWestLeader = NFLTables.find(
-    (t) => t.tableName === "NFL 25/26, AFC West",
-  )?.standings[0];
-  const afcEastLeader = NFLTables.find(
-    (t) => t.tableName === "NFL 25/26, AFC East",
-  )?.standings[0];
-  const afcNorthLeader = NFLTables.find(
-    (t) => t.tableName === "NFL 25/26, AFC North",
-  )?.standings[0];
-  const afcSouthLeader = NFLTables.find(
-    (t) => t.tableName === "NFL 25/26, AFC South",
-  )?.standings[0];
+  const afcStandings =
+    NFLTables.find((t) => t.tableName === "NFL 25/26, AFC")?.standings ?? []; //Get the conference standings
 
-  const afcDivisionLeaders =
-    afcStandings?.filter(
-      //Get only the division winners
-      (team) =>
-        [afcWestLeader, afcEastLeader, afcNorthLeader, afcSouthLeader].some(
-          (leader) => leader?.team.name === team.team.name,
-        ),
-    ) ?? [];
+  const afcWildCards = afcStandings.slice(0, 3) ?? []; //Get top 3 wild card teams
 
-  const afcWildCards =
-    afcStandings
-      ?.filter(
-        //Remove the division winners
-        (team) =>
-          ![afcWestLeader, afcEastLeader, afcNorthLeader, afcSouthLeader].some(
-            (leader) => leader?.team.name === team.team.name,
-          ),
-      )
-      .slice(0, 3) ?? []; //Get top 3 wild card teams
-
-  const afcInHunt =
-    afcStandings?.filter(
-      //Get remaining teams
-      (team) =>
-        ![...afcDivisionLeaders, ...afcWildCards].some(
-          (leader) => leader?.team.name === team.team.name,
-        ),
-    ) ?? [];
+  const afcInHunt = afcStandings.slice(6) ?? [];
 
   const afcNonPlayoff = getPlayoffStatus(afcInHunt, afcWildCards);
 
   // --------- NFC ------------
-  const nfcStandings = NFLTables.find(
-    (t) => t.tableName === "NFL 25/26, NFC",
-  )?.standings; //Get the conference standings
-  const nfcWestLeader = NFLTables.find(
-    (t) => t.tableName === "NFL 25/26, NFC West",
-  )?.standings[0];
-  const nfcEastLeader = NFLTables.find(
-    (t) => t.tableName === "NFL 25/26, NFC East",
-  )?.standings[0];
-  const nfcNorthLeader = NFLTables.find(
-    (t) => t.tableName === "NFL 25/26, NFC North",
-  )?.standings[0];
-  const nfcSouthLeader = NFLTables.find(
-    (t) => t.tableName === "NFL 25/26, NFC South",
-  )?.standings[0];
+  const nfcStandings =
+    NFLTables.find((t) => t.tableName === "NFL 25/26, NFC")?.standings ?? []; //Get the conference standings
 
-  const nfcDivisionLeaders =
-    nfcStandings?.filter(
-      //Get only the division winners
-      (team) =>
-        [nfcWestLeader, nfcEastLeader, nfcNorthLeader, nfcSouthLeader].some(
-          (leader) => leader?.team.name === team.team.name,
-        ),
-    ) ?? [];
+  const nfcWildCards = nfcStandings.slice(0, 3) ?? []; //Get top 3 wild card teams
 
-  const nfcWildCards =
-    nfcStandings
-      ?.filter(
-        //Remove the division winners
-        (team) =>
-          ![nfcWestLeader, nfcEastLeader, nfcNorthLeader, nfcSouthLeader].some(
-            (leader) => leader?.team.name === team.team.name,
-          ),
-      )
-      .slice(0, 3) ?? []; //Get top 3 wild card teams
-
-  const nfcInHunt =
-    nfcStandings?.filter(
-      //Get remaining teams
-      (team) =>
-        ![...nfcDivisionLeaders, ...nfcWildCards].some(
-          (leader) => leader?.team.name === team.team.name,
-        ),
-    ) ?? [];
+  const nfcInHunt = nfcStandings.slice(6) ?? [];
 
   const nfcNonPlayoff = getPlayoffStatus(nfcInHunt, nfcWildCards);
 
@@ -142,21 +66,21 @@ function getNFLPlayoffPicture(NFLTables: AmericanFootballStanding[]) {
 
   return {
     afc: {
-      divisional: mapTeams(afcDivisionLeaders[0], 1),
+      divisional: mapTeams(afcStandings[0], 1),
       wildCard: [
-        [mapTeams(afcDivisionLeaders[1], 2), mapTeams(afcWildCards[2], 7)],
-        [mapTeams(afcDivisionLeaders[2], 3), mapTeams(afcWildCards[1], 6)],
-        [mapTeams(afcDivisionLeaders[3], 4), mapTeams(afcWildCards[0], 5)],
+        [mapTeams(afcStandings[1], 2), mapTeams(afcWildCards[2], 7)],
+        [mapTeams(afcStandings[2], 3), mapTeams(afcWildCards[1], 6)],
+        [mapTeams(afcStandings[3], 4), mapTeams(afcWildCards[0], 5)],
       ],
       inHunt: afcNonPlayoff.inTheHunt.map(mapTeams) ?? [],
       eliminated: afcNonPlayoff.eliminated.map(mapTeams) ?? [],
     },
     nfc: {
-      divisional: mapTeams(nfcDivisionLeaders[0], 1) ?? [],
+      divisional: mapTeams(nfcStandings[0], 1) ?? [],
       wildCard: [
-        [mapTeams(nfcDivisionLeaders[1], 2), mapTeams(nfcWildCards[2], 7)],
-        [mapTeams(nfcDivisionLeaders[2], 3), mapTeams(nfcWildCards[1], 6)],
-        [mapTeams(nfcDivisionLeaders[3], 4), mapTeams(nfcWildCards[0], 5)],
+        [mapTeams(nfcStandings[1], 2), mapTeams(nfcWildCards[2], 7)],
+        [mapTeams(nfcStandings[2], 3), mapTeams(nfcWildCards[1], 6)],
+        [mapTeams(nfcStandings[3], 4), mapTeams(nfcWildCards[0], 5)],
       ],
       inHunt: nfcNonPlayoff.inTheHunt.map(mapTeams) ?? [],
       eliminated: nfcNonPlayoff.eliminated.map(mapTeams) ?? [],

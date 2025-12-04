@@ -1,35 +1,37 @@
 import fallback from "@/../public/vercel.svg";
 import Image from "next/image";
 
-export type FootballScoreBreakdown = {
+export type BasketballScoreBreakdown = {
   teams: { home: { score: number }; away: { score: number } };
   periodName: string;
 };
 
-export default function FootballScoreBreakdown({
+export default function BasketballScoreBreakdown({
   scoreData,
   homeLogo,
   awayLogo,
 }: {
-  scoreData: FootballScoreBreakdown[];
+  scoreData: BasketballScoreBreakdown[];
   homeLogo?: string;
   awayLogo?: string;
 }) {
-  let ETFLAG = false;
-  if (scoreData.length > 2) {
-    ETFLAG = true;
+  let OTFLAG = false;
+  if (scoreData.length > 4) {
+    OTFLAG = true;
   } else {
-    scoreData = scoreData.slice(0, 2);
+    scoreData = scoreData.slice(0, 4);
   }
-
   return (
     <table className="m-4 text-center dark:text-neutral-400">
       <thead>
         <tr>
           <th></th>
-          <th>1st Half</th>
-          <th>2nd Half</th>
-          {ETFLAG && <th>Extra Time</th>}
+          <th>Q1</th>
+          <th>Q2</th>
+          <th>Q3</th>
+          <th>Q4</th>
+          {OTFLAG && <th>OT</th>}
+          <th>Total</th>
         </tr>
       </thead>
       <tbody>
@@ -45,6 +47,12 @@ export default function FootballScoreBreakdown({
           {scoreData.map((item) => (
             <td key={item.periodName}>{item.teams.home.score}</td>
           ))}
+          <td>
+            {scoreData.reduce(
+              (accumulator, current) => accumulator + current.teams.home.score,
+              0,
+            )}
+          </td>
         </tr>
         <tr>
           <td>
@@ -58,6 +66,12 @@ export default function FootballScoreBreakdown({
           {scoreData.map((item) => (
             <td key={item.periodName}>{item.teams.away.score}</td>
           ))}
+          <td>
+            {scoreData.reduce(
+              (accumulator, current) => accumulator + current.teams.away.score,
+              0,
+            )}
+          </td>
         </tr>
       </tbody>
     </table>

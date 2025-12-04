@@ -556,7 +556,7 @@ export function resolveCricketTeamImages(teamName: string) {
 export function resolveFootballTeamImage(teamName: string) {
   switch (teamName) {
     case "Brisbane Roar":
-      return "https://brisbaneroar.com.au/wp-content/uploads/sites/4/2024/09/Brisbane_Roar_Full-Colour.png";
+    //return "https://brisbaneroar.com.au/wp-content/uploads/sites/4/2024/09/Brisbane_Roar_Full-Colour.png";
 
     default:
       return resolveCountryImage(teamName) ?? fallback;
@@ -573,6 +573,16 @@ export function resolveBaseballTeamImage(teamName: string) {
       return "https://assets.baseball.com.au/uploads/sites/12/2019/10/Perth-1.png";
     case "Sydney Blue Sox":
       return "https://assets.baseball.com.au/uploads/sites/13/2023/07/Site-Logo-for-MLBAM.png";
+    default:
+      return resolveCountryImage(teamName) ?? fallback;
+  }
+}
+
+export function resolveBasketballTeamImage(teamName: string) {
+  switch (teamName) {
+    case "Brisbane Bullets":
+    //return "https://brisbaneroar.com.au/wp-content/uploads/sites/4/2024/09/Brisbane_Roar_Full-Colour.png";
+
     default:
       return resolveCountryImage(teamName) ?? fallback;
   }

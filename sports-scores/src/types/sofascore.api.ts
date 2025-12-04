@@ -281,3 +281,8 @@ export interface Sofascore_Player {
   dateOfBirthTimestamp?: number;
   fieldTranslations?: Sofascore_FieldTranslations;
 }
+
+export interface Sofascore_CupTrees {
+  id: number;
+  name: string;
+}
