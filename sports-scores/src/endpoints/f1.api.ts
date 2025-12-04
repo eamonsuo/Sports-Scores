@@ -11,13 +11,6 @@ import {
   F1_OpenF1_Sessions_Response,
 } from "@/types/f1";
 
-const reqHeaders = new Headers();
-reqHeaders.append("x-apisports-key", `${process.env.APISportsKey}`);
-
-const fetchOptions = {
-  headers: reqHeaders,
-};
-
 // function updateQuota(response: Response) {
 //   const limit = response.headers.get("x-ratelimit-requests-limit");
 //   const remaining = response.headers.get("x-ratelimit-requests-remaining");
@@ -31,10 +24,7 @@ const fetchOptions = {
 // }
 
 export async function fetchF1Events(season: number) {
-  const rawEvents = await fetch(
-    `${process.env.F1_BASEURL}/f1/${season}/races`,
-    // fetchOptions,
-  );
+  const rawEvents = await fetch(`${process.env.F1_BASEURL}/f1/${season}/races`);
 
   if (!rawEvents.ok) {
     return null;
@@ -48,7 +38,6 @@ export async function fetchF1Events(season: number) {
 export async function fetchF1RaceResult(season: number, round: number) {
   const rawSession = await fetch(
     `${process.env.F1_BASEURL}/f1/${season}/${round}/results/`,
-    // fetchOptions,
   );
 
   if (!rawSession.ok) {
@@ -66,7 +55,6 @@ export async function fetchF1RaceResult(season: number, round: number) {
 export async function fetchF1QualifyingResult(season: number, round: number) {
   const rawSession = await fetch(
     `${process.env.F1_BASEURL}/f1/${season}/${round}/qualifying/`,
-    // fetchOptions,
   );
 
   if (!rawSession.ok) {
@@ -84,7 +72,6 @@ export async function fetchF1QualifyingResult(season: number, round: number) {
 export async function fetchF1SprintResult(season: number, round: number) {
   const rawSession = await fetch(
     `${process.env.F1_BASEURL}/f1/${season}/${round}/sprint/`,
-    // fetchOptions,
   );
 
   if (!rawSession.ok) {
@@ -102,7 +89,6 @@ export async function fetchF1SprintResult(season: number, round: number) {
 export async function fetchF1DriverStandings(season: number) {
   const rawStandings = await fetch(
     `${process.env.F1_BASEURL}/f1/${season}/driverstandings`,
-    // fetchOptions,
   );
 
   if (!rawStandings.ok) {
@@ -118,7 +104,6 @@ export async function fetchF1DriverStandings(season: number) {
 export async function fetchF1ConstructorStandings(season: number) {
   const rawStandings = await fetch(
     `${process.env.F1_BASEURL}/f1/${season}/constructorstandings`,
-    // fetchOptions,
   );
 
   if (!rawStandings.ok) {
@@ -139,7 +124,7 @@ export async function fetchF1Positions(
   date?: string, //UTC ISO format: YYYY-MM-DDTHH:mm:ssZ
   meetingId?: number,
 ) {
-  let searchUrl = `https://api.openf1.org/v1/position?`;
+  let searchUrl = `${process.env.OPENF1_BASEURL}/position?`;
 
   if (sessionId) searchUrl += `session_key=${sessionId}&`;
   if (driverId) searchUrl += `driver_number=${driverId}&`;
@@ -160,7 +145,7 @@ export async function fetchF1DriverDetails(
   sessionId?: number,
   driverId?: number,
 ) {
-  let searchUrl = `https://api.openf1.org/v1/drivers?`;
+  let searchUrl = `${process.env.OPENF1_BASEURL}/drivers?`;
 
   if (sessionId) searchUrl += `session_key=${sessionId}&`;
   if (driverId) searchUrl += `driver_number=${driverId}&`;
@@ -175,7 +160,7 @@ export async function fetchF1DriverDetails(
 }
 
 export async function fetchF1Meetings(year: number) {
-  let searchUrl = `https://api.openf1.org/v1/meetings?year=${year}&`;
+  let searchUrl = `${process.env.OPENF1_BASEURL}/meetings?year=${year}&`;
 
   // if (session) searchUrl += `session_key=${session}&`;
   // if (driver) searchUrl += `driver_number=${driver}&`;
@@ -194,7 +179,7 @@ export async function fetchF1Sessions(
   meetingId?: number,
   sessionName?: string,
 ) {
-  let searchUrl = `https://api.openf1.org/v1/sessions?year=${year}&`;
+  let searchUrl = `${process.env.OPENF1_BASEURL}/sessions?year=${year}&`;
 
   if (meetingId) searchUrl += `meeting_key=${meetingId}&`;
   if (sessionName) searchUrl += `session_name=${sessionName}&`;

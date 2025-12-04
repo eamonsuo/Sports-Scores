@@ -1,6 +1,9 @@
+import { FootballStanding } from "@/components/football/FootballLadder";
+import { FootballScoreBreakdown } from "@/components/football/FootballScoreBreakdown";
 import { ScoreDifference } from "@/components/generic/ScoreChart";
 import { MatchSummary, RoundDetails, TeamScoreDetails } from "./misc";
 import {
+  Sofascore_CupTrees,
   Sofascore_Event,
   Sofascore_Incident,
   Sofascore_Standing,
@@ -27,6 +30,10 @@ export interface Football_FootApi_MatchSchedules_Response {
   events: Sofascore_Event[];
 }
 
+export interface Football_FootApi_LeagueCupTrees_Response {
+  cupTrees: Sofascore_CupTrees[];
+}
+
 export interface FootballFixturesPage {
   fixtures: RoundDetails[];
   currentRound: string;
@@ -37,7 +44,7 @@ export interface FootballTeamFixturesPage {
 }
 
 export interface FootballLadderPage {
-  standings: any[]; //TODO: FootballStanding[];
+  standings: FootballStanding[];
   qualifyingPosition: number;
 }
 
@@ -46,7 +53,7 @@ export interface FootballMatchPage {
     homeTeam: TeamScoreDetails;
     awayTeam: TeamScoreDetails;
     status: string;
-    scoreBreakdown: any[]; //TODO: FootballScoreBreakdown[];
+    scoreBreakdown: FootballScoreBreakdown[];
   };
   scoreEvents: ScoreDifference[];
 }
@@ -54,4 +61,8 @@ export interface FootballMatchPage {
 export interface FootballTodayPage {
   fixtures: RoundDetails[];
   currentRound: string;
+}
+
+export interface FootballBracketPage {
+  brackets: { id: number; name: string }[];
 }

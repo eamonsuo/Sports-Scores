@@ -6,6 +6,7 @@ import {
   AMERICAN_FOOTBALL_LEAGUES,
   AUSSIE_RULES_LEAGUES,
   BASEBALL_LEAGUES,
+  BASKETBALL_LEAGUES,
   FOOTBALL_LEAGUES,
   GOLF_TOURS,
   MOTORSPORT_CATEGORIES,
@@ -79,6 +80,13 @@ const footerLinks: {
     altText: "Baseball",
   },
   {
+    sport: SPORT.BASKETBALL,
+    link: `/sports/${SPORT.BASKETBALL}/${BASKETBALL_LEAGUES[0].slug}/${BASKETBALL_LEAGUES[0].seasons[0].slug}/matches`,
+    // link: `https://www.livescore.com/en/basketball/`,
+    img: "/footer/basketball.svg",
+    altText: "Basketball",
+  },
+  {
     sport: SPORT.SURFING,
     // link: `/sports/${SPORT.SURFING}`,
     link: `https://www.worldsurfleague.com/events/2025/ct`,
@@ -98,14 +106,6 @@ const footerLinks: {
     link: `https://www.flashscore.com.au/cycling/`,
     img: "/footer/bike.svg",
     altText: "Cycling",
-  },
-
-  {
-    sport: SPORT.BASKETBALL,
-    // link: `/sports/${SPORT.BASKETBALL}`,
-    link: `https://www.livescore.com/en/basketball/`,
-    img: "/footer/basketball.svg",
-    altText: "Basketball",
   },
 
   {
