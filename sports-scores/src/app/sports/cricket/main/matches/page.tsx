@@ -1,11 +1,9 @@
 "use client";
 import CricketFixtureList from "@/components/cricket/CricketFixtureList";
 import Placeholder from "@/components/misc/Placeholder";
-import { cricketMatchesByDate } from "@/services/cricket.service";
+import { cricketMatchesByDateClient } from "@/services/cricket.service";
 import { MatchSummary } from "@/types/misc";
 import { useEffect, useRef, useState } from "react";
-
-export const dynamic = "force-dynamic";
 
 export default function InfiniteCricketMatches() {
   const [mounted, setMounted] = useState(false);
@@ -22,8 +20,10 @@ export default function InfiniteCricketMatches() {
     setMounted(true);
     if (dates.length === 0) {
       const today = new Date();
-      setDates([today]);
-      loadMatches([today], false, true); // Mark as initial load
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      setDates([yesterday, today]);
+      loadMatches([yesterday, today], false, true); // Mark as initial load
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -36,7 +36,7 @@ export default function InfiniteCricketMatches() {
     setLoading(true);
     let allNewSummaries: MatchSummary[] = [];
     for (const date of dateList) {
-      const result = await cricketMatchesByDate(date);
+      const result = await cricketMatchesByDateClient(date);
       if (result && result.length > 0) {
         allNewSummaries = [...allNewSummaries, ...result];
       }
