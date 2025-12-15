@@ -39,9 +39,9 @@ function getNFLPlayoffPicture(NFLTables: AmericanFootballStanding[]) {
   const afcStandings =
     NFLTables.find((t) => t.tableName === "NFL 25/26, AFC")?.standings ?? []; //Get the conference standings
 
-  const afcWildCards = afcStandings.slice(0, 3) ?? []; //Get top 3 wild card teams
+  const afcWildCards = afcStandings.slice(4, 7) ?? []; // Get wild card teams (pos 5-7)
 
-  const afcInHunt = afcStandings.slice(6) ?? [];
+  const afcInHunt = afcStandings.slice(7) ?? [];
 
   const afcNonPlayoff = getPlayoffStatus(afcInHunt, afcWildCards);
 
@@ -49,9 +49,9 @@ function getNFLPlayoffPicture(NFLTables: AmericanFootballStanding[]) {
   const nfcStandings =
     NFLTables.find((t) => t.tableName === "NFL 25/26, NFC")?.standings ?? []; //Get the conference standings
 
-  const nfcWildCards = nfcStandings.slice(0, 3) ?? []; //Get top 3 wild card teams
+  const nfcWildCards = nfcStandings.slice(4, 7) ?? []; // Get wild card teams (pos 5-7)
 
-  const nfcInHunt = nfcStandings.slice(6) ?? [];
+  const nfcInHunt = nfcStandings.slice(7) ?? [];
 
   const nfcNonPlayoff = getPlayoffStatus(nfcInHunt, nfcWildCards);
 

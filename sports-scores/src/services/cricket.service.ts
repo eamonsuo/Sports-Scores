@@ -19,9 +19,77 @@ import {
 } from "@/types/cricket";
 import { MatchStatus, MatchSummary, SPORT } from "@/types/misc";
 
-const excludedSeries = ["CSA", "The Ford", "County"];
+const excludedSeries = ["CSA", "The Ford", "County", "T10"];
 
-// Fetch matches for a specific date
+// Client-side fetch for matches by date (calls API route)
+export async function cricketMatchesByDateClient(date: Date) {
+  const dateString = `${date.getFullYear()}${(date.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}${date.getDate().toString().padStart(2, "0")}`;
+
+  try {
+    const response = await fetch(`/api/cricket/matches/${dateString}`);
+    if (!response.ok) {
+      console.error("Failed to fetch cricket matches:", response.statusText);
+      return null;
+    }
+    const rawMatches = await response.json();
+
+    if (!rawMatches || !rawMatches.Stages) return null;
+
+    return rawMatches.Stages.filter(
+      (series: any) => !excludedSeries.some((str) => series.Snm.includes(str)),
+    ).flatMap((item: any) => {
+      return item.Events.map((event: any) => {
+        let sDate = convertNumbertoDate(event.Esd, false);
+        let longFormat =
+          (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
+        let home2Ing = longFormat
+          ? `, ${event.Tr1CW2 ?? 0}/${event.Tr1C2 ?? 0}${event.Tr1CD2 === 1 ? "d" : ""}`
+          : "";
+        let away2Ing = longFormat
+          ? `, ${event.Tr2CW2 ?? 0}/${event.Tr2C2 ?? 0}${event.Tr2CD2 === 1 ? "d" : ""}`
+          : "";
+
+        return {
+          id: Number(event.Eid),
+          startDate: sDate,
+          endDate: convertNumbertoDate(event.Ese, false),
+          sport: SPORT.CRICKET,
+          venue: "",
+          status: mapCricketStatus(event.Eps),
+          summaryText:
+            event.Eps === "NS"
+              ? `Match starts at ${toShortTimeString(sDate)}`
+              : event.ECo,
+          otherDetail: event.ErnInf,
+          homeDetails: {
+            img: resolveCricketTeamImages(
+              event.T1[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
+            ),
+            score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
+            name: event.T1[0].Nm,
+          },
+          awayDetails: {
+            img: resolveCricketTeamImages(
+              event.T2[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
+            ),
+            score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
+            name: event.T2[0].Nm,
+          },
+          seriesName: item.Snm,
+          matchSlug: `${event.Eid}`,
+          seriesSlug: `${item.Ccd}/${item.Scd}`,
+        } as MatchSummary;
+      });
+    });
+  } catch (error) {
+    console.error("Error fetching cricket matches:", error);
+    return null;
+  }
+}
+
+// Fetch matches for a specific date (server-side only)
 export async function cricketMatchesByDate(date: Date) {
   const dateString = `${date.getFullYear()}${(date.getMonth() + 1)
     .toString()
