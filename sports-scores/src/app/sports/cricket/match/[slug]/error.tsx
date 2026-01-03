@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import ErrorPage from "@/components/misc/ErrorPage";
 
 // Error boundaries must be Client Components
 
@@ -9,17 +9,5 @@ export default function Error({
 }: {
   error: Error & { digest?: string };
 }) {
-  return (
-    <div className="h-full w-full px-4 pt-8 text-center">
-      <h2>Something went wrong!</h2>
-      <button
-        onClick={
-          // Attempt to recover by trying to re-render the segment
-          () => useRouter().refresh()
-        }
-      >
-        Try again
-      </button>
-    </div>
-  );
+  return <ErrorPage />;
 }

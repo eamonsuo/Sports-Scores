@@ -81,6 +81,7 @@ export const MOTORSPORT_CATEGORIES = [
     name: "Formula 1",
     slug: "f1",
     seasons: [
+      { name: "2026", slug: "2026" },
       { name: "2025", slug: "2025" },
       { name: "2024", slug: "2024" },
       { name: "2023", slug: "2023" },
@@ -89,7 +90,7 @@ export const MOTORSPORT_CATEGORIES = [
   {
     name: "Supercars",
     slug: "supercars",
-    seasons: [{ name: "2025", slug: "2025" }],
+    seasons: [{ name: "2026", slug: "2026" }],
   },
 ] as LeagueSeasonConfig[];
 
@@ -97,27 +98,33 @@ export const GOLF_TOURS = [
   {
     name: "PGA Tour",
     slug: "pga",
-    seasons: [{ name: "2025", slug: "" }],
+    seasons: [
+      { name: "2026", slug: "" },
+      { name: "2025", slug: "" },
+    ],
   },
   {
     name: "LIV Golf",
     slug: "liv",
-    seasons: [{ name: "2025", slug: "" }],
+    seasons: [
+      { name: "2026", slug: "" },
+      { name: "2025", slug: "" },
+    ],
   },
   {
     name: "LPGA Tour",
     slug: "lpga",
-    seasons: [{ name: "2025", slug: "" }],
+    seasons: [{ name: "2026", slug: "" }],
   },
   {
     name: "DP World Tour",
     slug: "dpworld",
-    seasons: [{ name: "2025", slug: "" }],
+    seasons: [{ name: "2026", slug: "" }],
   },
   {
     name: "PGA Tour Australasia",
     slug: "australasia",
-    seasons: [{ name: "2025", slug: "" }],
+    seasons: [{ name: "25/26", slug: "" }],
   },
   {
     name: "OWGR",
@@ -131,6 +138,7 @@ export const RUGBY_LEAGUE_LEAGUES = [
     name: "NRL",
     slug: "294",
     seasons: [
+      { name: "2026", slug: "86317" },
       { name: "2025", slug: "69277" },
       { name: "2024", slug: "56749" },
       { name: "2023", slug: "47382" },
@@ -157,6 +165,7 @@ export const RUGBY_LEAGUE_LEAGUES = [
     name: "NRLW",
     slug: "19120",
     seasons: [
+      { name: "2026", slug: "87573" },
       { name: "2025", slug: "69964" },
       { name: "2024", slug: "56809" },
       { name: "2023", slug: "51393" },
@@ -168,6 +177,7 @@ export const RUGBY_LEAGUE_LEAGUES = [
     name: "State of Origin",
     slug: "791",
     seasons: [
+      { name: "2026", slug: "87571" },
       { name: "2025", slug: "69960" },
       { name: "2024", slug: "56900" },
       { name: "2023", slug: "48134" },
@@ -216,12 +226,18 @@ export const RUGBY_LEAGUE_LEAGUES = [
   {
     name: "World Cup",
     slug: "431",
-    seasons: [{ name: "2021", slug: "42989" }],
+    seasons: [
+      { name: "2026", slug: "87548" },
+      { name: "2021", slug: "42989" },
+    ],
   },
   {
     name: "World Cup - Women",
     slug: "10683",
-    seasons: [{ name: "2022", slug: "42991" }],
+    seasons: [
+      { name: "2026", slug: "87572" },
+      { name: "2022", slug: "42991" },
+    ],
   },
   {
     name: "Pacific Champs",
@@ -265,6 +281,7 @@ export const AUSSIE_RULES_LEAGUES = [
     name: "AFL",
     slug: "656",
     seasons: [
+      { name: "2026", slug: "86748" },
       { name: "2025", slug: "71308" },
       { name: "2024", slug: "58226" },
       { name: "2023", slug: "47887" },
@@ -712,6 +729,7 @@ export const BASEBALL_LEAGUES = [
     name: "MLB",
     slug: "11205",
     seasons: [
+      { name: "2026", slug: "84695" },
       { name: "2025", slug: "68611" },
       { name: "2024", slug: "57577" },
     ],
@@ -779,6 +797,46 @@ export const BASKETBALL_LEAGUES = [
     seasons: [
       { name: "2025", slug: "69751" },
       { name: "2024", slug: "57477" },
+    ],
+  },
+] as LeagueSeasonConfig[];
+
+export const TENNIS_LEAGUES = [
+  {
+    name: "Australian Open",
+    slug: "ao",
+    seasons: [
+      { name: "2026", slug: "68611" },
+      { name: "2025", slug: "57577" },
+    ],
+  },
+] as LeagueSeasonConfig[];
+
+export const DARTS_LEAGUES = [
+  {
+    name: "Home",
+    slug: "",
+    seasons: [{ name: "N/A", slug: "" }],
+  },
+  {
+    name: "2026 World Champs",
+    slug: "world-champs",
+    seasons: [{ name: "2026", slug: "" }],
+  },
+  {
+    name: "FlashScore",
+    slug: "all",
+    seasons: [
+      { name: "25/26", slug: "" },
+      { name: "24/25", slug: "" },
+    ],
+  },
+  {
+    name: "PDC Tournaments",
+    slug: "pdc",
+    seasons: [
+      { name: "25/26", slug: "" },
+      { name: "24/25", slug: "" },
     ],
   },
 ] as LeagueSeasonConfig[];

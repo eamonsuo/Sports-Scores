@@ -1,9 +1,10 @@
 import { FootballStanding } from "@/components/football/FootballLadder";
 import { FootballScoreBreakdown } from "@/components/football/FootballScoreBreakdown";
 import { ScoreDifference } from "@/components/generic/ScoreChart";
+import { Match as BracketMatch } from "@/components/zz_export/types";
 import { MatchSummary, RoundDetails, TeamScoreDetails } from "./misc";
 import {
-  Sofascore_CupTrees,
+  Sofascore_CupTree,
   Sofascore_Event,
   Sofascore_Incident,
   Sofascore_Standing,
@@ -31,7 +32,7 @@ export interface Football_FootApi_MatchSchedules_Response {
 }
 
 export interface Football_FootApi_LeagueCupTrees_Response {
-  cupTrees: Sofascore_CupTrees[];
+  cupTrees: Sofascore_CupTree[];
 }
 
 export interface FootballFixturesPage {
@@ -64,5 +65,16 @@ export interface FootballTodayPage {
 }
 
 export interface FootballBracketPage {
-  brackets: { id: number; name: string }[];
+  brackets: {
+    id: number;
+    name: string;
+    currentRound: number;
+    matches: BracketMatch[];
+  }[];
+}
+
+export interface BracketRounds {
+  id: number;
+  name: string;
+  matches: MatchSummary[];
 }

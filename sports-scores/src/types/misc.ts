@@ -190,6 +190,7 @@ export enum SPORT {
   NETBALL = "netball",
   RUGBY_UNION = "rugby-union",
   CYCLING = "cycling",
+  DARTS = "darts",
 }
 
 export enum CountryFlagCode {

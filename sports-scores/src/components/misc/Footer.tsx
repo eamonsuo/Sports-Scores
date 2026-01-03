@@ -87,18 +87,18 @@ const footerLinks: {
     altText: "Basketball",
   },
   {
-    sport: SPORT.SURFING,
-    // link: `/sports/${SPORT.SURFING}`,
-    link: `https://www.worldsurfleague.com/events/2025/ct`,
-    img: "/footer/surfboard.svg",
-    altText: "Surfing",
-  },
-  {
     sport: SPORT.TENNIS,
     // link: `/sports/${SPORT.TENNIS}`,
     link: `https://www.livescore.com/en/tennis/`,
     img: "/footer/tennis.svg",
     altText: "Tennis",
+  },
+  {
+    sport: SPORT.SURFING,
+    // link: `/sports/${SPORT.SURFING}`,
+    link: `https://www.worldsurfleague.com/events/2025/ct`,
+    img: "/footer/surfboard.svg",
+    altText: "Surfing",
   },
   {
     sport: SPORT.CYCLING,
@@ -107,7 +107,13 @@ const footerLinks: {
     img: "/footer/bike.svg",
     altText: "Cycling",
   },
-
+  {
+    sport: SPORT.DARTS,
+    link: `/sports/${SPORT.DARTS}`,
+    // link: `https://www.flashscore.com.au/darts/`,
+    img: "/footer/dart.svg",
+    altText: "Darts",
+  },
   {
     sport: SPORT.ICE_HOCKEY,
     // link: `/sports/${SPORT.ICE_HOCKEY}`,

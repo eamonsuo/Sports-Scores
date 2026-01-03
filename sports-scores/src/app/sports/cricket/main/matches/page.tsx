@@ -41,10 +41,21 @@ export default function InfiniteCricketMatches() {
         allNewSummaries = [...allNewSummaries, ...result];
       }
     }
+
+    // Deduplicate within the new batch first
+    const seenIds = new Set<string | number>();
+    const deduplicatedNewSummaries = allNewSummaries.filter((m) => {
+      if (!m.id || seenIds.has(m.id)) {
+        return false;
+      }
+      seenIds.add(m.id);
+      return true;
+    });
+
     setMatchSummaries((prev) => {
-      // Filter out matches with duplicate IDs
+      // Filter out matches with duplicate IDs against existing matches
       const existingIds = new Set(prev.map((m) => m.id));
-      const uniqueNewSummaries = allNewSummaries.filter(
+      const uniqueNewSummaries = deduplicatedNewSummaries.filter(
         (m) => !existingIds.has(m.id),
       );
       return prepend
