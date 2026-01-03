@@ -3,8 +3,12 @@ import { golfFedExRankings } from "@/services/golf.service";
 
 export const dynamic = "force-dynamic";
 
-export default async function Page() {
-  var pageData = await golfFedExRankings();
+export default async function Page(props: {
+  params: Promise<{ season: string }>;
+}) {
+  const { season } = await props.params;
+
+  var pageData = await golfFedExRankings(season);
 
   if (pageData === null) {
     return <>NO DATA</>;

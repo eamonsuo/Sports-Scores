@@ -6,7 +6,13 @@ import SectionDateRange from "../generic/SectionDateRange";
 import TournamentSummaryCard from "./TournamentSummaryCardSchedule";
 
 // Assumes data prop is already sorted in desired order
-export default function GolfScheduleList({ data }: { data: GolfSchedule[] }) {
+export default function GolfScheduleList({
+  data,
+  season,
+}: {
+  data: GolfSchedule[];
+  season: string;
+}) {
   useEffect(() => {
     const scrollToAnchor = () => {
       const element = document.getElementById("current-date");
@@ -80,7 +86,7 @@ export default function GolfScheduleList({ data }: { data: GolfSchedule[] }) {
               status={item.status}
               leader={item.leader}
               location={item.location}
-              url={`/sports/golf/${item.tourName}/tournament/${item.id}`}
+              url={`/sports/golf/${item.tourName}/${season}/tournament/${item.id}`}
             />
           </React.Fragment>
         );

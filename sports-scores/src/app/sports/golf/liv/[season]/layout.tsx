@@ -11,14 +11,21 @@ export default async function SportsLayout({
         <NavButtonGroup
           buttons={[
             {
-              href: "/sports/golf/pga/schedule#current-date",
+              href: "./schedule#current-date",
               label: "Schedule",
               page: "schedule",
             },
             {
-              href: "/sports/golf/pga/fedexcup",
-              label: "FedEx Cup",
-              page: "fedexcup",
+              // href: "/sports/golf/liv/standings/team",
+              href: "https://www.livgolf.com/standings",
+              label: "Player Stnd",
+              page: "team",
+            },
+            {
+              // href: "/sports/golf/liv/standings/player",
+              href: "http://www.livgolf.com/standings",
+              label: "Team Stnd",
+              page: "player",
             },
           ]}
         />
