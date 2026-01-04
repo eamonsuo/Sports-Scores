@@ -1,7 +1,7 @@
-import { TennisStanding } from "@/components/Tennis/TennisLadder";
-import { TennisScoreBreakdown } from "@/components/Tennis/TennisScoreBreakdown";
+// import { TennisStanding } from "@/components/Tennis/TennisLadder";
+// import { TennisScoreBreakdown } from "@/components/Tennis/TennisScoreBreakdown";
+import { Match as BracketMatch } from "@/components/bracket/types";
 import { ScoreDifference } from "@/components/generic/ScoreChart";
-import { Match as BracketMatch } from "@/components/zz_export/types";
 import { MatchSummary, RoundDetails, TeamScoreDetails } from "./misc";
 import {
   Sofascore_CupTree,
@@ -113,7 +113,7 @@ export interface TennisTeamFixturesPage {
 }
 
 export interface TennisLadderPage {
-  standings: TennisStanding[];
+  // standings: TennisStanding[];
   qualifyingPosition: number;
 }
 
@@ -122,7 +122,7 @@ export interface TennisMatchPage {
     homeTeam: TeamScoreDetails;
     awayTeam: TeamScoreDetails;
     status: string;
-    scoreBreakdown: TennisScoreBreakdown[];
+    // scoreBreakdown: TennisScoreBreakdown[];
   };
   scoreEvents: ScoreDifference[];
 }

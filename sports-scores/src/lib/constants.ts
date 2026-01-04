@@ -99,16 +99,16 @@ export const GOLF_TOURS = [
     name: "PGA Tour",
     slug: "pga",
     seasons: [
-      { name: "2026", slug: "" },
-      { name: "2025", slug: "" },
+      { name: "2026", slug: "2026" },
+      { name: "2025", slug: "2025" },
     ],
   },
   {
     name: "LIV Golf",
     slug: "liv",
     seasons: [
-      { name: "2026", slug: "" },
-      { name: "2025", slug: "" },
+      { name: "2026", slug: "2026" },
+      { name: "2025", slug: "2025" },
     ],
   },
   {
@@ -125,6 +125,11 @@ export const GOLF_TOURS = [
     name: "PGA Tour Australasia",
     slug: "australasia",
     seasons: [{ name: "25/26", slug: "" }],
+  },
+  {
+    name: "TGL",
+    slug: "tgl",
+    seasons: [{ name: "2026", slug: "" }],
   },
   {
     name: "OWGR",

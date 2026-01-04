@@ -1,5 +1,7 @@
+import { Match as BracketMatch } from "@/components/bracket/types";
 import { FootballStanding } from "@/components/football/FootballLadder";
 import {
+  fetchFootballCupTrees,
   fetchFootballCurrentMatches,
   fetchFootballLastMatches,
   fetchFootballMatchDetails,
@@ -17,6 +19,7 @@ import {
   toShortTimeString,
 } from "@/lib/projUtils";
 import {
+  FootballBracketPage,
   FootballFixturesPage,
   FootballLadderPage,
   FootballMatchPage,
@@ -326,4 +329,81 @@ export async function footballCurrentMatches(
 
     currentRound: "NRL",
   } as FootballTodayPage;
+}
+
+export async function footballBrackets(tournamentId: number, seasonId: number) {
+  const trees = await fetchFootballCupTrees(tournamentId, seasonId);
+  // const trees = testdata;
+
+  console.log("🟢 Starting footballBrackets processing...");
+  console.log("Trees count:", trees?.cupTrees?.length);
+
+  if (!trees) {
+    return null;
+  }
+
+  console.log("Creating tempBrackets...");
+  const tempBrackets = trees.cupTrees.map((tree) => {
+    console.log(`Processing tree: ${tree.name}, rounds: ${tree.rounds.length}`);
+    return {
+      id: tree.id,
+      name: tree.name,
+      currentRound: tree.currentRound,
+      matches: tree.rounds.flatMap((round, roundIndex) =>
+        round.blocks.map(
+          (match) =>
+            ({
+              id: match.blockId,
+              nextMatchId: null,
+              participants: match.participants.map((team, teamIndex) => ({
+                id: team.team.id,
+                isWinner: team.winner,
+                name: team.team.name,
+                resultText:
+                  teamIndex === 0 ? match.homeTeamScore : match.awayTeamScore,
+                status: match.finished ? "PLAYED" : "SCHEDULED",
+              })),
+              startTime: match.seriesStartDateTimestamp?.toString(),
+              tournamentRoundText: (roundIndex + 1).toString(),
+              state: match.finished ? "PLAYED" : "SCHEDULED",
+              name: "",
+              href: `./${match?.events?.[0] ?? ""}`,
+            }) as BracketMatch,
+        ),
+      ),
+    };
+  });
+  console.log(
+    "tempBrackets created, total matches:",
+    tempBrackets.flatMap((b) => b.matches).length,
+  );
+
+  console.log("Setting up nextMatchId connections...");
+  // Build a lookup map first to avoid O(n²) complexity
+  const matchMap = new Map();
+  tempBrackets.forEach((bracket) => {
+    bracket.matches.forEach((match) => {
+      matchMap.set(match.id, match);
+    });
+  });
+
+  trees.cupTrees.forEach((tree) => {
+    tree.rounds.forEach((round) => {
+      round.blocks.forEach((match) => {
+        match.participants.forEach((team) => {
+          if (team.sourceBlockId) {
+            const matchToUpdate = matchMap.get(team.sourceBlockId);
+            if (matchToUpdate) {
+              matchToUpdate.nextMatchId = match.blockId;
+            }
+          }
+        });
+      });
+    });
+  });
+
+  console.log("footballBrackets processing complete");
+  return {
+    brackets: tempBrackets,
+  } as FootballBracketPage;
 }

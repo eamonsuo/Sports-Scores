@@ -1,6 +1,7 @@
 import { updateGlobalApiQuota } from "@/lib/apiCounter";
 import {
   Football_FootApi_FixturePage_Response,
+  Football_FootApi_LeagueCupTrees_Response,
   Football_FootApi_LeagueTotalStandings_Response,
   Football_FootApi_Match_Response,
   Football_FootApi_MatchIncidents_Response,
@@ -101,4 +102,13 @@ export async function fetchFootballTeamNextMatches(
   return (await fetchFootballApi(
     `/team/${teamId}/matches/next/${pageNumber}`,
   )) as Football_FootApi_FixturePage_Response;
+}
+
+export async function fetchFootballCupTrees(
+  tournamentId: number,
+  seasonId: number,
+) {
+  return (await fetchFootballApi(
+    `/tournament/${tournamentId}/season/${seasonId}/cuptrees`,
+  )) as Football_FootApi_LeagueCupTrees_Response;
 }
