@@ -20,23 +20,47 @@ const nextConfig = {
         port: "",
         pathname: "/db/PICTURES/CMS/**",
       },
+      // National Flags
       {
         protocol: "https",
         hostname: "flagcdn.com",
         port: "",
         pathname: "/**",
       },
+      // Cricket Logos
       {
         protocol: "https",
         hostname: "static-files.cricket-australia.pulselive.com",
         port: "",
         pathname: "/flag/**",
       },
+      // ABL Logos
       {
         protocol: "https",
         hostname: "assets.baseball.com.au",
         port: "",
         pathname: "/uploads/**",
+      },
+      // A-League logos
+      {
+        protocol: "https",
+        hostname: "aleagues.com.au",
+        port: "",
+        pathname: "/wp-content/themes/keepup/source/images/club-logos/**",
+      },
+      // Premier League logos
+      {
+        protocol: "https",
+        hostname: "resources.premierleague.com",
+        port: "",
+        pathname: "/premierleague25/**",
+      },
+      // NBL, NBA logos
+      {
+        protocol: "https",
+        hostname: "a.espncdn.com",
+        port: "",
+        pathname: "/combiner/**",
       },
     ],
   },

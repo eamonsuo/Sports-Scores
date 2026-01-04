@@ -160,6 +160,11 @@ export interface Sofascore_Score {
   period7?: number;
   period8?: number;
   period9?: number;
+  period1TieBreak?: number;
+  period2TieBreak?: number;
+  period3TieBreak?: number;
+  period4TieBreak?: number;
+  period5TieBreak?: number;
   overtime?: number;
   normaltime: number;
 }
@@ -282,7 +287,52 @@ export interface Sofascore_Player {
   fieldTranslations?: Sofascore_FieldTranslations;
 }
 
-export interface Sofascore_CupTrees {
+export interface Sofascore_CupTrees_Response {
+  cupTrees: Sofascore_CupTree[];
+}
+
+export interface Sofascore_CupTree {
   id: number;
   name: string;
+  tournament: Sofascore_Tournament;
+  currentRound: number;
+  rounds: Sofascore_CupRound[];
+  type: number;
+  finalMatchCupBlock?: Sofascore_CupBlock;
+  showSingleParticipantByeBlocks: boolean;
+  hideRoundsWithoutParticipants: boolean;
+}
+
+export interface Sofascore_CupRound {
+  order: number;
+  type: number;
+  description: string;
+  blocks: Sofascore_CupBlock[];
+  id: number;
+}
+
+export interface Sofascore_CupBlock {
+  finished?: boolean;
+  matchesInRound: number;
+  order?: number;
+  result?: string;
+  homeTeamScore?: string;
+  awayTeamScore?: string;
+  participants: Sofascore_CupParticipant[];
+  hasNextRoundLink?: boolean;
+  eventInProgress?: boolean;
+  id: number;
+  events?: number[];
+  blockId: number;
+  seriesStartDateTimestamp?: number;
+  automaticProgression: boolean;
+}
+
+export interface Sofascore_CupParticipant {
+  team: Sofascore_Team;
+  winner: boolean;
+  sourceBlockId?: number;
+  order: number;
+  teamSeed?: string;
+  id: number;
 }

@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import Footer from "@/components/misc/Footer";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,8 +31,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       {/* Dark mode enabled */}
       <link rel="icon" href="/favicon.ico" sizes="64x64" />
       <link
@@ -40,7 +40,7 @@ export default function RootLayout({
         type="image/png"
         sizes="180x180"
       />
-      
+
       <body className={inter.className}>
         {/* Set to Dynamic view height aka height of browser minus any browser things. Helps on
          mobile where safari search overhangs regular view height*/}
@@ -50,6 +50,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <Analytics />
         </div>
       </body>
     </html>
