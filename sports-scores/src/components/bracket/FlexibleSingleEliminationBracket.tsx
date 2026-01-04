@@ -271,7 +271,7 @@ const FlexibleSingleEliminationBracket = ({
                             (visiblePreviousMatches[1] as any) ?? undefined
                           }
                           topText={match.startTime ?? ""}
-                          bottomText={displayName}
+                          bottomText={displayName ?? ""}
                           teams={match.participants}
                           onMatchClick={onMatchClick}
                           onPartyClick={onPartyClick}

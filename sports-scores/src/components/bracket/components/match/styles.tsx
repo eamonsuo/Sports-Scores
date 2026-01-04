@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
+import { Theme } from "../../types";
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.div<{ theme: Theme }>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -8,12 +9,12 @@ export const Wrapper = styled.div`
   height: 100%;
   font-family: ${({ theme }) => theme.fontFamily};
 `;
-export const TopText = styled.p`
+export const TopText = styled.p<{ theme: Theme }>`
   color: ${({ theme }) => theme.textColor.dark};
   margin-bottom: 0.2rem;
   min-height: 1.25rem;
 `;
-export const BottomText = styled.p`
+export const BottomText = styled.p<{ theme: Theme }>`
   color: ${({ theme }) => theme.textColor.dark};
 
   flex: 0 0 none;
@@ -51,9 +52,9 @@ export const Score = styled.div<ScoreProps>`
   flex: 0 0 auto;
   min-width: fit-content;
   justify-content: center;
-  background: ${({ theme, $won }: any) =>
+  background: ${({ theme, $won }) =>
     $won ? theme.score.background.wonColor : theme.score.background.lostColor};
-  color: ${({ theme, $won }: any) =>
+  color: ${({ theme, $won }) =>
     $won ? theme.textColor.highlighted : theme.textColor.dark};
   text-shadow: none;
   -webkit-text-stroke: 0;
@@ -70,7 +71,7 @@ export const Side = styled.div<SideProps>`
   align-items: center;
   justify-content: space-between;
   padding: 0 0 0 1rem;
-  background: ${({ theme, $won }: any) =>
+  background: ${({ theme, $won }) =>
     $won ? theme.matchBackground.wonColor : theme.matchBackground.lostColor};
 
   :first-of-type {
@@ -90,22 +91,22 @@ export const Side = styled.div<SideProps>`
 
   transition: border-color 0.5s ${({ theme }) => theme.transitionTimingFunction};
   ${Team} {
-    color: ${({ theme, won }: any) =>
-      won ? theme.textColor.highlighted : theme.textColor.dark};
+    color: ${({ theme, $won }) =>
+      $won ? theme.textColor.highlighted : theme.textColor.dark};
   }
   ${Score} {
-    color: ${({ theme, won }: any) =>
-      won ? theme.textColor.highlighted : theme.textColor.dark};
+    color: ${({ theme, $won }) =>
+      $won ? theme.textColor.highlighted : theme.textColor.dark};
   }
-  ${({ hovered, theme, won }: any) =>
-    hovered &&
+  ${({ $hovered, theme, $won }) =>
+    $hovered &&
     css`
       border-color: ${theme.border.highlightedColor};
       ${Team} {
         color: ${theme.textColor.highlighted};
       }
       ${Score} {
-        color: ${won
+        color: ${$won
           ? theme.score.text.highlightedWonColor
           : theme.score.text.highlightedLostColor};
       }
@@ -116,11 +117,11 @@ interface LineProps {
 }
 export const Line = styled.div<LineProps>`
   height: 1px;
-  transition: border-color 0.5s ${({ theme }) => theme.smooth};
+  transition: border-color 0.5s ${({ theme }) => theme.transitionTimingFunction};
 
   border-width: 1px;
   border-style: solid;
-  border-color: ${({ $highlighted, theme }: any) =>
+  border-color: ${({ $highlighted, theme }) =>
     $highlighted ? theme.border.highlightedColor : theme.border.color};
 `;
 
