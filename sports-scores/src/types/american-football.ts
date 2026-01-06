@@ -12,22 +12,22 @@ export interface AmericanFootball_Sofascore_Event extends Sofascore_Event {
   homeTeamSeasonHistoricalForm: {
     wins: number;
     losses: number;
-    ties: number;
+    draws: number;
   };
   awayTeamSeasonHistoricalForm: {
     wins: number;
     losses: number;
-    ties: number;
+    draws: number;
   };
 }
 
 export interface AmericanFootball_AmericanFootballApi_FixturePage_Response {
-  events: Sofascore_Event[];
+  events: AmericanFootball_Sofascore_Event[];
   hasNextPage: boolean;
 }
 
 export interface AmericanFootball_AmericanFootballApi_Match_Response {
-  event: Sofascore_Event;
+  event: AmericanFootball_Sofascore_Event;
 }
 
 export interface AmericanFootball_AmericanFootballApi_LeagueTotalStandings_Response {

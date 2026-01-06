@@ -43,7 +43,16 @@ function getNFLPlayoffPicture(NFLTables: AmericanFootballStanding[]) {
 
   const afcInHunt = afcStandings.slice(7) ?? [];
 
-  const afcNonPlayoff = getPlayoffStatus(afcInHunt, afcWildCards);
+  // Get AFC division tables for divisional playoff checks
+  const afcDivisionTables = NFLTables.filter(
+    (t) => t.tableName.includes("AFC") && t.tableName !== "NFL 25/26, AFC",
+  );
+
+  const afcNonPlayoff = getPlayoffStatus(
+    afcInHunt,
+    afcWildCards,
+    afcDivisionTables,
+  );
 
   // --------- NFC ------------
   const nfcStandings =
@@ -53,7 +62,16 @@ function getNFLPlayoffPicture(NFLTables: AmericanFootballStanding[]) {
 
   const nfcInHunt = nfcStandings.slice(7) ?? [];
 
-  const nfcNonPlayoff = getPlayoffStatus(nfcInHunt, nfcWildCards);
+  // Get NFC division tables for divisional playoff checks
+  const nfcDivisionTables = NFLTables.filter(
+    (t) => t.tableName.includes("NFC") && t.tableName !== "NFL 25/26, NFC",
+  );
+
+  const nfcNonPlayoff = getPlayoffStatus(
+    nfcInHunt,
+    nfcWildCards,
+    nfcDivisionTables,
+  );
 
   // -------- Combine Results ------------
   function mapTeams(team: AmericanFootballTeamStanding, seedOverride?: number) {
@@ -91,24 +109,80 @@ function getNFLPlayoffPicture(NFLTables: AmericanFootballStanding[]) {
 function getPlayoffStatus(
   teamsNotInWildCard: AmericanFootballTeamStanding[],
   wildCardTeams: AmericanFootballTeamStanding[],
+  divisionTables: AmericanFootballStanding[],
 ) {
   const TotalGames = 17;
 
   const eliminated: AmericanFootballTeamStanding[] = [];
   const inTheHunt: AmericanFootballTeamStanding[] = [];
 
-  // Find the lowest win total among the wild-card teams
-  const minWildCardWins = Math.min(...wildCardTeams.map((t) => t.won));
+  // Helper function to calculate win percentage
+  const calculateWinPercentage = (team: AmericanFootballTeamStanding) => {
+    const totalGames = team.played;
+    if (totalGames === 0) return 0;
+    return (team.won + team.ties * 0.5) / totalGames;
+  };
+
+  // Helper function to calculate maximum possible win percentage
+  const calculateMaxWinPercentage = (team: AmericanFootballTeamStanding) => {
+    const gamesRemaining = TotalGames - team.played;
+    const maxWins = team.won + gamesRemaining;
+    return (maxWins + team.ties * 0.5) / TotalGames;
+  };
+
+  // Helper function to calculate win percentage
+  const calculateMinWinPercentage = (team: AmericanFootballTeamStanding) => {
+    if (team.played === 0) return 0;
+    return (team.won + team.ties * 0.5) / TotalGames;
+  };
+
+  // Find the lowest win percentage among the wild-card teams
+  const minWildCardWinPct = Math.min(
+    ...wildCardTeams.map(calculateWinPercentage),
+  );
+
+  // Find which division each team belongs to
+  const getTeamDivision = (teamId: number): AmericanFootballStanding | null => {
+    return (
+      divisionTables.find((divTable) =>
+        divTable.standings.some((standing) => standing.team.id === teamId),
+      ) || null
+    );
+  };
 
   teamsNotInWildCard.forEach((team) => {
-    const gamesRemaining = TotalGames - team.played;
-    const maxPossibleWins = team.won + gamesRemaining;
+    const maxPossibleWinPct = calculateMaxWinPercentage(team);
 
-    // Check for elimination based on max possible wins vs. lowest wild-card wins
-    if (maxPossibleWins < minWildCardWins) {
-      eliminated.push(team);
-    } else {
+    // Check 1: Can they catch the worst wild-card team?
+    const canMakeWildCard = maxPossibleWinPct >= minWildCardWinPct;
+
+    // Check 2: Can they win their division?
+    let canWinDivision = false;
+    const teamDivision = getTeamDivision(team.team.id);
+
+    if (teamDivision) {
+      // Find the current division leader (first team in division standings)
+      const divisionLeader = teamDivision.standings[0];
+
+      // Only check if this team is not already the division leader
+      if (divisionLeader.team.id !== team.team.id) {
+        const divisionLeaderCurrentWinPct =
+          calculateMinWinPercentage(divisionLeader);
+
+        // Check if team can achieve a better win percentage than current division leader by seasons end
+        canWinDivision =
+          TotalGames - team.played == 0
+            ? maxPossibleWinPct > divisionLeaderCurrentWinPct
+            : maxPossibleWinPct >= divisionLeaderCurrentWinPct;
+      }
+    }
+
+    // Team is in the hunt if they can make playoffs via either
+
+    if (canMakeWildCard || canWinDivision) {
       inTheHunt.push(team);
+    } else {
+      eliminated.push(team);
     }
   });
 

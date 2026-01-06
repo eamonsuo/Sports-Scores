@@ -96,7 +96,7 @@ const footerLinks: {
   {
     sport: SPORT.SURFING,
     // link: `/sports/${SPORT.SURFING}`,
-    link: `https://www.worldsurfleague.com/events/2025/ct`,
+    link: `https://www.worldsurfleague.com/events/2026/ct`,
     img: "/footer/surfboard.svg",
     altText: "Surfing",
   },
