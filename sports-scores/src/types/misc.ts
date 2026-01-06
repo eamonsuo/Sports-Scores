@@ -67,7 +67,6 @@ export type MatchSummary = {
   seriesName?: string;
   matchSlug?: string;
   seriesSlug?: string; // Used to navigate to cricket series
-  winDrawLoss?: { win: string; draw: string; loss: string };
 };
 
 export type MatchStatus = "LIVE" | "UPCOMING" | "COMPLETED";
