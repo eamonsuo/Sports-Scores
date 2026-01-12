@@ -4,6 +4,7 @@ import {
   CountryFlagCode,
   MatchSummary,
 } from "@/types/misc";
+import { Sofascore_Score } from "@/types/sofascore.api";
 
 const fallback = "/vercel.svg";
 
@@ -187,4 +188,60 @@ export function dateToCustomString(date: Date) {
       timeZone: "Australia/Brisbane",
     })
     .replaceAll(",", "");
+}
+
+export function formatPeriodScores(
+  homeScore: Sofascore_Score,
+  awayScore: Sofascore_Score,
+  showWinnerFirst: boolean = false,
+  winner?: number,
+) {
+  const periodKeys = Object.keys(homeScore).filter(
+    (key) => key.includes("period") && !key.includes("TieBreak"),
+  );
+
+  // Determine if we should reverse scores (show away/home instead of home/away)
+  const shouldReverse = showWinnerFirst && winner === 2;
+
+  const periodScores = periodKeys.map((periodKey) => {
+    const tieBreakKey = `${periodKey}TieBreak` as keyof Sofascore_Score;
+    const homeVal = homeScore[periodKey as keyof Sofascore_Score];
+    const awayVal = awayScore[periodKey as keyof Sofascore_Score];
+
+    let scoreStr = shouldReverse
+      ? `${awayVal}-${homeVal}`
+      : `${homeVal}-${awayVal}`;
+
+    // Check if there's a tie break for this period
+    if (
+      homeScore[tieBreakKey] !== undefined &&
+      awayScore[tieBreakKey] !== undefined
+    ) {
+      const homeTB = homeScore[tieBreakKey];
+      const awayTB = awayScore[tieBreakKey];
+      scoreStr += shouldReverse
+        ? ` (${awayTB}-${homeTB})`
+        : ` (${homeTB}-${awayTB})`;
+    }
+
+    return scoreStr;
+  });
+
+  return periodScores.join(", ");
+}
+
+export function setTennisMatchSummary(
+  status: string,
+  winner: number,
+  homeScore: Sofascore_Score,
+  awayScore: Sofascore_Score,
+) {
+  switch (status) {
+    case "notstarted":
+      return ``;
+    case "postponed":
+      return "Match Postponed";
+    default:
+      return formatPeriodScores(homeScore, awayScore, true, winner);
+  }
 }

@@ -1,7 +1,7 @@
-// import { TennisStanding } from "@/components/Tennis/TennisLadder";
-// import { TennisScoreBreakdown } from "@/components/Tennis/TennisScoreBreakdown";
 import { Match as BracketMatch } from "@/components/bracket/types";
 import { ScoreDifference } from "@/components/generic/ScoreChart";
+import { TennisRankingsPlayerRow } from "@/components/tennis/RankingsLeaderboard";
+import { TennisScoreBreakdown } from "@/components/tennis/TennisScoreBreakdown";
 import { MatchSummary, RoundDetails, TeamScoreDetails } from "./misc";
 import {
   Sofascore_CupTree,
@@ -10,13 +10,19 @@ import {
   Sofascore_Team,
 } from "./sofascore.api";
 
+export interface Tennis_Sofascore_Event extends Sofascore_Event {
+  homeTeamSeed?: string;
+  awayTeamSeed?: string;
+  firstToServe?: number;
+}
+
 export interface Tennis_TennisApi_FixturePage_Response {
-  events: Sofascore_Event[];
+  events: Tennis_Sofascore_Event[];
   hasNextPage: boolean;
 }
 
 export interface Tennis_TennisApi_Match_Response {
-  event: Sofascore_Event;
+  event: Tennis_Sofascore_Event;
 }
 
 export interface Tennis_TennisApi_TournamentStandings_Response {
@@ -53,7 +59,7 @@ export interface Tennis_TennisApi_MatchStatistics_Response {
 }
 
 export interface Tennis_TennisApi_MatchSchedules_Response {
-  events: Sofascore_Event[];
+  events: Tennis_Sofascore_Event[];
 }
 
 export interface Tennis_TennisApi_CupTrees_Response {
@@ -74,15 +80,15 @@ export interface Tennis_TennisApi_TournamentRounds_Response {
 }
 
 export interface Tennis_TennisApi_TournamentRoundMatch_Response {
-  events: Sofascore_Event[];
+  events: Tennis_Sofascore_Event[];
 }
 
 export interface Tennis_TennisApi_MatchDetails_Response {
-  event: Sofascore_Event;
+  event: Tennis_Sofascore_Event;
 }
 
 export interface Tennis_TennisApi_EventsByDate_Response {
-  events: Sofascore_Event[];
+  events: Tennis_Sofascore_Event[];
 }
 
 export interface Tennis_Ranking {
@@ -122,7 +128,7 @@ export interface TennisMatchPage {
     homeTeam: TeamScoreDetails;
     awayTeam: TeamScoreDetails;
     status: string;
-    // scoreBreakdown: TennisScoreBreakdown[];
+    scoreBreakdown: TennisScoreBreakdown[];
   };
   scoreEvents: ScoreDifference[];
 }
@@ -145,4 +151,8 @@ export interface BracketRounds {
   id: number;
   name: string;
   matches: MatchSummary[];
+}
+
+export interface TennisRankingPage {
+  players: TennisRankingsPlayerRow[];
 }

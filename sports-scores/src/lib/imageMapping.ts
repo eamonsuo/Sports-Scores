@@ -829,6 +829,7 @@ export function resolveCountryImage(countryName: string) {
       case "Bonaire Sint Eustatius Saba":
         return CountryFlagCode.BonaireSintEustatiusSaba;
       case "Bosnia And Herzegovina":
+      case "Bosnia & Herzegovina":
         return CountryFlagCode.BosniaAndHerzegovina;
       case "Botswana":
         return CountryFlagCode.Botswana;
@@ -1241,6 +1242,7 @@ export function resolveCountryImage(countryName: string) {
       case "Tunisia":
         return CountryFlagCode.Tunisia;
       case "Turkey":
+      case "Türkiye":
         return CountryFlagCode.Turkey;
       case "Turkmenistan":
         return CountryFlagCode.Turkmenistan;
