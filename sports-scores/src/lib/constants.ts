@@ -809,11 +809,31 @@ export const BASKETBALL_LEAGUES = [
 export const TENNIS_LEAGUES = [
   {
     name: "Australian Open",
-    slug: "ao",
+    slug: "2363",
     seasons: [
-      { name: "2026", slug: "68611" },
-      { name: "2025", slug: "57577" },
+      { name: "2026", slug: "80012" },
+      { name: "2025", slug: "69039" },
     ],
+  },
+  {
+    name: "Brisbane International - Men",
+    slug: "2437",
+    seasons: [{ name: "2026", slug: "80014" }],
+  },
+  {
+    name: "Brisbane International - Women",
+    slug: "2644",
+    seasons: [{ name: "2026", slug: "85608" }],
+  },
+  {
+    name: "ATP Rankings",
+    slug: "atpRank",
+    seasons: [{ name: "Current", slug: "" }],
+  },
+  {
+    name: "WTA Rankings",
+    slug: "wtaRank",
+    seasons: [{ name: "Current", slug: "" }],
   },
 ] as LeagueSeasonConfig[];
 

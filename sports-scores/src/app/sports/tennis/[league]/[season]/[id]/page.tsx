@@ -1,14 +1,13 @@
-import FootballScoreBreakdown from "@/components/football/FootballScoreBreakdown";
 import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
-import ScoreChart from "@/components/generic/ScoreChart";
 import Placeholder from "@/components/misc/Placeholder";
-import { footballMatchDetails } from "@/services/football.service";
+import TennisScoreBreakdown from "@/components/tennis/TennisScoreBreakdown";
+import { TennisMatchDetails } from "@/services/tennis.service";
 
 export default async function Page(props: {
   params: Promise<{ league: string; season: string; id: string }>;
 }) {
   const { league, season, id } = await props.params;
-  const pageData = await footballMatchDetails(Number(id));
+  const pageData = await TennisMatchDetails(Number(id));
 
   if (pageData === null || pageData.matchDetails === null) {
     return <Placeholder>NO DATA</Placeholder>;
@@ -21,26 +20,18 @@ export default async function Page(props: {
         awayInfo={pageData.matchDetails.awayTeam}
         status={pageData.matchDetails.status}
       />
-      <FootballScoreBreakdown
+      <TennisScoreBreakdown
         scoreData={pageData.matchDetails.scoreBreakdown}
         homeLogo={pageData.matchDetails.homeTeam.img}
         awayLogo={pageData.matchDetails.awayTeam.img}
       />
-      {pageData.scoreEvents && (
+      {/* {pageData.scoreEvents && (
         <ScoreChart
           scoreDifference={pageData.scoreEvents}
           homeLogo={pageData.matchDetails.homeTeam.img}
           awayLogo={pageData.matchDetails.awayTeam.img}
         />
-      )}
-      <iframe
-        className="mx-4 min-h-[350px]"
-        src={`https://widgets.sofascore.com/embed/attackMomentum?id=${id}&widgetTheme=dark`}
-      ></iframe>
-      <iframe
-        src={`https://widgets.sofascore.com/embed/lineups?id=${id}&widgetTheme=dark`}
-        className="mx-4 min-h-[800px]"
-      />
+      )} */}
     </div>
   );
 }

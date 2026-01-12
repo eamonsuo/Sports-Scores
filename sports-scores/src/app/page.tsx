@@ -1,7 +1,11 @@
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-between p-24 dark:text-neutral-400">
-      <p>Select a sport to get started</p>
+    <div className="container mx-auto p-6">
+      <h1 className="mb-6 text-3xl font-bold">Events Calendar</h1>
+      <div className="rounded-lg p-6 shadow">
+        <p>Events calendar content goes here.</p>
+        {/* Today's matches?? */}
+      </div>
     </div>
   );
 }

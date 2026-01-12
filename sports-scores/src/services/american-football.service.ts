@@ -91,13 +91,17 @@ export async function americanFootballMatches(league: number, season: number) {
                 name: shortenTeamNames(match.homeTeam.name),
                 score: match.homeScore.current?.toString() ?? "0",
                 img: resolveNFLImages(match.homeTeam.name),
-                winDrawLoss: `${match.homeTeamSeasonHistoricalForm?.wins ?? 0}-${match.homeTeamSeasonHistoricalForm?.losses ?? 0}${match.homeTeamSeasonHistoricalForm?.draws ? "-" + match.homeTeamSeasonHistoricalForm.draws : ""}`,
+                winDrawLoss: match.homeTeamSeasonHistoricalForm
+                  ? `${match.homeTeamSeasonHistoricalForm.wins ?? 0}-${match.homeTeamSeasonHistoricalForm.losses ?? 0}${match.homeTeamSeasonHistoricalForm.draws ? "-" + match.homeTeamSeasonHistoricalForm.draws : ""}`
+                  : null,
               },
               awayDetails: {
                 name: shortenTeamNames(match.awayTeam.name),
                 score: match.awayScore.current?.toString() ?? "0",
                 img: resolveNFLImages(match.awayTeam.name),
-                winDrawLoss: `${match.awayTeamSeasonHistoricalForm?.wins ?? 0}-${match.awayTeamSeasonHistoricalForm?.losses ?? 0}${match.awayTeamSeasonHistoricalForm?.draws ? "-" + match.awayTeamSeasonHistoricalForm.draws : ""}`,
+                winDrawLoss: match.awayTeamSeasonHistoricalForm
+                  ? `${match.awayTeamSeasonHistoricalForm.wins ?? 0}-${match.awayTeamSeasonHistoricalForm.losses ?? 0}${match.awayTeamSeasonHistoricalForm.draws ? "-" + match.awayTeamSeasonHistoricalForm.draws : ""}`
+                  : null,
               },
             } as MatchSummary;
           }),
@@ -312,13 +316,17 @@ export async function americanFootballCurrentMatches(
                 name: shortenTeamNames(match.homeTeam.name),
                 score: match.homeScore.current?.toString() ?? "0",
                 img: resolveNFLImages(match.homeTeam.name),
-                winDrawLoss: `${match.homeTeamSeasonHistoricalForm?.wins ?? 0}-${match.homeTeamSeasonHistoricalForm?.losses ?? 0}${match.homeTeamSeasonHistoricalForm?.draws ? "-" + match.homeTeamSeasonHistoricalForm.draws : ""}`,
+                winDrawLoss: match.homeTeamSeasonHistoricalForm
+                  ? `${match.homeTeamSeasonHistoricalForm?.wins ?? 0}-${match.homeTeamSeasonHistoricalForm?.losses ?? 0}${match.homeTeamSeasonHistoricalForm?.draws ? "-" + match.homeTeamSeasonHistoricalForm.draws : ""}`
+                  : null,
               },
               awayDetails: {
                 name: shortenTeamNames(match.awayTeam.name),
                 score: match.awayScore.current?.toString() ?? "0",
                 img: resolveNFLImages(match.awayTeam.name),
-                winDrawLoss: `${match.awayTeamSeasonHistoricalForm?.wins ?? 0}-${match.awayTeamSeasonHistoricalForm?.losses ?? 0}${match.awayTeamSeasonHistoricalForm?.draws ? "-" + match.awayTeamSeasonHistoricalForm.draws : ""}`,
+                winDrawLoss: match.awayTeamSeasonHistoricalForm
+                  ? `${match.awayTeamSeasonHistoricalForm?.wins ?? 0}-${match.awayTeamSeasonHistoricalForm?.losses ?? 0}${match.awayTeamSeasonHistoricalForm?.draws ? "-" + match.awayTeamSeasonHistoricalForm.draws : ""}`
+                  : null,
               },
             } as MatchSummary;
           }),
