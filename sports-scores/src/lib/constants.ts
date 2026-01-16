@@ -808,12 +808,35 @@ export const BASKETBALL_LEAGUES = [
 
 export const TENNIS_LEAGUES = [
   {
-    name: "Australian Open",
+    name: "Australian Open - Mens Singles",
     slug: "2363",
     seasons: [
       { name: "2026", slug: "80012" },
       { name: "2025", slug: "69039" },
     ],
+  },
+  {
+    name: "Australian Open - Womens Singles",
+    slug: "2571",
+    seasons: [
+      { name: "2026", slug: "80013" },
+      { name: "2025", slug: "67042" },
+    ],
+  },
+  {
+    name: "Australian Open - Mens Doubles",
+    slug: "2455",
+    seasons: [{ name: "2026", slug: "85948" }],
+  },
+  {
+    name: "Australian Open - Womens Doubles",
+    slug: "2650",
+    seasons: [{ name: "2026", slug: "85949" }],
+  },
+  {
+    name: "Australian Open - Mixed Doubles",
+    slug: "2403",
+    seasons: [{ name: "2026", slug: "85950" }],
   },
   {
     name: "Brisbane International - Men",
