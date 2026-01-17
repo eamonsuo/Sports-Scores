@@ -19,7 +19,7 @@ export default async function SportsLayout({
       />
 
       {children}
-      <APIStatus status={quota?.percentUsed ?? "N/A"} reset="per month" />
+      <APIStatus status={quota?.percentUsed ?? "N/A"} reset="per day" />
     </div>
   );
 }

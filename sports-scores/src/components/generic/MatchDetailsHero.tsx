@@ -6,8 +6,8 @@ export default function MatchDetailsHero({
   awayInfo,
   status,
 }: {
-  homeInfo: { img?: string; name: string; score: string };
-  awayInfo: { img?: string; name: string; score: string };
+  homeInfo: { img?: string; name: string; score: string | string[] };
+  awayInfo: { img?: string; name: string; score: string | string[] };
   status: string;
 }) {
   return (

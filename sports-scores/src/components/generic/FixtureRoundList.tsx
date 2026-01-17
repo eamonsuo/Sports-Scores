@@ -10,9 +10,11 @@ import FixtureList from "./FixtureList";
 export default function FixtureRoundList({
   data,
   curRound,
+  cardVariant,
 }: {
   data: RoundDetails[];
   curRound: string;
+  cardVariant?: "tennis" | "default";
 }) {
   const [round, setRound] = useState(curRound); //need to put in parent so that it only gets set once. Need to change page structure?
   const btnListRef = useRef<HTMLDivElement>(null); //Ref for the div which contains all round buttons
@@ -100,6 +102,7 @@ export default function FixtureRoundList({
       >
         <FixtureList
           data={data.find((item) => item.roundLabel === round)?.matches ?? []}
+          cardVariant={cardVariant}
         />
         {(data.find((item) => item.roundLabel === round)?.byes?.length ??
         0 > 0) ? (

@@ -62,6 +62,7 @@ export async function americanFootballMatches(league: number, season: number) {
             (item) =>
               item.roundInfo?.round === round || item.roundInfo?.name === round,
           )
+
           .map((match) => {
             var startDate = new Date(0);
             startDate.setUTCSeconds(match.startTimestamp);
@@ -119,14 +120,15 @@ export async function americanFootballMatches(league: number, season: number) {
     }),
 
     currentRound:
-      (nextMatches?.events[0]?.roundInfo?.name ??
-      nextMatches?.events[0]?.roundInfo?.round !== undefined)
-        ? `Week ${
-            nextMatches?.events[0]?.roundInfo?.round ??
-            lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo
-              ?.round ??
-            0
-          }`
+      nextMatches !== null && nextMatches.events.length > 0
+        ? nextMatches?.events[0]?.roundInfo?.name !== undefined
+          ? nextMatches?.events[0]?.roundInfo?.name
+          : `Week ${
+              nextMatches?.events[0]?.roundInfo?.round ??
+              lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo
+                ?.round ??
+              0
+            }`
         : lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo?.name,
   } as AmericanFootballFixturesPage;
 }

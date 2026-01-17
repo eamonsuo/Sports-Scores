@@ -19,6 +19,7 @@ export default async function Page(props: {
     <FixtureRoundList
       data={pageData.fixtures}
       curRound={pageData.currentRound}
+      cardVariant="tennis"
     />
   );
 }

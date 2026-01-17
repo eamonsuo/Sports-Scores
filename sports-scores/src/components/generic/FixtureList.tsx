@@ -1,10 +1,20 @@
 import MatchSummaryCard from "@/components/generic/MatchSummaryCard";
+import TennisMatchCard from "@/components/tennis/TennisMatchCard";
 import { MatchSummary } from "@/types/misc";
 import React from "react";
 import SectionDate from "./SectionDate";
 
 // Assumes data prop is already sorted in desired order
-export default function FixtureList({ data }: { data: MatchSummary[] }) {
+export default function FixtureList({
+  data,
+  cardVariant = "default",
+}: {
+  data: MatchSummary[];
+  cardVariant?: "tennis" | "default";
+}) {
+  const CardComponent =
+    cardVariant === "tennis" ? TennisMatchCard : MatchSummaryCard;
+
   const current_date: Date = new Date(Date.now());
 
   let sectionDate: Date = new Date("2000-01-01");
@@ -46,7 +56,7 @@ export default function FixtureList({ data }: { data: MatchSummary[] }) {
                 currentDate={currentMatch}
               />
             )}
-            <MatchSummaryCard
+            <CardComponent
               id={item.id}
               href={`/sports/${item.sport}/${item.matchSlug ?? item.id}`}
               homeInfo={item.homeDetails}
@@ -56,6 +66,7 @@ export default function FixtureList({ data }: { data: MatchSummary[] }) {
               venue={item.venue}
               timer={{ display: item.timer }}
               topInfo={undefined}
+              winner={item.winner}
             />
           </React.Fragment>
         );

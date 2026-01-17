@@ -19,6 +19,7 @@ import {
 } from "@/lib/projUtils";
 import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
 import {
+  Tennis_Sofascore_Event,
   TennisBracketPage,
   TennisFixturesPage,
   TennisMatchPage,
@@ -61,42 +62,7 @@ export async function tennisTournamentMatches(
         matches: matches
           .filter((item) => item.roundInfo?.name === round)
           .map((match) => {
-            let startDate = new Date(0);
-            startDate.setUTCSeconds(match.startTimestamp);
-
-            return {
-              startDate: startDate,
-              roundLabel: `${match.roundInfo?.name}`,
-              timer:
-                match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
-                  : match.status.description,
-              id: match.id,
-              matchSlug: `${tournamentId}/${seasonId}/${match.id}`,
-              sport: SPORT.TENNIS,
-              status: match.status.description,
-              venue: "",
-              summaryText: setTennisMatchSummary(
-                match.status.type,
-                match.winnerCode,
-                match.homeScore,
-                match.awayScore,
-              ),
-              homeDetails: {
-                name: shortenTeamNames(match.homeTeam.name),
-                score: match.homeScore.current?.toString() ?? "0",
-                img: resolveTennisImage(
-                  match.homeTeam.country.name ?? match.homeTeam.name,
-                ),
-              },
-              awayDetails: {
-                name: shortenTeamNames(match.awayTeam.name),
-                score: match.awayScore.current?.toString() ?? "0",
-                img: resolveTennisImage(
-                  match.awayTeam.country.name ?? match.awayTeam.name,
-                ),
-              },
-            } as MatchSummary;
+            return mapTennisMatches(match);
           }),
         roundLabel: `${round}`,
       } as RoundDetails;
@@ -123,43 +89,7 @@ export async function TennisPlayerMatches(teamId: number) {
 
   return {
     fixtures: matches.toReversed().map((match) => {
-      let startDate = new Date(0);
-      startDate.setUTCSeconds(match.startTimestamp);
-
-      return {
-        startDate: startDate,
-        roundLabel: `${match?.roundInfo?.name ?? "--"}`,
-        timer:
-          match.status.type === "notstarted"
-            ? toShortTimeString(startDate)
-            : match.status.description,
-        id: match.id,
-        matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
-        sport: SPORT.TENNIS,
-        status: match.status.description,
-        venue: "",
-        summaryText: setTennisMatchSummary(
-          match.status.type,
-          match.winnerCode,
-          match.homeScore,
-          match.awayScore,
-        ),
-        homeDetails: {
-          name: shortenTeamNames(match.homeTeam.name),
-          score: match.homeScore.current?.toString() ?? "0",
-          img: resolveTennisImage(
-            match.homeTeam.country.name ?? match.homeTeam.name,
-          ),
-        },
-        awayDetails: {
-          name: shortenTeamNames(match.awayTeam.name),
-          score: match.awayScore.current?.toString() ?? "0",
-          img: resolveTennisImage(
-            match.awayTeam.country.name ?? match.awayTeam.name,
-          ),
-        },
-        otherDetail: match.tournament.name,
-      } as MatchSummary;
+      return mapTennisMatches(match);
     }),
   } as TennisTeamFixturesPage;
 }
@@ -319,45 +249,11 @@ export async function TennisMatchesByDate(date: Date) {
         matches: matches.events
           .filter((item) => item.tournament.uniqueTournament.id === leagueId)
           .map((match) => {
-            let startDate = new Date(0);
-            startDate.setUTCSeconds(match.startTimestamp);
             if (firstTournament === "") {
               firstTournament = roundLabel;
             }
 
-            return {
-              startDate: startDate,
-              roundLabel: roundLabel,
-              timer:
-                match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
-                  : match.status.description,
-              id: match.id,
-              matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
-              sport: SPORT.TENNIS,
-              status: match.status.description,
-              venue: "",
-              summaryText: setTennisMatchSummary(
-                match.status.type,
-                match.winnerCode,
-                match.homeScore,
-                match.awayScore,
-              ),
-              homeDetails: {
-                name: shortenTeamNames(match.homeTeam.name),
-                score: match.homeScore.current?.toString() ?? "0",
-                img: resolveTennisImage(
-                  match.homeTeam.country.name ?? match.homeTeam.name,
-                ),
-              },
-              awayDetails: {
-                name: shortenTeamNames(match.awayTeam.name),
-                score: match.awayScore.current?.toString() ?? "0",
-                img: resolveTennisImage(
-                  match.awayTeam.country.name ?? match.awayTeam.name,
-                ),
-              },
-            } as MatchSummary;
+            return mapTennisMatches(match);
           }),
         roundLabel: roundLabel,
       } as RoundDetails;
@@ -476,4 +372,79 @@ export async function TennisWorldRankings(rankingList: RankingList) {
       previousRank: rank.previousRanking,
     })),
   } as TennisRankingPage;
+}
+
+function mapTennisMatches(match: Tennis_Sofascore_Event) {
+  let startDate = new Date(0);
+  startDate.setUTCSeconds(match.startTimestamp);
+  return {
+    startDate: startDate,
+    roundLabel: `${match.roundInfo?.name}`,
+    timer:
+      match.status.type === "notstarted"
+        ? toShortTimeString(startDate)
+        : match.status.description,
+    id: match.id,
+    matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
+    sport: SPORT.TENNIS,
+    status: match.status.description,
+    venue: "",
+    summaryText: setTennisMatchSummary(
+      match.status.type,
+      match.winnerCode,
+      match.homeTeam.name,
+      match.awayTeam.name,
+    ),
+    homeDetails: {
+      name:
+        `${match.homeTeamSeed ? match.homeTeamSeed + " " : ""}` +
+        shortenTeamNames(match.homeTeam.name),
+      score: [
+        match.homeScore.period1 !== undefined
+          ? `${match.homeScore.period1}${match.homeScore.period1TieBreak !== undefined ? ` (${match.homeScore.period1TieBreak})` : ""}`
+          : null,
+        match.homeScore.period2 !== undefined
+          ? `${match.homeScore.period2}${match.homeScore.period2TieBreak !== undefined ? ` (${match.homeScore.period2TieBreak})` : ""}`
+          : null,
+        match.homeScore.period3 !== undefined
+          ? `${match.homeScore.period3}${match.homeScore.period3TieBreak !== undefined ? ` (${match.homeScore.period3TieBreak})` : ""}`
+          : null,
+        match.homeScore.period4 !== undefined
+          ? `${match.homeScore.period4}${match.homeScore.period4TieBreak !== undefined ? ` (${match.homeScore.period4TieBreak})` : ""}`
+          : null,
+        match.homeScore.period5 !== undefined
+          ? `${match.homeScore.period5}${match.homeScore.period5TieBreak !== undefined ? ` (${match.homeScore.period5TieBreak})` : ""}`
+          : null,
+      ].filter((s): s is string => s !== null),
+      img: resolveTennisImage(
+        match.homeTeam.country.name ?? match.homeTeam.name,
+      ),
+    },
+    awayDetails: {
+      name:
+        `${match.awayTeamSeed ? match.awayTeamSeed + " " : ""}` +
+        shortenTeamNames(match.awayTeam.name),
+      score: [
+        match.awayScore.period1 !== undefined
+          ? `${match.awayScore.period1}${match.awayScore.period1TieBreak !== undefined ? ` (${match.awayScore.period1TieBreak})` : ""}`
+          : null,
+        match.awayScore.period2 !== undefined
+          ? `${match.awayScore.period2}${match.awayScore.period2TieBreak !== undefined ? ` (${match.awayScore.period2TieBreak})` : ""}`
+          : null,
+        match.awayScore.period3 !== undefined
+          ? `${match.awayScore.period3}${match.awayScore.period3TieBreak !== undefined ? ` (${match.awayScore.period3TieBreak})` : ""}`
+          : null,
+        match.awayScore.period4 !== undefined
+          ? `${match.awayScore.period4}${match.awayScore.period4TieBreak !== undefined ? ` (${match.awayScore.period4TieBreak})` : ""}`
+          : null,
+        match.awayScore.period5 !== undefined
+          ? `${match.awayScore.period5}${match.awayScore.period5TieBreak !== undefined ? ` (${match.awayScore.period5TieBreak})` : ""}`
+          : null,
+      ].filter((s): s is string => s !== null),
+      img: resolveTennisImage(
+        match.awayTeam.country.name ?? match.awayTeam.name,
+      ),
+    },
+    winner: match.winnerCode,
+  } as MatchSummary;
 }
