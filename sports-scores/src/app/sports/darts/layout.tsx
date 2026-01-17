@@ -14,7 +14,7 @@ export default async function SportsLayout({
     <div className="flex h-full flex-col">
       <LeagueSeasonToggle sport={SPORT.DARTS} leagues={DARTS_LEAGUES} />
       {children}
-      <APIStatus status={quota?.percentUsed ?? "N/A"} reset="per month" />
+      <APIStatus status={"N/A"} />
     </div>
   );
 }
