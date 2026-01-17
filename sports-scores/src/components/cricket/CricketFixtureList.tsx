@@ -73,8 +73,16 @@ export default function CricketFixtureList({ data }: { data: MatchSummary[] }) {
             <CricketMatchSummaryCard
               id={item.id}
               hrefMatch={`/sports/cricket/match/${item.matchSlug}`}
-              homeInfo={item.homeDetails}
-              awayInfo={item.awayDetails}
+              homeInfo={
+                Array.isArray(item.homeDetails)
+                  ? item.homeDetails[0]
+                  : item.homeDetails
+              }
+              awayInfo={
+                Array.isArray(item.awayDetails)
+                  ? item.awayDetails[0]
+                  : item.awayDetails
+              }
               matchSummary={item.summaryText}
               bottomInfo={item.otherDetail}
               venue={item.venue}

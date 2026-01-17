@@ -46,7 +46,7 @@ type NavButtonGroupProps = {
 
 export type TeamScoreDetails = {
   img?: string;
-  score: string;
+  score: string | string[];
   name: string;
   winDrawLoss?: string;
 };
@@ -67,6 +67,7 @@ export type MatchSummary = {
   seriesName?: string;
   matchSlug?: string;
   seriesSlug?: string; // Used to navigate to cricket series
+  winner?: number;
 };
 
 export type MatchStatus = "LIVE" | "UPCOMING" | "COMPLETED";

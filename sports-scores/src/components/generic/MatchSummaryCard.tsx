@@ -1,4 +1,5 @@
 import fallback from "@/../public/vercel.svg";
+import { TeamScoreDetails } from "@/types/misc";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,8 +18,8 @@ export default function MatchSummaryCard({
   id: number;
   href: string;
   matchSummary: string;
-  homeInfo: { name: string; score: string; img?: string; winDrawLoss?: string };
-  awayInfo: { name: string; score: string; img?: string; winDrawLoss?: string };
+  homeInfo: TeamScoreDetails;
+  awayInfo: TeamScoreDetails;
   timer: { display: string; displayColour?: "green" | "yellow" | "white" };
   venue: string;
   topInfo?: string;

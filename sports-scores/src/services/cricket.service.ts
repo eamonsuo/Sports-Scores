@@ -19,7 +19,15 @@ import {
 } from "@/types/cricket";
 import { MatchStatus, MatchSummary, SPORT } from "@/types/misc";
 
-const excludedSeries = ["CSA", "The Ford", "County", "T10"];
+const excludedSeries = [
+  "CSA",
+  "The Ford",
+  "County",
+  "T10",
+  "SA20",
+  "Super Smash",
+  "Bangladesh Premier League",
+];
 
 // Client-side fetch for matches by date (calls API route)
 export async function cricketMatchesByDateClient(date: Date) {

@@ -233,8 +233,8 @@ export function formatPeriodScores(
 export function setTennisMatchSummary(
   status: string,
   winner: number,
-  homeScore: Sofascore_Score,
-  awayScore: Sofascore_Score,
+  homeName: string,
+  awayName: string,
 ) {
   switch (status) {
     case "notstarted":
@@ -242,6 +242,6 @@ export function setTennisMatchSummary(
     case "postponed":
       return "Match Postponed";
     default:
-      return formatPeriodScores(homeScore, awayScore, true, winner);
+      return `${winner === 1 ? homeName : awayName} wins`;
   }
 }
