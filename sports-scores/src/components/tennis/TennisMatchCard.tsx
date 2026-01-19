@@ -46,7 +46,7 @@ export default function TennisMatchCard({
             className={clsx(
               "rounded px-2 py-0.5 text-xs",
               timer.displayColour === "green" &&
-                "bg-green-500 text-white dark:bg-green-600",
+                "bg-green-500 text-neutral-200 dark:bg-green-700",
               timer.displayColour === "yellow" &&
                 "bg-yellow-500 text-black dark:bg-yellow-600",
               !timer.displayColour &&

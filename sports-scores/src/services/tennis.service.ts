@@ -13,6 +13,7 @@ import {
 import { TENNIS_LEAGUES } from "@/lib/constants";
 import { resolveTennisImage } from "@/lib/imageMapping";
 import {
+  dateToCustomString,
   setTennisMatchSummary,
   shortenTeamNames,
   toShortTimeString,
@@ -60,6 +61,7 @@ export async function tennisTournamentMatches(
     fixtures: rounds.map((round) => {
       return {
         matches: matches
+          .filter((match) => match.status.type !== "canceled")
           .filter((item) => item.roundInfo?.name === round)
           .map((match) => {
             return mapTennisMatches(match);
@@ -88,9 +90,12 @@ export async function TennisPlayerMatches(teamId: number) {
   const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
 
   return {
-    fixtures: matches.toReversed().map((match) => {
-      return mapTennisMatches(match);
-    }),
+    fixtures: matches
+      .toReversed()
+
+      .map((match) => {
+        return mapTennisMatches(match);
+      }),
   } as TennisTeamFixturesPage;
 }
 
@@ -266,50 +271,41 @@ export async function TennisMatchesByDate(date: Date) {
 export async function tennisBrackets(tournamentId: number, seasonId: number) {
   const trees = await fetchTennisBracket(tournamentId, seasonId);
 
-  console.log("🟢 Starting tennisBrackets processing...");
-  console.log("Trees count:", trees?.cupTrees?.length);
-
   if (!trees) {
     return null;
   }
 
-  console.log("Creating tempBrackets...");
   const tempBrackets = trees.cupTrees.map((tree) => {
-    console.log(`Processing tree: ${tree.name}, rounds: ${tree.rounds.length}`);
     return {
       id: tree.id,
       name: tree.name,
       currentRound: tree.currentRound,
       matches: tree.rounds.flatMap((round, roundIndex) =>
-        round.blocks.map(
-          (match) =>
-            ({
-              id: match.blockId,
-              nextMatchId: null,
-              participants: match.participants.map((team, teamIndex) => ({
-                id: team.team.id,
-                isWinner: team.winner,
-                name: team.team.name,
-                resultText:
-                  teamIndex === 0 ? match.homeTeamScore : match.awayTeamScore,
-                status: match.finished ? "PLAYED" : "SCHEDULED",
-              })),
-              startTime: match.seriesStartDateTimestamp?.toString(),
-              tournamentRoundText: (roundIndex + 1).toString(),
-              state: match.finished ? "PLAYED" : "SCHEDULED",
-              name: "",
-              href: `./${match?.events?.[0] ?? ""}`,
-            }) as BracketMatch,
-        ),
+        round.blocks.map((match) => {
+          let startDate = new Date(0);
+          startDate.setUTCSeconds(match.seriesStartDateTimestamp ?? 0);
+          return {
+            id: match.blockId,
+            nextMatchId: null,
+            participants: match.participants.map((team, teamIndex) => ({
+              id: team.team.id,
+              isWinner: team.winner,
+              name: team.team.name,
+              resultText:
+                teamIndex === 0 ? match.homeTeamScore : match.awayTeamScore,
+              status: match.finished ? "PLAYED" : "SCHEDULED",
+            })),
+            startTime: dateToCustomString(startDate),
+            tournamentRoundText: (roundIndex + 1).toString(),
+            state: match.finished ? "PLAYED" : "SCHEDULED",
+            name: "",
+            href: `./${match?.events?.[0] ?? ""}`,
+          } as BracketMatch;
+        }),
       ),
     };
   });
-  console.log(
-    "tempBrackets created, total matches:",
-    tempBrackets.flatMap((b) => b.matches).length,
-  );
 
-  console.log("Setting up nextMatchId connections...");
   // Build a lookup map first to avoid O(n²) complexity
   const matchMap = new Map();
   tempBrackets.forEach((bracket) => {
@@ -333,7 +329,6 @@ export async function tennisBrackets(tournamentId: number, seasonId: number) {
     });
   });
 
-  console.log("tennisBrackets processing complete");
   return {
     brackets: tempBrackets,
   } as TennisBracketPage;
@@ -384,6 +379,7 @@ function mapTennisMatches(match: Tennis_Sofascore_Event) {
       match.status.type === "notstarted"
         ? toShortTimeString(startDate)
         : match.status.description,
+    timerDisplayColour: match.status.type === "inprogress" ? "green" : null,
     id: match.id,
     matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
     sport: SPORT.TENNIS,
@@ -394,6 +390,8 @@ function mapTennisMatches(match: Tennis_Sofascore_Event) {
       match.winnerCode,
       match.homeTeam.name,
       match.awayTeam.name,
+      match.homeScore.current ?? 0,
+      match.awayScore.current ?? 0,
     ),
     homeDetails: {
       name:

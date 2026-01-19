@@ -65,6 +65,8 @@ export async function baseballMatches(tournamentId: number, seasonId: number) {
                 match.status.type === "notstarted"
                   ? toShortTimeString(startDate)
                   : match.status.description,
+              timerDisplayColour:
+                match.status.type === "inprogress" ? "green" : null,
               id: match.id,
               matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
               sport: SPORT.BASEBALL,
@@ -301,6 +303,8 @@ export async function baseballCurrentMatches(
                 match.status.type === "notstarted"
                   ? toShortTimeString(startDate)
                   : match.status.description,
+              timerDisplayColour:
+                match.status.type === "inprogress" ? "green" : null,
               id: match.id,
               matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
               sport: SPORT.BASEBALL,

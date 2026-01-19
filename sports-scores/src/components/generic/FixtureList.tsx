@@ -64,7 +64,10 @@ export default function FixtureList({
               matchSummary={item.summaryText}
               bottomInfo={item.otherDetail}
               venue={item.venue}
-              timer={{ display: item.timer }}
+              timer={{
+                display: item.timer,
+                displayColour: item.timerDisplayColour,
+              }}
               topInfo={undefined}
               winner={item.winner}
             />
