@@ -73,6 +73,8 @@ export async function rugbyLeagueMatches(
                 match.status.type === "notstarted"
                   ? toShortTimeString(startDate)
                   : match.status.description,
+              timerDisplayColour:
+                match.status.type === "inprogress" ? "green" : null,
               id: match.id,
               matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
               sport: SPORT.RUGBY_LEAGUE,
@@ -253,6 +255,8 @@ export async function rugbyLeagueCurrentMatches(
                 match.status.type === "notstarted"
                   ? toShortTimeString(startDate)
                   : match.status.description,
+              timerDisplayColour:
+                match.status.type === "inprogress" ? "green" : null,
               id: match.id,
               matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
               sport: SPORT.RUGBY_LEAGUE,

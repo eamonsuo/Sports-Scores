@@ -76,6 +76,8 @@ export async function basketballMatches(
                 match.status.type === "notstarted"
                   ? toShortTimeString(startDate)
                   : match.status.description,
+              timerDisplayColour:
+                match.status.type === "inprogress" ? "green" : null,
               id: match.id,
               matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
               sport: SPORT.BASKETBALL,
@@ -290,6 +292,8 @@ export async function basketballCurrentMatches(
                 match.status.type === "notstarted"
                   ? toShortTimeString(startDate)
                   : match.status.description,
+              timerDisplayColour:
+                match.status.type === "inprogress" ? "green" : null,
               id: match.id,
               matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
               sport: SPORT.BASKETBALL,

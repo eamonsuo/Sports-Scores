@@ -68,6 +68,8 @@ export async function footballMatches(tournamentId: number, seasonId: number) {
                 match.status.type === "notstarted"
                   ? toShortTimeString(startDate)
                   : match.status.description,
+              timerDisplayColour:
+                match.status.type === "inprogress" ? "green" : null,
               id: match.id,
               matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
               sport: SPORT.FOOTBALL,
@@ -131,6 +133,7 @@ export async function footballTeamMatches(teamId: number) {
           match.status.type === "notstarted"
             ? toShortTimeString(startDate)
             : match.status.description,
+        timerDisplayColour: match.status.type === "inprogress" ? "green" : null,
         id: match.id,
         matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
         sport: SPORT.FOOTBALL,
@@ -298,6 +301,8 @@ export async function footballCurrentMatches(
                 match.status.type === "notstarted"
                   ? toShortTimeString(startDate)
                   : match.status.description,
+              timerDisplayColour:
+                match.status.type === "inprogress" ? "green" : null,
               id: match.id,
               matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
               sport: SPORT.FOOTBALL,

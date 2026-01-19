@@ -235,13 +235,26 @@ export function setTennisMatchSummary(
   winner: number,
   homeName: string,
   awayName: string,
+  homeScore: number,
+  awayScore: number,
 ) {
   switch (status) {
     case "notstarted":
       return ``;
     case "postponed":
       return "Match Postponed";
+    case "finished":
+      return winner !== undefined
+        ? `${winner === 1 ? homeName : awayName} wins`
+        : "";
+    case "inprogress":
+      if (homeScore > awayScore) {
+        return `${homeName} leading ${homeScore}-${awayScore}`;
+      } else if (awayScore > homeScore) {
+        return `${awayName} leading ${awayScore}-${homeScore}`;
+      }
+      return `Match tied at ${homeScore}-${awayScore}`;
     default:
-      return `${winner === 1 ? homeName : awayName} wins`;
+      return "";
   }
 }

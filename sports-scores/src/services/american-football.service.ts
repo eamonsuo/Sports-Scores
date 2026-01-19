@@ -75,6 +75,8 @@ export async function americanFootballMatches(league: number, season: number) {
                 match.status.type === "notstarted"
                   ? toShortTimeString(startDate)
                   : match.status.description,
+              timerDisplayColour:
+                match.status.type === "inprogress" ? "green" : null,
               id: match.id,
               matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
               sport: SPORT.AMERICAN_FOOTBALL,
@@ -301,6 +303,8 @@ export async function americanFootballCurrentMatches(
                 match.status.type === "notstarted"
                   ? toShortTimeString(startDate)
                   : match.status.description,
+              timerDisplayColour:
+                match.status.type === "inprogress" ? "green" : null,
               id: match.id,
               matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
               sport: SPORT.AMERICAN_FOOTBALL,

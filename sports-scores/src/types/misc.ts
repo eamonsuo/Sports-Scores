@@ -64,6 +64,7 @@ export type MatchSummary = {
   awayDetails: TeamScoreDetails;
   roundLabel?: string;
   timer: string;
+  timerDisplayColour?: "green" | "yellow";
   seriesName?: string;
   matchSlug?: string;
   seriesSlug?: string; // Used to navigate to cricket series
