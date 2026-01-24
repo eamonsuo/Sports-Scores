@@ -332,7 +332,7 @@ export async function footballCurrentMatches(
       } as RoundDetails;
     }),
 
-    currentRound: "NRL",
+    currentRound: leagueIdToName[rounds[0]] ?? "",
   } as FootballTodayPage;
 }
 

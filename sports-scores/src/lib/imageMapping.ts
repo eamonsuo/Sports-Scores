@@ -557,90 +557,363 @@ export function resolveFootballTeamImage(teamName: string) {
   switch (teamName) {
     // A Leagues
     case "Brisbane Roar":
-      return "https://aleagues.com.au/wp-content/themes/keepup/source/images/club-logos/v046no35g7ebk8lytdjmfb43.png";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/5326.png";
     case "Newcastle Jets":
-      return "https://aleagues.com.au/wp-content/themes/keepup/source/images/club-logos/chu9blh367xs3yumct5tqto2q.png";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/5323.png";
     case "Macarthur FC":
-      return "https://aleagues.com.au/wp-content/themes/keepup/source/images/club-logos/7jv344gvcvgqg7oeuc9u554dm.png";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/19340.png";
     case "Sydney FC":
-      return "https://aleagues.com.au/wp-content/themes/keepup/source/images/club-logos/38ui5tfi8anjuh533emny2tz1.png";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/5327.png";
     case "Auckland FC":
-      return "https://aleagues.com.au/wp-content/themes/keepup/source/images/club-logos/1csft77zeexrhddgjoxuht7v8.png";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/22344.png";
     case "Adelaide United":
-      return "https://aleagues.com.au/wp-content/themes/keepup/source/images/club-logos/6lezh5aazy0xca1800e5dqxwl.png";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/5321.png";
     case "Melbourne Victory":
-      return "https://aleagues.com.au/wp-content/themes/keepup/source/images/club-logos/9xmhnv6im8h7c9e17oqvcx8gl.png";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/5328.png";
     case "Melbourne City":
-      return "https://aleagues.com.au/wp-content/themes/keepup/source/images/club-logos/c33jm806py6adse5wv9wx6ch1.png";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/11143.png";
     case "Wellington Phoenix":
-      return "https://aleagues.com.au/wp-content/themes/keepup/source/images/club-logos/6j4xzc2g1eeafo6v1f38d4x22.png";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/8352.png";
     case "Central Coast Mariners":
-      return "https://aleagues.com.au/wp-content/themes/keepup/source/images/club-logos/c4ygb6mnh53kpl2mpxe52l8jw.png";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/5325.png";
     case "Western Sydney Wanderers":
-      return "https://aleagues.com.au/wp-content/themes/keepup/source/images/club-logos/6h553bwfqkoxayuv80uikkn42.png";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/13696.png";
     case "Perth Glory":
-      return "https://aleagues.com.au/wp-content/themes/keepup/source/images/club-logos/cuj4qahgk4idsme4dg8clk6gw.png";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/5322.png";
     case "Canberra United":
-      return "https://aleagues.com.au/wp-content/themes/keepup/source/images/club-logos/3xwecbfhkevrgr74iwq00yege.png ";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/5321.png";
 
     // EPL
     case "Arsenal":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/3.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/359.png";
     case "Manchester City":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/43.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/382.png";
     case "Manchester United":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/1.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/360.png";
     case "Chelsea":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/8.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/363.png";
     case "Liverpool":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/14.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/364.png";
     case "Tottenham Hotspur":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/6.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/367.png";
     case "Everton":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/11.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/368.png";
     case "West Ham United":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/21.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/371.png";
     case "Leicester City":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/14.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/375.png";
     case "Leeds United":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/2.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/357.png";
     case "Southampton":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/20.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/376.png";
     case "Newcastle United":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/4.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/361.png";
     case "Wolverhampton Wanderers":
     case "Wolverhampton":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/39.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/380.png";
     case "Aston Villa":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/7.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/362.png";
     case "Crystal Palace":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/31.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/384.png";
     case " Brighton & Hove Albion":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/3.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/331.png";
     case "Burnley":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/90.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/379.png";
     case "Norwich City":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/45.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/381.png";
     case "Fulham":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/54.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/370.png";
     case "Sheffield United":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/90.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/356.png";
     case "Huddersfield Town":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/90.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/377.png";
     case "West Bromwich Albion":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/90.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/383.png";
     case "Nottingham Forest":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/17.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/393.png";
     case "Brighton & Hove Albion":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/3.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/331.png";
     case "Bournemouth":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/90.svg";
-    case "Aston Villa":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/7.svg";
+    case "AFC Bournemouth":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/349.png";
     case "Brentford":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/94.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/337.png";
     case "Sunderland":
-      return "https://resources.premierleague.com/premierleague25/badges-alt/56.svg";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/366.png";
+    case "Ipswich Town":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/373.png";
+
+    // Championship
+    case "Birmingham City":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/392.png";
+    case "Blackburn Rovers":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/365.png";
+    case "Bristol City":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/333.png";
+    case "Charlton Athletic":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/372.png";
+    case "Coventry City":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/388.png";
+    case "Derby County":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/374.png";
+    case "Hull City":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/306.png";
+    case "Middlesbrough":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/369.png";
+    case "Millwall":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/391.png";
+    case "Oxford United":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/311.png";
+    case "Portsmouth":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/385.png";
+    case "Preston North End":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/394.png";
+    case "Queens Park Rangers":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/334.png";
+    case "Sheffield Wednesday":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/399.png";
+    case "Stoke City":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/336.png";
+    case "Swansea City":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/318.png";
+    case "Watford":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/395.png";
+    case "Wrexham":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/352.png";
+
+    // League One
+    case "AFC Wimbledon":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/3802.png";
+    case "Barnsley":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/397.png";
+    case "Blackpool":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/346.png";
+    case "Bolton Wanderers":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/358.png";
+    case "Bradford City":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/387.png";
+    case "Burton Albion":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/2567.png";
+    case "Cardiff City":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/347.png";
+    case "Doncaster Rovers":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/279.png";
+    case "Exeter City":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/324.png";
+    case "Leyton Orient":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/309.png";
+    case "Lincoln City":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/314.png";
+    case "Luton Town":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/301.png";
+    case "Mansfield Town":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/304.png";
+    case "Northampton Town":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/353.png";
+    case "Peterborough United":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/342.png";
+    case "Plymouth Argyle":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/307.png";
+    case "Port Vale":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/348.png";
+    case "Reading":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/338.png";
+    case "Rotherham United":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/402.png";
+    case "Stevenage":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/285.png";
+    case "Stockport County":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/400.png";
+    case "Wigan Athletic":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/350.png";
+    case "Wycombe Wanderers":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/344.png";
+
+    // Bundesliga
+    case "1. FC Heidenheim 1846":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/6418.png";
+    case "1. FC Union Berlin":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/598.png";
+    case "Bayer Leverkusen":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/131.png";
+    case "Bayern Munich":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/132.png";
+    case "Borussia Dortmund":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/124.png";
+    case "Borussia Mönchengladbach":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/268.png";
+    case "Eintracht Frankfurt":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/125.png";
+    case "FC Augsburg":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/3841.png";
+    case "FC Cologne":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/122.png";
+    case "Hamburg SV":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/127.png";
+    case "Mainz":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/2950.png";
+    case "RB Leipzig":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/11420.png";
+    case "SC Freiburg":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/126.png";
+    case "St. Pauli":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/270.png";
+    case "TSG Hoffenheim":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/7911.png";
+    case "VfB Stuttgart":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/134.png";
+    case "VfL Wolfsburg":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/138.png";
+    case "Werder Bremen":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/137.png";
+
+    // Serie A
+    case "AC Milan":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/103.png";
+    case "AS Roma":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/104.png";
+    case "Atalanta":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/105.png";
+    case "Bologna":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/107.png";
+    case "Cagliari":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/2925.png";
+    case "Como":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/2572.png";
+    case "Cremonese":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/4050.png";
+    case "Fiorentina":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/109.png";
+    case "Genoa":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/3263.png";
+    case "Hellas Verona":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/119.png";
+    case "Internazionale":
+    case "Inter Milan":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/110.png";
+    case "Juventus":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/111.png";
+    case "Lazio":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/112.png";
+    case "Lecce":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/113.png";
+    case "Napoli":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/114.png";
+    case "Parma":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/115.png";
+    case "Pisa":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/3956.png";
+    case "Sassuolo":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/3997.png";
+    case "Torino":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/239.png";
+    case "Udinese":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/118.png";
+
+    // La Liga
+    case "Alavés":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/96.png";
+    case "Athletic Club":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/93.png";
+    case "Atlético Madrid":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/1068.png";
+    case "Barcelona":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/83.png";
+    case "Celta Vigo":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/85.png";
+    case "Elche":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/3751.png";
+    case "Espanyol":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/88.png";
+    case "Getafe":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/2922.png";
+    case "Girona":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/9812.png";
+    case "Levante":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/1538.png";
+    case "Mallorca":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/84.png";
+    case "Osasuna":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/97.png";
+    case "Rayo Vallecano":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/101.png";
+    case "Real Betis":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/244.png";
+    case "Real Madrid":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/86.png";
+    case "Real Oviedo":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/92.png";
+    case "Real Sociedad":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/89.png";
+    case "Sevilla":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/243.png";
+    case "Valencia":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/94.png";
+    case "Villarreal":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/102.png";
+
+    // MLS
+    case "Atlanta United FC":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/18418.png";
+    case "Austin FC":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/20906.png";
+    case "CF Montréal":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/9720.png";
+    case "Charlotte FC":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/21300.png";
+    case "Chicago Fire FC":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/182.png";
+    case "Colorado Rapids":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/184.png";
+    case "Columbus Crew":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/183.png";
+    case "D.C. United":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/193.png";
+    case "FC Cincinnati":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/18267.png";
+    case "FC Dallas":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/185.png";
+    case "Houston Dynamo FC":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/6077.png";
+    case "Inter Miami CF":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/20232.png";
+    case "LA Galaxy":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/187.png";
+    case "LAFC":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/18966.png";
+    case "Minnesota United FC":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/17362.png";
+    case "Nashville SC":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/18986.png";
+    case "New England Revolution":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/189.png";
+    case "New York City FC":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/17606.png";
+    case "New York Red Bulls":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/190.png";
+    case "Orlando City SC":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/12011.png";
+    case "Philadelphia Union":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/10739.png";
+    case "Portland Timbers":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/9723.png";
+    case "Real Salt Lake":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/4771.png";
+    case "San Diego FC":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/22529.png";
+    case "San Jose Earthquakes":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/191.png";
+    case "Seattle Sounders FC":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/9726.png";
+    case "Sporting Kansas City":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/186.png";
+    case "St. Louis CITY SC":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/21812.png";
+    case "Toronto FC":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/7318.png";
+    case "Vancouver Whitecaps":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/9727.png";
+
     default:
       return resolveCountryImage(teamName) ?? fallback;
   }
@@ -648,6 +921,7 @@ export function resolveFootballTeamImage(teamName: string) {
 
 export function resolveBaseballTeamImage(teamName: string) {
   switch (teamName) {
+    // ABL
     case "Brisbane Bandits":
       return "https://assets.baseball.com.au/uploads/sites/8/2020/07/Site-Logo-for-MLBAM.png";
     case "Adelaide Giants":
@@ -656,6 +930,80 @@ export function resolveBaseballTeamImage(teamName: string) {
       return "https://assets.baseball.com.au/uploads/sites/12/2019/10/Perth-1.png";
     case "Sydney Blue Sox":
       return "https://assets.baseball.com.au/uploads/sites/13/2023/07/Site-Logo-for-MLBAM.png";
+
+    // MLB - American League East
+    case "Baltimore Orioles":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/bal.png";
+    case "Boston Red Sox":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/bos.png";
+    case "New York Yankees":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/nyy.png";
+    case "Tampa Bay Rays":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/tb.png";
+    case "Toronto Blue Jays":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/tor.png";
+
+    // MLB - American League Central
+    case "Chicago White Sox":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/chw.png";
+    case "Cleveland Guardians":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/cle.png";
+    case "Detroit Tigers":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/det.png";
+    case "Kansas City Royals":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/kc.png";
+    case "Minnesota Twins":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/min.png";
+
+    // MLB - American League West
+    case "Houston Astros":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/hou.png";
+    case "Los Angeles Angels":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/laa.png";
+    case "Oakland Athletics":
+    case "Athletics":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/oak.png";
+    case "Seattle Mariners":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/sea.png";
+    case "Texas Rangers":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/tex.png";
+
+    // MLB - National League East
+    case "Atlanta Braves":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/atl.png";
+    case "Miami Marlins":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/mia.png";
+    case "New York Mets":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/nym.png";
+    case "Philadelphia Phillies":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/phi.png";
+    case "Washington Nationals":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/wsh.png";
+
+    // MLB - National League Central
+    case "Chicago Cubs":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/chc.png";
+    case "Cincinnati Reds":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/cin.png";
+    case "Milwaukee Brewers":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/mil.png";
+    case "Pittsburgh Pirates":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/pit.png";
+    case "St. Louis Cardinals":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/stl.png";
+
+    // MLB - National League West
+    case "Arizona Diamondbacks":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/ari.png";
+    case "Colorado Rockies":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/col.png";
+    case "Los Angeles Dodgers":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/lad.png";
+    case "San Diego Padres":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/sd.png";
+    case "San Francisco Giants":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/sf.png";
+
     default:
       return resolveCountryImage(teamName) ?? fallback;
   }

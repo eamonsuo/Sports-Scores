@@ -334,7 +334,7 @@ export async function baseballCurrentMatches(
       } as RoundDetails;
     }),
 
-    currentRound: "NRL",
+    currentRound: leagueIdToName[rounds[0]] ?? "",
   } as BaseballTodayPage;
 }
 
