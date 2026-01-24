@@ -323,6 +323,6 @@ export async function basketballCurrentMatches(
       } as RoundDetails;
     }),
 
-    currentRound: "NRL",
+    currentRound: leagueIdToName[rounds[0]] ?? "",
   } as BasketballTodayPage;
 }

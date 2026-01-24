@@ -5,13 +5,9 @@ import { useState } from "react";
 import {
   AMERICAN_FOOTBALL_LEAGUES,
   AUSSIE_RULES_LEAGUES,
-  BASEBALL_LEAGUES,
-  BASKETBALL_LEAGUES,
-  FOOTBALL_LEAGUES,
   GOLF_TOURS,
   MOTORSPORT_CATEGORIES,
   RUGBY_LEAGUE_LEAGUES,
-  TENNIS_LEAGUES,
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { SPORT } from "@/types/misc";
@@ -68,25 +64,25 @@ const footerLinks: {
   },
   {
     sport: SPORT.FOOTBALL,
-    link: `/sports/${SPORT.FOOTBALL}/${FOOTBALL_LEAGUES[0].slug}/${FOOTBALL_LEAGUES[0].seasons[0].slug}/matches`,
+    link: `/sports/${SPORT.FOOTBALL}/today`,
     img: "/footer/football.svg",
     altText: "Football",
   },
   {
     sport: SPORT.BASEBALL,
-    link: `/sports/${SPORT.BASEBALL}/${BASEBALL_LEAGUES[0].slug}/${BASEBALL_LEAGUES[0].seasons[0].slug}/matches`,
+    link: `/sports/${SPORT.BASEBALL}/today`,
     img: "/footer/baseball.svg",
     altText: "Baseball",
   },
   {
     sport: SPORT.BASKETBALL,
-    link: `/sports/${SPORT.BASKETBALL}/${BASKETBALL_LEAGUES[0].slug}/${BASKETBALL_LEAGUES[0].seasons[0].slug}/matches`,
+    link: `/sports/${SPORT.BASKETBALL}/today`,
     img: "/footer/basketball.svg",
     altText: "Basketball",
   },
   {
     sport: SPORT.TENNIS,
-    link: `/sports/${SPORT.TENNIS}/${TENNIS_LEAGUES[0].slug}/${TENNIS_LEAGUES[0].seasons[0].slug}/matches`,
+    link: `/sports/${SPORT.TENNIS}/today`,
     img: "/footer/tennis.svg",
     altText: "Tennis",
   },

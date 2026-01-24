@@ -16,9 +16,10 @@ export default function FixtureRoundList({
   curRound: string;
   cardVariant?: "tennis" | "default";
 }) {
-  const [round, setRound] = useState(curRound); //need to put in parent so that it only gets set once. Need to change page structure?
-  const btnListRef = useRef<HTMLDivElement>(null); //Ref for the div which contains all round buttons
-  const initialBtn = useRef<HTMLButtonElement>(null); //Ref for btn of curRound
+  const [round, setRound] = useState(curRound);
+  const btnListRef = useRef<HTMLDivElement>(null);
+  const initialBtn = useRef<HTMLButtonElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const roundLabels = data.map((item) => item.roundLabel);
 
@@ -28,7 +29,14 @@ export default function FixtureRoundList({
       inline: "center",
       behavior: "smooth",
     });
-  }, []);
+
+    // Scroll to current round on mount
+    const index = roundLabels.indexOf(curRound);
+    if (scrollContainerRef.current && index !== -1) {
+      const container = scrollContainerRef.current;
+      container.scrollLeft = index * container.offsetWidth;
+    }
+  }, []); //Empty array so only runs once on mount
 
   //When called ensures the new round state is set and the related button is visible in view
   function handleRoundClick(roundLabel: string) {
@@ -40,34 +48,54 @@ export default function FixtureRoundList({
     btnNode?.scrollIntoView({
       behavior: "smooth",
     });
-  }
 
-  // Swipe actions
-  const MOVE_THRESHOLD = 100;
-
-  let initialX = 0;
-  let moveX = 0;
-
-  function touchStart(event: React.TouchEvent<HTMLDivElement>) {
-    initialX = event.touches[0].pageX;
-  }
-
-  function touchMove(event: React.TouchEvent<HTMLDivElement>) {
-    let currentX = event.touches[0].pageX;
-    moveX = currentX - initialX;
-  }
-
-  function touchEnd() {
-    let curIndex = roundLabels.indexOf(round);
-
-    if (moveX < -MOVE_THRESHOLD) {
-      curIndex + 1 !== roundLabels.length &&
-        handleRoundClick(roundLabels[curIndex + 1]);
-    } else if (moveX > MOVE_THRESHOLD) {
-      curIndex !== 0 && handleRoundClick(roundLabels[curIndex - 1]);
+    // Scroll to the round
+    const index = roundLabels.indexOf(roundLabel);
+    if (scrollContainerRef.current && index !== -1) {
+      const container = scrollContainerRef.current;
+      container.scrollTo({
+        left: index * container.offsetWidth,
+        behavior: "smooth",
+      });
     }
+  }
 
-    moveX = 0;
+  // Handle scroll to update active round
+  function handleScroll() {
+    if (scrollContainerRef.current) {
+      const container = scrollContainerRef.current;
+      const scrollLeft = container.scrollLeft;
+      const width = container.offsetWidth;
+      const index = Math.round(scrollLeft / width);
+
+      if (roundLabels[index] && roundLabels[index] !== round) {
+        setRound(roundLabels[index]);
+
+        // Scroll button into view only if it's not already visible
+        // Use setTimeout to allow React to update the button styling first
+        setTimeout(() => {
+          const divNode = btnListRef.current;
+          const btnNode = divNode?.querySelectorAll("button")[index];
+
+          if (btnNode && divNode) {
+            const btnRect = btnNode.getBoundingClientRect();
+            const containerRect = divNode.getBoundingClientRect();
+
+            // Check if button is fully visible within the container
+            const isVisible =
+              btnRect.left >= containerRect.left &&
+              btnRect.right <= containerRect.right;
+
+            if (!isVisible) {
+              btnNode.scrollIntoView({
+                behavior: "smooth",
+                inline: "nearest",
+              });
+            }
+          }
+        }, 0);
+      }
+    }
   }
 
   return (
@@ -80,7 +108,7 @@ export default function FixtureRoundList({
           <button
             onClick={() => handleRoundClick(item)}
             key={item}
-            ref={item === curRound ? initialBtn : null} //Only use for initial page load
+            ref={item === curRound ? initialBtn : null}
             className={clsx(
               "inline-flex items-center justify-center rounded-full px-2.5 py-0.5",
               item === round &&
@@ -95,32 +123,33 @@ export default function FixtureRoundList({
       </div>
 
       <div
-        onTouchStart={touchStart}
-        onTouchMove={touchMove}
-        onTouchEnd={touchEnd}
-        className="flex-1 overflow-y-auto"
+        ref={scrollContainerRef}
+        onScroll={handleScroll}
+        className="flex flex-1 snap-x snap-mandatory overflow-x-auto overflow-y-hidden"
+        style={{ scrollBehavior: "smooth" }}
       >
-        <FixtureList
-          data={data.find((item) => item.roundLabel === round)?.matches ?? []}
-          cardVariant={cardVariant}
-        />
-        {(data.find((item) => item.roundLabel === round)?.byes?.length ??
-        0 > 0) ? (
-          <div className="flex items-center gap-1 overflow-x-auto p-4 dark:text-neutral-400">
-            Bye:{" "}
-            {data
-              .find((item) => item.roundLabel === round)
-              ?.byes?.map((x) => (
-                <Image
-                  key={x.name}
-                  src={x.img ?? fallback}
-                  width={25}
-                  height={25}
-                  alt="Bye team"
-                />
-              ))}
+        {data.map((item) => (
+          <div
+            key={item.roundLabel}
+            className="w-full flex-shrink-0 snap-start overflow-y-auto"
+          >
+            <FixtureList data={item.matches} cardVariant={cardVariant} />
+            {(item.byes?.length ?? 0) > 0 ? (
+              <div className="flex items-center gap-1 overflow-x-auto p-4 dark:text-neutral-400">
+                Bye:{" "}
+                {item.byes?.map((x) => (
+                  <Image
+                    key={x.name}
+                    src={x.img ?? fallback}
+                    width={25}
+                    height={25}
+                    alt="Bye team"
+                  />
+                ))}
+              </div>
+            ) : null}
           </div>
-        ) : null}
+        ))}
       </div>
     </>
   );

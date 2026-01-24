@@ -2,8 +2,8 @@
 
 import { SPORT } from "@/types/misc";
 import { ChevronDownIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Button } from "../misc/Button";
 import {
   DropdownMenu,
@@ -30,6 +30,14 @@ export default function LeagueSeasonToggle({
   const [selectedSeason, setSelectedSeason] = useState(leagues[0].seasons[0]);
   const [todayActive, setTodayActive] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Check if URL contains "today" on mount and update todayActive
+  useEffect(() => {
+    if (pathname?.includes("/today")) {
+      setTodayActive(true);
+    }
+  }, [pathname]);
 
   // Helper to redirect to the correct route
   const redirectToRoute = (league: string, season: string) => {
