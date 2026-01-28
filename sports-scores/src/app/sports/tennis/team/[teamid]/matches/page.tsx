@@ -1,5 +1,5 @@
-import FixtureList from "@/components/generic/FixtureList";
-import Placeholder from "@/components/misc/Placeholder";
+import FixtureList from "@/components/all-sports/FixtureList";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { footballTeamMatches } from "@/services/football.service";
 
 export default async function Page(props: {

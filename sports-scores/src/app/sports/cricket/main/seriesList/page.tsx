@@ -1,4 +1,4 @@
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { cricketAllSeries } from "@/services/cricket.service";
 import Link from "next/link";
 

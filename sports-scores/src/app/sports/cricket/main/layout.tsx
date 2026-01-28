@@ -1,5 +1,5 @@
-import APIStatus from "@/components/misc/ApiStatus";
-import NavButtonGroup from "@/components/misc/NavButtonGroup";
+import APIStatus from "@/components/misc-ui/ApiStatus";
+import NavButtonGroup from "@/components/misc-ui/NavButtonGroup";
 import { getGlobalApiQuota } from "@/lib/apiCounter";
 import { SPORT } from "@/types/misc";
 

@@ -1,5 +1,5 @@
 import CricketFixtureList from "@/components/cricket/CricketFixtureList";
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { cricketSeriesDetails } from "@/services/cricket.service";
 
 export default async function Page(props: {

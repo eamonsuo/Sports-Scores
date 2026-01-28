@@ -1,6 +1,6 @@
 import Match from "@/components/bracket/components/match";
 import FlexibleSingleEliminationBracket from "@/components/bracket/FlexibleSingleEliminationBracket";
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { tennisBrackets } from "@/services/tennis.service";
 
 export default async function Page(props: {

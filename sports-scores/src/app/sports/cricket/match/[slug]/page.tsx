@@ -1,11 +1,11 @@
+import ClientSportsPage from "@/components/all-sports/ClientSportsPage";
 import CricketMatchDetailsPage, {
   MatchDetailsPage,
 } from "@/components/cricket/CricketMatchDetailsPage";
 import CricketMatchScorecardPage from "@/components/cricket/CricketMatchScorecardPage";
 import { CricketScorecardBatProps } from "@/components/cricket/CricketScorecardBat";
 import { CricketScorecardBowlProps } from "@/components/cricket/CricketScorecardBowl";
-import ClientSportsPage from "@/components/generic/ClientSportsPage";
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { cricketMatchDetails } from "@/services/cricket.service";
 import Link from "next/link";
 import { ReactNode } from "react";

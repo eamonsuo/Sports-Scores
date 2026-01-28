@@ -1,4 +1,4 @@
-import NavButtonGroup from "@/components/misc/NavButtonGroup";
+import NavButtonGroup from "@/components/misc-ui/NavButtonGroup";
 import { SPORT } from "@/types/misc";
 
 export default async function SportsLayout({

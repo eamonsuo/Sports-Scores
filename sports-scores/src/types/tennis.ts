@@ -1,5 +1,5 @@
+import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import { Match as BracketMatch } from "@/components/bracket/types";
-import { ScoreDifference } from "@/components/generic/ScoreChart";
 import { TennisRankingsPlayerRow } from "@/components/tennis/RankingsLeaderboard";
 import { TennisScoreBreakdown } from "@/components/tennis/TennisScoreBreakdown";
 import { MatchSummary, RoundDetails, TeamScoreDetails } from "./misc";

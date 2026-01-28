@@ -1,6 +1,6 @@
 "use client";
-import ErrorPage from "@/components/misc/ErrorPage";
-import Footer from "@/components/misc/Footer";
+import ErrorPage from "@/components/misc-ui/ErrorPage";
+import Footer from "@/components/misc-ui/Footer";
 import { Inter } from "next/font/google";
 
 // Error boundaries must be Client Components

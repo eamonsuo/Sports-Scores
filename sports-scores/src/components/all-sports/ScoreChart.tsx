@@ -2,7 +2,7 @@
 import fallback from "@/../public/vercel.svg";
 import Image from "next/image";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
-import { ChartConfig, ChartContainer } from "../ui/chart";
+import { ChartConfig, ChartContainer } from "../zzzshadcn/chart";
 
 export type ScoreDifference = { event: string; difference: number };
 

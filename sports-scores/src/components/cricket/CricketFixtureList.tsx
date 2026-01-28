@@ -1,7 +1,7 @@
-import SectionDate from "@/components/generic/SectionDate";
+import SectionDate from "@/components/all-sports/SectionDate";
 import { MatchSummary } from "@/types/misc";
 import React from "react";
-import SectionDateRange from "../generic/SectionDateRange";
+import SectionDateRange from "../all-sports/SectionDateRange";
 import CricketMatchSummaryCard from "./CricketMatchSummaryCard";
 import CricketSeriesHeader from "./CricketSeriesHeader";
 

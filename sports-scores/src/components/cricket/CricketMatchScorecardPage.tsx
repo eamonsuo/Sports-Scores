@@ -1,5 +1,5 @@
-import ClientSportsPage from "../generic/ClientSportsPage";
-import Placeholder from "../misc/Placeholder";
+import ClientSportsPage from "../all-sports/ClientSportsPage";
+import Placeholder from "../misc-ui/Placeholder";
 import CricketScorecardBat, {
   CricketScorecardBatProps,
 } from "./CricketScorecardBat";

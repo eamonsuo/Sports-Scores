@@ -1,4 +1,4 @@
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import F1DriverStandings from "@/components/motorsport/f1/F1DriverStandings";
 import { f1DriverStandings } from "@/services/motorsport.service";
 

@@ -27,6 +27,12 @@ const footerLinks: {
     altText: "ABC News",
   },
   {
+    sport: "calendar",
+    link: `/`,
+    img: "/footer/calendar.png",
+    altText: "Calendar",
+  },
+  {
     sport: SPORT.CRICKET,
     link: `/sports/${SPORT.CRICKET}/main/matches`,
     img: "/footer/cricket-ball.svg",

@@ -4,13 +4,13 @@ import { SPORT } from "@/types/misc";
 import { ChevronDownIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button } from "../misc/Button";
+import { Button } from "../misc-ui/Button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "../zzzshadcn/dropdown-menu";
 
 export type LeagueSeasonConfig = {
   name: string;

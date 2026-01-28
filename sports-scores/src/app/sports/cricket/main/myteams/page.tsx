@@ -1,5 +1,5 @@
 import CricketFixtureList from "@/components/cricket/CricketFixtureList";
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { cricketMyTeamsMatches } from "@/services/cricket.service";
 
 export const dynamic = "force-dynamic";

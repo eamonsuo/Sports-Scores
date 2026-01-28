@@ -1,5 +1,5 @@
 import TournamentLeaderboard from "@/components/golf/TournamentLeaderboard";
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { golfPGATournamentLeaderboard } from "@/services/golf.service";
 
 export const dynamic = "force-dynamic";

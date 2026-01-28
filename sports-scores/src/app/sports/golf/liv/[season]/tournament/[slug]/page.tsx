@@ -1,6 +1,6 @@
-import ClientSportsPage from "@/components/generic/ClientSportsPage";
+import ClientSportsPage from "@/components/all-sports/ClientSportsPage";
 import TournamentLeaderboard from "@/components/golf/TournamentLeaderboard";
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { golfLIVTournamentLeaderboard } from "@/services/golf.service";
 
 export const dynamic = "force-dynamic";

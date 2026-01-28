@@ -1,6 +1,6 @@
+import MatchDetailsHero from "@/components/all-sports/MatchDetailsHero";
 import BasketballScoreBreakdown from "@/components/basketball/BasketballScoreBreakdown";
-import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { basketballMatchDetails } from "@/services/basketball.service";
 
 export default async function Page(props: {

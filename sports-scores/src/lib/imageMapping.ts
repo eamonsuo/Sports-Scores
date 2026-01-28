@@ -591,14 +591,18 @@ export function resolveFootballTeamImage(teamName: string) {
     case "Manchester United":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/360.png";
     case "Chelsea":
+    case "Chelsea FC":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/363.png";
     case "Liverpool":
+    case "Liverpool FC":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/364.png";
     case "Tottenham Hotspur":
+    case "Tottenham FC":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/367.png";
     case "Everton":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/368.png";
     case "West Ham United":
+    case "West Ham":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/371.png";
     case "Leicester City":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/375.png";
@@ -616,6 +620,7 @@ export function resolveFootballTeamImage(teamName: string) {
     case "Crystal Palace":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/384.png";
     case " Brighton & Hove Albion":
+    case "Brighton":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/331.png";
     case "Burnley":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/379.png";
@@ -624,7 +629,7 @@ export function resolveFootballTeamImage(teamName: string) {
     case "Fulham":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/370.png";
     case "Sheffield United":
-      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/356.png";
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/398.png";
     case "Huddersfield Town":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/377.png";
     case "West Bromwich Albion":
@@ -642,6 +647,8 @@ export function resolveFootballTeamImage(teamName: string) {
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/366.png";
     case "Ipswich Town":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/373.png";
+    case "London City Lionesses":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/21053.png";
 
     // Championship
     case "Birmingham City":
@@ -729,34 +736,105 @@ export function resolveFootballTeamImage(teamName: string) {
     case "Wycombe Wanderers":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/344.png";
 
+    // Ligue 1
+    case "Paris Saint-Germain":
+    case "Paris SG":
+    case "PSG":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/160.png";
+    case "Olympique de Marseille":
+    case "Marseille":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/176.png";
+    case "Olympique Lyonnais":
+    case "Lyon":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/167.png";
+    case "AS Monaco":
+    case "Monaco":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/174.png";
+    case "Lille OSC":
+    case "Lille":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/166.png";
+    case "Stade Rennais":
+    case "Rennes":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/169.png";
+    case "OGC Nice":
+    case "Nice":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/2502.png";
+    case "RC Lens":
+    case "Lens":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/165.png";
+    case "RC Strasbourg":
+    case "Strasbourg":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/180.png";
+    case "Stade Brestois":
+    case "Brest":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/6997.png";
+    case "Stade de Reims":
+    case "Reims":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/3243.png";
+    case "Montpellier HSC":
+    case "Montpellier":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/3243.png";
+    case "FC Nantes":
+    case "Nantes":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/165.png";
+    case "Angers SCO":
+    case "Angers":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/3240.png";
+    case "Toulouse FC":
+    case "Toulouse":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/173.png";
+    case "AJ Auxerre":
+    case "Auxerre":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/172.png";
+    case "Le Havre AC":
+    case "Le Havre":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/3236.png";
+    case "AS Saint-Étienne":
+    case "Saint-Étienne":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/178.png";
+    case "Lorient":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/273.png";
+    case "Metz":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/177.png";
+    case "Paris FC":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/6851.png";
+
     // Bundesliga
     case "1. FC Heidenheim 1846":
+    case "1. FC Heidenheim":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/6418.png";
     case "1. FC Union Berlin":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/598.png";
     case "Bayer Leverkusen":
+    case "Bayer 04 Leverkusen":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/131.png";
     case "Bayern Munich":
+    case "FC Bayern München":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/132.png";
     case "Borussia Dortmund":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/124.png";
     case "Borussia Mönchengladbach":
+    case "Borussia M'gladbach":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/268.png";
     case "Eintracht Frankfurt":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/125.png";
     case "FC Augsburg":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/3841.png";
     case "FC Cologne":
+    case "1. FC Köln":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/122.png";
     case "Hamburg SV":
+    case "Hamburger SV":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/127.png";
     case "Mainz":
+    case "1. FSV Mainz 05":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/2950.png";
     case "RB Leipzig":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/11420.png";
     case "SC Freiburg":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/126.png";
     case "St. Pauli":
+    case "FC St. Pauli":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/270.png";
     case "TSG Hoffenheim":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/7911.png";
@@ -765,12 +843,15 @@ export function resolveFootballTeamImage(teamName: string) {
     case "VfL Wolfsburg":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/138.png";
     case "Werder Bremen":
+    case "SV Werder Bremen":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/137.png";
 
     // Serie A
     case "AC Milan":
+    case "Milan":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/103.png";
     case "AS Roma":
+    case "Roma":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/104.png";
     case "Atalanta":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/105.png";
@@ -790,6 +871,7 @@ export function resolveFootballTeamImage(teamName: string) {
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/119.png";
     case "Internazionale":
     case "Inter Milan":
+    case "Inter":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/110.png";
     case "Juventus":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/111.png";
@@ -812,6 +894,7 @@ export function resolveFootballTeamImage(teamName: string) {
 
     // La Liga
     case "Alavés":
+    case "Deportivo Alavés":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/96.png";
     case "Athletic Club":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/93.png";
@@ -828,8 +911,10 @@ export function resolveFootballTeamImage(teamName: string) {
     case "Getafe":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/2922.png";
     case "Girona":
+    case "Girona FC":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/9812.png";
     case "Levante":
+    case "Levante UD":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/1538.png";
     case "Mallorca":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/84.png";
@@ -853,7 +938,7 @@ export function resolveFootballTeamImage(teamName: string) {
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/102.png";
 
     // MLS
-    case "Atlanta United FC":
+    case "Atlanta United":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/18418.png";
     case "Austin FC":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/20906.png";
@@ -862,26 +947,30 @@ export function resolveFootballTeamImage(teamName: string) {
     case "Charlotte FC":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/21300.png";
     case "Chicago Fire FC":
+    case "Chicago Fire":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/182.png";
     case "Colorado Rapids":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/184.png";
     case "Columbus Crew":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/183.png";
-    case "D.C. United":
+    case "DC United":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/193.png";
     case "FC Cincinnati":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/18267.png";
     case "FC Dallas":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/185.png";
     case "Houston Dynamo FC":
+    case "Houston Dynamo":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/6077.png";
     case "Inter Miami CF":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/20232.png";
     case "LA Galaxy":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/187.png";
     case "LAFC":
+    case "Los Angeles FC":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/18966.png";
     case "Minnesota United FC":
+    case "Minnesota United":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/17362.png";
     case "Nashville SC":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/18986.png";
@@ -907,7 +996,7 @@ export function resolveFootballTeamImage(teamName: string) {
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/9726.png";
     case "Sporting Kansas City":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/186.png";
-    case "St. Louis CITY SC":
+    case "St.Louis City":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/21812.png";
     case "Toronto FC":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/7318.png";

@@ -1,5 +1,5 @@
-import FixtureRoundList from "@/components/generic/FixtureRoundList";
-import Placeholder from "@/components/misc/Placeholder";
+import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { baseballCurrentMatches } from "@/services/baseball.service";
 
 export const dynamic = "force-dynamic";

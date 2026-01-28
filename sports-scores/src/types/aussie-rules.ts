@@ -1,4 +1,4 @@
-import { ScoreDifference } from "@/components/generic/ScoreChart";
+import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import { RoundDetails, TeamScoreDetails } from "./misc";
 
 export interface AussieRulesFixturesPage {

@@ -2,7 +2,7 @@
 
 import { GolfSchedule } from "@/types/golf";
 import React, { useEffect } from "react";
-import SectionDateRange from "../generic/SectionDateRange";
+import SectionDateRange from "../all-sports/SectionDateRange";
 import TournamentSummaryCard from "./TournamentSummaryCardSchedule";
 
 // Assumes data prop is already sorted in desired order

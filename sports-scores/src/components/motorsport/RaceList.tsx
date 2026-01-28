@@ -2,7 +2,7 @@
 
 import { SessionSummary } from "@/types/f1";
 import React, { useEffect } from "react";
-import SectionDateRange from "../generic/SectionDateRange";
+import SectionDateRange from "../all-sports/SectionDateRange";
 import SessionSummaryCard from "./SessionSummaryCard";
 import WeekendSummaryCard from "./WeekendSummaryCard";
 

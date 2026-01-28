@@ -1,7 +1,7 @@
+import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import { Match as BracketMatch } from "@/components/bracket/types";
 import { FootballStanding } from "@/components/football/FootballLadder";
 import { FootballScoreBreakdown } from "@/components/football/FootballScoreBreakdown";
-import { ScoreDifference } from "@/components/generic/ScoreChart";
 import { MatchSummary, RoundDetails, TeamScoreDetails } from "./misc";
 import {
   Sofascore_CupTree,

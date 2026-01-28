@@ -1,6 +1,6 @@
 "use client";
 
-import ErrorPage from "@/components/misc/ErrorPage";
+import ErrorPage from "@/components/misc-ui/ErrorPage";
 
 // Error boundaries must be Client Components
 
