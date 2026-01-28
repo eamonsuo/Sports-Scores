@@ -337,18 +337,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     location: "Germany",
     tags: ["♀️"],
   },
-  {
-    id: "29",
-    name: "FIH Hockey World Cup 2026",
-    sport: "Hockey",
-    type: "major",
-    startDate: new Date("2026-08-14"),
-    endDate: new Date("2026-08-30"),
-    // imageUrl: "/olympic-rings.svg",
-    link: "/sports/hockey",
-    location: "Belgium & Netherlands",
-    tags: ["♂️", "♀️"],
-  },
+
   {
     id: "30",
     name: "Asian Games 2026",
