@@ -2,24 +2,6 @@
 const nextConfig = {
   images: {
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "cdn.sportmonks.com",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "media.api-sports.io",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "p.imgci.com",
-        port: "",
-        pathname: "/db/PICTURES/CMS/**",
-      },
       // National Flags
       {
         protocol: "https",
@@ -41,26 +23,19 @@ const nextConfig = {
         port: "",
         pathname: "/uploads/**",
       },
-      // A-League logos
-      {
-        protocol: "https",
-        hostname: "aleagues.com.au",
-        port: "",
-        pathname: "/wp-content/themes/keepup/source/images/club-logos/**",
-      },
-      // Premier League logos
-      {
-        protocol: "https",
-        hostname: "resources.premierleague.com",
-        port: "",
-        pathname: "/premierleague25/**",
-      },
-      // NBL, NBA logos
+      // ESPN logos
       {
         protocol: "https",
         hostname: "a.espncdn.com",
         port: "",
         pathname: "/combiner/**",
+      },
+      // Wikipedia logos
+      {
+        protocol: "https",
+        hostname: "upload.wikimedia.org",
+        port: "",
+        pathname: "/wikipedia/**",
       },
     ],
   },

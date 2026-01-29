@@ -125,7 +125,7 @@ export default function FixtureRoundList({
       <div
         ref={scrollContainerRef}
         onScroll={handleScroll}
-        className="flex flex-1 snap-x snap-mandatory overflow-x-auto overflow-y-hidden"
+        className="hideScroll flex flex-1 snap-x snap-mandatory overflow-x-auto overflow-y-hidden"
         style={{ scrollBehavior: "smooth" }}
       >
         {data.map((item) => (

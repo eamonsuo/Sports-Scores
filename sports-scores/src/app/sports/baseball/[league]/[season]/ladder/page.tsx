@@ -1,5 +1,5 @@
 import BaseballLadder from "@/components/baseball/BaseballLadder";
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { baseballStandings } from "@/services/baseball.service";
 
 export default async function Page(props: {

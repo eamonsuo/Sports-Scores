@@ -45,7 +45,7 @@ export async function cricketMatchesByDateClient(date: Date) {
 
     if (!rawMatches || !rawMatches.Stages) return null;
 
-    return rawMatches.Stages.filter(
+    const matches = rawMatches.Stages.filter(
       (series: any) => !excludedSeries.some((str) => series.Snm.includes(str)),
     ).flatMap((item: any) => {
       return item.Events.map((event: any) => {
@@ -91,6 +91,13 @@ export async function cricketMatchesByDateClient(date: Date) {
         } as MatchSummary;
       });
     });
+
+    // Sort by date first, then by start time
+    return matches.sort((a: MatchSummary, b: MatchSummary) => {
+      const dateCompare = a.startDate.getTime() - b.startDate.getTime();
+      if (dateCompare !== 0) return dateCompare;
+      return a.startDate.getTime() - b.startDate.getTime();
+    });
   } catch (error) {
     console.error("Error fetching cricket matches:", error);
     return null;
@@ -106,7 +113,7 @@ export async function cricketMatchesByDate(date: Date) {
   const rawMatches = await fetchCricketMatchesByDate(dateString);
   if (!rawMatches || !rawMatches.Stages) return null;
 
-  return rawMatches.Stages.filter(
+  const matches = rawMatches.Stages.filter(
     (series) => !excludedSeries.some((str) => series.Snm.includes(str)),
   ).flatMap((item) => {
     return item.Events.map((event) => {
@@ -151,6 +158,13 @@ export async function cricketMatchesByDate(date: Date) {
         seriesSlug: `${item.Ccd}/${item.Scd}`,
       } as MatchSummary;
     });
+  });
+
+  // Sort by date first, then by start time
+  return matches.sort((a, b) => {
+    const dateCompare = a.startDate.getTime() - b.startDate.getTime();
+    if (dateCompare !== 0) return dateCompare;
+    return a.startDate.getTime() - b.startDate.getTime();
   });
 }
 
@@ -268,7 +282,7 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
     return null;
   }
 
-  return rawMatches.Stages.flatMap((item) => {
+  const matches = rawMatches.Stages.flatMap((item) => {
     return item.Events.map((event) => {
       let sDate = convertNumbertoDate(event.Esd, false);
       let longFormat =
@@ -311,6 +325,13 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
         seriesSlug: `${item.Ccd}/${item.Scd}`,
       } as MatchSummary;
     });
+  });
+
+  // Sort by date first, then by start time
+  return matches.sort((a, b) => {
+    const dateCompare = a.startDate.getTime() - b.startDate.getTime();
+    if (dateCompare !== 0) return dateCompare;
+    return a.startDate.getTime() - b.startDate.getTime();
   });
 }
 

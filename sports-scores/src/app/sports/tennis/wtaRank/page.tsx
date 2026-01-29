@@ -1,4 +1,4 @@
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import RankingsLeaderboard from "@/components/tennis/RankingsLeaderboard";
 import { TennisWorldRankings } from "@/services/tennis.service";
 

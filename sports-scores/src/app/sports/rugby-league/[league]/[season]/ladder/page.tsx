@@ -1,4 +1,4 @@
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import NRLLadder from "@/components/rugby-league/NRLLadder";
 import { rugbyLeagueStandings } from "@/services/rugby-league.service";
 

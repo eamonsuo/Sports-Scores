@@ -1,4 +1,4 @@
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import RaceList from "@/components/motorsport/RaceList";
 import { f1EventSchedule } from "@/services/motorsport.service";
 

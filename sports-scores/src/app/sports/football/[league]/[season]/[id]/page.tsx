@@ -1,7 +1,7 @@
+import MatchDetailsHero from "@/components/all-sports/MatchDetailsHero";
+import ScoreChart from "@/components/all-sports/ScoreChart";
 import FootballScoreBreakdown from "@/components/football/FootballScoreBreakdown";
-import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
-import ScoreChart from "@/components/generic/ScoreChart";
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { footballMatchDetails } from "@/services/football.service";
 
 export default async function Page(props: {

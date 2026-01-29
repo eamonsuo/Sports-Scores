@@ -1,5 +1,5 @@
 import AussieRulesLadder from "@/components/aussie-rules/AussieRulesLadder";
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { aussieRulesStandings } from "@/services/aussie-rules.service";
 
 export const dynamic = "force-dynamic";

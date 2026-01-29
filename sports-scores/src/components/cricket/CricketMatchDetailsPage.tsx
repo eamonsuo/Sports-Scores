@@ -1,4 +1,4 @@
-import MatchDetailsHero from "../generic/MatchDetailsHero";
+import MatchDetailsHero from "../all-sports/MatchDetailsHero";
 import CricketMatchSummary from "./CricketMatchSummary";
 
 export type MatchDetailsPage = {

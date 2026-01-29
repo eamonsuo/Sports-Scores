@@ -1,6 +1,6 @@
+import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import { AmericanFootballStanding } from "@/components/american-football/AmericanFootballLadder";
 import { AmericanFootballScoreBreakdown } from "@/components/american-football/AmericanFootballScoreBreakdown";
-import { ScoreDifference } from "@/components/generic/ScoreChart";
 import { APISportsResponse, RoundDetails, TeamScoreDetails } from "./misc";
 import {
   Sofascore_Event,

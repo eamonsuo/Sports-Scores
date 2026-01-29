@@ -1,5 +1,5 @@
-import FixtureRoundList from "@/components/generic/FixtureRoundList";
-import Placeholder from "@/components/misc/Placeholder";
+import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { americanFootballMatches } from "@/services/american-football.service";
 
 export const dynamic = "force-dynamic";

@@ -1,5 +1,5 @@
-import MatchDetailsHero from "@/components/generic/MatchDetailsHero";
-import Placeholder from "@/components/misc/Placeholder";
+import MatchDetailsHero from "@/components/all-sports/MatchDetailsHero";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import TennisScoreBreakdown from "@/components/tennis/TennisScoreBreakdown";
 import { TennisMatchDetails } from "@/services/tennis.service";
 

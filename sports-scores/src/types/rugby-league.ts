@@ -1,4 +1,4 @@
-import { ScoreDifference } from "@/components/generic/ScoreChart";
+import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import { RugbyLeagueStanding } from "@/components/rugby-league/NRLLadder";
 import { RugbyLeagueScoreBreakdown } from "@/components/rugby-league/NRLScoreBreakdown";
 import { RoundDetails, TeamScoreDetails } from "./misc";

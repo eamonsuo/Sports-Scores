@@ -1,6 +1,6 @@
 "use client";
 import CricketFixtureList from "@/components/cricket/CricketFixtureList";
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { cricketMatchesByDateClient } from "@/services/cricket.service";
 import { MatchSummary } from "@/types/misc";
 import { useEffect, useRef, useState } from "react";

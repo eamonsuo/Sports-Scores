@@ -4,7 +4,7 @@ import AmericanFootballLadder, {
 } from "@/components/american-football/AmericanFootballLadder";
 import type { PlayoffPictureProps } from "@/components/american-football/PlayoffPicture";
 import PlayoffPicture from "@/components/american-football/PlayoffPicture";
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { americanFootballStandings } from "@/services/american-football.service";
 
 export const dynamic = "force-dynamic";

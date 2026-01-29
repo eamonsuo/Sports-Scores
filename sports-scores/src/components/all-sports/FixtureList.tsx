@@ -1,4 +1,4 @@
-import MatchSummaryCard from "@/components/generic/MatchSummaryCard";
+import MatchSummaryCard from "@/components/all-sports/MatchSummaryCard";
 import TennisMatchCard from "@/components/tennis/TennisMatchCard";
 import { MatchSummary } from "@/types/misc";
 import React from "react";

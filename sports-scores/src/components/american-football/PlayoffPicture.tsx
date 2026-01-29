@@ -1,6 +1,7 @@
 "use client";
+import Image from "next/image";
 import { useState } from "react";
-import { Button } from "../misc/Button";
+import { Button } from "../misc-ui/Button";
 
 // Types for the playoff data structure
 interface Team {
@@ -55,7 +56,7 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
               >
                 <span>{afc.divisional.seed}</span>
                 {afc.divisional.logo && (
-                  <img
+                  <Image
                     src={afc.divisional.logo}
                     alt={"Team Logo"}
                     className="h-8 w-8"
@@ -73,7 +74,7 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
                   <span>{home.seed}</span>
 
                   {home.logo && (
-                    <img
+                    <Image
                       src={home.logo}
                       alt={"Team Logo"}
                       className="h-8 w-8"
@@ -82,7 +83,7 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
                   <span className="mx-2 text-xs text-gray-400">vs</span>
                   <span>{away.seed}</span>
                   {away.logo && (
-                    <img
+                    <Image
                       src={away.logo}
                       alt={"Team Logo"}
                       className="h-8 w-8"
@@ -104,7 +105,7 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
                       .map((team) => (
                         <span key={team.seed} className="flex items-center">
                           {team.logo && (
-                            <img
+                            <Image
                               src={team.logo}
                               alt={"Team Logo"}
                               className="h-8 w-8"
@@ -129,7 +130,7 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
                       .map((team) => (
                         <span key={team.seed} className="flex items-center">
                           {team.logo && (
-                            <img
+                            <Image
                               src={team.logo}
                               alt={"Team Logo"}
                               className="h-8 w-8"
@@ -155,7 +156,7 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
               >
                 <span>{nfc.divisional.seed}</span>
                 {nfc.divisional.logo && (
-                  <img
+                  <Image
                     src={nfc.divisional.logo}
                     alt={"Team Logo"}
                     className="h-8 w-8"
@@ -173,7 +174,7 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
                   <span>{home.seed}</span>
 
                   {home.logo && (
-                    <img
+                    <Image
                       src={home.logo}
                       alt={"Team Logo"}
                       className="h-8 w-8"
@@ -182,7 +183,7 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
                   <span className="mx-2 text-xs text-gray-400">vs</span>
                   <span>{away.seed}</span>
                   {away.logo && (
-                    <img
+                    <Image
                       src={away.logo}
                       alt={"Team Logo"}
                       className="h-8 w-8"
@@ -204,7 +205,7 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
                       .map((team) => (
                         <span key={team.seed} className="flex items-center">
                           {team.logo && (
-                            <img
+                            <Image
                               src={team.logo}
                               alt={"Team Logo"}
                               className="h-8 w-8"
@@ -229,7 +230,7 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
                       .map((team) => (
                         <span key={team.seed} className="flex items-center">
                           {team.logo && (
-                            <img
+                            <Image
                               src={team.logo}
                               alt={"Team Logo"}
                               className="h-8 w-8"

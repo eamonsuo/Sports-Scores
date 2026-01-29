@@ -2,7 +2,7 @@ import CricketSeriesLadder, {
   CricketLadder,
 } from "@/components/cricket/CricketSeriesLadder";
 import CricketSeriesResult from "@/components/cricket/CricketSeriesResult";
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { cricketSeriesResults } from "@/services/cricket.service";
 import Image from "next/image";
 

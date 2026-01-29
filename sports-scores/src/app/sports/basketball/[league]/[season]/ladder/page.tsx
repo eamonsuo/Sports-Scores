@@ -1,5 +1,5 @@
 import BasketballLadder from "@/components/basketball/BasketballLadder";
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { basketballStandings } from "@/services/basketball.service";
 
 export default async function Page(props: {

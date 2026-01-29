@@ -1,5 +1,5 @@
 import FootballLadder from "@/components/football/FootballLadder";
-import Placeholder from "@/components/misc/Placeholder";
+import Placeholder from "@/components/misc-ui/Placeholder";
 import { footballStandings } from "@/services/football.service";
 
 export default async function Page(props: {

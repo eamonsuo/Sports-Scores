@@ -1,4 +1,4 @@
-import NavButtonGroup from "@/components/misc/NavButtonGroup";
+import NavButtonGroup from "@/components/misc-ui/NavButtonGroup";
 import { getGlobalApiQuota } from "@/lib/apiCounter";
 import { SPORT } from "@/types/misc";
 
