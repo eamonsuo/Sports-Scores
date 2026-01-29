@@ -6,7 +6,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
   // Major Events 2026
   {
     id: "22",
-    name: "2026 PDC World Darts Championship",
+    name: "PDC World Darts Championship",
     sport: "Darts",
     type: "major",
     startDate: new Date("2025-12-11"),
@@ -18,12 +18,13 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
   },
   {
     id: "1",
-    name: "FIFA World Cup 2026",
+    name: "FIFA World Cup",
     sport: "Football",
     type: "major",
     startDate: new Date("2026-06-11"),
     endDate: new Date("2026-07-19"),
-    // imageUrl: "/footer/cricket-ball.svg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/1/17/2026_FIFA_World_Cup_emblem.svg",
     link: "/sports/football/world-cup",
     location: "USA, Canada, Mexico",
     tags: ["♂️"],
@@ -47,7 +48,8 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-02-01"),
     endDate: new Date("2026-02-23"),
-    // imageUrl: "/vercel.svg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/f/fa/2026_ICC_Men%27s_T20_World_Cup_logo.svg",
     link: "/sports/cricket",
     location: "India & Sri Lanka",
     tags: ["♂️"],
@@ -80,6 +82,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-06-29"),
     endDate: new Date("2026-07-12"),
+    imageUrl: "https://upload.wikimedia.org/wikipedia/en/b/b9/Wimbledon.svg",
     link: "/sports/tennis",
     location: "London, England",
     tags: ["♂️", "♀️"],
@@ -103,7 +106,8 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-01-15"),
     endDate: new Date("2026-02-06"),
-    // imageUrl: "/vercel.svg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/b/b4/Australian_Open_Logo_2017.svg",
     link: "/sports/tennis",
     location: "Melbourne, Australia",
     tags: ["♂️", "♀️"],
@@ -115,7 +119,8 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-05-18"),
     endDate: new Date("2026-06-07"),
-    // imageUrl: "/vercel.svg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/1/1d/Logo_Roland-Garros.svg",
     link: "/sports/tennis",
     location: "Paris, France",
     tags: ["♂️", "♀️"],
@@ -127,7 +132,8 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-06-12"),
     endDate: new Date("2026-07-05"),
-    // imageUrl: "/vercel.svg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/8/87/2026_ICC_Women%27s_T20_World_Cup_Logo.svg",
     link: "/sports/cricket",
     location: "England & Wales",
     tags: ["♀️"],
@@ -147,7 +153,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
   },
   {
     id: "11",
-    name: "World Baseball Classic 2026",
+    name: "World Baseball Classic",
     sport: "Baseball",
     type: "major",
     startDate: new Date("2026-03-05"),
@@ -171,7 +177,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
   },
   {
     id: "15",
-    name: "March Madness 2026",
+    name: "March Madness",
     sport: "Basketball",
     type: "major",
     startDate: new Date("2026-03-17"),
@@ -183,7 +189,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
   },
   {
     id: "16",
-    name: "World Athletics Indoor Championships 2026",
+    name: "World Athletics Indoor Championships",
     sport: "Athletics",
     type: "major",
     startDate: new Date("2026-03-20"),
@@ -195,7 +201,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
   },
   {
     id: "17",
-    name: "NFL Draft 2026",
+    name: "NFL Draft",
     sport: "American Football",
     type: "major",
     startDate: new Date("2026-04-23"),
@@ -207,7 +213,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
   },
   {
     id: "18",
-    name: "Giro d'Italia 2026",
+    name: "Giro d'Italia",
     sport: "Cycling",
     type: "major",
     startDate: new Date("2026-05-08"),
@@ -219,7 +225,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
   },
   {
     id: "19",
-    name: "IIHF World Championship 2026",
+    name: "IIHF World Championship",
     sport: "Ice Hockey",
     type: "major",
     startDate: new Date("2026-05-15"),
@@ -231,19 +237,20 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
   },
   {
     id: "20",
-    name: "PGA Championship 2026",
+    name: "PGA Championship",
     sport: "Golf",
     type: "major",
     startDate: new Date("2026-05-14"),
     endDate: new Date("2026-05-17"),
-    // imageUrl: "/olympic-rings.svg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/5/5d/PGA_Championship.png",
     link: "/sports/golf",
-    location: "Aronimink Golf Club, Newtown Square, PA, USA",
+    location: "Aronimink Golf Club, USA",
     tags: ["♂️"],
   },
   {
     id: "21",
-    name: "Europa League Final 2026",
+    name: "Europa League Final",
     sport: "Football",
     type: "major",
     startDate: new Date("2026-05-20"),
@@ -255,12 +262,13 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
   },
   {
     id: "22-ucl",
-    name: "Champions League Final 2026",
+    name: "Champions League Final",
     sport: "Football",
     type: "major",
     startDate: new Date("2026-05-30"),
     endDate: new Date("2026-05-30"),
-    // imageUrl: "/olympic-rings.svg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/f/f5/UEFA_Champions_League.svg",
     link: "/sports/football",
     location: "Budapest, Hungary",
     tags: ["♂️"],
@@ -272,38 +280,41 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-06-18"),
     endDate: new Date("2026-06-21"),
-    // imageUrl: "/olympic-rings.svg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/7/76/US_Open_%28Golf%29_Logo.png",
     link: "/sports/golf",
-    location: "Shinnecock Hills Golf Club, New York, USA",
+    location: "Shinnecock Hills Golf Club, USA",
     tags: ["♂️"],
   },
   {
     id: "24",
-    name: "Tour De France 2026",
+    name: "Tour De France",
     sport: "Cycling",
     type: "major",
     startDate: new Date("2026-07-04"),
     endDate: new Date("2026-07-26"),
-    // imageUrl: "/olympic-rings.svg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/5/50/Tour_de_France_logo_%28black_background%29.svg",
     link: "/sports/cycling",
     location: "France",
     tags: ["♂️"],
   },
   {
     id: "25",
-    name: "Commonwealth Games 2026",
+    name: "Commonwealth Games",
     sport: "Multi-Sport",
     type: "major",
     startDate: new Date("2026-07-23"),
     endDate: new Date("2026-08-02"),
-    // imageUrl: "/olympic-rings.svg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/5/57/2026_Commonwealth_Games_logo.svg",
     link: "/sports/olympics/commonwealth-games",
     location: "Glasgow, Scotland",
     tags: ["♂️", "♀️"],
   },
   {
     id: "26",
-    name: "FIH Hockey World Cup 2026",
+    name: "FIH Hockey World Cup",
     sport: "Hockey",
     type: "major",
     startDate: new Date("2026-08-14"),
@@ -320,14 +331,15 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-08-31"),
     endDate: new Date("2026-09-13"),
-    // imageUrl: "/olympic-rings.svg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/c/cd/Usopen-horizontal-logo.svg",
     link: "/sports/tennis",
     location: "New York, USA",
     tags: ["♂️", "♀️"],
   },
   {
     id: "28",
-    name: "FIBA Basketball World Cup 2026",
+    name: "FIBA Basketball World Cup",
     sport: "Basketball",
     type: "major",
     startDate: new Date("2026-09-04"),
@@ -352,7 +364,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
   },
   {
     id: "31",
-    name: "UCI Road World Championships 2026",
+    name: "UCI Road World Championships",
     sport: "Cycling",
     type: "major",
     startDate: new Date("2026-09-20"),
@@ -364,7 +376,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
   },
   {
     id: "32",
-    name: "UCI Track World Championships 2026",
+    name: "UCI Track World Championships",
     sport: "Cycling",
     type: "major",
     startDate: new Date("2026-10-14"),
@@ -376,7 +388,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
   },
   {
     id: "33",
-    name: "Rugby League World Cup 2026",
+    name: "Rugby League World Cup",
     sport: "Rugby League",
     type: "major",
     startDate: new Date("2026-10-15"),
@@ -434,6 +446,19 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     location: "Saudi Arabia",
     tags: ["♀️"],
   },
+  {
+    id: "38",
+    name: "The Open Championship",
+    sport: "Golf",
+    type: "major",
+    startDate: new Date("2026-07-15"),
+    endDate: new Date("2026-07-19"),
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/d/d0/The_Open_Championship_logo.png",
+    link: "/sports/golf",
+    location: "Royal Birkdale Golf Club, England",
+    tags: ["♂️"],
+  },
 
   // Regular Seasons
   {
@@ -445,7 +470,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-02-08"),
     // imageUrl: "/vercel.svg",
     link: "/sports/american-football",
-    location: "USA",
+    // location: "USA",
   },
   {
     id: "rs-nba-2026",
@@ -455,7 +480,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     startDate: new Date("2025-10-21"),
     endDate: new Date("2026-06-19"),
     link: "/sports/basketball",
-    location: "USA",
+    // location: "USA",
   },
   {
     id: "rs-mlb-2026",
@@ -466,7 +491,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2027-11-01"),
     imageUrl: "/vercel.svg",
     link: "/sports/baseball",
-    location: "USA",
+    // location: "USA",
   },
   {
     id: "rs-nhl-2026",
@@ -477,17 +502,17 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-06-30"),
     imageUrl: "/vercel.svg",
     link: "/sports/ice-hockey",
-    location: "USA",
+    //  location: "USA",
   },
   {
     id: "rs-premier-league-2026",
     name: "Premier League",
     sport: "Football",
     type: "regular-season",
-    startDate: new Date("2026-08-08"),
-    endDate: new Date("2027-05-23"),
+    startDate: new Date("2025-08-08"),
+    endDate: new Date("2026-05-23"),
     link: "/sports/football",
-    location: "England",
+    // location: "England",
   },
   {
     id: "rs-afl-2026",
@@ -508,7 +533,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-10-04"),
     imageUrl: "/vercel.svg",
     link: "/sports/rugby-league",
-    location: "Australia & New Zealand",
+    // location: "Australia & New Zealand",
   },
   {
     id: "rs-f1-2026",
@@ -519,6 +544,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-12-06"),
     imageUrl: "/vercel.svg",
     link: "/sports/motorsport",
+    // location: "Worldwide",
   },
   {
     id: "rs-aleague-men-2026",
@@ -529,7 +555,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-05-10"),
     imageUrl: "/vercel.svg",
     link: "/sports/football",
-    location: "Australia & New Zealand",
+    // location: "Australia & New Zealand",
   },
   {
     id: "rs-aleague-women-2026",
@@ -540,7 +566,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-05-10"),
     imageUrl: "/vercel.svg",
     link: "/sports/football",
-    location: "Australia & New Zealand",
+    // location: "Australia & New Zealand",
   },
   {
     id: "rs-sailgp-2026",
@@ -551,7 +577,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-11-29"),
     imageUrl: "/vercel.svg",
     link: "/sports/sailing",
-    location: "Worldwide",
+    // location: "Worldwide",
   },
 ];
 

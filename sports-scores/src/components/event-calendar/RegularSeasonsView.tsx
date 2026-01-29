@@ -16,9 +16,9 @@ export default function RegularSeasonsView({
   const [viewMode, setViewMode] = useState<SeasonViewMode>("active-upcoming");
 
   return (
-    <div className="space-y-6">
+    <>
       {/* Sub-filter for Regular Seasons */}
-      <div className="sticky top-0 z-10 mb-4 flex justify-center gap-2 rounded-lg bg-gray-200 p-1 dark:bg-neutral-800">
+      <div className="mx-6 mb-4 flex justify-center gap-2 rounded-lg bg-gray-200 p-1 dark:bg-neutral-800">
         <button
           onClick={() => setViewMode("active-upcoming")}
           className={`flex-1 rounded-md px-4 py-2 transition-all ${
@@ -42,9 +42,13 @@ export default function RegularSeasonsView({
       </div>
 
       {/* Content */}
-      {viewMode === "active-upcoming" && <ActiveUpcomingView events={events} />}
-      {viewMode === "by-sport" && <BySportView events={events} />}
-    </div>
+      <div className="flex-1 overflow-y-auto px-6">
+        {viewMode === "active-upcoming" && (
+          <ActiveUpcomingView events={events} />
+        )}
+        {viewMode === "by-sport" && <BySportView events={events} />}
+      </div>
+    </>
   );
 }
 
@@ -52,30 +56,23 @@ function ActiveUpcomingView({ events }: { events: SportEvent[] }) {
   const now = new Date();
 
   // Separate active and upcoming
-  const activeSeasons = events
-    .filter((event) => {
-      const start = new Date(event.startDate);
-      const end = event.endDate ? new Date(event.endDate) : start;
-      return now >= start && now <= end;
-    })
-    .sort((a, b) => a.sport.localeCompare(b.sport));
+  const activeSeasons = events.filter((event) => {
+    const start = new Date(event.startDate);
+    const end = event.endDate ? new Date(event.endDate) : start;
+    return now >= start && now <= end;
+  });
 
-  const upcomingSeasons = events
-    .filter((event) => {
-      const start = new Date(event.startDate);
-      return now < start;
-    })
-    .sort(
-      (a, b) =>
-        new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-    );
+  const upcomingSeasons = events.filter((event) => {
+    const start = new Date(event.startDate);
+    return now < start;
+  });
 
   return (
     <div className="space-y-8">
       {/* Active Seasons */}
       {activeSeasons.length > 0 && (
         <div>
-          <h2 className="mb-4 flex items-center gap-2 text-2xl font-bold text-gray-900 dark:text-white">
+          <h2 className="sticky top-0 z-10 mb-4 flex items-center gap-2 bg-white pb-2 pt-2 text-2xl font-bold text-gray-900 dark:bg-neutral-950 dark:text-white">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-green-500 text-white dark:bg-green-600">
               <span className="text-sm">●</span>
             </span>
@@ -92,7 +89,7 @@ function ActiveUpcomingView({ events }: { events: SportEvent[] }) {
       {/* Upcoming Seasons */}
       {upcomingSeasons.length > 0 && (
         <div>
-          <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">
+          <h2 className="sticky top-0 z-10 mb-4 bg-white pb-2 pt-2 text-2xl font-bold text-gray-900 dark:bg-neutral-950 dark:text-white">
             Upcoming Leagues
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

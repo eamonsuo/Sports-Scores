@@ -45,7 +45,7 @@ export default function EventCardGrid({ events }: EventCardGridProps) {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-1 flex-col overflow-y-auto px-6">
       {/* Current/Upcoming Events Section */}
       {currentEvents.length > 0 && (
         <div className="mb-6">
@@ -85,7 +85,7 @@ export default function EventCardGrid({ events }: EventCardGridProps) {
       {/* Events by Month */}
 
       {Object.entries(eventsByMonth).map(([month, monthEvents]) => (
-        <div key={month} id={`month-${month}`} className="mb-6 scroll-mt-24">
+        <div key={month} id={`month-${month}`} className="mb-6 scroll-mt-28">
           <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-neutral-200">
             {month}
           </h2>

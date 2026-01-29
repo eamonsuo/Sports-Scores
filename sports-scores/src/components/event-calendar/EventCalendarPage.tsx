@@ -64,12 +64,9 @@ export default function EventCalendarPage() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto rounded-lg px-6">
-        {viewMode === "major" && <EventCardGrid events={majorEvents} />}
-        {viewMode === "regular" && (
-          <RegularSeasonsView events={regularSeasons} />
-        )}
-      </div>
+
+      {viewMode === "major" && <EventCardGrid events={majorEvents} />}
+      {viewMode === "regular" && <RegularSeasonsView events={regularSeasons} />}
     </div>
   );
 }
