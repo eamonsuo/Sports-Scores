@@ -427,7 +427,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     name: "PGA Tour",
     sport: "Golf",
     type: "regular-season",
-    startDate: new Date("2025-01-15"),
+    startDate: new Date("2026-01-15"),
     endDate: new Date("2026-08-30"),
     // imageUrl: "/vercel.svg",
     link: "/sports/golf",
@@ -437,7 +437,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     name: "TGL",
     sport: "Golf",
     type: "regular-season",
-    startDate: new Date("2025-12-28"),
+    startDate: new Date("2026-12-28"),
     endDate: new Date("2026-03-24"),
     // imageUrl: "/vercel.svg",
     link: "/sports/golf",
@@ -447,7 +447,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     name: "LIV Golf",
     sport: "Golf",
     type: "regular-season",
-    startDate: new Date("2025-02-04"),
+    startDate: new Date("2026-02-04"),
     endDate: new Date("2026-08-30"),
     // imageUrl: "/vercel.svg",
     link: "/sports/golf",
@@ -653,6 +653,29 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     link: "/sports/multi-sport",
     location: "Dakar, Senegal",
     tags: ["👨", "👩"],
+  },
+
+//Netball
+  {
+    id: "35net",
+    name: "Super Netball",
+    sport: "Netball",
+    type: "regular-season",
+    startDate: new Date("2026-03-14"),
+    endDate: new Date("2026-06-28"),
+    // imageUrl: "/olympic-rings.svg",
+    link: "/sports/netball",
+  },{
+    id: "36net",
+    name: "Netball World Cup",
+    sport: "Netball",
+    type: "major",
+    startDate: new Date("2027-07-28"),
+    endDate: new Date("2026-08-06"),
+    imageUrl: "https://upload.wikimedia.org/wikipedia/en/8/8f/2027_Netball_World_Cup_Sydney_bid_logo.jpg",
+    link: "/sports/netball",
+location: "Sydney, Australia",
+    tags: ["👩"]
   },
 
   // Olympics
