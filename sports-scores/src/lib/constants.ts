@@ -201,8 +201,8 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     name: "Australia vs India",
     sport: "Cricket (Tests)",
     type: "major",
-    startDate: new Date("2026-01-01"),
-    endDate: new Date("2026-02-01"),
+    startDate: new Date("2027-01-01"),
+    endDate: new Date("2027-02-01"),
     // imageUrl:
     //   "https://upload.wikimedia.org/wikipedia/en/d/d0/The_Open_Championship_logo.png",
     link: "/sports/cricket",
@@ -279,7 +279,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     sport: "Cricket (Tests)",
     type: "major",
     startDate: new Date("2026-12-01"),
-    endDate: new Date("2026-01-01"),
+    endDate: new Date("2027-01-01"),
     // imageUrl:
     //   "https://upload.wikimedia.org/wikipedia/en/d/d0/The_Open_Championship_logo.png",
     link: "/sports/cricket",
@@ -534,7 +534,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
   {
     id: "26",
     name: "FIH Hockey World Cup",
-    sport: "Hockey",
+    sport: "Field Hockey",
     type: "major",
     startDate: new Date("2026-08-14"),
     endDate: new Date("2026-08-30"),
