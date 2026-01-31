@@ -86,7 +86,7 @@ export async function cricketMatchesByDateClient(date: Date) {
             name: event.T2[0].Nm,
           },
           seriesName: item.Snm,
-          matchSlug: `${event.Eid}`,
+          matchSlug: `match/${event.Eid}`,
           seriesSlug: `${item.Ccd}/${item.Scd}`,
         } as MatchSummary;
       });
@@ -138,6 +138,8 @@ export async function cricketMatchesByDate(date: Date) {
           event.Eps === "NS"
             ? `Match starts at ${toShortTimeString(sDate)}`
             : event.ECo,
+        timer: event.EpsL === "Play in progress" ? "Live" : null,
+        timerDisplayColour: event.EpsL === "Play in progress" ? "green" : null,
         otherDetail: event.ErnInf,
         homeDetails: {
           img: resolveCricketTeamImages(
@@ -154,7 +156,7 @@ export async function cricketMatchesByDate(date: Date) {
           name: event.T2[0].Nm,
         },
         seriesName: item.Snm,
-        matchSlug: `${event.Eid}`,
+        matchSlug: `match/${event.Eid}`,
         seriesSlug: `${item.Ccd}/${item.Scd}`,
       } as MatchSummary;
     });
@@ -321,7 +323,7 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
           name: event.T2[0].Nm,
         },
         seriesName: item.Snm,
-        matchSlug: `${event.Eid}`,
+        matchSlug: `match/${event.Eid}`,
         seriesSlug: `${item.Ccd}/${item.Scd}`,
       } as MatchSummary;
     });

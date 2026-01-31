@@ -1,5 +1,5 @@
 import { SportEvent } from "@/types/event-calendar";
-import { format } from "date-fns";
+import { format, isSameDay } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,20 +8,6 @@ interface EventCardProps {
 }
 
 export default function EventCard({ event }: EventCardProps) {
-  const EventWrapper = ({ children }: { children: React.ReactNode }) => {
-    if (event.link) {
-      return <Link href={event.link}>{children}</Link>;
-    }
-    if (event.externalLink) {
-      return (
-        <a href={event.externalLink} target="_blank" rel="noopener noreferrer">
-          {children}
-        </a>
-      );
-    }
-    return <div>{children}</div>;
-  };
-
   const isOngoing = event.endDate
     ? new Date() >= new Date(event.startDate) &&
       new Date() <= new Date(event.endDate)
@@ -35,8 +21,36 @@ export default function EventCard({ event }: EventCardProps) {
   );
   const showCountdown = daysUntilStart > 0 && daysUntilStart < 10;
 
+  // Determine date display
+  const getDateDisplay = () => {
+    // If custom dateDisplay is provided, use it
+    if (event.dateDisplay) {
+      return event.dateDisplay;
+    }
+
+    const start = new Date(event.startDate);
+    const end = event.endDate ? new Date(event.endDate) : null;
+
+    // If no end date or same day, show single date
+    if (!end || isSameDay(start, end)) {
+      return format(start, "d MMM yyyy");
+    }
+
+    // Check if start and end are in different years
+    const startYear = start.getFullYear();
+    const endYear = end.getFullYear();
+
+    if (startYear !== endYear) {
+      // Different years - show year on both dates
+      return `${format(start, "d MMM yyyy")} - ${format(end, "d MMM yyyy")}`;
+    } else {
+      // Same year - show year only on end date
+      return `${format(start, "d MMM")} - ${format(end, "d MMM yyyy")}`;
+    }
+  };
+
   return (
-    <EventWrapper>
+    <Link href={event.link ?? ""}>
       <div className="group flex h-full cursor-pointer overflow-hidden rounded-lg border border-gray-300 bg-white shadow-sm transition-all hover:shadow-md active:bg-gray-100 dark:border-neutral-500 dark:bg-neutral-800 dark:active:bg-neutral-700">
         {/* Image Section */}
         {event.imageUrl && (
@@ -84,13 +98,15 @@ export default function EventCard({ event }: EventCardProps) {
 
           {/* Date */}
           <div className="mb-2 text-sm text-gray-700 dark:text-neutral-300">
-            <p>
-              {format(new Date(event.startDate), "MMM dd, yyyy")}
-              {event.endDate &&
-                event.endDate !== event.startDate &&
-                ` - ${format(new Date(event.endDate), "MMM dd, yyyy")}`}
-            </p>
+            <p>{getDateDisplay()}</p>
           </div>
+
+          {/* Notes Section */}
+          {event.notes && (
+            <div className="mb-2 whitespace-pre-line rounded bg-blue-50 px-2 py-1 text-xs text-blue-800 dark:bg-blue-900/30 dark:text-blue-200">
+              {event.notes}
+            </div>
+          )}
 
           {/* Location and Tags */}
           <div className="flex items-center justify-between gap-3">
@@ -111,6 +127,6 @@ export default function EventCard({ event }: EventCardProps) {
           </div>
         </div>
       </div>
-    </EventWrapper>
+    </Link>
   );
 }

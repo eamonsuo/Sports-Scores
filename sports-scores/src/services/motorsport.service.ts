@@ -24,7 +24,7 @@ import {
   F1SessionType,
   SessionSummary,
 } from "@/types/f1";
-import { SPORT } from "@/types/misc";
+import { MatchSummary, SPORT } from "@/types/misc";
 
 export async function f1EventSchedule(season: number) {
   const rawEvents = await fetchF1Events(season);
@@ -396,4 +396,45 @@ function setSessionStatus(sessionDate: Date) {
   } else {
     return "Completed";
   }
+}
+
+export function motorsportCategoriesByDate(date: Date) {
+  // Placeholder for golf matches fetching logic
+
+  function createMotorsportMatchSummary(
+    id: number,
+    name: string,
+    slug: string,
+  ) {
+    return {
+      id: id,
+      sport: SPORT.MOTORSPORT,
+      summaryText: name,
+      startDate: date,
+      status: "UPCOMING",
+      awayDetails: { score: "", name: "" },
+      homeDetails: { score: "", name: "" },
+      matchSlug: slug,
+    } as MatchSummary;
+  }
+
+  const motorsportEvents: MatchSummary[] = [];
+
+  // Basic check for tournaments
+  switch (date.getDay()) {
+    case 2: // Tuesday
+    case 3: // Wednesday
+      break;
+    case 4: // Thursday
+    case 5: // Friday
+    case 6: // Saturday
+    case 0: // Sunday
+    case 1: // Monday
+      motorsportEvents.push(
+        createMotorsportMatchSummary(2, "F1", "f1/2026"),
+        createMotorsportMatchSummary(1, "Supercars", "supercars/2026"),
+      );
+      break;
+  }
+  return motorsportEvents;
 }

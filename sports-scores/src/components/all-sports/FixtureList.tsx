@@ -63,9 +63,9 @@ export default function FixtureList({
               awayInfo={item.awayDetails}
               matchSummary={item.summaryText}
               bottomInfo={item.otherDetail}
-              venue={item.venue}
+              venue={item.venue ?? ""}
               timer={{
-                display: item.timer,
+                display: item.timer ?? "",
                 displayColour: item.timerDisplayColour,
               }}
               topInfo={undefined}

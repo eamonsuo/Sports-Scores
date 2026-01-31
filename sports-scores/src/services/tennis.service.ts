@@ -379,7 +379,7 @@ function mapTennisMatches(match: Tennis_Sofascore_Event) {
       match.status.type === "notstarted"
         ? toShortTimeString(startDate)
         : match.status.description,
-    timerDisplayColour: match.status.type === "inprogress" ? "green" : null,
+    timerDisplayColour: match.status.type === "inprogress" ? "green" : "gray",
     id: match.id,
     matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
     sport: SPORT.TENNIS,

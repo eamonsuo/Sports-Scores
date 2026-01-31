@@ -20,7 +20,7 @@ export default function MatchSummaryCard({
   matchSummary: string;
   homeInfo: TeamScoreDetails;
   awayInfo: TeamScoreDetails;
-  timer: { display: string; displayColour?: "green" | "yellow" | "white" };
+  timer: { display: string; displayColour?: "green" | "yellow" | "gray" };
   venue: string;
   topInfo?: string;
   bottomInfo?: string;
@@ -54,7 +54,7 @@ export default function MatchSummaryCard({
                   "bg-green-500 text-neutral-200 dark:bg-green-700",
                 timer.displayColour === "yellow" &&
                   "bg-yellow-500 text-black dark:bg-yellow-600",
-                !timer.displayColour &&
+                timer.displayColour === "gray" &&
                   "bg-gray-200 text-gray-700 dark:bg-neutral-700 dark:text-neutral-400",
               )}
             >

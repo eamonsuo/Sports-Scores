@@ -72,7 +72,7 @@ function ActiveUpcomingView({ events }: { events: SportEvent[] }) {
       {/* Active Seasons */}
       {activeSeasons.length > 0 && (
         <div>
-          <h2 className="sticky top-0 z-10 mb-4 flex items-center gap-2 bg-white pb-2 pt-2 text-2xl font-bold text-gray-900 dark:bg-neutral-950 dark:text-white">
+          <h2 className="sticky top-0 z-10 mb-4 flex items-center gap-2 bg-white pb-2 pt-2 text-2xl font-bold text-gray-900 dark:bg-neutral-950 dark:text-neutral-200">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-green-500 text-white dark:bg-green-600">
               <span className="text-sm">●</span>
             </span>
@@ -89,7 +89,7 @@ function ActiveUpcomingView({ events }: { events: SportEvent[] }) {
       {/* Upcoming Seasons */}
       {upcomingSeasons.length > 0 && (
         <div>
-          <h2 className="sticky top-0 z-10 mb-4 bg-white pb-2 pt-2 text-2xl font-bold text-gray-900 dark:bg-neutral-950 dark:text-white">
+          <h2 className="sticky top-0 z-10 mb-4 bg-white pb-2 pt-2 text-2xl font-bold text-gray-900 dark:bg-neutral-950 dark:text-neutral-200">
             Upcoming Leagues
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -138,7 +138,7 @@ function BySportView({ events }: { events: SportEvent[] }) {
     <div className="space-y-8">
       {sortedSports.map((sport) => (
         <div key={sport}>
-          <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">
+          <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-neutral-200">
             {sport}
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

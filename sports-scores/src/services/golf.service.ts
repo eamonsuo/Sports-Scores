@@ -17,6 +17,7 @@ import {
   SlashGolf_PlayerRanking_FedExCup,
   SlashGolf_PlayerRanking_OWGR,
 } from "@/types/golf";
+import { MatchSummary, SPORT } from "@/types/misc";
 
 export async function golfPGASchedule(year: string = "2025") {
   var rawSchedule = await fetchGolfSchedule(1, year);
@@ -175,4 +176,57 @@ export function mapGolfSchedule(
     }),
     pageName: "",
   } as GolfSchedulePage;
+}
+
+export function golfTournamentsByDate(date: Date) {
+  // Placeholder for golf matches fetching logic
+
+  function createGolfMatchSummary(id: number, name: string, slug: string) {
+    return {
+      id: id,
+      sport: SPORT.GOLF,
+      summaryText: name,
+      startDate: date,
+      status: "UPCOMING",
+      awayDetails: { score: "", name: "" },
+      homeDetails: { score: "", name: "" },
+      matchSlug: slug,
+    } as MatchSummary;
+  }
+
+  const golfTours: MatchSummary[] = [];
+
+  // Basic check for tournaments
+  switch (date.getDay()) {
+    case 2: // Tuesday
+    case 3: // Wednesday
+      golfTours.push(createGolfMatchSummary(0, "TGL", "tgl"));
+      break;
+    case 4: // Thursday
+      golfTours.push(
+        createGolfMatchSummary(1, "PGA Tour of Australasia", "australasia"),
+      );
+      break;
+    case 5: // Friday
+    case 6: // Saturday
+    case 0: // Sunday
+      golfTours.push(
+        createGolfMatchSummary(1, "PGA Tour of Australasia", "australasia"),
+        createGolfMatchSummary(2, "PGA Tour", "pga/2026"),
+        createGolfMatchSummary(3, "LIV Golf", "liv/2026"),
+        createGolfMatchSummary(4, "DP World Tour", "dpworld"),
+        createGolfMatchSummary(5, "LPGA Tour", "lpga"),
+      );
+      break;
+    case 1: // Monday
+      golfTours.push(
+        // createGolfMatchSummary(1, "PGA Tour of Australasia", "australasia"),
+        createGolfMatchSummary(2, "PGA Tour", "pga/2026"),
+        createGolfMatchSummary(3, "LIV Golf", "liv/2026"),
+        createGolfMatchSummary(4, "DP World Tour", "dpworld"),
+        createGolfMatchSummary(5, "LPGA Tour", "lpga"),
+      );
+      break;
+  }
+  return golfTours;
 }

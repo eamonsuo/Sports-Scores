@@ -2,6 +2,8 @@
 
 import { SportEvent } from "@/types/event-calendar";
 import { format } from "date-fns";
+import Link from "next/link";
+import { Button } from "../misc-ui/Button";
 import EventCard from "./EventCard";
 
 interface EventCardGridProps {
@@ -49,9 +51,16 @@ export default function EventCardGrid({ events }: EventCardGridProps) {
       {/* Current/Upcoming Events Section */}
       {currentEvents.length > 0 && (
         <div className="mb-6">
+          <Link
+            href={"/sports/today"}
+            className="mb-6 flex justify-center rounded"
+          >
+            <Button variant={"secondary"}>Today&apos;s Sports</Button>
+          </Link>
           <h2 className="sticky top-0 z-10 mb-4 bg-white pb-2 pt-2 text-2xl font-bold text-gray-900 dark:bg-neutral-950 dark:text-neutral-200">
             Current Events
           </h2>
+
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {currentEvents.map((event) => (
               <EventCard key={`current-${event.id}`} event={event} />
