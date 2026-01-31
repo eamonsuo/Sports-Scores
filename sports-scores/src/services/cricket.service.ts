@@ -18,6 +18,7 @@ import {
   Cricket_LiveScoreAPI_MatchesGetScoreBoard,
 } from "@/types/cricket";
 import { MatchStatus, MatchSummary, SPORT } from "@/types/misc";
+import { format } from "date-fns";
 
 const excludedSeries = [
   "CSA",
@@ -305,7 +306,7 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
         status: mapCricketStatus(event.Eps),
         summaryText:
           event.Eps === "NS"
-            ? `Match starts at ${toShortTimeString(sDate)}`
+            ? `Match starts at ${format(sDate, "h:mm a")}`
             : event.ECo,
         otherDetail: event.ErnInf,
         homeDetails: {
