@@ -251,8 +251,8 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     name: "ICC T20 World Cup",
     sport: "Cricket",
     type: "major",
-    startDate: new Date("2026-02-01"),
-    endDate: new Date("2026-02-23"),
+    startDate: new Date("2026-02-07"),
+    endDate: new Date("2026-03-08"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/f/fa/2026_ICC_Men%27s_T20_World_Cup_logo.svg",
     link: "/sports/cricket/main/matches",
