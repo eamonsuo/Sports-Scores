@@ -56,15 +56,15 @@ export type MatchSummary = {
   startDate: Date;
   endDate?: Date;
   sport: string;
-  venue: string;
+  venue?: string;
   status: MatchStatus;
   summaryText: string;
   otherDetail?: string;
   homeDetails: TeamScoreDetails;
   awayDetails: TeamScoreDetails;
   roundLabel?: string;
-  timer: string;
-  timerDisplayColour?: "green" | "yellow";
+  timer?: string;
+  timerDisplayColour?: "green" | "yellow" | "gray" | undefined;
   seriesName?: string;
   matchSlug?: string;
   seriesSlug?: string; // Used to navigate to cricket series

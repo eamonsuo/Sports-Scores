@@ -1,31 +1,38 @@
 import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
 import { SportEvent } from "@/types/event-calendar";
+import { format } from "date-fns";
+
+const formatDate = (date: Date) => format(date, "d MMM");
+const formatDateYear = (date: Date) => format(date, "d MMM yyyy");
 
 // Event Data
 export const upcomingAndCurrentEvents: SportEvent[] = [
   // American Football
   {
     id: "rs-nfl-2026",
-    name: "NFL ",
+    name: "NFL",
     sport: "American Football",
     type: "regular-season",
     startDate: new Date("2025-09-04"),
-    endDate: new Date("2026-02-08"),
-    // imageUrl: "/vercel.svg",
-    link: "/sports/american-football",
+    endDate: new Date("2026-02-09"),
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/a/a2/National_Football_League_logo.svg",
+    link: "/sports/american-football/9464/75522",
+    notes: "Playoffs Start: Jan 10 \nSuperbowl: Feb 9",
   },
   {
     id: "10",
     name: "Superbowl LX",
     sport: "American Football",
     type: "major",
-    startDate: new Date("2026-02-08"),
-    endDate: new Date("2026-02-08"),
+    startDate: new Date("2026-02-09"),
+    endDate: new Date("2026-02-09"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/thumb/b/b0/Super_Bowl_LX_Logo.svg/1280px-Super_Bowl_LX_Logo.svg.png",
-    link: "/sports/american-football",
+    link: "/sports/american-football/9464/75522",
     location: "Santa Clara, California, USA",
     tags: ["👨"],
+    notes: "Halftime Show: Bad Bunny",
   },
   {
     id: "17",
@@ -34,8 +41,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-04-23"),
     endDate: new Date("2026-04-25"),
-    // imageUrl: "/olympic-rings.svg",
-    link: "/sports/american-football",
+    link: "https://www.nfl.com/draft",
     location: "USA",
     tags: ["👨"],
   },
@@ -48,9 +54,10 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-03-20"),
     endDate: new Date("2026-03-22"),
-    // imageUrl: "/olympic-rings.svg",
-    link: "/sports/athletics",
-    location: "Poland",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/2/24/World_Athletics_logo.svg",
+    link: "https://en.wikipedia.org/wiki/2026_World_Athletics_Indoor_Championships",
+    location: "Kujawy-Pomorze, Poland",
     tags: ["👨", "👩"],
   },
 
@@ -62,8 +69,10 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "regular-season",
     startDate: new Date("2026-03-05"),
     endDate: new Date("2026-09-26"),
-    // imageUrl: "/vercel.svg",
-    link: "/sports/aussie-rules",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/9/91/AFL-Logo_RGB_white_border.png",
+    link: "/sports/aussie-rules/656/86748",
+    notes: "Finals Series Start: Aug 29 \nGrand Final: Sep 26",
   },
   {
     id: "rs-aflw-2026",
@@ -72,8 +81,9 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "regular-season",
     startDate: new Date("2026-08-10"),
     endDate: new Date("2026-11-28"),
-    // imageUrl: "/vercel.svg",
-    link: "/sports/aussie-rules",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/b/b1/AFL_Women%27s_logo.svg",
+    link: "/sports/aussie-rules/10159/76123",
   },
   {
     id: "46",
@@ -82,10 +92,10 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-09-26"),
     endDate: new Date("2026-09-26"),
-    // imageUrl:
-    //   "https://upload.wikimedia.org/wikipedia/en/8/8e/Tour_Championship_Logo.png",
-    link: "/sports/aussie-rules",
-    location: "Australia & New Zealand",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/9/91/AFL-Logo_RGB_white_border.png",
+    link: "/sports/aussie-rules/656/86748",
+    location: "Melbourne, Australia",
     tags: ["👨"],
   },
 
@@ -97,8 +107,9 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-03-05"),
     endDate: new Date("2026-03-17"),
-    // imageUrl: "/vercel.svg",
-    link: "/sports/baseball",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/2/2e/WBC_logo.svg",
+    link: "/sports/baseball/11207/75868",
     location: "Japan, Puerto Rico, USA",
     tags: ["👨"],
   },
@@ -108,34 +119,26 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     sport: "Baseball",
     type: "regular-season",
     startDate: new Date("2026-03-25"),
-    endDate: new Date("2027-11-01"),
-    // imageUrl: "/vercel.svg",
-    link: "/sports/baseball",
+    endDate: new Date("2026-11-01"),
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/a/a6/Major_League_Baseball_logo.svg",
+    link: "/sports/baseball/11205/84695",
+    // dateDisplay: `${formatDate(new Date("2026-03-25"))} - Nov 2026`,
+    notes: "Playoffs Start: Sep 30 \nWorld Series: Oct 24 - Nov 1",
   },
   {
     id: "34",
     name: "World Series",
     sport: "Baseball",
     type: "major",
-    startDate: new Date("2026-10-23"),
-    endDate: new Date("2026-10-30"),
-    // imageUrl: "/olympic-rings.svg",
-    link: "/sports/baseball",
-    location: "USA",
-    tags: ["👨"],
-  },
-  {
-    id: "48",
-    name: "World Series",
-    sport: "Baseball",
-    type: "major",
     startDate: new Date("2026-10-24"),
     endDate: new Date("2026-11-01"),
-    // imageUrl:
-    //   "https://upload.wikimedia.org/wikipedia/en/8/8e/Tour_Championship_Logo.png",
-    link: "/sports/baseball",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/a/a6/Major_League_Baseball_logo.svg",
+    link: "/sports/baseball/11205/84695",
     location: "USA",
     tags: ["👨"],
+    // notes: "Game 1: Oct 24 \nGame 7: Nov 1 (if necessary)",
   },
 
   // Basketball
@@ -145,17 +148,36 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     sport: "Basketball",
     type: "regular-season",
     startDate: new Date("2025-09-18"),
-    endDate: new Date("2026-04-01"),
-    link: "/sports/basketball",
+    endDate: new Date("2026-04-15"),
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/b/b2/NBL_%28Australia%29_logo.svg",
+    link: "/sports/basketball/1524/77205",
+    dateDisplay: `${formatDateYear(new Date("2025-09-18"))} - Apr 2026`,
+    notes: "NBL Finals: March - April 2026",
   },
   {
     id: "rs-nba-2026",
-    name: "NBA ",
+    name: "NBA",
     sport: "Basketball",
     type: "regular-season",
     startDate: new Date("2025-10-21"),
-    endDate: new Date("2026-06-19"),
-    link: "/sports/basketball",
+    endDate: new Date("2026-06-20"),
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/0/03/National_Basketball_Association_logo.svg",
+    link: "/sports/basketball/132/80229",
+    notes: "Playoffs Start: Apr 15 \nNBA Finals: Jun 4",
+  },
+  {
+    id: "rs-wnba-2026",
+    name: "WNBA",
+    sport: "Basketball",
+    type: "regular-season",
+    startDate: new Date("2026-05-09"),
+    endDate: new Date("2026-10-24"),
+    dateDisplay: `${formatDate(new Date("2026-05-09"))} - Oct 2026`,
+    imageUrl: "https://upload.wikimedia.org/wikipedia/en/9/97/WNBA_logo.svg",
+    link: "/sports/basketball/",
+    notes: "Playoffs Start: Sep 25 \nWNBA Finals: ??",
   },
   {
     id: "15",
@@ -164,21 +186,35 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-03-17"),
     endDate: new Date("2026-04-06"),
-    // imageUrl: "/olympic-rings.svg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/2/28/March_Madness_logo.svg",
     link: "/sports/basketball",
     location: "USA",
     tags: ["👨", "👩"],
   },
   {
     id: "49",
+    name: "NBL Finals",
+    sport: "Basketball",
+    type: "major",
+    startDate: new Date("2026-03-01"),
+    endDate: new Date("2026-04-15"),
+    dateDisplay: "March - April 2026",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/en/7/76/NBL_Finals.png",
+    link: "/sports/basketball/1524/77205",
+    location: "Australia",
+    tags: ["👨"],
+  },
+  {
+    id: "49nba",
     name: "NBA Finals",
     sport: "Basketball",
     type: "major",
-    startDate: new Date("2026-06-05"),
-    endDate: new Date("2026-06-22"),
-    // imageUrl:
-    //   "https://upload.wikimedia.org/wikipedia/en/8/8e/Tour_Championship_Logo.png",
-    link: "/sports/basketball",
+    startDate: new Date("2026-06-04"),
+    endDate: new Date("2026-06-20"),
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/4/44/NBA_Finals_logo_%282022%29.svg",
+    link: "/sports/basketball/132/80229",
     location: "USA",
     tags: ["👨"],
   },
@@ -189,26 +225,14 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-09-04"),
     endDate: new Date("2026-09-13"),
-    // imageUrl: "/olympic-rings.svg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/3/3f/FIBA_Women%27s_Basketball_World_Cup_Germany%2726_logo.svg",
     link: "/sports/basketball",
-    location: "Germany",
+    location: "Berlin, Germany",
     tags: ["👩"],
   },
 
   // Cricket
-  {
-    id: "42",
-    name: "Australia vs India",
-    sport: "Cricket (Tests)",
-    type: "major",
-    startDate: new Date("2027-01-01"),
-    endDate: new Date("2027-02-01"),
-    // imageUrl:
-    //   "https://upload.wikimedia.org/wikipedia/en/d/d0/The_Open_Championship_logo.png",
-    link: "/sports/cricket",
-    location: "India",
-    tags: ["👨"],
-  },
   {
     id: "7",
     name: "ICC Under-19 World Cup",
@@ -216,8 +240,9 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-01-15"),
     endDate: new Date("2026-02-06"),
-    // imageUrl: "/vercel.svg",
-    link: "/sports/cricket",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/5/5f/2026_Under-19_Cricket_World_Cup_logo.svg",
+    link: "/sports/cricket/main/matches",
     location: "Zimbabwe & Namibia",
     tags: ["👨"],
   },
@@ -230,7 +255,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-02-23"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/f/fa/2026_ICC_Men%27s_T20_World_Cup_logo.svg",
-    link: "/sports/cricket",
+    link: "/sports/cricket/main/matches",
     location: "India & Sri Lanka",
     tags: ["👨"],
   },
@@ -242,8 +267,8 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     startDate: new Date("2026-02-15"),
     endDate: new Date("2026-03-09"),
     // imageUrl:
-    //   "https://upload.wikimedia.org/wikipedia/en/d/d0/The_Open_Championship_logo.png",
-    link: "/sports/cricket",
+    //   "https://upload.wikimedia.org/wikipedia/en/0/05/World_Test_Championship_Logo.svg",
+    link: "/sports/cricket/main/matches",
     location: "Australia",
     tags: ["👩"],
   },
@@ -256,7 +281,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-07-05"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/8/87/2026_ICC_Women%27s_T20_World_Cup_Logo.svg",
-    link: "/sports/cricket",
+    link: "/sports/cricket/main/matches",
     location: "England & Wales",
     tags: ["👩"],
   },
@@ -267,9 +292,10 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-09-01"),
     endDate: new Date("2026-10-01"),
-    // imageUrl:
-    //   "https://upload.wikimedia.org/wikipedia/en/d/d0/The_Open_Championship_logo.png",
-    link: "/sports/cricket",
+    dateDisplay: "Sep - Oct 2026",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/0/05/World_Test_Championship_Logo.svg",
+    link: "/sports/cricket/main/matches",
     location: "South Africa",
     tags: ["👨"],
   },
@@ -280,10 +306,25 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-12-01"),
     endDate: new Date("2027-01-01"),
-    // imageUrl:
-    //   "https://upload.wikimedia.org/wikipedia/en/d/d0/The_Open_Championship_logo.png",
-    link: "/sports/cricket",
+    dateDisplay: "Dec 2026 - Jan 2027",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/0/05/World_Test_Championship_Logo.svg",
+    link: "/sports/cricket/main/matches",
     location: "Australia",
+    tags: ["👨"],
+  },
+  {
+    id: "42",
+    name: "Australia vs India",
+    sport: "Cricket (Tests)",
+    type: "major",
+    startDate: new Date("2027-01-01"),
+    endDate: new Date("2027-02-01"),
+    dateDisplay: "Jan - Feb 2027",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/0/05/World_Test_Championship_Logo.svg",
+    link: "/sports/cricket/main/matches",
+    location: "India",
     tags: ["👨"],
   },
 
@@ -293,10 +334,11 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     name: "Giro d'Italia",
     sport: "Cycling",
     type: "major",
-    startDate: new Date("2026-05-08"),
-    endDate: new Date("2026-05-31"),
-    // imageUrl: "/olympic-rings.svg",
-    link: "/sports/cycling",
+    startDate: new Date("2026-05-09"),
+    endDate: new Date("2026-06-01"),
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/b/b3/Giro_d%27Italia_-_Logo_2018.svg",
+    link: "https://en.wikipedia.org/wiki/2026_Giro_d%27Italia",
     location: "Italy",
     tags: ["👨"],
   },
@@ -305,11 +347,11 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     name: "Tour De France",
     sport: "Cycling",
     type: "major",
-    startDate: new Date("2026-07-04"),
-    endDate: new Date("2026-07-26"),
+    startDate: new Date("2026-07-05"),
+    endDate: new Date("2026-07-27"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/5/50/Tour_de_France_logo_%28black_background%29.svg",
-    link: "/sports/cycling",
+    link: "https://en.wikipedia.org/wiki/2026_Tour_de_France",
     location: "France",
     tags: ["👨"],
   },
@@ -320,9 +362,11 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-09-20"),
     endDate: new Date("2026-09-27"),
-    // imageUrl: "/olympic-rings.svg",
-    link: "/sports/cycling",
-    location: "Canada",
+    dateDisplay: "Sep 2026",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/5/5c/Union_Cycliste_Internationale_logo.svg",
+    link: "https://en.wikipedia.org/wiki/2026_UCI_Road_World_Championships",
+    location: "Montreal, Canada",
     tags: ["👨", "👩"],
   },
   {
@@ -332,9 +376,11 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-10-14"),
     endDate: new Date("2026-10-18"),
-    // imageUrl: "/olympic-rings.svg",
-    link: "/sports/cycling",
-    location: "China",
+    dateDisplay: "Oct 2026",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/5/5c/Union_Cycliste_Internationale_logo.svg",
+    link: "https://en.wikipedia.org/wiki/2026_UCI_Track_Cycling_World_Championships",
+    location: "Shanghai, China",
     tags: ["👨", "👩"],
   },
 
@@ -344,12 +390,29 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     name: "PDC World Darts Championship",
     sport: "Darts",
     type: "major",
-    startDate: new Date("2025-12-11"),
-    endDate: new Date("2026-01-03"),
-    // imageUrl: "/footer/cricket-ball.svg",
+    startDate: new Date("2026-12-01"),
+    endDate: new Date("2027-01-10"),
+    dateDisplay: "Dec 2026 - Jan 2027",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/2/29/Professional_Darts_Corporation_logo.svg",
     link: "/sports/darts/world-championship",
     location: "Alexandra Palace, London, England",
     tags: ["👨"],
+  },
+
+  // Field Hockey
+  {
+    id: "26",
+    name: "FIH Hockey World Cup",
+    sport: "Field Hockey",
+    type: "major",
+    startDate: new Date("2026-08-15"),
+    endDate: new Date("2026-08-31"),
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/e/ee/Field_hockey_worldcup_logo.png",
+    link: "https://en.wikipedia.org/wiki/2026_Men%27s_FIH_Hockey_World_Cup",
+    location: "Belgium & Netherlands",
+    tags: ["👨", "👩"],
   },
 
   // Football
@@ -360,27 +423,33 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "regular-season",
     startDate: new Date("2025-08-08"),
     endDate: new Date("2026-05-23"),
-    link: "/sports/football",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/f/f2/Premier_League_Logo.svg",
+    link: "/sports/football/17/76986",
   },
   {
     id: "rs-aleague-men-2026",
     name: "A-League Men",
     sport: "Football",
     type: "regular-season",
-    startDate: new Date("2025-10-18"),
-    endDate: new Date("2026-05-10"),
-    // imageUrl: "/vercel.svg",
-    link: "/sports/football",
+    startDate: new Date("2025-10-17"),
+    endDate: new Date("2026-05-23"),
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/9/98/Isuzu_UTE_A-League_Men.svg",
+    link: "/sports/football/136/82603",
+    notes: "Finals Series Start: 1 May \nGrand Final: 23/24 May ",
   },
   {
     id: "rs-aleague-women-2026",
     name: "A-League Women",
     sport: "Football",
     type: "regular-season",
-    startDate: new Date("2025-10-18"),
-    endDate: new Date("2026-05-10"),
-    // imageUrl: "/vercel.svg",
-    link: "/sports/football",
+    startDate: new Date("2025-10-17"),
+    endDate: new Date("2026-05-17"),
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/0/0e/Ninja_A-League_Women_logo.svg",
+    link: "/sports/football/1894/82605",
+    notes: "Finals Series Start: 24 Apr \nGrand Final: 16/17 May ",
   },
   {
     id: "21",
@@ -389,7 +458,8 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-05-20"),
     endDate: new Date("2026-05-20"),
-    // imageUrl: "/olympic-rings.svg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/1/1b/UEFA_Europa_League_logo_%282024_version%29.svg",
     link: "/sports/football",
     location: "Istanbul, Turkey",
     tags: ["👨"],
@@ -423,34 +493,39 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
 
   // Golf
   {
-    id: "rs-pga-tour-2026",
-    name: "PGA Tour",
-    sport: "Golf",
-    type: "regular-season",
-    startDate: new Date("2026-01-15"),
-    endDate: new Date("2026-08-30"),
-    // imageUrl: "/vercel.svg",
-    link: "/sports/golf",
-  },
-  {
     id: "rs-tgl-2026",
     name: "TGL",
     sport: "Golf",
     type: "regular-season",
-    startDate: new Date("2026-12-28"),
+    startDate: new Date("2025-12-28"),
     endDate: new Date("2026-03-24"),
-    // imageUrl: "/vercel.svg",
-    link: "/sports/golf",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/en/f/f7/TGL_logo.png",
+    link: "/sports/golf/tgl",
+    notes: "Finals: 23-24 Mar",
+  },
+  {
+    id: "rs-pga-tour-2026",
+    name: "PGA Tour",
+    sport: "Golf",
+    type: "regular-season",
+    startDate: new Date("2026-01-16"),
+    endDate: new Date("2026-11-23"),
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/7/77/PGA_Tour_logo.svg",
+    link: "/sports/golf/pga/2026",
+    notes:
+      "FedEx Playoffs: 14 Aug - 31 Aug\nTour Championship: 28 Aug - 31 Aug\nFedEx Fall: 18 Sep - 23 Nov",
   },
   {
     id: "rs-liv-golf-2026",
     name: "LIV Golf",
     sport: "Golf",
     type: "regular-season",
-    startDate: new Date("2026-02-04"),
-    endDate: new Date("2026-08-30"),
-    // imageUrl: "/vercel.svg",
-    link: "/sports/golf",
+    startDate: new Date("2026-02-05"),
+    endDate: new Date("2026-08-31"),
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/2/27/LIV_golf_logo.svg",
+    link: "/sports/golf/liv/2026",
   },
   {
     id: "44",
@@ -459,9 +534,8 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-03-23"),
     endDate: new Date("2026-03-24"),
-    // imageUrl:
-    //   "https://upload.wikimedia.org/wikipedia/en/8/8e/Tour_Championship_Logo.png",
-    link: "/sports/golf",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/en/f/f7/TGL_logo.png",
+    link: "/sports/golf/pga/2026",
     location: "USA",
     tags: ["👨"],
   },
@@ -470,10 +544,10 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     name: "The Masters",
     sport: "Golf",
     type: "major",
-    startDate: new Date("2026-04-09"),
-    endDate: new Date("2026-04-12"),
+    startDate: new Date("2026-04-10"),
+    endDate: new Date("2026-04-13"),
     imageUrl: "https://upload.wikimedia.org/wikipedia/en/2/23/Masters_Logo.png",
-    link: "/sports/golf",
+    link: "/sports/golf/pga/2026",
     location: "Augusta, Georgia, USA",
     tags: ["👨"],
   },
@@ -482,11 +556,11 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     name: "PGA Championship",
     sport: "Golf",
     type: "major",
-    startDate: new Date("2026-05-14"),
-    endDate: new Date("2026-05-17"),
+    startDate: new Date("2026-05-15"),
+    endDate: new Date("2026-05-18"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/5/5d/PGA_Championship.png",
-    link: "/sports/golf",
+    link: "/sports/golf/pga/2026",
     location: "Aronimink Golf Club, USA",
     tags: ["👨"],
   },
@@ -495,11 +569,11 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     name: "US Open",
     sport: "Golf",
     type: "major",
-    startDate: new Date("2026-06-18"),
-    endDate: new Date("2026-06-21"),
+    startDate: new Date("2026-06-19"),
+    endDate: new Date("2026-06-22"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/7/76/US_Open_%28Golf%29_Logo.png",
-    link: "/sports/golf",
+    link: "/sports/golf/pga/2026",
     location: "Shinnecock Hills Golf Club, USA",
     tags: ["👨"],
   },
@@ -508,11 +582,11 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     name: "The Open Championship",
     sport: "Golf",
     type: "major",
-    startDate: new Date("2026-07-15"),
-    endDate: new Date("2026-07-19"),
+    startDate: new Date("2026-07-16"),
+    endDate: new Date("2026-07-20"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/d/d0/The_Open_Championship_logo.png",
-    link: "/sports/golf",
+    link: "/sports/golf/pga/2026",
     location: "Royal Birkdale Golf Club, England",
     tags: ["👨"],
   },
@@ -525,23 +599,9 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-08-24"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/8/8e/Tour_Championship_Logo.png",
-    link: "/sports/golf",
+    link: "/sports/golf/pga/2026",
     location: "USA",
     tags: ["👨"],
-  },
-
-  // Hockey
-  {
-    id: "26",
-    name: "FIH Hockey World Cup",
-    sport: "Field Hockey",
-    type: "major",
-    startDate: new Date("2026-08-14"),
-    endDate: new Date("2026-08-30"),
-    // imageUrl: "/olympic-rings.svg",
-    link: "/sports/hockey",
-    location: "Belgium & Netherlands",
-    tags: ["👨", "👩"],
   },
 
   // Ice Hockey
@@ -552,7 +612,8 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "regular-season",
     startDate: new Date("2025-10-07"),
     endDate: new Date("2026-06-30"),
-    // imageUrl: "/vercel.svg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/3/3a/05_NHL_Shield.svg",
     link: "/sports/ice-hockey",
   },
   {
@@ -563,7 +624,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     startDate: new Date("2026-05-15"),
     endDate: new Date("2026-05-31"),
     // imageUrl: "/olympic-rings.svg",
-    link: "/sports/ice-hockey",
+    link: "https://upload.wikimedia.org/wikipedia/en/6/62/2026_IIHF_World_Championship_logo.svg",
     location: "Switzerland",
     tags: ["👨"],
   },
@@ -574,8 +635,8 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-06-04"),
     endDate: new Date("2026-06-04"),
-    // imageUrl:
-    //   "https://upload.wikimedia.org/wikipedia/en/8/8e/Tour_Championship_Logo.png",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/3/3a/05_NHL_Shield.svg",
     link: "/sports/ice-hockey",
     location: "USA",
     tags: ["👨"],
@@ -589,8 +650,9 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "regular-season",
     startDate: new Date("2026-02-20"),
     endDate: new Date("2026-11-29"),
-    // imageUrl: "/vercel.svg",
-    link: "/sports/motorsport",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/2/25/Supercars_Championship_Logo_2021.png",
+    link: "/sports/motorsport/supercars/",
   },
   {
     id: "rs-f1-2026",
@@ -599,8 +661,9 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "regular-season",
     startDate: new Date("2026-03-06"),
     endDate: new Date("2026-12-06"),
-    // imageUrl: "/vercel.svg",
-    link: "/sports/motorsport",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/0/0d/F1_%28registered_trademark%29.svg",
+    link: "/sports/motorsport/f1/2026",
   },
   {
     id: "50",
@@ -609,8 +672,8 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-10-08"),
     endDate: new Date("2026-10-11"),
-    // imageUrl:
-    //   "https://upload.wikimedia.org/wikipedia/en/8/8e/Tour_Championship_Logo.png",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/2/25/Supercars_Championship_Logo_2021.png",
     link: "/sports/motorsport",
     location: "Bathurst, Australia",
     tags: ["👨"],
@@ -637,7 +700,8 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-09-19"),
     endDate: new Date("2026-10-04"),
-    // imageUrl: "/olympic-rings.svg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/4/4d/2026_Asian_Games_logo.svg",
     link: "/sports/multi-sport",
     location: "Japan",
     tags: ["👨", "👩"],
@@ -649,13 +713,13 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-10-31"),
     endDate: new Date("2026-11-13"),
-    // imageUrl: "/olympic-rings.svg",
+    imageUrl: "/olympic-rings.svg",
     link: "/sports/multi-sport",
     location: "Dakar, Senegal",
     tags: ["👨", "👩"],
   },
 
-//Netball
+  // Netball
   {
     id: "35net",
     name: "Super Netball",
@@ -663,19 +727,22 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "regular-season",
     startDate: new Date("2026-03-14"),
     endDate: new Date("2026-06-28"),
-    // imageUrl: "/olympic-rings.svg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/7/78/Super_Netball_League_logo_%28unsponsored%29.svg",
     link: "/sports/netball",
-  },{
+  },
+  {
     id: "36net",
     name: "Netball World Cup",
     sport: "Netball",
     type: "major",
     startDate: new Date("2027-07-28"),
-    endDate: new Date("2026-08-06"),
-    imageUrl: "https://upload.wikimedia.org/wikipedia/en/8/8f/2027_Netball_World_Cup_Sydney_bid_logo.jpg",
+    endDate: new Date("2027-08-06"),
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/8/8f/2027_Netball_World_Cup_Sydney_bid_logo.jpg",
     link: "/sports/netball",
-location: "Sydney, Australia",
-    tags: ["👩"]
+    location: "Sydney, Australia",
+    tags: ["👩"],
   },
 
   // Olympics
@@ -707,12 +774,15 @@ location: "Sydney, Australia",
   // Rugby
   {
     id: "4",
-    name: "Rugby World Cup Sevens",
+    name: "Rugby World Cup",
     sport: "Rugby",
     type: "major",
-    startDate: new Date("2026-07-10"),
-    endDate: new Date("2026-07-12"),
-    location: "TBC",
+    startDate: new Date("2027-10-01"),
+    endDate: new Date("2027-11-13"),
+    imageUrl: "https://upload.wikimedia.org/wikipedia/en/6/62/RWC2027logo.png",
+    link: "/sports/rugby-union",
+    location: "Australia",
+    tags: ["👨"],
   },
 
   // Rugby League
@@ -723,8 +793,9 @@ location: "Sydney, Australia",
     type: "regular-season",
     startDate: new Date("2026-03-01"),
     endDate: new Date("2026-10-04"),
-    // imageUrl: "/vercel.svg",
-    link: "/sports/rugby-league",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/5/50/National_Rugby_League.svg",
+    link: "/sports/rugby-league/294/86317",
   },
   {
     id: "rs-nrlw-2026",
@@ -733,8 +804,9 @@ location: "Sydney, Australia",
     type: "regular-season",
     startDate: new Date("2026-07-02"),
     endDate: new Date("2026-10-04"),
-    // imageUrl: "/vercel.svg",
-    link: "/sports/rugby-league",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/5/50/Telstra_NRL_Women%27s_Premiership.png",
+    link: "/sports/rugby-league/19120/87573",
   },
   {
     id: "45",
@@ -743,10 +815,11 @@ location: "Sydney, Australia",
     type: "major",
     startDate: new Date("2026-10-04"),
     endDate: new Date("2026-10-04"),
-    // imageUrl:
-    //   "https://upload.wikimedia.org/wikipedia/en/8/8e/Tour_Championship_Logo.png",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/5/50/National_Rugby_League.svg",
+
     link: "/sports/rugby-league",
-    location: "Australia & New Zealand",
+    location: "Sydney, Australia",
     tags: ["👨"],
   },
   {
@@ -770,8 +843,9 @@ location: "Sydney, Australia",
     type: "regular-season",
     startDate: new Date("2026-01-18"),
     endDate: new Date("2026-11-29"),
-    // imageUrl: "/vercel.svg",
-    link: "/sports/sailing",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/f/fa/SailGP_logo.png",
+    link: "https://en.wikipedia.org/wiki/2026_SailGP_championship",
   },
 
   // Tennis
@@ -784,7 +858,7 @@ location: "Sydney, Australia",
     endDate: new Date("2026-02-06"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/b/b4/Australian_Open_Logo_2017.svg",
-    link: "/sports/tennis",
+    link: "/sports/tennis/2363/80012",
     location: "Melbourne, Australia",
     tags: ["👨", "👩"],
   },
@@ -797,7 +871,7 @@ location: "Sydney, Australia",
     endDate: new Date("2026-06-07"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/1/1d/Logo_Roland-Garros.svg",
-    link: "/sports/tennis",
+    link: "/sports/tennis/today",
     location: "Paris, France",
     tags: ["👨", "👩"],
   },
@@ -809,7 +883,7 @@ location: "Sydney, Australia",
     startDate: new Date("2026-06-29"),
     endDate: new Date("2026-07-12"),
     imageUrl: "https://upload.wikimedia.org/wikipedia/en/b/b9/Wimbledon.svg",
-    link: "/sports/tennis",
+    link: "/sports/tennis/today",
     location: "London, England",
     tags: ["👨", "👩"],
   },
@@ -822,7 +896,7 @@ location: "Sydney, Australia",
     endDate: new Date("2026-09-13"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/c/cd/Usopen-horizontal-logo.svg",
-    link: "/sports/tennis",
+    link: "/sports/tennis/today",
     location: "New York, USA",
     tags: ["👨", "👩"],
   },
@@ -833,8 +907,9 @@ location: "Sydney, Australia",
     type: "major",
     startDate: new Date("2026-11-7"),
     endDate: new Date("2026-11-14"),
-    // imageUrl: "/olympic-rings.svg",
-    link: "/sports/tennis",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/0/0a/WTA_2025.svg",
+    link: "/sports/tennis/today",
     location: "Saudi Arabia",
     tags: ["👩"],
   },
@@ -845,8 +920,9 @@ location: "Sydney, Australia",
     type: "major",
     startDate: new Date("2026-11-15"),
     endDate: new Date("2026-11-22"),
-    // imageUrl: "/olympic-rings.svg",
-    link: "/sports/tennis",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/9/90/Nitto_ATP_Finals_logo.jpg",
+    link: "/sports/tennis/today",
     location: "Italy",
     tags: ["👨"],
   },
@@ -1656,6 +1732,22 @@ export const BASKETBALL_LEAGUES = [
       { name: "2024", slug: "57477" },
     ],
   },
+  // {
+  //   name: "March Madness",
+  //   slug: "486",
+  //   seasons: [
+  //     { name: "2025", slug: "69751" },
+  //     { name: "2024", slug: "57477" },
+  //   ],
+  // },
+  // {
+  //   name: "Basketball World Cup",
+  //   slug: "486",
+  //   seasons: [
+  //     { name: "2025", slug: "69751" },
+  //     { name: "2024", slug: "57477" },
+  //   ],
+  // },
 ] as LeagueSeasonConfig[];
 
 export const TENNIS_LEAGUES = [

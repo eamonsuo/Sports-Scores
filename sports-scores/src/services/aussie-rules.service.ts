@@ -61,7 +61,7 @@ export async function aussieRulesMatches(league: number, season: number) {
                   ? toShortTimeString(startDate)
                   : match.status.description,
               timerDisplayColour:
-                match.status.type === "inprogress" ? "green" : null,
+                match.status.type === "inprogress" ? "green" : "gray",
               id: match.id,
               matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
               sport: SPORT.AUSSIE_RULES,
@@ -245,7 +245,7 @@ export async function aussieRulesCurrentMatches(
                   ? toShortTimeString(startDate)
                   : match.status.description,
               timerDisplayColour:
-                match.status.type === "inprogress" ? "green" : null,
+                match.status.type === "inprogress" ? "green" : "gray",
               id: match.id,
               matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
               sport: SPORT.AUSSIE_RULES,

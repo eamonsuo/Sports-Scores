@@ -72,7 +72,7 @@ export default function CricketFixtureList({ data }: { data: MatchSummary[] }) {
             )}
             <CricketMatchSummaryCard
               id={item.id}
-              hrefMatch={`/sports/cricket/match/${item.matchSlug}`}
+              hrefMatch={`/sports/cricket/${item.matchSlug}`}
               homeInfo={
                 Array.isArray(item.homeDetails)
                   ? item.homeDetails[0]
@@ -85,8 +85,8 @@ export default function CricketFixtureList({ data }: { data: MatchSummary[] }) {
               }
               matchSummary={item.summaryText}
               bottomInfo={item.otherDetail}
-              venue={item.venue}
-              timer={item.timer}
+              venue={item.venue ?? ""}
+              timer={item.timer ?? ""}
               topInfo={undefined}
               hrefSeries=""
               seriesName={item.seriesName ?? ""}
