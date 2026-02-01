@@ -855,7 +855,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     sport: "Tennis",
     type: "major",
     startDate: new Date("2026-01-15"),
-    endDate: new Date("2026-02-06"),
+    endDate: new Date("2026-02-01"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/b/b4/Australian_Open_Logo_2017.svg",
     link: "/sports/tennis/2363/80012",
