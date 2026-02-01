@@ -450,6 +450,18 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
       "https://upload.wikimedia.org/wikipedia/en/0/0e/Ninja_A-League_Women_logo.svg",
     link: "/sports/football/1894/82605",
     notes: "Finals Series Start: 24 Apr \nGrand Final: 16/17 May ",
+  },{
+    id: "21ASIA",
+    name: "AFC Asian Cup",
+    sport: "Football",
+    type: "major",
+    startDate: new Date("2026-03-01"),
+    endDate: new Date("2026-03-21"),
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/6/68/AFC_Women%27s_Asian_Cup.png",
+    link: "/sports/football",
+    location: "Australia",
+    tags: ["👩"],
   },
   {
     id: "21",
