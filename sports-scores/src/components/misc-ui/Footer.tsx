@@ -31,6 +31,11 @@ const footerLinks: {
     link: `/`,
     img: "/footer/calendar.png",
     altText: "Calendar",
+  },{
+    sport: SPORT.OLYMPICS,
+    link: `/sports/${SPORT.OLYMPICS}`,
+    img: "/olympic-rings.svg",
+    altText: "Olympics",
   },
   {
     sport: SPORT.CRICKET,
@@ -133,12 +138,6 @@ const footerLinks: {
     link: `https://www.flashscore.com.au/rugby/`,
     img: "/footer/union.png",
     altText: "Rugby Union",
-  },
-  {
-    sport: SPORT.OLYMPICS,
-    link: `/sports/${SPORT.OLYMPICS}`,
-    img: "/olympic-rings.svg",
-    altText: "Olympics",
   },
 ];
 
