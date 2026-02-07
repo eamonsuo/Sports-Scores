@@ -46,7 +46,14 @@ export async function cricketMatchesByDateClient(date: Date) {
 
     if (!rawMatches || !rawMatches.Stages) return null;
 
-    const matches = rawMatches.Stages.filter(
+    // Sort stages by the first event's start date (Esd)
+    rawMatches.Stages.sort((a: any, b: any) => {
+      const aFirstEventEsd = a.Events[0]?.Esd ?? Infinity;
+      const bFirstEventEsd = b.Events[0]?.Esd ?? Infinity;
+      return aFirstEventEsd - bFirstEventEsd;
+    });
+
+    return rawMatches.Stages.filter(
       (series: any) => !excludedSeries.some((str) => series.Snm.includes(str)),
     ).flatMap((item: any) => {
       return item.Events.map((event: any) => {
@@ -91,13 +98,6 @@ export async function cricketMatchesByDateClient(date: Date) {
           seriesSlug: `${item.Ccd}/${item.Scd}`,
         } as MatchSummary;
       });
-    });
-
-    // Sort by date first, then by start time
-    return matches.sort((a: MatchSummary, b: MatchSummary) => {
-      const dateCompare = a.startDate.getTime() - b.startDate.getTime();
-      if (dateCompare !== 0) return dateCompare;
-      return a.startDate.getTime() - b.startDate.getTime();
     });
   } catch (error) {
     console.error("Error fetching cricket matches:", error);

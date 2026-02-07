@@ -14,10 +14,7 @@ export default function Home() {
   const adjustedDate = new Date();
   adjustedDate.setDate(adjustedDate.getDate() - 10);
 
-  const upcomingEvents = getUpcomingEvents(
-    upcomingAndCurrentEvents,
-    adjustedDate,
-  );
+  const upcomingEvents = getUpcomingEvents(adjustedDate);
 
   const majorEvents = upcomingEvents.filter((e) => e.type === "major");
   const regularSeasons = upcomingEvents.filter(

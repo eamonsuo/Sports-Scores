@@ -1,12 +1,9 @@
+import { upcomingAndCurrentEvents } from "@/lib/constants";
 import { SportEvent } from "@/types/event-calendar";
 
 // Helper function to get upcoming events
-export function getUpcomingEvents(
-  events: SportEvent[],
-  fromDate: Date = new Date(),
-  limit?: number,
-): SportEvent[] {
-  const upcoming = events
+export function getUpcomingEvents(fromDate: Date = new Date()): SportEvent[] {
+  const upcoming = upcomingAndCurrentEvents
     .filter((event) => {
       const endDate = event.endDate
         ? new Date(event.endDate)
@@ -19,5 +16,5 @@ export function getUpcomingEvents(
         new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
     );
 
-  return limit ? upcoming.slice(0, limit) : upcoming;
+  return upcoming;
 }

@@ -259,7 +259,7 @@ export async function americanFootballCurrentMatches(
 ) {
   const matches = await fetchAmericanFootballCurrentMatches(date, 1370);
 
-  if (!matches) {
+  if (!matches || matches.events.length === 0) {
     return null;
   }
 
