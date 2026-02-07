@@ -10,7 +10,7 @@ import {
   fetchTennisTournamentNextMatches,
   fetchTennisWTARankings,
 } from "@/endpoints/tennis.api";
-import { TENNIS_LEAGUES } from "@/lib/constants";
+import { TENNIS_CATEGORIES, TENNIS_LEAGUES } from "@/lib/constants";
 import { resolveTennisImage } from "@/lib/imageMapping";
 import {
   dateToCustomString,
@@ -61,8 +61,10 @@ export async function tennisTournamentMatches(
     fixtures: rounds.map((round) => {
       return {
         matches: matches
-          .filter((match) => match.status.type !== "canceled")
-          .filter((item) => item.roundInfo?.name === round)
+          .filter(
+            (item) =>
+              item.roundInfo?.name === round && item.status.type !== "canceled",
+          )
           .map((match) => {
             return mapTennisMatches(match);
           }),
@@ -223,46 +225,62 @@ export async function TennisMatchesByDate(date: Date) {
     return null;
   }
 
-  const validLeagueIds = TENNIS_LEAGUES.map((l) => Number(l.slug));
+  const validLeagueIds = TENNIS_CATEGORIES.concat(TENNIS_LEAGUES).map((l) =>
+    Number(l.slug),
+  );
   const leagueIdToName = Object.fromEntries(
-    TENNIS_LEAGUES.map((l) => [Number(l.slug), l.name]),
+    TENNIS_CATEGORIES.concat(TENNIS_LEAGUES).map((l) => [
+      Number(l.slug),
+      l.name,
+    ]),
   );
 
-  matches.events = matches.events
-    .filter((item) =>
-      validLeagueIds.includes(item.tournament.uniqueTournament.id),
-    )
-    .sort(
-      (a, b) =>
-        validLeagueIds.indexOf(a.tournament.uniqueTournament.id) -
-        validLeagueIds.indexOf(b.tournament.uniqueTournament.id),
-    );
+  const filteredMatches = matches.events.filter(
+    (item) =>
+      (validLeagueIds.includes(item.tournament.category.id) ||
+        validLeagueIds.includes(item.tournament.uniqueTournament.id)) &&
+      item.status.type !== "canceled",
+  );
+
+  const aussieMatches = matches.events.filter(
+    (item) =>
+      (item.homeTeam.country.name === "Australia" ||
+        item.awayTeam.country.name === "Australia") &&
+      item.status.type !== "canceled",
+  );
 
   // Get unique league ids in order
   const rounds = [
-    ...new Set(
-      matches.events.map((item) => item.tournament.uniqueTournament.id),
-    ),
+    ...new Set(filteredMatches.map((item) => item.tournament.category.id)),
   ];
 
   let firstTournament = "";
 
   return {
-    fixtures: rounds.map((leagueId) => {
-      const roundLabel = leagueIdToName[leagueId] ?? "";
-      return {
-        matches: matches.events
-          .filter((item) => item.tournament.uniqueTournament.id === leagueId)
-          .map((match) => {
-            if (firstTournament === "") {
-              firstTournament = roundLabel;
-            }
+    fixtures: rounds
+      .map((leagueId) => {
+        const roundLabel = leagueIdToName[leagueId] ?? "Other";
+        return {
+          matches: filteredMatches
+            .filter((item) => item.tournament.category.id === leagueId)
+            .map((match) => {
+              if (firstTournament === "") {
+                firstTournament = roundLabel;
+              }
 
-            return mapTennisMatches(match);
-          }),
-        roundLabel: roundLabel,
-      } as RoundDetails;
-    }),
+              return mapTennisMatches(match);
+            })
+            .sort((a, b) => a.startDate.getTime() - b.startDate.getTime()),
+
+          roundLabel: roundLabel,
+        } as RoundDetails;
+      })
+      .concat({
+        matches: aussieMatches
+          .map(mapTennisMatches)
+          .sort((a, b) => a.startDate.getTime() - b.startDate.getTime()),
+        roundLabel: "Australians",
+      } as RoundDetails),
 
     currentRound: firstTournament,
   } as TennisTodayPage;

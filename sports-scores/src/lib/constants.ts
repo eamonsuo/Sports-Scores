@@ -450,7 +450,8 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
       "https://upload.wikimedia.org/wikipedia/en/0/0e/Ninja_A-League_Women_logo.svg",
     link: "/sports/football/1894/82605",
     notes: "Finals Series Start: 24 Apr \nGrand Final: 16/17 May ",
-  },{
+  },
+  {
     id: "21ASIA",
     name: "AFC Asian Cup",
     sport: "Football",
@@ -1762,6 +1763,32 @@ export const BASKETBALL_LEAGUES = [
   // },
 ] as LeagueSeasonConfig[];
 
+export const TENNIS_CATEGORIES = [
+  {
+    name: "ATP",
+    slug: "3",
+    seasons: [{ name: "2026", slug: "" }],
+  },
+
+  {
+    name: "WTA",
+    slug: "6",
+    seasons: [{ name: "2026", slug: "" }],
+  },
+
+  {
+    name: "Davis Cup",
+    slug: "76",
+    seasons: [{ name: "2026", slug: "" }],
+  },
+
+  {
+    name: "Billie Jean King Cup",
+    slug: "74",
+    seasons: [{ name: "2026", slug: "" }],
+  },
+] as LeagueSeasonConfig[];
+
 export const TENNIS_LEAGUES = [
   {
     name: "Australian Open - Mens Singles",
@@ -1794,6 +1821,7 @@ export const TENNIS_LEAGUES = [
     slug: "2403",
     seasons: [{ name: "2026", slug: "85950" }],
   },
+
   {
     name: "Brisbane International - Men",
     slug: "2437",

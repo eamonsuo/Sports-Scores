@@ -29,6 +29,7 @@ export default function EventCardGrid({ events }: EventCardGridProps) {
 
   // Get current/upcoming events (ongoing or starting soon)
   const now = new Date();
+  now.setHours(now.getHours() + 10);
   const currentEvents = events.filter((event) => {
     const startDate = new Date(event.startDate);
     const endDate = event.endDate ? new Date(event.endDate) : startDate;
