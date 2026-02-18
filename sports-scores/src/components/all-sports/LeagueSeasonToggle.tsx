@@ -26,18 +26,62 @@ export default function LeagueSeasonToggle({
   sport: SPORT;
   leagues: LeagueSeasonConfig[];
 }) {
-  const [selectedLeague, setSelectedLeague] = useState(leagues[0]);
-  const [selectedSeason, setSelectedSeason] = useState(leagues[0].seasons[0]);
-  const [todayActive, setTodayActive] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
-  // Check if URL contains "today" on mount and update todayActive
+  // Helper to parse league and season from URL
+  function getLeagueAndSeasonFromPath(path: string) {
+    // Example: /sports/football/epl/2024
+    const parts = path.split("/");
+    const sportIdx = parts.indexOf("sports");
+    if (sportIdx !== -1 && parts.length > sportIdx + 3) {
+      return {
+        leagueSlug: parts[sportIdx + 2],
+        seasonSlug: parts[sportIdx + 3],
+      };
+    }
+    return { leagueSlug: null, seasonSlug: null };
+  }
+
+  // Helper to find league and season objects
+  function findLeagueAndSeason(
+    leagueSlug: string | null,
+    seasonSlug: string | null,
+  ) {
+    const league = leagues.find((l) => l.slug === leagueSlug) || leagues[0];
+    const season =
+      league.seasons.find((s) => s.slug === seasonSlug) || league.seasons[0];
+    return { league, season };
+  }
+
+  // State initialization
+  const [{ league: initialLeague, season: initialSeason }] = useState(() => {
+    const { leagueSlug, seasonSlug } = getLeagueAndSeasonFromPath(
+      pathname || "",
+    );
+    return findLeagueAndSeason(leagueSlug, seasonSlug);
+  });
+  const [selectedLeague, setSelectedLeague] = useState(initialLeague);
+  const [selectedSeason, setSelectedSeason] = useState(initialSeason);
+  const [todayActive, setTodayActive] = useState(
+    pathname?.includes("/today") ?? false,
+  );
+
+  // Update state if URL changes (e.g., via navigation)
   useEffect(() => {
     if (pathname?.includes("/today")) {
       setTodayActive(true);
+    } else {
+      setTodayActive(false);
+      const { leagueSlug, seasonSlug } = getLeagueAndSeasonFromPath(
+        pathname || "",
+      );
+      const { league, season } = findLeagueAndSeason(leagueSlug, seasonSlug);
+      setSelectedLeague(league);
+      setSelectedSeason(season);
     }
-  }, [pathname]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname, leagues]);
 
   // Helper to redirect to the correct route
   const redirectToRoute = (league: string, season: string) => {

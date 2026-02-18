@@ -206,7 +206,10 @@ export async function aussieRulesCurrentMatches(
 
   const validLeagueIds = AUSSIE_RULES_LEAGUES.map((l) => Number(l.slug));
   const leagueIdToName = Object.fromEntries(
-    AUSSIE_RULES_LEAGUES.map((l) => [Number(l.slug), l.name]),
+    AUSSIE_RULES_LEAGUES.map((l) => [
+      Number(l.slug),
+      { name: l.name, currentSeason: l.seasons[0].slug },
+    ]),
   );
 
   matches.events = matches.events
@@ -228,7 +231,7 @@ export async function aussieRulesCurrentMatches(
 
   return {
     fixtures: rounds.map((leagueId) => {
-      const roundLabel = leagueIdToName[leagueId] ?? "";
+      const roundLabel = leagueIdToName[leagueId]?.name ?? "";
 
       return {
         matches: matches.events
@@ -272,6 +275,8 @@ export async function aussieRulesCurrentMatches(
             } as MatchSummary;
           }),
         roundLabel: roundLabel,
+        roundSlug: `${leagueId}/${leagueIdToName[leagueId]?.currentSeason}`,
+        sport: SPORT.AUSSIE_RULES,
       } as RoundDetails;
     }),
 

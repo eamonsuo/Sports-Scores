@@ -16,7 +16,6 @@ export default async function Page() {
     <FixtureRoundList
       data={pageData.fixtures}
       curRound={pageData.currentRound}
-      cardVariant="tennis"
     />
   );
 }

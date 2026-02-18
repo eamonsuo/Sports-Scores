@@ -1,12 +1,12 @@
 import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
 import NoData from "@/components/misc-ui/NoData";
 import Placeholder from "@/components/misc-ui/Placeholder";
-import { americanFootballCurrentMatches } from "@/services/american-football.service";
+import { americanFootballMatchesByDate } from "@/services/american-football.service";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const pageData = await americanFootballCurrentMatches("TODAY");
+  const pageData = await americanFootballMatchesByDate(new Date());
 
   if (pageData === null) {
     return <NoData href={"https://www.google.com/search?q=nfl"} />;

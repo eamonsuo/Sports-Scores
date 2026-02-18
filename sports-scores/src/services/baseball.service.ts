@@ -4,7 +4,7 @@ import {
 } from "@/components/baseball/BaseballLadder";
 import { BaseballScoreBreakdown } from "@/components/baseball/BaseballScoreBreakdown";
 import {
-  fetchBaseballCurrentMatches,
+  fetchBaseballCurrentMatches as fetchBaseballByDateMatches,
   fetchBaseballLastMatches,
   fetchBaseballMatchDetails,
   fetchBaseballNextMatches,
@@ -254,11 +254,11 @@ export async function baseballMatchDetails(matchId: number) {
   } as BaseballMatchPage;
 }
 
-export async function baseballCurrentMatches(
+export async function baseballMatchesByDate(
   date: Date,
   // categoryId: number,
 ) {
-  const matches = await fetchBaseballCurrentMatches(date);
+  const matches = await fetchBaseballByDateMatches(date);
 
   if (!matches) {
     return null;
@@ -266,7 +266,10 @@ export async function baseballCurrentMatches(
 
   const validLeagueIds = BASEBALL_LEAGUES.map((l) => Number(l.slug));
   const leagueIdToName = Object.fromEntries(
-    BASEBALL_LEAGUES.map((l) => [Number(l.slug), l.name]),
+    BASEBALL_LEAGUES.map((l) => [
+      Number(l.slug),
+      { name: l.name, currentSeason: l.seasons[0].slug },
+    ]),
   );
 
   matches.events = matches.events
@@ -288,7 +291,8 @@ export async function baseballCurrentMatches(
 
   return {
     fixtures: rounds.map((leagueId) => {
-      const roundLabel = leagueIdToName[leagueId] ?? "";
+      const roundLabel = leagueIdToName[leagueId]?.name ?? "";
+      const seasonId = leagueIdToName[leagueId]?.currentSeason ?? "";
       return {
         matches: matches.events
           .filter((item) => item.tournament.uniqueTournament.id === leagueId)
@@ -331,10 +335,12 @@ export async function baseballCurrentMatches(
             } as MatchSummary;
           }),
         roundLabel: roundLabel,
+        sport: SPORT.BASEBALL,
+        roundSlug: `${leagueId}/${seasonId}`,
       } as RoundDetails;
     }),
 
-    currentRound: leagueIdToName[rounds[0]] ?? "",
+    currentRound: leagueIdToName[rounds[0]]?.name ?? "",
   } as BaseballTodayPage;
 }
 

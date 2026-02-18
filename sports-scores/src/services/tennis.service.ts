@@ -69,6 +69,7 @@ export async function tennisTournamentMatches(
             return mapTennisMatches(match);
           }),
         roundLabel: `${round}`,
+        cardVariant: "tennis",
       } as RoundDetails;
     }),
 
@@ -273,6 +274,9 @@ export async function TennisMatchesByDate(date: Date) {
             .sort((a, b) => a.startDate.getTime() - b.startDate.getTime()),
 
           roundLabel: roundLabel,
+          cardVariant: "tennis",
+          roundSlug: `today`,
+          sport: SPORT.TENNIS,
         } as RoundDetails;
       })
       .concat({
@@ -280,6 +284,9 @@ export async function TennisMatchesByDate(date: Date) {
           .map(mapTennisMatches)
           .sort((a, b) => a.startDate.getTime() - b.startDate.getTime()),
         roundLabel: "Australians",
+        cardVariant: "tennis",
+        roundSlug: `today`,
+        sport: SPORT.TENNIS,
       } as RoundDetails),
 
     currentRound: firstTournament,

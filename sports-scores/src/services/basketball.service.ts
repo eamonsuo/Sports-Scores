@@ -3,7 +3,7 @@ import {
   BasketballTeamStanding,
 } from "@/components/basketball/BasketballLadder";
 import {
-  fetchBasketballCurrentMatches,
+  fetchBasketballMatchesByDate,
   fetchBasketballLastMatches,
   fetchBasketballMatchDetails,
   fetchBasketballMatchIncidents,
@@ -53,25 +53,38 @@ export async function basketballMatches(
     }
   }
 
-  const rounds = [...new Set(matches.map((item) => item.roundInfo?.round))];
+  const rounds = [
+    ...new Set(
+      matches.map((item) => item.roundInfo?.name ?? item.roundInfo?.round),
+    ),
+  ].filter((round) => round !== undefined);
+
+  console.log(rounds);
 
   return {
     fixtures: rounds.map((round) => {
       //Get all teams playing in the round
       let teams = matches
-        .filter((item) => item.roundInfo?.round === round)
+        .filter(
+          (item) =>
+            item.roundInfo?.round === round || item.roundInfo?.name === round,
+        )
         .flatMap((game) => [game.homeTeam.name, game.awayTeam.name]);
 
       return {
         matches: matches
-          .filter((item) => item.roundInfo?.round === round)
+          .filter(
+            (item) =>
+              item.roundInfo?.round === round || item.roundInfo?.name === round,
+          )
           .map((match) => {
             var startDate = new Date(0);
             startDate.setUTCSeconds(match.startTimestamp);
 
             return {
               startDate: startDate,
-              roundLabel: `Round ${match.roundInfo?.round}`,
+              roundLabel:
+                match.roundInfo?.name ?? `Round ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
                   ? toShortTimeString(startDate)
@@ -103,18 +116,24 @@ export async function basketballMatches(
               },
             } as MatchSummary;
           }),
-        roundLabel: `Round ${round}`,
+        roundLabel: typeof round === "string" ? round : `Round ${round}`,
         // byes: NRL_TEAM_NAMES.filter((x) => !teams.includes(x)).map((team) => {
         //   return { name: team, img: resolveNRLImages(team) };
         // }),
       } as RoundDetails;
     }),
 
-    currentRound: `Round ${
-      nextMatches?.events?.[0]?.roundInfo?.round ??
-      lastMatches?.events?.[lastMatches?.events.length - 1]?.roundInfo?.round ??
-      0
-    }`,
+    currentRound:
+      nextMatches !== null && nextMatches.events.length > 0
+        ? nextMatches?.events[0]?.roundInfo?.name !== undefined
+          ? nextMatches?.events[0]?.roundInfo?.name
+          : `Round ${
+              nextMatches?.events[0]?.roundInfo?.round ??
+              lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo
+                ?.round ??
+              0
+            }`
+        : lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo?.name,
   } as BasketballFixturesPage;
 }
 
@@ -243,11 +262,11 @@ export async function basketballMatchDetails(matchId: number) {
   } as BasketballMatchPage;
 }
 
-export async function basketballCurrentMatches(
+export async function basketballMatchesByDate(
   date: Date,
   // categoryId: number,
 ) {
-  const matches = await fetchBasketballCurrentMatches(date);
+  const matches = await fetchBasketballMatchesByDate(date);
 
   if (!matches) {
     return null;
@@ -255,7 +274,10 @@ export async function basketballCurrentMatches(
 
   const validLeagueIds = BASKETBALL_LEAGUES.map((l) => Number(l.slug));
   const leagueIdToName = Object.fromEntries(
-    BASKETBALL_LEAGUES.map((l) => [Number(l.slug), l.name]),
+    BASKETBALL_LEAGUES.map((l) => [
+      Number(l.slug),
+      { name: l.name, currentSeason: l.seasons[0].slug },
+    ]),
   );
 
   matches.events = matches.events
@@ -277,7 +299,8 @@ export async function basketballCurrentMatches(
 
   return {
     fixtures: rounds.map((leagueId) => {
-      const roundLabel = leagueIdToName[leagueId] ?? "";
+      const roundLabel = leagueIdToName[leagueId]?.name ?? "";
+      const seasonId = leagueIdToName[leagueId]?.currentSeason ?? "";
       return {
         matches: matches.events
           .filter((item) => item.tournament.uniqueTournament.id === leagueId)
@@ -320,9 +343,11 @@ export async function basketballCurrentMatches(
             } as MatchSummary;
           }),
         roundLabel: roundLabel,
+        roundSlug: `${leagueId}/${seasonId}`,
+        sport: SPORT.BASKETBALL,
       } as RoundDetails;
     }),
 
-    currentRound: leagueIdToName[rounds[0]] ?? "",
+    currentRound: leagueIdToName[rounds[0]]?.name ?? "",
   } as BasketballTodayPage;
 }

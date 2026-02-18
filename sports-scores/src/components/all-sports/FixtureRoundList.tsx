@@ -6,15 +6,15 @@ import { clsx } from "clsx";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import FixtureList from "./FixtureList";
+import Link from "next/link";
+import { Button } from "../misc-ui/Button";
 
 export default function FixtureRoundList({
   data,
   curRound,
-  cardVariant,
 }: {
   data: RoundDetails[];
   curRound: string;
-  cardVariant?: "tennis" | "default";
 }) {
   const [round, setRound] = useState(curRound);
   const btnListRef = useRef<HTMLDivElement>(null);
@@ -133,7 +133,15 @@ export default function FixtureRoundList({
             key={item.roundLabel}
             className="w-full flex-shrink-0 snap-start overflow-y-auto"
           >
-            <FixtureList data={item.matches} cardVariant={cardVariant} />
+            {item.roundSlug && (
+              <Link
+                href={`/sports/${item.sport}/${item.roundSlug ?? ""}`}
+                className="flex justify-center rounded"
+              >
+                <Button variant="secondary">All Events</Button>
+              </Link>
+            )}
+            <FixtureList data={item.matches} cardVariant={item.cardVariant} />
             {(item.byes?.length ?? 0) > 0 ? (
               <div className="flex items-center gap-1 overflow-x-auto p-4 dark:text-neutral-400">
                 Bye:{" "}

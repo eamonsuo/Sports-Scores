@@ -1,19 +1,21 @@
 import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
-import { americanFootballCurrentMatches } from "@/services/american-football.service";
+import { GOLF_TOURS, MOTORSPORT_CATEGORIES } from "@/lib/constants";
+import { americanFootballMatchesByDate } from "@/services/american-football.service";
 import { aussieRulesCurrentMatches } from "@/services/aussie-rules.service";
-import { baseballCurrentMatches } from "@/services/baseball.service";
-import { basketballCurrentMatches } from "@/services/basketball.service";
+import { baseballMatchesByDate } from "@/services/baseball.service";
+import { basketballMatchesByDate } from "@/services/basketball.service";
 import { cricketMatchesByDate } from "@/services/cricket.service";
-import { footballCurrentMatches } from "@/services/football.service";
+import { footballMatchesByDate } from "@/services/football.service";
 import { golfTournamentsByDate } from "@/services/golf.service";
 import { motorsportCategoriesByDate } from "@/services/motorsport.service";
-import { rugbyLeagueCurrentMatches } from "@/services/rugby-league.service";
+import { rugbyLeagueMatchesByDate } from "@/services/rugby-league.service";
 import { TennisMatchesByDate as tennisMatchesByDate } from "@/services/tennis.service";
-import { RoundDetails } from "@/types/misc";
+import { RoundDetails, SPORT } from "@/types/misc";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
+  const curDate = new Date();
   const [
     cricketoday,
     tennisToday,
@@ -24,28 +26,49 @@ export default async function Page() {
     rugbyLeagueToday,
     aussieRulesToday,
   ] = await Promise.all([
-    cricketMatchesByDate(new Date()),
-    tennisMatchesByDate(new Date()),
-    footballCurrentMatches(new Date()),
-    basketballCurrentMatches(new Date()),
-    baseballCurrentMatches(new Date()),
-    americanFootballCurrentMatches("TODAY"),
-    rugbyLeagueCurrentMatches("TODAY"),
+    cricketMatchesByDate(curDate),
+    tennisMatchesByDate(curDate),
+    footballMatchesByDate(curDate),
+    basketballMatchesByDate(curDate),
+    baseballMatchesByDate(curDate),
+    americanFootballMatchesByDate(curDate),
+    rugbyLeagueMatchesByDate(curDate),
     aussieRulesCurrentMatches("TODAY"),
   ]);
 
-  const golfToday = golfTournamentsByDate(new Date());
-  const motorsportToday = motorsportCategoriesByDate(new Date()); // Placeholder for motorsport matches fetching logic
+  const golfToday = golfTournamentsByDate(curDate);
+  const motorsportToday = motorsportCategoriesByDate(curDate); // Placeholder for motorsport matches fetching logic
   const dartsToday = null; // Placeholder for darts matches fetching logic
   const cyclingToday = null; // Placeholder for cycling matches fetching logic
 
   const allSports: RoundDetails[] = ([] as RoundDetails[])
-    .concat([{ matches: cricketoday ?? [], roundLabel: "🏏 Cricket" }])
+    .concat([
+      {
+        matches: cricketoday ?? [],
+        roundLabel: "🏏 Cricket",
+        roundSlug: "main/matches",
+        sport: SPORT.CRICKET,
+      },
+    ])
     .concat(rugbyLeagueToday?.fixtures ?? [])
     .concat(aussieRulesToday?.fixtures ?? [])
     .concat(americanFootballToday?.fixtures ?? [])
-    .concat([{ matches: golfToday ?? [], roundLabel: "⛳ Golf" }])
-    .concat([{ matches: motorsportToday ?? [], roundLabel: "🏎️ Motorsport" }])
+    .concat([
+      {
+        matches: golfToday ?? [],
+        roundLabel: "⛳ Golf",
+        roundSlug: `${GOLF_TOURS[0].slug}/${GOLF_TOURS[0].seasons[0].slug}`,
+        sport: SPORT.GOLF,
+      },
+    ])
+    .concat([
+      {
+        matches: motorsportToday ?? [],
+        roundLabel: "🏎️ Motorsport",
+        roundSlug: `${MOTORSPORT_CATEGORIES[0].slug}/${MOTORSPORT_CATEGORIES[0].seasons[0].slug}`,
+        sport: SPORT.MOTORSPORT,
+      },
+    ])
     .concat(footballToday?.fixtures ?? [])
     .concat(basketballToday?.fixtures ?? [])
     .concat(baseballToday?.fixtures ?? [])

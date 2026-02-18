@@ -2,7 +2,7 @@ import { Match as BracketMatch } from "@/components/bracket/types";
 import { FootballStanding } from "@/components/football/FootballLadder";
 import {
   fetchFootballCupTrees,
-  fetchFootballCurrentMatches,
+  fetchFootballMatchesByDate,
   fetchFootballLastMatches,
   fetchFootballMatchDetails,
   fetchFootballMatchIncidents,
@@ -252,11 +252,8 @@ export async function footballMatchDetails(matchId: number) {
   } as FootballMatchPage;
 }
 
-export async function footballCurrentMatches(
-  date: Date,
-  // categoryId: number,
-) {
-  const matches = await fetchFootballCurrentMatches(date);
+export async function footballMatchesByDate(date: Date) {
+  const matches = await fetchFootballMatchesByDate(date);
 
   if (!matches) {
     return null;
@@ -264,7 +261,10 @@ export async function footballCurrentMatches(
 
   const validLeagueIds = FOOTBALL_LEAGUES.map((l) => Number(l.slug));
   const leagueIdToName = Object.fromEntries(
-    FOOTBALL_LEAGUES.map((l) => [Number(l.slug), l.name]),
+    FOOTBALL_LEAGUES.map((l) => [
+      Number(l.slug),
+      { name: l.name, currentSeason: l.seasons[0].slug },
+    ]),
   );
 
   matches.events = matches.events
@@ -286,7 +286,8 @@ export async function footballCurrentMatches(
 
   return {
     fixtures: rounds.map((leagueId) => {
-      const roundLabel = leagueIdToName[leagueId] ?? "";
+      const roundLabel = leagueIdToName[leagueId]?.name ?? "";
+      const seasonId = leagueIdToName[leagueId]?.currentSeason ?? "";
       return {
         matches: matches.events
           .filter((item) => item.tournament.uniqueTournament.id === leagueId)
@@ -329,10 +330,12 @@ export async function footballCurrentMatches(
             } as MatchSummary;
           }),
         roundLabel: roundLabel,
+        sport: SPORT.FOOTBALL,
+        roundSlug: `${leagueId}/${seasonId}`,
       } as RoundDetails;
     }),
 
-    currentRound: leagueIdToName[rounds[0]] ?? "",
+    currentRound: leagueIdToName[rounds[0]]?.name ?? "",
   } as FootballTodayPage;
 }
 

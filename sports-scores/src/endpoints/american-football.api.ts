@@ -119,19 +119,9 @@ export async function fetchAmericanFootballMatchIncidents(matchId: number) {
   return (await rawMatch.json()) as AmericanFootball_AmericanFootballApi_MatchIncidents_Response;
 }
 
-export async function fetchAmericanFootballCurrentMatches(
-  date: "TODAY" | "YESTERDAY" | "TOMORROW",
-  categoryId: number,
-) {
-  let curDate = new Date();
-  if (date === "YESTERDAY") {
-    curDate.setDate(curDate.getDate() - 1);
-  } else if (date === "TOMORROW") {
-    curDate.setDate(curDate.getDate() + 1);
-  }
-
+export async function fetchAmericanFootballCurrentMatches(date: Date) {
   const rawFixtures = await fetch(
-    `${process.env.NFL_BASEURL}/american-football/category/${categoryId}/events/${curDate.getDate()}/${curDate.getMonth() + 1}/${curDate.getFullYear()}`,
+    `${process.env.NFL_BASEURL}/american-football/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
     {
       headers: reqHeaders,
     },

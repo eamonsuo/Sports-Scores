@@ -3,7 +3,7 @@ import {
   AmericanFootballTeamStanding,
 } from "@/components/american-football/AmericanFootballLadder";
 import {
-  fetchAmericanFootballCurrentMatches,
+  fetchAmericanFootballCurrentMatches as fetchAmericanFootballMatchesByDate,
   fetchAmericanFootballLastMatches,
   fetchAmericanFootballMatchDetails,
   fetchAmericanFootballMatchIncidents,
@@ -254,10 +254,8 @@ export async function americanFootballMatchDetails(matchId: number) {
   } as AmericanFootballMatchPage;
 }
 
-export async function americanFootballCurrentMatches(
-  date: "TODAY" | "YESTERDAY" | "TOMORROW",
-) {
-  const matches = await fetchAmericanFootballCurrentMatches(date, 1370);
+export async function americanFootballMatchesByDate(date: Date) {
+  const matches = await fetchAmericanFootballMatchesByDate(date);
 
   if (!matches || matches.events.length === 0) {
     return null;
@@ -265,7 +263,10 @@ export async function americanFootballCurrentMatches(
 
   const validLeagueIds = AMERICAN_FOOTBALL_LEAGUES.map((l) => Number(l.slug));
   const leagueIdToName = Object.fromEntries(
-    AMERICAN_FOOTBALL_LEAGUES.map((l) => [Number(l.slug), l.name]),
+    AMERICAN_FOOTBALL_LEAGUES.map((l) => [
+      Number(l.slug),
+      { name: l.name, currentSeason: l.seasons[0].slug },
+    ]),
   );
 
   matches.events = matches.events
@@ -287,7 +288,7 @@ export async function americanFootballCurrentMatches(
 
   return {
     fixtures: rounds.map((leagueId) => {
-      const roundLabel = leagueIdToName[leagueId] ?? "";
+      const roundLabel = leagueIdToName[leagueId]?.name ?? "";
 
       return {
         matches: matches.events
@@ -337,9 +338,11 @@ export async function americanFootballCurrentMatches(
             } as MatchSummary;
           }),
         roundLabel: roundLabel,
+        sport: SPORT.AMERICAN_FOOTBALL,
+        roundSlug: `${leagueId}/${leagueIdToName[leagueId]?.currentSeason}`,
       } as RoundDetails;
     }),
 
-    currentRound: "NFL",
+    currentRound: leagueIdToName[rounds[0]]?.name ?? "NFL",
   } as AmericanFootballFixturesPage;
 }
