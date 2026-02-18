@@ -73,10 +73,15 @@ export type MatchSummary = {
 
 export type MatchStatus = "LIVE" | "UPCOMING" | "COMPLETED";
 
+export type CardVariant = "tennis" | "default";
+
 export interface RoundDetails {
   matches: MatchSummary[];
   roundLabel: string;
   byes?: { name?: string; img?: string }[];
+  cardVariant?: CardVariant;
+  roundSlug?: string;
+  sport?: string;
 }
 
 export interface SportsmonksCricket {

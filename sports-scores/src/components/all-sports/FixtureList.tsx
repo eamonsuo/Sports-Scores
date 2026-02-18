@@ -1,8 +1,9 @@
 import MatchSummaryCard from "@/components/all-sports/MatchSummaryCard";
 import TennisMatchCard from "@/components/tennis/TennisMatchCard";
-import { MatchSummary } from "@/types/misc";
+import { CardVariant, MatchSummary } from "@/types/misc";
 import React from "react";
 import SectionDate from "./SectionDate";
+import Placeholder from "../misc-ui/Placeholder";
 
 // Assumes data prop is already sorted in desired order
 export default function FixtureList({
@@ -10,7 +11,7 @@ export default function FixtureList({
   cardVariant = "default",
 }: {
   data: MatchSummary[];
-  cardVariant?: "tennis" | "default";
+  cardVariant?: CardVariant;
 }) {
   const CardComponent =
     cardVariant === "tennis" ? TennisMatchCard : MatchSummaryCard;
@@ -23,7 +24,7 @@ export default function FixtureList({
   let currentDateFlag: boolean = false;
 
   if (data.length === 0) {
-    return <>NO DATA</>;
+    return <Placeholder>NO DATA</Placeholder>;
   }
 
   return (

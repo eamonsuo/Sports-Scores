@@ -119,19 +119,9 @@ export async function fetchRugbyLeagueMatchIncidents(matchId: number) {
   return (await rawMatch.json()) as RugbyLeague_RugbyAPI2_MatchIncidents_Response;
 }
 
-export async function fetchRugbyLeagueCurrentMatches(
-  date: "TODAY" | "YESTERDAY" | "TOMORROW",
-  categoryId: number,
-) {
-  let curDate = new Date();
-  if (date === "YESTERDAY") {
-    curDate.setDate(curDate.getDate() - 1);
-  } else if (date === "TOMORROW") {
-    curDate.setDate(curDate.getDate() + 1);
-  }
-
+export async function fetchRugbyLeagueMatchesByDate(date: Date) {
   const rawFixtures = await fetch(
-    `${process.env.NRL_BASEURL}/rugby/category/${categoryId}/events/${curDate.getDate()}/${curDate.getMonth() + 1}/${curDate.getFullYear()}`,
+    `${process.env.NRL_BASEURL}/rugby/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
     {
       headers: reqHeaders,
     },

@@ -80,7 +80,7 @@ export async function fetchFootballMatchIncidents(matchId: number) {
   )) as Football_FootApi_MatchIncidents_Response;
 }
 
-export async function fetchFootballCurrentMatches(date: Date) {
+export async function fetchFootballMatchesByDate(date: Date) {
   return (await fetchFootballApi(
     `/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
   )) as Football_FootApi_MatchSchedules_Response;

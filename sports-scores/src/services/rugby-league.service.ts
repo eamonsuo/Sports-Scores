@@ -1,6 +1,6 @@
 import { RugbyLeagueStanding } from "@/components/rugby-league/NRLLadder";
 import {
-  fetchRugbyLeagueCurrentMatches,
+  fetchRugbyLeagueMatchesByDate,
   fetchRugbyLeagueLastMatches,
   fetchRugbyLeagueMatchDetails,
   fetchRugbyLeagueMatchIncidents,
@@ -206,11 +206,8 @@ export async function rugbyLeagueMatchDetails(matchId: number) {
   } as RugbyLeagueMatchPage;
 }
 
-export async function rugbyLeagueCurrentMatches(
-  date: "TODAY" | "YESTERDAY" | "TOMORROW",
-  // categoryId: number,
-) {
-  const matches = await fetchRugbyLeagueCurrentMatches(date, 83);
+export async function rugbyLeagueMatchesByDate(date: Date) {
+  const matches = await fetchRugbyLeagueMatchesByDate(date);
 
   if (!matches) {
     return null;
@@ -218,7 +215,10 @@ export async function rugbyLeagueCurrentMatches(
 
   const validLeagueIds = RUGBY_LEAGUE_LEAGUES.map((l) => Number(l.slug));
   const leagueIdToName = Object.fromEntries(
-    RUGBY_LEAGUE_LEAGUES.map((l) => [Number(l.slug), l.name]),
+    RUGBY_LEAGUE_LEAGUES.map((l) => [
+      Number(l.slug),
+      { name: l.name, currentSeason: l.seasons[0].slug },
+    ]),
   );
 
   matches.events = matches.events
@@ -240,7 +240,7 @@ export async function rugbyLeagueCurrentMatches(
 
   return {
     fixtures: rounds.map((leagueId) => {
-      const roundLabel = leagueIdToName[leagueId] ?? "";
+      const roundLabel = leagueIdToName[leagueId]?.name ?? "";
       return {
         matches: matches.events
           .filter((item) => item.tournament.uniqueTournament.id === leagueId)
@@ -283,6 +283,8 @@ export async function rugbyLeagueCurrentMatches(
             } as MatchSummary;
           }),
         roundLabel: roundLabel,
+        roundSlug: `${leagueId}/${leagueIdToName[leagueId]?.currentSeason}`,
+        sport: SPORT.RUGBY_LEAGUE,
       } as RoundDetails;
     }),
 

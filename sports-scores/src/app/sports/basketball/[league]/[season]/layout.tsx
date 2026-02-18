@@ -10,7 +10,7 @@ export default async function SportsLayout({
       <NavButtonGroup
         buttons={[
           {
-            href: "./matches",
+            href: "./matches#current-date",
             label: "Matches",
             page: "matches",
           },
