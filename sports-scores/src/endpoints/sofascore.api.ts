@@ -21,6 +21,7 @@ export async function fetchLastEvents(
   );
 
   if (!rawEvents.ok || errorCodesToNullify.includes(rawEvents.status)) {
+    console.log(rawEvents.status);
     return null;
   }
 
@@ -37,6 +38,7 @@ export async function fetchNextEvents(
   );
 
   if (!rawEvents.ok || errorCodesToNullify.includes(rawEvents.status)) {
+    console.log(rawEvents.status);
     return null;
   }
 
@@ -52,6 +54,7 @@ export async function fetchStandingsTotal(
   );
 
   if (!rawStandings.ok || errorCodesToNullify.includes(rawStandings.status)) {
+    console.log(rawStandings.status);
     return null;
   }
 
