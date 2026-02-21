@@ -75,6 +75,17 @@ export interface Sofascore_Event {
   fanRatingEvent: boolean;
   showTotoPromo: boolean;
   isEditor: boolean;
+  // american football
+  homeTeamSeasonHistoricalForm?: {
+    wins: number;
+    losses: number;
+    draws: number;
+  };
+  awayTeamSeasonHistoricalForm?: {
+    wins: number;
+    losses: number;
+    draws: number;
+  };
 }
 
 export interface Sofascore_Tournament {

@@ -5,7 +5,7 @@ import { aussieRulesCurrentMatches } from "@/services/aussie-rules.service";
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const pageData = await aussieRulesCurrentMatches("TODAY");
+  const pageData = await aussieRulesCurrentMatches(new Date());
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;

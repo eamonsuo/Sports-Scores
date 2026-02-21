@@ -4,12 +4,12 @@ import {
 } from "@/components/baseball/BaseballLadder";
 import { BaseballScoreBreakdown } from "@/components/baseball/BaseballScoreBreakdown";
 import {
-  fetchBaseballCurrentMatches as fetchBaseballByDateMatches,
-  fetchBaseballLastMatches,
-  fetchBaseballMatchDetails,
-  fetchBaseballNextMatches,
-  fetchBaseballStandings,
-} from "@/endpoints/baseball.api";
+  fetchEventDetails,
+  fetchEventsByDate,
+  fetchLastEvents,
+  fetchNextEvents,
+  fetchStandingsTotal,
+} from "@/endpoints/sofascore.api";
 import { BASEBALL_LEAGUES } from "@/lib/constants";
 import { resolveBaseballTeamImage } from "@/lib/imageMapping";
 import {
@@ -26,9 +26,8 @@ import {
 import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
 
 export async function baseballMatches(tournamentId: number, seasonId: number) {
-  const lastMatches = await fetchBaseballLastMatches(tournamentId, seasonId, 0);
-
-  const nextMatches = await fetchBaseballNextMatches(tournamentId, seasonId, 0);
+  const lastMatches = await fetchLastEvents(tournamentId, seasonId, 0);
+  const nextMatches = await fetchNextEvents(tournamentId, seasonId, 0);
 
   if (!lastMatches && !nextMatches) {
     return null;
@@ -108,7 +107,7 @@ export async function baseballStandings(
   tournamentId: number,
   seasonId: number,
 ) {
-  const standings = await fetchBaseballStandings(tournamentId, seasonId);
+  const standings = await fetchStandingsTotal(tournamentId, seasonId);
 
   if (!standings) {
     return null;
@@ -145,7 +144,7 @@ export async function baseballStandings(
 }
 
 export async function baseballMatchDetails(matchId: number) {
-  const match = await fetchBaseballMatchDetails(matchId);
+  const match = await fetchEventDetails(matchId);
 
   const matchDetails = match?.event;
 
@@ -254,11 +253,8 @@ export async function baseballMatchDetails(matchId: number) {
   } as BaseballMatchPage;
 }
 
-export async function baseballMatchesByDate(
-  date: Date,
-  // categoryId: number,
-) {
-  const matches = await fetchBaseballByDateMatches(date);
+export async function baseballMatchesByDate(date: Date) {
+  const matches = await fetchEventsByDate("baseball", date);
 
   if (!matches) {
     return null;

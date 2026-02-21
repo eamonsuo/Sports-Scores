@@ -1,11 +1,11 @@
 import {
-  fetchMatchDetails,
-  fetchMatchIncidents,
-  fetchScheduledEvents,
-  fetchTournamentLastMatches,
-  fetchTournamentNextMatches,
-  fetchTournamentStandings,
-} from "@/endpoints/sofascore-rapid-api.api";
+  fetchEventDetails,
+  fetchEventIncidents,
+  fetchEventsByDate,
+  fetchLastEvents,
+  fetchNextEvents,
+  fetchStandingsTotal,
+} from "@/endpoints/sofascore.api";
 import { AFL_TEAM_NAMES, AUSSIE_RULES_LEAGUES } from "@/lib/constants";
 import { resolveAussieRulesImages } from "@/lib/imageMapping";
 import {
@@ -22,8 +22,8 @@ import {
 import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
 
 export async function aussieRulesMatches(league: number, season: number) {
-  const lastMatches = await fetchTournamentLastMatches(league, season, 0);
-  const nextMatches = await fetchTournamentNextMatches(league, season, 0);
+  const lastMatches = await fetchLastEvents(league, season, 0);
+  const nextMatches = await fetchNextEvents(league, season, 0);
 
   if (!lastMatches && !nextMatches) {
     return null;
@@ -103,7 +103,7 @@ export async function aussieRulesMatches(league: number, season: number) {
 }
 
 export async function aussieRulesStandings(league: number, season: number) {
-  const standings = await fetchTournamentStandings(league, season);
+  const standings = await fetchStandingsTotal(league, season);
 
   if (!standings) {
     return null;
@@ -135,8 +135,8 @@ export async function aussieRulesStandings(league: number, season: number) {
 }
 
 export async function aussieRulesMatchDetails(matchId: number) {
-  const match = await fetchMatchDetails(matchId);
-  const incidents = await fetchMatchIncidents(matchId);
+  const match = await fetchEventDetails(matchId);
+  const incidents = await fetchEventIncidents(matchId);
 
   const matchDetails = match?.event;
   const scoreIncidents = incidents?.incidents
@@ -195,10 +195,8 @@ export async function aussieRulesMatchDetails(matchId: number) {
   } as AussieRulesMatchPage;
 }
 
-export async function aussieRulesCurrentMatches(
-  date: "TODAY" | "YESTERDAY" | "TOMORROW",
-) {
-  const matches = await fetchScheduledEvents(87);
+export async function aussieRulesCurrentMatches(date: Date) {
+  const matches = await fetchEventsByDate("aussie-rules", date);
 
   if (!matches) {
     return null;

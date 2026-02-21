@@ -1,12 +1,12 @@
 import { RugbyLeagueStanding } from "@/components/rugby-league/NRLLadder";
 import {
-  fetchRugbyLeagueMatchesByDate,
-  fetchRugbyLeagueLastMatches,
-  fetchRugbyLeagueMatchDetails,
-  fetchRugbyLeagueMatchIncidents,
-  fetchRugbyLeagueNextMatches,
-  fetchRugbyLeagueStandings,
-} from "@/endpoints/rugby-league.api";
+  fetchEventDetails,
+  fetchEventIncidents,
+  fetchEventsByDate,
+  fetchLastEvents,
+  fetchNextEvents,
+  fetchStandingsTotal,
+} from "@/endpoints/sofascore.api";
 import { NRL_TEAM_NAMES, RUGBY_LEAGUE_LEAGUES } from "@/lib/constants";
 import { resolveNRLImages } from "@/lib/imageMapping";
 import {
@@ -26,17 +26,9 @@ export async function rugbyLeagueMatches(
   tournamentId: number,
   seasonId: number,
 ) {
-  const lastMatches = await fetchRugbyLeagueLastMatches(
-    tournamentId,
-    seasonId,
-    0,
-  );
+  const lastMatches = await fetchLastEvents(tournamentId, seasonId, 0);
 
-  const nextMatches = await fetchRugbyLeagueNextMatches(
-    tournamentId,
-    seasonId,
-    0,
-  );
+  const nextMatches = await fetchNextEvents(tournamentId, seasonId, 0);
 
   if (!lastMatches && !nextMatches) {
     return null;
@@ -119,7 +111,7 @@ export async function rugbyLeagueStandings(
   tournamentId: number,
   seasonId: number,
 ) {
-  const standings = await fetchRugbyLeagueStandings(tournamentId, seasonId);
+  const standings = await fetchStandingsTotal(tournamentId, seasonId);
 
   if (!standings) {
     return null;
@@ -153,8 +145,8 @@ export async function rugbyLeagueStandings(
 }
 
 export async function rugbyLeagueMatchDetails(matchId: number) {
-  const match = await fetchRugbyLeagueMatchDetails(matchId);
-  const incidents = await fetchRugbyLeagueMatchIncidents(matchId);
+  const match = await fetchEventDetails(matchId);
+  const incidents = await fetchEventIncidents(matchId);
 
   const matchDetails = match?.event;
   const scoreIncidents = incidents?.incidents
@@ -207,7 +199,7 @@ export async function rugbyLeagueMatchDetails(matchId: number) {
 }
 
 export async function rugbyLeagueMatchesByDate(date: Date) {
-  const matches = await fetchRugbyLeagueMatchesByDate(date);
+  const matches = await fetchEventsByDate("rugby", date);
 
   if (!matches) {
     return null;
@@ -237,17 +229,18 @@ export async function rugbyLeagueMatchesByDate(date: Date) {
       matches.events.map((item) => item.tournament.uniqueTournament.id),
     ),
   ];
+  let currentround = "";
 
   return {
     fixtures: rounds.map((leagueId) => {
       const roundLabel = leagueIdToName[leagueId]?.name ?? "";
+      currentround = currentround === "" ? roundLabel : currentround;
       return {
         matches: matches.events
           .filter((item) => item.tournament.uniqueTournament.id === leagueId)
           .map((match) => {
             var startDate = new Date(0);
             startDate.setUTCSeconds(match.startTimestamp);
-
             return {
               startDate: startDate,
               roundLabel: roundLabel,
@@ -288,6 +281,6 @@ export async function rugbyLeagueMatchesByDate(date: Date) {
       } as RoundDetails;
     }),
 
-    currentRound: "NRL",
+    currentRound: currentround,
   } as RugbyLeagueTodayPage;
 }

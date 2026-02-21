@@ -3,13 +3,15 @@ import {
   AmericanFootballTeamStanding,
 } from "@/components/american-football/AmericanFootballLadder";
 import {
-  fetchAmericanFootballCurrentMatches as fetchAmericanFootballMatchesByDate,
-  fetchAmericanFootballLastMatches,
-  fetchAmericanFootballMatchDetails,
-  fetchAmericanFootballMatchIncidents,
-  fetchAmericanFootballNextMatches,
-  fetchAmericanFootballStandings,
-} from "@/endpoints/american-football.api";
+  fetchMatchDetails,
+  fetchMatchIncidents,
+} from "@/endpoints/sofascore-rapid-api.api";
+import {
+  fetchEventsByDate,
+  fetchLastEvents,
+  fetchNextEvents,
+  fetchStandingsTotal,
+} from "@/endpoints/sofascore.api";
 import { AMERICAN_FOOTBALL_LEAGUES, NFL_TEAM_NAMES } from "@/lib/constants";
 import { resolveNFLImages } from "@/lib/imageMapping";
 import {
@@ -25,8 +27,8 @@ import {
 import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
 
 export async function americanFootballMatches(league: number, season: number) {
-  const lastMatches = await fetchAmericanFootballLastMatches(league, season, 0);
-  const nextMatches = await fetchAmericanFootballNextMatches(league, season, 0);
+  const lastMatches = await fetchNextEvents(league, season, 0);
+  const nextMatches = await fetchLastEvents(league, season, 0);
 
   if (!lastMatches && !nextMatches) {
     return null;
@@ -139,7 +141,7 @@ export async function americanFootballStandings(
   league: number,
   season: number,
 ) {
-  const standings = await fetchAmericanFootballStandings(league, season);
+  const standings = await fetchStandingsTotal(league, season);
   if (!standings) {
     return null;
   }
@@ -174,8 +176,8 @@ export async function americanFootballStandings(
 }
 
 export async function americanFootballMatchDetails(matchId: number) {
-  const match = await fetchAmericanFootballMatchDetails(matchId);
-  const incidents = await fetchAmericanFootballMatchIncidents(matchId);
+  const match = await fetchMatchDetails(matchId);
+  const incidents = await fetchMatchIncidents(matchId);
 
   const matchDetails = match?.event;
   const scoreIncidents = incidents?.incidents
@@ -255,7 +257,7 @@ export async function americanFootballMatchDetails(matchId: number) {
 }
 
 export async function americanFootballMatchesByDate(date: Date) {
-  const matches = await fetchAmericanFootballMatchesByDate(date);
+  const matches = await fetchEventsByDate("american-football", date);
 
   if (!matches || matches.events.length === 0) {
     return null;

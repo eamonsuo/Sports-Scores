@@ -1,13 +1,15 @@
 import { Match as BracketMatch } from "@/components/bracket/types";
+import { fetchMatchDetails } from "@/endpoints/sofascore-rapid-api.api";
+import {
+  fetchEventsByDate,
+  fetchLastEvents,
+  fetchNextEvents,
+} from "@/endpoints/sofascore.api";
 import {
   fetchTennisATPRankings,
   fetchTennisBracket,
-  fetchTennisMatchDetails,
-  fetchTennisMatchesByDate,
   fetchTennisPlayerLastMatches,
   fetchTennisPlayerNextMatches,
-  fetchTennisTournamentLastMatches,
-  fetchTennisTournamentNextMatches,
   fetchTennisWTARankings,
 } from "@/endpoints/tennis.api";
 import { TENNIS_CATEGORIES, TENNIS_LEAGUES } from "@/lib/constants";
@@ -33,15 +35,9 @@ export async function tennisTournamentMatches(
   tournamentId: number,
   seasonId: number,
 ) {
-  const lastMatches = await fetchTennisTournamentLastMatches(
-    tournamentId,
-    seasonId,
-  );
+  const lastMatches = await fetchLastEvents(tournamentId, seasonId);
 
-  const nextMatches = await fetchTennisTournamentNextMatches(
-    tournamentId,
-    seasonId,
-  );
+  const nextMatches = await fetchNextEvents(tournamentId, seasonId);
 
   if (!lastMatches && !nextMatches) {
     return null;
@@ -135,7 +131,7 @@ export async function TennisPlayerMatches(teamId: number) {
 // }
 
 export async function TennisMatchDetails(matchId: number) {
-  const match = await fetchTennisMatchDetails(matchId);
+  const match = await fetchMatchDetails(matchId);
   // const incidents = await fetchTennisMatchIncidents(matchId);
 
   const matchDetails = match?.event;
@@ -220,7 +216,7 @@ export async function TennisMatchDetails(matchId: number) {
 }
 
 export async function TennisMatchesByDate(date: Date) {
-  const matches = await fetchTennisMatchesByDate(date);
+  const matches = await fetchEventsByDate("tennis", date);
 
   if (!matches) {
     return null;

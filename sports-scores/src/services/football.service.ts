@@ -2,15 +2,17 @@ import { Match as BracketMatch } from "@/components/bracket/types";
 import { FootballStanding } from "@/components/football/FootballLadder";
 import {
   fetchFootballCupTrees,
-  fetchFootballMatchesByDate,
-  fetchFootballLastMatches,
-  fetchFootballMatchDetails,
-  fetchFootballMatchIncidents,
-  fetchFootballNextMatches,
-  fetchFootballStandings,
   fetchFootballTeamLastMatches,
   fetchFootballTeamNextMatches,
 } from "@/endpoints/football.api";
+import {
+  fetchEventDetails,
+  fetchEventIncidents,
+  fetchEventsByDate,
+  fetchLastEvents,
+  fetchNextEvents,
+  fetchStandingsTotal,
+} from "@/endpoints/sofascore.api";
 import { FOOTBALL_LEAGUES } from "@/lib/constants";
 import { resolveFootballTeamImage } from "@/lib/imageMapping";
 import {
@@ -29,9 +31,8 @@ import {
 import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
 
 export async function footballMatches(tournamentId: number, seasonId: number) {
-  const lastMatches = await fetchFootballLastMatches(tournamentId, seasonId, 0);
-
-  const nextMatches = await fetchFootballNextMatches(tournamentId, seasonId, 0);
+  const lastMatches = await fetchLastEvents(tournamentId, seasonId, 0);
+  const nextMatches = await fetchNextEvents(tournamentId, seasonId, 0);
 
   if (!lastMatches && !nextMatches) {
     return null;
@@ -167,7 +168,7 @@ export async function footballStandings(
   tournamentId: number,
   seasonId: number,
 ) {
-  const standings = await fetchFootballStandings(tournamentId, seasonId);
+  const standings = await fetchStandingsTotal(tournamentId, seasonId);
 
   if (!standings) {
     return null;
@@ -199,8 +200,8 @@ export async function footballStandings(
 }
 
 export async function footballMatchDetails(matchId: number) {
-  const match = await fetchFootballMatchDetails(matchId);
-  const incidents = await fetchFootballMatchIncidents(matchId);
+  const match = await fetchEventDetails(matchId);
+  const incidents = await fetchEventIncidents(matchId);
 
   const matchDetails = match?.event;
   const scoreIncidents = incidents?.incidents
@@ -253,7 +254,7 @@ export async function footballMatchDetails(matchId: number) {
 }
 
 export async function footballMatchesByDate(date: Date) {
-  const matches = await fetchFootballMatchesByDate(date);
+  const matches = await fetchEventsByDate("football", date);
 
   if (!matches) {
     return null;

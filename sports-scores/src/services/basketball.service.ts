@@ -3,13 +3,13 @@ import {
   BasketballTeamStanding,
 } from "@/components/basketball/BasketballLadder";
 import {
-  fetchBasketballMatchesByDate,
-  fetchBasketballLastMatches,
-  fetchBasketballMatchDetails,
-  fetchBasketballMatchIncidents,
-  fetchBasketballNextMatches,
-  fetchBasketballStandings,
-} from "@/endpoints/basketball.api";
+  fetchEventDetails,
+  fetchEventIncidents,
+  fetchEventsByDate,
+  fetchLastEvents,
+  fetchNextEvents,
+  fetchStandingsTotal,
+} from "@/endpoints/sofascore.api";
 import { BASKETBALL_LEAGUES } from "@/lib/constants";
 import { resolveBasketballTeamImage } from "@/lib/imageMapping";
 import {
@@ -29,17 +29,8 @@ export async function basketballMatches(
   tournamentId: number,
   seasonId: number,
 ) {
-  const lastMatches = await fetchBasketballLastMatches(
-    tournamentId,
-    seasonId,
-    0,
-  );
-
-  const nextMatches = await fetchBasketballNextMatches(
-    tournamentId,
-    seasonId,
-    0,
-  );
+  const lastMatches = await fetchLastEvents(tournamentId, seasonId, 0);
+  const nextMatches = await fetchNextEvents(tournamentId, seasonId, 0);
 
   if (!lastMatches && !nextMatches) {
     return null;
@@ -141,7 +132,7 @@ export async function basketballStandings(
   tournamentId: number,
   seasonId: number,
 ) {
-  const standings = await fetchBasketballStandings(tournamentId, seasonId);
+  const standings = await fetchStandingsTotal(tournamentId, seasonId);
 
   if (!standings) {
     return null;
@@ -182,8 +173,8 @@ export async function basketballStandings(
 }
 
 export async function basketballMatchDetails(matchId: number) {
-  const match = await fetchBasketballMatchDetails(matchId);
-  const incidents = await fetchBasketballMatchIncidents(matchId);
+  const match = await fetchEventDetails(matchId);
+  const incidents = await fetchEventIncidents(matchId);
 
   const matchDetails = match?.event;
   const scoreIncidents = incidents?.incidents
@@ -262,11 +253,8 @@ export async function basketballMatchDetails(matchId: number) {
   } as BasketballMatchPage;
 }
 
-export async function basketballMatchesByDate(
-  date: Date,
-  // categoryId: number,
-) {
-  const matches = await fetchBasketballMatchesByDate(date);
+export async function basketballMatchesByDate(date: Date) {
+  const matches = await fetchEventsByDate("basketball", date);
 
   if (!matches) {
     return null;

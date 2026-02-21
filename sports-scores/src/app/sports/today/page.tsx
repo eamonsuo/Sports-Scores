@@ -35,7 +35,7 @@ export default async function Page() {
     baseballMatchesByDate(curDate),
     americanFootballMatchesByDate(curDate),
     rugbyLeagueMatchesByDate(curDate),
-    aussieRulesCurrentMatches("TODAY"),
+    aussieRulesCurrentMatches(curDate),
     golfTournamentsByDate(curDate),
     motorsportCategoriesByDate(curDate),
   ]);
