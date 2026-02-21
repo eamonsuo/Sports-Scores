@@ -188,7 +188,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-04-06"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/2/28/March_Madness_logo.svg",
-    link: "/sports/basketball",
+    link: "https://en.wikipedia.org/wiki/2026_NCAA_Division_I_men%27s_basketball_tournament",
     location: "USA",
     tags: ["👨", "👩"],
   },
@@ -255,7 +255,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-03-08"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/f/fa/2026_ICC_Men%27s_T20_World_Cup_logo.svg",
-    link: "/sports/cricket/main/matches",
+    link: "/sports/cricket/series/icc-mens-t20-world-cup/icc-mens-t20-world-cup/matches#current-date",
     location: "India & Sri Lanka",
     tags: ["👨"],
   },
@@ -268,7 +268,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-03-09"),
     // imageUrl:
     //   "https://upload.wikimedia.org/wikipedia/en/0/05/World_Test_Championship_Logo.svg",
-    link: "/sports/cricket/main/matches",
+    link: "/sports/cricket/series/womens-twenty20/australia-women-v-india-women-twenty20-series/matches#current-date",
     location: "Australia",
     tags: ["👩"],
   },
@@ -281,7 +281,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-07-05"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/8/87/2026_ICC_Women%27s_T20_World_Cup_Logo.svg",
-    link: "/sports/cricket/main/matches",
+    link: "/sports/cricket/series/icc-womens-t20-world-cup/icc-womens-t20-world-cup/matches#current-date",
     location: "England & Wales",
     tags: ["👩"],
   },
@@ -460,7 +460,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-03-21"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/6/68/AFC_Women%27s_Asian_Cup.png",
-    link: "/sports/football",
+    link: "/sports/football/1692/79569",
     location: "Australia",
     tags: ["👩"],
   },
@@ -473,7 +473,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-05-20"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/1/1b/UEFA_Europa_League_logo_%282024_version%29.svg",
-    link: "/sports/football",
+    link: "/sports/football/679/76984",
     location: "Istanbul, Turkey",
     tags: ["👨"],
   },
@@ -486,7 +486,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-05-30"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/f/f5/UEFA_Champions_League.svg",
-    link: "/sports/football",
+    link: "/sports/football/7/76953",
     location: "Budapest, Hungary",
     tags: ["👨"],
   },
@@ -499,7 +499,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-07-19"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/1/17/2026_FIFA_World_Cup_emblem.svg",
-    link: "/sports/football/world-cup",
+    link: "/sports/football/16/58210",
     location: "USA, Canada, Mexico",
     tags: ["👨"],
   },

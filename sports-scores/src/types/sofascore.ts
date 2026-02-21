@@ -1,22 +1,50 @@
-export interface Sofascore_FixturePage_Response {
+export interface Sofascore_Event_Response {
+  event: Sofascore_Event;
+}
+
+export interface Sofascore_Events_Response {
   events: Sofascore_Event[];
+}
+
+export interface Sofascore_EventPage_Response
+  extends Sofascore_Events_Response {
   hasNextPage: boolean;
 }
 
-export interface Sofascore_Match_Response {
-  event: Sofascore_Event;
-}
-export interface Sofascore_LeagueTotalStandings_Response {
+export interface Sofascore_TotalStandings_Response {
   standings: Sofascore_Standing[];
 }
 
-export interface Sofascore_MatchIncidents_Response {
+export interface Sofascore_EventIncidents_Response {
   incidents: Sofascore_Incident[];
 }
 
-export interface Sofascore_ScheduledEvents_Response {
-  events: Sofascore_Event[];
-}
+export type SofascoreSport =
+  | "american-football"
+  | "aussie-rules"
+  | "badminton"
+  | "bandy"
+  | "baseball"
+  | "basketball"
+  | "beach-volley"
+  | "cricket"
+  | "cycling"
+  | "darts"
+  | "esports"
+  | "floorball"
+  | "football"
+  | "futsal"
+  | "handball"
+  | "ice-hockey"
+  | "minifootball"
+  | "mma"
+  | "motorsport"
+  | "rugby"
+  | "snooker"
+  | "table-tennis"
+  | "tennis"
+  | "volleyball"
+  | "water-polo";
 
 export interface Sofascore_Event {
   tournament: Sofascore_Tournament;

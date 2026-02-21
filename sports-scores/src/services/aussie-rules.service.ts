@@ -5,7 +5,7 @@ import {
   fetchTournamentLastMatches,
   fetchTournamentNextMatches,
   fetchTournamentStandings,
-} from "@/endpoints/sofascore.api";
+} from "@/endpoints/sofascore-rapid-api.api";
 import { AFL_TEAM_NAMES, AUSSIE_RULES_LEAGUES } from "@/lib/constants";
 import { resolveAussieRulesImages } from "@/lib/imageMapping";
 import {

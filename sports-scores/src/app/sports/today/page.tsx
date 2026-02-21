@@ -25,6 +25,8 @@ export default async function Page() {
     americanFootballToday,
     rugbyLeagueToday,
     aussieRulesToday,
+    golfToday,
+    motorsportToday,
   ] = await Promise.all([
     cricketMatchesByDate(curDate),
     tennisMatchesByDate(curDate),
@@ -34,10 +36,10 @@ export default async function Page() {
     americanFootballMatchesByDate(curDate),
     rugbyLeagueMatchesByDate(curDate),
     aussieRulesCurrentMatches("TODAY"),
+    golfTournamentsByDate(curDate),
+    motorsportCategoriesByDate(curDate),
   ]);
 
-  const golfToday = golfTournamentsByDate(curDate);
-  const motorsportToday = motorsportCategoriesByDate(curDate); // Placeholder for motorsport matches fetching logic
   const dartsToday = null; // Placeholder for darts matches fetching logic
   const cyclingToday = null; // Placeholder for cycling matches fetching logic
 

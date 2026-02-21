@@ -8,7 +8,7 @@ import {
   Sofascore_Event,
   Sofascore_Standing,
   Sofascore_Team,
-} from "./sofascore.api";
+} from "./sofascore";
 
 export interface Tennis_Sofascore_Event extends Sofascore_Event {
   homeTeamSeed?: string;

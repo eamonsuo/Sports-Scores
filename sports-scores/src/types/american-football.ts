@@ -6,7 +6,7 @@ import {
   Sofascore_Event,
   Sofascore_Incident,
   Sofascore_Standing,
-} from "./sofascore.api";
+} from "./sofascore";
 
 export interface AmericanFootball_Sofascore_Event extends Sofascore_Event {
   homeTeamSeasonHistoricalForm: {

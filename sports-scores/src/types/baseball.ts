@@ -5,7 +5,7 @@ import {
   Sofascore_Event,
   Sofascore_Incident,
   Sofascore_Standing,
-} from "./sofascore.api";
+} from "./sofascore";
 
 export interface Baseball_BaseballApi_FixturePage_Response {
   events: Sofascore_Event[];
