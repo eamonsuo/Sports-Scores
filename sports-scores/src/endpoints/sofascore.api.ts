@@ -35,6 +35,20 @@ export async function fetchNextEvents(
 ) {
   const rawEvents = await fetch(
     `${SOFASCOREBASEURL}/unique-tournament/${tournamentId}/season/${seasonId}/events/next/${pageNumber}`,
+    {
+      headers: {
+        accept: "*/*",
+        "accept-language": "en-US,en;q=0.9,en-AU;q=0.8",
+        "sec-ch-ua":
+          '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145"',
+        "sec-ch-ua-mobile": "?1",
+        "sec-ch-ua-platform": '"iOS"',
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        Referer: "https://www.sofascore.com",
+      },
+    },
   );
 
   if (!rawEvents.ok || errorCodesToNullify.includes(rawEvents.status)) {
