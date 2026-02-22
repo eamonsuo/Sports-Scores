@@ -6,9 +6,12 @@ import { MatchSummary, RoundDetails, TeamScoreDetails } from "./misc";
 import {
   Sofascore_CupTree,
   Sofascore_Event,
-  Sofascore_Standing,
+  Sofascore_Event_Response,
+  Sofascore_EventPage_Response,
+  Sofascore_Events_Response,
   Sofascore_Team,
-} from "./sofascore.api";
+  Sofascore_TotalStandings_Response,
+} from "./sofascore";
 
 export interface Tennis_Sofascore_Event extends Sofascore_Event {
   homeTeamSeed?: string;
@@ -16,18 +19,18 @@ export interface Tennis_Sofascore_Event extends Sofascore_Event {
   firstToServe?: number;
 }
 
-export interface Tennis_TennisApi_FixturePage_Response {
+export interface Tennis_TennisApi_FixturePage_Response
+  extends Sofascore_EventPage_Response {
   events: Tennis_Sofascore_Event[];
-  hasNextPage: boolean;
 }
 
-export interface Tennis_TennisApi_Match_Response {
+export interface Tennis_TennisApi_Match_Response
+  extends Sofascore_Event_Response {
   event: Tennis_Sofascore_Event;
 }
 
-export interface Tennis_TennisApi_TournamentStandings_Response {
-  standings: Sofascore_Standing[];
-}
+export interface Tennis_TennisApi_TournamentStandings_Response
+  extends Sofascore_TotalStandings_Response {}
 
 export interface Tennis_StatisticsItem {
   name: string;
@@ -58,7 +61,8 @@ export interface Tennis_TennisApi_MatchStatistics_Response {
   statistics: Tennis_Statistics[];
 }
 
-export interface Tennis_TennisApi_MatchSchedules_Response {
+export interface Tennis_TennisApi_MatchSchedules_Response
+  extends Sofascore_Events_Response {
   events: Tennis_Sofascore_Event[];
 }
 

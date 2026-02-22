@@ -4,7 +4,7 @@ import {
   CountryFlagCode,
   MatchSummary,
 } from "@/types/misc";
-import { Sofascore_Score } from "@/types/sofascore.api";
+import { Sofascore_Score } from "@/types/sofascore";
 
 const fallback = "/vercel.svg";
 

@@ -1,8 +1,8 @@
 import { RugbyLeagueStanding } from "@/components/rugby-league/NRLLadder";
 import {
-  fetchRugbyLeagueMatchesByDate,
   fetchRugbyLeagueLastMatches,
   fetchRugbyLeagueMatchDetails,
+  fetchRugbyLeagueMatchesByDate,
   fetchRugbyLeagueMatchIncidents,
   fetchRugbyLeagueNextMatches,
   fetchRugbyLeagueStandings,
@@ -238,9 +238,12 @@ export async function rugbyLeagueMatchesByDate(date: Date) {
     ),
   ];
 
+  let currentRound = "";
+
   return {
     fixtures: rounds.map((leagueId) => {
       const roundLabel = leagueIdToName[leagueId]?.name ?? "";
+      currentRound = currentRound === "" ? roundLabel : currentRound;
       return {
         matches: matches.events
           .filter((item) => item.tournament.uniqueTournament.id === leagueId)
@@ -288,6 +291,6 @@ export async function rugbyLeagueMatchesByDate(date: Date) {
       } as RoundDetails;
     }),
 
-    currentRound: "NRL",
+    currentRound: currentRound,
   } as RugbyLeagueTodayPage;
 }

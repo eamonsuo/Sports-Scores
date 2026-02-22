@@ -5,31 +5,27 @@ import { FootballScoreBreakdown } from "@/components/football/FootballScoreBreak
 import { MatchSummary, RoundDetails, TeamScoreDetails } from "./misc";
 import {
   Sofascore_CupTree,
-  Sofascore_Event,
-  Sofascore_Incident,
-  Sofascore_Standing,
-} from "./sofascore.api";
+  Sofascore_Event_Response,
+  Sofascore_EventIncidents_Response,
+  Sofascore_EventPage_Response,
+  Sofascore_Events_Response,
+  Sofascore_TotalStandings_Response,
+} from "./sofascore";
 
-export interface Football_FootApi_FixturePage_Response {
-  events: Sofascore_Event[];
-  hasNextPage: boolean;
-}
+export interface Football_FootApi_FixturePage_Response
+  extends Sofascore_EventPage_Response {}
 
-export interface Football_FootApi_Match_Response {
-  event: Sofascore_Event;
-}
+export interface Football_FootApi_Match_Response
+  extends Sofascore_Event_Response {}
 
-export interface Football_FootApi_LeagueTotalStandings_Response {
-  standings: Sofascore_Standing[];
-}
+export interface Football_FootApi_LeagueTotalStandings_Response
+  extends Sofascore_TotalStandings_Response {}
 
-export interface Football_FootApi_MatchIncidents_Response {
-  incidents: Sofascore_Incident[];
-}
+export interface Football_FootApi_MatchIncidents_Response
+  extends Sofascore_EventIncidents_Response {}
 
-export interface Football_FootApi_MatchSchedules_Response {
-  events: Sofascore_Event[];
-}
+export interface Football_FootApi_MatchSchedules_Response
+  extends Sofascore_Events_Response {}
 
 export interface Football_FootApi_LeagueCupTrees_Response {
   cupTrees: Sofascore_CupTree[];
