@@ -6,31 +6,47 @@ const fallback = "/vercel.svg";
 export function resolveGolfTeamImage(teamName: string) {
   switch (teamName) {
     case "4ACES GC":
+    case "4Aces GC":
       return "/liv/4aces.webp";
     case "LEGION XIII":
+    case "Legion XIII":
       return "/liv/legion13.webp";
     case "CRUSHERS GC":
+    case "Crushers GC":
       return "/liv/crushers.webp";
     case "STINGER GC":
       return "/liv/stinger.webp";
     case "FIREBALLS GC":
+    case "Fireballs GC":
       return "/liv/fireballs.webp";
     case "CLEEKS GOLF CLUB":
+    case "Cleeks Golf Club":
       return "/liv/cleeks.webp";
     case "TORQUE GC":
+    case "Torque GC":
       return "/liv/torque.webp";
     case "RIPPER GC":
+    case "Ripper GC":
       return "/liv/ripper.webp";
     case "HYFLYERS GC":
+    case "HyFlyers GC":
       return "/liv/hyflyers.webp";
     case "MAJESTICKS GC":
       return "/liv/majesticks.webp";
+    case "Majesticks Golf Club":
+      return fallback;
     case "RANGEGOATS GC":
+    case "RangeGoats GC":
       return "/liv/rangegoats.webp";
     case "SMASH GC":
+    case "Smash GC":
       return "/liv/smash.webp";
     case "IRON HEADS GC":
       return "/liv/ironheads.webp";
+    case "Korean Golf Club":
+      return fallback;
+    case "Southern Guards GC":
+      return fallback;
     default:
       return fallback;
   }
@@ -51,6 +67,7 @@ export function resolveGolfPlayerImage(playerName: string) {
       case "Aaron Baddeley":
       case "Ryan Ruffels":
       case "Elvis Smylie":
+      case "Wade Ormsby":
         return CountryFlagCode.Australia;
 
       case "Ryan Fox":
@@ -97,6 +114,15 @@ export function resolveGolfPlayerImage(playerName: string) {
       case "Lucas Glover":
       case "Harris English":
       case "Chris Gotterup":
+      case "Anthony Kim":
+      case "Jake Knapp":
+      case "Jacob Bridgeman":
+      case "Max Greyserman":
+      case "Michael Thorbjornsen":
+      case "Neal Shipley":
+      case "Joel Dahmen":
+      case "Webb Simpson":
+      case "Davis Riley":
         return CountryFlagCode.UnitedStates;
 
       case "Tommy Fleetwood":
@@ -108,11 +134,13 @@ export function resolveGolfPlayerImage(playerName: string) {
       case "Lee Westwood":
       case "Ian Poulter":
       case "Harry Hall":
+      case "Marco Penge":
         return CountryFlagCode.England;
 
       case "Shane Lowry":
         return CountryFlagCode.Ireland;
       case "Rory McIlroy":
+      case "Tom Mckibbin":
         return CountryFlagCode.NorthernIreland;
       case "Robert MacIntyre":
         return CountryFlagCode.Scotland;
@@ -153,6 +181,10 @@ export function resolveGolfPlayerImage(playerName: string) {
       case "Branden Grace":
       case "Charl Schwartzel":
       case "Aldrich Potgieter":
+      case "Christiaan Bezuidenhout":
+      case "Dean Burmester":
+      case "Garrick Higgo":
+      case "Erik van Rooyen":
         return CountryFlagCode.SouthAfrica;
 
       case "Thomas Pieters":
@@ -162,6 +194,7 @@ export function resolveGolfPlayerImage(playerName: string) {
       case "Thorbjørn Olesen":
       case "Rasmus Højgaard":
       case "Nicolai Højgaard":
+      case "Rasmus Neergaard-Petersen":
         return CountryFlagCode.Denmark;
 
       case "Victor Perez":
@@ -177,6 +210,16 @@ export function resolveGolfPlayerImage(playerName: string) {
 
       case "Anirban Lahiri":
         return CountryFlagCode.India;
+      case "Scott Vincent":
+        return CountryFlagCode.Zimbabwe;
+      case "Jhonattan Vegas":
+        return CountryFlagCode.Venezuela;
+      case "Emiliano Grillo":
+        return CountryFlagCode.Argentina;
+      case "Haotong Li":
+        return CountryFlagCode.China;
+      case "Nico Echavarria":
+        return CountryFlagCode.Colombia;
     }
   })();
 
@@ -276,6 +319,10 @@ export function resolveNRLImages(teamName: string) {
       return "/nrl/roosters.svg";
     case "Wests Tigers":
       return "/nrl/tigers.svg";
+    case "Queensland Maroons":
+      return "https://upload.wikimedia.org/wikipedia/commons/d/d1/State_of_Origin_QLD_Maroons_Logo.jpg";
+    case "New South Wales Blues":
+      return "https://upload.wikimedia.org/wikipedia/en/8/80/NSW_Blues_Logo_2023.png";
     default:
       return resolveCountryImage(teamName) ?? fallback;
   }
@@ -499,6 +546,7 @@ export function resolveF1TeamImages(teamName: string) {
     case "Aston Martin":
       return "/f1/astonmartin.svg";
     case "RB F1 Team":
+    case "Racing Bulls":
       return "/f1/racing-bulls-f1.svg";
     case "Sauber":
       return "/f1/sauber.webp";
@@ -506,6 +554,11 @@ export function resolveF1TeamImages(teamName: string) {
       return "/f1/haas.png";
     case "Williams":
       return "/f1/williams-f1.svg";
+
+    case "Audi":
+      return "https://upload.wikimedia.org/wikipedia/commons/0/03/Audif1.com_logo17_%28cropped%29.svg";
+    case "Cadillac":
+      return "https://upload.wikimedia.org/wikipedia/en/b/bc/Cadillac_Formula_1_Team_Logo_%282025%29.svg";
     default:
       return fallback;
   }
@@ -1122,6 +1175,24 @@ export function resolveBasketballTeamImage(teamName: string) {
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nbl/500/per.png";
     case "South East Melbourne Phoenix":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nbl/500/pnx.png";
+    //WNBL
+    case "Canberra Capitals":
+      return "https://upload.wikimedia.org/wikipedia/en/3/3c/Canberra_Capitals_logo_new.png";
+    case "Adelaide Lightning":
+      return "https://upload.wikimedia.org/wikipedia/en/6/6b/Adelaide_Lightning_logo.png";
+    case "Townsville Fire":
+      return "https://upload.wikimedia.org/wikipedia/en/3/33/Townsville_Fire_2020.png";
+    case "Geelong Venom":
+      return "https://upload.wikimedia.org/wikipedia/en/3/3e/Geelong_Venom_logo.png";
+    case "Perth Lynx":
+      return "https://upload.wikimedia.org/wikipedia/en/7/75/Perth_Lynx_new_logo.png";
+    case "Southside Flyers":
+      return "https://upload.wikimedia.org/wikipedia/en/b/bf/Southside_Melbourne_Flyers_logo.png";
+    case "Bendigo Spirit":
+      return "https://upload.wikimedia.org/wikipedia/en/1/17/Bendigo_Spirit_new_logo.png";
+    case "Sydney Flames":
+      return "https://upload.wikimedia.org/wikipedia/en/7/7a/Sydney_Flames_new_logo.png";
+
     //NBA
     case "Detroit Pistons":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/det.png";
@@ -1187,6 +1258,34 @@ export function resolveBasketballTeamImage(teamName: string) {
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/min.png";
     case "Sacramento Kings":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/sac.png";
+    //WNBA
+    case "Chicago Sky":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/chi.png";
+    case "Connecticut Sun":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/con.png";
+    case "Dallas Wings":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/dal.png";
+    case "Indiana Fever":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/ind.png";
+    case "Las Vegas Aces":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/lv.png";
+    case "Los Angeles Sparks":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/la.png";
+    case "Minnesota Lynx":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/min.png";
+    case "New York Liberty":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/ny.png";
+    case "Phoenix Mercury":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/phx.png";
+    case "Seattle Storm":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/sea.png";
+    case "Atlanta Dream":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/atl.png";
+    case "Golden State Valkyries":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/gs.png";
+    case "Washington Mystics":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/wsh.png";
+      7;
     default:
       return resolveCountryImage(teamName) ?? fallback;
   }

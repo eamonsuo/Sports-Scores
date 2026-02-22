@@ -4,8 +4,11 @@ import { AmericanFootballScoreBreakdown } from "@/components/american-football/A
 import { APISportsResponse, RoundDetails, TeamScoreDetails } from "./misc";
 import {
   Sofascore_Event,
-  Sofascore_Incident,
-  Sofascore_Standing,
+  Sofascore_Event_Response,
+  Sofascore_EventIncidents_Response,
+  Sofascore_EventPage_Response,
+  Sofascore_Events_Response,
+  Sofascore_TotalStandings_Response,
 } from "./sofascore";
 
 export interface AmericanFootball_Sofascore_Event extends Sofascore_Event {
@@ -21,24 +24,24 @@ export interface AmericanFootball_Sofascore_Event extends Sofascore_Event {
   };
 }
 
-export interface AmericanFootball_AmericanFootballApi_FixturePage_Response {
+export interface AmericanFootball_AmericanFootballApi_FixturePage_Response
+  extends Sofascore_EventPage_Response {
   events: AmericanFootball_Sofascore_Event[];
-  hasNextPage: boolean;
 }
 
-export interface AmericanFootball_AmericanFootballApi_Match_Response {
+export interface AmericanFootball_AmericanFootballApi_Match_Response
+  extends Sofascore_Event_Response {
   event: AmericanFootball_Sofascore_Event;
 }
 
-export interface AmericanFootball_AmericanFootballApi_LeagueTotalStandings_Response {
-  standings: Sofascore_Standing[];
-}
+export interface AmericanFootball_AmericanFootballApi_LeagueTotalStandings_Response
+  extends Sofascore_TotalStandings_Response {}
 
-export interface AmericanFootball_AmericanFootballApi_MatchIncidents_Response {
-  incidents: Sofascore_Incident[];
-}
+export interface AmericanFootball_AmericanFootballApi_MatchIncidents_Response
+  extends Sofascore_EventIncidents_Response {}
 
-export interface AmericanFootball_AmericanFootballApi_CategorySchedule_Response {
+export interface AmericanFootball_AmericanFootballApi_CategorySchedule_Response
+  extends Sofascore_Events_Response {
   events: AmericanFootball_Sofascore_Event[];
 }
 
