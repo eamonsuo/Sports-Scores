@@ -23,7 +23,7 @@ import {
   BaseballMatchPage,
   BaseballTodayPage,
 } from "@/types/baseball";
-import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
+import { FixtureRound, MatchSummary, SPORT } from "@/types/misc";
 
 export async function baseballMatches(tournamentId: number, seasonId: number) {
   const lastMatches = await fetchBaseballLastMatches(tournamentId, seasonId, 0);
@@ -74,7 +74,6 @@ export async function baseballMatches(tournamentId: number, seasonId: number) {
               venue: "",
               summaryText: setMatchSummary(
                 match.status.type,
-                toShortTimeString(startDate),
                 match.homeTeam.name,
                 match.homeScore.current,
                 match.awayTeam.name,
@@ -93,7 +92,7 @@ export async function baseballMatches(tournamentId: number, seasonId: number) {
             } as MatchSummary;
           }),
         roundLabel: `Round ${round}`,
-      } as RoundDetails;
+      } as FixtureRound;
     }),
 
     currentRound: `Round ${
@@ -316,7 +315,6 @@ export async function baseballMatchesByDate(
               venue: "",
               summaryText: setMatchSummary(
                 match.status.type,
-                toShortTimeString(startDate),
                 match.homeTeam.name,
                 match.homeScore.current,
                 match.awayTeam.name,
@@ -337,7 +335,7 @@ export async function baseballMatchesByDate(
         roundLabel: roundLabel,
         sport: SPORT.BASEBALL,
         roundSlug: `${leagueId}/${seasonId}`,
-      } as RoundDetails;
+      } as FixtureRound;
     }),
 
     currentRound: leagueIdToName[rounds[0]]?.name ?? "",

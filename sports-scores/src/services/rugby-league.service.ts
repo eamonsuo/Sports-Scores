@@ -1,42 +1,39 @@
 import { RugbyLeagueStanding } from "@/components/rugby-league/NRLLadder";
 import {
-  fetchRugbyLeagueLastMatches,
   fetchRugbyLeagueMatchDetails,
   fetchRugbyLeagueMatchesByDate,
   fetchRugbyLeagueMatchIncidents,
-  fetchRugbyLeagueNextMatches,
   fetchRugbyLeagueStandings,
 } from "@/endpoints/rugby-league.api";
-import { NRL_TEAM_NAMES, RUGBY_LEAGUE_LEAGUES } from "@/lib/constants";
+import { fetchLastEvents, fetchNextEvents } from "@/endpoints/sofascore.api";
+import { NRL_TEAMS_NAME_LOGO, RUGBY_LEAGUE_LEAGUES } from "@/lib/constants";
 import { resolveNRLImages } from "@/lib/imageMapping";
 import {
-  setMatchSummary,
+  getCurrentRound,
+  mapFixtureRound,
+  mapMatchSummary,
   shortenTeamNames,
-  toShortTimeString,
 } from "@/lib/projUtils";
-import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
+import {
+  API_EVENT_TYPES,
+  FixtureRound,
+  MatchSummary,
+  SPORT,
+} from "@/types/misc";
 import {
   RugbyLeagueFixturesPage,
   RugbyLeagueLadderPage,
   RugbyLeagueMatchPage,
   RugbyLeagueTodayPage,
 } from "@/types/rugby-league";
+import { Sofascore_Event } from "@/types/sofascore";
 
 export async function rugbyLeagueMatches(
   tournamentId: number,
   seasonId: number,
 ) {
-  const lastMatches = await fetchRugbyLeagueLastMatches(
-    tournamentId,
-    seasonId,
-    0,
-  );
-
-  const nextMatches = await fetchRugbyLeagueNextMatches(
-    tournamentId,
-    seasonId,
-    0,
-  );
+  const lastMatches = await fetchNextEvents(tournamentId, seasonId, 0);
+  const nextMatches = await fetchLastEvents(tournamentId, seasonId, 0);
 
   if (!lastMatches && !nextMatches) {
     return null;
@@ -44,74 +41,17 @@ export async function rugbyLeagueMatches(
 
   const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
 
-  for (let i = 1; i < matches.length; i++) {
-    if (matches[i].roundInfo === undefined) {
-      matches[i].roundInfo = { round: 0 };
-    }
-  }
-
-  const rounds = [...new Set(matches.map((item) => item.roundInfo?.round))];
-
+  const fixture = mapFixtureRound(
+    API_EVENT_TYPES.SOFASCORE,
+    "",
+    matches,
+    mapRugbyLeagueMatch,
+    tournamentId === 294,
+    NRL_TEAMS_NAME_LOGO,
+  );
   return {
-    fixtures: rounds.map((round) => {
-      //Get all teams playing in the round
-      let teams = matches
-        .filter((item) => item.roundInfo?.round === round)
-        .flatMap((game) => [game.homeTeam.name, game.awayTeam.name]);
-
-      return {
-        matches: matches
-          .filter((item) => item.roundInfo?.round === round)
-          .map((match) => {
-            var startDate = new Date(0);
-            startDate.setUTCSeconds(match.startTimestamp);
-
-            return {
-              startDate: startDate,
-              roundLabel: `Round ${match.roundInfo?.round}`,
-              timer:
-                match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
-                  : match.status.description,
-              timerDisplayColour:
-                match.status.type === "inprogress" ? "green" : "gray",
-              id: match.id,
-              matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
-              sport: SPORT.RUGBY_LEAGUE,
-              status: match.status.description,
-              venue: "",
-              summaryText: setMatchSummary(
-                match.status.type,
-                toShortTimeString(startDate),
-                match.homeTeam.name,
-                match.homeScore.current,
-                match.awayTeam.name,
-                match.awayScore.current,
-              ),
-              homeDetails: {
-                name: shortenTeamNames(match.homeTeam.name),
-                score: match.homeScore.current?.toString() ?? "0",
-                img: resolveNRLImages(match.homeTeam.name),
-              },
-              awayDetails: {
-                name: shortenTeamNames(match.awayTeam.name),
-                score: match.awayScore.current?.toString() ?? "0",
-                img: resolveNRLImages(match.awayTeam.name),
-              },
-            } as MatchSummary;
-          }),
-        roundLabel: `Round ${round}`,
-        byes: NRL_TEAM_NAMES.filter((x) => !teams.includes(x)).map((team) => {
-          return { name: team, img: resolveNRLImages(team) };
-        }),
-      } as RoundDetails;
-    }),
-
-    currentRound: `Round ${
-      nextMatches?.events?.[0]?.roundInfo?.round ??
-      lastMatches?.events?.[lastMatches?.events.length - 1]?.roundInfo?.round ??
-      0
-    }`,
+    fixtures: fixture,
+    currentRound: getCurrentRound(fixture),
   } as RugbyLeagueFixturesPage;
 }
 
@@ -209,9 +149,7 @@ export async function rugbyLeagueMatchDetails(matchId: number) {
 export async function rugbyLeagueMatchesByDate(date: Date) {
   const matches = await fetchRugbyLeagueMatchesByDate(date);
 
-  if (!matches) {
-    return null;
-  }
+  if (!matches) return null;
 
   const validLeagueIds = RUGBY_LEAGUE_LEAGUES.map((l) => Number(l.slug));
   const leagueIdToName = Object.fromEntries(
@@ -231,6 +169,8 @@ export async function rugbyLeagueMatchesByDate(date: Date) {
         validLeagueIds.indexOf(b.tournament.uniqueTournament.id),
     );
 
+  if (!matches.events || matches.events.length === 0) return null;
+
   // Get unique league ids in order
   const rounds = [
     ...new Set(
@@ -241,56 +181,43 @@ export async function rugbyLeagueMatchesByDate(date: Date) {
   let currentRound = "";
 
   return {
-    fixtures: rounds.map((leagueId) => {
-      const roundLabel = leagueIdToName[leagueId]?.name ?? "";
-      currentRound = currentRound === "" ? roundLabel : currentRound;
-      return {
-        matches: matches.events
-          .filter((item) => item.tournament.uniqueTournament.id === leagueId)
-          .map((match) => {
-            var startDate = new Date(0);
-            startDate.setUTCSeconds(match.startTimestamp);
+    fixtures:
+      // mapFixtureRound("type",
+      //   API_EVENT_TYPES.SOFASCORE,
+      //   matches.events, mapRugbyLeagueMatch, false)
 
-            return {
-              startDate: startDate,
-              roundLabel: roundLabel,
-              timer:
-                match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
-                  : match.status.description,
-              timerDisplayColour:
-                match.status.type === "inprogress" ? "green" : "gray",
-              id: match.id,
-              matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
-              sport: SPORT.RUGBY_LEAGUE,
-              status: match.status.description,
-              venue: "",
-              summaryText: setMatchSummary(
-                match.status.type,
-                toShortTimeString(startDate),
-                match.homeTeam.name,
-                match.homeScore.current,
-                match.awayTeam.name,
-                match.awayScore.current,
-              ),
-              homeDetails: {
-                name: shortenTeamNames(match.homeTeam.name),
-                score: match.homeScore.current?.toString() ?? "0",
-                img: resolveNRLImages(match.homeTeam.name),
-              },
-              awayDetails: {
-                name: shortenTeamNames(match.awayTeam.name),
-                score: match.awayScore.current?.toString() ?? "0",
-                img: resolveNRLImages(match.awayTeam.name),
-              },
-            } as MatchSummary;
-          }),
-        roundLabel: roundLabel,
-        roundSlug: `${leagueId}/${leagueIdToName[leagueId]?.currentSeason}`,
-        sport: SPORT.RUGBY_LEAGUE,
-      } as RoundDetails;
-    }),
+      rounds.map((leagueId) => {
+        const roundLabel = leagueIdToName[leagueId]?.name ?? "";
+        currentRound = currentRound === "" ? roundLabel : currentRound;
+        return {
+          matches: matches.events
+            .filter((item) => item.tournament.uniqueTournament.id === leagueId)
+            .map((match) => mapRugbyLeagueMatch(match, roundLabel)),
+          roundLabel: roundLabel,
+          roundSlug: `${leagueId}/${leagueIdToName[leagueId]?.currentSeason}`,
+          sport: SPORT.RUGBY_LEAGUE,
+        } as FixtureRound;
+      }),
 
     currentRound: currentRound,
   } as RugbyLeagueTodayPage;
+}
+
+function mapRugbyLeagueMatch(
+  match: Sofascore_Event,
+  roundLabel: string,
+): MatchSummary {
+  let startDate = new Date(0);
+  startDate.setUTCSeconds(match.startTimestamp);
+
+  return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.RUGBY_LEAGUE, match, {
+    startDate: startDate,
+    roundLabel: roundLabel,
+    homeDetails: {
+      img: resolveNRLImages(match.homeTeam.name),
+    },
+    awayDetails: {
+      img: resolveNRLImages(match.awayTeam.name),
+    },
+  });
 }

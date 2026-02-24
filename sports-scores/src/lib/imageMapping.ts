@@ -1285,7 +1285,10 @@ export function resolveBasketballTeamImage(teamName: string) {
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/gs.png";
     case "Washington Mystics":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/wsh.png";
-      7;
+    case "Toronto Tempo":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/tor.png";
+    case "Portland Fire":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/por.png";
     default:
       return resolveCountryImage(teamName) ?? fallback;
   }

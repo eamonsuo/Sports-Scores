@@ -19,7 +19,7 @@ import {
   AussieRulesMatchPage,
   AussieRulesStanding,
 } from "@/types/aussie-rules";
-import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
+import { FixtureRound, MatchSummary, SPORT } from "@/types/misc";
 
 export async function aussieRulesMatches(league: number, season: number) {
   const lastMatches = await fetchTournamentLastMatches(league, season, 0);
@@ -69,7 +69,6 @@ export async function aussieRulesMatches(league: number, season: number) {
               venue: "",
               summaryText: setMatchSummary(
                 match.status.type,
-                toShortTimeString(startDate),
                 match.homeTeam.name,
                 match.homeScore.current,
                 match.awayTeam.name,
@@ -91,7 +90,7 @@ export async function aussieRulesMatches(league: number, season: number) {
         byes: AFL_TEAM_NAMES.filter((x) => !teams.includes(x)).map((team) => {
           return { name: team, img: resolveAussieRulesImages(team) };
         }),
-      } as RoundDetails;
+      } as FixtureRound;
     }),
 
     currentRound: `Round ${
@@ -256,7 +255,6 @@ export async function aussieRulesCurrentMatches(
               venue: "",
               summaryText: setMatchSummary(
                 match.status.type,
-                toShortTimeString(startDate),
                 match.homeTeam.name,
                 match.homeScore.current,
                 match.awayTeam.name,
@@ -277,7 +275,7 @@ export async function aussieRulesCurrentMatches(
         roundLabel: roundLabel,
         roundSlug: `${leagueId}/${leagueIdToName[leagueId]?.currentSeason}`,
         sport: SPORT.AUSSIE_RULES,
-      } as RoundDetails;
+      } as FixtureRound;
     }),
 
     currentRound: "AFL",

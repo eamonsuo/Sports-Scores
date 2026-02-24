@@ -3,9 +3,9 @@ import {
   AmericanFootballTeamStanding,
 } from "@/components/american-football/AmericanFootballLadder";
 import {
-  fetchAmericanFootballCurrentMatches as fetchAmericanFootballMatchesByDate,
   fetchAmericanFootballLastMatches,
   fetchAmericanFootballMatchDetails,
+  fetchAmericanFootballCurrentMatches as fetchAmericanFootballMatchesByDate,
   fetchAmericanFootballMatchIncidents,
   fetchAmericanFootballNextMatches,
   fetchAmericanFootballStandings,
@@ -22,7 +22,7 @@ import {
   AmericanFootballLadderPage,
   AmericanFootballMatchPage,
 } from "@/types/american-football";
-import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
+import { FixtureRound, MatchSummary, SPORT } from "@/types/misc";
 
 export async function americanFootballMatches(league: number, season: number) {
   const lastMatches = await fetchAmericanFootballLastMatches(league, season, 0);
@@ -84,7 +84,6 @@ export async function americanFootballMatches(league: number, season: number) {
               venue: "",
               summaryText: setMatchSummary(
                 match.status.type,
-                toShortTimeString(startDate),
                 match.homeTeam.name,
                 match.homeScore.current,
                 match.awayTeam.name,
@@ -118,7 +117,7 @@ export async function americanFootballMatches(league: number, season: number) {
                 };
               })
             : [],
-      } as RoundDetails;
+      } as FixtureRound;
     }),
 
     currentRound:
@@ -313,7 +312,6 @@ export async function americanFootballMatchesByDate(date: Date) {
               venue: "",
               summaryText: setMatchSummary(
                 match.status.type,
-                toShortTimeString(startDate),
                 match.homeTeam.name,
                 match.homeScore.current,
                 match.awayTeam.name,
@@ -340,7 +338,7 @@ export async function americanFootballMatchesByDate(date: Date) {
         roundLabel: roundLabel,
         sport: SPORT.AMERICAN_FOOTBALL,
         roundSlug: `${leagueId}/${leagueIdToName[leagueId]?.currentSeason}`,
-      } as RoundDetails;
+      } as FixtureRound;
     }),
 
     currentRound: leagueIdToName[rounds[0]]?.name ?? "NFL",

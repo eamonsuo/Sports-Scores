@@ -1,6 +1,8 @@
 import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
 import { SportEvent } from "@/types/event-calendar";
+import { DISPLAY_TYPES } from "@/types/misc";
 import { format } from "date-fns";
+import { resolveNRLImages } from "./imageMapping";
 
 const formatDate = (date: Date) => format(date, "d MMM");
 const formatDateYear = (date: Date) => format(date, "d MMM yyyy");
@@ -288,11 +290,10 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
   {
     id: "40",
     name: "Australia vs South Africa",
-    sport: "Cricket (Tests)",
+    sport: "Cricket (ODI & Test)",
     type: "major",
-    startDate: new Date("2026-09-01"),
-    endDate: new Date("2026-10-01"),
-    dateDisplay: "Sep - Oct 2026",
+    startDate: new Date("2026-09-24"),
+    endDate: new Date("2026-10-31"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/0/05/World_Test_Championship_Logo.svg",
     link: "/sports/cricket/main/matches",
@@ -941,7 +942,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
   },
 ];
 
-export const NRL_TEAM_NAMES = [
+export const NRL_TEAMS_NAME_LOGO = [
   "Brisbane Broncos",
   "Canberra Raiders",
   "Canterbury Bulldogs",
@@ -959,7 +960,10 @@ export const NRL_TEAM_NAMES = [
   "St. George Illawarra Dragons",
   "Sydney Roosters",
   "Wests Tigers",
-];
+].map((team) => ({
+  name: team,
+  img: resolveNRLImages(team),
+}));
 
 export const AFL_TEAM_NAMES = [
   "Adelaide Crows",
@@ -1728,6 +1732,7 @@ export const BASKETBALL_LEAGUES = [
       { name: "25/26", slug: "80229" },
       { name: "24/25", slug: "65360" },
     ],
+    display: DISPLAY_TYPES.DATE,
   },
   // {
   //   name: "NBA Cup",
@@ -1741,9 +1746,11 @@ export const BASKETBALL_LEAGUES = [
     name: "WNBA",
     slug: "486",
     seasons: [
+      { name: "2026", slug: "89004" },
       { name: "2025", slug: "69751" },
       { name: "2024", slug: "57477" },
     ],
+    display: DISPLAY_TYPES.DATE,
   },
   // {
   //   name: "March Madness",

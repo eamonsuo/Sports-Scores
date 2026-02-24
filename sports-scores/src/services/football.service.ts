@@ -2,9 +2,9 @@ import { Match as BracketMatch } from "@/components/bracket/types";
 import { FootballStanding } from "@/components/football/FootballLadder";
 import {
   fetchFootballCupTrees,
-  fetchFootballMatchesByDate,
   fetchFootballLastMatches,
   fetchFootballMatchDetails,
+  fetchFootballMatchesByDate,
   fetchFootballMatchIncidents,
   fetchFootballNextMatches,
   fetchFootballStandings,
@@ -26,7 +26,7 @@ import {
   FootballTeamFixturesPage,
   FootballTodayPage,
 } from "@/types/football";
-import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
+import { FixtureRound, MatchSummary, SPORT } from "@/types/misc";
 
 export async function footballMatches(tournamentId: number, seasonId: number) {
   const lastMatches = await fetchFootballLastMatches(tournamentId, seasonId, 0);
@@ -77,7 +77,6 @@ export async function footballMatches(tournamentId: number, seasonId: number) {
               venue: "",
               summaryText: setMatchSummary(
                 match.status.type,
-                toShortTimeString(startDate),
                 match.homeTeam.name,
                 match.homeScore.current,
                 match.awayTeam.name,
@@ -99,7 +98,7 @@ export async function footballMatches(tournamentId: number, seasonId: number) {
         // byes: NRL_TEAM_NAMES.filter((x) => !teams.includes(x)).map((team) => {
         //   return { name: team, img: resolveNRLImages(team) };
         // }),
-      } as RoundDetails;
+      } as FixtureRound;
     }),
 
     currentRound: `Round ${
@@ -141,7 +140,6 @@ export async function footballTeamMatches(teamId: number) {
         venue: "",
         summaryText: setMatchSummary(
           match.status.type,
-          toShortTimeString(startDate),
           match.homeTeam.name,
           match.homeScore.current,
           match.awayTeam.name,
@@ -311,7 +309,6 @@ export async function footballMatchesByDate(date: Date) {
               venue: "",
               summaryText: setMatchSummary(
                 match.status.type,
-                toShortTimeString(startDate),
                 match.homeTeam.name,
                 match.homeScore.current,
                 match.awayTeam.name,
@@ -332,7 +329,7 @@ export async function footballMatchesByDate(date: Date) {
         roundLabel: roundLabel,
         sport: SPORT.FOOTBALL,
         roundSlug: `${leagueId}/${seasonId}`,
-      } as RoundDetails;
+      } as FixtureRound;
     }),
 
     currentRound: leagueIdToName[rounds[0]]?.name ?? "",

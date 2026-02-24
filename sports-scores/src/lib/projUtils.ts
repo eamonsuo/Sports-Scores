@@ -1,10 +1,15 @@
 import {
+  API_EVENT_TYPES,
+  APIEventTypes,
   APISportsErrors,
   APISportsResponse,
   CountryFlagCode,
+  DeepPartial,
+  FixtureRound,
   MatchSummary,
+  SportCodes,
 } from "@/types/misc";
-import { Sofascore_Score } from "@/types/sofascore";
+import { Sofascore_Event, Sofascore_Score } from "@/types/sofascore";
 
 const fallback = "/vercel.svg";
 
@@ -51,7 +56,6 @@ export function calculateMatchResult(
 
 export function setMatchSummary(
   status: string,
-  startTime: string,
   homeName: string,
   homeScore: number,
   awayName: string,
@@ -257,4 +261,176 @@ export function setTennisMatchSummary(
     default:
       return "";
   }
+}
+
+export function mapMatchSummary(
+  type: APIEventTypes,
+  sport: SportCodes,
+  event: any,
+  options?: DeepPartial<MatchSummary>,
+) {
+  switch (type) {
+    case API_EVENT_TYPES.SOFASCORE:
+      return mapSofascoreEventToMatchSummary(sport, event, options);
+    case API_EVENT_TYPES.SPORTSMONKS_CRICKET:
+    default:
+      return {
+        id: Math.random().toString(),
+        sport: sport,
+        summaryText: "",
+        status: "UPCOMING",
+        startDate: new Date(),
+        awayDetails: {},
+        homeDetails: {},
+        ...options,
+      } as MatchSummary;
+  }
+}
+
+function mapSofascoreEventToMatchSummary(
+  sport: SportCodes,
+  event: Sofascore_Event,
+  options?: DeepPartial<MatchSummary>,
+): MatchSummary {
+  const startDate = options?.startDate ?? new Date(event.startTimestamp * 1000);
+  const localStartTime = getLocalTimeISO(startDate.toISOString());
+  return {
+    id: options?.id ?? event.id,
+    startDate: startDate,
+    sport: sport,
+    status:
+      (options?.status ?? event.status.type === "inprogress")
+        ? "LIVE"
+        : event.status.type === "notstarted"
+          ? "UPCOMING"
+          : "COMPLETED",
+    roundLabel: options?.roundLabel ?? `Round ${event.roundInfo?.round}`,
+    timer:
+      options?.timer ??
+      (event.status.type === "notstarted"
+        ? toShortTimeString(startDate)
+        : event.status.description),
+    timerDisplayColour:
+      options?.timerDisplayColour ??
+      (event.status.type === "inprogress" ? "green" : "gray"),
+    matchSlug:
+      options?.matchSlug ??
+      `${event.tournament.uniqueTournament.id}/${event.season.id}/${event.id}`,
+    venue: options?.venue ?? event?.venue?.name ?? "",
+    summaryText:
+      options?.summaryText ??
+      setMatchSummary(
+        event.status.type,
+        event.homeTeam.name,
+        event.homeScore.current,
+        event.awayTeam.name,
+        event.awayScore.current,
+      ),
+    homeDetails: {
+      name: options?.homeDetails?.name ?? shortenTeamNames(event.homeTeam.name),
+      score:
+        options?.homeDetails?.score ??
+        event.homeScore.current?.toString() ??
+        "0",
+      img: options?.homeDetails?.img ?? fallback,
+    },
+    awayDetails: {
+      name: options?.awayDetails?.name ?? shortenTeamNames(event.awayTeam.name),
+      score:
+        options?.awayDetails?.score ??
+        event.awayScore.current?.toString() ??
+        "0",
+      img: options?.awayDetails?.img ?? fallback,
+    },
+  };
+}
+
+export function mapFixtureRound(
+  type: APIEventTypes,
+  roundLabel: string,
+  matches: any[],
+  matchesMapper: (match: any, roundLabel: string) => MatchSummary,
+  showByes: boolean,
+  teams?: { name: string; img: string }[], // Required if showByes is true
+) {
+  switch (type) {
+    case API_EVENT_TYPES.SOFASCORE:
+      return mapSofascoreEventsToFixtureRounds(
+        roundLabel,
+        matches,
+        matchesMapper,
+        showByes,
+        teams,
+      );
+    case API_EVENT_TYPES.SPORTSMONKS_CRICKET:
+    default:
+      return [
+        {
+          matches: [],
+          roundLabel: "",
+        } as FixtureRound,
+      ];
+  }
+}
+
+function mapSofascoreEventsToFixtureRounds(
+  roundLabel: string,
+  matches: Sofascore_Event[],
+  matchesMapper: (match: Sofascore_Event, roundLabel: string) => MatchSummary,
+  showByes: boolean,
+  teams?: { name: string; img: string }[], // Required if showByes is true
+) {
+  // Create rounds object { round: string; matches: Sofascore_Event[]; byes: { name: string; img: string }[] }
+  const tempRounds = Object.values(
+    matches.reduce(
+      (acc, match) => {
+        const round =
+          match.roundInfo?.name ?? `Round ${match.roundInfo?.round ?? 0}`;
+        if (round !== undefined) {
+          if (!acc[round]) {
+            acc[round] = showByes
+              ? { round, matches: [], byes: teams }
+              : { round, matches: [] };
+          }
+          acc[round].matches.push(match);
+          if (showByes) {
+            acc[round].byes = acc[round]?.byes?.filter(
+              (team) =>
+                team.name !== match.homeTeam.name &&
+                team.name !== match.awayTeam.name,
+            );
+          }
+        }
+        return acc;
+      },
+      {} as Record<
+        string,
+        {
+          round: string;
+          matches: Sofascore_Event[];
+          byes?: { name: string; img: string }[];
+        }
+      >,
+    ),
+  );
+
+  return tempRounds.map((roundData) => {
+    return {
+      matches: roundData.matches.map((match) =>
+        matchesMapper(match, roundData.round),
+      ),
+      roundLabel: roundData.round,
+      byes: roundData.byes,
+    } as FixtureRound;
+  });
+}
+
+export function getCurrentRound(rounds: FixtureRound[]) {
+  // Find first round with upcoming matches
+  return (
+    rounds.find((r) => r.matches.some((m) => m.status === "UPCOMING"))
+      ?.roundLabel ??
+    rounds[rounds.length - 1]?.roundLabel ??
+    "Round 0"
+  );
 }

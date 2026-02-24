@@ -1,19 +1,19 @@
 "use client";
 
 import fallback from "@/../public/vercel.svg";
-import { RoundDetails } from "@/types/misc";
+import { FixtureRound } from "@/types/misc";
 import { clsx } from "clsx";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import FixtureList from "./FixtureList";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "../misc-ui/Button";
+import FixtureList from "./FixtureList";
 
 export default function FixtureRoundList({
   data,
   curRound,
 }: {
-  data: RoundDetails[];
+  data: FixtureRound[];
   curRound: string;
 }) {
   const [round, setRound] = useState(curRound);

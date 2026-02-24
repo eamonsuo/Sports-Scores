@@ -3,9 +3,9 @@ import {
   BasketballTeamStanding,
 } from "@/components/basketball/BasketballLadder";
 import {
-  fetchBasketballMatchesByDate,
   fetchBasketballLastMatches,
   fetchBasketballMatchDetails,
+  fetchBasketballMatchesByDate,
   fetchBasketballMatchIncidents,
   fetchBasketballNextMatches,
   fetchBasketballStandings,
@@ -23,7 +23,8 @@ import {
   BasketballMatchPage,
   BasketballTodayPage,
 } from "@/types/basketball";
-import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
+import { DISPLAY_TYPES, FixtureRound, MatchSummary, SPORT } from "@/types/misc";
+import { addHours, format } from "date-fns";
 
 export async function basketballMatches(
   tournamentId: number,
@@ -53,29 +54,52 @@ export async function basketballMatches(
     }
   }
 
-  const rounds = [
-    ...new Set(
-      matches.map((item) => item.roundInfo?.name ?? item.roundInfo?.round),
-    ),
-  ].filter((round) => round !== undefined);
+  const displayType =
+    BASKETBALL_LEAGUES.find((l) => Number(l.slug) === tournamentId)?.display ??
+    "round";
 
-  console.log(rounds);
+  function getMatchDate(match: any) {
+    let startDate = new Date(0);
+    startDate.setUTCSeconds(match.startTimestamp);
+    startDate = addHours(startDate, 10);
+    return format(startDate, "eee d MMM");
+  }
+
+  let rounds = [];
+  if (displayType === DISPLAY_TYPES.ROUND) {
+    rounds = [
+      ...new Set(
+        matches.map((item) => item.roundInfo?.name ?? item.roundInfo?.round),
+      ),
+    ].filter((round) => round !== undefined);
+  } else {
+    rounds = [
+      ...new Set(
+        matches
+          .sort((a, b) => a.startTimestamp - b.startTimestamp)
+          .map((item) => getMatchDate(item)),
+      ),
+    ];
+  }
 
   return {
     fixtures: rounds.map((round) => {
       //Get all teams playing in the round
       let teams = matches
-        .filter(
-          (item) =>
-            item.roundInfo?.round === round || item.roundInfo?.name === round,
+        .filter((item) =>
+          displayType === DISPLAY_TYPES.ROUND
+            ? item.roundInfo?.round === round || item.roundInfo?.name === round
+            : getMatchDate(item) === round,
         )
         .flatMap((game) => [game.homeTeam.name, game.awayTeam.name]);
 
       return {
         matches: matches
-          .filter(
-            (item) =>
-              item.roundInfo?.round === round || item.roundInfo?.name === round,
+          .filter((item) =>
+            displayType === DISPLAY_TYPES.ROUND
+              ? item.roundInfo?.round === round ||
+                item.roundInfo?.name === round
+              : getMatchDate(item) === round,
           )
           .map((match) => {
             var startDate = new Date(0);
@@ -98,7 +122,6 @@ export async function basketballMatches(
               venue: "",
               summaryText: setMatchSummary(
                 match.status.type,
-                toShortTimeString(startDate),
                 match.homeTeam.name,
                 match.homeScore.current,
                 match.awayTeam.name,
@@ -120,20 +143,30 @@ export async function basketballMatches(
         // byes: NRL_TEAM_NAMES.filter((x) => !teams.includes(x)).map((team) => {
         //   return { name: team, img: resolveNRLImages(team) };
         // }),
-      } as RoundDetails;
+      } as FixtureRound;
     }),
 
-    currentRound:
-      nextMatches !== null && nextMatches.events.length > 0
-        ? nextMatches?.events[0]?.roundInfo?.name !== undefined
-          ? nextMatches?.events[0]?.roundInfo?.name
-          : `Round ${
-              nextMatches?.events[0]?.roundInfo?.round ??
-              lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo
-                ?.round ??
-              0
-            }`
-        : lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo?.name,
+    currentRound: (() => {
+      if (displayType === DISPLAY_TYPES.ROUND) {
+        if (nextMatches !== null && nextMatches.events.length > 0) {
+          if (nextMatches?.events[0]?.roundInfo?.name !== undefined) {
+            return nextMatches?.events[0]?.roundInfo?.name;
+          } else {
+            const round = nextMatches?.events[0]?.roundInfo?.round ?? 0;
+            return `Round ${round}`;
+          }
+        } else {
+          return lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo
+            ?.name;
+        }
+      } else {
+        let startDate = new Date();
+        startDate = addHours(startDate, 10);
+        return rounds.includes(format(startDate, "eee d MMM"))
+          ? format(startDate, "eee d MMM")
+          : rounds[0];
+      }
+    })(),
   } as BasketballFixturesPage;
 }
 
@@ -324,7 +357,6 @@ export async function basketballMatchesByDate(
               venue: "",
               summaryText: setMatchSummary(
                 match.status.type,
-                toShortTimeString(startDate),
                 match.homeTeam.name,
                 match.homeScore.current,
                 match.awayTeam.name,
@@ -345,7 +377,7 @@ export async function basketballMatchesByDate(
         roundLabel: roundLabel,
         roundSlug: `${leagueId}/${seasonId}`,
         sport: SPORT.BASKETBALL,
-      } as RoundDetails;
+      } as FixtureRound;
     }),
 
     currentRound: leagueIdToName[rounds[0]]?.name ?? "",

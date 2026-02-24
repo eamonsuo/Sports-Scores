@@ -1,6 +1,6 @@
 import { BaseballStanding } from "@/components/baseball/BaseballLadder";
 import { BaseballScoreBreakdown } from "@/components/baseball/BaseballScoreBreakdown";
-import { RoundDetails, TeamScoreDetails } from "./misc";
+import { FixtureRound, TeamScoreDetails } from "./misc";
 import {
   Sofascore_Event_Response,
   Sofascore_EventIncidents_Response,
@@ -25,7 +25,7 @@ export interface Baseball_BaseballApi_MatchSchedules_Response
   extends Sofascore_Events_Response {}
 
 export interface BaseballFixturesPage {
-  fixtures: RoundDetails[];
+  fixtures: FixtureRound[];
   currentRound: string;
 }
 
@@ -44,6 +44,6 @@ export interface BaseballMatchPage {
 }
 
 export interface BaseballTodayPage {
-  fixtures: RoundDetails[];
+  fixtures: FixtureRound[];
   currentRound: string;
 }

@@ -10,7 +10,7 @@ import { golfTournamentsByDate } from "@/services/golf.service";
 import { motorsportCategoriesByDate } from "@/services/motorsport.service";
 import { rugbyLeagueMatchesByDate } from "@/services/rugby-league.service";
 import { TennisMatchesByDate as tennisMatchesByDate } from "@/services/tennis.service";
-import { RoundDetails, SPORT } from "@/types/misc";
+import { FixtureRound, SPORT } from "@/types/misc";
 
 export const dynamic = "force-dynamic";
 
@@ -43,7 +43,7 @@ export default async function Page() {
   const dartsToday = null; // Placeholder for darts matches fetching logic
   const cyclingToday = null; // Placeholder for cycling matches fetching logic
 
-  const allSports: RoundDetails[] = ([] as RoundDetails[])
+  const allSports: FixtureRound[] = ([] as FixtureRound[])
     .concat([
       {
         matches: cricketoday ?? [],

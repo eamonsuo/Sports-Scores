@@ -2,7 +2,7 @@ import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import { Match as BracketMatch } from "@/components/bracket/types";
 import { TennisRankingsPlayerRow } from "@/components/tennis/RankingsLeaderboard";
 import { TennisScoreBreakdown } from "@/components/tennis/TennisScoreBreakdown";
-import { MatchSummary, RoundDetails, TeamScoreDetails } from "./misc";
+import { FixtureRound, MatchSummary, TeamScoreDetails } from "./misc";
 import {
   Sofascore_CupTree,
   Sofascore_Event,
@@ -114,7 +114,7 @@ export interface Tennis_TennisApi_Rankings_Response {
 }
 
 export interface TennisFixturesPage {
-  fixtures: RoundDetails[];
+  fixtures: FixtureRound[];
   currentRound: string;
 }
 
@@ -138,7 +138,7 @@ export interface TennisMatchPage {
 }
 
 export interface TennisTodayPage {
-  fixtures: RoundDetails[];
+  fixtures: FixtureRound[];
   currentRound: string;
 }
 

@@ -18,7 +18,7 @@ import {
   shortenTeamNames,
   toShortTimeString,
 } from "@/lib/projUtils";
-import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
+import { FixtureRound, MatchSummary, SPORT } from "@/types/misc";
 import {
   Tennis_Sofascore_Event,
   TennisBracketPage,
@@ -70,7 +70,7 @@ export async function tennisTournamentMatches(
           }),
         roundLabel: `${round}`,
         cardVariant: "tennis",
-      } as RoundDetails;
+      } as FixtureRound;
     }),
 
     currentRound: `${
@@ -277,7 +277,7 @@ export async function TennisMatchesByDate(date: Date) {
           cardVariant: "tennis",
           roundSlug: `today`,
           sport: SPORT.TENNIS,
-        } as RoundDetails;
+        } as FixtureRound;
       })
       .concat({
         matches: aussieMatches
@@ -287,7 +287,7 @@ export async function TennisMatchesByDate(date: Date) {
         cardVariant: "tennis",
         roundSlug: `today`,
         sport: SPORT.TENNIS,
-      } as RoundDetails),
+      } as FixtureRound),
 
     currentRound: firstTournament,
   } as TennisTodayPage;
