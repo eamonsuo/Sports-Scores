@@ -10,8 +10,16 @@ import {
   fetchBasketballNextMatches,
   fetchBasketballStandings,
 } from "@/endpoints/basketball.api";
+import {
+  fetchEventDetails,
+  fetchEventIncidents,
+  fetchEventsByDate,
+  fetchLastEvents,
+  fetchNextEvents,
+  fetchStandingsTotal,
+} from "@/endpoints/sofascore.api";
 import { BASKETBALL_LEAGUES } from "@/lib/constants";
-import { resolveBasketballTeamImage } from "@/lib/imageMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
 import {
   setMatchSummary,
   shortenTeamNames,
@@ -30,17 +38,13 @@ export async function basketballMatches(
   tournamentId: number,
   seasonId: number,
 ) {
-  const lastMatches = await fetchBasketballLastMatches(
-    tournamentId,
-    seasonId,
-    0,
-  );
+  const lastMatches = await (
+    process.env.DEV_MODE ? fetchLastEvents : fetchBasketballLastMatches
+  )(tournamentId, seasonId, 0);
 
-  const nextMatches = await fetchBasketballNextMatches(
-    tournamentId,
-    seasonId,
-    0,
-  );
+  const nextMatches = await (
+    process.env.DEV_MODE ? fetchNextEvents : fetchBasketballNextMatches
+  )(tournamentId, seasonId, 0);
 
   if (!lastMatches && !nextMatches) {
     return null;
@@ -130,12 +134,12 @@ export async function basketballMatches(
               homeDetails: {
                 name: shortenTeamNames(match.homeTeam.name),
                 score: match.homeScore.current?.toString() ?? "0",
-                img: resolveBasketballTeamImage(match.homeTeam.name),
+                img: resolveSportImage(match.homeTeam.name),
               },
               awayDetails: {
                 name: shortenTeamNames(match.awayTeam.name),
                 score: match.awayScore.current?.toString() ?? "0",
-                img: resolveBasketballTeamImage(match.awayTeam.name),
+                img: resolveSportImage(match.awayTeam.name),
               },
             } as MatchSummary;
           }),
@@ -174,7 +178,9 @@ export async function basketballStandings(
   tournamentId: number,
   seasonId: number,
 ) {
-  const standings = await fetchBasketballStandings(tournamentId, seasonId);
+  const standings = await (
+    process.env.DEV_MODE ? fetchStandingsTotal : fetchBasketballStandings
+  )(tournamentId, seasonId);
 
   if (!standings) {
     return null;
@@ -196,7 +202,7 @@ export async function basketballStandings(
               team: {
                 id: standing.team.id,
                 name: shortenTeamNames(standing.team.name),
-                logo: resolveBasketballTeamImage(standing.team.name),
+                logo: resolveSportImage(standing.team.name),
               },
               points: {
                 for: standing.scoresFor,
@@ -215,8 +221,12 @@ export async function basketballStandings(
 }
 
 export async function basketballMatchDetails(matchId: number) {
-  const match = await fetchBasketballMatchDetails(matchId);
-  const incidents = await fetchBasketballMatchIncidents(matchId);
+  const match = await (
+    process.env.DEV_MODE ? fetchEventDetails : fetchBasketballMatchDetails
+  )(matchId);
+  const incidents = await (
+    process.env.DEV_MODE ? fetchEventIncidents : fetchBasketballMatchIncidents
+  )(matchId);
 
   const matchDetails = match?.event;
   const scoreIncidents = incidents?.incidents
@@ -232,12 +242,12 @@ export async function basketballMatchDetails(matchId: number) {
         homeTeam: {
           name: shortenTeamNames(matchDetails.homeTeam.name),
           score: matchDetails?.homeScore?.current?.toString() ?? "0",
-          img: resolveBasketballTeamImage(matchDetails.homeTeam.name),
+          img: resolveSportImage(matchDetails.homeTeam.name),
         },
         awayTeam: {
           name: shortenTeamNames(matchDetails?.awayTeam.name),
           score: matchDetails?.awayScore?.current?.toString() ?? "0",
-          img: resolveBasketballTeamImage(matchDetails.awayTeam.name),
+          img: resolveSportImage(matchDetails.awayTeam.name),
         },
 
         scoreBreakdown: [
@@ -299,7 +309,9 @@ export async function basketballMatchesByDate(
   date: Date,
   // categoryId: number,
 ) {
-  const matches = await fetchBasketballMatchesByDate(date);
+  const matches = await (process.env.DEV_MODE
+    ? fetchEventsByDate("basketball", date)
+    : fetchBasketballMatchesByDate(date));
 
   if (!matches) {
     return null;
@@ -365,18 +377,17 @@ export async function basketballMatchesByDate(
               homeDetails: {
                 name: shortenTeamNames(match.homeTeam.name),
                 score: match.homeScore.current?.toString() ?? "0",
-                img: resolveBasketballTeamImage(match.homeTeam.name),
+                img: resolveSportImage(match.homeTeam.name),
               },
               awayDetails: {
                 name: shortenTeamNames(match.awayTeam.name),
                 score: match.awayScore.current?.toString() ?? "0",
-                img: resolveBasketballTeamImage(match.awayTeam.name),
+                img: resolveSportImage(match.awayTeam.name),
               },
             } as MatchSummary;
           }),
         roundLabel: roundLabel,
-        roundSlug: `${leagueId}/${seasonId}`,
-        sport: SPORT.BASKETBALL,
+        roundSlug: `${SPORT.BASKETBALL}/${leagueId}/${seasonId}`,
       } as FixtureRound;
     }),
 

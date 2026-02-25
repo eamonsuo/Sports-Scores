@@ -1,13 +1,22 @@
 import { RugbyLeagueStanding } from "@/components/rugby-league/NRLLadder";
 import {
+  fetchRugbyLeagueLastMatches,
   fetchRugbyLeagueMatchDetails,
   fetchRugbyLeagueMatchesByDate,
   fetchRugbyLeagueMatchIncidents,
+  fetchRugbyLeagueNextMatches,
   fetchRugbyLeagueStandings,
 } from "@/endpoints/rugby-league.api";
-import { fetchLastEvents, fetchNextEvents } from "@/endpoints/sofascore.api";
+import {
+  fetchEventDetails,
+  fetchEventIncidents,
+  fetchEventsByDate,
+  fetchLastEvents,
+  fetchNextEvents,
+  fetchStandingsTotal,
+} from "@/endpoints/sofascore.api";
 import { NRL_TEAMS_NAME_LOGO, RUGBY_LEAGUE_LEAGUES } from "@/lib/constants";
-import { resolveNRLImages } from "@/lib/imageMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
 import {
   getCurrentRound,
   mapFixtureRound,
@@ -16,7 +25,7 @@ import {
 } from "@/lib/projUtils";
 import {
   API_EVENT_TYPES,
-  FixtureRound,
+  DISPLAY_TYPES,
   MatchSummary,
   SPORT,
 } from "@/types/misc";
@@ -32,8 +41,12 @@ export async function rugbyLeagueMatches(
   tournamentId: number,
   seasonId: number,
 ) {
-  const lastMatches = await fetchNextEvents(tournamentId, seasonId, 0);
-  const nextMatches = await fetchLastEvents(tournamentId, seasonId, 0);
+  const lastMatches = await (
+    process.env.DEV_MODE ? fetchLastEvents : fetchRugbyLeagueLastMatches
+  )(tournamentId, seasonId, 0);
+  const nextMatches = await (
+    process.env.DEV_MODE ? fetchNextEvents : fetchRugbyLeagueNextMatches
+  )(tournamentId, seasonId, 0);
 
   if (!lastMatches && !nextMatches) {
     return null;
@@ -43,15 +56,16 @@ export async function rugbyLeagueMatches(
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    "",
+    DISPLAY_TYPES.ROUND,
     matches,
     mapRugbyLeagueMatch,
     tournamentId === 294,
     NRL_TEAMS_NAME_LOGO,
   );
+
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(fixture),
+    currentRound: getCurrentRound(DISPLAY_TYPES.ROUND, fixture),
   } as RugbyLeagueFixturesPage;
 }
 
@@ -59,7 +73,9 @@ export async function rugbyLeagueStandings(
   tournamentId: number,
   seasonId: number,
 ) {
-  const standings = await fetchRugbyLeagueStandings(tournamentId, seasonId);
+  const standings = await (
+    process.env.DEV_MODE ? fetchStandingsTotal : fetchRugbyLeagueStandings
+  )(tournamentId, seasonId);
 
   if (!standings) {
     return null;
@@ -74,7 +90,7 @@ export async function rugbyLeagueStandings(
           team: {
             id: item.team.id,
             name: shortenTeamNames(item.team.name),
-            logo: resolveNRLImages(item.team.name),
+            logo: resolveSportImage(item.team.name),
           },
           games: {
             played: item.matches,
@@ -93,8 +109,12 @@ export async function rugbyLeagueStandings(
 }
 
 export async function rugbyLeagueMatchDetails(matchId: number) {
-  const match = await fetchRugbyLeagueMatchDetails(matchId);
-  const incidents = await fetchRugbyLeagueMatchIncidents(matchId);
+  const match = await (
+    process.env.DEV_MODE ? fetchEventDetails : fetchRugbyLeagueMatchDetails
+  )(matchId);
+  const incidents = await (
+    process.env.DEV_MODE ? fetchEventIncidents : fetchRugbyLeagueMatchIncidents
+  )(matchId);
 
   const matchDetails = match?.event;
   const scoreIncidents = incidents?.incidents
@@ -119,12 +139,12 @@ export async function rugbyLeagueMatchDetails(matchId: number) {
           homeTeam: {
             name: shortenTeamNames(matchDetails.homeTeam.name),
             score: matchDetails?.homeScore?.current?.toString() ?? "0",
-            img: resolveNRLImages(matchDetails.homeTeam.name),
+            img: resolveSportImage(matchDetails.homeTeam.name),
           },
           awayTeam: {
             name: shortenTeamNames(matchDetails?.awayTeam.name),
             score: matchDetails?.awayScore?.current?.toString() ?? "0",
-            img: resolveNRLImages(matchDetails.awayTeam.name),
+            img: resolveSportImage(matchDetails.awayTeam.name),
           },
           scoreBreakdown: [
             {
@@ -147,17 +167,13 @@ export async function rugbyLeagueMatchDetails(matchId: number) {
 }
 
 export async function rugbyLeagueMatchesByDate(date: Date) {
-  const matches = await fetchRugbyLeagueMatchesByDate(date);
+  const matches = await (process.env.DEV_MODE
+    ? fetchEventsByDate("rugby", date)
+    : fetchRugbyLeagueMatchesByDate(date));
 
   if (!matches) return null;
 
   const validLeagueIds = RUGBY_LEAGUE_LEAGUES.map((l) => Number(l.slug));
-  const leagueIdToName = Object.fromEntries(
-    RUGBY_LEAGUE_LEAGUES.map((l) => [
-      Number(l.slug),
-      { name: l.name, currentSeason: l.seasons[0].slug },
-    ]),
-  );
 
   matches.events = matches.events
     .filter((item) =>
@@ -171,35 +187,20 @@ export async function rugbyLeagueMatchesByDate(date: Date) {
 
   if (!matches.events || matches.events.length === 0) return null;
 
-  // Get unique league ids in order
-  const rounds = [
-    ...new Set(
-      matches.events.map((item) => item.tournament.uniqueTournament.id),
-    ),
-  ];
-
-  let currentRound = "";
+  const fixture = mapFixtureRound(
+    API_EVENT_TYPES.SOFASCORE,
+    DISPLAY_TYPES.LEAGUE,
+    matches.events,
+    mapRugbyLeagueMatch,
+    false,
+    undefined,
+    SPORT.RUGBY_LEAGUE,
+  );
 
   return {
-    fixtures:
-      // mapFixtureRound("type",
-      //   API_EVENT_TYPES.SOFASCORE,
-      //   matches.events, mapRugbyLeagueMatch, false)
+    fixtures: fixture,
 
-      rounds.map((leagueId) => {
-        const roundLabel = leagueIdToName[leagueId]?.name ?? "";
-        currentRound = currentRound === "" ? roundLabel : currentRound;
-        return {
-          matches: matches.events
-            .filter((item) => item.tournament.uniqueTournament.id === leagueId)
-            .map((match) => mapRugbyLeagueMatch(match, roundLabel)),
-          roundLabel: roundLabel,
-          roundSlug: `${leagueId}/${leagueIdToName[leagueId]?.currentSeason}`,
-          sport: SPORT.RUGBY_LEAGUE,
-        } as FixtureRound;
-      }),
-
-    currentRound: currentRound,
+    currentRound: getCurrentRound(DISPLAY_TYPES.LEAGUE, fixture),
   } as RugbyLeagueTodayPage;
 }
 
@@ -213,11 +214,5 @@ function mapRugbyLeagueMatch(
   return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.RUGBY_LEAGUE, match, {
     startDate: startDate,
     roundLabel: roundLabel,
-    homeDetails: {
-      img: resolveNRLImages(match.homeTeam.name),
-    },
-    awayDetails: {
-      img: resolveNRLImages(match.awayTeam.name),
-    },
   });
 }

@@ -5,11 +5,16 @@ import {
   APISportsResponse,
   CountryFlagCode,
   DeepPartial,
+  DISPLAY_TYPES,
+  DisplayTypes,
   FixtureRound,
   MatchSummary,
   SportCodes,
 } from "@/types/misc";
 import { Sofascore_Event, Sofascore_Score } from "@/types/sofascore";
+import { addHours } from "date-fns/addHours";
+import { format } from "date-fns/format";
+import { resolveSportImage } from "./imageMapping";
 
 const fallback = "/vercel.svg";
 
@@ -292,8 +297,9 @@ function mapSofascoreEventToMatchSummary(
   event: Sofascore_Event,
   options?: DeepPartial<MatchSummary>,
 ): MatchSummary {
-  const startDate = options?.startDate ?? new Date(event.startTimestamp * 1000);
-  const localStartTime = getLocalTimeISO(startDate.toISOString());
+  var startDate = new Date(0);
+  startDate.setUTCSeconds(event.startTimestamp);
+
   return {
     id: options?.id ?? event.id,
     startDate: startDate,
@@ -332,7 +338,7 @@ function mapSofascoreEventToMatchSummary(
         options?.homeDetails?.score ??
         event.homeScore.current?.toString() ??
         "0",
-      img: options?.homeDetails?.img ?? fallback,
+      img: options?.homeDetails?.img ?? resolveSportImage(event.homeTeam.name),
     },
     awayDetails: {
       name: options?.awayDetails?.name ?? shortenTeamNames(event.awayTeam.name),
@@ -340,27 +346,29 @@ function mapSofascoreEventToMatchSummary(
         options?.awayDetails?.score ??
         event.awayScore.current?.toString() ??
         "0",
-      img: options?.awayDetails?.img ?? fallback,
+      img: options?.awayDetails?.img ?? resolveSportImage(event.awayTeam.name),
     },
   };
 }
 
 export function mapFixtureRound(
   type: APIEventTypes,
-  roundLabel: string,
+  roundDisplayType: DisplayTypes,
   matches: any[],
   matchesMapper: (match: any, roundLabel: string) => MatchSummary,
   showByes: boolean,
   teams?: { name: string; img: string }[], // Required if showByes is true
+  sport?: SportCodes,
 ) {
   switch (type) {
     case API_EVENT_TYPES.SOFASCORE:
       return mapSofascoreEventsToFixtureRounds(
-        roundLabel,
+        roundDisplayType,
         matches,
         matchesMapper,
         showByes,
         teams,
+        sport,
       );
     case API_EVENT_TYPES.SPORTSMONKS_CRICKET:
     default:
@@ -374,25 +382,46 @@ export function mapFixtureRound(
 }
 
 function mapSofascoreEventsToFixtureRounds(
-  roundLabel: string,
+  roundDisplayType: DisplayTypes,
   matches: Sofascore_Event[],
   matchesMapper: (match: Sofascore_Event, roundLabel: string) => MatchSummary,
   showByes: boolean,
   teams?: { name: string; img: string }[], // Required if showByes is true
+  sport?: SportCodes,
 ) {
   // Create rounds object { round: string; matches: Sofascore_Event[]; byes: { name: string; img: string }[] }
   const tempRounds = Object.values(
     matches.reduce(
       (acc, match) => {
-        const round =
-          match.roundInfo?.name ?? `Round ${match.roundInfo?.round ?? 0}`;
+        let round = "";
+        switch (roundDisplayType) {
+          case DISPLAY_TYPES.ROUND:
+            round =
+              match.roundInfo?.name ?? `Round ${match.roundInfo?.round ?? 0}`;
+            break;
+          case DISPLAY_TYPES.DATE:
+            var startDate = new Date(0);
+            startDate.setUTCSeconds(match.startTimestamp);
+            // startDate = addHours(startDate, 10);
+
+            round = format(startDate, "eee d MMM");
+            break;
+          case DISPLAY_TYPES.LEAGUE:
+            round = match.tournament.name;
+            break;
+        }
+
         if (round !== undefined) {
           if (!acc[round]) {
             acc[round] = showByes
               ? { round, matches: [], byes: teams }
               : { round, matches: [] };
           }
+
           acc[round].matches.push(match);
+          acc[round].roundSlug = sport
+            ? `${sport}/${match.tournament.uniqueTournament.id}/${match.season.id}`
+            : undefined;
           if (showByes) {
             acc[round].byes = acc[round]?.byes?.filter(
               (team) =>
@@ -409,6 +438,7 @@ function mapSofascoreEventsToFixtureRounds(
           round: string;
           matches: Sofascore_Event[];
           byes?: { name: string; img: string }[];
+          roundSlug?: string;
         }
       >,
     ),
@@ -421,16 +451,34 @@ function mapSofascoreEventsToFixtureRounds(
       ),
       roundLabel: roundData.round,
       byes: roundData.byes,
+      roundSlug: roundData.roundSlug,
     } as FixtureRound;
   });
 }
 
-export function getCurrentRound(rounds: FixtureRound[]) {
-  // Find first round with upcoming matches
-  return (
-    rounds.find((r) => r.matches.some((m) => m.status === "UPCOMING"))
-      ?.roundLabel ??
-    rounds[rounds.length - 1]?.roundLabel ??
-    "Round 0"
-  );
+export function getCurrentRound(
+  roundDisplayType: DisplayTypes,
+  rounds: FixtureRound[],
+) {
+  switch (roundDisplayType) {
+    case DISPLAY_TYPES.ROUND:
+      // Find first round with upcoming matches
+      return (
+        rounds.find((r) => r.matches.some((m) => m.status === "UPCOMING"))
+          ?.roundLabel ??
+        rounds[rounds.length - 1]?.roundLabel ??
+        "Round 0"
+      );
+    case DISPLAY_TYPES.DATE:
+      let startDate = new Date();
+      startDate = addHours(startDate, 10);
+      return rounds
+        .map((item) => item.roundLabel)
+        .includes(format(startDate, "eee d MMM"))
+        ? format(startDate, "eee d MMM")
+        : rounds[0].roundLabel;
+
+    case DISPLAY_TYPES.LEAGUE:
+      return rounds[0].roundLabel ?? "League";
+  }
 }

@@ -2,7 +2,7 @@ import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
 import { SportEvent } from "@/types/event-calendar";
 import { DISPLAY_TYPES } from "@/types/misc";
 import { format } from "date-fns";
-import { resolveNRLImages } from "./imageMapping";
+import { resolveSportImage } from "./imageMapping";
 
 const formatDate = (date: Date) => format(date, "d MMM");
 const formatDateYear = (date: Date) => format(date, "d MMM yyyy");
@@ -155,7 +155,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
       "https://upload.wikimedia.org/wikipedia/en/b/b2/NBL_%28Australia%29_logo.svg",
     link: "/sports/basketball/1524/77205",
     dateDisplay: `${formatDateYear(new Date("2025-09-18"))} - Apr 2026`,
-    notes: "NBL Finals: March - April 2026",
+    notes: "Playoffs Start: Mar 4 \nChampionship Series: Not before March 18",
   },
   {
     id: "rs-nba-2026",
@@ -196,12 +196,12 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
   },
   {
     id: "49",
-    name: "NBL Finals",
+    name: "NBL Championship Series",
     sport: "Basketball",
     type: "major",
-    startDate: new Date("2026-03-01"),
-    endDate: new Date("2026-04-15"),
-    dateDisplay: "March - April 2026",
+    startDate: new Date("2026-03-18"),
+    endDate: new Date("2026-04-04"),
+    dateDisplay: "After 18 March - April 2026",
     imageUrl: "https://upload.wikimedia.org/wikipedia/en/7/76/NBL_Finals.png",
     link: "/sports/basketball/1524/77205",
     location: "Australia",
@@ -962,7 +962,7 @@ export const NRL_TEAMS_NAME_LOGO = [
   "Wests Tigers",
 ].map((team) => ({
   name: team,
-  img: resolveNRLImages(team),
+  img: resolveSportImage(team),
 }));
 
 export const AFL_TEAM_NAMES = [

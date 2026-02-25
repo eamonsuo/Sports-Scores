@@ -48,8 +48,7 @@ export default async function Page() {
       {
         matches: cricketoday ?? [],
         roundLabel: "🏏 Cricket",
-        roundSlug: "main/matches",
-        sport: SPORT.CRICKET,
+        roundSlug: `${SPORT.CRICKET}/main/matches`,
       },
     ])
     .concat(rugbyLeagueToday?.fixtures ?? [])
@@ -59,16 +58,14 @@ export default async function Page() {
       {
         matches: golfToday ?? [],
         roundLabel: "⛳ Golf",
-        roundSlug: `${GOLF_TOURS[0].slug}/${GOLF_TOURS[0].seasons[0].slug}`,
-        sport: SPORT.GOLF,
+        roundSlug: `${SPORT.GOLF}/${GOLF_TOURS[0].slug}/${GOLF_TOURS[0].seasons[0].slug}`,
       },
     ])
     .concat([
       {
         matches: motorsportToday ?? [],
         roundLabel: "🏎️ Motorsport",
-        roundSlug: `${MOTORSPORT_CATEGORIES[0].slug}/${MOTORSPORT_CATEGORIES[0].seasons[0].slug}`,
-        sport: SPORT.MOTORSPORT,
+        roundSlug: `${SPORT.MOTORSPORT}/${MOTORSPORT_CATEGORIES[0].slug}/${MOTORSPORT_CATEGORIES[0].seasons[0].slug}`,
       },
     ])
     .concat(footballToday?.fixtures ?? [])

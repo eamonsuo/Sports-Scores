@@ -89,7 +89,6 @@ export interface FixtureRound {
   byes?: { name?: string; img?: string }[];
   cardVariant?: CardVariant;
   roundSlug?: string;
-  sport?: string;
 }
 
 export interface SportsmonksCricket {
@@ -212,6 +211,7 @@ export type SportCodes = (typeof SPORT)[keyof typeof SPORT];
 export enum DISPLAY_TYPES {
   ROUND = "round",
   DATE = "date",
+  LEAGUE = "league",
 }
 
 export type DisplayTypes = (typeof DISPLAY_TYPES)[keyof typeof DISPLAY_TYPES];

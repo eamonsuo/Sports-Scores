@@ -11,7 +11,7 @@ import {
   fetchCricketMyTeams,
   fetchCricketSeriesMatches,
 } from "@/endpoints/cricket.api";
-import { resolveCricketTeamImages } from "@/lib/imageMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
 import { dateToCustomString, toShortTimeString } from "@/lib/projUtils";
 import {
   Cricket_LiveScoreAPI_MatchesGetInnings,
@@ -80,14 +80,14 @@ export async function cricketMatchesByDateClient(date: Date) {
               : event.ECo,
           otherDetail: event.ErnInf,
           homeDetails: {
-            img: resolveCricketTeamImages(
+            img: resolveSportImage(
               event.T1[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
             ),
             score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
             name: event.T1[0].Nm,
           },
           awayDetails: {
-            img: resolveCricketTeamImages(
+            img: resolveSportImage(
               event.T2[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
             ),
             score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
@@ -143,14 +143,14 @@ export async function cricketMatchesByDate(date: Date) {
         timerDisplayColour: event.EpsL === "Play in progress" ? "green" : null,
         otherDetail: event.ErnInf,
         homeDetails: {
-          img: resolveCricketTeamImages(
+          img: resolveSportImage(
             event.T1[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
           ),
           score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
           name: event.T1[0].Nm,
         },
         awayDetails: {
-          img: resolveCricketTeamImages(
+          img: resolveSportImage(
             event.T2[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
           ),
           score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
@@ -264,7 +264,7 @@ export async function cricketSeriesResults(ccd: string, scd: string) {
       teams: item.team.map((team) => {
         return {
           name: team.Tnm,
-          logo: resolveCricketTeamImages(team.Tnm.replace(/\s(W|A|U19)$/i, "")),
+          logo: resolveSportImage(team.Tnm.replace(/\s(W|A|U19)$/i, "")),
           rank: team.rnk,
           played: team.pld,
           won: team.win,
@@ -310,16 +310,12 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
             : event.ECo,
         otherDetail: event.ErnInf,
         homeDetails: {
-          img: resolveCricketTeamImages(
-            event.T1[0].Nm.replace(/\s(W|A|U19)$/i, ""),
-          ),
+          img: resolveSportImage(event.T1[0].Nm.replace(/\s(W|A|U19)$/i, "")),
           score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
           name: event.T1[0].Nm,
         },
         awayDetails: {
-          img: resolveCricketTeamImages(
-            event.T2[0].Nm.replace(/\s(W|A|U19)$/i, ""),
-          ),
+          img: resolveSportImage(event.T2[0].Nm.replace(/\s(W|A|U19)$/i, "")),
           score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
           name: event.T2[0].Nm,
         },
@@ -392,17 +388,13 @@ export function mapMatchDetails(
     homeInfo: {
       name: details.T1[0].Nm,
       score: `${home1Ing}${home2Ing}`,
-      img: resolveCricketTeamImages(
-        details.T1[0].Nm.replace(/\s(W|A|U19)$/i, ""),
-      ),
+      img: resolveSportImage(details.T1[0].Nm.replace(/\s(W|A|U19)$/i, "")),
     },
     homePlayers: homePlayers,
     awayInfo: {
       name: details.T2[0].Nm,
       score: `${away1Ing}${away2Ing}`,
-      img: resolveCricketTeamImages(
-        details.T2[0].Nm.replace(/\s(W|A|U19)$/i, ""),
-      ),
+      img: resolveSportImage(details.T2[0].Nm.replace(/\s(W|A|U19)$/i, "")),
     },
     awayPlayers: awayPlayers,
   } as MatchDetailsPage;

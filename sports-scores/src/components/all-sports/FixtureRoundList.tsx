@@ -135,7 +135,7 @@ export default function FixtureRoundList({
           >
             {item.roundSlug && (
               <Link
-                href={`/sports/${item.sport}/${item.roundSlug ?? ""}`}
+                href={`/sports/${item.roundSlug ?? ""}`}
                 className="flex justify-center rounded"
               >
                 <Button variant="secondary">All Events</Button>

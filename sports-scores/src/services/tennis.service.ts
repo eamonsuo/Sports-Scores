@@ -1,5 +1,14 @@
 import { Match as BracketMatch } from "@/components/bracket/types";
 import {
+  fetchCupTrees,
+  fetchEventDetails,
+  fetchEventsByDate,
+  fetchLastEvents,
+  fetchNextEvents,
+  fetchTeamLastEvents,
+  fetchTeamNextEvents,
+} from "@/endpoints/sofascore.api";
+import {
   fetchTennisATPRankings,
   fetchTennisBracket,
   fetchTennisMatchDetails,
@@ -11,7 +20,7 @@ import {
   fetchTennisWTARankings,
 } from "@/endpoints/tennis.api";
 import { TENNIS_CATEGORIES, TENNIS_LEAGUES } from "@/lib/constants";
-import { resolveTennisImage } from "@/lib/imageMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
 import {
   dateToCustomString,
   setTennisMatchSummary,
@@ -33,15 +42,13 @@ export async function tennisTournamentMatches(
   tournamentId: number,
   seasonId: number,
 ) {
-  const lastMatches = await fetchTennisTournamentLastMatches(
-    tournamentId,
-    seasonId,
-  );
+  const lastMatches = await (
+    process.env.DEV_MODE ? fetchLastEvents : fetchTennisTournamentLastMatches
+  )(tournamentId, seasonId);
 
-  const nextMatches = await fetchTennisTournamentNextMatches(
-    tournamentId,
-    seasonId,
-  );
+  const nextMatches = await (
+    process.env.DEV_MODE ? fetchNextEvents : fetchTennisTournamentNextMatches
+  )(tournamentId, seasonId);
 
   if (!lastMatches && !nextMatches) {
     return null;
@@ -82,9 +89,13 @@ export async function tennisTournamentMatches(
 }
 
 export async function TennisPlayerMatches(teamId: number) {
-  const lastMatches = await fetchTennisPlayerLastMatches(teamId, 0);
+  const lastMatches = await (
+    process.env.DEV_MODE ? fetchTeamLastEvents : fetchTennisPlayerLastMatches
+  )(teamId, 0);
 
-  const nextMatches = await fetchTennisPlayerNextMatches(teamId, 0);
+  const nextMatches = await (
+    process.env.DEV_MODE ? fetchTeamNextEvents : fetchTennisPlayerNextMatches
+  )(teamId, 0);
 
   if (!lastMatches && !nextMatches) {
     return null;
@@ -117,7 +128,7 @@ export async function TennisPlayerMatches(teamId: number) {
 //         team: {
 //           id: item.team.id,
 //           name: shortenTeamNames(item.team.name),
-//           logo: resolveTennisImage(item.team.name),
+//           logo: resolveSportImage(item.team.name),
 //         },
 //         games: {
 //           played: item.matches,
@@ -135,7 +146,9 @@ export async function TennisPlayerMatches(teamId: number) {
 // }
 
 export async function TennisMatchDetails(matchId: number) {
-  const match = await fetchTennisMatchDetails(matchId);
+  const match = await (
+    process.env.DEV_MODE ? fetchEventDetails : fetchTennisMatchDetails
+  )(matchId);
   // const incidents = await fetchTennisMatchIncidents(matchId);
 
   const matchDetails = match?.event;
@@ -161,14 +174,14 @@ export async function TennisMatchDetails(matchId: number) {
           homeTeam: {
             name: shortenTeamNames(matchDetails.homeTeam.name),
             score: matchDetails?.homeScore?.current?.toString() ?? "0",
-            img: resolveTennisImage(
+            img: resolveSportImage(
               matchDetails.homeTeam.country.name ?? matchDetails.homeTeam.name,
             ),
           },
           awayTeam: {
             name: shortenTeamNames(matchDetails?.awayTeam.name),
             score: matchDetails?.awayScore?.current?.toString() ?? "0",
-            img: resolveTennisImage(
+            img: resolveSportImage(
               matchDetails.awayTeam.country.name ?? matchDetails.awayTeam.name,
             ),
           },
@@ -220,7 +233,9 @@ export async function TennisMatchDetails(matchId: number) {
 }
 
 export async function TennisMatchesByDate(date: Date) {
-  const matches = await fetchTennisMatchesByDate(date);
+  const matches = await (process.env.DEV_MODE
+    ? fetchEventsByDate("tennis", date)
+    : fetchTennisMatchesByDate(date));
 
   if (!matches) {
     return null;
@@ -275,8 +290,7 @@ export async function TennisMatchesByDate(date: Date) {
 
           roundLabel: roundLabel,
           cardVariant: "tennis",
-          roundSlug: `today`,
-          sport: SPORT.TENNIS,
+          roundSlug: `${SPORT.TENNIS}/today`,
         } as FixtureRound;
       })
       .concat({
@@ -285,8 +299,7 @@ export async function TennisMatchesByDate(date: Date) {
           .sort((a, b) => a.startDate.getTime() - b.startDate.getTime()),
         roundLabel: "Australians",
         cardVariant: "tennis",
-        roundSlug: `today`,
-        sport: SPORT.TENNIS,
+        roundSlug: `${SPORT.TENNIS}/today`,
       } as FixtureRound),
 
     currentRound: firstTournament,
@@ -294,7 +307,9 @@ export async function TennisMatchesByDate(date: Date) {
 }
 
 export async function tennisBrackets(tournamentId: number, seasonId: number) {
-  const trees = await fetchTennisBracket(tournamentId, seasonId);
+  const trees = await (
+    process.env.DEV_MODE ? fetchCupTrees : fetchTennisBracket
+  )(tournamentId, seasonId);
 
   if (!trees) {
     return null;
@@ -368,15 +383,19 @@ type RankingList = (typeof RANKING_LIST)[keyof typeof RANKING_LIST];
 
 export async function TennisWorldRankings(rankingList: RankingList) {
   let rankings;
-  switch (rankingList) {
-    case RANKING_LIST.WTA:
-      rankings = await fetchTennisWTARankings();
-      break;
-    case RANKING_LIST.ATP:
-      rankings = await fetchTennisATPRankings();
-      break;
-    default:
-      return null;
+  if (process.env.DEV_MODE) {
+    // rankings = await fetchPlayerRankings(rankingList);
+  } else {
+    switch (rankingList) {
+      case RANKING_LIST.WTA:
+        rankings = await fetchTennisWTARankings();
+        break;
+      case RANKING_LIST.ATP:
+        rankings = await fetchTennisATPRankings();
+        break;
+      default:
+        return null;
+    }
   }
 
   if (!rankings) {
@@ -387,7 +406,7 @@ export async function TennisWorldRankings(rankingList: RankingList) {
     players: rankings.rankings.map((rank) => ({
       name: rank.rowName,
       position: rank.ranking,
-      img: resolveTennisImage(rank.team.country.name ?? rank.team.name),
+      img: resolveSportImage(rank.team.country.name ?? rank.team.name),
       totalPoints: rank.points,
       previousRank: rank.previousRanking,
     })),
@@ -439,7 +458,7 @@ function mapTennisMatches(match: Tennis_Sofascore_Event) {
           ? `${match.homeScore.period5}${match.homeScore.period5TieBreak !== undefined ? ` (${match.homeScore.period5TieBreak})` : ""}`
           : null,
       ].filter((s): s is string => s !== null),
-      img: resolveTennisImage(
+      img: resolveSportImage(
         match.homeTeam.country.name ?? match.homeTeam.name,
       ),
     },
@@ -464,7 +483,7 @@ function mapTennisMatches(match: Tennis_Sofascore_Event) {
           ? `${match.awayScore.period5}${match.awayScore.period5TieBreak !== undefined ? ` (${match.awayScore.period5TieBreak})` : ""}`
           : null,
       ].filter((s): s is string => s !== null),
-      img: resolveTennisImage(
+      img: resolveSportImage(
         match.awayTeam.country.name ?? match.awayTeam.name,
       ),
     },

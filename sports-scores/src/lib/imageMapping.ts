@@ -3,8 +3,9 @@ import { getCountryImageUrl } from "./projUtils";
 
 const fallback = "/vercel.svg";
 
-export function resolveGolfTeamImage(teamName: string) {
+export function resolveSportImage(teamName: string) {
   switch (teamName) {
+    // LIV Teams
     case "4ACES GC":
     case "4Aces GC":
       return "/liv/4aces.webp";
@@ -47,244 +48,8 @@ export function resolveGolfTeamImage(teamName: string) {
       return fallback;
     case "Southern Guards GC":
       return fallback;
-    default:
-      return fallback;
-  }
-}
 
-export function resolveGolfPlayerImage(playerName: string) {
-  var countryCode = (() => {
-    switch (playerName) {
-      case "Min Woo Lee":
-      case "Jason Day":
-      case "Adam Scott":
-      case "Cam Davis":
-      case "Cameron Smith":
-      case "Marc Leishman":
-      case "Lucas Herbert":
-      case "Matt Jones":
-      case "Karl Vilips":
-      case "Aaron Baddeley":
-      case "Ryan Ruffels":
-      case "Elvis Smylie":
-      case "Wade Ormsby":
-        return CountryFlagCode.Australia;
-
-      case "Ryan Fox":
-        return CountryFlagCode.NewZealand;
-
-      case "Scottie Scheffler":
-      case "Xander Schauffele":
-      case "Collin Morikawa":
-      case "Justin Thomas":
-      case "Russell Henley":
-      case "Maverick McNealy":
-      case "Bryson DeChambeau":
-      case "Wyndham Clark":
-      case "Patrick Cantlay":
-      case "Keegan Bradley":
-      case "Brian Harman":
-      case "Billy Horschel":
-      case "Akshay Bhatia":
-      case "Daniel Berger":
-      case "J.J. Spaun":
-      case "Sahith Theegala":
-      case "Jordan Spieth":
-      case "Sam Burns":
-      case "Will Zalatoris":
-      case "Tony Finau":
-      case "Rickie Fowler":
-      case "Bubba Watson":
-      case "Tiger Woods":
-      case "Phil Mickelson":
-      case "Dustin Johnson":
-      case "Brooks Koepka":
-      case "Luke Clanton":
-      case "Max Homa":
-      case "Andrew Novak":
-      case "Michael Kim":
-      case "Cameron Young":
-      case "Patrick Reed":
-      case "Ben Griffin":
-      case "Harold Varner III":
-      case "Kevin Kisner":
-      case "Matt Kuchar":
-      case "Kevin Na":
-      case "Gary Woodland":
-      case "Lucas Glover":
-      case "Harris English":
-      case "Chris Gotterup":
-      case "Anthony Kim":
-      case "Jake Knapp":
-      case "Jacob Bridgeman":
-      case "Max Greyserman":
-      case "Michael Thorbjornsen":
-      case "Neal Shipley":
-      case "Joel Dahmen":
-      case "Webb Simpson":
-      case "Davis Riley":
-        return CountryFlagCode.UnitedStates;
-
-      case "Tommy Fleetwood":
-      case "Justin Rose":
-      case "Tyrrell Hatton":
-      case "Aaron Rai":
-      case "Matt Fitzpatrick":
-      case "Paul Casey":
-      case "Lee Westwood":
-      case "Ian Poulter":
-      case "Harry Hall":
-      case "Marco Penge":
-        return CountryFlagCode.England;
-
-      case "Shane Lowry":
-        return CountryFlagCode.Ireland;
-      case "Rory McIlroy":
-      case "Tom Mckibbin":
-        return CountryFlagCode.NorthernIreland;
-      case "Robert MacIntyre":
-        return CountryFlagCode.Scotland;
-
-      case "Ludvig Åberg":
-      case "Henrik Stenson":
-        return CountryFlagCode.Sweden;
-
-      case "Hideki Matsuyama":
-        return CountryFlagCode.Japan;
-
-      case "Viktor Hovland":
-        return CountryFlagCode.Norway;
-
-      case "Sepp Straka":
-        return CountryFlagCode.Austria;
-
-      case "Sungjae Im":
-      case "Tom Kim":
-      case "Byeong Hun An":
-      case "Si Woo Kim":
-        return CountryFlagCode.KoreaSouth;
-
-      case "Corey Conners":
-      case "Nick Taylor":
-        return CountryFlagCode.Canada;
-
-      case "Sergio Garcia":
-      case "Jon Rahm":
-      case "David Puig":
-        return CountryFlagCode.Spain;
-
-      case "Joaquin Niemann":
-      case "Mito Pereira":
-        return CountryFlagCode.Chile;
-
-      case "Louis Oosthuizen":
-      case "Branden Grace":
-      case "Charl Schwartzel":
-      case "Aldrich Potgieter":
-      case "Christiaan Bezuidenhout":
-      case "Dean Burmester":
-      case "Garrick Higgo":
-      case "Erik van Rooyen":
-        return CountryFlagCode.SouthAfrica;
-
-      case "Thomas Pieters":
-      case "Thomas Detry":
-        return CountryFlagCode.Belgium;
-
-      case "Thorbjørn Olesen":
-      case "Rasmus Højgaard":
-      case "Nicolai Højgaard":
-      case "Rasmus Neergaard-Petersen":
-        return CountryFlagCode.Denmark;
-
-      case "Victor Perez":
-      case "Matthieu Pavon":
-        return CountryFlagCode.France;
-
-      case "Abraham Ancer":
-      case "Carlos Ortiz":
-        return CountryFlagCode.Mexico;
-
-      case "Adrian Meronk":
-        return CountryFlagCode.Poland;
-
-      case "Anirban Lahiri":
-        return CountryFlagCode.India;
-      case "Scott Vincent":
-        return CountryFlagCode.Zimbabwe;
-      case "Jhonattan Vegas":
-        return CountryFlagCode.Venezuela;
-      case "Emiliano Grillo":
-        return CountryFlagCode.Argentina;
-      case "Haotong Li":
-        return CountryFlagCode.China;
-      case "Nico Echavarria":
-        return CountryFlagCode.Colombia;
-    }
-  })();
-
-  return getCountryImageUrl(countryCode);
-}
-
-export function resolveGolfTournamentImage(tournamentName: string) {
-  var countryCode = (() => {
-    switch (tournamentName) {
-      // PGA Tour
-      case "Mexico Open at VidantaWorld":
-      case "World Wide Technology Championship":
-        return CountryFlagCode.Mexico;
-
-      case "Puerto Rico Open":
-        return CountryFlagCode.PuertoRico;
-
-      case "Corales Puntacana Championshi":
-        return CountryFlagCode.DominicanRepublic;
-
-      case "The Open Championship":
-        return CountryFlagCode.UnitedKingdom;
-      case "Genesis Scottish Open":
-        return CountryFlagCode.Scotland;
-
-      case "RBC Canadian Open":
-        return CountryFlagCode.Canada;
-
-      case "Baycurrent Classic":
-        return CountryFlagCode.Japan;
-
-      case "Butterfield Bermuda Championship":
-        return CountryFlagCode.Bermuda;
-
-      case "Hero World Challenge":
-        return CountryFlagCode.Bahamas;
-
-      // LIV Golf
-      case "Riyadh":
-        return CountryFlagCode.SaudiArabia;
-      case "Adelaide":
-        return CountryFlagCode.Australia;
-      case "Hong Kong":
-        return CountryFlagCode.HongKong;
-      case "Singapore":
-        return CountryFlagCode.Singapore;
-      case "Mexico City":
-        return CountryFlagCode.Mexico;
-      case "Korea":
-        return CountryFlagCode.KoreaSouth;
-      case "Andalucía":
-        return CountryFlagCode.Spain;
-      case "United Kingdom":
-        return CountryFlagCode.UnitedKingdom;
-
-      default:
-        return CountryFlagCode.UnitedStates;
-    }
-  })();
-
-  return getCountryImageUrl(countryCode);
-}
-
-export function resolveNRLImages(teamName: string) {
-  switch (teamName) {
+    //NRL
     case "Brisbane Broncos":
       return "/nrl/broncos.svg";
     case "Canberra Raiders":
@@ -323,13 +88,8 @@ export function resolveNRLImages(teamName: string) {
       return "https://upload.wikimedia.org/wikipedia/commons/d/d1/State_of_Origin_QLD_Maroons_Logo.jpg";
     case "New South Wales Blues":
       return "https://upload.wikimedia.org/wikipedia/en/8/80/NSW_Blues_Logo_2023.png";
-    default:
-      return resolveCountryImage(teamName) ?? fallback;
-  }
-}
 
-export function resolveAussieRulesImages(teamName: string) {
-  switch (teamName) {
+    //AFL
     case "Adelaide Crows":
       return "/afl/crows.svg";
     case "Brisbane Lions":
@@ -375,13 +135,8 @@ export function resolveAussieRulesImages(teamName: string) {
       return "/afl/eagles.svg";
     case "Western Bulldogs":
       return "/afl/bulldogs.svg";
-    default:
-      return fallback;
-  }
-}
 
-export function resolveNFLImages(teamName: string) {
-  switch (teamName) {
+    //NFL
     case "Arizona Cardinals":
       return "/nfl/cardinals.svg";
     case "Atlanta Falcons":
@@ -446,93 +201,8 @@ export function resolveNFLImages(teamName: string) {
       return "/nfl/titans.svg";
     case "Washington Commanders":
       return "/nfl/commanders.svg";
-    default:
-      return fallback;
-  }
-}
 
-export function resolveF1CountryFlagImages(name: string) {
-  var countryCode = (() => {
-    switch (name) {
-      case "Australian Grand Prix":
-      case "Oscar Piastri":
-      case "Jack Doohan":
-        return CountryFlagCode.Australia;
-      case "Bahrain Grand Prix":
-        return CountryFlagCode.Bahrain;
-      case "Chinese Grand Prix":
-        return CountryFlagCode.China;
-      case "Azerbaijan Grand Prix":
-        return CountryFlagCode.Azerbaijan;
-      case "Emilia Romagna Grand Prix":
-      case "Italian Grand Prix":
-      case "Andrea Kimi Antonelli":
-        return CountryFlagCode.Italy;
-      case "Monaco Grand Prix":
-      case "Charles Leclerc":
-        return CountryFlagCode.Monaco;
-      case "Spanish Grand Prix":
-      case "Carlos Sainz":
-      case "Fernando Alonso":
-        return CountryFlagCode.Spain;
-      case "Canadian Grand Prix":
-      case "Lance Stroll":
-        return CountryFlagCode.Canada;
-      case "Austrian Grand Prix":
-        return CountryFlagCode.Austria;
-      case "British Grand Prix":
-      case "Lando Norris":
-      case "George Russell":
-      case "Lewis Hamilton":
-      case "Oliver Bearman":
-        return CountryFlagCode.UnitedKingdom;
-      case "Hungarian Grand Prix":
-        return CountryFlagCode.Hungary;
-      case "Belgian Grand Prix":
-        return CountryFlagCode.Belgium;
-      case "Dutch Grand Prix":
-      case "Max Verstappen":
-        return CountryFlagCode.Netherlands;
-      case "Singapore Grand Prix":
-        return CountryFlagCode.Singapore;
-      case "Japanese Grand Prix":
-      case "Yuki Tsunoda":
-        return CountryFlagCode.Japan;
-      case "Qatar Grand Prix":
-        return CountryFlagCode.Qatar;
-      case "Miami Grand Prix":
-      case "United States Grand Prix":
-      case "Las Vegas Grand Prix":
-        return CountryFlagCode.UnitedStates;
-      case "Mexico City Grand Prix":
-        return CountryFlagCode.Mexico;
-      case "São Paulo Grand Prix":
-      case "Gabriel Bortoleto":
-        return CountryFlagCode.Brazil;
-      case "Saudi Arabian Grand Prix":
-        return CountryFlagCode.SaudiArabia;
-      case "Abu Dhabi Grand Prix":
-        return CountryFlagCode.UnitedArabEmirates;
-      case "Alexander Albon":
-        return CountryFlagCode.Thailand;
-      case "Nico Hülkenberg":
-        return CountryFlagCode.Germany;
-      case "Liam Lawson":
-        return CountryFlagCode.NewZealand;
-      case "Esteban Ocon":
-      case "Pierre Gasly":
-      case "Isack Hadjar":
-        return CountryFlagCode.France;
-      case "Franco Colapinto":
-        return CountryFlagCode.Argentina;
-    }
-  })();
-
-  return getCountryImageUrl(countryCode);
-}
-
-export function resolveF1TeamImages(teamName: string) {
-  switch (teamName) {
+    // F1
     case "Red Bull":
       return "/f1/redbull-f1.svg";
     case "Mercedes":
@@ -554,18 +224,12 @@ export function resolveF1TeamImages(teamName: string) {
       return "/f1/haas.png";
     case "Williams":
       return "/f1/williams-f1.svg";
-
     case "Audi":
       return "https://upload.wikimedia.org/wikipedia/commons/0/03/Audif1.com_logo17_%28cropped%29.svg";
     case "Cadillac":
       return "https://upload.wikimedia.org/wikipedia/en/b/bc/Cadillac_Formula_1_Team_Logo_%282025%29.svg";
-    default:
-      return fallback;
-  }
-}
 
-export function resolveCricketTeamImages(teamName: string) {
-  switch (teamName) {
+    //Cricket
     case "Queensland":
       return "https://static-files.cricket-australia.pulselive.com/flag/120/1205@2x.png";
     case "Queensland Fire":
@@ -601,13 +265,8 @@ export function resolveCricketTeamImages(teamName: string) {
       return "https://static-files.cricket-australia.pulselive.com/flag/120/99@2x.png";
     case "Perth Scorchers":
       return "https://static-files.cricket-australia.pulselive.com/flag/120/95@2x.png";
-    default:
-      return resolveCountryImage(teamName) ?? fallback;
-  }
-}
 
-export function resolveFootballTeamImage(teamName: string) {
-  switch (teamName) {
+    // Football
     // A Leagues
     case "Brisbane Roar":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/5326.png";
@@ -1056,13 +715,7 @@ export function resolveFootballTeamImage(teamName: string) {
     case "Vancouver Whitecaps":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/9727.png";
 
-    default:
-      return resolveCountryImage(teamName) ?? fallback;
-  }
-}
-
-export function resolveBaseballTeamImage(teamName: string) {
-  switch (teamName) {
+    // Baseball
     // ABL
     case "Brisbane Bandits":
       return "https://assets.baseball.com.au/uploads/sites/8/2020/07/Site-Logo-for-MLBAM.png";
@@ -1146,13 +799,7 @@ export function resolveBaseballTeamImage(teamName: string) {
     case "San Francisco Giants":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/mlb/500/sf.png";
 
-    default:
-      return resolveCountryImage(teamName) ?? fallback;
-  }
-}
-
-export function resolveBasketballTeamImage(teamName: string) {
-  switch (teamName) {
+    //Basketball
     //NBL
     case "Brisbane Bullets":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nbl/500/bri.png";
@@ -1289,558 +936,827 @@ export function resolveBasketballTeamImage(teamName: string) {
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/tor.png";
     case "Portland Fire":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/por.png";
+
+    // Special cricket team
+    case "West Indies":
+      return "/cricket/west-indies.svg";
+    case "Chinese Taipei":
+      return "https://upload.wikimedia.org/wikipedia/commons/3/3a/Flag_of_Chinese_Taipei_variant.svg";
+
+    // Golf Players - Australia
+    case "Min Woo Lee":
+    case "Jason Day":
+    case "Adam Scott":
+    case "Cam Davis":
+    case "Cameron Smith":
+    case "Marc Leishman":
+    case "Lucas Herbert":
+    case "Matt Jones":
+    case "Karl Vilips":
+    case "Aaron Baddeley":
+    case "Ryan Ruffels":
+    case "Elvis Smylie":
+    case "Wade Ormsby":
+      return getCountryImageUrl(CountryFlagCode.Australia);
+
+    // Golf Players - New Zealand
+    case "Ryan Fox":
+      return getCountryImageUrl(CountryFlagCode.NewZealand);
+
+    // Golf Players - United States
+    case "Scottie Scheffler":
+    case "Xander Schauffele":
+    case "Collin Morikawa":
+    case "Justin Thomas":
+    case "Russell Henley":
+    case "Maverick McNealy":
+    case "Bryson DeChambeau":
+    case "Wyndham Clark":
+    case "Patrick Cantlay":
+    case "Keegan Bradley":
+    case "Brian Harman":
+    case "Billy Horschel":
+    case "Akshay Bhatia":
+    case "Daniel Berger":
+    case "J.J. Spaun":
+    case "Sahith Theegala":
+    case "Jordan Spieth":
+    case "Sam Burns":
+    case "Will Zalatoris":
+    case "Tony Finau":
+    case "Rickie Fowler":
+    case "Bubba Watson":
+    case "Tiger Woods":
+    case "Phil Mickelson":
+    case "Dustin Johnson":
+    case "Brooks Koepka":
+    case "Luke Clanton":
+    case "Max Homa":
+    case "Andrew Novak":
+    case "Michael Kim":
+    case "Cameron Young":
+    case "Patrick Reed":
+    case "Ben Griffin":
+    case "Harold Varner III":
+    case "Kevin Kisner":
+    case "Matt Kuchar":
+    case "Kevin Na":
+    case "Gary Woodland":
+    case "Lucas Glover":
+    case "Harris English":
+    case "Chris Gotterup":
+    case "Anthony Kim":
+    case "Jake Knapp":
+    case "Jacob Bridgeman":
+    case "Max Greyserman":
+    case "Michael Thorbjornsen":
+    case "Neal Shipley":
+    case "Joel Dahmen":
+    case "Webb Simpson":
+    case "Davis Riley":
+      return getCountryImageUrl(CountryFlagCode.UnitedStates);
+
+    // Golf Players - England
+    case "Tommy Fleetwood":
+    case "Justin Rose":
+    case "Tyrrell Hatton":
+    case "Aaron Rai":
+    case "Matt Fitzpatrick":
+    case "Paul Casey":
+    case "Lee Westwood":
+    case "Ian Poulter":
+    case "Harry Hall":
+    case "Marco Penge":
+      return getCountryImageUrl(CountryFlagCode.England);
+
+    // Golf Players - Ireland & UK
+    case "Shane Lowry":
+      return getCountryImageUrl(CountryFlagCode.Ireland);
+    case "Rory McIlroy":
+    case "Tom Mckibbin":
+      return getCountryImageUrl(CountryFlagCode.NorthernIreland);
+    case "Robert MacIntyre":
+      return getCountryImageUrl(CountryFlagCode.Scotland);
+
+    // Golf Players - Other European
+    case "Ludvig Åberg":
+    case "Henrik Stenson":
+      return getCountryImageUrl(CountryFlagCode.Sweden);
+    case "Viktor Hovland":
+      return getCountryImageUrl(CountryFlagCode.Norway);
+    case "Sepp Straka":
+      return getCountryImageUrl(CountryFlagCode.Austria);
+    case "Thomas Pieters":
+    case "Thomas Detry":
+      return getCountryImageUrl(CountryFlagCode.Belgium);
+    case "Thorbjørn Olesen":
+    case "Rasmus Højgaard":
+    case "Nicolai Højgaard":
+    case "Rasmus Neergaard-Petersen":
+      return getCountryImageUrl(CountryFlagCode.Denmark);
+    case "Victor Perez":
+    case "Matthieu Pavon":
+      return getCountryImageUrl(CountryFlagCode.France);
+    case "Adrian Meronk":
+      return getCountryImageUrl(CountryFlagCode.Poland);
+
+    // Golf Players - Asia
+    case "Hideki Matsuyama":
+      return getCountryImageUrl(CountryFlagCode.Japan);
+    case "Sungjae Im":
+    case "Tom Kim":
+    case "Byeong Hun An":
+    case "Si Woo Kim":
+      return getCountryImageUrl(CountryFlagCode.KoreaSouth);
+    case "Anirban Lahiri":
+      return getCountryImageUrl(CountryFlagCode.India);
+    case "Haotong Li":
+      return getCountryImageUrl(CountryFlagCode.China);
+
+    // Golf Players - Americas
+    case "Corey Conners":
+    case "Nick Taylor":
+      return getCountryImageUrl(CountryFlagCode.Canada);
+    case "Sergio Garcia":
+    case "Jon Rahm":
+    case "David Puig":
+      return getCountryImageUrl(CountryFlagCode.Spain);
+    case "Joaquin Niemann":
+    case "Mito Pereira":
+      return getCountryImageUrl(CountryFlagCode.Chile);
+    case "Abraham Ancer":
+    case "Carlos Ortiz":
+      return getCountryImageUrl(CountryFlagCode.Mexico);
+    case "Emiliano Grillo":
+      return getCountryImageUrl(CountryFlagCode.Argentina);
+    case "Jhonattan Vegas":
+      return getCountryImageUrl(CountryFlagCode.Venezuela);
+    case "Nico Echavarria":
+      return getCountryImageUrl(CountryFlagCode.Colombia);
+
+    // Golf Players - Africa
+    case "Louis Oosthuizen":
+    case "Branden Grace":
+    case "Charl Schwartzel":
+    case "Aldrich Potgieter":
+    case "Christiaan Bezuidenhout":
+    case "Dean Burmester":
+    case "Garrick Higgo":
+    case "Erik van Rooyen":
+      return getCountryImageUrl(CountryFlagCode.SouthAfrica);
+    case "Scott Vincent":
+      return getCountryImageUrl(CountryFlagCode.Zimbabwe);
+
+    // Golf Tournaments - PGA Tour
+    case "Mexico Open at VidantaWorld":
+    case "World Wide Technology Championship":
+      return getCountryImageUrl(CountryFlagCode.Mexico);
+    case "Puerto Rico Open":
+      return getCountryImageUrl(CountryFlagCode.PuertoRico);
+    case "Corales Puntacana Championshi":
+      return getCountryImageUrl(CountryFlagCode.DominicanRepublic);
+    case "The Open Championship":
+      return getCountryImageUrl(CountryFlagCode.UnitedKingdom);
+    case "Genesis Scottish Open":
+      return getCountryImageUrl(CountryFlagCode.Scotland);
+    case "RBC Canadian Open":
+      return getCountryImageUrl(CountryFlagCode.Canada);
+    case "Baycurrent Classic":
+      return getCountryImageUrl(CountryFlagCode.Japan);
+    case "Butterfield Bermuda Championship":
+      return getCountryImageUrl(CountryFlagCode.Bermuda);
+    case "Hero World Challenge":
+      return getCountryImageUrl(CountryFlagCode.Bahamas);
+
+    // Golf Tournaments - LIV
+    case "Riyadh":
+      return getCountryImageUrl(CountryFlagCode.SaudiArabia);
+    case "Adelaide":
+      return getCountryImageUrl(CountryFlagCode.Australia);
+    case "Hong Kong":
+      return getCountryImageUrl(CountryFlagCode.HongKong);
+    case "Singapore":
+      return getCountryImageUrl(CountryFlagCode.Singapore);
+    case "Mexico City":
+      return getCountryImageUrl(CountryFlagCode.Mexico);
+    case "Korea":
+      return getCountryImageUrl(CountryFlagCode.KoreaSouth);
+    case "Andalucía":
+      return getCountryImageUrl(CountryFlagCode.Spain);
+    case "United Kingdom":
+      return getCountryImageUrl(CountryFlagCode.UnitedKingdom);
+
+    // F1 - Grand Prix
+    case "Australian Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.Australia);
+    case "Bahrain Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.Bahrain);
+    case "Chinese Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.China);
+    case "Azerbaijan Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.Azerbaijan);
+    case "Emilia Romagna Grand Prix":
+    case "Italian Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.Italy);
+    case "Monaco Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.Monaco);
+    case "Spanish Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.Spain);
+    case "Canadian Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.Canada);
+    case "Austrian Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.Austria);
+    case "British Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.UnitedKingdom);
+    case "Hungarian Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.Hungary);
+    case "Belgian Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.Belgium);
+    case "Dutch Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.Netherlands);
+    case "Singapore Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.Singapore);
+    case "Japanese Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.Japan);
+    case "Qatar Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.Qatar);
+    case "Miami Grand Prix":
+    case "United States Grand Prix":
+    case "Las Vegas Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.UnitedStates);
+    case "Mexico City Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.Mexico);
+    case "São Paulo Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.Brazil);
+    case "Saudi Arabian Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.SaudiArabia);
+    case "Abu Dhabi Grand Prix":
+      return getCountryImageUrl(CountryFlagCode.UnitedArabEmirates);
+
+    // F1 - Drivers
+    case "Oscar Piastri":
+    case "Jack Doohan":
+      return getCountryImageUrl(CountryFlagCode.Australia);
+    case "Andrea Kimi Antonelli":
+      return getCountryImageUrl(CountryFlagCode.Italy);
+    case "Charles Leclerc":
+      return getCountryImageUrl(CountryFlagCode.Monaco);
+    case "Carlos Sainz":
+    case "Fernando Alonso":
+      return getCountryImageUrl(CountryFlagCode.Spain);
+    case "Lance Stroll":
+      return getCountryImageUrl(CountryFlagCode.Canada);
+    case "Lando Norris":
+    case "George Russell":
+    case "Lewis Hamilton":
+    case "Oliver Bearman":
+      return getCountryImageUrl(CountryFlagCode.UnitedKingdom);
+    case "Max Verstappen":
+      return getCountryImageUrl(CountryFlagCode.Netherlands);
+    case "Yuki Tsunoda":
+      return getCountryImageUrl(CountryFlagCode.Japan);
+    case "Alexander Albon":
+      return getCountryImageUrl(CountryFlagCode.Thailand);
+    case "Nico Hülkenberg":
+      return getCountryImageUrl(CountryFlagCode.Germany);
+    case "Liam Lawson":
+      return getCountryImageUrl(CountryFlagCode.NewZealand);
+    case "Esteban Ocon":
+    case "Pierre Gasly":
+    case "Isack Hadjar":
+      return getCountryImageUrl(CountryFlagCode.France);
+    case "Franco Colapinto":
+    case "Gabriel Bortoleto":
+      return getCountryImageUrl(CountryFlagCode.Argentina);
+
+    // Countries
+    case "Afghanistan":
+      return getCountryImageUrl(CountryFlagCode.Afghanistan);
+    case "Aland Islands":
+      return getCountryImageUrl(CountryFlagCode.AlandIslands);
+    case "Albania":
+      return getCountryImageUrl(CountryFlagCode.Albania);
+    case "Alaska":
+      return getCountryImageUrl(CountryFlagCode.Alaska);
+    case "Algeria":
+      return getCountryImageUrl(CountryFlagCode.Algeria);
+    case "American Samoa":
+      return getCountryImageUrl(CountryFlagCode.AmericanSamoa);
+    case "Andorra":
+      return getCountryImageUrl(CountryFlagCode.Andorra);
+    case "Angola":
+      return getCountryImageUrl(CountryFlagCode.Angola);
+    case "Anguilla":
+      return getCountryImageUrl(CountryFlagCode.Anguilla);
+    case "Antarctica":
+      return getCountryImageUrl(CountryFlagCode.Antarctica);
+    case "Antarctica Heard":
+      return getCountryImageUrl(CountryFlagCode.AntarcticaHeard);
+    case "Antigua And Barbuda":
+      return getCountryImageUrl(CountryFlagCode.AntiguaAndBarbuda);
+    case "Argentina":
+      return getCountryImageUrl(CountryFlagCode.Argentina);
+    case "Armenia":
+      return getCountryImageUrl(CountryFlagCode.Armenia);
+    case "Aruba":
+      return getCountryImageUrl(CountryFlagCode.Aruba);
+    case "Australia":
+      return getCountryImageUrl(CountryFlagCode.Australia);
+    case "Austria":
+      return getCountryImageUrl(CountryFlagCode.Austria);
+    case "Azerbaijan":
+      return getCountryImageUrl(CountryFlagCode.Azerbaijan);
+    case "Bahamas":
+      return getCountryImageUrl(CountryFlagCode.Bahamas);
+    case "Bahrain":
+      return getCountryImageUrl(CountryFlagCode.Bahrain);
+    case "Bangladesh":
+      return getCountryImageUrl(CountryFlagCode.Bangladesh);
+    case "Barbados":
+      return getCountryImageUrl(CountryFlagCode.Barbados);
+    case "Belarus":
+      return getCountryImageUrl(CountryFlagCode.Belarus);
+    case "Belgium":
+      return getCountryImageUrl(CountryFlagCode.Belgium);
+    case "Belize":
+      return getCountryImageUrl(CountryFlagCode.Belize);
+    case "Benin":
+      return getCountryImageUrl(CountryFlagCode.Benin);
+    case "Bermuda":
+      return getCountryImageUrl(CountryFlagCode.Bermuda);
+    case "Bhutan":
+      return getCountryImageUrl(CountryFlagCode.Bhutan);
+    case "Bolivia":
+      return getCountryImageUrl(CountryFlagCode.Bolivia);
+    case "Bonaire Sint Eustatius Saba":
+      return getCountryImageUrl(CountryFlagCode.BonaireSintEustatiusSaba);
+    case "Bosnia And Herzegovina":
+    case "Bosnia & Herzegovina":
+      return getCountryImageUrl(CountryFlagCode.BosniaAndHerzegovina);
+    case "Botswana":
+      return getCountryImageUrl(CountryFlagCode.Botswana);
+    case "Bouvet Island":
+      return getCountryImageUrl(CountryFlagCode.BouvetIsland);
+    case "Brazil":
+      return getCountryImageUrl(CountryFlagCode.Brazil);
+    case "British Indian Ocean Territory":
+      return getCountryImageUrl(CountryFlagCode.BritishIndianOceanTerritory);
+    case "British Virgin Islands":
+      return getCountryImageUrl(CountryFlagCode.BritishVirginIslands);
+    case "Brunei Darussalam":
+      return getCountryImageUrl(CountryFlagCode.BruneiDarussalam);
+    case "Bulgaria":
+      return getCountryImageUrl(CountryFlagCode.Bulgaria);
+    case "Burkina Faso":
+      return getCountryImageUrl(CountryFlagCode.BurkinaFaso);
+    case "Burundi":
+      return getCountryImageUrl(CountryFlagCode.Burundi);
+    case "Cabo Verde":
+      return getCountryImageUrl(CountryFlagCode.CaboVerde);
+    case "Cambodia":
+      return getCountryImageUrl(CountryFlagCode.Cambodia);
+    case "Cameroon":
+      return getCountryImageUrl(CountryFlagCode.Cameroon);
+    case "Canada":
+      return getCountryImageUrl(CountryFlagCode.Canada);
+    case "Canary Islands":
+      return getCountryImageUrl(CountryFlagCode.CanaryIslands);
+    case "Cayman Islands":
+      return getCountryImageUrl(CountryFlagCode.CaymanIslands);
+    case "Central African Republic":
+      return getCountryImageUrl(CountryFlagCode.CentralAfricanRepublic);
+    case "Chad":
+      return getCountryImageUrl(CountryFlagCode.Chad);
+    case "Chile":
+      return getCountryImageUrl(CountryFlagCode.Chile);
+    case "China":
+      return getCountryImageUrl(CountryFlagCode.China);
+    case "Christmas Island":
+      return getCountryImageUrl(CountryFlagCode.ChristmasIsland);
+    case "Cocos Keeling Islands":
+      return getCountryImageUrl(CountryFlagCode.CocosKeelingIslands);
+    case "Colombia":
+      return getCountryImageUrl(CountryFlagCode.Colombia);
+    case "Comoros":
+      return getCountryImageUrl(CountryFlagCode.Comoros);
+    case "Congo":
+      return getCountryImageUrl(CountryFlagCode.Congo);
+    case "Congo Democratic Republic":
+      return getCountryImageUrl(CountryFlagCode.CongoDemocraticRepublic);
+    case "Cook Islands":
+      return getCountryImageUrl(CountryFlagCode.CookIslands);
+    case "Costa Rica":
+      return getCountryImageUrl(CountryFlagCode.CostaRica);
+    case "Cote D'Ivoire":
+      return getCountryImageUrl(CountryFlagCode.CoteDIvoire);
+    case "Croatia":
+      return getCountryImageUrl(CountryFlagCode.Croatia);
+    case "Cuba":
+      return getCountryImageUrl(CountryFlagCode.Cuba);
+    case "Curacao":
+      return getCountryImageUrl(CountryFlagCode.Curacao);
+    case "Cyprus":
+      return getCountryImageUrl(CountryFlagCode.Cyprus);
+    case "Czechia":
+      return getCountryImageUrl(CountryFlagCode.Czechia);
+    case "Denmark":
+      return getCountryImageUrl(CountryFlagCode.Denmark);
+    case "Djibouti":
+      return getCountryImageUrl(CountryFlagCode.Djibouti);
+    case "Dominica":
+      return getCountryImageUrl(CountryFlagCode.Dominica);
+    case "Dominican Republic":
+      return getCountryImageUrl(CountryFlagCode.DominicanRepublic);
+    case "Ecuador":
+      return getCountryImageUrl(CountryFlagCode.Ecuador);
+    case "Egypt":
+      return getCountryImageUrl(CountryFlagCode.Egypt);
+    case "El Salvador":
+      return getCountryImageUrl(CountryFlagCode.ElSalvador);
+    case "England":
+      return getCountryImageUrl(CountryFlagCode.England);
+    case "Equatorial Guinea":
+      return getCountryImageUrl(CountryFlagCode.EquatorialGuinea);
+    case "Eritrea":
+      return getCountryImageUrl(CountryFlagCode.Eritrea);
+    case "Estonia":
+      return getCountryImageUrl(CountryFlagCode.Estonia);
+    case "Eswatini":
+      return getCountryImageUrl(CountryFlagCode.Eswatini);
+    case "Ethiopia":
+      return getCountryImageUrl(CountryFlagCode.Ethiopia);
+    case "European Union":
+      return getCountryImageUrl(CountryFlagCode.EuropeanUnion);
+    case "Faroe Islands":
+      return getCountryImageUrl(CountryFlagCode.FaroeIslands);
+    case "Fiji":
+      return getCountryImageUrl(CountryFlagCode.Fiji);
+    case "Finland":
+      return getCountryImageUrl(CountryFlagCode.Finland);
+    case "France":
+      return getCountryImageUrl(CountryFlagCode.France);
+    case "French Guiana":
+      return getCountryImageUrl(CountryFlagCode.FrenchGuiana);
+    case "French Polynesia":
+      return getCountryImageUrl(CountryFlagCode.FrenchPolynesia);
+    case "French Southern Territories":
+      return getCountryImageUrl(CountryFlagCode.FrenchSouthernTerritories);
+    case "Gabon":
+      return getCountryImageUrl(CountryFlagCode.Gabon);
+    case "Gambia":
+      return getCountryImageUrl(CountryFlagCode.Gambia);
+    case "Georgia":
+      return getCountryImageUrl(CountryFlagCode.Georgia);
+    case "Germany":
+      return getCountryImageUrl(CountryFlagCode.Germany);
+    case "Ghana":
+      return getCountryImageUrl(CountryFlagCode.Ghana);
+    case "Gibraltar":
+      return getCountryImageUrl(CountryFlagCode.Gibraltar);
+    case "Greece":
+      return getCountryImageUrl(CountryFlagCode.Greece);
+    case "Greenland":
+      return getCountryImageUrl(CountryFlagCode.Greenland);
+    case "Grenada":
+      return getCountryImageUrl(CountryFlagCode.Grenada);
+    case "Guadeloupe":
+      return getCountryImageUrl(CountryFlagCode.Guadeloupe);
+    case "Guam":
+      return getCountryImageUrl(CountryFlagCode.Guam);
+    case "Guatemala":
+      return getCountryImageUrl(CountryFlagCode.Guatemala);
+    case "Guernsey":
+      return getCountryImageUrl(CountryFlagCode.Guernsey);
+    case "Guinea":
+      return getCountryImageUrl(CountryFlagCode.Guinea);
+    case "Guinea-Bissau":
+      return getCountryImageUrl(CountryFlagCode.GuineaBissau);
+    case "Guyana":
+      return getCountryImageUrl(CountryFlagCode.Guyana);
+    case "Haiti":
+      return getCountryImageUrl(CountryFlagCode.Haiti);
+    case "Heard Island And McDonald Islands":
+      return getCountryImageUrl(CountryFlagCode.HeardIslandAndMcDonaldIslands);
+    case "Holy See":
+      return getCountryImageUrl(CountryFlagCode.HolySee);
+    case "Honduras":
+      return getCountryImageUrl(CountryFlagCode.Honduras);
+    case "Hong Kong":
+      return getCountryImageUrl(CountryFlagCode.HongKong);
+    case "Hungary":
+      return getCountryImageUrl(CountryFlagCode.Hungary);
+    case "Iceland":
+      return getCountryImageUrl(CountryFlagCode.Iceland);
+    case "India":
+      return getCountryImageUrl(CountryFlagCode.India);
+    case "Indonesia":
+      return getCountryImageUrl(CountryFlagCode.Indonesia);
+    case "Iran":
+      return getCountryImageUrl(CountryFlagCode.Iran);
+    case "Iraq":
+      return getCountryImageUrl(CountryFlagCode.Iraq);
+    case "Ireland":
+      return getCountryImageUrl(CountryFlagCode.Ireland);
+    case "Isle Of Man":
+      return getCountryImageUrl(CountryFlagCode.IsleOfMan);
+    case "Israel":
+      return getCountryImageUrl(CountryFlagCode.Israel);
+    case "Italy":
+      return getCountryImageUrl(CountryFlagCode.Italy);
+    case "Jamaica":
+      return getCountryImageUrl(CountryFlagCode.Jamaica);
+    case "Japan":
+      return getCountryImageUrl(CountryFlagCode.Japan);
+    case "Jersey":
+      return getCountryImageUrl(CountryFlagCode.Jersey);
+    case "Jordan":
+      return getCountryImageUrl(CountryFlagCode.Jordan);
+    case "Kazakhstan":
+      return getCountryImageUrl(CountryFlagCode.Kazakhstan);
+    case "Kenya":
+      return getCountryImageUrl(CountryFlagCode.Kenya);
+    case "Kiribati":
+      return getCountryImageUrl(CountryFlagCode.Kiribati);
+    case "Korea North":
+      return getCountryImageUrl(CountryFlagCode.KoreaNorth);
+    case "Korea":
+    case "South Korea":
+    case "Korea South":
+      return getCountryImageUrl(CountryFlagCode.KoreaSouth);
+    case "Kosovo":
+      return getCountryImageUrl(CountryFlagCode.Kosovo);
+    case "Kuwait":
+      return getCountryImageUrl(CountryFlagCode.Kuwait);
+    case "Kyrgyzstan":
+      return getCountryImageUrl(CountryFlagCode.Kyrgyzstan);
+    case "Laos":
+      return getCountryImageUrl(CountryFlagCode.Laos);
+    case "Latvia":
+      return getCountryImageUrl(CountryFlagCode.Latvia);
+    case "Lebanon":
+      return getCountryImageUrl(CountryFlagCode.Lebanon);
+    case "Lesotho":
+      return getCountryImageUrl(CountryFlagCode.Lesotho);
+    case "Liberia":
+      return getCountryImageUrl(CountryFlagCode.Liberia);
+    case "Libya":
+      return getCountryImageUrl(CountryFlagCode.Libya);
+    case "Liechtenstein":
+      return getCountryImageUrl(CountryFlagCode.Liechtenstein);
+    case "Lithuania":
+      return getCountryImageUrl(CountryFlagCode.Lithuania);
+    case "Luxembourg":
+      return getCountryImageUrl(CountryFlagCode.Luxembourg);
+    case "Macao":
+      return getCountryImageUrl(CountryFlagCode.Macao);
+    case "Madagascar":
+      return getCountryImageUrl(CountryFlagCode.Madagascar);
+    case "Malawi":
+      return getCountryImageUrl(CountryFlagCode.Malawi);
+    case "Malaysia":
+      return getCountryImageUrl(CountryFlagCode.Malaysia);
+    case "Maldives":
+      return getCountryImageUrl(CountryFlagCode.Maldives);
+    case "Mali":
+      return getCountryImageUrl(CountryFlagCode.Mali);
+    case "Malta":
+      return getCountryImageUrl(CountryFlagCode.Malta);
+    case "Marshall Islands":
+      return getCountryImageUrl(CountryFlagCode.MarshallIslands);
+    case "Martinique":
+      return getCountryImageUrl(CountryFlagCode.Martinique);
+    case "Mauritania":
+      return getCountryImageUrl(CountryFlagCode.Mauritania);
+    case "Mauritius":
+      return getCountryImageUrl(CountryFlagCode.Mauritius);
+    case "Mayotte":
+      return getCountryImageUrl(CountryFlagCode.Mayotte);
+    case "Mexico":
+      return getCountryImageUrl(CountryFlagCode.Mexico);
+    case "Micronesia":
+      return getCountryImageUrl(CountryFlagCode.Micronesia);
+    case "Moldova":
+      return getCountryImageUrl(CountryFlagCode.Moldova);
+    case "Monaco":
+      return getCountryImageUrl(CountryFlagCode.Monaco);
+    case "Mongolia":
+      return getCountryImageUrl(CountryFlagCode.Mongolia);
+    case "Montenegro":
+      return getCountryImageUrl(CountryFlagCode.Montenegro);
+    case "Montserrat":
+      return getCountryImageUrl(CountryFlagCode.Montserrat);
+    case "Morocco":
+      return getCountryImageUrl(CountryFlagCode.Morocco);
+    case "Mozambique":
+      return getCountryImageUrl(CountryFlagCode.Mozambique);
+    case "Myanmar":
+      return getCountryImageUrl(CountryFlagCode.Myanmar);
+    case "Namibia":
+      return getCountryImageUrl(CountryFlagCode.Namibia);
+    case "Nauru":
+      return getCountryImageUrl(CountryFlagCode.Nauru);
+    case "Nepal":
+      return getCountryImageUrl(CountryFlagCode.Nepal);
+    case "Netherlands":
+      return getCountryImageUrl(CountryFlagCode.Netherlands);
+    case "Netherlands Antilles":
+      return getCountryImageUrl(CountryFlagCode.NetherlandsAntilles);
+    case "New Caledonia":
+      return getCountryImageUrl(CountryFlagCode.NewCaledonia);
+    case "New York":
+      return getCountryImageUrl(CountryFlagCode.NewYork);
+    case "New Zealand":
+      return getCountryImageUrl(CountryFlagCode.NewZealand);
+    case "Nicaragua":
+      return getCountryImageUrl(CountryFlagCode.Nicaragua);
+    case "Niger":
+      return getCountryImageUrl(CountryFlagCode.Niger);
+    case "Nigeria":
+      return getCountryImageUrl(CountryFlagCode.Nigeria);
+    case "Niue":
+      return getCountryImageUrl(CountryFlagCode.Niue);
+    case "Norfolk Island":
+      return getCountryImageUrl(CountryFlagCode.NorfolkIsland);
+    case "North Macedonia":
+      return getCountryImageUrl(CountryFlagCode.NorthMacedonia);
+    case "Northern Ireland":
+      return getCountryImageUrl(CountryFlagCode.NorthernIreland);
+    case "Northern Mariana Islands":
+      return getCountryImageUrl(CountryFlagCode.NorthernMarianaIslands);
+    case "Norway":
+      return getCountryImageUrl(CountryFlagCode.Norway);
+    case "Oman":
+      return getCountryImageUrl(CountryFlagCode.Oman);
+    case "Pakistan":
+      return getCountryImageUrl(CountryFlagCode.Pakistan);
+    case "Palau":
+      return getCountryImageUrl(CountryFlagCode.Palau);
+    case "Panama":
+      return getCountryImageUrl(CountryFlagCode.Panama);
+    case "Papua New Guinea":
+      return getCountryImageUrl(CountryFlagCode.PapuaNewGuinea);
+    case "Paraguay":
+      return getCountryImageUrl(CountryFlagCode.Paraguay);
+    case "Peru":
+      return getCountryImageUrl(CountryFlagCode.Peru);
+    case "Philippines":
+      return getCountryImageUrl(CountryFlagCode.Philippines);
+    case "Pitcairn":
+      return getCountryImageUrl(CountryFlagCode.Pitcairn);
+    case "Poland":
+      return getCountryImageUrl(CountryFlagCode.Poland);
+    case "Portugal":
+      return getCountryImageUrl(CountryFlagCode.Portugal);
+    case "Puerto Rico":
+      return getCountryImageUrl(CountryFlagCode.PuertoRico);
+    case "Qatar":
+      return getCountryImageUrl(CountryFlagCode.Qatar);
+    case "Reunion":
+      return getCountryImageUrl(CountryFlagCode.Reunion);
+    case "Romania":
+      return getCountryImageUrl(CountryFlagCode.Romania);
+    case "Russia":
+      return getCountryImageUrl(CountryFlagCode.Russia);
+    case "Rwanda":
+      return getCountryImageUrl(CountryFlagCode.Rwanda);
+    case "Saint Barthelemy":
+      return getCountryImageUrl(CountryFlagCode.SaintBarthelemy);
+    case "Saint Helena":
+      return getCountryImageUrl(CountryFlagCode.SaintHelena);
+    case "Saint Kitts And Nevis":
+      return getCountryImageUrl(CountryFlagCode.SaintKittsAndNevis);
+    case "Saint Lucia":
+      return getCountryImageUrl(CountryFlagCode.SaintLucia);
+    case "Saint Martin":
+      return getCountryImageUrl(CountryFlagCode.SaintMartin);
+    case "Saint Pierre And Miquelon":
+      return getCountryImageUrl(CountryFlagCode.SaintPierreAndMiquelon);
+    case "Saint Vincent And Grenadines":
+      return getCountryImageUrl(CountryFlagCode.SaintVincentAndGrenadines);
+    case "Samoa":
+      return getCountryImageUrl(CountryFlagCode.Samoa);
+    case "San Marino":
+      return getCountryImageUrl(CountryFlagCode.SanMarino);
+    case "Sao Tome And Principe":
+      return getCountryImageUrl(CountryFlagCode.SaoTomeAndPrincipe);
+    case "Saudi Arabia":
+      return getCountryImageUrl(CountryFlagCode.SaudiArabia);
+    case "Scotland":
+      return getCountryImageUrl(CountryFlagCode.Scotland);
+    case "Senegal":
+      return getCountryImageUrl(CountryFlagCode.Senegal);
+    case "Serbia":
+      return getCountryImageUrl(CountryFlagCode.Serbia);
+    case "Seychelles":
+      return getCountryImageUrl(CountryFlagCode.Seychelles);
+    case "Sierra Leone":
+      return getCountryImageUrl(CountryFlagCode.SierraLeone);
+    case "Singapore":
+      return getCountryImageUrl(CountryFlagCode.Singapore);
+    case "Sint Maarten":
+      return getCountryImageUrl(CountryFlagCode.SintMaarten);
+    case "Slovakia":
+      return getCountryImageUrl(CountryFlagCode.Slovakia);
+    case "Slovenia":
+      return getCountryImageUrl(CountryFlagCode.Slovenia);
+    case "Solomon Islands":
+      return getCountryImageUrl(CountryFlagCode.SolomonIslands);
+    case "Somalia":
+      return getCountryImageUrl(CountryFlagCode.Somalia);
+    case "South Africa":
+      return getCountryImageUrl(CountryFlagCode.SouthAfrica);
+    case "South Sudan":
+      return getCountryImageUrl(CountryFlagCode.SouthSudan);
+    case "Spain":
+      return getCountryImageUrl(CountryFlagCode.Spain);
+    case "Sri Lanka":
+      return getCountryImageUrl(CountryFlagCode.SriLanka);
+    case "Sudan":
+      return getCountryImageUrl(CountryFlagCode.Sudan);
+    case "Suriname":
+      return getCountryImageUrl(CountryFlagCode.Suriname);
+    case "Svalbard And Jan Mayen":
+      return getCountryImageUrl(CountryFlagCode.SvalbardAndJanMayen);
+    case "Sweden":
+      return getCountryImageUrl(CountryFlagCode.Sweden);
+    case "Switzerland":
+      return getCountryImageUrl(CountryFlagCode.Switzerland);
+    case "Syria":
+      return getCountryImageUrl(CountryFlagCode.Syria);
+    case "Taiwan":
+      return getCountryImageUrl(CountryFlagCode.Taiwan);
+    case "Tajikistan":
+      return getCountryImageUrl(CountryFlagCode.Tajikistan);
+    case "Tanzania":
+      return getCountryImageUrl(CountryFlagCode.Tanzania);
+    case "Thailand":
+      return getCountryImageUrl(CountryFlagCode.Thailand);
+    case "Timor-Leste":
+      return getCountryImageUrl(CountryFlagCode.TimorLeste);
+    case "Togo":
+      return getCountryImageUrl(CountryFlagCode.Togo);
+    case "Tokelau":
+      return getCountryImageUrl(CountryFlagCode.Tokelau);
+    case "Tonga":
+      return getCountryImageUrl(CountryFlagCode.Tonga);
+    case "Trinidad And Tobago":
+      return getCountryImageUrl(CountryFlagCode.TrinidadAndTobago);
+    case "Tunisia":
+      return getCountryImageUrl(CountryFlagCode.Tunisia);
+    case "Turkey":
+    case "Türkiye":
+      return getCountryImageUrl(CountryFlagCode.Turkey);
+    case "Turkmenistan":
+      return getCountryImageUrl(CountryFlagCode.Turkmenistan);
+    case "Turks And Caicos Islands":
+      return getCountryImageUrl(CountryFlagCode.TurksAndCaicosIslands);
+    case "Tuvalu":
+      return getCountryImageUrl(CountryFlagCode.Tuvalu);
+    case "Uganda":
+      return getCountryImageUrl(CountryFlagCode.Uganda);
+    case "Ukraine":
+      return getCountryImageUrl(CountryFlagCode.Ukraine);
+    case "United Arab Emirates":
+      return getCountryImageUrl(CountryFlagCode.UnitedArabEmirates);
+    case "United Kingdom":
+    case "Great Britan":
+      return getCountryImageUrl(CountryFlagCode.UnitedKingdom);
+    case "United States":
+    case "USA":
+    case "US":
+      return getCountryImageUrl(CountryFlagCode.UnitedStates);
+    case "United States Minor Outlying Islands":
+      return getCountryImageUrl(
+        CountryFlagCode.UnitedStatesMinorOutlyingIslands,
+      );
+    case "Uruguay":
+      return getCountryImageUrl(CountryFlagCode.Uruguay);
+    case "US Virgin Islands":
+      return getCountryImageUrl(CountryFlagCode.USVirginIslands);
+    case "Uzbekistan":
+      return getCountryImageUrl(CountryFlagCode.Uzbekistan);
+    case "Vanuatu":
+      return getCountryImageUrl(CountryFlagCode.Vanuatu);
+    case "Vatican City":
+      return getCountryImageUrl(CountryFlagCode.VaticanCity);
+    case "Venezuela":
+      return getCountryImageUrl(CountryFlagCode.Venezuela);
+    case "Vietnam":
+      return getCountryImageUrl(CountryFlagCode.Vietnam);
+    case "Wales":
+      return getCountryImageUrl(CountryFlagCode.Wales);
+    case "Wallis And Futuna":
+      return getCountryImageUrl(CountryFlagCode.WallisAndFutuna);
+    case "Western Sahara":
+      return getCountryImageUrl(CountryFlagCode.WesternSahara);
+    case "Yemen":
+      return getCountryImageUrl(CountryFlagCode.Yemen);
+    case "Zambia":
+      return getCountryImageUrl(CountryFlagCode.Zambia);
+    case "Zimbabwe":
+      return getCountryImageUrl(CountryFlagCode.Zimbabwe);
+
     default:
-      return resolveCountryImage(teamName) ?? fallback;
+      return fallback;
   }
-}
-
-export function resolveTennisImage(teamName: string) {
-  switch (teamName) {
-    case "Alex De Minaur":
-      return resolveCountryImage("Australia");
-
-    default:
-      return resolveCountryImage(teamName) ?? fallback;
-  }
-}
-
-export function resolveCountryImage(countryName: string) {
-  var countryCode = (() => {
-    switch (countryName) {
-      case "Afghanistan":
-        return CountryFlagCode.Afghanistan;
-      case "Aland Islands":
-        return CountryFlagCode.AlandIslands;
-      case "Albania":
-        return CountryFlagCode.Albania;
-      case "Alaska":
-        return CountryFlagCode.Alaska;
-      case "Algeria":
-        return CountryFlagCode.Algeria;
-      case "American Samoa":
-        return CountryFlagCode.AmericanSamoa;
-      case "Andorra":
-        return CountryFlagCode.Andorra;
-      case "Angola":
-        return CountryFlagCode.Angola;
-      case "Anguilla":
-        return CountryFlagCode.Anguilla;
-      case "Antarctica":
-        return CountryFlagCode.Antarctica;
-      case "Antarctica Heard":
-        return CountryFlagCode.AntarcticaHeard;
-      case "Antigua And Barbuda":
-        return CountryFlagCode.AntiguaAndBarbuda;
-      case "Argentina":
-        return CountryFlagCode.Argentina;
-      case "Armenia":
-        return CountryFlagCode.Armenia;
-      case "Aruba":
-        return CountryFlagCode.Aruba;
-      case "Australia":
-        return CountryFlagCode.Australia;
-      case "Austria":
-        return CountryFlagCode.Austria;
-      case "Azerbaijan":
-        return CountryFlagCode.Azerbaijan;
-      case "Bahamas":
-        return CountryFlagCode.Bahamas;
-      case "Bahrain":
-        return CountryFlagCode.Bahrain;
-      case "Bangladesh":
-        return CountryFlagCode.Bangladesh;
-      case "Barbados":
-        return CountryFlagCode.Barbados;
-      case "Belarus":
-        return CountryFlagCode.Belarus;
-      case "Belgium":
-        return CountryFlagCode.Belgium;
-      case "Belize":
-        return CountryFlagCode.Belize;
-      case "Benin":
-        return CountryFlagCode.Benin;
-      case "Bermuda":
-        return CountryFlagCode.Bermuda;
-      case "Bhutan":
-        return CountryFlagCode.Bhutan;
-      case "Bolivia":
-        return CountryFlagCode.Bolivia;
-      case "Bonaire Sint Eustatius Saba":
-        return CountryFlagCode.BonaireSintEustatiusSaba;
-      case "Bosnia And Herzegovina":
-      case "Bosnia & Herzegovina":
-        return CountryFlagCode.BosniaAndHerzegovina;
-      case "Botswana":
-        return CountryFlagCode.Botswana;
-      case "Bouvet Island":
-        return CountryFlagCode.BouvetIsland;
-      case "Brazil":
-        return CountryFlagCode.Brazil;
-      case "British Indian Ocean Territory":
-        return CountryFlagCode.BritishIndianOceanTerritory;
-      case "British Virgin Islands":
-        return CountryFlagCode.BritishVirginIslands;
-      case "Brunei Darussalam":
-        return CountryFlagCode.BruneiDarussalam;
-      case "Bulgaria":
-        return CountryFlagCode.Bulgaria;
-      case "Burkina Faso":
-        return CountryFlagCode.BurkinaFaso;
-      case "Burundi":
-        return CountryFlagCode.Burundi;
-      case "Cabo Verde":
-        return CountryFlagCode.CaboVerde;
-      case "Cambodia":
-        return CountryFlagCode.Cambodia;
-      case "Cameroon":
-        return CountryFlagCode.Cameroon;
-      case "Canada":
-        return CountryFlagCode.Canada;
-      case "Canary Islands":
-        return CountryFlagCode.CanaryIslands;
-      case "Cayman Islands":
-        return CountryFlagCode.CaymanIslands;
-      case "Central African Republic":
-        return CountryFlagCode.CentralAfricanRepublic;
-      case "Chad":
-        return CountryFlagCode.Chad;
-      case "Chile":
-        return CountryFlagCode.Chile;
-      case "China":
-        return CountryFlagCode.China;
-      case "Christmas Island":
-        return CountryFlagCode.ChristmasIsland;
-      case "Cocos Keeling Islands":
-        return CountryFlagCode.CocosKeelingIslands;
-      case "Colombia":
-        return CountryFlagCode.Colombia;
-      case "Comoros":
-        return CountryFlagCode.Comoros;
-      case "Congo":
-        return CountryFlagCode.Congo;
-      case "Congo Democratic Republic":
-        return CountryFlagCode.CongoDemocraticRepublic;
-      case "Cook Islands":
-        return CountryFlagCode.CookIslands;
-      case "Costa Rica":
-        return CountryFlagCode.CostaRica;
-      case "Cote D'Ivoire":
-        return CountryFlagCode.CoteDIvoire;
-      case "Croatia":
-        return CountryFlagCode.Croatia;
-      case "Cuba":
-        return CountryFlagCode.Cuba;
-      case "Curacao":
-        return CountryFlagCode.Curacao;
-      case "Cyprus":
-        return CountryFlagCode.Cyprus;
-      case "Czechia":
-        return CountryFlagCode.Czechia;
-      case "Denmark":
-        return CountryFlagCode.Denmark;
-      case "Djibouti":
-        return CountryFlagCode.Djibouti;
-      case "Dominica":
-        return CountryFlagCode.Dominica;
-      case "Dominican Republic":
-        return CountryFlagCode.DominicanRepublic;
-      case "Ecuador":
-        return CountryFlagCode.Ecuador;
-      case "Egypt":
-        return CountryFlagCode.Egypt;
-      case "El Salvador":
-        return CountryFlagCode.ElSalvador;
-      case "England":
-        return CountryFlagCode.England;
-      case "Equatorial Guinea":
-        return CountryFlagCode.EquatorialGuinea;
-      case "Eritrea":
-        return CountryFlagCode.Eritrea;
-      case "Estonia":
-        return CountryFlagCode.Estonia;
-      case "Eswatini":
-        return CountryFlagCode.Eswatini;
-      case "Ethiopia":
-        return CountryFlagCode.Ethiopia;
-      case "European Union":
-        return CountryFlagCode.EuropeanUnion;
-      case "Faroe Islands":
-        return CountryFlagCode.FaroeIslands;
-      case "Fiji":
-        return CountryFlagCode.Fiji;
-      case "Finland":
-        return CountryFlagCode.Finland;
-      case "France":
-        return CountryFlagCode.France;
-      case "French Guiana":
-        return CountryFlagCode.FrenchGuiana;
-      case "French Polynesia":
-        return CountryFlagCode.FrenchPolynesia;
-      case "French Southern Territories":
-        return CountryFlagCode.FrenchSouthernTerritories;
-      case "Gabon":
-        return CountryFlagCode.Gabon;
-      case "Gambia":
-        return CountryFlagCode.Gambia;
-      case "Georgia":
-        return CountryFlagCode.Georgia;
-      case "Germany":
-        return CountryFlagCode.Germany;
-      case "Ghana":
-        return CountryFlagCode.Ghana;
-      case "Gibraltar":
-        return CountryFlagCode.Gibraltar;
-      case "Greece":
-        return CountryFlagCode.Greece;
-      case "Greenland":
-        return CountryFlagCode.Greenland;
-      case "Grenada":
-        return CountryFlagCode.Grenada;
-      case "Guadeloupe":
-        return CountryFlagCode.Guadeloupe;
-      case "Guam":
-        return CountryFlagCode.Guam;
-      case "Guatemala":
-        return CountryFlagCode.Guatemala;
-      case "Guernsey":
-        return CountryFlagCode.Guernsey;
-      case "Guinea":
-        return CountryFlagCode.Guinea;
-      case "Guinea-Bissau":
-        return CountryFlagCode.GuineaBissau;
-      case "Guyana":
-        return CountryFlagCode.Guyana;
-      case "Haiti":
-        return CountryFlagCode.Haiti;
-      case "Heard Island And McDonald Islands":
-        return CountryFlagCode.HeardIslandAndMcDonaldIslands;
-      case "Holy See":
-        return CountryFlagCode.HolySee;
-      case "Honduras":
-        return CountryFlagCode.Honduras;
-      case "Hong Kong":
-        return CountryFlagCode.HongKong;
-      case "Hungary":
-        return CountryFlagCode.Hungary;
-      case "Iceland":
-        return CountryFlagCode.Iceland;
-      case "India":
-        return CountryFlagCode.India;
-      case "Indonesia":
-        return CountryFlagCode.Indonesia;
-      case "Iran":
-        return CountryFlagCode.Iran;
-      case "Iraq":
-        return CountryFlagCode.Iraq;
-      case "Ireland":
-        return CountryFlagCode.Ireland;
-      case "Isle Of Man":
-        return CountryFlagCode.IsleOfMan;
-      case "Israel":
-        return CountryFlagCode.Israel;
-      case "Italy":
-        return CountryFlagCode.Italy;
-      case "Jamaica":
-        return CountryFlagCode.Jamaica;
-      case "Japan":
-        return CountryFlagCode.Japan;
-      case "Jersey":
-        return CountryFlagCode.Jersey;
-      case "Jordan":
-        return CountryFlagCode.Jordan;
-      case "Kazakhstan":
-        return CountryFlagCode.Kazakhstan;
-      case "Kenya":
-        return CountryFlagCode.Kenya;
-      case "Kiribati":
-        return CountryFlagCode.Kiribati;
-      case "Korea North":
-        return CountryFlagCode.KoreaNorth;
-      case "Korea":
-      case "South Korea":
-      case "Korea South":
-        return CountryFlagCode.KoreaSouth;
-      case "Kosovo":
-        return CountryFlagCode.Kosovo;
-      case "Kuwait":
-        return CountryFlagCode.Kuwait;
-      case "Kyrgyzstan":
-        return CountryFlagCode.Kyrgyzstan;
-      case "Laos":
-        return CountryFlagCode.Laos;
-      case "Latvia":
-        return CountryFlagCode.Latvia;
-      case "Lebanon":
-        return CountryFlagCode.Lebanon;
-      case "Lesotho":
-        return CountryFlagCode.Lesotho;
-      case "Liberia":
-        return CountryFlagCode.Liberia;
-      case "Libya":
-        return CountryFlagCode.Libya;
-      case "Liechtenstein":
-        return CountryFlagCode.Liechtenstein;
-      case "Lithuania":
-        return CountryFlagCode.Lithuania;
-      case "Luxembourg":
-        return CountryFlagCode.Luxembourg;
-      case "Macao":
-        return CountryFlagCode.Macao;
-      case "Madagascar":
-        return CountryFlagCode.Madagascar;
-      case "Malawi":
-        return CountryFlagCode.Malawi;
-      case "Malaysia":
-        return CountryFlagCode.Malaysia;
-      case "Maldives":
-        return CountryFlagCode.Maldives;
-      case "Mali":
-        return CountryFlagCode.Mali;
-      case "Malta":
-        return CountryFlagCode.Malta;
-      case "Marshall Islands":
-        return CountryFlagCode.MarshallIslands;
-      case "Martinique":
-        return CountryFlagCode.Martinique;
-      case "Mauritania":
-        return CountryFlagCode.Mauritania;
-      case "Mauritius":
-        return CountryFlagCode.Mauritius;
-      case "Mayotte":
-        return CountryFlagCode.Mayotte;
-      case "Mexico":
-        return CountryFlagCode.Mexico;
-      case "Micronesia":
-        return CountryFlagCode.Micronesia;
-      case "Moldova":
-        return CountryFlagCode.Moldova;
-      case "Monaco":
-        return CountryFlagCode.Monaco;
-      case "Mongolia":
-        return CountryFlagCode.Mongolia;
-      case "Montenegro":
-        return CountryFlagCode.Montenegro;
-      case "Montserrat":
-        return CountryFlagCode.Montserrat;
-      case "Morocco":
-        return CountryFlagCode.Morocco;
-      case "Mozambique":
-        return CountryFlagCode.Mozambique;
-      case "Myanmar":
-        return CountryFlagCode.Myanmar;
-      case "Namibia":
-        return CountryFlagCode.Namibia;
-      case "Nauru":
-        return CountryFlagCode.Nauru;
-      case "Nepal":
-        return CountryFlagCode.Nepal;
-      case "Netherlands":
-        return CountryFlagCode.Netherlands;
-      case "Netherlands Antilles":
-        return CountryFlagCode.NetherlandsAntilles;
-      case "New Caledonia":
-        return CountryFlagCode.NewCaledonia;
-      case "New York":
-        return CountryFlagCode.NewYork;
-      case "New Zealand":
-        return CountryFlagCode.NewZealand;
-      case "Nicaragua":
-        return CountryFlagCode.Nicaragua;
-      case "Niger":
-        return CountryFlagCode.Niger;
-      case "Nigeria":
-        return CountryFlagCode.Nigeria;
-      case "Niue":
-        return CountryFlagCode.Niue;
-      case "Norfolk Island":
-        return CountryFlagCode.NorfolkIsland;
-      case "North Macedonia":
-        return CountryFlagCode.NorthMacedonia;
-      case "Northern Ireland":
-        return CountryFlagCode.NorthernIreland;
-      case "Northern Mariana Islands":
-        return CountryFlagCode.NorthernMarianaIslands;
-      case "Norway":
-        return CountryFlagCode.Norway;
-      case "Oman":
-        return CountryFlagCode.Oman;
-      case "Pakistan":
-        return CountryFlagCode.Pakistan;
-      case "Palau":
-        return CountryFlagCode.Palau;
-      case "Panama":
-        return CountryFlagCode.Panama;
-      case "Papua New Guinea":
-        return CountryFlagCode.PapuaNewGuinea;
-      case "Paraguay":
-        return CountryFlagCode.Paraguay;
-      case "Peru":
-        return CountryFlagCode.Peru;
-      case "Philippines":
-        return CountryFlagCode.Philippines;
-      case "Pitcairn":
-        return CountryFlagCode.Pitcairn;
-      case "Poland":
-        return CountryFlagCode.Poland;
-      case "Portugal":
-        return CountryFlagCode.Portugal;
-      case "Puerto Rico":
-        return CountryFlagCode.PuertoRico;
-      case "Qatar":
-        return CountryFlagCode.Qatar;
-      case "Reunion":
-        return CountryFlagCode.Reunion;
-      case "Romania":
-        return CountryFlagCode.Romania;
-      case "Russia":
-        return CountryFlagCode.Russia;
-      case "Rwanda":
-        return CountryFlagCode.Rwanda;
-      case "Saint Barthelemy":
-        return CountryFlagCode.SaintBarthelemy;
-      case "Saint Helena":
-        return CountryFlagCode.SaintHelena;
-      case "Saint Kitts And Nevis":
-        return CountryFlagCode.SaintKittsAndNevis;
-      case "Saint Lucia":
-        return CountryFlagCode.SaintLucia;
-      case "Saint Martin":
-        return CountryFlagCode.SaintMartin;
-      case "Saint Pierre And Miquelon":
-        return CountryFlagCode.SaintPierreAndMiquelon;
-      case "Saint Vincent And Grenadines":
-        return CountryFlagCode.SaintVincentAndGrenadines;
-      case "Samoa":
-        return CountryFlagCode.Samoa;
-      case "San Marino":
-        return CountryFlagCode.SanMarino;
-      case "Sao Tome And Principe":
-        return CountryFlagCode.SaoTomeAndPrincipe;
-      case "Saudi Arabia":
-        return CountryFlagCode.SaudiArabia;
-      case "Scotland":
-        return CountryFlagCode.Scotland;
-      case "Senegal":
-        return CountryFlagCode.Senegal;
-      case "Serbia":
-        return CountryFlagCode.Serbia;
-      case "Seychelles":
-        return CountryFlagCode.Seychelles;
-      case "Sierra Leone":
-        return CountryFlagCode.SierraLeone;
-      case "Singapore":
-        return CountryFlagCode.Singapore;
-      case "Sint Maarten":
-        return CountryFlagCode.SintMaarten;
-      case "Slovakia":
-        return CountryFlagCode.Slovakia;
-      case "Slovenia":
-        return CountryFlagCode.Slovenia;
-      case "Solomon Islands":
-        return CountryFlagCode.SolomonIslands;
-      case "Somalia":
-        return CountryFlagCode.Somalia;
-      case "South Africa":
-        return CountryFlagCode.SouthAfrica;
-      case "South Sudan":
-        return CountryFlagCode.SouthSudan;
-      case "Spain":
-        return CountryFlagCode.Spain;
-      case "Sri Lanka":
-        return CountryFlagCode.SriLanka;
-      case "Sudan":
-        return CountryFlagCode.Sudan;
-      case "Suriname":
-        return CountryFlagCode.Suriname;
-      case "Svalbard And Jan Mayen":
-        return CountryFlagCode.SvalbardAndJanMayen;
-      case "Sweden":
-        return CountryFlagCode.Sweden;
-      case "Switzerland":
-        return CountryFlagCode.Switzerland;
-      case "Syria":
-        return CountryFlagCode.Syria;
-      case "Taiwan":
-        return CountryFlagCode.Taiwan;
-      case "Tajikistan":
-        return CountryFlagCode.Tajikistan;
-      case "Tanzania":
-        return CountryFlagCode.Tanzania;
-      case "Thailand":
-        return CountryFlagCode.Thailand;
-      case "Timor-Leste":
-        return CountryFlagCode.TimorLeste;
-      case "Togo":
-        return CountryFlagCode.Togo;
-      case "Tokelau":
-        return CountryFlagCode.Tokelau;
-      case "Tonga":
-        return CountryFlagCode.Tonga;
-      case "Trinidad And Tobago":
-        return CountryFlagCode.TrinidadAndTobago;
-      case "Tunisia":
-        return CountryFlagCode.Tunisia;
-      case "Turkey":
-      case "Türkiye":
-        return CountryFlagCode.Turkey;
-      case "Turkmenistan":
-        return CountryFlagCode.Turkmenistan;
-      case "Turks And Caicos Islands":
-        return CountryFlagCode.TurksAndCaicosIslands;
-      case "Tuvalu":
-        return CountryFlagCode.Tuvalu;
-      case "Uganda":
-        return CountryFlagCode.Uganda;
-      case "Ukraine":
-        return CountryFlagCode.Ukraine;
-      case "United Arab Emirates":
-        return CountryFlagCode.UnitedArabEmirates;
-      case "United Kingdom":
-      case "Great Britan":
-        return CountryFlagCode.UnitedKingdom;
-      case "United States":
-      case "USA":
-      case "US":
-        return CountryFlagCode.UnitedStates;
-      case "United States Minor Outlying Islands":
-        return CountryFlagCode.UnitedStatesMinorOutlyingIslands;
-      case "Uruguay":
-        return CountryFlagCode.Uruguay;
-      case "US Virgin Islands":
-        return CountryFlagCode.USVirginIslands;
-      case "Uzbekistan":
-        return CountryFlagCode.Uzbekistan;
-      case "Vanuatu":
-        return CountryFlagCode.Vanuatu;
-      case "Vatican City":
-        return CountryFlagCode.VaticanCity;
-      case "Venezuela":
-        return CountryFlagCode.Venezuela;
-      case "Vietnam":
-        return CountryFlagCode.Vietnam;
-      case "Wales":
-        return CountryFlagCode.Wales;
-      case "Wallis And Futuna":
-        return CountryFlagCode.WallisAndFutuna;
-      case "Western Sahara":
-        return CountryFlagCode.WesternSahara;
-      case "Yemen":
-        return CountryFlagCode.Yemen;
-      case "Zambia":
-        return CountryFlagCode.Zambia;
-      case "Zimbabwe":
-        return CountryFlagCode.Zimbabwe;
-      default:
-        return undefined;
-    }
-  })();
-
-  if (countryName === "West Indies") {
-    return "/cricket/west-indies.svg";
-  }
-  if (countryName === "Chinese Taipei") {
-    return "https://upload.wikimedia.org/wikipedia/commons/3/3a/Flag_of_Chinese_Taipei_variant.svg";
-  }
-
-  return getCountryImageUrl(countryCode);
 }

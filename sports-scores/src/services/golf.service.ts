@@ -4,11 +4,7 @@ import {
   fetchGolfRankings,
   fetchGolfSchedule,
 } from "@/endpoints/golf.api";
-import {
-  resolveGolfPlayerImage,
-  resolveGolfTeamImage,
-  resolveGolfTournamentImage,
-} from "@/lib/imageMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
 import {
   Golf_SlashGolfAPI_Leaderboard,
   Golf_SlashGolfAPI_Schedule,
@@ -49,7 +45,7 @@ export async function golfOWGRankings(year: string = "2025") {
         let playerName = item.firstName + " " + item.lastName;
         return {
           name: playerName,
-          img: resolveGolfPlayerImage(playerName),
+          img: resolveSportImage(playerName),
           position: item.rank.$numberInt.toString(),
           totalPoints: item.avgPoints.$numberDouble.toString(),
           pointsBehind: item.previousRank.$numberInt.toString(),
@@ -71,7 +67,7 @@ export async function golfFedExRankings(year: string = "2025") {
         let playerName = item.firstName + " " + item.lastName;
         return {
           name: playerName,
-          img: resolveGolfPlayerImage(playerName),
+          img: resolveSportImage(playerName),
           position: item.rank.$numberInt.toString(),
           totalPoints: item.totalPoints?.toString() ?? "",
           pointsBehind: item.pointsBehind,
@@ -114,7 +110,7 @@ export async function golfLIVTournamentLeaderboard(
           totalScore: item.totalScore,
           thru: "",
           curRound: "",
-          img: resolveGolfTeamImage(item.name),
+          img: resolveSportImage(item.name),
         } as GolfLeaderboardPlayerRow;
       }) ?? [],
   };
@@ -142,7 +138,7 @@ export function mapGolfLeaderboard(data: Golf_SlashGolfAPI_Leaderboard) {
           item.currentRoundScore[0] !== "+"
             ? "+" + item.currentRoundScore
             : item.currentRoundScore,
-        img: resolveGolfPlayerImage(playerName),
+        img: resolveSportImage(playerName),
       } as GolfLeaderboardPlayerRow;
     }),
   };
@@ -163,7 +159,7 @@ export function mapGolfSchedule(
       return {
         id: item.tournId,
         name: item.name,
-        img: resolveGolfTournamentImage(item.name),
+        img: resolveSportImage(item.name),
         startDate: startDate,
         endDate: endDate,
         sport: "golf",

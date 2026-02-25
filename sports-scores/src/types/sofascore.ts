@@ -19,6 +19,22 @@ export interface Sofascore_EventIncidents_Response {
   incidents: Sofascore_Incident[];
 }
 
+export interface Sofascore_TournamentCupTrees_Response {
+  cupTrees: Sofascore_CupTree[];
+}
+
+export interface Sofascore_Rankings_Response {
+  rankingType: {
+    sport: Sofascore_Sport;
+    name: string;
+    id: number;
+    gender: string;
+    lastUpdatedTimestamp: number;
+    slug: string;
+  };
+  rankingRows: Sofascore_Ranking[];
+}
+
 export type SofascoreSport =
   | "american-football"
   | "aussie-rules"
@@ -364,3 +380,5 @@ export interface Sofascore_CupParticipant {
   teamSeed?: string;
   id: number;
 }
+
+export interface Sofascore_Ranking {}
