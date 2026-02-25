@@ -12,8 +12,9 @@ import {
   SportCodes,
 } from "@/types/misc";
 import { Sofascore_Event, Sofascore_Score } from "@/types/sofascore";
-import { addHours } from "date-fns/addHours";
 import { format } from "date-fns/format";
+import { parseISO } from "date-fns/parseISO";
+import { startOfDay } from "date-fns/startOfDay";
 import { resolveSportImage } from "./imageMapping";
 
 const fallback = "/vercel.svg";
@@ -91,8 +92,7 @@ export function setMatchSummary(
 }
 
 export function getCurrentWeek(data: MatchSummary[]) {
-  let curDate = new Date(Date.now());
-  curDate.setHours(0, 0, 0, 0);
+  let curDate = startOfDay(new Date());
 
   let record = data.find((item) => {
     let itemDate = new Date(item.startDate);
@@ -104,37 +104,24 @@ export function getCurrentWeek(data: MatchSummary[]) {
 }
 
 export function toShortTimeString(date: Date) {
-  return date
-    .toLocaleTimeString("en-US", {
-      timeZone: "Australia/Brisbane",
-    })
-    .replace(":00 ", " ");
+  return date.toLocaleTimeString("en-US").replace(":00 ", " ");
 }
 
-//Convert to AEST
+//Convert to user's timezone
 //startTime format: hh:mm
 export function getLocalTime(startTime: string) {
   let splitTime = startTime.split(":");
   let tempDate = new Date(
     Date.UTC(0, 0, 0, Number(splitTime[0]), Number(splitTime[1])),
   );
-  return tempDate
-    .toLocaleTimeString("en-US", {
-      timeZone: "Australia/Brisbane",
-    })
-    .replace(":00 ", " ");
+  return tempDate.toLocaleTimeString("en-US").replace(":00 ", " ");
 }
 
-//Convert to AEST
+//Convert to user's timezone
 //startTime format: yyyy-mm-ddThh:mm:ss.sssZ
 export function getLocalTimeISO(startTime: string) {
-  // let splitTime = startTime.split(":");
-  let tempDate = new Date(startTime);
-  return tempDate
-    .toLocaleTimeString("en-US", {
-      timeZone: "Australia/Brisbane",
-    })
-    .replace(":00 ", " ");
+  let tempDate = parseISO(startTime);
+  return tempDate.toLocaleTimeString("en-US").replace(":00 ", " ");
 }
 
 export function getCountryImageUrl(countryCode?: CountryFlagCode) {
@@ -194,9 +181,20 @@ export function dateToCustomString(date: Date) {
       month: "short",
       day: "numeric",
       year: "numeric",
-      timeZone: "Australia/Brisbane",
     })
     .replaceAll(",", "");
+}
+
+// Timezone detection utilities
+export function getUserTimezone(): string {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
+export function getTimezoneAbbr(): string {
+  const timeString = new Date().toLocaleTimeString("en-US", {
+    timeZoneName: "short",
+  });
+  return timeString.split(" ").pop() || "";
 }
 
 export function formatPeriodScores(
@@ -471,7 +469,6 @@ export function getCurrentRound(
       );
     case DISPLAY_TYPES.DATE:
       let startDate = new Date();
-      startDate = addHours(startDate, 10);
       return rounds
         .map((item) => item.roundLabel)
         .includes(format(startDate, "eee d MMM"))

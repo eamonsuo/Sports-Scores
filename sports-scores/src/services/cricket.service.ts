@@ -57,7 +57,7 @@ export async function cricketMatchesByDateClient(date: Date) {
       (series: any) => !excludedSeries.some((str) => series.Snm.includes(str)),
     ).flatMap((item: any) => {
       return item.Events.map((event: any) => {
-        let sDate = convertNumbertoDate(event.Esd, false);
+        let sDate = convertNumbertoDate(event.Esd, true);
         let longFormat =
           (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
         let home2Ing = longFormat
@@ -70,7 +70,7 @@ export async function cricketMatchesByDateClient(date: Date) {
         return {
           id: Number(event.Eid),
           startDate: sDate,
-          endDate: convertNumbertoDate(event.Ese, false),
+          endDate: convertNumbertoDate(event.Ese, true),
           sport: SPORT.CRICKET,
           venue: "",
           status: mapCricketStatus(event.Eps),
@@ -118,7 +118,7 @@ export async function cricketMatchesByDate(date: Date) {
     (series) => !excludedSeries.some((str) => series.Snm.includes(str)),
   ).flatMap((item) => {
     return item.Events.map((event) => {
-      let sDate = convertNumbertoDate(event.Esd, false);
+      let sDate = convertNumbertoDate(event.Esd, true);
       let longFormat =
         (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
       let home2Ing = longFormat
@@ -131,7 +131,7 @@ export async function cricketMatchesByDate(date: Date) {
       return {
         id: Number(event.Eid),
         startDate: sDate,
-        endDate: convertNumbertoDate(event.Ese, false),
+        endDate: convertNumbertoDate(event.Ese, true),
         sport: SPORT.CRICKET,
         venue: "",
         status: mapCricketStatus(event.Eps),
@@ -287,7 +287,7 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
 
   const matches = rawMatches.Stages.flatMap((item) => {
     return item.Events.map((event) => {
-      let sDate = convertNumbertoDate(event.Esd, false);
+      let sDate = convertNumbertoDate(event.Esd, true);
       let longFormat =
         (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
       let home2Ing = longFormat
@@ -300,7 +300,7 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
       return {
         id: Number(event.Eid),
         startDate: sDate,
-        endDate: convertNumbertoDate(event.Ese ?? event.Esd, false),
+        endDate: convertNumbertoDate(event.Ese ?? event.Esd, true),
         sport: SPORT.CRICKET,
         venue: "",
         status: mapCricketStatus(event.Eps),

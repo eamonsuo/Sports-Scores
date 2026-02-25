@@ -5,6 +5,7 @@ import {
   fetchGolfSchedule,
 } from "@/endpoints/golf.api";
 import { resolveSportImage } from "@/lib/imageMapping";
+import { getCountryImageUrl } from "@/lib/projUtils";
 import {
   Golf_SlashGolfAPI_Leaderboard,
   Golf_SlashGolfAPI_Schedule,
@@ -13,7 +14,7 @@ import {
   SlashGolf_PlayerRanking_FedExCup,
   SlashGolf_PlayerRanking_OWGR,
 } from "@/types/golf";
-import { MatchSummary, SPORT } from "@/types/misc";
+import { CountryFlagCode, MatchSummary, SPORT } from "@/types/misc";
 
 export async function golfPGASchedule(year: string = "2025") {
   var rawSchedule = await fetchGolfSchedule(1, year);
@@ -159,7 +160,10 @@ export function mapGolfSchedule(
       return {
         id: item.tournId,
         name: item.name,
-        img: resolveSportImage(item.name),
+        img:
+          resolveSportImage(item.name) === "/vercel.svg"
+            ? getCountryImageUrl(CountryFlagCode.UnitedStates)
+            : resolveSportImage(item.name),
         startDate: startDate,
         endDate: endDate,
         sport: "golf",

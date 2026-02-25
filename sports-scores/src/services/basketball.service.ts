@@ -32,7 +32,7 @@ import {
   BasketballTodayPage,
 } from "@/types/basketball";
 import { DISPLAY_TYPES, FixtureRound, MatchSummary, SPORT } from "@/types/misc";
-import { addHours, format } from "date-fns";
+import { format } from "date-fns";
 
 export async function basketballMatches(
   tournamentId: number,
@@ -65,7 +65,6 @@ export async function basketballMatches(
   function getMatchDate(match: any) {
     let startDate = new Date(0);
     startDate.setUTCSeconds(match.startTimestamp);
-    startDate = addHours(startDate, 10);
     return format(startDate, "eee d MMM");
   }
 
@@ -165,7 +164,6 @@ export async function basketballMatches(
         }
       } else {
         let startDate = new Date();
-        startDate = addHours(startDate, 10);
         return rounds.includes(format(startDate, "eee d MMM"))
           ? format(startDate, "eee d MMM")
           : rounds[0];
