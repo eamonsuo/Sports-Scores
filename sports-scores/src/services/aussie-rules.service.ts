@@ -16,11 +16,7 @@ import {
 } from "@/endpoints/sofascore.api";
 import { AFL_TEAM_NAMES, AUSSIE_RULES_LEAGUES } from "@/lib/constants";
 import { resolveSportImage } from "@/lib/imageMapping";
-import {
-  setMatchSummary,
-  shortenTeamNames,
-  toShortTimeString,
-} from "@/lib/projUtils";
+import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils";
 import {
   AussieRulesFixturesPage,
   AussieRulesLadderPage,
@@ -70,7 +66,7 @@ export async function aussieRulesMatches(league: number, season: number) {
               roundLabel: `Round ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
+                  ? null
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",
@@ -264,7 +260,7 @@ export async function aussieRulesCurrentMatches(
               roundLabel: roundLabel,
               timer:
                 match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
+                  ? null
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",

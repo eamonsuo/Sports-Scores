@@ -20,11 +20,7 @@ import {
 } from "@/endpoints/sofascore.api";
 import { AMERICAN_FOOTBALL_LEAGUES, NFL_TEAM_NAMES } from "@/lib/constants";
 import { resolveSportImage } from "@/lib/imageMapping";
-import {
-  setMatchSummary,
-  shortenTeamNames,
-  toShortTimeString,
-} from "@/lib/projUtils";
+import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils";
 import {
   AmericanFootball_AmericanFootballApi_CategorySchedule_Response,
   AmericanFootball_Sofascore_Event,
@@ -89,7 +85,7 @@ export async function americanFootballMatches(league: number, season: number) {
                 match.roundInfo?.name ?? `Week ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
+                  ? null
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",
@@ -329,7 +325,7 @@ export async function americanFootballMatchesByDate(date: Date) {
               roundLabel: roundLabel,
               timer:
                 match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
+                  ? null
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",

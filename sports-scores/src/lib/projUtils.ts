@@ -1,8 +1,6 @@
 import {
   API_EVENT_TYPES,
   APIEventTypes,
-  APISportsErrors,
-  APISportsResponse,
   CountryFlagCode,
   DeepPartial,
   DISPLAY_TYPES,
@@ -13,8 +11,6 @@ import {
 } from "@/types/misc";
 import { Sofascore_Event, Sofascore_Score } from "@/types/sofascore";
 import { format } from "date-fns/format";
-import { parseISO } from "date-fns/parseISO";
-import { startOfDay } from "date-fns/startOfDay";
 import { resolveSportImage } from "./imageMapping";
 
 const fallback = "/vercel.svg";
@@ -70,17 +66,10 @@ export function setMatchSummary(
   switch (status) {
     case "notstarted":
       return ``;
-    case "finished":
-      return calculateMatchResult(
-        homeName,
-        homeScore,
-        awayName,
-        awayScore,
-        true,
-      );
     case "postponed":
       return "Match Postponed";
     default:
+      // Includes finished
       return calculateMatchResult(
         homeName,
         homeScore,
@@ -89,39 +78,6 @@ export function setMatchSummary(
         false,
       );
   }
-}
-
-export function getCurrentWeek(data: MatchSummary[]) {
-  let curDate = startOfDay(new Date());
-
-  let record = data.find((item) => {
-    let itemDate = new Date(item.startDate);
-    itemDate.setHours(0, 0, 0, 0);
-    return itemDate >= curDate;
-  });
-
-  return record?.roundLabel ?? data[data.length - 1].roundLabel ?? "";
-}
-
-export function toShortTimeString(date: Date) {
-  return date.toLocaleTimeString("en-US").replace(":00 ", " ");
-}
-
-//Convert to user's timezone
-//startTime format: hh:mm
-export function getLocalTime(startTime: string) {
-  let splitTime = startTime.split(":");
-  let tempDate = new Date(
-    Date.UTC(0, 0, 0, Number(splitTime[0]), Number(splitTime[1])),
-  );
-  return tempDate.toLocaleTimeString("en-US").replace(":00 ", " ");
-}
-
-//Convert to user's timezone
-//startTime format: yyyy-mm-ddThh:mm:ss.sssZ
-export function getLocalTimeISO(startTime: string) {
-  let tempDate = parseISO(startTime);
-  return tempDate.toLocaleTimeString("en-US").replace(":00 ", " ");
 }
 
 export function getCountryImageUrl(countryCode?: CountryFlagCode) {
@@ -162,29 +118,6 @@ export function shortenTeamNames(team: string) {
   }
 }
 
-export function handleAPIErrors(response: APISportsResponse) {
-  if ((response.errors as any[]).length === undefined) {
-    return (
-      (response.errors as APISportsErrors).rateLimit ??
-      (response.errors as APISportsErrors).requests ??
-      (response.errors as APISportsErrors).token ??
-      "Unknown error"
-    );
-  }
-  return "No Results";
-}
-
-export function dateToCustomString(date: Date) {
-  return date
-    .toLocaleDateString("en-US", {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    })
-    .replaceAll(",", "");
-}
-
 // Timezone detection utilities
 export function getUserTimezone(): string {
   return Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -195,6 +128,36 @@ export function getTimezoneAbbr(): string {
     timeZoneName: "short",
   });
   return timeString.split(" ").pop() || "";
+}
+
+/**
+ * Format time as a string in user's timezone.
+ * Use this in client components to format times.
+ * Client-side: formats in user's browser timezone
+ * Server-side: formats in server's timezone (UTC)
+ */
+export function formatTime(date: Date | number | null | undefined): string {
+  if (!date) return "";
+
+  const dateObj = typeof date === "number" ? new Date(date) : date;
+
+  // Format in execution environment's timezone
+  return format(dateObj, "h:mm a");
+}
+
+/**
+ * Format date in long format (EEE MMM d yyyy) in user's timezone.
+ * Use this in client components to format dates.
+ * Client-side: formats in user's browser timezone
+ * Server-side: formats in server's timezone (UTC)
+ */
+export function formatDateLong(date: Date | number | null | undefined): string {
+  if (!date) return "";
+
+  const dateObj = typeof date === "number" ? new Date(date) : date;
+
+  // Format in execution environment's timezone
+  return format(dateObj, "EEE MMM d yyyy");
 }
 
 export function formatPeriodScores(
@@ -312,7 +275,7 @@ function mapSofascoreEventToMatchSummary(
     timer:
       options?.timer ??
       (event.status.type === "notstarted"
-        ? toShortTimeString(startDate)
+        ? null // Don't format server-side, let client handle it
         : event.status.description),
     timerDisplayColour:
       options?.timerDisplayColour ??

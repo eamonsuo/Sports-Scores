@@ -20,11 +20,7 @@ import {
 } from "@/endpoints/sofascore.api";
 import { BASKETBALL_LEAGUES } from "@/lib/constants";
 import { resolveSportImage } from "@/lib/imageMapping";
-import {
-  setMatchSummary,
-  shortenTeamNames,
-  toShortTimeString,
-} from "@/lib/projUtils";
+import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils";
 import {
   BasketballFixturesPage,
   BasketballLadderPage,
@@ -114,7 +110,7 @@ export async function basketballMatches(
                 match.roundInfo?.name ?? `Round ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
+                  ? null
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",
@@ -356,7 +352,7 @@ export async function basketballMatchesByDate(
               roundLabel: roundLabel,
               timer:
                 match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
+                  ? null
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",

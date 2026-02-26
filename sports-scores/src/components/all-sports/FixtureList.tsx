@@ -1,9 +1,12 @@
+"use client";
+
 import MatchSummaryCard from "@/components/all-sports/MatchSummaryCard";
 import TennisMatchCard from "@/components/tennis/TennisMatchCard";
+import { formatTime } from "@/lib/projUtils";
 import { CardVariant, MatchSummary } from "@/types/misc";
 import React from "react";
-import SectionDate from "./SectionDate";
 import Placeholder from "../misc-ui/Placeholder";
+import SectionDate from "./SectionDate";
 
 // Assumes data prop is already sorted in desired order
 export default function FixtureList({
@@ -66,7 +69,7 @@ export default function FixtureList({
               bottomInfo={item.otherDetail}
               venue={item.venue ?? ""}
               timer={{
-                display: item.timer ?? "",
+                display: item.timer ?? formatTime(item.startDate),
                 displayColour: item.timerDisplayColour,
               }}
               topInfo={undefined}

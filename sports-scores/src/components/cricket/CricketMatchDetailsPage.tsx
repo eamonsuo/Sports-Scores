@@ -4,7 +4,7 @@ import CricketMatchSummary from "./CricketMatchSummary";
 export type MatchDetailsPage = {
   matchSummaryText: string;
   status: string;
-  date: string;
+  date: string | Date;
   venue: string;
   tossResult: string;
   umpires: string[];

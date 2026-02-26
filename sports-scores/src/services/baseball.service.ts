@@ -19,11 +19,7 @@ import {
 } from "@/endpoints/sofascore.api";
 import { BASEBALL_LEAGUES } from "@/lib/constants";
 import { resolveSportImage } from "@/lib/imageMapping";
-import {
-  setMatchSummary,
-  shortenTeamNames,
-  toShortTimeString,
-} from "@/lib/projUtils";
+import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils";
 import {
   BaseballFixturesPage,
   BaseballLadderPage,
@@ -74,7 +70,7 @@ export async function baseballMatches(tournamentId: number, seasonId: number) {
               roundLabel: `Round ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
+                  ? null
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",
@@ -321,7 +317,7 @@ export async function baseballMatchesByDate(
               roundLabel: roundLabel,
               timer:
                 match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
+                  ? null
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",

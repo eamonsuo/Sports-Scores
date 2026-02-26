@@ -24,11 +24,7 @@ import {
 } from "@/endpoints/sofascore.api";
 import { FOOTBALL_LEAGUES } from "@/lib/constants";
 import { resolveSportImage } from "@/lib/imageMapping";
-import {
-  setMatchSummary,
-  shortenTeamNames,
-  toShortTimeString,
-} from "@/lib/projUtils";
+import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils";
 import {
   FootballBracketPage,
   FootballFixturesPage,
@@ -81,7 +77,7 @@ export async function footballMatches(tournamentId: number, seasonId: number) {
               roundLabel: `Round ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
+                  ? null
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",
@@ -148,9 +144,7 @@ export async function footballTeamMatches(teamId: number) {
         startDate: startDate,
         // roundLabel: `Round ${match?.roundInfo?.round ?? "--"}`,
         timer:
-          match.status.type === "notstarted"
-            ? toShortTimeString(startDate)
-            : match.status.description,
+          match.status.type === "notstarted" ? null : match.status.description,
         timerDisplayColour: match.status.type === "inprogress" ? "green" : null,
         id: match.id,
         matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
@@ -325,7 +319,7 @@ export async function footballMatchesByDate(date: Date) {
               roundLabel: roundLabel,
               timer:
                 match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
+                  ? null
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",

@@ -12,7 +12,6 @@ import {
   fetchF1SprintResult,
 } from "@/endpoints/f1.api";
 import { resolveSportImage } from "@/lib/imageMapping";
-import { toShortTimeString } from "@/lib/projUtils";
 import {
   F1ConstructorStandingsPage,
   F1DriverStandingsPage,
@@ -387,7 +386,7 @@ function setSessionStatus(sessionDate: Date) {
   liveDate.setHours(liveDate.getHours() - 3);
 
   if (sessionDate > currentDate) {
-    return toShortTimeString(sessionDate);
+    return null;
   } else if (sessionDate > liveDate) {
     return "In Progress";
   } else {

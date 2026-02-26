@@ -21,12 +21,7 @@ import {
 } from "@/endpoints/tennis.api";
 import { TENNIS_CATEGORIES, TENNIS_LEAGUES } from "@/lib/constants";
 import { resolveSportImage } from "@/lib/imageMapping";
-import {
-  dateToCustomString,
-  setTennisMatchSummary,
-  shortenTeamNames,
-  toShortTimeString,
-} from "@/lib/projUtils";
+import { setTennisMatchSummary, shortenTeamNames } from "@/lib/projUtils";
 import { FixtureRound, MatchSummary, SPORT } from "@/types/misc";
 import {
   Tennis_Sofascore_Event,
@@ -335,7 +330,7 @@ export async function tennisBrackets(tournamentId: number, seasonId: number) {
                 teamIndex === 0 ? match.homeTeamScore : match.awayTeamScore,
               status: match.finished ? "PLAYED" : "SCHEDULED",
             })),
-            startTime: dateToCustomString(startDate),
+            startTime: startDate,
             tournamentRoundText: (roundIndex + 1).toString(),
             state: match.finished ? "PLAYED" : "SCHEDULED",
             name: "",
@@ -419,10 +414,7 @@ function mapTennisMatches(match: Tennis_Sofascore_Event) {
   return {
     startDate: startDate,
     roundLabel: `${match.roundInfo?.name}`,
-    timer:
-      match.status.type === "notstarted"
-        ? toShortTimeString(startDate)
-        : match.status.description,
+    timer: match.status.type === "notstarted" ? null : match.status.description,
     timerDisplayColour: match.status.type === "inprogress" ? "green" : "gray",
     id: match.id,
     matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,

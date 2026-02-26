@@ -12,13 +12,11 @@ import {
   fetchCricketSeriesMatches,
 } from "@/endpoints/cricket.api";
 import { resolveSportImage } from "@/lib/imageMapping";
-import { dateToCustomString, toShortTimeString } from "@/lib/projUtils";
 import {
   Cricket_LiveScoreAPI_MatchesGetInnings,
   Cricket_LiveScoreAPI_MatchesGetScoreBoard,
 } from "@/types/cricket";
 import { MatchStatus, MatchSummary, SPORT } from "@/types/misc";
-import { format } from "date-fns";
 
 const excludedSeries = [
   "CSA",
@@ -74,10 +72,7 @@ export async function cricketMatchesByDateClient(date: Date) {
           sport: SPORT.CRICKET,
           venue: "",
           status: mapCricketStatus(event.Eps),
-          summaryText:
-            event.Eps === "NS"
-              ? `Match starts at ${toShortTimeString(sDate)}`
-              : event.ECo,
+          summaryText: event.Eps === "NS" ? "Match not started" : event.ECo,
           otherDetail: event.ErnInf,
           homeDetails: {
             img: resolveSportImage(
@@ -135,10 +130,7 @@ export async function cricketMatchesByDate(date: Date) {
         sport: SPORT.CRICKET,
         venue: "",
         status: mapCricketStatus(event.Eps),
-        summaryText:
-          event.Eps === "NS"
-            ? `Match starts at ${toShortTimeString(sDate)}`
-            : event.ECo,
+        summaryText: event.Eps === "NS" ? "Match not started" : event.ECo,
         timer: event.EpsL === "Play in progress" ? "Live" : null,
         timerDisplayColour: event.EpsL === "Play in progress" ? "green" : null,
         otherDetail: event.ErnInf,
@@ -304,10 +296,7 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
         sport: SPORT.CRICKET,
         venue: "",
         status: mapCricketStatus(event.Eps),
-        summaryText:
-          event.Eps === "NS"
-            ? `Match starts at ${format(sDate, "h:mm a")}`
-            : event.ECo,
+        summaryText: event.Eps === "NS" ? "Match not started" : event.ECo,
         otherDetail: event.ErnInf,
         homeDetails: {
           img: resolveSportImage(event.T1[0].Nm.replace(/\s(W|A|U19)$/i, "")),
@@ -360,10 +349,8 @@ export function mapMatchDetails(
     Object.keys(innings).length === 0
       ? ["No Team Data"]
       : innings.Prns.slice(middlePlayerIndex).map((item) => item.Snm);
-  let startDate = dateToCustomString(convertNumbertoDate(details.Esd, true));
-  let endDate = dateToCustomString(convertNumbertoDate(details.Ese, true));
-  let dateString =
-    details.Esd === details.Ese ? `${startDate}` : `${startDate} - ${endDate}`;
+  let startDate = convertNumbertoDate(details.Esd, true);
+  let endDate = convertNumbertoDate(details.Ese, true);
   let tossChoice = details.TCho === 1 ? "bat" : "bowl";
   let tossWinner = details.TPa === 1 ? details.T1[0].Nm : details.T2[0].Nm;
   let longFormat =
@@ -380,7 +367,7 @@ export function mapMatchDetails(
   return {
     matchSummaryText: details.ECo,
     status: details.EpsL,
-    date: dateString,
+    date: startDate,
     venue: `${details.Venue.Vnm}, ${details.Stg.Cnm}`,
     tossResult: `${tossWinner} won the toss and chose to ${tossChoice}`,
     umpires: [""],

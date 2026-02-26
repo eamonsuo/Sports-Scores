@@ -432,7 +432,7 @@ export type SessionSummary = {
   round: number;
   grandPrixName: string;
   logo?: string;
-  status: string;
+  status: string | null;
   sessionType: F1SessionType;
   sessionName?: string;
   startDate: Date;

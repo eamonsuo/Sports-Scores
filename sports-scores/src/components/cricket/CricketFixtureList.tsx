@@ -1,4 +1,7 @@
+"use client";
+
 import SectionDate from "@/components/all-sports/SectionDate";
+import { formatTime } from "@/lib/projUtils";
 import { MatchSummary } from "@/types/misc";
 import React from "react";
 import SectionDateRange from "../all-sports/SectionDateRange";
@@ -86,7 +89,7 @@ export default function CricketFixtureList({ data }: { data: MatchSummary[] }) {
               matchSummary={item.summaryText}
               bottomInfo={item.otherDetail}
               venue={item.venue ?? ""}
-              timer={item.timer ?? ""}
+              timer={item.timer ?? formatTime(item.startDate)}
               topInfo={undefined}
               hrefSeries=""
               seriesName={item.seriesName ?? ""}

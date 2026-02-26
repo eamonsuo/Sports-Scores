@@ -32,7 +32,7 @@ export type Match = {
   /** Custom title for the round header. Takes precedence over auto-generated titles. */
   roundTitle?: string;
 
-  startTime: string;
+  startTime: string | Date;
 
   state: "PLAYED" | "NO_SHOW" | "WALK_OVER" | "NO_PARTY" | string;
 
