@@ -199,7 +199,6 @@ export async function rugbyLeagueMatchesByDate(date: Date) {
 
   return {
     fixtures: fixture,
-
     currentRound: getCurrentRound(DISPLAY_TYPES.LEAGUE, fixture),
   } as RugbyLeagueTodayPage;
 }

@@ -110,7 +110,7 @@ export async function basketballMatches(
                 match.roundInfo?.name ?? `Round ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
-                  ? null
+                  ? startDate
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",
@@ -352,7 +352,7 @@ export async function basketballMatchesByDate(
               roundLabel: roundLabel,
               timer:
                 match.status.type === "notstarted"
-                  ? null
+                  ? startDate
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",

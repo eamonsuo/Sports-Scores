@@ -275,7 +275,7 @@ function mapSofascoreEventToMatchSummary(
     timer:
       options?.timer ??
       (event.status.type === "notstarted"
-        ? null // Don't format server-side, let client handle it
+        ? undefined // Don't format server-side, let client handle it
         : event.status.description),
     timerDisplayColour:
       options?.timerDisplayColour ??

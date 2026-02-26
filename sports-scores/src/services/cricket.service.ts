@@ -1,4 +1,4 @@
-import { CricketScorecardPage } from "@/app/sports/cricket/match/[slug]/page";
+import { CricketScorecardPage } from "@/app/sports/cricket/[league]/[season]/[match]/page";
 import { MatchDetailsPage } from "@/components/cricket/CricketMatchDetailsPage";
 import { CricketScorecardBatProps } from "@/components/cricket/CricketScorecardBat";
 import { CricketScorecardBowlProps } from "@/components/cricket/CricketScorecardBowl";
@@ -17,6 +17,7 @@ import {
   Cricket_LiveScoreAPI_MatchesGetScoreBoard,
 } from "@/types/cricket";
 import { MatchStatus, MatchSummary, SPORT } from "@/types/misc";
+import { format } from "date-fns";
 
 const excludedSeries = [
   "CSA",
@@ -55,7 +56,7 @@ export async function cricketMatchesByDateClient(date: Date) {
       (series: any) => !excludedSeries.some((str) => series.Snm.includes(str)),
     ).flatMap((item: any) => {
       return item.Events.map((event: any) => {
-        let sDate = convertNumbertoDate(event.Esd, true);
+        let sDate = convertNumbertoDate(event.Esd);
         let longFormat =
           (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
         let home2Ing = longFormat
@@ -68,11 +69,13 @@ export async function cricketMatchesByDateClient(date: Date) {
         return {
           id: Number(event.Eid),
           startDate: sDate,
-          endDate: convertNumbertoDate(event.Ese, true),
+          endDate: convertNumbertoDate(event.Ese),
           sport: SPORT.CRICKET,
           venue: "",
           status: mapCricketStatus(event.Eps),
-          summaryText: event.Eps === "NS" ? "Match not started" : event.ECo,
+          summaryText: event.Eps === "NS" ? "" : event.ECo,
+          timer: event.Eps === "L" ? "Live" : event.Eps === "NS" ? sDate : null,
+          timerDisplayColour: event.Eps === "L" ? "green" : "gray",
           otherDetail: event.ErnInf,
           homeDetails: {
             img: resolveSportImage(
@@ -89,7 +92,7 @@ export async function cricketMatchesByDateClient(date: Date) {
             name: event.T2[0].Nm,
           },
           seriesName: item.Snm,
-          matchSlug: `match/${event.Eid}`,
+          matchSlug: `${item.Ccd}/${item.Scd}/${event.Eid}`,
           seriesSlug: `${item.Ccd}/${item.Scd}`,
         } as MatchSummary;
       });
@@ -102,9 +105,7 @@ export async function cricketMatchesByDateClient(date: Date) {
 
 // Fetch matches for a specific date (server-side only)
 export async function cricketMatchesByDate(date: Date) {
-  const dateString = `${date.getFullYear()}${(date.getMonth() + 1)
-    .toString()
-    .padStart(2, "0")}${date.getDate().toString().padStart(2, "0")}`;
+  const dateString = format(date, "yyyyMMdd");
 
   const rawMatches = await fetchCricketMatchesByDate(dateString);
   if (!rawMatches || !rawMatches.Stages) return null;
@@ -113,7 +114,7 @@ export async function cricketMatchesByDate(date: Date) {
     (series) => !excludedSeries.some((str) => series.Snm.includes(str)),
   ).flatMap((item) => {
     return item.Events.map((event) => {
-      let sDate = convertNumbertoDate(event.Esd, true);
+      let sDate = convertNumbertoDate(event.Esd);
       let longFormat =
         (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
       let home2Ing = longFormat
@@ -126,13 +127,13 @@ export async function cricketMatchesByDate(date: Date) {
       return {
         id: Number(event.Eid),
         startDate: sDate,
-        endDate: convertNumbertoDate(event.Ese, true),
+        endDate: convertNumbertoDate(event.Ese),
         sport: SPORT.CRICKET,
         venue: "",
         status: mapCricketStatus(event.Eps),
-        summaryText: event.Eps === "NS" ? "Match not started" : event.ECo,
-        timer: event.EpsL === "Play in progress" ? "Live" : null,
-        timerDisplayColour: event.EpsL === "Play in progress" ? "green" : null,
+        summaryText: event.Eps === "NS" ? "" : event.ECo,
+        timer: event.Eps === "L" ? "Live" : event.Eps === "NS" ? sDate : null,
+        timerDisplayColour: event.Eps === "L" ? "green" : "gray",
         otherDetail: event.ErnInf,
         homeDetails: {
           img: resolveSportImage(
@@ -149,7 +150,7 @@ export async function cricketMatchesByDate(date: Date) {
           name: event.T2[0].Nm,
         },
         seriesName: item.Snm,
-        matchSlug: `match/${event.Eid}`,
+        matchSlug: `${item.Ccd}/${item.Scd}/${event.Eid}`,
         seriesSlug: `${item.Ccd}/${item.Scd}`,
       } as MatchSummary;
     });
@@ -173,7 +174,7 @@ export async function cricketMyTeamsMatches() {
   return rawTeamDetails.flatMap((a) => {
     return a.Stages.flatMap((item) => {
       return item.Events.map((event) => {
-        let sDate = convertNumbertoDate(event.Esd, true);
+        let sDate = convertNumbertoDate(event.Esd);
         // let longFormat =
         //   (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
         // let home2Ing = longFormat
@@ -187,8 +188,10 @@ export async function cricketMyTeamsMatches() {
           startDate: sDate,
           sport: SPORT.CRICKET,
           venue: "",
+          summaryText: event.Eps === "NS" ? "" : event.ECo,
+          timer: event.Eps === "L" ? "Live" : event.Eps === "NS" ? sDate : null,
+          timerDisplayColour: event.Eps === "L" ? "green" : "gray",
           status: mapCricketStatus(event.Eps),
-          summaryText: "",
           otherDetail: "",
           homeDetails: {
             score: "", //`${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""} ${home2Ing}`,
@@ -279,7 +282,7 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
 
   const matches = rawMatches.Stages.flatMap((item) => {
     return item.Events.map((event) => {
-      let sDate = convertNumbertoDate(event.Esd, true);
+      let sDate = convertNumbertoDate(event.Esd);
       let longFormat =
         (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
       let home2Ing = longFormat
@@ -292,11 +295,13 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
       return {
         id: Number(event.Eid),
         startDate: sDate,
-        endDate: convertNumbertoDate(event.Ese ?? event.Esd, true),
+        endDate: convertNumbertoDate(event.Ese ?? event.Esd),
         sport: SPORT.CRICKET,
         venue: "",
         status: mapCricketStatus(event.Eps),
-        summaryText: event.Eps === "NS" ? "Match not started" : event.ECo,
+        summaryText: event.Eps === "NS" ? "" : event.ECo,
+        timer: event.Eps === "L" ? "Live" : event.Eps === "NS" ? sDate : null,
+        timerDisplayColour: event.Eps === "L" ? "green" : "gray",
         otherDetail: event.ErnInf,
         homeDetails: {
           img: resolveSportImage(event.T1[0].Nm.replace(/\s(W|A|U19)$/i, "")),
@@ -309,7 +314,7 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
           name: event.T2[0].Nm,
         },
         seriesName: item.Snm,
-        matchSlug: `match/${event.Eid}`,
+        matchSlug: `${item.Ccd}/${item.Scd}/${event.Eid}`,
         seriesSlug: `${item.Ccd}/${item.Scd}`,
       } as MatchSummary;
     });
@@ -349,8 +354,8 @@ export function mapMatchDetails(
     Object.keys(innings).length === 0
       ? ["No Team Data"]
       : innings.Prns.slice(middlePlayerIndex).map((item) => item.Snm);
-  let startDate = convertNumbertoDate(details.Esd, true);
-  let endDate = convertNumbertoDate(details.Ese, true);
+  let startDate = convertNumbertoDate(details.Esd);
+  let endDate = convertNumbertoDate(details.Ese);
   let tossChoice = details.TCho === 1 ? "bat" : "bowl";
   let tossWinner = details.TPa === 1 ? details.T1[0].Nm : details.T2[0].Nm;
   let longFormat =
@@ -456,15 +461,13 @@ export function mapScorecardDetails(
   } as CricketScorecardPage;
 }
 
-export function convertNumbertoDate(dateNumber: number, utcDate: boolean) {
+export function convertNumbertoDate(dateNumber: number) {
   let dateString = dateNumber.toString();
-  let year = Number(dateString.substring(0, 4));
-  let month = Number(dateString.substring(4, 6)) - 1;
-  let day = Number(dateString.substring(6, 8));
-  let hour = Number(dateString.substring(8, 10));
-  let minute = Number(dateString.substring(10, 12));
-  let second = Number(dateString.substring(12, 14));
-  return utcDate
-    ? new Date(Date.UTC(year, month, day, hour, minute, second))
-    : new Date(year, month, day, hour, minute, second);
+  let year = dateString.substring(0, 4);
+  let month = dateString.substring(4, 6);
+  let day = dateString.substring(6, 8);
+  let hour = dateString.substring(8, 10);
+  let minute = dateString.substring(10, 12);
+  let second = dateString.substring(12, 14);
+  return new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}+10:00`);
 }

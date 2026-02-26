@@ -70,7 +70,7 @@ export async function baseballMatches(tournamentId: number, seasonId: number) {
               roundLabel: `Round ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
-                  ? null
+                  ? startDate
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",
@@ -264,10 +264,7 @@ export async function baseballMatchDetails(matchId: number) {
   } as BaseballMatchPage;
 }
 
-export async function baseballMatchesByDate(
-  date: Date,
-  // categoryId: number,
-) {
+export async function baseballMatchesByDate(date: Date) {
   const matches = await (process.env.DEV_MODE
     ? fetchEventsByDate("baseball", date)
     : fetchBaseballByDateMatches(date));
@@ -317,7 +314,7 @@ export async function baseballMatchesByDate(
               roundLabel: roundLabel,
               timer:
                 match.status.type === "notstarted"
-                  ? null
+                  ? startDate
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",

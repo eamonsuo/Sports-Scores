@@ -20,7 +20,7 @@ export default function MatchSummaryCard({
   matchSummary: string;
   homeInfo: TeamScoreDetails;
   awayInfo: TeamScoreDetails;
-  timer: { display: string; displayColour?: "green" | "yellow" | "gray" };
+  timer: { display?: string; displayColour?: "green" | "yellow" | "gray" };
   venue: string;
   topInfo?: string;
   bottomInfo?: string;
@@ -46,20 +46,22 @@ export default function MatchSummaryCard({
             {homeInfo.score}
           </p>
           <div className="flex items-center justify-center overflow-visible">
-            <p
-              className={clsx(
-                "whitespace-nowrap rounded-sm px-2 py-1 text-center text-xs",
+            {timer.display && (
+              <p
+                className={clsx(
+                  "whitespace-nowrap rounded-sm px-2 py-1 text-center text-xs",
 
-                timer.displayColour === "green" &&
-                  "bg-green-500 text-neutral-200 dark:bg-green-700",
-                timer.displayColour === "yellow" &&
-                  "bg-yellow-500 text-black dark:bg-yellow-600",
-                timer.displayColour === "gray" &&
-                  "bg-gray-200 text-gray-700 dark:bg-neutral-700 dark:text-neutral-400",
-              )}
-            >
-              {timer.display}
-            </p>
+                  timer.displayColour === "green" &&
+                    "bg-green-500 text-neutral-200 dark:bg-green-700",
+                  timer.displayColour === "yellow" &&
+                    "bg-yellow-500 text-black dark:bg-yellow-600",
+                  timer.displayColour === "gray" &&
+                    "bg-gray-200 text-gray-700 dark:bg-neutral-700 dark:text-neutral-400",
+                )}
+              >
+                {timer.display}
+              </p>
+            )}
           </div>
 
           <p className="content-center text-right dark:text-neutral-400">

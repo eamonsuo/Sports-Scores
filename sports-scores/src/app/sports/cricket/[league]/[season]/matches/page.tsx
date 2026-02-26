@@ -3,11 +3,11 @@ import Placeholder from "@/components/misc-ui/Placeholder";
 import { cricketSeriesDetails } from "@/services/cricket.service";
 
 export default async function Page(props: {
-  params: Promise<{ ccd: string; scd: string }>;
+  params: Promise<{ league: string; season: string }>;
 }) {
-  const params = await props.params;
+  const { league, season } = await props.params;
 
-  let matches = await cricketSeriesDetails(params.ccd, params.scd);
+  let matches = await cricketSeriesDetails(league, season);
 
   if (matches == null) {
     return <Placeholder>An error has ocurred</Placeholder>;

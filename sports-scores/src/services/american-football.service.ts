@@ -85,7 +85,7 @@ export async function americanFootballMatches(league: number, season: number) {
                 match.roundInfo?.name ?? `Week ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
-                  ? null
+                  ? startDate
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",
@@ -325,7 +325,7 @@ export async function americanFootballMatchesByDate(date: Date) {
               roundLabel: roundLabel,
               timer:
                 match.status.type === "notstarted"
-                  ? null
+                  ? startDate
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",

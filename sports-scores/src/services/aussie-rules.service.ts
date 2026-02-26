@@ -66,7 +66,7 @@ export async function aussieRulesMatches(league: number, season: number) {
               roundLabel: `Round ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
-                  ? null
+                  ? startDate
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",
@@ -260,7 +260,7 @@ export async function aussieRulesCurrentMatches(
               roundLabel: roundLabel,
               timer:
                 match.status.type === "notstarted"
-                  ? null
+                  ? startDate
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",

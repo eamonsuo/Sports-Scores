@@ -71,7 +71,7 @@ export type MatchSummary = {
   homeDetails: TeamScoreDetails;
   awayDetails: TeamScoreDetails;
   roundLabel?: string;
-  timer?: string | null;
+  timer?: string | Date;
   timerDisplayColour?: "green" | "yellow" | "gray" | undefined;
   seriesName?: string;
   matchSlug?: string;

@@ -20,25 +20,27 @@ export type CricketScorecardPage = {
 };
 
 export default async function Page(props: {
-  params: Promise<{ slug: number }>;
+  params: Promise<{ league: string; season: string; match: string }>;
 }) {
-  const params = await props.params;
-  const rawDetails = await cricketMatchDetails(params.slug);
+  const { league, season, match } = await props.params;
+  const rawDetails = await cricketMatchDetails(Number(match));
 
   if (rawDetails === null) {
     return <Placeholder>An error has ocurred</Placeholder>;
   }
 
   return (
-    <ClientSportsPage
-      apiStatus={<></>}
-      options={pageSettings(
-        rawDetails.matchDetails,
-        rawDetails.matchScorecard,
-        rawDetails.matchSeries,
-      )}
-      defaultState="scorecard"
-    />
+    <div className="flex-1 overflow-y-auto">
+      <ClientSportsPage
+        apiStatus={<></>}
+        options={pageSettings(
+          rawDetails.matchDetails,
+          rawDetails.matchScorecard,
+          rawDetails.matchSeries,
+        )}
+        defaultState="scorecard"
+      />
+    </div>
   );
 }
 
@@ -82,7 +84,7 @@ function pageSettings(
 
 function seriesComponents(series: string) {
   return (
-    <Link href={`/sports/cricket/series/${series}/matches#current-date`}>
+    <Link href={`/sports/cricket/${series}/matches#current-date`}>
       <p className="m-4 rounded-md p-2 text-center dark:bg-neutral-700 dark:text-neutral-300">
         Go to Series Details - {series}
       </p>

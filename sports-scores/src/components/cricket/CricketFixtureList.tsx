@@ -4,8 +4,8 @@ import SectionDate from "@/components/all-sports/SectionDate";
 import { formatTime } from "@/lib/projUtils";
 import { MatchSummary } from "@/types/misc";
 import React from "react";
+import MatchSummaryCard from "../all-sports/MatchSummaryCard";
 import SectionDateRange from "../all-sports/SectionDateRange";
-import CricketMatchSummaryCard from "./CricketMatchSummaryCard";
 import CricketSeriesHeader from "./CricketSeriesHeader";
 
 // Assumes data prop is already sorted in desired order
@@ -24,7 +24,7 @@ export default function CricketFixtureList({ data }: { data: MatchSummary[] }) {
   }
 
   return (
-    <div className="flex-1 px-4">
+    <div className="flex-1 overflow-y-auto px-4">
       {data.map((item: MatchSummary) => {
         let item_date = new Date(item.startDate);
         displayDate = false;
@@ -69,13 +69,13 @@ export default function CricketFixtureList({ data }: { data: MatchSummary[] }) {
               ))}
             {(displaySeries || displayDate) && (
               <CricketSeriesHeader
-                href={`/sports/cricket/series/${item.seriesSlug}/matches#current-date`}
+                href={`/sports/cricket/${item.seriesSlug}/matches#current-date`}
                 seriesName={item.seriesName ?? ""}
               />
             )}
-            <CricketMatchSummaryCard
+            <MatchSummaryCard
               id={item.id}
-              hrefMatch={`/sports/cricket/${item.matchSlug}`}
+              href={`/sports/cricket/${item.matchSlug}`}
               homeInfo={
                 Array.isArray(item.homeDetails)
                   ? item.homeDetails[0]
@@ -89,10 +89,14 @@ export default function CricketFixtureList({ data }: { data: MatchSummary[] }) {
               matchSummary={item.summaryText}
               bottomInfo={item.otherDetail}
               venue={item.venue ?? ""}
-              timer={item.timer ?? formatTime(item.startDate)}
+              timer={{
+                display:
+                  item.timer instanceof Date
+                    ? formatTime(item.timer)
+                    : (item.timer ?? ""),
+                displayColour: item.timerDisplayColour,
+              }}
               topInfo={undefined}
-              hrefSeries=""
-              seriesName={item.seriesName ?? ""}
             />
           </React.Fragment>
         );

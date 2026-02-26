@@ -77,7 +77,7 @@ export async function footballMatches(tournamentId: number, seasonId: number) {
               roundLabel: `Round ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
-                  ? null
+                  ? startDate
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",
@@ -144,7 +144,9 @@ export async function footballTeamMatches(teamId: number) {
         startDate: startDate,
         // roundLabel: `Round ${match?.roundInfo?.round ?? "--"}`,
         timer:
-          match.status.type === "notstarted" ? null : match.status.description,
+          match.status.type === "notstarted"
+            ? startDate
+            : match.status.description,
         timerDisplayColour: match.status.type === "inprogress" ? "green" : null,
         id: match.id,
         matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
@@ -319,7 +321,7 @@ export async function footballMatchesByDate(date: Date) {
               roundLabel: roundLabel,
               timer:
                 match.status.type === "notstarted"
-                  ? null
+                  ? startDate
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",

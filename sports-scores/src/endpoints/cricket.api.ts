@@ -87,7 +87,7 @@ export async function fetchCricketMatchesByDate(
   date: string, //Formatted as yyyymmdd
 ) {
   const rawFixtures = await fetch(
-    `${process.env.CRICKET_BASEURL}/matches/v2/list-by-date?Category=cricket&Date=${date}`,
+    `${process.env.CRICKET_BASEURL}/matches/v2/list-by-date?Category=cricket&Date=${date}&Timezone=10`,
     {
       headers: reqHeaders,
     },

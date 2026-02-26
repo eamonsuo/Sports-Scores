@@ -1034,6 +1034,25 @@ export const NFL_TEAM_NAMES = [
   "Washington Commanders",
 ];
 
+export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
+  // {
+  //   name: "BBL",
+  //   slug: "bbl",
+  //   seasons: [{ name: "25/26", slug: "" }],
+  // },
+  // {
+  //   name: "WTC",
+  //   slug: "wtc",
+  //   seasons: [{ name: "2025-2027", slug: "" }],
+  // },
+  {
+    name: "ICC Mens T20 World Cup",
+    slug: "icc-mens-t20-world-cup",
+    seasons: [{ name: "2026", slug: "icc-mens-t20-world-cup" }],
+  },
+  { name: "Today", slug: "today", seasons: [{ name: "", slug: "" }] },
+];
+
 export const MOTORSPORT_CATEGORIES = [
   {
     name: "Formula 1",

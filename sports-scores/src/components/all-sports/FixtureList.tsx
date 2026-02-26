@@ -69,7 +69,10 @@ export default function FixtureList({
               bottomInfo={item.otherDetail}
               venue={item.venue ?? ""}
               timer={{
-                display: item.timer ?? formatTime(item.startDate),
+                display:
+                  item.timer instanceof Date
+                    ? formatTime(item.timer)
+                    : (item.timer ?? ""),
                 displayColour: item.timerDisplayColour,
               }}
               topInfo={undefined}
