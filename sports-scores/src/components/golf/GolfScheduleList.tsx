@@ -2,7 +2,7 @@
 
 import { GolfSchedule } from "@/types/golf";
 import React, { useEffect } from "react";
-import SectionDateRange from "../all-sports/SectionDateRange";
+import SectionDate from "../all-sports/SectionDate";
 import TournamentSummaryCard from "./TournamentSummaryCardSchedule";
 
 // Assumes data prop is already sorted in desired order
@@ -17,25 +17,35 @@ export default function GolfScheduleList({
     const scrollToAnchor = () => {
       const element = document.getElementById("current-date");
       if (element) {
-        element.scrollIntoView(true);
+        // Use block: 'nearest' to avoid over-scrolling past the element on mobile
+        // This will scroll the minimum amount needed to bring the element into view
+        element.scrollIntoView({
+          behavior: "auto",
+          block: "start",
+          inline: "nearest",
+        });
         return true;
       }
       return false;
     };
 
-    // Try immediately
-    if (!scrollToAnchor()) {
-      // If not found, retry with intervals
-      const maxRetries = 10;
-      let retryCount = 0;
+    // Wait a bit longer for layout to complete before scrolling
+    const timer = setTimeout(() => {
+      if (!scrollToAnchor()) {
+        // If not found, retry with intervals
+        const maxRetries = 10;
+        let retryCount = 0;
 
-      const retryInterval = setInterval(() => {
-        if (scrollToAnchor() || retryCount >= maxRetries) {
-          clearInterval(retryInterval);
-        }
-        retryCount++;
-      }, 100);
-    }
+        const retryInterval = setInterval(() => {
+          if (scrollToAnchor() || retryCount >= maxRetries) {
+            clearInterval(retryInterval);
+          }
+          retryCount++;
+        }, 100);
+      }
+    }, 200);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const current_date: Date = new Date(Date.now());
@@ -74,9 +84,9 @@ export default function GolfScheduleList({
         return (
           <React.Fragment key={item.id}>
             {displayDate && (
-              <SectionDateRange
-                dateFrom={item.startDate}
-                dateTo={item.endDate}
+              <SectionDate
+                sectionDate={item.startDate}
+                sectionDateEnd={item.endDate}
                 currentDate={currentMatch}
               />
             )}
@@ -86,7 +96,7 @@ export default function GolfScheduleList({
               status={item.status}
               leader={item.leader}
               location={item.location}
-              url={`/sports/golf/${item.tourName}/${season}/tournament/${item.id}`}
+              url={`/sports/golf/${item.tourName}/${season}/${item.id}`}
             />
           </React.Fragment>
         );

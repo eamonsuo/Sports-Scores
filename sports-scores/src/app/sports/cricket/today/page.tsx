@@ -1,3 +1,29 @@
+import FixtureList from "@/components/all-sports/FixtureList";
+import Placeholder from "@/components/misc-ui/Placeholder";
+import { cricketMatchesByDate } from "@/services/cricket.service";
+import { addDays } from "date-fns";
+
+export const dynamic = "force-dynamic";
+
+export default async function Page() {
+  const curDate = new Date();
+  const matches = await cricketMatchesByDate(curDate);
+  const yesterdayMatches = await cricketMatchesByDate(addDays(curDate, -1));
+
+  if (matches === null && yesterdayMatches === null) {
+    return <Placeholder>NO DATA</Placeholder>;
+  }
+
+  return (
+    // <FixtureRoundList data={matches.fixtures} curRound={matches.currentRound} />
+    <FixtureList data={(yesterdayMatches ?? []).concat(matches ?? [])} />
+  );
+}
+
+/**
+ * OLD INFINITE SCROLL VERSION
+ * 
+
 "use client";
 import CricketFixtureList from "@/components/cricket/CricketFixtureList";
 import Placeholder from "@/components/misc-ui/Placeholder";
@@ -122,7 +148,7 @@ export default function InfiniteCricketMatches() {
           {loading ? "Loading..." : "Load previous day"}
         </button>
       </div>
-      {/* Attach ref to the first record of the current day */}
+       {/ Attach ref to the first record of the current day /}
       <div ref={currentDayRef} id="current-day-anchor" />
 
       <CricketFixtureList data={matchSummaries} />
@@ -145,3 +171,4 @@ export default function InfiniteCricketMatches() {
     </div>
   );
 }
+ */

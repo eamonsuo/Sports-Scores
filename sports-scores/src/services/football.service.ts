@@ -2,22 +2,29 @@ import { Match as BracketMatch } from "@/components/bracket/types";
 import { FootballStanding } from "@/components/football/FootballLadder";
 import {
   fetchFootballCupTrees,
-  fetchFootballMatchesByDate,
   fetchFootballLastMatches,
   fetchFootballMatchDetails,
+  fetchFootballMatchesByDate,
   fetchFootballMatchIncidents,
   fetchFootballNextMatches,
   fetchFootballStandings,
   fetchFootballTeamLastMatches,
   fetchFootballTeamNextMatches,
 } from "@/endpoints/football.api";
-import { FOOTBALL_LEAGUES } from "@/lib/constants";
-import { resolveFootballTeamImage } from "@/lib/imageMapping";
 import {
-  setMatchSummary,
-  shortenTeamNames,
-  toShortTimeString,
-} from "@/lib/projUtils";
+  fetchCupTrees,
+  fetchEventDetails,
+  fetchEventIncidents,
+  fetchEventsByDate,
+  fetchLastEvents,
+  fetchNextEvents,
+  fetchStandingsTotal,
+  fetchTeamLastEvents,
+  fetchTeamNextEvents,
+} from "@/endpoints/sofascore.api";
+import { FOOTBALL_LEAGUES } from "@/lib/constants";
+import { resolveSportImage } from "@/lib/imageMapping";
+import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils";
 import {
   FootballBracketPage,
   FootballFixturesPage,
@@ -26,12 +33,16 @@ import {
   FootballTeamFixturesPage,
   FootballTodayPage,
 } from "@/types/football";
-import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
+import { FixtureRound, MatchSummary, SPORT } from "@/types/misc";
 
 export async function footballMatches(tournamentId: number, seasonId: number) {
-  const lastMatches = await fetchFootballLastMatches(tournamentId, seasonId, 0);
+  const lastMatches = await (
+    process.env.DEV_MODE ? fetchLastEvents : fetchFootballLastMatches
+  )(tournamentId, seasonId, 0);
 
-  const nextMatches = await fetchFootballNextMatches(tournamentId, seasonId, 0);
+  const nextMatches = await (
+    process.env.DEV_MODE ? fetchNextEvents : fetchFootballNextMatches
+  )(tournamentId, seasonId, 0);
 
   if (!lastMatches && !nextMatches) {
     return null;
@@ -66,7 +77,7 @@ export async function footballMatches(tournamentId: number, seasonId: number) {
               roundLabel: `Round ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
+                  ? startDate
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",
@@ -77,7 +88,6 @@ export async function footballMatches(tournamentId: number, seasonId: number) {
               venue: "",
               summaryText: setMatchSummary(
                 match.status.type,
-                toShortTimeString(startDate),
                 match.homeTeam.name,
                 match.homeScore.current,
                 match.awayTeam.name,
@@ -86,12 +96,12 @@ export async function footballMatches(tournamentId: number, seasonId: number) {
               homeDetails: {
                 name: shortenTeamNames(match.homeTeam.name),
                 score: match.homeScore.current?.toString() ?? "0",
-                img: resolveFootballTeamImage(match.homeTeam.name),
+                img: resolveSportImage(match.homeTeam.name),
               },
               awayDetails: {
                 name: shortenTeamNames(match.awayTeam.name),
                 score: match.awayScore.current?.toString() ?? "0",
-                img: resolveFootballTeamImage(match.awayTeam.name),
+                img: resolveSportImage(match.awayTeam.name),
               },
             } as MatchSummary;
           }),
@@ -99,7 +109,7 @@ export async function footballMatches(tournamentId: number, seasonId: number) {
         // byes: NRL_TEAM_NAMES.filter((x) => !teams.includes(x)).map((team) => {
         //   return { name: team, img: resolveNRLImages(team) };
         // }),
-      } as RoundDetails;
+      } as FixtureRound;
     }),
 
     currentRound: `Round ${
@@ -111,9 +121,13 @@ export async function footballMatches(tournamentId: number, seasonId: number) {
 }
 
 export async function footballTeamMatches(teamId: number) {
-  const lastMatches = await fetchFootballTeamLastMatches(teamId, 0);
+  const lastMatches = await (
+    process.env.DEV_MODE ? fetchTeamLastEvents : fetchFootballTeamLastMatches
+  )(teamId, 0);
 
-  const nextMatches = await fetchFootballTeamNextMatches(teamId, 0);
+  const nextMatches = await (
+    process.env.DEV_MODE ? fetchTeamNextEvents : fetchFootballTeamNextMatches
+  )(teamId, 0);
 
   if (!lastMatches && !nextMatches) {
     return null;
@@ -131,7 +145,7 @@ export async function footballTeamMatches(teamId: number) {
         // roundLabel: `Round ${match?.roundInfo?.round ?? "--"}`,
         timer:
           match.status.type === "notstarted"
-            ? toShortTimeString(startDate)
+            ? startDate
             : match.status.description,
         timerDisplayColour: match.status.type === "inprogress" ? "green" : null,
         id: match.id,
@@ -141,7 +155,6 @@ export async function footballTeamMatches(teamId: number) {
         venue: "",
         summaryText: setMatchSummary(
           match.status.type,
-          toShortTimeString(startDate),
           match.homeTeam.name,
           match.homeScore.current,
           match.awayTeam.name,
@@ -150,12 +163,12 @@ export async function footballTeamMatches(teamId: number) {
         homeDetails: {
           name: shortenTeamNames(match.homeTeam.name),
           score: match.homeScore.current?.toString() ?? "0",
-          img: resolveFootballTeamImage(match.homeTeam.name),
+          img: resolveSportImage(match.homeTeam.name),
         },
         awayDetails: {
           name: shortenTeamNames(match.awayTeam.name),
           score: match.awayScore.current?.toString() ?? "0",
-          img: resolveFootballTeamImage(match.awayTeam.name),
+          img: resolveSportImage(match.awayTeam.name),
         },
         otherDetail: match.tournament.name,
       } as MatchSummary;
@@ -167,7 +180,9 @@ export async function footballStandings(
   tournamentId: number,
   seasonId: number,
 ) {
-  const standings = await fetchFootballStandings(tournamentId, seasonId);
+  const standings = await (
+    process.env.DEV_MODE ? fetchStandingsTotal : fetchFootballStandings
+  )(tournamentId, seasonId);
 
   if (!standings) {
     return null;
@@ -181,7 +196,7 @@ export async function footballStandings(
         team: {
           id: item.team.id,
           name: shortenTeamNames(item.team.name),
-          logo: resolveFootballTeamImage(item.team.name),
+          logo: resolveSportImage(item.team.name),
         },
         games: {
           played: item.matches,
@@ -199,8 +214,12 @@ export async function footballStandings(
 }
 
 export async function footballMatchDetails(matchId: number) {
-  const match = await fetchFootballMatchDetails(matchId);
-  const incidents = await fetchFootballMatchIncidents(matchId);
+  const match = await (
+    process.env.DEV_MODE ? fetchEventDetails : fetchFootballMatchDetails
+  )(matchId);
+  const incidents = await (
+    process.env.DEV_MODE ? fetchEventIncidents : fetchFootballMatchIncidents
+  )(matchId);
 
   const matchDetails = match?.event;
   const scoreIncidents = incidents?.incidents
@@ -225,12 +244,12 @@ export async function footballMatchDetails(matchId: number) {
           homeTeam: {
             name: shortenTeamNames(matchDetails.homeTeam.name),
             score: matchDetails?.homeScore?.current?.toString() ?? "0",
-            img: resolveFootballTeamImage(matchDetails.homeTeam.name),
+            img: resolveSportImage(matchDetails.homeTeam.name),
           },
           awayTeam: {
             name: shortenTeamNames(matchDetails?.awayTeam.name),
             score: matchDetails?.awayScore?.current?.toString() ?? "0",
-            img: resolveFootballTeamImage(matchDetails.awayTeam.name),
+            img: resolveSportImage(matchDetails.awayTeam.name),
           },
           scoreBreakdown: [
             {
@@ -253,7 +272,9 @@ export async function footballMatchDetails(matchId: number) {
 }
 
 export async function footballMatchesByDate(date: Date) {
-  const matches = await fetchFootballMatchesByDate(date);
+  const matches = await (process.env.DEV_MODE
+    ? fetchEventsByDate("football", date)
+    : fetchFootballMatchesByDate(date));
 
   if (!matches) {
     return null;
@@ -300,7 +321,7 @@ export async function footballMatchesByDate(date: Date) {
               roundLabel: roundLabel,
               timer:
                 match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
+                  ? startDate
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",
@@ -311,7 +332,6 @@ export async function footballMatchesByDate(date: Date) {
               venue: "",
               summaryText: setMatchSummary(
                 match.status.type,
-                toShortTimeString(startDate),
                 match.homeTeam.name,
                 match.homeScore.current,
                 match.awayTeam.name,
@@ -320,19 +340,18 @@ export async function footballMatchesByDate(date: Date) {
               homeDetails: {
                 name: shortenTeamNames(match.homeTeam.name),
                 score: match.homeScore.current?.toString() ?? "0",
-                img: resolveFootballTeamImage(match.homeTeam.name),
+                img: resolveSportImage(match.homeTeam.name),
               },
               awayDetails: {
                 name: shortenTeamNames(match.awayTeam.name),
                 score: match.awayScore.current?.toString() ?? "0",
-                img: resolveFootballTeamImage(match.awayTeam.name),
+                img: resolveSportImage(match.awayTeam.name),
               },
             } as MatchSummary;
           }),
         roundLabel: roundLabel,
-        sport: SPORT.FOOTBALL,
-        roundSlug: `${leagueId}/${seasonId}`,
-      } as RoundDetails;
+        roundSlug: `${SPORT.FOOTBALL}/${leagueId}/${seasonId}`,
+      } as FixtureRound;
     }),
 
     currentRound: leagueIdToName[rounds[0]]?.name ?? "",
@@ -340,7 +359,9 @@ export async function footballMatchesByDate(date: Date) {
 }
 
 export async function footballBrackets(tournamentId: number, seasonId: number) {
-  const trees = await fetchFootballCupTrees(tournamentId, seasonId);
+  const trees = await (
+    process.env.DEV_MODE ? fetchCupTrees : fetchFootballCupTrees
+  )(tournamentId, seasonId);
   // const trees = testdata;
 
   console.log("🟢 Starting footballBrackets processing...");

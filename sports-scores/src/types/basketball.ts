@@ -1,6 +1,6 @@
 import { BasketballStanding } from "@/components/basketball/BasketballLadder";
 import { BasketballScoreBreakdown } from "@/components/basketball/BasketballScoreBreakdown";
-import { RoundDetails, TeamScoreDetails } from "./misc";
+import { FixtureRound, TeamScoreDetails } from "./misc";
 import {
   Sofascore_Event_Response,
   Sofascore_EventIncidents_Response,
@@ -25,7 +25,7 @@ export interface Basketball_BasketApi_MatchSchedules_Response
   extends Sofascore_Events_Response {}
 
 export interface BasketballFixturesPage {
-  fixtures: RoundDetails[];
+  fixtures: FixtureRound[];
   currentRound: string;
 }
 
@@ -45,6 +45,6 @@ export interface BasketballMatchPage {
 }
 
 export interface BasketballTodayPage {
-  fixtures: RoundDetails[];
+  fixtures: FixtureRound[];
   currentRound: string;
 }

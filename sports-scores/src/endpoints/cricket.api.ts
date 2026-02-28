@@ -8,6 +8,8 @@ import {
   Cricket_LiveScoreAPI_TeamDetails,
 } from "@/types/cricket";
 import { SPORT } from "@/types/misc";
+import { Sofascore_Events_Response } from "@/types/sofascore";
+import { format } from "date-fns/format";
 
 const SERIES_IDS = [
   1445395, //Darwin T20 Series
@@ -83,11 +85,9 @@ export async function fetchCricketAllSeries() {
   return (await rawFixtures.json()) as Cricket_LiveScoreAPI_LeaguesListPopular;
 }
 
-export async function fetchCricketMatchesByDate(
-  date: string, //Formatted as yyyymmdd
-) {
+export async function fetchCricketMatchesByDateLiveScore(date: Date) {
   const rawFixtures = await fetch(
-    `${process.env.CRICKET_BASEURL}/matches/v2/list-by-date?Category=cricket&Date=${date}&Timezone=10`,
+    `${process.env.CRICKET_BASEURL}/matches/v2/list-by-date?Category=cricket&Date=${format(date, "yyyyMMdd")}&Timezone=10`,
     {
       headers: reqHeaders,
     },
@@ -97,6 +97,20 @@ export async function fetchCricketMatchesByDate(
   }
   updateQuota(rawFixtures);
   return (await rawFixtures.json()) as Cricket_LiveScoreAPI_MatchesListByDate;
+}
+
+export async function fetchCricketMatchesByDateSofascore(date: Date) {
+  const rawFixtures = await fetch(
+    `https://cricketapi21.p.rapidapi.com/api/cricket/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+    {
+      headers: reqHeaders,
+    },
+  );
+  if (!rawFixtures.ok) {
+    return null;
+  }
+  updateQuota(rawFixtures);
+  return (await rawFixtures.json()) as Sofascore_Events_Response;
 }
 
 export async function fetchCricketMatchInnings(id: number) {
@@ -135,7 +149,7 @@ export async function fetchCricketMatchDetails(id: number) {
 
 export async function fetchCricketSeriesMatches(ccd: string, scd: string) {
   const rawFixtures = await fetch(
-    `${process.env.CRICKET_BASEURL}/matches/v2/list-by-league?Category=cricket&Ccd=${ccd}&Scd=${scd}&Timezone=10`,
+    `${process.env.CRICKET_BASEURL}/matches/v2/list-by-league?Category=cricket&Ccd=${ccd}&Scd=${scd}`,
     {
       headers: reqHeaders,
     },

@@ -1,8 +1,9 @@
 "use client";
 
+import { formatTime } from "@/lib/projUtils";
 import { SessionSummary } from "@/types/f1";
 import React, { useEffect } from "react";
-import SectionDateRange from "../all-sports/SectionDateRange";
+import SectionDate from "../all-sports/SectionDate";
 import SessionSummaryCard from "./SessionSummaryCard";
 import WeekendSummaryCard from "./WeekendSummaryCard";
 
@@ -75,9 +76,9 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
           <React.Fragment key={item.sessionType + item.grandPrixName}>
             {displayDate && (
               <React.Fragment>
-                <SectionDateRange
-                  dateFrom={startDate}
-                  dateTo={raceDate}
+                <SectionDate
+                  sectionDate={startDate}
+                  sectionDateEnd={raceDate}
                   currentDate={currentMatch}
                 />
                 <WeekendSummaryCard
@@ -91,7 +92,7 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
             <SessionSummaryCard
               href={`/sports/${item.sport}/${item.sessionSlug}`}
               sessionType={item.sessionName ?? item.sessionType}
-              status={item.status}
+              status={item.status ?? formatTime(item.startDate)}
             />
           </React.Fragment>
         );

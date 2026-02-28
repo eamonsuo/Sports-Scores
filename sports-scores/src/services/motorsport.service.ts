@@ -11,11 +11,7 @@ import {
   fetchF1Sessions,
   fetchF1SprintResult,
 } from "@/endpoints/f1.api";
-import {
-  resolveF1CountryFlagImages,
-  resolveF1TeamImages,
-} from "@/lib/imageMapping";
-import { toShortTimeString } from "@/lib/projUtils";
+import { resolveSportImage } from "@/lib/imageMapping";
 import {
   F1ConstructorStandingsPage,
   F1DriverStandingsPage,
@@ -50,7 +46,7 @@ export async function f1EventSchedule(season: number) {
           status: setSessionStatus(
             new Date(item.FirstPractice.date + "T" + item.FirstPractice.time),
           ),
-          logo: resolveF1CountryFlagImages(item.raceName),
+          logo: resolveSportImage(item.raceName),
           sessionSlug: `${season}/${item.round}/${F1SessionType.Practice1}`,
         });
       }
@@ -350,7 +346,7 @@ export async function f1DriverStandings(season: number) {
         driver: {
           id: Number(item.Driver.permanentNumber),
           name: item.Driver.givenName + " " + item.Driver.familyName,
-          img: resolveF1CountryFlagImages(
+          img: resolveSportImage(
             item.Driver.givenName + " " + item.Driver.familyName,
           ),
         },
@@ -375,7 +371,7 @@ export async function f1ConstructorStandings(season: number) {
         team: {
           id: item.Constructor.constructorId,
           name: item.Constructor.name,
-          logo: resolveF1TeamImages(item.Constructor.name),
+          logo: resolveSportImage(item.Constructor.name),
         },
         position: Number(item.position),
         points: Number(item.points),
@@ -390,7 +386,7 @@ function setSessionStatus(sessionDate: Date) {
   liveDate.setHours(liveDate.getHours() - 3);
 
   if (sessionDate > currentDate) {
-    return toShortTimeString(sessionDate);
+    return null;
   } else if (sessionDate > liveDate) {
     return "In Progress";
   } else {

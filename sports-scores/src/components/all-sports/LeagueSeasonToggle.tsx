@@ -1,6 +1,6 @@
 "use client";
 
-import { SPORT } from "@/types/misc";
+import { DisplayTypes, SPORT } from "@/types/misc";
 import { ChevronDownIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -17,6 +17,7 @@ export type LeagueSeasonConfig = {
   slug: string;
   seasons: { name: string; slug: string }[];
   qualifyingPosition?: number;
+  display?: DisplayTypes;
 };
 
 export default function LeagueSeasonToggle({

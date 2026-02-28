@@ -4,6 +4,7 @@ import {
   Sofascore_EventPage_Response,
   Sofascore_Events_Response,
   Sofascore_TotalStandings_Response,
+  Sofascore_TournamentCupTrees_Response,
   SofascoreSport,
 } from "@/types/sofascore";
 import { format } from "date-fns";
@@ -90,4 +91,57 @@ export async function fetchEventsByDate(sport: SofascoreSport, date: Date) {
   }
 
   return (await rawEvents.json()) as Sofascore_Events_Response;
+}
+
+// Placeholder functions - to be implemented
+export async function fetchTeamLastEvents(
+  teamId: number,
+  pageNumber: number = 0,
+) {
+  const rawEvents = await fetch(
+    `${SOFASCOREBASEURL}/team/${teamId}/events/last/${pageNumber}`,
+  );
+
+  if (!rawEvents.ok || errorCodesToNullify.includes(rawEvents.status)) {
+    return null;
+  }
+
+  return (await rawEvents.json()) as Sofascore_EventPage_Response;
+}
+
+export async function fetchTeamNextEvents(
+  teamId: number,
+  pageNumber: number = 0,
+) {
+  const rawEvents = await fetch(
+    `${SOFASCOREBASEURL}/team/${teamId}/events/next/${pageNumber}`,
+  );
+
+  if (!rawEvents.ok || errorCodesToNullify.includes(rawEvents.status)) {
+    return null;
+  }
+
+  return (await rawEvents.json()) as Sofascore_EventPage_Response;
+}
+
+export async function fetchCupTrees(tournamentId: number, seasonId: number) {
+  const rawTrees = await fetch(
+    `${SOFASCOREBASEURL}/unique-tournament/${tournamentId}/season/${seasonId}/cuptrees`,
+  );
+
+  if (!rawTrees.ok || errorCodesToNullify.includes(rawTrees.status)) {
+    return null;
+  }
+
+  return (await rawTrees.json()) as Sofascore_TournamentCupTrees_Response;
+}
+
+export async function fetchPlayerRankings(rankingId: string) {
+  const rawRankings = await fetch(`${SOFASCOREBASEURL}/rankings/${rankingId}`);
+
+  if (!rawRankings.ok || errorCodesToNullify.includes(rawRankings.status)) {
+    return null;
+  }
+
+  return (await rawRankings.json()) as Sofascore_TournamentCupTrees_Response;
 }

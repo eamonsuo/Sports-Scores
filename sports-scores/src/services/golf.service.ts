@@ -4,11 +4,8 @@ import {
   fetchGolfRankings,
   fetchGolfSchedule,
 } from "@/endpoints/golf.api";
-import {
-  resolveGolfPlayerImage,
-  resolveGolfTeamImage,
-  resolveGolfTournamentImage,
-} from "@/lib/imageMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
+import { getCountryImageUrl } from "@/lib/projUtils";
 import {
   Golf_SlashGolfAPI_Leaderboard,
   Golf_SlashGolfAPI_Schedule,
@@ -17,9 +14,9 @@ import {
   SlashGolf_PlayerRanking_FedExCup,
   SlashGolf_PlayerRanking_OWGR,
 } from "@/types/golf";
-import { MatchSummary, SPORT } from "@/types/misc";
+import { CountryFlagCode, MatchSummary, SPORT } from "@/types/misc";
 
-export async function golfPGASchedule(year: string = "2025") {
+export async function golfPGASchedule(year: string) {
   var rawSchedule = await fetchGolfSchedule(1, year);
   if (!rawSchedule) {
     return null;
@@ -28,7 +25,7 @@ export async function golfPGASchedule(year: string = "2025") {
   return mapGolfSchedule(rawSchedule, "pga");
 }
 
-export async function golfLIVSchedule(year: string = "2025") {
+export async function golfLIVSchedule(year: string) {
   var rawSchedule = await fetchGolfSchedule(2, year);
   if (!rawSchedule) {
     return null;
@@ -37,7 +34,7 @@ export async function golfLIVSchedule(year: string = "2025") {
   return mapGolfSchedule(rawSchedule, "liv");
 }
 
-export async function golfOWGRankings(year: string = "2025") {
+export async function golfOWGRankings(year: string) {
   var rawRanking = await fetchGolfRankings("186", year);
   if (!rawRanking) {
     return null;
@@ -49,7 +46,7 @@ export async function golfOWGRankings(year: string = "2025") {
         let playerName = item.firstName + " " + item.lastName;
         return {
           name: playerName,
-          img: resolveGolfPlayerImage(playerName),
+          img: resolveSportImage(playerName),
           position: item.rank.$numberInt.toString(),
           totalPoints: item.avgPoints.$numberDouble.toString(),
           pointsBehind: item.previousRank.$numberInt.toString(),
@@ -59,7 +56,7 @@ export async function golfOWGRankings(year: string = "2025") {
   } as GolfRankingsPage;
 }
 
-export async function golfFedExRankings(year: string = "2025") {
+export async function golfFedExRankings(year: string) {
   var rawRanking = await fetchGolfRankings("02671", year);
   if (!rawRanking) {
     return null;
@@ -71,7 +68,7 @@ export async function golfFedExRankings(year: string = "2025") {
         let playerName = item.firstName + " " + item.lastName;
         return {
           name: playerName,
-          img: resolveGolfPlayerImage(playerName),
+          img: resolveSportImage(playerName),
           position: item.rank.$numberInt.toString(),
           totalPoints: item.totalPoints?.toString() ?? "",
           pointsBehind: item.pointsBehind,
@@ -83,7 +80,7 @@ export async function golfFedExRankings(year: string = "2025") {
 
 export async function golfPGATournamentLeaderboard(
   tournId: string,
-  year: string = "2025",
+  year: string,
   roundId?: number,
 ) {
   var rawLeaderboard = await fetchGolfLeaderboard(1, tournId, year, roundId);
@@ -96,7 +93,7 @@ export async function golfPGATournamentLeaderboard(
 
 export async function golfLIVTournamentLeaderboard(
   tournId: string,
-  year: string = "2025",
+  year: string,
   roundId?: number,
 ) {
   var rawLeaderboard = await fetchGolfLeaderboard(2, tournId, year, roundId);
@@ -114,7 +111,7 @@ export async function golfLIVTournamentLeaderboard(
           totalScore: item.totalScore,
           thru: "",
           curRound: "",
-          img: resolveGolfTeamImage(item.name),
+          img: resolveSportImage(item.name),
         } as GolfLeaderboardPlayerRow;
       }) ?? [],
   };
@@ -142,7 +139,7 @@ export function mapGolfLeaderboard(data: Golf_SlashGolfAPI_Leaderboard) {
           item.currentRoundScore[0] !== "+"
             ? "+" + item.currentRoundScore
             : item.currentRoundScore,
-        img: resolveGolfPlayerImage(playerName),
+        img: resolveSportImage(playerName),
       } as GolfLeaderboardPlayerRow;
     }),
   };
@@ -163,7 +160,10 @@ export function mapGolfSchedule(
       return {
         id: item.tournId,
         name: item.name,
-        img: resolveGolfTournamentImage(item.name),
+        img:
+          resolveSportImage(item.name) === "/vercel.svg"
+            ? getCountryImageUrl(CountryFlagCode.UnitedStates)
+            : resolveSportImage(item.name),
         startDate: startDate,
         endDate: endDate,
         sport: "golf",

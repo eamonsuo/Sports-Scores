@@ -1,20 +1,16 @@
 "use client";
 
-import fallback from "@/../public/vercel.svg";
-import { FixtureRound } from "@/types/misc";
 import { clsx } from "clsx";
-import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "../misc-ui/Button";
-import FixtureList from "./FixtureList";
 
-export default function FixtureRoundList({
+export default function GenericRoundList({
   data,
   curRound,
+  children,
 }: {
-  data: FixtureRound[];
+  data: { roundLabel: string; component: React.ReactNode }[];
   curRound: string;
+  children?: React.ReactNode;
 }) {
   const [round, setRound] = useState(curRound);
   const btnListRef = useRef<HTMLDivElement>(null);
@@ -36,7 +32,7 @@ export default function FixtureRoundList({
       const container = scrollContainerRef.current;
       container.scrollLeft = index * container.offsetWidth;
     }
-  }, []); //Empty array so only runs once on mount
+  }, []); // Intentionally run only once on mount; curRound and roundLabels are read for initial positioning and are not expected to change
 
   //When called ensures the new round state is set and the related button is visible in view
   function handleRoundClick(roundLabel: string) {
@@ -133,29 +129,7 @@ export default function FixtureRoundList({
             key={item.roundLabel}
             className="w-full flex-shrink-0 snap-start overflow-y-auto"
           >
-            {item.roundSlug && (
-              <Link
-                href={`/sports/${item.roundSlug ?? ""}`}
-                className="flex justify-center rounded"
-              >
-                <Button variant="secondary">All Events</Button>
-              </Link>
-            )}
-            <FixtureList data={item.matches} cardVariant={item.cardVariant} />
-            {(item.byes?.length ?? 0) > 0 ? (
-              <div className="flex items-center gap-1 overflow-x-auto p-4 dark:text-neutral-400">
-                Bye:{" "}
-                {item.byes?.map((x) => (
-                  <Image
-                    key={x.name}
-                    src={x.img ?? fallback}
-                    width={25}
-                    height={25}
-                    alt="Bye team"
-                  />
-                ))}
-              </div>
-            ) : null}
+            {item.component}
           </div>
         ))}
       </div>

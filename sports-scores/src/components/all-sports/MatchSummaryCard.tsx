@@ -1,4 +1,5 @@
 import fallback from "@/../public/vercel.svg";
+import { cn } from "@/lib/utils";
 import { TeamScoreDetails } from "@/types/misc";
 import clsx from "clsx";
 import Image from "next/image";
@@ -14,20 +15,27 @@ export default function MatchSummaryCard({
   venue,
   topInfo,
   bottomInfo,
+  className,
 }: {
   id: number;
   href: string;
   matchSummary: string;
   homeInfo: TeamScoreDetails;
   awayInfo: TeamScoreDetails;
-  timer: { display: string; displayColour?: "green" | "yellow" | "gray" };
+  timer: { display?: string; displayColour?: "green" | "yellow" | "gray" };
   venue: string;
   topInfo?: string;
   bottomInfo?: string;
+  className?: string;
 }) {
   return (
     <Link href={href}>
-      <div className="mt-4 flex flex-col items-center justify-center rounded-md border border-gray-300 p-4 shadow-sm active:bg-gray-300 dark:border-neutral-500 dark:active:bg-neutral-700">
+      <div
+        className={cn(
+          "mt-4 flex flex-col items-center justify-center border border-gray-300 p-4 shadow-sm active:bg-gray-300 dark:border-neutral-500 dark:active:bg-neutral-700",
+          className,
+        )}
+      >
         <p className="text-xs text-gray-700 dark:text-neutral-500">{topInfo}</p>
         <p className="text-center text-gray-500 dark:text-neutral-500">
           {matchSummary}
@@ -46,20 +54,22 @@ export default function MatchSummaryCard({
             {homeInfo.score}
           </p>
           <div className="flex items-center justify-center overflow-visible">
-            <p
-              className={clsx(
-                "whitespace-nowrap rounded-sm px-2 py-1 text-center text-xs",
+            {timer.display && (
+              <p
+                className={clsx(
+                  "whitespace-nowrap rounded-sm px-2 py-1 text-center text-xs",
 
-                timer.displayColour === "green" &&
-                  "bg-green-500 text-neutral-200 dark:bg-green-700",
-                timer.displayColour === "yellow" &&
-                  "bg-yellow-500 text-black dark:bg-yellow-600",
-                timer.displayColour === "gray" &&
-                  "bg-gray-200 text-gray-700 dark:bg-neutral-700 dark:text-neutral-400",
-              )}
-            >
-              {timer.display}
-            </p>
+                  timer.displayColour === "green" &&
+                    "bg-green-500 text-neutral-200 dark:bg-green-700",
+                  timer.displayColour === "yellow" &&
+                    "bg-yellow-500 text-black dark:bg-yellow-600",
+                  timer.displayColour === "gray" &&
+                    "bg-gray-200 text-gray-700 dark:bg-neutral-700 dark:text-neutral-400",
+                )}
+              >
+                {timer.display}
+              </p>
+            )}
           </div>
 
           <p className="content-center text-right dark:text-neutral-400">

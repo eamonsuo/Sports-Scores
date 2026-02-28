@@ -1,7 +1,7 @@
 import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import { RugbyLeagueStanding } from "@/components/rugby-league/NRLLadder";
 import { RugbyLeagueScoreBreakdown } from "@/components/rugby-league/NRLScoreBreakdown";
-import { RoundDetails, TeamScoreDetails } from "./misc";
+import { FixtureRound, TeamScoreDetails } from "./misc";
 import {
   Sofascore_Event,
   Sofascore_Event_Response,
@@ -27,13 +27,13 @@ export interface RugbyLeague_RugbyAPI2_CategorySchedules_Response
   extends Sofascore_Events_Response {}
 
 export interface RugbyLeagueFixturesPage {
-  fixtures: RoundDetails[];
+  fixtures: FixtureRound[];
   currentRound: string;
   events: Sofascore_Event[];
 }
 
 export interface RugbyLeagueFixturesPage {
-  fixtures: RoundDetails[];
+  fixtures: FixtureRound[];
   currentRound: string;
 }
 
@@ -53,6 +53,6 @@ export interface RugbyLeagueMatchPage {
 }
 
 export interface RugbyLeagueTodayPage {
-  fixtures: RoundDetails[];
+  fixtures: FixtureRound[];
   currentRound: string;
 }

@@ -1,4 +1,6 @@
-import { dateToCustomString } from "@/lib/projUtils";
+"use client";
+
+import { formatDateLong } from "@/lib/projUtils";
 
 export default function SectionDateRange({
   dateFrom,
@@ -14,7 +16,7 @@ export default function SectionDateRange({
       id={currentDate ? "current-date" : undefined}
       className="mt-4 text-black dark:text-neutral-400"
     >
-      {dateToCustomString(dateFrom)} - {dateToCustomString(dateTo)}
+      {formatDateLong(dateFrom)} - {formatDateLong(dateTo)}
     </div>
   );
 }

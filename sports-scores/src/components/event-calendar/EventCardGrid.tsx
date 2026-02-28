@@ -14,8 +14,7 @@ export default function EventCardGrid({ events }: EventCardGridProps) {
   // Group events by month - events only appear in their starting month
   const eventsByMonth = events.reduce(
     (acc, event) => {
-      const startDate = new Date(event.startDate);
-      const monthKey = format(startDate, "MMMM yyyy");
+      const monthKey = format(event.startDate, "MMMM yyyy");
 
       if (!acc[monthKey]) {
         acc[monthKey] = [];
@@ -29,7 +28,6 @@ export default function EventCardGrid({ events }: EventCardGridProps) {
 
   // Get current/upcoming events (ongoing or starting soon)
   const now = new Date();
-  now.setHours(now.getHours() + 10);
   const currentEvents = events.filter((event) => {
     const startDate = new Date(event.startDate);
     const endDate = event.endDate ? new Date(event.endDate) : startDate;

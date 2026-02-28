@@ -6,24 +6,32 @@ import {
   fetchTournamentNextMatches,
   fetchTournamentStandings,
 } from "@/endpoints/sofascore-rapid-api.api";
-import { AFL_TEAM_NAMES, AUSSIE_RULES_LEAGUES } from "@/lib/constants";
-import { resolveAussieRulesImages } from "@/lib/imageMapping";
 import {
-  setMatchSummary,
-  shortenTeamNames,
-  toShortTimeString,
-} from "@/lib/projUtils";
+  fetchEventDetails,
+  fetchEventIncidents,
+  fetchEventsByDate,
+  fetchLastEvents,
+  fetchNextEvents,
+  fetchStandingsTotal,
+} from "@/endpoints/sofascore.api";
+import { AFL_TEAM_NAMES, AUSSIE_RULES_LEAGUES } from "@/lib/constants";
+import { resolveSportImage } from "@/lib/imageMapping";
+import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils";
 import {
   AussieRulesFixturesPage,
   AussieRulesLadderPage,
   AussieRulesMatchPage,
   AussieRulesStanding,
 } from "@/types/aussie-rules";
-import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
+import { FixtureRound, MatchSummary, SPORT } from "@/types/misc";
 
 export async function aussieRulesMatches(league: number, season: number) {
-  const lastMatches = await fetchTournamentLastMatches(league, season, 0);
-  const nextMatches = await fetchTournamentNextMatches(league, season, 0);
+  const lastMatches = await (
+    process.env.DEV_MODE ? fetchLastEvents : fetchTournamentLastMatches
+  )(league, season, 0);
+  const nextMatches = await (
+    process.env.DEV_MODE ? fetchNextEvents : fetchTournamentNextMatches
+  )(league, season, 0);
 
   if (!lastMatches && !nextMatches) {
     return null;
@@ -58,7 +66,7 @@ export async function aussieRulesMatches(league: number, season: number) {
               roundLabel: `Round ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
+                  ? startDate
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",
@@ -69,7 +77,6 @@ export async function aussieRulesMatches(league: number, season: number) {
               venue: "",
               summaryText: setMatchSummary(
                 match.status.type,
-                toShortTimeString(startDate),
                 match.homeTeam.name,
                 match.homeScore.current,
                 match.awayTeam.name,
@@ -78,20 +85,20 @@ export async function aussieRulesMatches(league: number, season: number) {
               homeDetails: {
                 name: shortenTeamNames(match.homeTeam.name),
                 score: match.homeScore.current?.toString() ?? "0",
-                img: resolveAussieRulesImages(match.homeTeam.name),
+                img: resolveSportImage(match.homeTeam.name),
               },
               awayDetails: {
                 name: shortenTeamNames(match.awayTeam.name),
                 score: match.awayScore.current?.toString() ?? "0",
-                img: resolveAussieRulesImages(match.awayTeam.name),
+                img: resolveSportImage(match.awayTeam.name),
               },
             } as MatchSummary;
           }),
         roundLabel: `Round ${round}`,
         byes: AFL_TEAM_NAMES.filter((x) => !teams.includes(x)).map((team) => {
-          return { name: team, img: resolveAussieRulesImages(team) };
+          return { name: team, img: resolveSportImage(team) };
         }),
-      } as RoundDetails;
+      } as FixtureRound;
     }),
 
     currentRound: `Round ${
@@ -103,7 +110,9 @@ export async function aussieRulesMatches(league: number, season: number) {
 }
 
 export async function aussieRulesStandings(league: number, season: number) {
-  const standings = await fetchTournamentStandings(league, season);
+  const standings = await (
+    process.env.DEV_MODE ? fetchStandingsTotal : fetchTournamentStandings
+  )(league, season);
 
   if (!standings) {
     return null;
@@ -117,7 +126,7 @@ export async function aussieRulesStandings(league: number, season: number) {
         team: {
           id: item.team.id,
           name: shortenTeamNames(item.team.name),
-          logo: resolveAussieRulesImages(item.team.name),
+          logo: resolveSportImage(item.team.name),
         },
         games: {
           played: item.matches,
@@ -135,8 +144,12 @@ export async function aussieRulesStandings(league: number, season: number) {
 }
 
 export async function aussieRulesMatchDetails(matchId: number) {
-  const match = await fetchMatchDetails(matchId);
-  const incidents = await fetchMatchIncidents(matchId);
+  const match = await (
+    process.env.DEV_MODE ? fetchEventDetails : fetchMatchDetails
+  )(matchId);
+  const incidents = await (
+    process.env.DEV_MODE ? fetchEventIncidents : fetchMatchIncidents
+  )(matchId);
 
   const matchDetails = match?.event;
   const scoreIncidents = incidents?.incidents
@@ -161,12 +174,12 @@ export async function aussieRulesMatchDetails(matchId: number) {
           homeTeam: {
             name: shortenTeamNames(matchDetails.homeTeam.name),
             score: matchDetails?.homeScore?.current?.toString() ?? "0",
-            img: resolveAussieRulesImages(matchDetails.homeTeam.name),
+            img: resolveSportImage(matchDetails.homeTeam.name),
           },
           awayTeam: {
             name: shortenTeamNames(matchDetails?.awayTeam.name),
             score: matchDetails?.awayScore?.current?.toString() ?? "0",
-            img: resolveAussieRulesImages(matchDetails.awayTeam.name),
+            img: resolveSportImage(matchDetails.awayTeam.name),
           },
           scoreBreakdown: [1, 2, 3, 4].map((quarter) => ({
             quarter,
@@ -198,7 +211,9 @@ export async function aussieRulesMatchDetails(matchId: number) {
 export async function aussieRulesCurrentMatches(
   date: "TODAY" | "YESTERDAY" | "TOMORROW",
 ) {
-  const matches = await fetchScheduledEvents(87);
+  const matches = await (process.env.DEV_MODE
+    ? fetchEventsByDate("aussie-rules", new Date())
+    : fetchScheduledEvents(87));
 
   if (!matches) {
     return null;
@@ -245,7 +260,7 @@ export async function aussieRulesCurrentMatches(
               roundLabel: roundLabel,
               timer:
                 match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
+                  ? startDate
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",
@@ -256,7 +271,6 @@ export async function aussieRulesCurrentMatches(
               venue: "",
               summaryText: setMatchSummary(
                 match.status.type,
-                toShortTimeString(startDate),
                 match.homeTeam.name,
                 match.homeScore.current,
                 match.awayTeam.name,
@@ -265,19 +279,18 @@ export async function aussieRulesCurrentMatches(
               homeDetails: {
                 name: shortenTeamNames(match.homeTeam.name),
                 score: match.homeScore.current?.toString() ?? "0",
-                img: resolveAussieRulesImages(match.homeTeam.name),
+                img: resolveSportImage(match.homeTeam.name),
               },
               awayDetails: {
                 name: shortenTeamNames(match.awayTeam.name),
                 score: match.awayScore.current?.toString() ?? "0",
-                img: resolveAussieRulesImages(match.awayTeam.name),
+                img: resolveSportImage(match.awayTeam.name),
               },
             } as MatchSummary;
           }),
         roundLabel: roundLabel,
-        roundSlug: `${leagueId}/${leagueIdToName[leagueId]?.currentSeason}`,
-        sport: SPORT.AUSSIE_RULES,
-      } as RoundDetails;
+        roundSlug: `${SPORT.AUSSIE_RULES}/${leagueId}/${leagueIdToName[leagueId]?.currentSeason}`,
+      } as FixtureRound;
     }),
 
     currentRound: "AFL",

@@ -1,3 +1,5 @@
+"use client";
+
 import { SportEvent } from "@/types/event-calendar";
 import { format, isSameDay } from "date-fns";
 import Image from "next/image";

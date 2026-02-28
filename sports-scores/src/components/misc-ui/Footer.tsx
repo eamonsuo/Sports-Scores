@@ -31,7 +31,8 @@ const footerLinks: {
     link: `/`,
     img: "/footer/calendar.png",
     altText: "Calendar",
-  },{
+  },
+  {
     sport: SPORT.OLYMPICS,
     link: `/sports/${SPORT.OLYMPICS}`,
     img: "/olympic-rings.svg",
@@ -39,7 +40,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.CRICKET,
-    link: `/sports/${SPORT.CRICKET}/main/matches`,
+    link: `/sports/${SPORT.CRICKET}/today`,
     img: "/footer/cricket-ball.svg",
     altText: "Cricket",
   },

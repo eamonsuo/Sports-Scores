@@ -1,3 +1,11 @@
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends Date
+    ? T[P]
+    : T[P] extends object
+      ? DeepPartial<T[P]>
+      : T[P];
+};
+
 export interface APISportsResponse {
   get: string;
   parameters: {
@@ -63,7 +71,7 @@ export type MatchSummary = {
   homeDetails: TeamScoreDetails;
   awayDetails: TeamScoreDetails;
   roundLabel?: string;
-  timer?: string;
+  timer?: string | Date;
   timerDisplayColour?: "green" | "yellow" | "gray" | undefined;
   seriesName?: string;
   matchSlug?: string;
@@ -75,13 +83,12 @@ export type MatchStatus = "LIVE" | "UPCOMING" | "COMPLETED";
 
 export type CardVariant = "tennis" | "default";
 
-export interface RoundDetails {
+export interface FixtureRound {
   matches: MatchSummary[];
   roundLabel: string;
   byes?: { name?: string; img?: string }[];
   cardVariant?: CardVariant;
   roundSlug?: string;
-  sport?: string;
 }
 
 export interface SportsmonksCricket {
@@ -198,6 +205,24 @@ export enum SPORT {
   CYCLING = "cycling",
   DARTS = "darts",
 }
+
+export type SportCodes = (typeof SPORT)[keyof typeof SPORT];
+
+export enum DISPLAY_TYPES {
+  ROUND = "round",
+  DATE = "date",
+  LEAGUE = "league",
+}
+
+export type DisplayTypes = (typeof DISPLAY_TYPES)[keyof typeof DISPLAY_TYPES];
+
+export enum API_EVENT_TYPES {
+  SOFASCORE = "SOFASCORE",
+  SPORTSMONKS_CRICKET = "SPORTSMONKS_CRICKET",
+}
+
+export type APIEventTypes =
+  (typeof API_EVENT_TYPES)[keyof typeof API_EVENT_TYPES];
 
 export enum CountryFlagCode {
   Afghanistan = "af",

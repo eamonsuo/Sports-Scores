@@ -1,3 +1,7 @@
+"use client";
+
+import { formatDateLong } from "@/lib/projUtils";
+
 export default function CricketMatchSummary({
   date,
   venue,
@@ -7,7 +11,7 @@ export default function CricketMatchSummary({
   umpires,
   pom,
 }: {
-  date: string;
+  date: string | Date;
   venue: string;
   toss: string;
   homePlayers: string[];
@@ -15,12 +19,14 @@ export default function CricketMatchSummary({
   umpires: string[];
   pom: string;
 }) {
+  const dateStr = date instanceof Date ? formatDateLong(date) : date;
+
   return (
     <table className="m-4 dark:text-neutral-500">
       <tbody>
         <tr>
           <td>Date</td>
-          <td className="py-1 text-sm">{date}</td>
+          <td className="py-1 text-sm">{dateStr}</td>
         </tr>
         <tr>
           <td>Venue</td>

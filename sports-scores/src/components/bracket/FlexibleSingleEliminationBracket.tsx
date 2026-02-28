@@ -1,4 +1,5 @@
 "use client";
+import { formatDateLong } from "@/lib/projUtils";
 import React, { useEffect, useMemo } from "react";
 import { ThemeProvider } from "styled-components";
 import {
@@ -270,7 +271,11 @@ const FlexibleSingleEliminationBracket = ({
                           previousBottomMatch={
                             (visiblePreviousMatches[1] as any) ?? undefined
                           }
-                          topText={match.startTime ?? ""}
+                          topText={
+                            match.startTime instanceof Date
+                              ? formatDateLong(match.startTime)
+                              : (match.startTime ?? "")
+                          }
                           bottomText={displayName ?? ""}
                           teams={match.participants}
                           onMatchClick={onMatchClick}

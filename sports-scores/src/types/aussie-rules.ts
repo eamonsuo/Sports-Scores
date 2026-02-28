@@ -1,8 +1,8 @@
 import { ScoreDifference } from "@/components/all-sports/ScoreChart";
-import { RoundDetails, TeamScoreDetails } from "./misc";
+import { FixtureRound, TeamScoreDetails } from "./misc";
 
 export interface AussieRulesFixturesPage {
-  fixtures: RoundDetails[];
+  fixtures: FixtureRound[];
   currentRound: string;
 }
 
@@ -149,6 +149,6 @@ export type AussieRulesStanding = {
 };
 
 export interface AussieRulesTodayPage {
-  fixtures: RoundDetails[];
+  fixtures: FixtureRound[];
   currentRound: string;
 }

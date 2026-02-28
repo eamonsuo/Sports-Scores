@@ -10,25 +10,32 @@ import {
   fetchBaseballNextMatches,
   fetchBaseballStandings,
 } from "@/endpoints/baseball.api";
-import { BASEBALL_LEAGUES } from "@/lib/constants";
-import { resolveBaseballTeamImage } from "@/lib/imageMapping";
 import {
-  setMatchSummary,
-  shortenTeamNames,
-  toShortTimeString,
-} from "@/lib/projUtils";
+  fetchEventDetails,
+  fetchEventsByDate,
+  fetchLastEvents,
+  fetchNextEvents,
+  fetchStandingsTotal,
+} from "@/endpoints/sofascore.api";
+import { BASEBALL_LEAGUES } from "@/lib/constants";
+import { resolveSportImage } from "@/lib/imageMapping";
+import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils";
 import {
   BaseballFixturesPage,
   BaseballLadderPage,
   BaseballMatchPage,
   BaseballTodayPage,
 } from "@/types/baseball";
-import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
+import { FixtureRound, MatchSummary, SPORT } from "@/types/misc";
 
 export async function baseballMatches(tournamentId: number, seasonId: number) {
-  const lastMatches = await fetchBaseballLastMatches(tournamentId, seasonId, 0);
+  const lastMatches = await (
+    process.env.DEV_MODE ? fetchLastEvents : fetchBaseballLastMatches
+  )(tournamentId, seasonId, 0);
 
-  const nextMatches = await fetchBaseballNextMatches(tournamentId, seasonId, 0);
+  const nextMatches = await (
+    process.env.DEV_MODE ? fetchNextEvents : fetchBaseballNextMatches
+  )(tournamentId, seasonId, 0);
 
   if (!lastMatches && !nextMatches) {
     return null;
@@ -63,7 +70,7 @@ export async function baseballMatches(tournamentId: number, seasonId: number) {
               roundLabel: `Round ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
+                  ? startDate
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",
@@ -74,7 +81,6 @@ export async function baseballMatches(tournamentId: number, seasonId: number) {
               venue: "",
               summaryText: setMatchSummary(
                 match.status.type,
-                toShortTimeString(startDate),
                 match.homeTeam.name,
                 match.homeScore.current,
                 match.awayTeam.name,
@@ -83,17 +89,17 @@ export async function baseballMatches(tournamentId: number, seasonId: number) {
               homeDetails: {
                 name: shortenTeamNames(match.homeTeam.name),
                 score: match.homeScore.current?.toString() ?? "0",
-                img: resolveBaseballTeamImage(match.homeTeam.name),
+                img: resolveSportImage(match.homeTeam.name),
               },
               awayDetails: {
                 name: shortenTeamNames(match.awayTeam.name),
                 score: match.awayScore.current?.toString() ?? "0",
-                img: resolveBaseballTeamImage(match.awayTeam.name),
+                img: resolveSportImage(match.awayTeam.name),
               },
             } as MatchSummary;
           }),
         roundLabel: `Round ${round}`,
-      } as RoundDetails;
+      } as FixtureRound;
     }),
 
     currentRound: `Round ${
@@ -108,7 +114,9 @@ export async function baseballStandings(
   tournamentId: number,
   seasonId: number,
 ) {
-  const standings = await fetchBaseballStandings(tournamentId, seasonId);
+  const standings = await (
+    process.env.DEV_MODE ? fetchStandingsTotal : fetchBaseballStandings
+  )(tournamentId, seasonId);
 
   if (!standings) {
     return null;
@@ -135,7 +143,7 @@ export async function baseballStandings(
               team: {
                 id: standing.team.id,
                 name: shortenTeamNames(standing.team.name),
-                logo: resolveBaseballTeamImage(standing.team.name),
+                logo: resolveSportImage(standing.team.name),
               },
             } as BaseballTeamStanding;
           }),
@@ -145,7 +153,9 @@ export async function baseballStandings(
 }
 
 export async function baseballMatchDetails(matchId: number) {
-  const match = await fetchBaseballMatchDetails(matchId);
+  const match = await (
+    process.env.DEV_MODE ? fetchEventDetails : fetchBaseballMatchDetails
+  )(matchId);
 
   const matchDetails = match?.event;
 
@@ -156,12 +166,12 @@ export async function baseballMatchDetails(matchId: number) {
         homeTeam: {
           name: shortenTeamNames(matchDetails.homeTeam.name),
           score: matchDetails?.homeScore?.current?.toString() ?? "0",
-          img: resolveBaseballTeamImage(matchDetails.homeTeam.name),
+          img: resolveSportImage(matchDetails.homeTeam.name),
         },
         awayTeam: {
           name: shortenTeamNames(matchDetails?.awayTeam.name),
           score: matchDetails?.awayScore?.current?.toString() ?? "0",
-          img: resolveBaseballTeamImage(matchDetails.awayTeam.name),
+          img: resolveSportImage(matchDetails.awayTeam.name),
         },
 
         scoreBreakdown: [
@@ -237,13 +247,13 @@ export async function baseballMatchDetails(matchId: number) {
       teams: {
         home: {
           score:
-            matchDetails.homeScore?.current -
-            matchDetails.homeScore?.normaltime,
+            (matchDetails.homeScore?.current ?? 0) -
+            (matchDetails.homeScore?.normaltime ?? 0),
         },
         away: {
           score:
-            matchDetails.awayScore?.current -
-            matchDetails.awayScore?.normaltime,
+            (matchDetails.awayScore?.current ?? 0) -
+            (matchDetails.awayScore?.normaltime ?? 0),
         },
       },
     });
@@ -254,11 +264,10 @@ export async function baseballMatchDetails(matchId: number) {
   } as BaseballMatchPage;
 }
 
-export async function baseballMatchesByDate(
-  date: Date,
-  // categoryId: number,
-) {
-  const matches = await fetchBaseballByDateMatches(date);
+export async function baseballMatchesByDate(date: Date) {
+  const matches = await (process.env.DEV_MODE
+    ? fetchEventsByDate("baseball", date)
+    : fetchBaseballByDateMatches(date));
 
   if (!matches) {
     return null;
@@ -305,7 +314,7 @@ export async function baseballMatchesByDate(
               roundLabel: roundLabel,
               timer:
                 match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
+                  ? startDate
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",
@@ -316,7 +325,6 @@ export async function baseballMatchesByDate(
               venue: "",
               summaryText: setMatchSummary(
                 match.status.type,
-                toShortTimeString(startDate),
                 match.homeTeam.name,
                 match.homeScore.current,
                 match.awayTeam.name,
@@ -325,19 +333,18 @@ export async function baseballMatchesByDate(
               homeDetails: {
                 name: shortenTeamNames(match.homeTeam.name),
                 score: match.homeScore.current?.toString() ?? "0",
-                img: resolveBaseballTeamImage(match.homeTeam.name),
+                img: resolveSportImage(match.homeTeam.name),
               },
               awayDetails: {
                 name: shortenTeamNames(match.awayTeam.name),
                 score: match.awayScore.current?.toString() ?? "0",
-                img: resolveBaseballTeamImage(match.awayTeam.name),
+                img: resolveSportImage(match.awayTeam.name),
               },
             } as MatchSummary;
           }),
         roundLabel: roundLabel,
-        sport: SPORT.BASEBALL,
-        roundSlug: `${leagueId}/${seasonId}`,
-      } as RoundDetails;
+        roundSlug: `${SPORT.BASEBALL}/${leagueId}/${seasonId}`,
+      } as FixtureRound;
     }),
 
     currentRound: leagueIdToName[rounds[0]]?.name ?? "",

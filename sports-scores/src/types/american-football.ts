@@ -1,7 +1,7 @@
 import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import { AmericanFootballStanding } from "@/components/american-football/AmericanFootballLadder";
 import { AmericanFootballScoreBreakdown } from "@/components/american-football/AmericanFootballScoreBreakdown";
-import { APISportsResponse, RoundDetails, TeamScoreDetails } from "./misc";
+import { APISportsResponse, FixtureRound, TeamScoreDetails } from "./misc";
 import {
   Sofascore_Event,
   Sofascore_Event_Response,
@@ -46,7 +46,7 @@ export interface AmericanFootball_AmericanFootballApi_CategorySchedule_Response
 }
 
 export interface AmericanFootballFixturesPage {
-  fixtures: RoundDetails[];
+  fixtures: FixtureRound[];
   currentRound: string;
 }
 

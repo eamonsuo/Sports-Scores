@@ -10,7 +10,7 @@ import { golfTournamentsByDate } from "@/services/golf.service";
 import { motorsportCategoriesByDate } from "@/services/motorsport.service";
 import { rugbyLeagueMatchesByDate } from "@/services/rugby-league.service";
 import { TennisMatchesByDate as tennisMatchesByDate } from "@/services/tennis.service";
-import { RoundDetails, SPORT } from "@/types/misc";
+import { FixtureRound, SPORT } from "@/types/misc";
 
 export const dynamic = "force-dynamic";
 
@@ -43,13 +43,12 @@ export default async function Page() {
   const dartsToday = null; // Placeholder for darts matches fetching logic
   const cyclingToday = null; // Placeholder for cycling matches fetching logic
 
-  const allSports: RoundDetails[] = ([] as RoundDetails[])
+  const allSports: FixtureRound[] = ([] as FixtureRound[])
     .concat([
       {
         matches: cricketoday ?? [],
         roundLabel: "🏏 Cricket",
-        roundSlug: "main/matches",
-        sport: SPORT.CRICKET,
+        roundSlug: `${SPORT.CRICKET}/main/matches`,
       },
     ])
     .concat(rugbyLeagueToday?.fixtures ?? [])
@@ -59,16 +58,14 @@ export default async function Page() {
       {
         matches: golfToday ?? [],
         roundLabel: "⛳ Golf",
-        roundSlug: `${GOLF_TOURS[0].slug}/${GOLF_TOURS[0].seasons[0].slug}`,
-        sport: SPORT.GOLF,
+        roundSlug: `${SPORT.GOLF}/${GOLF_TOURS[0].slug}/${GOLF_TOURS[0].seasons[0].slug}`,
       },
     ])
     .concat([
       {
         matches: motorsportToday ?? [],
         roundLabel: "🏎️ Motorsport",
-        roundSlug: `${MOTORSPORT_CATEGORIES[0].slug}/${MOTORSPORT_CATEGORIES[0].seasons[0].slug}`,
-        sport: SPORT.MOTORSPORT,
+        roundSlug: `${SPORT.MOTORSPORT}/${MOTORSPORT_CATEGORIES[0].slug}/${MOTORSPORT_CATEGORIES[0].seasons[0].slug}`,
       },
     ])
     .concat(footballToday?.fixtures ?? [])

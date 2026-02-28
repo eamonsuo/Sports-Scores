@@ -7,15 +7,15 @@ import { cricketSeriesResults } from "@/services/cricket.service";
 import Image from "next/image";
 
 export default async function Page(props: {
-  params: Promise<{ ccd: string; scd: string }>;
+  params: Promise<{ league: string; season: string }>;
 }) {
-  const params = await props.params;
+  const { league, season } = await props.params;
 
   let seriesHeadToHead: any = null;
   let seriesLadders: CricketLadder[] | null = null;
   let tournamentWinner: any = null;
 
-  seriesLadders = await cricketSeriesResults(params.ccd, params.scd);
+  seriesLadders = await cricketSeriesResults(league, season);
 
   return (
     <div className="flex-1 overflow-y-auto px-4">

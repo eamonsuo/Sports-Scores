@@ -3,36 +3,48 @@ import {
   AmericanFootballTeamStanding,
 } from "@/components/american-football/AmericanFootballLadder";
 import {
-  fetchAmericanFootballCurrentMatches as fetchAmericanFootballMatchesByDate,
   fetchAmericanFootballLastMatches,
   fetchAmericanFootballMatchDetails,
+  fetchAmericanFootballCurrentMatches as fetchAmericanFootballMatchesByDate,
   fetchAmericanFootballMatchIncidents,
   fetchAmericanFootballNextMatches,
   fetchAmericanFootballStandings,
 } from "@/endpoints/american-football.api";
+import {
+  fetchEventDetails,
+  fetchEventIncidents,
+  fetchEventsByDate,
+  fetchLastEvents,
+  fetchNextEvents,
+  fetchStandingsTotal,
+} from "@/endpoints/sofascore.api";
 import { AMERICAN_FOOTBALL_LEAGUES, NFL_TEAM_NAMES } from "@/lib/constants";
-import { resolveNFLImages } from "@/lib/imageMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
+import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils";
 import {
-  setMatchSummary,
-  shortenTeamNames,
-  toShortTimeString,
-} from "@/lib/projUtils";
-import {
+  AmericanFootball_AmericanFootballApi_CategorySchedule_Response,
+  AmericanFootball_Sofascore_Event,
   AmericanFootballFixturesPage,
   AmericanFootballLadderPage,
   AmericanFootballMatchPage,
 } from "@/types/american-football";
-import { MatchSummary, RoundDetails, SPORT } from "@/types/misc";
+import { FixtureRound, MatchSummary, SPORT } from "@/types/misc";
 
 export async function americanFootballMatches(league: number, season: number) {
-  const lastMatches = await fetchAmericanFootballLastMatches(league, season, 0);
-  const nextMatches = await fetchAmericanFootballNextMatches(league, season, 0);
+  const lastMatches = await (
+    process.env.DEV_MODE ? fetchLastEvents : fetchAmericanFootballLastMatches
+  )(league, season, 0);
+  const nextMatches = await (
+    process.env.DEV_MODE ? fetchNextEvents : fetchAmericanFootballNextMatches
+  )(league, season, 0);
 
   if (!lastMatches && !nextMatches) {
     return null;
   }
 
-  const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
+  const matches = (lastMatches?.events ?? []).concat(
+    nextMatches?.events ?? [],
+  ) as AmericanFootball_Sofascore_Event[];
 
   for (let i = 1; i < matches.length; i++) {
     if (matches[i].roundInfo === undefined) {
@@ -73,7 +85,7 @@ export async function americanFootballMatches(league: number, season: number) {
                 match.roundInfo?.name ?? `Week ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
+                  ? startDate
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",
@@ -84,7 +96,6 @@ export async function americanFootballMatches(league: number, season: number) {
               venue: "",
               summaryText: setMatchSummary(
                 match.status.type,
-                toShortTimeString(startDate),
                 match.homeTeam.name,
                 match.homeScore.current,
                 match.awayTeam.name,
@@ -93,7 +104,7 @@ export async function americanFootballMatches(league: number, season: number) {
               homeDetails: {
                 name: shortenTeamNames(match.homeTeam.name),
                 score: match.homeScore.current?.toString() ?? "0",
-                img: resolveNFLImages(match.homeTeam.name),
+                img: resolveSportImage(match.homeTeam.name),
                 winDrawLoss: match.homeTeamSeasonHistoricalForm
                   ? `${match.homeTeamSeasonHistoricalForm.wins ?? 0}-${match.homeTeamSeasonHistoricalForm.losses ?? 0}${match.homeTeamSeasonHistoricalForm.draws ? "-" + match.homeTeamSeasonHistoricalForm.draws : ""}`
                   : null,
@@ -101,7 +112,7 @@ export async function americanFootballMatches(league: number, season: number) {
               awayDetails: {
                 name: shortenTeamNames(match.awayTeam.name),
                 score: match.awayScore.current?.toString() ?? "0",
-                img: resolveNFLImages(match.awayTeam.name),
+                img: resolveSportImage(match.awayTeam.name),
                 winDrawLoss: match.awayTeamSeasonHistoricalForm
                   ? `${match.awayTeamSeasonHistoricalForm.wins ?? 0}-${match.awayTeamSeasonHistoricalForm.losses ?? 0}${match.awayTeamSeasonHistoricalForm.draws ? "-" + match.awayTeamSeasonHistoricalForm.draws : ""}`
                   : null,
@@ -114,11 +125,11 @@ export async function americanFootballMatches(league: number, season: number) {
             ? NFL_TEAM_NAMES.filter((x) => !teams.includes(x)).map((team) => {
                 return {
                   name: team,
-                  img: resolveNFLImages(team),
+                  img: resolveSportImage(team),
                 };
               })
             : [],
-      } as RoundDetails;
+      } as FixtureRound;
     }),
 
     currentRound:
@@ -139,7 +150,9 @@ export async function americanFootballStandings(
   league: number,
   season: number,
 ) {
-  const standings = await fetchAmericanFootballStandings(league, season);
+  const standings = await (
+    process.env.DEV_MODE ? fetchStandingsTotal : fetchAmericanFootballStandings
+  )(league, season);
   if (!standings) {
     return null;
   }
@@ -160,7 +173,7 @@ export async function americanFootballStandings(
               team: {
                 id: standing.team.id,
                 name: shortenTeamNames(standing.team.name),
-                logo: resolveNFLImages(standing.team.name),
+                logo: resolveSportImage(standing.team.name),
               },
               points: {
                 for: standing.scoresFor,
@@ -174,8 +187,14 @@ export async function americanFootballStandings(
 }
 
 export async function americanFootballMatchDetails(matchId: number) {
-  const match = await fetchAmericanFootballMatchDetails(matchId);
-  const incidents = await fetchAmericanFootballMatchIncidents(matchId);
+  const match = await (
+    process.env.DEV_MODE ? fetchEventDetails : fetchAmericanFootballMatchDetails
+  )(matchId);
+  const incidents = await (
+    process.env.DEV_MODE
+      ? fetchEventIncidents
+      : fetchAmericanFootballMatchIncidents
+  )(matchId);
 
   const matchDetails = match?.event;
   const scoreIncidents = incidents?.incidents
@@ -191,12 +210,12 @@ export async function americanFootballMatchDetails(matchId: number) {
         homeTeam: {
           name: shortenTeamNames(matchDetails.homeTeam.name),
           score: matchDetails?.homeScore?.current?.toString() ?? "0",
-          img: resolveNFLImages(matchDetails.homeTeam.name),
+          img: resolveSportImage(matchDetails.homeTeam.name),
         },
         awayTeam: {
           name: shortenTeamNames(matchDetails?.awayTeam.name),
           score: matchDetails?.awayScore?.current?.toString() ?? "0",
-          img: resolveNFLImages(matchDetails.awayTeam.name),
+          img: resolveSportImage(matchDetails.awayTeam.name),
         },
 
         scoreBreakdown: [
@@ -255,7 +274,11 @@ export async function americanFootballMatchDetails(matchId: number) {
 }
 
 export async function americanFootballMatchesByDate(date: Date) {
-  const matches = await fetchAmericanFootballMatchesByDate(date);
+  const matches = (await (process.env.DEV_MODE
+    ? fetchEventsByDate("american-football", date)
+    : fetchAmericanFootballMatchesByDate(
+        date,
+      ))) as AmericanFootball_AmericanFootballApi_CategorySchedule_Response;
 
   if (!matches || matches.events.length === 0) {
     return null;
@@ -302,7 +325,7 @@ export async function americanFootballMatchesByDate(date: Date) {
               roundLabel: roundLabel,
               timer:
                 match.status.type === "notstarted"
-                  ? toShortTimeString(startDate)
+                  ? startDate
                   : match.status.description,
               timerDisplayColour:
                 match.status.type === "inprogress" ? "green" : "gray",
@@ -313,7 +336,6 @@ export async function americanFootballMatchesByDate(date: Date) {
               venue: "",
               summaryText: setMatchSummary(
                 match.status.type,
-                toShortTimeString(startDate),
                 match.homeTeam.name,
                 match.homeScore.current,
                 match.awayTeam.name,
@@ -322,7 +344,7 @@ export async function americanFootballMatchesByDate(date: Date) {
               homeDetails: {
                 name: shortenTeamNames(match.homeTeam.name),
                 score: match.homeScore.current?.toString() ?? "0",
-                img: resolveNFLImages(match.homeTeam.name),
+                img: resolveSportImage(match.homeTeam.name),
                 winDrawLoss: match.homeTeamSeasonHistoricalForm
                   ? `${match.homeTeamSeasonHistoricalForm?.wins ?? 0}-${match.homeTeamSeasonHistoricalForm?.losses ?? 0}${match.homeTeamSeasonHistoricalForm?.draws ? "-" + match.homeTeamSeasonHistoricalForm.draws : ""}`
                   : null,
@@ -330,7 +352,7 @@ export async function americanFootballMatchesByDate(date: Date) {
               awayDetails: {
                 name: shortenTeamNames(match.awayTeam.name),
                 score: match.awayScore.current?.toString() ?? "0",
-                img: resolveNFLImages(match.awayTeam.name),
+                img: resolveSportImage(match.awayTeam.name),
                 winDrawLoss: match.awayTeamSeasonHistoricalForm
                   ? `${match.awayTeamSeasonHistoricalForm?.wins ?? 0}-${match.awayTeamSeasonHistoricalForm?.losses ?? 0}${match.awayTeamSeasonHistoricalForm?.draws ? "-" + match.awayTeamSeasonHistoricalForm.draws : ""}`
                   : null,
@@ -338,9 +360,8 @@ export async function americanFootballMatchesByDate(date: Date) {
             } as MatchSummary;
           }),
         roundLabel: roundLabel,
-        sport: SPORT.AMERICAN_FOOTBALL,
-        roundSlug: `${leagueId}/${leagueIdToName[leagueId]?.currentSeason}`,
-      } as RoundDetails;
+        roundSlug: `${SPORT.AMERICAN_FOOTBALL}/${leagueId}/${leagueIdToName[leagueId]?.currentSeason}`,
+      } as FixtureRound;
     }),
 
     currentRound: leagueIdToName[rounds[0]]?.name ?? "NFL",
