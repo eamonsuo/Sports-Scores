@@ -1034,6 +1034,23 @@ export const NFL_TEAM_NAMES = [
   "Washington Commanders",
 ];
 
+export const SUPER_RUGBY_TEAMS_NAME_LOGO = [
+  "Queensland Reds",
+  "NSW Waratahs",
+  "Brumbies",
+  "Western Force",
+  "Fijian Drua",
+  "Moana Pasifika",
+  "Gallagher Chiefs",
+  "Hurricanes",
+  "Blues",
+  "Highlanders",
+  "Crusaders",
+].map((team) => ({
+  name: team,
+  img: resolveSportImage(team),
+}));
+
 export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
   // {
   //   name: "BBL",
@@ -1182,6 +1199,7 @@ export const RUGBY_LEAGUE_LEAGUES = [
     name: "Queensland Cup",
     slug: "2135",
     seasons: [
+      { name: "2026", slug: "88763" },
       { name: "2025", slug: "69961" },
       { name: "2024", slug: "57514" },
       { name: "2023", slug: "48145" },
@@ -1200,6 +1218,7 @@ export const RUGBY_LEAGUE_LEAGUES = [
     name: "New South Wales Cup",
     slug: "2134",
     seasons: [
+      { name: "2026", slug: "89006" },
       { name: "2025", slug: "69962" },
       { name: "2024", slug: "57568" },
     ],
@@ -1245,12 +1264,16 @@ export const RUGBY_LEAGUE_LEAGUES = [
   {
     name: "World Club Challenge",
     slug: "1590",
-    seasons: [{ name: "2024", slug: "57112" }],
+    seasons: [
+      { name: "2026", slug: "87449" },
+      { name: "2024", slug: "57112" },
+    ],
   },
   {
     name: "Super League",
     slug: "302",
     seasons: [
+      { name: "2026", slug: "86986" },
       { name: "2025", slug: "69930" },
       { name: "2024", slug: "57044" },
     ],
@@ -1307,6 +1330,7 @@ export const AUSSIE_RULES_LEAGUES = [
     name: "VFL",
     slug: "25506",
     seasons: [
+      { name: "2026", slug: "90001" },
       { name: "2025", slug: "73301" },
       { name: "2024", slug: "57568" },
     ],
@@ -1316,6 +1340,7 @@ export const AUSSIE_RULES_LEAGUES = [
     name: "SANFL",
     slug: "20126",
     seasons: [
+      { name: "2026", slug: "89835" },
       { name: "2025", slug: "71309" },
       { name: "2024", slug: "59236" },
     ],
@@ -1325,6 +1350,7 @@ export const AUSSIE_RULES_LEAGUES = [
     name: "WAFL",
     slug: "20160",
     seasons: [
+      { name: "2026", slug: "89836" },
       { name: "2025", slug: "71310" },
       { name: "2024", slug: "59237" },
     ],
@@ -1334,6 +1360,7 @@ export const AUSSIE_RULES_LEAGUES = [
     name: "AFL Preseason",
     slug: "22064",
     seasons: [
+      { name: "2026", slug: "89834" },
       { name: "2025", slug: "71941" },
       { name: "2024", slug: "58764" },
     ],
@@ -1911,3 +1938,119 @@ export const DARTS_LEAGUES = [
     ],
   },
 ] as LeagueSeasonConfig[];
+
+export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
+  {
+    name: "Super Rugby",
+    slug: "422",
+    seasons: [
+      { name: "2026", slug: "86502" },
+      { name: "2025", slug: "69795" },
+      { name: "2024", slug: "56889" },
+      { name: "2023", slug: "47476" },
+    ],
+    qualifyingPosition: 6,
+  },
+  {
+    name: "Rugby Championship",
+    slug: "789",
+    seasons: [
+      // { name: "2026", slug: "" },
+      { name: "2025", slug: "76747" },
+      { name: "2024", slug: "61372" },
+    ],
+  },
+  {
+    name: "Six Nations",
+    slug: "423",
+    seasons: [
+      { name: "2026", slug: "86339" },
+      { name: "2025", slug: "59195" },
+      { name: "2024", slug: "49850" },
+    ],
+  },
+  {
+    name: "Super Rugby AUS",
+    slug: "29227",
+    seasons: [{ name: "2025", slug: "82008" }],
+  },
+  {
+    name: "Queensland Premier Rugby",
+    slug: "2048",
+    seasons: [
+      { name: "2026", slug: "87649" },
+      { name: "2025", slug: "69968" },
+    ],
+    qualifyingPosition: 4,
+  },
+  {
+    name: "Int. Friendly Games",
+    slug: "876",
+    seasons: [
+      { name: "2026", slug: "87128" },
+      { name: "2025", slug: "69572" },
+    ],
+  },
+  {
+    name: "World Cup",
+    slug: "421",
+    seasons: [
+      { name: "2023", slug: "46701" },
+      { name: "2019", slug: "19518" },
+      { name: "2015", slug: "10282" },
+      { name: "2011", slug: "1349" },
+      { name: "2007", slug: "42997" },
+    ],
+  },
+  {
+    name: "World Cup - Women",
+    slug: "1826",
+    seasons: [
+      { name: "2025", slug: "69966" },
+      { name: "2022", slug: "45694" },
+      { name: "2017", slug: "13261" },
+      { name: "2014", slug: "8696" },
+    ],
+  },
+  {
+    name: "British and Irish Lions Tour",
+    slug: "27512",
+    seasons: [
+      { name: "2025", slug: "77221" },
+      { name: "2024", slug: "57568" },
+    ],
+  },
+
+  {
+    name: "Rugby Sevens World Series",
+    slug: "10055",
+    seasons: [
+      { name: "25/26", slug: "85821" },
+      { name: "24/25", slug: "68941" },
+    ],
+  },
+  {
+    name: "Rugby Sevens World Series - Women",
+    slug: "11623",
+    seasons: [
+      { name: "25/26", slug: "85845" },
+      { name: "24/25", slug: "68964" },
+    ],
+  },
+  {
+    name: "World Cup Sevens",
+    slug: "11276",
+    seasons: [
+      // { name: "2026", slug: "" },
+      { name: "2022", slug: "45756" },
+    ],
+  },
+  {
+    name: "World Cup Sevens - Women",
+    slug: "11277",
+    seasons: [
+      // { name: "2026", slug: "" },
+      { name: "2022", slug: "45757" },
+    ],
+  },
+];

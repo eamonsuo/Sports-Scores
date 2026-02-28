@@ -478,7 +478,7 @@ export enum CountryFlagCode {
   Venezuela = "ve",
   Vercel = "/vercel.svg",
   Vietnam = "vn",
-  Wales = "gb-wal",
+  Wales = "gb-wls",
   WallisAndFutuna = "wf",
   WesternSahara = "eh",
   Yemen = "ye",

@@ -9,6 +9,7 @@ import { footballMatchesByDate } from "@/services/football.service";
 import { golfTournamentsByDate } from "@/services/golf.service";
 import { motorsportCategoriesByDate } from "@/services/motorsport.service";
 import { rugbyLeagueMatchesByDate } from "@/services/rugby-league.service";
+import { rugbyUnionMatchesByDate } from "@/services/rugby-union.service";
 import { TennisMatchesByDate as tennisMatchesByDate } from "@/services/tennis.service";
 import { FixtureRound, SPORT } from "@/types/misc";
 
@@ -27,6 +28,7 @@ export default async function Page() {
     aussieRulesToday,
     golfToday,
     motorsportToday,
+    rugbyUnionToday,
   ] = await Promise.all([
     cricketMatchesByDate(curDate),
     tennisMatchesByDate(curDate),
@@ -38,8 +40,11 @@ export default async function Page() {
     aussieRulesCurrentMatches("TODAY"),
     golfTournamentsByDate(curDate),
     motorsportCategoriesByDate(curDate),
+    rugbyUnionMatchesByDate(curDate),
   ]);
 
+  const surfingToday = null; // Placeholder for surfing matches fetching logic
+  const netballToday = null; // Placeholder for netball matches fetching logic
   const dartsToday = null; // Placeholder for darts matches fetching logic
   const cyclingToday = null; // Placeholder for cycling matches fetching logic
 
@@ -71,7 +76,8 @@ export default async function Page() {
     .concat(footballToday?.fixtures ?? [])
     .concat(basketballToday?.fixtures ?? [])
     .concat(baseballToday?.fixtures ?? [])
-    .concat(tennisToday?.fixtures ?? []);
+    .concat(tennisToday?.fixtures ?? [])
+    .concat(rugbyUnionToday?.fixtures ?? []);
 
   return (
     <div className="flex h-full flex-col">
