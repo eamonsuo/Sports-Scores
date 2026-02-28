@@ -1,12 +1,12 @@
 import Placeholder from "@/components/misc-ui/Placeholder";
-import NRLLadder from "@/components/rugby-league/nrl/NRLLadder";
-import { rugbyLeagueStandings } from "@/services/rugby-league.service";
+import RugbyUnionLadder from "@/components/rugby-union/RugbyUnionLadder";
+import { rugbyUnionStandings } from "@/services/rugby-union.service";
 
 export default async function Page(props: {
   params: Promise<{ league: string; season: string }>;
 }) {
   const { league, season } = await props.params;
-  const pageData = await rugbyLeagueStandings(Number(league), Number(season));
+  const pageData = await rugbyUnionStandings(Number(league), Number(season));
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;
@@ -15,7 +15,7 @@ export default async function Page(props: {
   return (
     <>
       {pageData.standings.map((table, index) => (
-        <NRLLadder
+        <RugbyUnionLadder
           key={index}
           data={table}
           qualifyingPosition={pageData.qualifyingPosition}

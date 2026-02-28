@@ -99,6 +99,13 @@ const footerLinks: {
     altText: "Tennis",
   },
   {
+    sport: SPORT.RUGBY_UNION,
+    link: `/sports/${SPORT.RUGBY_UNION}/today`,
+    // link: `https://www.flashscore.com.au/rugby/`,
+    img: "/footer/union.png",
+    altText: "Rugby Union",
+  },
+  {
     sport: SPORT.SURFING,
     // link: `/sports/${SPORT.SURFING}`,
     link: `https://www.worldsurfleague.com/events/2026/ct`,
@@ -132,13 +139,6 @@ const footerLinks: {
     link: `https://www.flashscore.com.au/netball/`,
     img: "/footer/netball.png",
     altText: "Netball",
-  },
-  {
-    sport: SPORT.RUGBY_UNION,
-    // link: `/sports/${SPORT.RUGBY_UNION}`,
-    link: `https://www.flashscore.com.au/rugby/`,
-    img: "/footer/union.png",
-    altText: "Rugby Union",
   },
 ];
 

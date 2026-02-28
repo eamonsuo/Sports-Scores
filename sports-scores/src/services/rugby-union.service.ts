@@ -1,4 +1,4 @@
-import { RugbyLeagueStanding } from "@/components/rugby-league/nrl/NRLLadder";
+import { RugbyUnionStanding } from "@/components/rugby-union/RugbyUnionLadder";
 import {
   fetchRugbyLeagueLastMatches,
   fetchRugbyLeagueMatchDetails,
@@ -15,7 +15,10 @@ import {
   fetchNextEvents,
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
-import { NRL_TEAMS_NAME_LOGO, RUGBY_LEAGUE_LEAGUES } from "@/lib/constants";
+import {
+  RUGBY_UNION_LEAGUES,
+  SUPER_RUGBY_TEAMS_NAME_LOGO,
+} from "@/lib/constants";
 import { resolveSportImage } from "@/lib/imageMapping";
 import {
   getCurrentRound,
@@ -30,14 +33,14 @@ import {
   SPORT,
 } from "@/types/misc";
 import {
-  RugbyLeagueFixturesPage,
-  RugbyLeagueLadderPage,
-  RugbyLeagueMatchPage,
-  RugbyLeagueTodayPage,
-} from "@/types/rugby-league";
+  RugbyUnionFixturesPage,
+  RugbyUnionLadderPage,
+  RugbyUnionMatchPage,
+  RugbyUnionTodayPage,
+} from "@/types/rugby-union";
 import { Sofascore_Event } from "@/types/sofascore";
 
-export async function rugbyLeagueMatches(
+export async function rugbyUnionMatches(
   tournamentId: number,
   seasonId: number,
 ) {
@@ -58,18 +61,18 @@ export async function rugbyLeagueMatches(
     API_EVENT_TYPES.SOFASCORE,
     DISPLAY_TYPES.ROUND,
     matches,
-    mapRugbyLeagueMatch,
-    tournamentId === 294,
-    NRL_TEAMS_NAME_LOGO,
+    mapRugbyUnionMatch,
+    tournamentId === 422,
+    SUPER_RUGBY_TEAMS_NAME_LOGO,
   );
 
   return {
     fixtures: fixture,
     currentRound: getCurrentRound(DISPLAY_TYPES.ROUND, fixture),
-  } as RugbyLeagueFixturesPage;
+  } as RugbyUnionFixturesPage;
 }
 
-export async function rugbyLeagueStandings(
+export async function rugbyUnionStandings(
   tournamentId: number,
   seasonId: number,
 ) {
@@ -99,16 +102,18 @@ export async function rugbyLeagueStandings(
             drawn: item.draws,
           },
           scores: { against: item.scoresAgainst, for: item.scoresFor },
-        } as RugbyLeagueStanding;
+          bonusPoints:
+            (item.points ?? 0) - item.wins * 4 - (item.draws ?? 0) * 2,
+        } as RugbyUnionStanding;
       }),
     ),
     qualifyingPosition:
-      RUGBY_LEAGUE_LEAGUES.find((l) => Number(l.slug) === tournamentId)
+      RUGBY_UNION_LEAGUES.find((l) => Number(l.slug) === tournamentId)
         ?.qualifyingPosition ?? -1,
-  } as RugbyLeagueLadderPage;
+  } as RugbyUnionLadderPage;
 }
 
-export async function rugbyLeagueMatchDetails(matchId: number) {
+export async function rugbyUnionMatchDetails(matchId: number) {
   const match = await (
     process.env.DEV_MODE ? fetchEventDetails : fetchRugbyLeagueMatchDetails
   )(matchId);
@@ -163,17 +168,17 @@ export async function rugbyLeagueMatchDetails(matchId: number) {
             },
           ],
         },
-  } as RugbyLeagueMatchPage;
+  } as RugbyUnionMatchPage;
 }
 
-export async function rugbyLeagueMatchesByDate(date: Date) {
+export async function rugbyUnionMatchesByDate(date: Date) {
   const matches = await (process.env.DEV_MODE
     ? fetchEventsByDate("rugby", date)
     : fetchRugbyLeagueMatchesByDate(date));
 
   if (!matches) return null;
 
-  const validLeagueIds = RUGBY_LEAGUE_LEAGUES.map((l) => Number(l.slug));
+  const validLeagueIds = RUGBY_UNION_LEAGUES.map((l) => Number(l.slug));
 
   matches.events = matches.events
     .filter((item) =>
@@ -191,26 +196,26 @@ export async function rugbyLeagueMatchesByDate(date: Date) {
     API_EVENT_TYPES.SOFASCORE,
     DISPLAY_TYPES.LEAGUE,
     matches.events,
-    mapRugbyLeagueMatch,
+    mapRugbyUnionMatch,
     false,
     undefined,
-    SPORT.RUGBY_LEAGUE,
+    SPORT.RUGBY_UNION,
   );
 
   return {
     fixtures: fixture,
     currentRound: getCurrentRound(DISPLAY_TYPES.LEAGUE, fixture),
-  } as RugbyLeagueTodayPage;
+  } as RugbyUnionTodayPage;
 }
 
-function mapRugbyLeagueMatch(
+function mapRugbyUnionMatch(
   match: Sofascore_Event,
   roundLabel: string,
 ): MatchSummary {
   let startDate = new Date(0);
   startDate.setUTCSeconds(match.startTimestamp);
 
-  return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.RUGBY_LEAGUE, match, {
+  return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.RUGBY_UNION, match, {
     startDate: startDate,
     roundLabel: roundLabel,
   });

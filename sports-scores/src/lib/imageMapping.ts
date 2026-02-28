@@ -1243,6 +1243,33 @@ export function resolveSportImage(teamName: string) {
     case "Gabriel Bortoleto":
       return getCountryImageUrl(CountryFlagCode.Argentina);
 
+    // Rugby Union
+    case "All Blacks":
+      return getCountryImageUrl(CountryFlagCode.NewZealand);
+    // Super Rugby
+    case "Queensland Reds":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/rugby/teams/500/182.png";
+    case "NSW Waratahs":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/rugby/teams/500/227.png";
+    case "Brumbies":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/rugby/teams/500/25889.png";
+    case "Western Force":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/rugby/teams/500/25893.png";
+    case "Fijian Drua":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/rugby/teams/500/289338.png";
+    case "Moana Pasifika":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/rugby/teams/500/289319.png";
+    case "Gallagher Chiefs":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/rugby/teams/500/25934.png";
+    case "Hurricanes":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/rugby/teams/500/25939.png";
+    case "Blues":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/rugby/teams/500/25932.png";
+    case "Highlanders":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/rugby/teams/500/25938.png";
+    case "Crusaders":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/rugby/teams/500/25936.png";
+
     // Countries
     case "Afghanistan":
       return getCountryImageUrl(CountryFlagCode.Afghanistan);

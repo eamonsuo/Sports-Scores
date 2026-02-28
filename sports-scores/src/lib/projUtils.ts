@@ -68,8 +68,15 @@ export function setMatchSummary(
       return ``;
     case "postponed":
       return "Match Postponed";
+    case "finished":
+      return calculateMatchResult(
+        homeName,
+        homeScore,
+        awayName,
+        awayScore,
+        true,
+      );
     default:
-      // Includes finished
       return calculateMatchResult(
         homeName,
         homeScore,
@@ -276,7 +283,7 @@ function mapSofascoreEventToMatchSummary(
     timer:
       options?.timer ??
       (event.status.type === "notstarted"
-        ? undefined // Don't format server-side, let client handle it
+        ? (options?.startDate ?? startDate)
         : event.status.description),
     timerDisplayColour:
       options?.timerDisplayColour ??
@@ -426,20 +433,15 @@ export function getCurrentRound(
 ) {
   switch (roundDisplayType) {
     case DISPLAY_TYPES.ROUND:
+    case DISPLAY_TYPES.DATE:
       // Find first round with upcoming matches
       return (
-        rounds.find((r) => r.matches.some((m) => m.status === "UPCOMING"))
-          ?.roundLabel ??
+        rounds.find((r) =>
+          r.matches.some((m) => m.status === "UPCOMING" || m.status === "LIVE"),
+        )?.roundLabel ??
         rounds[rounds.length - 1]?.roundLabel ??
         "Round 0"
       );
-    case DISPLAY_TYPES.DATE:
-      let startDate = new Date();
-      return rounds
-        .map((item) => item.roundLabel)
-        .includes(format(startDate, "eee d MMM"))
-        ? format(startDate, "eee d MMM")
-        : rounds[0].roundLabel;
 
     case DISPLAY_TYPES.LEAGUE:
       return rounds[0].roundLabel ?? "League";

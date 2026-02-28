@@ -2,13 +2,13 @@ import MatchDetailsHero from "@/components/all-sports/MatchDetailsHero";
 import ScoreChart from "@/components/all-sports/ScoreChart";
 import Placeholder from "@/components/misc-ui/Placeholder";
 import NRLScoreBreakdown from "@/components/rugby-league/nrl/NRLScoreBreakdown";
-import { rugbyLeagueMatchDetails } from "@/services/rugby-league.service";
+import { rugbyUnionMatchDetails } from "@/services/rugby-union.service";
 
 export default async function Page(props: {
   params: Promise<{ league: string; season: string; id: string }>;
 }) {
   const { league, season, id } = await props.params;
-  const pageData = await rugbyLeagueMatchDetails(Number(id));
+  const pageData = await rugbyUnionMatchDetails(Number(id));
 
   if (pageData === null || pageData.matchDetails === null) {
     return <Placeholder>NO DATA</Placeholder>;
