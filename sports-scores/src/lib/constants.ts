@@ -270,7 +270,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-03-09T00:00:00Z"),
     // imageUrl:
     //   "https://upload.wikimedia.org/wikipedia/en/0/05/World_Test_Championship_Logo.svg",
-    link: "/sports/cricket/series/womens-twenty20/australia-women-v-india-women-twenty20-series/matches#current-date",
+    link: "/sports/cricket/today",
     location: "Australia",
     tags: ["👩"],
   },

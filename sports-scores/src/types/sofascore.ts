@@ -80,6 +80,7 @@ export interface Sofascore_Event {
   hasGlobalHighlights: boolean;
   crowdsourcingDataDisplayEnabled: boolean;
   id: number;
+  subTeams?: Sofascore_Team[];
   note?: string;
   defaultPeriodCount: number;
   defaultPeriodLength: number;
