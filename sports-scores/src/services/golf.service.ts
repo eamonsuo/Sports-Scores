@@ -16,7 +16,7 @@ import {
 } from "@/types/golf";
 import { CountryFlagCode, MatchSummary, SPORT } from "@/types/misc";
 
-export async function golfPGASchedule(year: string = "2025") {
+export async function golfPGASchedule(year: string) {
   var rawSchedule = await fetchGolfSchedule(1, year);
   if (!rawSchedule) {
     return null;
@@ -25,7 +25,7 @@ export async function golfPGASchedule(year: string = "2025") {
   return mapGolfSchedule(rawSchedule, "pga");
 }
 
-export async function golfLIVSchedule(year: string = "2025") {
+export async function golfLIVSchedule(year: string) {
   var rawSchedule = await fetchGolfSchedule(2, year);
   if (!rawSchedule) {
     return null;
@@ -34,7 +34,7 @@ export async function golfLIVSchedule(year: string = "2025") {
   return mapGolfSchedule(rawSchedule, "liv");
 }
 
-export async function golfOWGRankings(year: string = "2025") {
+export async function golfOWGRankings(year: string) {
   var rawRanking = await fetchGolfRankings("186", year);
   if (!rawRanking) {
     return null;
@@ -56,7 +56,7 @@ export async function golfOWGRankings(year: string = "2025") {
   } as GolfRankingsPage;
 }
 
-export async function golfFedExRankings(year: string = "2025") {
+export async function golfFedExRankings(year: string) {
   var rawRanking = await fetchGolfRankings("02671", year);
   if (!rawRanking) {
     return null;
@@ -80,7 +80,7 @@ export async function golfFedExRankings(year: string = "2025") {
 
 export async function golfPGATournamentLeaderboard(
   tournId: string,
-  year: string = "2025",
+  year: string,
   roundId?: number,
 ) {
   var rawLeaderboard = await fetchGolfLeaderboard(1, tournId, year, roundId);
@@ -93,7 +93,7 @@ export async function golfPGATournamentLeaderboard(
 
 export async function golfLIVTournamentLeaderboard(
   tournId: string,
-  year: string = "2025",
+  year: string,
   roundId?: number,
 ) {
   var rawLeaderboard = await fetchGolfLeaderboard(2, tournId, year, roundId);

@@ -6,6 +6,7 @@ import { formatTime } from "@/lib/projUtils";
 import { CardVariant, MatchSummary } from "@/types/misc";
 import React from "react";
 import Placeholder from "../misc-ui/Placeholder";
+import LeagueSeriesHeader from "./LeagueSeriesHeader";
 import SectionDate from "./SectionDate";
 
 // Assumes data prop is already sorted in desired order
@@ -19,12 +20,14 @@ export default function FixtureList({
   const CardComponent =
     cardVariant === "tennis" ? TennisMatchCard : MatchSummaryCard;
 
-  const current_date: Date = new Date(Date.now());
+  const currentDate: Date = new Date(Date.now());
 
-  let sectionDate: Date = new Date("2000-01-01");
-  let displayDate: boolean = false;
-  let currentMatch: boolean = false;
-  let currentDateFlag: boolean = false;
+  let sectionDate = new Date("2000-01-01");
+  let sectionSeries = "";
+  let displayDate = false;
+  let displaySeries = false;
+  let currentMatch = false;
+  let currentDateFlag = false;
 
   if (data.length === 0) {
     return <Placeholder>NO DATA</Placeholder>;
@@ -33,11 +36,18 @@ export default function FixtureList({
   return (
     <div className="flex-1 overflow-y-auto px-4">
       {data.map((item: MatchSummary) => {
-        let item_date = new Date(item.startDate);
+        let itemDate = new Date(item.startDate);
         displayDate = false;
-        if (sectionDate.toDateString() !== item_date.toDateString()) {
-          sectionDate = item_date;
+        displaySeries = false;
+
+        if (sectionDate.toDateString() !== itemDate.toDateString()) {
+          sectionDate = itemDate;
           displayDate = true;
+        }
+
+        if (sectionSeries !== item.seriesName) {
+          sectionSeries = item.seriesName ?? "";
+          displaySeries = true;
         }
 
         if (currentMatch) {
@@ -45,8 +55,8 @@ export default function FixtureList({
         }
         if (
           !currentDateFlag &&
-          (current_date.toDateString() === sectionDate.toDateString() ||
-            current_date.getTime() <= sectionDate.getTime())
+          (currentDate.toDateString() === sectionDate.toDateString() ||
+            currentDate.getTime() <= sectionDate.getTime())
         ) {
           currentMatch = true;
           currentDateFlag = true;
@@ -57,10 +67,18 @@ export default function FixtureList({
             {displayDate && (
               <SectionDate
                 sectionDate={sectionDate}
+                sectionDateEnd={item.endDate}
                 currentDate={currentMatch}
               />
             )}
+            {(displaySeries || displayDate) && item.seriesName && (
+              <LeagueSeriesHeader
+                href={`/sports/${item.sport}/${item.seriesSlug}`}
+                seriesName={item.seriesName ?? ""}
+              />
+            )}
             <CardComponent
+              className={item.seriesName ? "mt-0 rounded-b-md" : "rounded-md"}
               id={item.id}
               href={`/sports/${item.sport}/${item.matchSlug ?? item.id}`}
               homeInfo={item.homeDetails}

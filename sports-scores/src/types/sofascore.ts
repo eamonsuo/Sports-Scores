@@ -80,11 +80,13 @@ export interface Sofascore_Event {
   hasGlobalHighlights: boolean;
   crowdsourcingDataDisplayEnabled: boolean;
   id: number;
+  note?: string;
   defaultPeriodCount: number;
   defaultPeriodLength: number;
   slug: string;
   currentPeriodStartTimestamp: number;
   startTimestamp: number;
+  endTimestamp?: number;
   defaultOvertimeLength: number;
   finalResultOnly: boolean;
   feedLocked: boolean;
@@ -146,6 +148,8 @@ export interface Sofascore_UniqueTournament {
   hasEventPlayerStatistics: boolean;
   displayInverseHomeAwayTeams: boolean;
   fieldTranslations: Sofascore_FieldTranslations;
+  tennisPoints?: number; // Only for tennis unique tournaments, represents the level of tournament
+  groundType?: string; // Only for tennis unique tournaments, e.g. "Hardcourt outdoor", "Clay", "Grass"
 }
 
 export interface Sofascore_Season {
@@ -195,8 +199,8 @@ export interface Sofascore_TeamColors {
 export interface Sofascore_Score {
   current: number;
   display: number;
-  period1: number;
-  period2: number;
+  period1?: number;
+  period2?: number;
   period3?: number;
   period4?: number;
   period5?: number;
@@ -210,7 +214,18 @@ export interface Sofascore_Score {
   period4TieBreak?: number;
   period5TieBreak?: number;
   overtime?: number;
-  normaltime: number;
+  normaltime?: number;
+  innings?: {
+    inning1?: Sofascore_Score_Inning;
+    inning2?: Sofascore_Score_Inning;
+  };
+}
+
+export interface Sofascore_Score_Inning {
+  score: number;
+  wickets: number;
+  overs: number;
+  runRate: number;
 }
 
 export interface Sofascore_Time {

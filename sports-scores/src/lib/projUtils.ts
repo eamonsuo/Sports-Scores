@@ -263,7 +263,8 @@ function mapSofascoreEventToMatchSummary(
 
   return {
     id: options?.id ?? event.id,
-    startDate: startDate,
+    startDate: options?.startDate ?? startDate,
+    endDate: options?.endDate,
     sport: sport,
     status:
       (options?.status ?? event.status.type === "inprogress")
@@ -284,6 +285,8 @@ function mapSofascoreEventToMatchSummary(
       options?.matchSlug ??
       `${event.tournament.uniqueTournament.id}/${event.season.id}/${event.id}`,
     venue: options?.venue ?? event?.venue?.name ?? "",
+    seriesName: options?.seriesName,
+    seriesSlug: options?.seriesSlug,
     summaryText:
       options?.summaryText ??
       setMatchSummary(

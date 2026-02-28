@@ -460,7 +460,7 @@ export function resolveSportImage(teamName: string) {
     case "Lyon":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/167.png";
     case "AS Monaco":
-    case "Monaco":
+      // case "Monaco":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/174.png";
     case "Lille OSC":
     case "Lille":
@@ -1014,6 +1014,16 @@ export function resolveSportImage(teamName: string) {
     case "Joel Dahmen":
     case "Webb Simpson":
     case "Davis Riley":
+    case "Kevin Streelman":
+    case "Austin Eckroat":
+    case "Beau Hossler":
+    case "Dylan Wu":
+    case "Blades Brown":
+    case "Nick Dunlap":
+    case "Brandt Snedeker":
+    case "Charley Hoffman":
+    case "Doug Ghim":
+    case "Lanto Griffen":
       return getCountryImageUrl(CountryFlagCode.UnitedStates);
 
     // Golf Players - England
@@ -1027,6 +1037,7 @@ export function resolveSportImage(teamName: string) {
     case "Ian Poulter":
     case "Harry Hall":
     case "Marco Penge":
+    case "Danny Willett":
       return getCountryImageUrl(CountryFlagCode.England);
 
     // Golf Players - Ireland & UK
@@ -1062,6 +1073,7 @@ export function resolveSportImage(teamName: string) {
 
     // Golf Players - Asia
     case "Hideki Matsuyama":
+    case "Ryo Hisatsune":
       return getCountryImageUrl(CountryFlagCode.Japan);
     case "Sungjae Im":
     case "Tom Kim":
@@ -1076,6 +1088,8 @@ export function resolveSportImage(teamName: string) {
     // Golf Players - Americas
     case "Corey Conners":
     case "Nick Taylor":
+    case "Mackenzie Hughes":
+    case "Adam Hadwin":
       return getCountryImageUrl(CountryFlagCode.Canada);
     case "Sergio Garcia":
     case "Jon Rahm":

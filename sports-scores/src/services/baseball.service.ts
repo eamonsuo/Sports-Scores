@@ -247,13 +247,13 @@ export async function baseballMatchDetails(matchId: number) {
       teams: {
         home: {
           score:
-            matchDetails.homeScore?.current -
-            matchDetails.homeScore?.normaltime,
+            (matchDetails.homeScore?.current ?? 0) -
+            (matchDetails.homeScore?.normaltime ?? 0),
         },
         away: {
           score:
-            matchDetails.awayScore?.current -
-            matchDetails.awayScore?.normaltime,
+            (matchDetails.awayScore?.current ?? 0) -
+            (matchDetails.awayScore?.normaltime ?? 0),
         },
       },
     });

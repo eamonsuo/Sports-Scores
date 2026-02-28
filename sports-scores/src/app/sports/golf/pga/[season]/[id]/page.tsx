@@ -5,10 +5,10 @@ import { golfPGATournamentLeaderboard } from "@/services/golf.service";
 export const dynamic = "force-dynamic";
 
 export default async function Page(props: {
-  params: Promise<{ season: string; slug: string }>;
+  params: Promise<{ season: string; id: string }>;
 }) {
-  const { season, slug } = await props.params;
-  const leaderboard = await golfPGATournamentLeaderboard(slug, season);
+  const { season, id } = await props.params;
+  const leaderboard = await golfPGATournamentLeaderboard(id, season);
 
   if (!leaderboard) {
     return <Placeholder>No Data</Placeholder>;

@@ -6,18 +6,31 @@ import { CricketLadder } from "@/components/cricket/CricketSeriesLadder";
 import {
   fetchCricketAllSeries,
   fetchCricketMatchDetails,
-  fetchCricketMatchesByDate,
+  fetchCricketMatchesByDateLiveScore,
+  fetchCricketMatchesByDateSofascore,
   fetchCricketMatchInnings,
   fetchCricketMyTeams,
   fetchCricketSeriesMatches,
 } from "@/endpoints/cricket.api";
+import { fetchEventsByDate } from "@/endpoints/sofascore.api";
 import { resolveSportImage } from "@/lib/imageMapping";
+import {
+  getCurrentRound,
+  mapFixtureRound,
+  mapMatchSummary,
+} from "@/lib/projUtils";
 import {
   Cricket_LiveScoreAPI_MatchesGetInnings,
   Cricket_LiveScoreAPI_MatchesGetScoreBoard,
 } from "@/types/cricket";
-import { MatchStatus, MatchSummary, SPORT } from "@/types/misc";
-import { format } from "date-fns";
+import {
+  API_EVENT_TYPES,
+  DISPLAY_TYPES,
+  MatchStatus,
+  MatchSummary,
+  SPORT,
+} from "@/types/misc";
+import { Sofascore_Event } from "@/types/sofascore";
 
 const excludedSeries = [
   "CSA",
@@ -27,87 +40,11 @@ const excludedSeries = [
   "SA20",
   "Super Smash",
   "Bangladesh Premier League",
+  "Plunket",
 ];
 
-// Client-side fetch for matches by date (calls API route)
-export async function cricketMatchesByDateClient(date: Date) {
-  const dateString = `${date.getFullYear()}${(date.getMonth() + 1)
-    .toString()
-    .padStart(2, "0")}${date.getDate().toString().padStart(2, "0")}`;
-
-  try {
-    const response = await fetch(`/api/cricket/matches/${dateString}`);
-    if (!response.ok) {
-      console.error("Failed to fetch cricket matches:", response.statusText);
-      return null;
-    }
-    const rawMatches = await response.json();
-
-    if (!rawMatches || !rawMatches.Stages) return null;
-
-    // Sort stages by the first event's start date (Esd)
-    rawMatches.Stages.sort((a: any, b: any) => {
-      const aFirstEventEsd = a.Events[0]?.Esd ?? Infinity;
-      const bFirstEventEsd = b.Events[0]?.Esd ?? Infinity;
-      return aFirstEventEsd - bFirstEventEsd;
-    });
-
-    return rawMatches.Stages.filter(
-      (series: any) => !excludedSeries.some((str) => series.Snm.includes(str)),
-    ).flatMap((item: any) => {
-      return item.Events.map((event: any) => {
-        let sDate = convertNumbertoDate(event.Esd);
-        let longFormat =
-          (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
-        let home2Ing = longFormat
-          ? `, ${event.Tr1CW2 ?? 0}/${event.Tr1C2 ?? 0}${event.Tr1CD2 === 1 ? "d" : ""}`
-          : "";
-        let away2Ing = longFormat
-          ? `, ${event.Tr2CW2 ?? 0}/${event.Tr2C2 ?? 0}${event.Tr2CD2 === 1 ? "d" : ""}`
-          : "";
-
-        return {
-          id: Number(event.Eid),
-          startDate: sDate,
-          endDate: convertNumbertoDate(event.Ese),
-          sport: SPORT.CRICKET,
-          venue: "",
-          status: mapCricketStatus(event.Eps),
-          summaryText: event.Eps === "NS" ? "" : event.ECo,
-          timer: event.Eps === "L" ? "Live" : event.Eps === "NS" ? sDate : null,
-          timerDisplayColour: event.Eps === "L" ? "green" : "gray",
-          otherDetail: event.ErnInf,
-          homeDetails: {
-            img: resolveSportImage(
-              event.T1[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
-            ),
-            score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
-            name: event.T1[0].Nm,
-          },
-          awayDetails: {
-            img: resolveSportImage(
-              event.T2[0].Nm.replace(/\s((W|A|U19)(\sW)?)$/i, ""),
-            ),
-            score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
-            name: event.T2[0].Nm,
-          },
-          seriesName: item.Snm,
-          matchSlug: `${item.Ccd}/${item.Scd}/${event.Eid}`,
-          seriesSlug: `${item.Ccd}/${item.Scd}`,
-        } as MatchSummary;
-      });
-    });
-  } catch (error) {
-    console.error("Error fetching cricket matches:", error);
-    return null;
-  }
-}
-
-// Fetch matches for a specific date (server-side only)
 export async function cricketMatchesByDate(date: Date) {
-  const dateString = format(date, "yyyyMMdd");
-
-  const rawMatches = await fetchCricketMatchesByDate(dateString);
+  const rawMatches = await fetchCricketMatchesByDateLiveScore(date);
   if (!rawMatches || !rawMatches.Stages) return null;
 
   const matches = rawMatches.Stages.filter(
@@ -115,6 +52,7 @@ export async function cricketMatchesByDate(date: Date) {
   ).flatMap((item) => {
     return item.Events.map((event) => {
       let sDate = convertNumbertoDate(event.Esd);
+      let endDate = convertNumbertoDate(event.Ese);
       let longFormat =
         (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
       let home2Ing = longFormat
@@ -127,7 +65,8 @@ export async function cricketMatchesByDate(date: Date) {
       return {
         id: Number(event.Eid),
         startDate: sDate,
-        endDate: convertNumbertoDate(event.Ese),
+        endDate:
+          sDate.toDateString() !== endDate.toDateString() ? endDate : undefined,
         sport: SPORT.CRICKET,
         venue: "",
         status: mapCricketStatus(event.Eps),
@@ -156,10 +95,8 @@ export async function cricketMatchesByDate(date: Date) {
     });
   });
 
-  // Sort by date first, then by start time
+  // Sort by start date
   return matches.sort((a, b) => {
-    const dateCompare = a.startDate.getTime() - b.startDate.getTime();
-    if (dateCompare !== 0) return dateCompare;
     return a.startDate.getTime() - b.startDate.getTime();
   });
 }
@@ -322,8 +259,6 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
 
   // Sort by date first, then by start time
   return matches.sort((a, b) => {
-    const dateCompare = a.startDate.getTime() - b.startDate.getTime();
-    if (dateCompare !== 0) return dateCompare;
     return a.startDate.getTime() - b.startDate.getTime();
   });
 }
@@ -470,4 +405,79 @@ export function convertNumbertoDate(dateNumber: number) {
   let minute = dateString.substring(10, 12);
   let second = dateString.substring(12, 14);
   return new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}+10:00`);
+}
+
+export async function cricketMatchesByDateSofascore(date: Date) {
+  const matches = await (process.env.DEV_MODE
+    ? fetchEventsByDate("cricket", date)
+    : fetchCricketMatchesByDateSofascore(date));
+
+  if (!matches) return null;
+
+  // const validLeagueIds = CRICKET_LEAGUES.map((l) => Number(l.slug));
+
+  matches.events = matches.events
+    .filter(
+      (item) => !excludedSeries.some((str) => item.season.name.includes(str)),
+      // validLeagueIds.includes(item.tournament.uniqueTournament.id),
+    )
+    .sort((a, b) => a.startTimestamp - b.startTimestamp);
+
+  if (!matches.events || matches.events.length === 0) return null;
+
+  const fixture = mapFixtureRound(
+    API_EVENT_TYPES.SOFASCORE,
+    DISPLAY_TYPES.DATE,
+    matches.events,
+    mapCricketMatch,
+    false,
+    undefined,
+    SPORT.CRICKET,
+  );
+
+  return {
+    fixtures: fixture,
+    currentRound: getCurrentRound(DISPLAY_TYPES.DATE, fixture),
+  };
+}
+
+function mapCricketMatch(
+  match: Sofascore_Event,
+  roundLabel: string,
+): MatchSummary {
+  let startDate = new Date(0);
+  startDate.setUTCSeconds(match.startTimestamp);
+  let endDate = new Date(0);
+  endDate.setUTCSeconds(match?.endTimestamp ?? 0);
+
+  return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.CRICKET, match, {
+    startDate: startDate,
+    endDate:
+      startDate.toDateString() !== endDate.toDateString() ? endDate : undefined,
+    // status: mapCricketStatus(match.status.code.toString()),
+    summaryText: match.note,
+    // otherDetail: match.tournament.name,
+    timer:
+      match.status.type === "finished"
+        ? ""
+        : match.status.type === "notstarted"
+          ? startDate
+          : match.status.description,
+    // timerDisplayColour: match.status === "L" ? "green" : "gray",
+    homeDetails: {
+      img: resolveSportImage(
+        match.homeTeam.name.replace(/\s((Women|A|U19)(\sW)?)$/i, ""),
+      ),
+      score: `${match.homeScore.innings?.inning1?.wickets ?? 0}/${match.homeScore.innings?.inning1?.score ?? 0}${match.homeScore.innings?.inning2 ? `, ${match.homeScore.innings?.inning2?.wickets ?? 0}/${match.homeScore.innings?.inning2?.score ?? 0}` : ""}`,
+    },
+    awayDetails: {
+      img: resolveSportImage(
+        match.awayTeam.name.replace(/\s((Women|A|U19)(\sW)?)$/i, ""),
+      ),
+      score: `${match.awayScore.innings?.inning1?.wickets ?? 0}/${match.awayScore.innings?.inning1?.score ?? 0}${match.awayScore.innings?.inning2 ? `, ${match.awayScore.innings?.inning2?.wickets ?? 0}/${match.awayScore.innings?.inning2?.score ?? 0}` : ""}`,
+    },
+    roundLabel: roundLabel,
+    seriesName: match.tournament.name,
+    seriesSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}`,
+  });
 }

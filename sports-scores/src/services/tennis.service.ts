@@ -422,6 +422,7 @@ function mapTennisMatches(match: Tennis_Sofascore_Event) {
     sport: SPORT.TENNIS,
     status: match.status.description,
     venue: "",
+    otherDetail: match.roundInfo?.name ?? undefined,
     summaryText: setTennisMatchSummary(
       match.status.type,
       match.winnerCode,
@@ -430,6 +431,8 @@ function mapTennisMatches(match: Tennis_Sofascore_Event) {
       match.homeScore.current ?? 0,
       match.awayScore.current ?? 0,
     ),
+    seriesName: `${match.tournament.category.name} ${match.tournament.uniqueTournament?.tennisPoints ?? ""} - ${match.tournament.name}`,
+    seriesSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}`,
     homeDetails: {
       name:
         `${match.homeTeamSeed ? match.homeTeamSeed + " " : ""}` +
@@ -482,4 +485,113 @@ function mapTennisMatches(match: Tennis_Sofascore_Event) {
     },
     winner: match.winnerCode,
   } as MatchSummary;
+}
+
+export async function TESTTennisMatchesByDate(date: Date) {
+  const matches = await (process.env.DEV_MODE
+    ? fetchEventsByDate("tennis", date)
+    : fetchTennisMatchesByDate(date));
+
+  if (!matches) {
+    return null;
+  }
+
+  const validLeagueIds = TENNIS_CATEGORIES.concat(TENNIS_LEAGUES).map((l) =>
+    Number(l.slug),
+  );
+  const leagueIdToName = Object.fromEntries(
+    TENNIS_CATEGORIES.concat(TENNIS_LEAGUES).map((l) => [
+      Number(l.slug),
+      l.name,
+    ]),
+  );
+
+  const filteredMatches = matches.events.filter(
+    (item) =>
+      (validLeagueIds.includes(item.tournament.category.id) ||
+        validLeagueIds.includes(item.tournament.uniqueTournament.id)) &&
+      item.status.type !== "canceled",
+  );
+
+  const aussieMatches = matches.events.filter(
+    (item) =>
+      (item.homeTeam.country.name === "Australia" ||
+        item.awayTeam.country.name === "Australia") &&
+      item.status.type !== "canceled",
+  );
+
+  // Get unique league ids in order
+  const roundsParent = [
+    ...new Set(filteredMatches.map((item) => item.tournament.category.id)),
+  ];
+
+  let firstTournament = "";
+
+  const aussieRoundsChild = [
+    ...new Set(
+      aussieMatches.map((item) => item.tournament.uniqueTournament.id),
+    ),
+  ];
+
+  const fixtures = roundsParent
+    .map((parent) => {
+      const roundsChild = [
+        ...new Set(
+          filteredMatches
+            .filter((item) => item.tournament.category.id === parent)
+            .map((item) => item.tournament.uniqueTournament.id),
+        ),
+      ];
+
+      let tourLabel = leagueIdToName[parent] ?? "Other";
+
+      return {
+        tourLabel: tourLabel,
+        tournament: roundsChild.map((leagueId) => {
+          let roundLabel = "";
+          return {
+            matches: filteredMatches
+              .filter(
+                (item) => item.tournament.uniqueTournament.id === leagueId,
+              )
+              .map((match) => {
+                if (roundLabel === "") {
+                  roundLabel = match.tournament.name;
+                }
+                if (firstTournament === "") {
+                  firstTournament = roundLabel;
+                }
+
+                return mapTennisMatches(match);
+              }),
+
+            roundLabel,
+            cardVariant: "tennis",
+            roundSlug: `${SPORT.TENNIS}/today`,
+          } as FixtureRound;
+        }),
+      };
+    })
+    .concat({
+      tourLabel: "Australians",
+      tournament: aussieRoundsChild.map((leagueId) => {
+        let roundLabel = "";
+        return {
+          matches: aussieMatches
+            .filter((item) => item.tournament.uniqueTournament.id === leagueId)
+            .map((match) => {
+              if (roundLabel === "") {
+                roundLabel = match.tournament.name;
+              }
+              return mapTennisMatches(match);
+            }),
+          // .sort((a, b) => a.startDate.getTime() - b.startDate.getTime()),
+          roundLabel,
+          cardVariant: "tennis",
+          roundSlug: `${SPORT.TENNIS}/today`,
+        } as FixtureRound;
+      }),
+    });
+
+  return { firstItem: fixtures[0].tourLabel, fixtures };
 }

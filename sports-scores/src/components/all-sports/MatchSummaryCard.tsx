@@ -1,4 +1,5 @@
 import fallback from "@/../public/vercel.svg";
+import { cn } from "@/lib/utils";
 import { TeamScoreDetails } from "@/types/misc";
 import clsx from "clsx";
 import Image from "next/image";
@@ -14,6 +15,7 @@ export default function MatchSummaryCard({
   venue,
   topInfo,
   bottomInfo,
+  className,
 }: {
   id: number;
   href: string;
@@ -24,10 +26,16 @@ export default function MatchSummaryCard({
   venue: string;
   topInfo?: string;
   bottomInfo?: string;
+  className?: string;
 }) {
   return (
     <Link href={href}>
-      <div className="mt-4 flex flex-col items-center justify-center rounded-md border border-gray-300 p-4 shadow-sm active:bg-gray-300 dark:border-neutral-500 dark:active:bg-neutral-700">
+      <div
+        className={cn(
+          "mt-4 flex flex-col items-center justify-center border border-gray-300 p-4 shadow-sm active:bg-gray-300 dark:border-neutral-500 dark:active:bg-neutral-700",
+          className,
+        )}
+      >
         <p className="text-xs text-gray-700 dark:text-neutral-500">{topInfo}</p>
         <p className="text-center text-gray-500 dark:text-neutral-500">
           {matchSummary}

@@ -1,4 +1,5 @@
 import fallback from "@/../public/vercel.svg";
+import { cn } from "@/lib/utils";
 import { TeamScoreDetails } from "@/types/misc";
 import clsx from "clsx";
 import Image from "next/image";
@@ -15,6 +16,7 @@ export default function TennisMatchCard({
   topInfo,
   bottomInfo,
   winner,
+  className,
 }: {
   id: number;
   href: string;
@@ -26,10 +28,16 @@ export default function TennisMatchCard({
   topInfo?: string;
   bottomInfo?: string;
   winner?: number;
+  className?: string;
 }) {
   return (
     <Link href={href}>
-      <div className="mt-4 flex flex-col rounded-md border border-gray-300 p-4 shadow-sm active:bg-gray-300 dark:border-neutral-500 dark:active:bg-neutral-700">
+      <div
+        className={cn(
+          "mt-4 flex flex-col border border-gray-300 p-4 shadow-sm active:bg-gray-300 dark:border-neutral-500 dark:active:bg-neutral-700",
+          className,
+        )}
+      >
         {/* Header with tournament/round info */}
         {topInfo && (
           <p className="mb-2 text-xs text-gray-700 dark:text-neutral-500">

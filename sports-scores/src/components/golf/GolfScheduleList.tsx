@@ -2,7 +2,7 @@
 
 import { GolfSchedule } from "@/types/golf";
 import React, { useEffect } from "react";
-import SectionDateRange from "../all-sports/SectionDateRange";
+import SectionDate from "../all-sports/SectionDate";
 import TournamentSummaryCard from "./TournamentSummaryCardSchedule";
 
 // Assumes data prop is already sorted in desired order
@@ -84,9 +84,9 @@ export default function GolfScheduleList({
         return (
           <React.Fragment key={item.id}>
             {displayDate && (
-              <SectionDateRange
-                dateFrom={item.startDate}
-                dateTo={item.endDate}
+              <SectionDate
+                sectionDate={item.startDate}
+                sectionDateEnd={item.endDate}
                 currentDate={currentMatch}
               />
             )}
@@ -96,7 +96,7 @@ export default function GolfScheduleList({
               status={item.status}
               leader={item.leader}
               location={item.location}
-              url={`/sports/golf/${item.tourName}/${season}/tournament/${item.id}`}
+              url={`/sports/golf/${item.tourName}/${season}/${item.id}`}
             />
           </React.Fragment>
         );

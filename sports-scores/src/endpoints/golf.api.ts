@@ -21,7 +21,7 @@ function updateQuota(response: Response) {
   }
 }
 
-export async function fetchGolfSchedule(orgId: 1 | 2, year: string = "2025") {
+export async function fetchGolfSchedule(orgId: 1 | 2, year: string) {
   const rawTournaments = await fetch(
     `${process.env.GOLF_BASEURL}/schedule?orgId=${orgId}&year=${year}`,
     {
@@ -38,7 +38,7 @@ export async function fetchGolfSchedule(orgId: 1 | 2, year: string = "2025") {
   return (await rawTournaments.json()) as Golf_SlashGolfAPI_Schedule;
 }
 
-export async function fetchGolfRankings(statId: string, year: string = "2025") {
+export async function fetchGolfRankings(statId: string, year: string) {
   const rawRankings = await fetch(
     `${process.env.GOLF_BASEURL}/stats?year=${year}&statId=${statId}`,
     {
@@ -58,7 +58,7 @@ export async function fetchGolfRankings(statId: string, year: string = "2025") {
 export async function fetchGolfLeaderboard(
   orgId: 1 | 2,
   tournId: string,
-  year: string = "2025",
+  year: string,
   roundId?: number,
 ) {
   const rawLeaderboard = await fetch(

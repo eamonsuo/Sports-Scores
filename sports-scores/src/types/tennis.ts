@@ -17,6 +17,12 @@ export interface Tennis_Sofascore_Event extends Sofascore_Event {
   homeTeamSeed?: string;
   awayTeamSeed?: string;
   firstToServe?: number;
+  eventFilters?: {
+    category: string[];
+    level: string[];
+    tournament: string[];
+    gender: string[];
+  };
 }
 
 export interface Tennis_TennisApi_FixturePage_Response
