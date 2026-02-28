@@ -1,6 +1,6 @@
 import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import { RugbyLeagueStanding } from "@/components/rugby-league/nrl/NRLLadder";
-import { RugbyLeagueScoreBreakdown } from "@/components/rugby-league/NRLScoreBreakdown";
+import { RugbyLeagueScoreBreakdown } from "@/components/rugby-league/nrl/NRLScoreBreakdown";
 import { FixtureRound, TeamScoreDetails } from "./misc";
 import {
   Sofascore_Event,
