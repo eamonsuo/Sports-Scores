@@ -104,10 +104,10 @@ export async function golfLIVTournamentLeaderboard(
   return {
     playerLeaderboard: mapGolfLeaderboard(rawLeaderboard),
     teamLeaderboard:
-      rawLeaderboard.teams?.map((item) => {
+      rawLeaderboard.teams?.map((item, idx) => {
         return {
           name: item.name,
-          position: item.position,
+          position: (idx + 1).toString(),
           totalScore: item.totalScore,
           thru: "",
           curRound: "",

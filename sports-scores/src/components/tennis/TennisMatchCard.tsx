@@ -69,12 +69,27 @@ export default function TennisMatchCard({
         <div className="grid grid-cols-[1fr_auto] gap-2 border-gray-300 dark:border-neutral-600">
           {/* Home Player */}
           <div className="flex items-center gap-2">
-            <Image
-              src={homeInfo.img ?? fallback}
-              width={32}
-              height={32}
-              alt={homeInfo.name}
-            />
+            {Array.isArray(homeInfo.img) ? (
+              <div className="flex">
+                {homeInfo.img.map((img, idx) => (
+                  <Image
+                    key={idx}
+                    src={img || fallback}
+                    width={32}
+                    height={32}
+                    alt={`${homeInfo.name} player ${idx + 1}`}
+                    className="me-0.5"
+                  />
+                ))}
+              </div>
+            ) : (
+              <Image
+                src={homeInfo.img || fallback}
+                width={32}
+                height={32}
+                alt={homeInfo.name}
+              />
+            )}
             <p
               className={clsx(
                 "truncate text-sm text-gray-700 dark:text-neutral-500",
@@ -98,12 +113,27 @@ export default function TennisMatchCard({
 
           {/* Away Player */}
           <div className="flex items-center gap-2">
-            <Image
-              src={awayInfo.img ?? fallback}
-              width={32}
-              height={32}
-              alt={awayInfo.name}
-            />
+            {Array.isArray(awayInfo.img) ? (
+              <div className="flex">
+                {awayInfo.img.map((img, idx) => (
+                  <Image
+                    key={idx}
+                    src={img || fallback}
+                    width={32}
+                    height={32}
+                    alt={`${awayInfo.name} player ${idx + 1}`}
+                    className="me-0.5"
+                  />
+                ))}
+              </div>
+            ) : (
+              <Image
+                src={awayInfo.img || fallback}
+                width={32}
+                height={32}
+                alt={awayInfo.name}
+              />
+            )}
             <p
               className={clsx(
                 "truncate text-sm text-gray-700 dark:text-neutral-500",

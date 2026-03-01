@@ -1,17 +1,17 @@
 import fallback from "@/../public/vercel.svg";
 import Image from "next/image";
 
-export type FootballScoreBreakdown = {
+export type RugbyLeagueScoreBreakdown = {
   teams: { home: { score: number }; away: { score: number } };
   periodName: string;
 };
 
-export default function FootballScoreBreakdown({
+export default function RugbyLeagueScoreBreakdown({
   scoreData,
   homeLogo,
   awayLogo,
 }: {
-  scoreData: FootballScoreBreakdown[];
+  scoreData: RugbyLeagueScoreBreakdown[];
   homeLogo?: string | string[];
   awayLogo?: string | string[];
 }) {
@@ -23,13 +23,6 @@ export default function FootballScoreBreakdown({
     ? awayLogo[0] || undefined
     : awayLogo || undefined;
 
-  let ETFLAG = false;
-  if (scoreData.length > 2) {
-    ETFLAG = true;
-  } else {
-    scoreData = scoreData.slice(0, 2);
-  }
-
   return (
     <table className="m-4 text-center dark:text-neutral-400">
       <thead>
@@ -37,7 +30,6 @@ export default function FootballScoreBreakdown({
           <th></th>
           <th>1st Half</th>
           <th>2nd Half</th>
-          {ETFLAG && <th>Extra Time</th>}
         </tr>
       </thead>
       <tbody>

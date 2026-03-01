@@ -16,11 +16,12 @@ Currently Implemented:
 - Ice Hockey (NHL, AIHL, Internationals) - Fixtures, Ladder, Match Details, Today's Matches
 - Tennis (Australian tournaments) - Fixtures, Match Details, Brackets, Today's Matches
 - Rugby Union (Super Rugby, Internationals, QLD Premier) - Fixtures, Ladder, Match Details, Today's Matches
+- Netball (Super Netball, Internationals) - Fixtures, Ladder, Match Details, Today's Matches
 
 To Be Implemented:
 
 - Surfing (WSL)
-- Netball (Super Netball, Internationals)
 - Olympics
 - Other Golf Leagues (LPGA, AusPGA, European Tour, TGL)
 - Darts (PDC)
+- Improve Netball & Cricket (My Teams) Data

@@ -19,7 +19,7 @@ export default async function Page(props: {
     {
       btnLabel: `Players`,
       component: (
-        <div className="overflow-y-auto px-4" key="playerscomponent">
+        <div className="overflow-y-auto px-4">
           <TournamentLeaderboard
             players={leaderboard?.playerLeaderboard.playerPositions}
           />
@@ -30,7 +30,7 @@ export default async function Page(props: {
     {
       btnLabel: `Teams`,
       component: (
-        <div className="overflow-y-auto px-4" key="teamscomponent">
+        <div className="overflow-y-auto px-4">
           <TournamentLeaderboard players={leaderboard?.teamLeaderboard} />
         </div>
       ),

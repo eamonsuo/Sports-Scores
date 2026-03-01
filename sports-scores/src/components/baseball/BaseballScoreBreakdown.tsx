@@ -12,9 +12,17 @@ export default function BaseballScoreBreakdown({
   awayLogo,
 }: {
   scoreData: BaseballScoreBreakdown[];
-  homeLogo?: string;
-  awayLogo?: string;
+  homeLogo?: string | string[];
+  awayLogo?: string | string[];
 }) {
+  // Use first image if array (for doubles), and handle empty strings
+  const homeLogoSrc = Array.isArray(homeLogo)
+    ? homeLogo[0] || undefined
+    : homeLogo || undefined;
+  const awayLogoSrc = Array.isArray(awayLogo)
+    ? awayLogo[0] || undefined
+    : awayLogo || undefined;
+
   let EXTRAFLAG = false;
   if (scoreData.length > 9) {
     EXTRAFLAG = true;
@@ -43,7 +51,7 @@ export default function BaseballScoreBreakdown({
         <tr>
           <td>
             <Image
-              src={homeLogo ?? fallback}
+              src={homeLogoSrc ?? fallback}
               width={15}
               height={15}
               alt="Home Logo"
@@ -62,7 +70,7 @@ export default function BaseballScoreBreakdown({
         <tr>
           <td>
             <Image
-              src={awayLogo ?? fallback}
+              src={awayLogoSrc ?? fallback}
               width={15}
               height={15}
               alt="Away Logo"

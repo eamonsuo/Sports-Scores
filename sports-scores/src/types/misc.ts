@@ -53,7 +53,7 @@ type NavButtonGroupProps = {
 }[];
 
 export type TeamScoreDetails = {
-  img?: string;
+  img?: string | string[];
   score: string | string[];
   name: string;
   winDrawLoss?: string;
@@ -219,6 +219,7 @@ export type DisplayTypes = (typeof DISPLAY_TYPES)[keyof typeof DISPLAY_TYPES];
 export enum API_EVENT_TYPES {
   SOFASCORE = "SOFASCORE",
   SPORTSMONKS_CRICKET = "SPORTSMONKS_CRICKET",
+  SPORTSDB = "SPORTSDB",
 }
 
 export type APIEventTypes =

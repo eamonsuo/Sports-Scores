@@ -2209,3 +2209,38 @@ export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
 ];
+
+export const NETBALL_LEAGUES: LeagueSeasonConfig[] = [
+  {
+    name: "Super Netball",
+    slug: "4540",
+    seasons: [
+      { name: "2026", slug: "2026" },
+      { name: "2025", slug: "2025" },
+    ],
+  },
+  {
+    name: "Constellation Cup",
+    slug: "5793",
+    seasons: [
+      // { name: "2026", slug: "2026" },
+      { name: "2025", slug: "2025" },
+    ],
+  },
+  {
+    name: "World Cup",
+    slug: "5790",
+    seasons: [
+      // { name: "2027", slug: "" },
+      { name: "2023", slug: "2023" },
+    ],
+  },
+  {
+    name: "Quad Series",
+    slug: "5792",
+    seasons: [
+      // { name: "2026", slug: "" },
+      { name: "2025", slug: "2025" },
+    ],
+  },
+];

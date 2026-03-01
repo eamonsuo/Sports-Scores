@@ -12,9 +12,17 @@ export default function BasketballScoreBreakdown({
   awayLogo,
 }: {
   scoreData: BasketballScoreBreakdown[];
-  homeLogo?: string;
-  awayLogo?: string;
+  homeLogo?: string | string[];
+  awayLogo?: string | string[];
 }) {
+  // Use first image if array (for doubles), and handle empty strings
+  const homeLogoSrc = Array.isArray(homeLogo)
+    ? homeLogo[0] || undefined
+    : homeLogo || undefined;
+  const awayLogoSrc = Array.isArray(awayLogo)
+    ? awayLogo[0] || undefined
+    : awayLogo || undefined;
+
   let OTFLAG = false;
   if (scoreData.length > 4) {
     OTFLAG = true;
@@ -38,7 +46,7 @@ export default function BasketballScoreBreakdown({
         <tr>
           <td>
             <Image
-              src={homeLogo ?? fallback}
+              src={homeLogoSrc ?? fallback}
               width={15}
               height={15}
               alt="Home Logo"
@@ -57,7 +65,7 @@ export default function BasketballScoreBreakdown({
         <tr>
           <td>
             <Image
-              src={awayLogo ?? fallback}
+              src={awayLogoSrc ?? fallback}
               width={15}
               height={15}
               alt="Away Logo"

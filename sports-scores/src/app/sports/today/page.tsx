@@ -8,6 +8,7 @@ import { cricketMatchesByDate } from "@/services/cricket.service";
 import { footballMatchesByDate } from "@/services/football.service";
 import { golfTournamentsByDate } from "@/services/golf.service";
 import { motorsportCategoriesByDate } from "@/services/motorsport.service";
+import { netballMatchesByDate } from "@/services/netball.service";
 import { rugbyLeagueMatchesByDate } from "@/services/rugby-league.service";
 import { rugbyUnionMatchesByDate } from "@/services/rugby-union.service";
 import { TennisMatchesByDate as tennisMatchesByDate } from "@/services/tennis.service";
@@ -29,6 +30,10 @@ export default async function Page() {
     golfToday,
     motorsportToday,
     rugbyUnionToday,
+    netballToday,
+    surfingToday,
+    dartsToday,
+    cyclingToday,
   ] = await Promise.all([
     cricketMatchesByDate(curDate),
     tennisMatchesByDate(curDate),
@@ -41,12 +46,11 @@ export default async function Page() {
     golfTournamentsByDate(curDate),
     motorsportCategoriesByDate(curDate),
     rugbyUnionMatchesByDate(curDate),
+    netballMatchesByDate(curDate),
+    null,
+    null,
+    null,
   ]);
-
-  const surfingToday = null; // Placeholder for surfing matches fetching logic
-  const netballToday = null; // Placeholder for netball matches fetching logic
-  const dartsToday = null; // Placeholder for darts matches fetching logic
-  const cyclingToday = null; // Placeholder for cycling matches fetching logic
 
   const allSports: FixtureRound[] = ([] as FixtureRound[])
     .concat([
@@ -77,7 +81,8 @@ export default async function Page() {
     .concat(basketballToday?.fixtures ?? [])
     .concat(baseballToday?.fixtures ?? [])
     .concat(tennisToday?.fixtures ?? [])
-    .concat(rugbyUnionToday?.fixtures ?? []);
+    .concat(rugbyUnionToday?.fixtures ?? [])
+    .concat(netballToday?.fixtures ?? []);
 
   return (
     <div className="flex h-full flex-col">
