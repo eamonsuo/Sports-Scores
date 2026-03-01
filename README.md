@@ -13,13 +13,13 @@ Currently Implemented:
 - Football (A Leagues, Aus National teams, Major European leagues, FA Cup, AFC, UEFA, FIFA competitions) - Fixtures, Ladder, Match Details, Brackets, Today's Matches
 - Baseball (ABL, MLB, World competitions) - Fixtures, Ladder, Match Details, Today's Matches
 - Basketball (NBL, WNBL, NBA, WNBA) - Fixtures, Ladder, Match Details, Today's Matches
+- Ice Hockey (NHL, AIHL, Internationals) - Fixtures, Ladder, Match Details, Today's Matches
 - Tennis (Australian tournaments) - Fixtures, Match Details, Brackets, Today's Matches
 - Rugby Union (Super Rugby, Internationals, QLD Premier) - Fixtures, Ladder, Match Details, Today's Matches
 
 To Be Implemented:
 
 - Surfing (WSL)
-- Ice Hockey (NHL, AIHL)
 - Netball (Super Netball, Internationals)
 - Olympics
 - Other Golf Leagues (LPGA, AusPGA, European Tour, TGL)
