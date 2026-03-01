@@ -268,8 +268,8 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-02-15T00:00:00Z"),
     endDate: new Date("2026-03-09T00:00:00Z"),
-    // imageUrl:
-    //   "https://upload.wikimedia.org/wikipedia/en/0/05/World_Test_Championship_Logo.svg",
+    imageUrl:
+      "https://static-files.cricket-australia.pulselive.com/series-web/74/3125.png",
     link: "/sports/cricket/today",
     location: "Australia",
     tags: ["👩"],
@@ -449,7 +449,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     startDate: new Date("2025-10-17T00:00:00Z"),
     endDate: new Date("2026-05-23T00:00:00Z"),
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/en/9/98/Isuzu_UTE_A-League_Men.svg",
+      "https://r2.thesportsdb.com/images/media/league/badge/2u78lm1638459575.png",
     link: "/sports/football/136/82603",
     notes: "Finals Series Start: 1 May \nGrand Final: 23/24 May ",
   },
@@ -461,7 +461,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     startDate: new Date("2025-10-17T00:00:00Z"),
     endDate: new Date("2026-05-17T00:00:00Z"),
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/en/0/0e/Ninja_A-League_Women_logo.svg",
+      "https://r2.thesportsdb.com/images/media/league/badge/1sk49c1638459590.png",
     link: "/sports/football/1894/82605",
     notes: "Finals Series Start: 24 Apr \nGrand Final: 16/17 May ",
   },
@@ -639,9 +639,10 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "regular-season",
     startDate: new Date("2025-10-07T00:00:00Z"),
     endDate: new Date("2026-06-30T00:00:00Z"),
+    notes: "Playoffs Start: April \nStanley Cup Final: June",
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/3/3a/05_NHL_Shield.svg",
-    link: "/sports/ice-hockey",
+    link: "/sports/ice-hockey/234/78476/",
   },
   {
     id: "19",
@@ -650,8 +651,9 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-05-15T00:00:00Z"),
     endDate: new Date("2026-05-31T00:00:00Z"),
-    // imageUrl: "/olympic-rings.svg",
-    link: "https://upload.wikimedia.org/wikipedia/en/6/62/2026_IIHF_World_Championship_logo.svg",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/6/62/2026_IIHF_World_Championship_logo.svg",
+    link: "/sports/ice-hockey/3/81043",
     location: "Switzerland",
     tags: ["👨"],
   },
@@ -664,8 +666,62 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-06-04T00:00:00Z"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/3/3a/05_NHL_Shield.svg",
-    link: "/sports/ice-hockey",
+    link: "/sports/ice-hockey/234/78476/",
     location: "USA",
+    tags: ["👨"],
+  },
+
+  {
+    id: "rs-aihl-2026",
+    name: "AIHL",
+    sport: "Ice Hockey",
+    type: "regular-season",
+    startDate: new Date("2026-04-17T00:00:00+10:00"),
+    endDate: new Date("2026-08-30T00:00:00+10:00"),
+    notes: "AIHL Finals Series: August 28-30",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/f/f6/Australian_Ice_Hockey_League_Logo.png",
+    link: "/sports/ice-hockey/11059/72392/",
+  },
+  {
+    id: "19-world-aus",
+    name: "IIHF World Championship (Australia Men)",
+    sport: "Ice Hockey",
+    type: "major",
+    startDate: new Date("2026-04-20T00:00:00+10:00"),
+    endDate: new Date("2026-04-26T00:00:00+10:00"),
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/f/ff/2026_IIHF_World_Championship_Division_II_A_logo.png",
+
+    link: "https://en.wikipedia.org/wiki/2026_IIHF_World_Championship_Division_II",
+    // link: "/sports/ice-hockey/13446/69168",
+    location: "Al Ain, UAE",
+    tags: ["👨"],
+  },
+  {
+    id: "19-world-aus-w",
+    name: "IIHF World Championship (Australia Women)",
+    sport: "Ice Hockey",
+    type: "major",
+    startDate: new Date("2026-04-13T00:00:00+10:00"),
+    endDate: new Date("2026-04-19T00:00:00+10:00"),
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/c/ce/2026_IIHF_Women%27s_World_Championship_Division_II_A_logo.png",
+    link: "/sports/ice-hockey/wiki/2026_IIHF_Women%27s_World_Championship_Division_II",
+    location: "Bled, Slovenia",
+    tags: ["👩"],
+  },
+  {
+    id: "47-aihl",
+    name: "AIHL Finals Series",
+    sport: "Ice Hockey",
+    type: "major",
+    startDate: new Date("2026-08-28T00:00:00+10:00"),
+    endDate: new Date("2026-08-30T00:00:00+10:00"),
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/f/f6/Australian_Ice_Hockey_League_Logo.png",
+    link: "/sports/ice-hockey/11059/72392/",
+    location: "Melbourne, Australia",
     tags: ["👨"],
   },
 
@@ -798,20 +854,6 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     tags: ["👨", "👩"],
   },
 
-  // Rugby
-  {
-    id: "4",
-    name: "Rugby World Cup",
-    sport: "Rugby",
-    type: "major",
-    startDate: new Date("2027-10-01T00:00:00Z"),
-    endDate: new Date("2027-11-13T00:00:00Z"),
-    imageUrl: "https://upload.wikimedia.org/wikipedia/en/6/62/RWC2027logo.png",
-    link: "/sports/rugby-union",
-    location: "Australia",
-    tags: ["👨"],
-  },
-
   // Rugby League
   {
     id: "rs-nrl-2026",
@@ -819,7 +861,8 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     sport: "Rugby League",
     type: "regular-season",
     startDate: new Date("2026-03-01T00:00:00Z"),
-    endDate: new Date("2026-10-04T00:00:00Z"),
+    endDate: new Date("2026-10-04T23:59:59+10:00"),
+    notes: "Finals Series Start: 10 Sep\nGrand Final: 4 Oct",
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/5/50/National_Rugby_League.svg",
     link: "/sports/rugby-league/294/86317",
@@ -830,7 +873,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     sport: "Rugby League",
     type: "regular-season",
     startDate: new Date("2026-07-02T00:00:00Z"),
-    endDate: new Date("2026-10-04T00:00:00Z"),
+    endDate: new Date("2026-10-04T23:59:59+10:00"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/5/50/Telstra_NRL_Women%27s_Premiership.png",
     link: "/sports/rugby-league/19120/87573",
@@ -840,8 +883,8 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     name: "NRL Grand Final",
     sport: "Rugby League",
     type: "major",
-    startDate: new Date("2026-10-04T00:00:00Z"),
-    endDate: new Date("2026-10-04T00:00:00Z"),
+    startDate: new Date("2026-10-04T00:00:00+10:00"),
+    endDate: new Date("2026-10-04T23:59:59+10:00"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/5/50/National_Rugby_League.svg",
 
@@ -854,12 +897,53 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     name: "Rugby League World Cup",
     sport: "Rugby League",
     type: "major",
-    startDate: new Date("2026-10-15T00:00:00Z"),
-    endDate: new Date("2026-11-15T00:00:00Z"),
+    startDate: new Date("2026-10-15T00:00:00+10:00"),
+    endDate: new Date("2026-11-15T23:59:59+10:00"),
     // imageUrl: "/olympic-rings.svg",
     link: "/sports/rugby-league",
     location: "Australia, New Zealand & PNG",
     tags: ["👨", "👩", "♿"],
+  },
+
+  // Rugby Union
+  {
+    id: "super-rugby-2026",
+    name: "Super Rugby",
+    sport: "Rugby Union",
+    type: "regular-season",
+    startDate: new Date("2026-02-13T06:00:00Z"),
+    endDate: new Date("2026-06-30T00:00:00Z"),
+    dateDisplay: "13 Feb - 30 Jun 2026",
+    notes: "Finals: after 30 May 2026",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/2/25/Super_Rugby_Pacific_logo.png",
+    link: "/sports/rugby-union/422/86502",
+  },
+  {
+    id: "super-rugby-grand-final-2026",
+    name: "Super Rugby Grand Final",
+    sport: "Rugby Union",
+    type: "major",
+    startDate: new Date("2026-06-21T00:00:00Z"),
+    endDate: new Date("2026-06-21T00:00:00Z"),
+    dateDisplay: "Jun 2026",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/en/2/25/Super_Rugby_Pacific_logo.png",
+    link: "/sports/rugby-union",
+    location: "Australia/New Zealand",
+    tags: ["👨"],
+  },
+  {
+    id: "rugby-world-cup-2026",
+    name: "Rugby World Cup",
+    sport: "Rugby Union",
+    type: "major",
+    startDate: new Date("2027-10-01T00:00:00+10:00"),
+    endDate: new Date("2027-11-13T23:59:59+10:00"),
+    imageUrl: "https://upload.wikimedia.org/wikipedia/en/6/62/RWC2027logo.png",
+    link: "/sports/rugby-union",
+    location: "Australia",
+    tags: ["👨"],
   },
 
   // Sailing
@@ -1128,7 +1212,10 @@ export const GOLF_TOURS = [
   {
     name: "OWGR",
     slug: "owgr",
-    seasons: [{ name: "Current", slug: "" }],
+    seasons: [
+      { name: "Current", slug: "2026" },
+      { name: "2025", slug: "2025" },
+    ],
   },
 ] as LeagueSeasonConfig[];
 
@@ -1459,6 +1546,11 @@ export const FOOTBALL_LEAGUES = [
     ],
   },
   {
+    name: "🌏 AFC Asian Cup - Women",
+    slug: "1692",
+    seasons: [{ name: "2026", slug: "79569" }],
+  },
+  {
     name: "🇦🇺 Australia Cup",
     slug: "1786",
     seasons: [
@@ -1657,11 +1749,11 @@ export const FOOTBALL_LEAGUES = [
     slug: "246",
     seasons: [{ name: "2023", slug: "51384" }],
   },
-  {
-    name: "🌏 AFC Asian Cup - Women",
-    slug: "1692",
-    seasons: [{ name: "2026", slug: "79569" }],
-  },
+  // {
+  //   name: "🌏 AFC Asian Cup - Women",
+  //   slug: "1692",
+  //   seasons: [{ name: "2026", slug: "79569" }],
+  // },
   // {
   //   name: "AFC World Cup Qualifiers",
   //   slug: "308",
@@ -2051,6 +2143,69 @@ export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
     seasons: [
       // { name: "2026", slug: "" },
       { name: "2022", slug: "45757" },
+    ],
+  },
+];
+
+export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
+  {
+    name: "AIHL",
+    slug: "11059",
+    seasons: [
+      { name: "2026", slug: "86527" },
+      { name: "2025", slug: "72392" },
+    ],
+  },
+  {
+    name: "NHL",
+    slug: "234",
+    seasons: [
+      { name: "25/26", slug: "78476" },
+      { name: "24/25", slug: "63409" },
+    ],
+  },
+  {
+    name: "World Championship",
+    slug: "3",
+    seasons: [
+      { name: "2026", slug: "81043" },
+      { name: "2025", slug: "64007" },
+    ],
+  },
+  {
+    name: "World Championship - Australia (Div II, Group A)",
+    slug: "13446",
+    seasons: [
+      // { name: "2026", slug: "https://en.wikipedia.org/wiki/2026_IIHF_World_Championship_Division_II" },
+      { name: "2025", slug: "69168" },
+    ],
+  },
+  {
+    name: "World Championship - Women",
+    slug: "428",
+    seasons: [
+      // { name: "2026", slug: "" },
+      { name: "2025", slug: "69237" },
+    ],
+  },
+  {
+    name: "World Championship - Women - Australia (Div II, Group A)",
+    slug: "wiki",
+    seasons: [
+      {
+        name: "2026",
+        slug: "2026_IIHF_Women%27s_World_Championship_Division_II",
+      },
+      // { name: "2025", slug: "69168" },
+    ],
+  },
+
+  {
+    name: "Int. Friendly Games",
+    slug: "873",
+    seasons: [
+      { name: "2026", slug: "87173" },
+      { name: "2025", slug: "69568" },
     ],
   },
 ];

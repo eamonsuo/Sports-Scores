@@ -11,43 +11,43 @@ export function resolveSportImage(teamName: string) {
       return "/liv/4aces.webp";
     case "LEGION XIII":
     case "Legion XIII":
-      return "/liv/legion13.webp";
+      return "https://r2.thesportsdb.com/images/media/team/badge/cuk3e51707077028.png";
     case "CRUSHERS GC":
     case "Crushers GC":
-      return "/liv/crushers.webp";
+      return "https://r2.thesportsdb.com/images/media/team/badge/hl2hco1677791561.png";
     case "STINGER GC":
       return "/liv/stinger.webp";
     case "FIREBALLS GC":
     case "Fireballs GC":
-      return "/liv/fireballs.webp";
+      return "https://r2.thesportsdb.com/images/media/team/badge/yijd3q1677791981.png";
     case "CLEEKS GOLF CLUB":
     case "Cleeks Golf Club":
       return "/liv/cleeks.webp";
     case "TORQUE GC":
     case "Torque GC":
-      return "/liv/torque.webp";
+      return "https://r2.thesportsdb.com/images/media/team/badge/cbro131677794355.png";
     case "RIPPER GC":
     case "Ripper GC":
-      return "/liv/ripper.webp";
+      return "https://r2.thesportsdb.com/images/media/team/badge/fsnirc1677793412.png";
     case "HYFLYERS GC":
     case "HyFlyers GC":
       return "/liv/hyflyers.webp";
     case "MAJESTICKS GC":
       return "/liv/majesticks.webp";
     case "Majesticks Golf Club":
-      return fallback;
+      return "https://r2.thesportsdb.com/images/media/team/badge/klmxd71768154770.png";
     case "RANGEGOATS GC":
     case "RangeGoats GC":
-      return "/liv/rangegoats.webp";
+      return "https://r2.thesportsdb.com/images/media/team/badge/ig753h1677793178.png";
     case "SMASH GC":
     case "Smash GC":
-      return "/liv/smash.webp";
+      return "https://r2.thesportsdb.com/images/media/team/badge/7xrym81677793652.png";
     case "IRON HEADS GC":
       return "/liv/ironheads.webp";
     case "Korean Golf Club":
-      return fallback;
+      return "https://www.thesportsdb.com/images/media/team/badge/e2ccn51770673557.png";
     case "Southern Guards GC":
-      return fallback;
+      return "https://www.thesportsdb.com/images/media/team/badge/ng8z1o1770673163.png";
 
     //NRL
     case "Brisbane Broncos":
@@ -1270,6 +1270,98 @@ export function resolveSportImage(teamName: string) {
     case "Crusaders":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/rugby/teams/500/25936.png";
 
+    // Ice Hockey
+    // AIHL
+    case "Adelaide Adrenaline":
+      return "https://upload.wikimedia.org/wikipedia/en/5/57/Adelaide_Adrenaline_%282025%29_logo.png";
+    case "Brisbane Lightning":
+      return "https://upload.wikimedia.org/wikipedia/en/0/04/Brisbane_Lightning_logo_%282022%29.png";
+    case "Canberra Brave":
+      return "https://upload.wikimedia.org/wikipedia/en/4/4a/Canberra_Brave_%282024%29.png";
+    case "Central Coast Rhinos":
+      return "https://upload.wikimedia.org/wikipedia/en/2/21/Central_Coast_Rhinos_Logo.png";
+    case "Melbourne Ice":
+      return "https://upload.wikimedia.org/wikipedia/en/a/a0/Melbourne_Ice_Logo.png";
+    case "Melbourne Mustangs":
+      return "https://upload.wikimedia.org/wikipedia/en/3/3a/Mustangs_IHC_Logo.png";
+    case "Newcastle Northstars":
+    case "Newcastle North Stars":
+      return "https://upload.wikimedia.org/wikipedia/en/1/11/Newcastle_Northstars_logo.png";
+    case "Perth Thunder":
+      return "https://upload.wikimedia.org/wikipedia/en/f/f9/Perth_Thunder_Logo.png";
+    case "Sydney Bears":
+      return "https://upload.wikimedia.org/wikipedia/en/7/7f/Sydney_Bears_logo.png";
+    case "Sydney Ice Dogs":
+      return "https://upload.wikimedia.org/wikipedia/en/5/52/Sydney_Ice_Dogs_Logo.png";
+
+    // NHL
+    case "Tampa Bay Lightning":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/tb.png";
+    case "Buffalo Sabres":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/buf.png";
+    case "Detroit Red Wings":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/det.png";
+    case "Montreal Canadiens":
+    case "Montréal Canadiens":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/mtl.png";
+    case "Boston Bruins":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/bos.png";
+    case "Ottawa Senators":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/ott.png";
+    case "Florida Panthers":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/fla.png";
+    case "Toronto Maple Leafs":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/tor.png";
+    case "Carolina Hurricanes":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/car.png";
+    case "Pittsburgh Penguins":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/pit.png";
+    case "New York Islanders":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/nyi.png";
+    case "Washington Capitals":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/wsh.png";
+    case "Columbus Blue Jackets":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/cbj.png";
+    case "Philadelphia Flyers":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/phi.png";
+    case "New Jersey Devils":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/njd.png";
+    case "New York Rangers":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/nyr.png";
+    case "Colorado Avalanche":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/col.png";
+    case "Minnesota Wild":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/min.png";
+    case "Dallas Stars":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/dal.png";
+    case "Utah Mammoth":
+    case "Utah Hockey Club":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/utah.png";
+    case "Nashville Predators":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/nsh.png";
+    case "Winnipeg Jets":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/wpg.png";
+    case "Chicago Blackhawks":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/chi.png";
+    case "St. Louis Blues":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/stl.png";
+    case "Vegas Golden Knights":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/vgk.png";
+    case "Anaheim Ducks":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/ana.png";
+    case "Edmonton Oilers":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/edm.png";
+    case "Seattle Kraken":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/sea.png";
+    case "Los Angeles Kings":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/la.png";
+    case "San Jose Sharks":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/sj.png";
+    case "Calgary Flames":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/cgy.png";
+    case "Vancouver Canucks":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nhl/500/van.png";
+
     // Countries
     case "Afghanistan":
       return getCountryImageUrl(CountryFlagCode.Afghanistan);
@@ -1519,6 +1611,7 @@ export function resolveSportImage(teamName: string) {
     case "Kiribati":
       return getCountryImageUrl(CountryFlagCode.Kiribati);
     case "Korea North":
+    case "North Korea":
       return getCountryImageUrl(CountryFlagCode.KoreaNorth);
     case "Korea":
     case "South Korea":

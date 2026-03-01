@@ -14,7 +14,7 @@ const nextConfig = {
         protocol: "https",
         hostname: "static-files.cricket-australia.pulselive.com",
         port: "",
-        pathname: "/flag/**",
+        pathname: "/**",
       },
       // ABL Logos
       {
@@ -36,6 +36,19 @@ const nextConfig = {
         hostname: "upload.wikimedia.org",
         port: "",
         pathname: "/wikipedia/**",
+      },
+      // The Sports DB images
+      {
+        protocol: "https",
+        hostname: "www.thesportsdb.com",
+        port: "",
+        pathname: "/images/**",
+      },
+      {
+        protocol: "https",
+        hostname: "r2.thesportsdb.com",
+        port: "",
+        pathname: "/images/**",
       },
     ],
   },

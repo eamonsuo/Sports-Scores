@@ -18,19 +18,23 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
       return false;
     };
 
-    // Try immediately
-    if (!scrollToAnchor()) {
-      // If not found, retry with intervals
-      const maxRetries = 10;
-      let retryCount = 0;
+    // Wait a bit longer for layout to complete before scrolling
+    const timer = setTimeout(() => {
+      if (!scrollToAnchor()) {
+        // If not found, retry with intervals
+        const maxRetries = 10;
+        let retryCount = 0;
 
-      const retryInterval = setInterval(() => {
-        if (scrollToAnchor() || retryCount >= maxRetries) {
-          clearInterval(retryInterval);
-        }
-        retryCount++;
-      }, 100);
-    }
+        const retryInterval = setInterval(() => {
+          if (scrollToAnchor() || retryCount >= maxRetries) {
+            clearInterval(retryInterval);
+          }
+          retryCount++;
+        }, 100);
+      }
+    }, 200);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const current_date: Date = new Date(Date.now());
