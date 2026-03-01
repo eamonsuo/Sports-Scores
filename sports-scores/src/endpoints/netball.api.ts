@@ -127,7 +127,7 @@ export async function fetchNetballMatchIncidents(matchId: number) {
 
 export async function fetchNetballMatchesByDate(date: Date) {
   const rawFixtures = await fetch(
-    `${process.env.NETBALL_BASEURL}/eventsday.php?d=${format(date, "yyyy-MM-dd")}&s=Netball${date.getMonth() > 1 && date.getMonth() < 7 && "l=Australian Super Netball League"}`,
+    `${process.env.NETBALL_BASEURL}/eventsday.php?d=${format(date, "yyyy-MM-dd")}&s=Netball${date.getMonth() > 1 && date.getMonth() < 7 ? "&l=Australian Super Netball League" : ""}`,
   );
 
   if (!rawFixtures.ok || rawFixtures.status === 204) {
