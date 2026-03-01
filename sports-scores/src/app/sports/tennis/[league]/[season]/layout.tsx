@@ -14,11 +14,6 @@ export default async function SportsLayout({
             label: "Matches",
             page: "matches",
           },
-          // {
-          //   href: "./ladder",
-          //   label: "Ladder",
-          //   page: "ladder",
-          // },
           {
             href: "./bracket",
             label: "Bracket",
