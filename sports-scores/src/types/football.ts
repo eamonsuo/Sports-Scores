@@ -41,8 +41,7 @@ export interface FootballTeamFixturesPage {
 }
 
 export interface FootballLadderPage {
-  standings: FootballStanding[];
-  qualifyingPosition: number;
+  tables: FootballStanding[];
 }
 
 export interface FootballMatchPage {

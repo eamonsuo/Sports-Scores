@@ -99,11 +99,23 @@ const footerLinks: {
     altText: "Tennis",
   },
   {
+    sport: SPORT.ICE_HOCKEY,
+    link: `/sports/${SPORT.ICE_HOCKEY}/today`,
+    img: "/footer/hockey-puck.svg",
+    altText: "Hockey",
+  },
+  {
     sport: SPORT.RUGBY_UNION,
     link: `/sports/${SPORT.RUGBY_UNION}/today`,
-    // link: `https://www.flashscore.com.au/rugby/`,
     img: "/footer/union.png",
     altText: "Rugby Union",
+  },
+  {
+    sport: SPORT.DARTS,
+    link: `/sports/${SPORT.DARTS}`,
+    // link: `https://www.flashscore.com.au/darts/`,
+    img: "/footer/dart.svg",
+    altText: "Darts",
   },
   {
     sport: SPORT.SURFING,
@@ -119,20 +131,7 @@ const footerLinks: {
     img: "/footer/bike.svg",
     altText: "Cycling",
   },
-  {
-    sport: SPORT.DARTS,
-    link: `/sports/${SPORT.DARTS}`,
-    // link: `https://www.flashscore.com.au/darts/`,
-    img: "/footer/dart.svg",
-    altText: "Darts",
-  },
-  {
-    sport: SPORT.ICE_HOCKEY,
-    // link: `/sports/${SPORT.ICE_HOCKEY}`,
-    link: `https://www.livescore.com/en/hockey/`,
-    img: "/footer/hockey-puck.svg",
-    altText: "Hockey",
-  },
+
   {
     sport: SPORT.NETBALL,
     // link: `/sports/${SPORT.NETBALL}`,

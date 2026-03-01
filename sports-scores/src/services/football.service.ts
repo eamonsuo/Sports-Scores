@@ -1,5 +1,8 @@
 import { Match as BracketMatch } from "@/components/bracket/types";
-import { FootballStanding } from "@/components/football/FootballLadder";
+import {
+  FootballStanding,
+  FootballTeamStanding,
+} from "@/components/football/FootballLadder";
 import {
   fetchFootballCupTrees,
   fetchFootballLastMatches,
@@ -189,27 +192,37 @@ export async function footballStandings(
   }
 
   return {
-    standings: standings?.standings[0].rows.map((item) => {
-      return {
-        position: item.position,
-        points: item.points,
-        team: {
-          id: item.team.id,
-          name: shortenTeamNames(item.team.name),
-          logo: resolveSportImage(item.team.name),
-        },
-        games: {
-          played: item.matches,
-          win: item.wins,
-          lost: item.losses,
-          drawn: item.draws,
-        },
-        scores: { against: item.scoresAgainst, for: item.scoresFor },
-      } as FootballStanding;
-    }),
-    qualifyingPosition:
-      FOOTBALL_LEAGUES.find((l) => Number(l.slug) === tournamentId)
-        ?.qualifyingPosition ?? -1,
+    tables: standings?.standings
+      // .sort((a, b) => b.name.localeCompare(a.name))
+      .map((table) => {
+        return {
+          tableName: table.name ?? "test",
+          standings: table.rows.map((standing) => {
+            return {
+              position: standing.position,
+              points: standing.points,
+              team: {
+                id: standing.team.id,
+                name: shortenTeamNames(standing.team.name),
+                logo: resolveSportImage(standing.team.name),
+              },
+              games: {
+                played: standing.matches,
+                win: standing.wins,
+                lost: standing.losses,
+                drawn: standing.draws,
+              },
+              scores: {
+                against: standing.scoresAgainst,
+                for: standing.scoresFor,
+              },
+            } as FootballTeamStanding;
+          }),
+          qualifyingPosition:
+            FOOTBALL_LEAGUES.find((l) => Number(l.slug) === tournamentId)
+              ?.qualifyingPosition ?? -1,
+        } as FootballStanding;
+      }),
   } as FootballLadderPage;
 }
 

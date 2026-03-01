@@ -1,21 +1,21 @@
-import FootballLadder from "@/components/football/FootballLadder";
+import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
 import Placeholder from "@/components/misc-ui/Placeholder";
-import { footballStandings } from "@/services/football.service";
+import { iceHockeyMatches } from "@/services/ice-hockey.service";
 
 export default async function Page(props: {
   params: Promise<{ league: string; season: string }>;
 }) {
   const { league, season } = await props.params;
-  const pageData = await footballStandings(Number(league), Number(season));
+  const pageData = await iceHockeyMatches(Number(league), Number(season));
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;
   }
 
   return (
-    <FootballLadder
-      data={pageData.standings}
-      qualifyingPosition={pageData.qualifyingPosition}
+    <FixtureRoundList
+      data={pageData.fixtures}
+      curRound={pageData.currentRound}
     />
   );
 }

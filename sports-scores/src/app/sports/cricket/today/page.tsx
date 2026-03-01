@@ -9,14 +9,24 @@ export default async function Page() {
   const curDate = new Date();
   const matches = await cricketMatchesByDate(curDate);
   const yesterdayMatches = await cricketMatchesByDate(addDays(curDate, -1));
+  const tomorrowMatches = await cricketMatchesByDate(addDays(curDate, 1));
 
-  if (matches === null && yesterdayMatches === null) {
+  if (
+    matches === null &&
+    yesterdayMatches === null &&
+    tomorrowMatches === null
+  ) {
     return <Placeholder>NO DATA</Placeholder>;
   }
 
   return (
     // <FixtureRoundList data={matches.fixtures} curRound={matches.currentRound} />
-    <FixtureList data={(yesterdayMatches ?? []).concat(matches ?? [])} />
+    <FixtureList
+      data={(yesterdayMatches ?? []).concat(
+        matches ?? [],
+        tomorrowMatches ?? [],
+      )}
+    />
   );
 }
 
