@@ -12,9 +12,16 @@ export default function ScoreChart({
   awayLogo,
 }: {
   scoreDifference: ScoreDifference[]; // Array of numbers representing the score difference between the home team (+) and away team (-) after each score
-  homeLogo?: string;
-  awayLogo?: string;
+  homeLogo?: string | string[];
+  awayLogo?: string | string[];
 }) {
+  // Use first image if array (for doubles tennis), and handle empty strings
+  const homeLogoSrc = Array.isArray(homeLogo)
+    ? homeLogo[0] || undefined
+    : homeLogo || undefined;
+  const awayLogoSrc = Array.isArray(awayLogo)
+    ? awayLogo[0] || undefined
+    : awayLogo || undefined;
   const chartConfig = {
     desktop: {
       label: "Score Difference",
@@ -36,13 +43,13 @@ export default function ScoreChart({
       <div className="mx-4 flex gap-2">
         <div className="flex flex-col place-content-around">
           <Image
-            src={homeLogo ?? fallback}
+            src={homeLogoSrc ?? fallback}
             width={15}
             height={15}
             alt="Home team image"
           />
           <Image
-            src={awayLogo ?? fallback}
+            src={awayLogoSrc ?? fallback}
             width={15}
             height={15}
             alt="Away team image"

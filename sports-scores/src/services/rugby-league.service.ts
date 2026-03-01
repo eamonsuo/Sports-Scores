@@ -1,4 +1,4 @@
-import { RugbyLeagueStanding } from "@/components/rugby-league/nrl/NRLLadder";
+import { RugbyLeagueStanding } from "@/components/rugby-league/RugbyLeagueLadder";
 import {
   fetchRugbyLeagueLastMatches,
   fetchRugbyLeagueMatchDetails,

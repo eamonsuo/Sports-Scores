@@ -169,16 +169,30 @@ export async function TennisMatchDetails(matchId: number) {
           homeTeam: {
             name: shortenTeamNames(matchDetails.homeTeam.name),
             score: matchDetails?.homeScore?.current?.toString() ?? "0",
-            img: resolveSportImage(
-              matchDetails.homeTeam.country.name ?? matchDetails.homeTeam.name,
-            ),
+            img:
+              matchDetails.homeTeam.subTeams &&
+              matchDetails.homeTeam.subTeams.length > 0
+                ? matchDetails.homeTeam.subTeams.map((subTeam) =>
+                    resolveSportImage(subTeam.country.name ?? subTeam.name),
+                  )
+                : resolveSportImage(
+                    matchDetails.homeTeam.country.name ??
+                      matchDetails.homeTeam.name,
+                  ),
           },
           awayTeam: {
             name: shortenTeamNames(matchDetails?.awayTeam.name),
             score: matchDetails?.awayScore?.current?.toString() ?? "0",
-            img: resolveSportImage(
-              matchDetails.awayTeam.country.name ?? matchDetails.awayTeam.name,
-            ),
+            img:
+              matchDetails.awayTeam.subTeams &&
+              matchDetails.awayTeam.subTeams.length > 0
+                ? matchDetails.awayTeam.subTeams.map((subTeam) =>
+                    resolveSportImage(subTeam.country.name ?? subTeam.name),
+                  )
+                : resolveSportImage(
+                    matchDetails.awayTeam.country.name ??
+                      matchDetails.awayTeam.name,
+                  ),
           },
           scoreBreakdown: [
             {
@@ -265,33 +279,28 @@ export async function TennisMatchesByDate(date: Date) {
     ...new Set(filteredMatches.map((item) => item.tournament.category.id)),
   ];
 
-  let firstTournament = "";
+  const firstTournament =
+    rounds.length > 0 ? (leagueIdToName[rounds[0]] ?? "Other") : "";
 
   return {
     fixtures: rounds
       .map((leagueId) => {
         const roundLabel = leagueIdToName[leagueId] ?? "Other";
+
+        // Filter matches for this league
+        const leagueMatches = filteredMatches.filter(
+          (item) => item.tournament.category.id === leagueId,
+        );
+
         return {
-          matches: filteredMatches
-            .filter((item) => item.tournament.category.id === leagueId)
-            .map((match) => {
-              if (firstTournament === "") {
-                firstTournament = roundLabel;
-              }
-
-              return mapTennisMatches(match);
-            })
-            .sort((a, b) => a.startDate.getTime() - b.startDate.getTime()),
-
+          matches: sortMatchesByDateAndTournament(leagueMatches),
           roundLabel: roundLabel,
           cardVariant: "tennis",
           roundSlug: `${SPORT.TENNIS}/today`,
         } as FixtureRound;
       })
       .concat({
-        matches: aussieMatches
-          .map(mapTennisMatches)
-          .sort((a, b) => a.startDate.getTime() - b.startDate.getTime()),
+        matches: sortMatchesByDateAndTournament(aussieMatches),
         roundLabel: "Australians",
         cardVariant: "tennis",
         roundSlug: `${SPORT.TENNIS}/today`,
@@ -454,9 +463,14 @@ function mapTennisMatches(match: Tennis_Sofascore_Event) {
           ? `${match.homeScore.period5}${match.homeScore.period5TieBreak !== undefined ? ` (${match.homeScore.period5TieBreak})` : ""}`
           : null,
       ].filter((s): s is string => s !== null),
-      img: resolveSportImage(
-        match.homeTeam.country.name ?? match.homeTeam.name,
-      ),
+      img:
+        match.homeTeam.subTeams && match.homeTeam.subTeams.length > 0
+          ? match.homeTeam.subTeams.map((subTeam) =>
+              resolveSportImage(subTeam.country.name ?? subTeam.name),
+            )
+          : resolveSportImage(
+              match.homeTeam.country.name ?? match.homeTeam.name,
+            ),
     },
     awayDetails: {
       name:
@@ -479,9 +493,14 @@ function mapTennisMatches(match: Tennis_Sofascore_Event) {
           ? `${match.awayScore.period5}${match.awayScore.period5TieBreak !== undefined ? ` (${match.awayScore.period5TieBreak})` : ""}`
           : null,
       ].filter((s): s is string => s !== null),
-      img: resolveSportImage(
-        match.awayTeam.country.name ?? match.awayTeam.name,
-      ),
+      img:
+        match.awayTeam.subTeams && match.awayTeam.subTeams.length > 0
+          ? match.awayTeam.subTeams.map((subTeam) =>
+              resolveSportImage(subTeam.country.name ?? subTeam.name),
+            )
+          : resolveSportImage(
+              match.awayTeam.country.name ?? match.awayTeam.name,
+            ),
     },
     winner: match.winnerCode,
   } as MatchSummary;
@@ -594,4 +613,49 @@ export async function TESTTennisMatchesByDate(date: Date) {
     });
 
   return { firstItem: fixtures[0].tourLabel, fixtures };
+}
+
+// AI Generated Helper
+function sortMatchesByDateAndTournament(
+  matches: Tennis_Sofascore_Event[],
+): MatchSummary[] {
+  // Group matches by date and tournament
+  const groupKey = (match: Tennis_Sofascore_Event) => {
+    const date = new Date(match.startTimestamp * 1000);
+    date.setHours(0, 0, 0, 0);
+    return `${date.toISOString()}_${match.tournament.uniqueTournament.id}`;
+  };
+
+  const matchGroups = new Map<string, Tennis_Sofascore_Event[]>();
+  matches.forEach((match) => {
+    const key = groupKey(match);
+    if (!matchGroups.has(key)) {
+      matchGroups.set(key, []);
+    }
+    matchGroups.get(key)!.push(match);
+  });
+
+  // Sort each group internally by time
+  matchGroups.forEach((group) => {
+    group.sort((a, b) => a.startTimestamp - b.startTimestamp);
+  });
+
+  // Sort groups by date, then by first match time within each day
+  const sortedGroups = Array.from(matchGroups.values()).sort(
+    (groupA, groupB) => {
+      const dateA = new Date(groupA[0].startTimestamp * 1000);
+      const dateB = new Date(groupB[0].startTimestamp * 1000);
+      dateA.setHours(0, 0, 0, 0);
+      dateB.setHours(0, 0, 0, 0);
+
+      const dateDiff = dateA.getTime() - dateB.getTime();
+      if (dateDiff !== 0) return dateDiff;
+
+      // Within same day, sort by first match time of each tournament
+      return groupA[0].startTimestamp - groupB[0].startTimestamp;
+    },
+  );
+
+  // Flatten back to single array and map to MatchSummary
+  return sortedGroups.flat().map(mapTennisMatches);
 }

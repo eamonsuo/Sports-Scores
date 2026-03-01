@@ -12,9 +12,17 @@ export default function TennisScoreBreakdown({
   awayLogo,
 }: {
   scoreData: TennisScoreBreakdown[];
-  homeLogo?: string;
-  awayLogo?: string;
+  homeLogo?: string | string[];
+  awayLogo?: string | string[];
 }) {
+  // Use first image if array (for doubles tennis), and handle empty strings
+  const homeLogoSrc = Array.isArray(homeLogo)
+    ? homeLogo[0] || undefined
+    : homeLogo || undefined;
+  const awayLogoSrc = Array.isArray(awayLogo)
+    ? awayLogo[0] || undefined
+    : awayLogo || undefined;
+
   const getSetLabel = (index: number) => {};
 
   return (
@@ -30,12 +38,27 @@ export default function TennisScoreBreakdown({
       <tbody>
         <tr>
           <td>
-            <Image
-              src={homeLogo ?? fallback}
-              width={15}
-              height={15}
-              alt="Home Logo"
-            />
+            {Array.isArray(homeLogo) ? (
+              <div className="flex -space-x-1">
+                {homeLogo.map((img, idx) => (
+                  <Image
+                    key={idx}
+                    src={img || fallback}
+                    width={15}
+                    height={15}
+                    alt={`Home player ${idx + 1}`}
+                    className="rounded-full border border-white dark:border-neutral-800"
+                  />
+                ))}
+              </div>
+            ) : (
+              <Image
+                src={homeLogoSrc ?? fallback}
+                width={15}
+                height={15}
+                alt="Home Logo"
+              />
+            )}
           </td>
           {scoreData.map((item) => (
             <td key={item.periodName}>{item.teams.home.score}</td>
@@ -43,12 +66,27 @@ export default function TennisScoreBreakdown({
         </tr>
         <tr>
           <td>
-            <Image
-              src={awayLogo ?? fallback}
-              width={15}
-              height={15}
-              alt="Away Logo"
-            />
+            {Array.isArray(awayLogo) ? (
+              <div className="flex -space-x-1">
+                {awayLogo.map((img, idx) => (
+                  <Image
+                    key={idx}
+                    src={img || fallback}
+                    width={15}
+                    height={15}
+                    alt={`Away player ${idx + 1}`}
+                    className="rounded-full border border-white dark:border-neutral-800"
+                  />
+                ))}
+              </div>
+            ) : (
+              <Image
+                src={awayLogoSrc ?? fallback}
+                width={15}
+                height={15}
+                alt="Away Logo"
+              />
+            )}
           </td>
           {scoreData.map((item) => (
             <td key={item.periodName}>{item.teams.away.score}</td>

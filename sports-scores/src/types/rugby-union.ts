@@ -1,5 +1,5 @@
 import { ScoreDifference } from "@/components/all-sports/ScoreChart";
-import { RugbyLeagueScoreBreakdown } from "@/components/rugby-league/nrl/NRLScoreBreakdown";
+import { RugbyLeagueScoreBreakdown } from "@/components/rugby-league/RugbyLeagueScoreBreakdown";
 import { RugbyUnionStanding } from "@/components/rugby-union/RugbyUnionLadder";
 import { FixtureRound, TeamScoreDetails } from "./misc";
 import {

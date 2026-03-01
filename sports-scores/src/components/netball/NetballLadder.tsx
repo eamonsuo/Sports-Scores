@@ -1,7 +1,7 @@
 import fallback from "@/../public/vercel.svg";
 import Image from "next/image";
 
-export type RugbyLeagueStanding = {
+export type NetballStanding = {
   position: number;
   team: {
     id: number;
@@ -21,11 +21,11 @@ export type RugbyLeagueStanding = {
   };
 };
 
-export default function NRLLadder({
+export default function NetballLadder({
   data,
   qualifyingPosition,
 }: {
-  data: RugbyLeagueStanding[];
+  data: NetballStanding[];
   qualifyingPosition: number;
 }) {
   return (

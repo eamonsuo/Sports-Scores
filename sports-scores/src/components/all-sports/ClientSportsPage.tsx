@@ -1,6 +1,6 @@
 "use client";
 import { clsx } from "clsx";
-import { ReactNode, useState } from "react";
+import { Fragment, ReactNode, useState } from "react";
 
 export default function ClientSportsPage({
   options,
@@ -31,7 +31,11 @@ export default function ClientSportsPage({
           </button>
         ))}
       </div>
-      {options.map((item) => view === item.state && item.component)}
+      {options.map((item) => (
+        <Fragment key={item.state + "component"}>
+          {view === item.state && item.component}
+        </Fragment>
+      ))}
       {apiStatus}
     </div>
   );

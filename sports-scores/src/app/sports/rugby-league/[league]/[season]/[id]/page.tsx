@@ -1,7 +1,7 @@
 import MatchDetailsHero from "@/components/all-sports/MatchDetailsHero";
 import ScoreChart from "@/components/all-sports/ScoreChart";
 import Placeholder from "@/components/misc-ui/Placeholder";
-import NRLScoreBreakdown from "@/components/rugby-league/nrl/NRLScoreBreakdown";
+import NRLScoreBreakdown from "@/components/rugby-league/RugbyLeagueScoreBreakdown";
 import { rugbyLeagueMatchDetails } from "@/services/rugby-league.service";
 
 export default async function Page(props: {
