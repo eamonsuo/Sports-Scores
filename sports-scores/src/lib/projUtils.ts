@@ -166,7 +166,7 @@ export function formatDateLong(date: Date | number | null | undefined): string {
   const dateObj = typeof date === "number" ? new Date(date) : date;
 
   // Format in execution environment's timezone
-  return format(dateObj, "EEE MMM d yyyy");
+  return format(dateObj, "EEE d MMM yyyy");
 }
 
 export function formatPeriodScores(

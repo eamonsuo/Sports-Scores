@@ -99,6 +99,12 @@ const footerLinks: {
     altText: "Tennis",
   },
   {
+    sport: SPORT.NETBALL,
+    link: `/sports/${SPORT.NETBALL}/today`,
+    img: "/footer/netball.png",
+    altText: "Netball",
+  },
+  {
     sport: SPORT.ICE_HOCKEY,
     link: `/sports/${SPORT.ICE_HOCKEY}/today`,
     img: "/footer/hockey-puck.svg",
@@ -113,7 +119,6 @@ const footerLinks: {
   {
     sport: SPORT.DARTS,
     link: `/sports/${SPORT.DARTS}`,
-    // link: `https://www.flashscore.com.au/darts/`,
     img: "/footer/dart.svg",
     altText: "Darts",
   },
@@ -130,14 +135,6 @@ const footerLinks: {
     link: `https://www.flashscore.com.au/cycling/`,
     img: "/footer/bike.svg",
     altText: "Cycling",
-  },
-
-  {
-    sport: SPORT.NETBALL,
-    // link: `/sports/${SPORT.NETBALL}`,
-    link: `https://www.flashscore.com.au/netball/`,
-    img: "/footer/netball.png",
-    altText: "Netball",
   },
 ];
 

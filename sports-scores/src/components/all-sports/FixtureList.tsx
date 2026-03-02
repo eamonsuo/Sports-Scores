@@ -20,7 +20,7 @@ export default function FixtureList({
   const CardComponent =
     cardVariant === "tennis" ? TennisMatchCard : MatchSummaryCard;
 
-  const currentDate: Date = new Date(Date.now());
+  const currentDate: Date = new Date();
 
   let sectionDate = new Date("2000-01-01");
   let sectionSeries = "";
