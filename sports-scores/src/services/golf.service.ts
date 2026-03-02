@@ -15,6 +15,7 @@ import {
   SlashGolf_PlayerRanking_OWGR,
 } from "@/types/golf";
 import { CountryFlagCode, MatchSummary, SPORT } from "@/types/misc";
+import { addDays } from "date-fns";
 
 export async function golfPGASchedule(year: string) {
   var rawSchedule = await fetchGolfSchedule(1, year);
@@ -157,15 +158,27 @@ export function mapGolfSchedule(
       var endDate = new Date(0);
       endDate.setUTCSeconds(item.date.end.$date.$numberLong / 1000);
 
+      const tournamentImage = resolveSportImage(item.name);
+
+      switch (item.name) {
+        case "Genesis Scottish Open":
+        case "The Open Championship":
+        case "Baycurrent Classic":
+          break;
+        default:
+          startDate = addDays(startDate, 1);
+          endDate = addDays(endDate, 1);
+      }
+
       return {
         id: item.tournId,
         name: item.name,
         img:
-          resolveSportImage(item.name) === "/vercel.svg"
+          tournamentImage === "/vercel.svg"
             ? getCountryImageUrl(CountryFlagCode.UnitedStates)
-            : resolveSportImage(item.name),
-        startDate: startDate,
-        endDate: endDate,
+            : tournamentImage,
+        startDate,
+        endDate,
         sport: "golf",
         course: [""],
         status: "",

@@ -1151,7 +1151,6 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
     slug: "icc-mens-t20-world-cup",
     seasons: [{ name: "2026", slug: "icc-mens-t20-world-cup" }],
   },
-  { name: "Today", slug: "today", seasons: [{ name: "", slug: "" }] },
 ];
 
 export const MOTORSPORT_CATEGORIES = [
@@ -1613,41 +1612,6 @@ export const FOOTBALL_LEAGUES = [
     slug: "21",
     seasons: [{ name: "25/26", slug: "77500" }],
   },
-  // France - category 7
-  {
-    name: "🇫🇷 Ligue 1",
-    slug: "34",
-    seasons: [{ name: "25/26", slug: "77356" }],
-  },
-  // Germany - category 30
-  {
-    name: "🇩🇪 Bundesliga",
-    slug: "35",
-    seasons: [{ name: "25/26", slug: "77333" }],
-  },
-  // Italy - category 31
-  {
-    name: "🇮🇹 Serie A",
-    slug: "23",
-    seasons: [{ name: "25/26", slug: "76457" }],
-  },
-  // Spain - category 32
-  {
-    name: "🇪🇸 La Liga",
-    slug: "8",
-    seasons: [{ name: "25/26", slug: "77559" }],
-  },
-  // USA - category 26
-  {
-    name: "🇺🇸 MLS",
-    slug: "242",
-    seasons: [{ name: "2025", slug: "70158" }],
-  },
-  {
-    name: "🇺🇸 NWSL",
-    slug: "1690",
-    seasons: [{ name: "2025", slug: "71412" }],
-  },
 
   //Australia - category 34
   // {
@@ -1693,7 +1657,9 @@ export const FOOTBALL_LEAGUES = [
   {
     name: "🌍 FIFA World Cup Qualifiers",
     slug: "fifaQualifiers",
-    seasons: [{ name: "2026", slug: "" }],
+    seasons: [{ name: "2026", slug: "wiki" }],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_FIFA_World_Cup_qualification",
   },
   {
     name: "🌍 FIFA Women's World Cup",
@@ -1706,7 +1672,9 @@ export const FOOTBALL_LEAGUES = [
   {
     name: "🌍 FIFA Women's World Cup Qualifiers",
     slug: "fifaWQualifiers",
-    seasons: [{ name: "2027", slug: "" }],
+    seasons: [{ name: "2027", slug: "wiki" }],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2027_FIFA_Women%27s_World_Cup_qualification",
   },
   // {
   //   name: "FIFA World Cup Qualifier Playoffs",
@@ -1759,6 +1727,20 @@ export const FOOTBALL_LEAGUES = [
   //   slug: "308",
   //   seasons: [{ name: "23-25", slug: "53508" }],
   // },
+  {
+    name: "🌏 AFC World Cup Qualifiers",
+    slug: "308",
+    seasons: [{ name: "23-25", slug: "53508" }],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_FIFA_World_Cup_qualification_(AFC)",
+  },
+  {
+    name: "🌏 AFC Women's World Cup Qualifiers",
+    slug: "308-women",
+    seasons: [{ name: "26-27", slug: "wiki" }],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2027_FIFA_Women%27s_World_Cup_qualification#AFC",
+  },
   {
     name: "🌏 AFC Champions League Elite",
     slug: "463",
@@ -1817,6 +1799,42 @@ export const FOOTBALL_LEAGUES = [
   //   slug: "780",
   //   seasons: [{ name: "2022", slug: "38585" }],
   // },
+
+  // USA - category 26
+  {
+    name: "🇺🇸 MLS",
+    slug: "242",
+    seasons: [{ name: "2025", slug: "70158" }],
+  },
+  {
+    name: "🇺🇸 NWSL",
+    slug: "1690",
+    seasons: [{ name: "2025", slug: "71412" }],
+  },
+  // France - category 7
+  {
+    name: "🇫🇷 Ligue 1",
+    slug: "34",
+    seasons: [{ name: "25/26", slug: "77356" }],
+  },
+  // Germany - category 30
+  {
+    name: "🇩🇪 Bundesliga",
+    slug: "35",
+    seasons: [{ name: "25/26", slug: "77333" }],
+  },
+  // Italy - category 31
+  {
+    name: "🇮🇹 Serie A",
+    slug: "23",
+    seasons: [{ name: "25/26", slug: "76457" }],
+  },
+  // Spain - category 32
+  {
+    name: "🇪🇸 La Liga",
+    slug: "8",
+    seasons: [{ name: "25/26", slug: "77559" }],
+  },
 
   // North & Central America - category 1469
   // South America - category 1470
@@ -2120,6 +2138,7 @@ export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
       { name: "25/26", slug: "85821" },
       { name: "24/25", slug: "68941" },
     ],
+    externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_SVNS",
   },
   {
     name: "Rugby Sevens World Series - Women",
@@ -2128,6 +2147,7 @@ export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
       { name: "25/26", slug: "85845" },
       { name: "24/25", slug: "68964" },
     ],
+    externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_SVNS",
   },
   {
     name: "World Cup Sevens",
@@ -2171,33 +2191,36 @@ export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2026", slug: "81043" },
       { name: "2025", slug: "64007" },
     ],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_Men%27s_Ice_Hockey_World_Championships",
   },
+
   {
-    name: "World Championship - Australia (Div II, Group A)",
+    name: "World Championship - Australia",
     slug: "13446",
     seasons: [
-      // { name: "2026", slug: "https://en.wikipedia.org/wiki/2026_IIHF_World_Championship_Division_II" },
+      { name: "2026", slug: "wiki" },
       { name: "2025", slug: "69168" },
     ],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_IIHF_World_Championship_Division_II",
   },
   {
     name: "World Championship - Women",
     slug: "428",
     seasons: [
-      // { name: "2026", slug: "" },
+      { name: "2026", slug: "wiki" },
       { name: "2025", slug: "69237" },
     ],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_Women%27s_Ice_Hockey_World_Championships",
   },
   {
-    name: "World Championship - Women - Australia (Div II, Group A)",
+    name: "World Championship - Women - Australia",
     slug: "wiki",
-    seasons: [
-      {
-        name: "2026",
-        slug: "2026_IIHF_Women%27s_World_Championship_Division_II",
-      },
-      // { name: "2025", slug: "69168" },
-    ],
+    seasons: [{ name: "2026", slug: "wiki" }],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_IIHF_Women%27s_World_Championship_Division_II",
   },
 
   {
@@ -2218,6 +2241,8 @@ export const NETBALL_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2026", slug: "2026" },
       { name: "2025", slug: "2025" },
     ],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_Suncorp_Super_Netball_season",
   },
   {
     name: "Constellation Cup",
@@ -2241,6 +2266,33 @@ export const NETBALL_LEAGUES: LeagueSeasonConfig[] = [
     seasons: [
       // { name: "2026", slug: "" },
       { name: "2025", slug: "2025" },
+    ],
+  },
+];
+
+export const CYCLING_TOURS: LeagueSeasonConfig[] = [
+  {
+    name: "Men",
+    slug: "9",
+    seasons: [
+      { name: "2026", slug: "220825" },
+      { name: "2025", slug: "210189" },
+    ],
+  },
+  {
+    name: "Women",
+    slug: "94",
+    seasons: [
+      { name: "2026", slug: "220906" },
+      { name: "2025", slug: "209791" },
+    ],
+  },
+  {
+    name: "Tour de France",
+    slug: "",
+    seasons: [
+      { name: "2026", slug: "" },
+      { name: "2025", slug: "210217" },
     ],
   },
 ];

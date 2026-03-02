@@ -1,7 +1,9 @@
 "use client";
 
 import { DisplayTypes, SPORT } from "@/types/misc";
-import { ChevronDownIcon } from "lucide-react";
+import { format } from "date-fns/format";
+import { ChevronDownIcon, ExternalLinkIcon } from "lucide-react";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "../misc-ui/Button";
@@ -18,6 +20,7 @@ export type LeagueSeasonConfig = {
   seasons: { name: string; slug: string }[];
   qualifyingPosition?: number;
   display?: DisplayTypes;
+  externalURL?: string;
 };
 
 export default function LeagueSeasonToggle({
@@ -125,7 +128,7 @@ export default function LeagueSeasonToggle({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="justify-between">
-            {truncateName(selectedLeague.name)}
+            {todayActive ? "Today" : truncateName(selectedLeague.name)}
             <ChevronDownIcon className="ml-2 h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -139,6 +142,14 @@ export default function LeagueSeasonToggle({
               onClick={() => handleLeagueChange(league)}
             >
               {league.name}
+              {league.externalURL && (
+                <Link
+                  href={league.externalURL}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <ExternalLinkIcon className="h-4 w-6" />
+                </Link>
+              )}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
@@ -148,7 +159,7 @@ export default function LeagueSeasonToggle({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="justify-between">
-            {selectedSeason.name}
+            {todayActive ? format(new Date(), "d MMM") : selectedSeason.name}
             <ChevronDownIcon className="ml-2 h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -163,6 +174,7 @@ export default function LeagueSeasonToggle({
                 setSelectedSeason(season);
                 redirectToRoute(selectedLeague.slug, season.slug);
               }}
+              className="flex items-center justify-between"
             >
               {season.name}
             </DropdownMenuItem>

@@ -1,3 +1,4 @@
+import { FOOTBALL_LEAGUES } from "@/lib/constants";
 import { SPORT } from "@/types/misc";
 import { redirect } from "next/navigation";
 
@@ -6,16 +7,15 @@ export default async function Page(props: {
 }) {
   const { league, season } = await props.params;
 
-  switch (league) {
-    case "fifaQualifiers":
-      redirect(
-        `https://en.wikipedia.org/wiki/2026_FIFA_World_Cup_qualification`,
-      );
-    case "fifaWQualifiers":
-      redirect(
-        `https://en.wikipedia.org/wiki/2027_FIFA_Women%27s_World_Cup_qualification`,
-      );
-    default:
-      redirect(`/sports/${SPORT.FOOTBALL}/${league}/${season}/matches`);
+  if (season === "wiki") {
+    return (
+      <iframe
+        src={`${FOOTBALL_LEAGUES.find((l) => l.slug === league)?.externalURL}`}
+        title="Wikipedia Page"
+        className="h-screen w-full border-0"
+      />
+    );
   }
+
+  redirect(`/sports/${SPORT.FOOTBALL}/${league}/${season}/matches`);
 }
