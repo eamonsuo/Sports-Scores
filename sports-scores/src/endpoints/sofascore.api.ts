@@ -41,6 +41,7 @@ export async function fetchNextEvents(
       },
     },
   );
+  console.log(rawEvents);
 
   if (!rawEvents.ok || errorCodesToNullify.includes(rawEvents.status)) {
     console.log(rawEvents.status);
