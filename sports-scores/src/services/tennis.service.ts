@@ -241,7 +241,10 @@ export async function TennisMatchDetails(matchId: number) {
   } as TennisMatchPage;
 }
 
-export async function TennisMatchesByDate(date: Date) {
+export async function TennisMatchesByDate(
+  date: Date,
+  timezone: string = "UTC",
+) {
   const matches = await (process.env.DEV_MODE
     ? fetchEventsByDate("tennis", date)
     : fetchTennisMatchesByDate(date));
@@ -293,14 +296,14 @@ export async function TennisMatchesByDate(date: Date) {
         );
 
         return {
-          matches: sortMatchesByDateAndTournament(leagueMatches),
+          matches: sortMatchesByDateAndTournament(leagueMatches, timezone),
           roundLabel: roundLabel,
           cardVariant: "tennis",
           roundSlug: `${SPORT.TENNIS}/today`,
         } as FixtureRound;
       })
       .concat({
-        matches: sortMatchesByDateAndTournament(aussieMatches),
+        matches: sortMatchesByDateAndTournament(aussieMatches, timezone),
         roundLabel: "Australians",
         cardVariant: "tennis",
         roundSlug: `${SPORT.TENNIS}/today`,
@@ -618,13 +621,19 @@ export async function TESTTennisMatchesByDate(date: Date) {
 // AI Generated Helper
 function sortMatchesByDateAndTournament(
   matches: Tennis_Sofascore_Event[],
+  timezone: string = "UTC",
 ): MatchSummary[] {
-  // Group matches by date and tournament
-  const groupKey = (match: Tennis_Sofascore_Event) => {
-    const date = new Date(match.startTimestamp * 1000);
-    date.setHours(0, 0, 0, 0);
-    return `${date.toISOString()}_${match.tournament.uniqueTournament.id}`;
-  };
+  // Group matches by date (in the user's timezone) and tournament
+  const getLocalDateStr = (timestamp: number) =>
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: timezone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date(timestamp * 1000));
+
+  const groupKey = (match: Tennis_Sofascore_Event) =>
+    `${getLocalDateStr(match.startTimestamp)}_${match.tournament.uniqueTournament.id}`;
 
   const matchGroups = new Map<string, Tennis_Sofascore_Event[]>();
   matches.forEach((match) => {
@@ -640,15 +649,13 @@ function sortMatchesByDateAndTournament(
     group.sort((a, b) => a.startTimestamp - b.startTimestamp);
   });
 
-  // Sort groups by date, then by first match time within each day
+  // Sort groups by date (in the user's timezone), then by first match time within each day
   const sortedGroups = Array.from(matchGroups.values()).sort(
     (groupA, groupB) => {
-      const dateA = new Date(groupA[0].startTimestamp * 1000);
-      const dateB = new Date(groupB[0].startTimestamp * 1000);
-      dateA.setHours(0, 0, 0, 0);
-      dateB.setHours(0, 0, 0, 0);
+      const dateStrA = getLocalDateStr(groupA[0].startTimestamp);
+      const dateStrB = getLocalDateStr(groupB[0].startTimestamp);
 
-      const dateDiff = dateA.getTime() - dateB.getTime();
+      const dateDiff = dateStrA.localeCompare(dateStrB);
       if (dateDiff !== 0) return dateDiff;
 
       // Within same day, sort by first match time of each tournament

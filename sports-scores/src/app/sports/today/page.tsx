@@ -1,6 +1,6 @@
 import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
 import { GOLF_TOURS, MOTORSPORT_CATEGORIES } from "@/lib/constants";
-import { getClientDate } from "@/lib/serverUtils";
+import { getClientDate, getClientTimezone } from "@/lib/serverUtils";
 import { americanFootballMatchesByDate } from "@/services/american-football.service";
 import { aussieRulesCurrentMatches } from "@/services/aussie-rules.service";
 import { baseballMatchesByDate } from "@/services/baseball.service";
@@ -19,6 +19,7 @@ export const dynamic = "force-dynamic";
 
 export default async function Page() {
   const curDate = await getClientDate();
+  const timezone = await getClientTimezone();
   const [
     cricketoday,
     tennisToday,
@@ -37,7 +38,7 @@ export default async function Page() {
     cyclingToday,
   ] = await Promise.all([
     cricketMatchesByDate(curDate),
-    tennisMatchesByDate(curDate),
+    tennisMatchesByDate(curDate, timezone),
     footballMatchesByDate(curDate),
     basketballMatchesByDate(curDate),
     baseballMatchesByDate(curDate),
