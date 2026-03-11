@@ -59,25 +59,34 @@ export async function footballMatches(tournamentId: number, seasonId: number) {
     }
   }
 
-  const rounds = [...new Set(matches.map((item) => item.roundInfo?.round))];
+  const rounds = [
+    ...new Set(
+      matches.map((item) => item.roundInfo?.name ?? item.roundInfo?.round),
+    ),
+  ];
 
   return {
     fixtures: rounds.map((round) => {
       //Get all teams playing in the round
       let teams = matches
-        .filter((item) => item.roundInfo?.round === round)
+        .filter(
+          (item) => (item.roundInfo?.name ?? item.roundInfo?.round) === round,
+        )
         .flatMap((game) => [game.homeTeam.name, game.awayTeam.name]);
 
       return {
         matches: matches
-          .filter((item) => item.roundInfo?.round === round)
+          .filter(
+            (item) => (item.roundInfo?.name ?? item.roundInfo?.round) === round,
+          )
           .map((match) => {
             let startDate = new Date(0);
             startDate.setUTCSeconds(match.startTimestamp);
 
             return {
               startDate: startDate,
-              roundLabel: `Round ${match.roundInfo?.round}`,
+              roundLabel:
+                match.roundInfo?.name ?? `Round ${match.roundInfo?.round}`,
               timer:
                 match.status.type === "notstarted"
                   ? startDate
@@ -108,18 +117,26 @@ export async function footballMatches(tournamentId: number, seasonId: number) {
               },
             } as MatchSummary;
           }),
-        roundLabel: `Round ${round}`,
+        roundLabel: typeof round === "string" ? round : `Round ${round}`,
         // byes: NRL_TEAM_NAMES.filter((x) => !teams.includes(x)).map((team) => {
         //   return { name: team, img: resolveNRLImages(team) };
         // }),
       } as FixtureRound;
     }),
 
-    currentRound: `Round ${
-      nextMatches?.events?.[0]?.roundInfo?.round ??
-      lastMatches?.events?.[lastMatches?.events.length - 1]?.roundInfo?.round ??
-      0
-    }`,
+    currentRound: (() => {
+      if (nextMatches !== null && nextMatches.events.length > 0) {
+        if (nextMatches?.events[0]?.roundInfo?.name !== undefined) {
+          return nextMatches?.events[0]?.roundInfo?.name;
+        } else {
+          const round = nextMatches?.events[0]?.roundInfo?.round ?? 0;
+          return `Round ${round}`;
+        }
+      } else {
+        return lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo
+          ?.name;
+      }
+    })(),
   } as FootballFixturesPage;
 }
 

@@ -127,18 +127,6 @@ export function shortenTeamNames(team: string) {
   }
 }
 
-// Timezone detection utilities
-export function getUserTimezone(): string {
-  return Intl.DateTimeFormat().resolvedOptions().timeZone;
-}
-
-export function getTimezoneAbbr(): string {
-  const timeString = new Date().toLocaleTimeString("en-US", {
-    timeZoneName: "short",
-  });
-  return timeString.split(" ").pop() || "";
-}
-
 /**
  * Format time as a string in user's timezone.
  * Use this in client components to format times.

@@ -164,6 +164,14 @@ export function mapGolfSchedule(
         case "Genesis Scottish Open":
         case "The Open Championship":
         case "Baycurrent Classic":
+        case "LIV Golf Riyadh":
+        case "LIV Golf Adelaide":
+        case "LIV Golf Singapore":
+        case "LIV Golf Hong Kong":
+        case "LIV Golf South Africa":
+        case "LIV Golf Korea":
+        case "LIV Golf Andalucia":
+        case "LIV Golf UK":
           break;
         default:
           startDate = addDays(startDate, 1);

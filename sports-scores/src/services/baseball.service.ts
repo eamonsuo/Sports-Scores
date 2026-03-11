@@ -285,11 +285,7 @@ export async function baseballMatchesByDate(date: Date) {
     .filter((item) =>
       validLeagueIds.includes(item.tournament.uniqueTournament.id),
     )
-    .sort(
-      (a, b) =>
-        validLeagueIds.indexOf(a.tournament.uniqueTournament.id) -
-        validLeagueIds.indexOf(b.tournament.uniqueTournament.id),
-    );
+    .sort((a, b) => a.startTimestamp - b.startTimestamp);
 
   // Get unique league ids in order
   const rounds = [
