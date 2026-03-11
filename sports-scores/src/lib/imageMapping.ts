@@ -4,6 +4,7 @@ import { getCountryImageUrl } from "./projUtils";
 const fallback = "/vercel.svg";
 
 export function resolveSportImage(teamName: string) {
+  teamName = teamName.replace(/\s((W|A|U19|Women)(\sW)?)$/i, "");
   switch (teamName) {
     // LIV Teams
     case "4ACES GC":
@@ -1217,6 +1218,7 @@ export function resolveSportImage(teamName: string) {
       return getCountryImageUrl(CountryFlagCode.Monaco);
     case "Carlos Sainz":
     case "Fernando Alonso":
+    case "Sergio Pérez":
       return getCountryImageUrl(CountryFlagCode.Spain);
     case "Lance Stroll":
       return getCountryImageUrl(CountryFlagCode.Canada);
@@ -1224,6 +1226,7 @@ export function resolveSportImage(teamName: string) {
     case "George Russell":
     case "Lewis Hamilton":
     case "Oliver Bearman":
+    case "Arvid Lindblad":
       return getCountryImageUrl(CountryFlagCode.UnitedKingdom);
     case "Max Verstappen":
       return getCountryImageUrl(CountryFlagCode.Netherlands);
@@ -1242,6 +1245,8 @@ export function resolveSportImage(teamName: string) {
     case "Franco Colapinto":
     case "Gabriel Bortoleto":
       return getCountryImageUrl(CountryFlagCode.Argentina);
+    case "Valtteri Bottas":
+      return getCountryImageUrl(CountryFlagCode.Finland);
 
     // Rugby Union
     case "All Blacks":
@@ -1854,6 +1859,7 @@ export function resolveSportImage(teamName: string) {
       return getCountryImageUrl(CountryFlagCode.UnitedArabEmirates);
     case "United Kingdom":
     case "Great Britan":
+    case "Great Britain":
       return getCountryImageUrl(CountryFlagCode.UnitedKingdom);
     case "United States":
     case "USA":

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
+import ClientDateSetter from "@/components/misc-ui/ClientDateSetter";
 import Footer from "@/components/misc-ui/Footer";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -42,6 +43,7 @@ export default function RootLayout({
       />
 
       <body className={inter.className}>
+        <ClientDateSetter />
         {/* Set to Dynamic view height aka height of browser minus any browser things. Helps on
          mobile where safari search overhangs regular view height*/}
         <div className="flex h-dvh w-dvw flex-col">

@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export type F1DriverStandings = {
   position: number;
-  driver: { id: number; name: string; img?: string };
+  driver: { id: number; name: string; img?: string; teamimg?: string };
   points: number;
   wins?: number;
 };
@@ -34,6 +34,13 @@ export default function F1DriverStandingsTable({
                     height={20}
                     width={20}
                     alt={"Logo"}
+                    className="me-2"
+                  />
+                  <Image
+                    src={item.driver.teamimg ?? fallback}
+                    height={15}
+                    width={15}
+                    alt={"Team Logo"}
                     className="me-2"
                   />
                   {item.driver.name}

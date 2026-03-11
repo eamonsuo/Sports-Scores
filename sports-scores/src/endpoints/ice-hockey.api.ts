@@ -29,7 +29,7 @@ export async function fetchIceHockeyLastMatches(
   pageNumber: number = 0,
 ) {
   const rawMatches = await fetch(
-    `${process.env.NHL_BASEURL}/ice-hockey/tournament/${tournamentId}/season/${seasonId}/matches/last/${pageNumber}`,
+    `${process.env.ICE_HOCKEY_BASEURL}/ice-hockey/tournament/${tournamentId}/season/${seasonId}/matches/last/${pageNumber}`,
     {
       headers: reqHeaders,
     },
@@ -50,7 +50,7 @@ export async function fetchIceHockeyNextMatches(
   pageNumber: number = 0,
 ) {
   const rawMatches = await fetch(
-    `${process.env.NHL_BASEURL}/ice-hockey/tournament/${tournamentId}/season/${seasonId}/matches/next/${pageNumber}`,
+    `${process.env.ICE_HOCKEY_BASEURL}/ice-hockey/tournament/${tournamentId}/season/${seasonId}/matches/next/${pageNumber}`,
     {
       headers: reqHeaders,
     },
@@ -70,7 +70,7 @@ export async function fetchIceHockeyStandings(
   seasonId: number,
 ) {
   const rawStandings = await fetch(
-    `${process.env.NHL_BASEURL}/ice-hockey/tournament/${tournamentId}/season/${seasonId}/standings/total`,
+    `${process.env.ICE_HOCKEY_BASEURL}/ice-hockey/tournament/${tournamentId}/season/${seasonId}/standings/total`,
     {
       headers: reqHeaders,
     },
@@ -87,7 +87,7 @@ export async function fetchIceHockeyStandings(
 
 export async function fetchIceHockeyMatchDetails(matchId: number) {
   const rawMatch = await fetch(
-    `${process.env.NHL_BASEURL}/ice-hockey/match/${matchId}`,
+    `${process.env.ICE_HOCKEY_BASEURL}/ice-hockey/match/${matchId}`,
     {
       headers: reqHeaders,
     },
@@ -104,7 +104,7 @@ export async function fetchIceHockeyMatchDetails(matchId: number) {
 
 export async function fetchIceHockeyMatchIncidents(matchId: number) {
   const rawMatch = await fetch(
-    `${process.env.NHL_BASEURL}/ice-hockey/match/${matchId}/incidents`,
+    `${process.env.ICE_HOCKEY_BASEURL}/ice-hockey/match/${matchId}/incidents`,
     {
       headers: reqHeaders,
     },
@@ -121,7 +121,7 @@ export async function fetchIceHockeyMatchIncidents(matchId: number) {
 
 export async function fetchIceHockeyMatchesByDate(date: Date) {
   const rawFixtures = await fetch(
-    `${process.env.NHL_BASEURL}/ice-hockey/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+    `${process.env.ICE_HOCKEY_BASEURL}/ice-hockey/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
     {
       headers: reqHeaders,
     },

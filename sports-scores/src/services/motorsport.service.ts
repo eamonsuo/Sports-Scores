@@ -21,6 +21,7 @@ import {
   SessionSummary,
 } from "@/types/f1";
 import { MatchSummary, SPORT } from "@/types/misc";
+import { addHours } from "date-fns/addHours";
 
 export async function f1EventSchedule(season: number) {
   const rawEvents = await fetchF1Events(season);
@@ -45,6 +46,7 @@ export async function f1EventSchedule(season: number) {
           sport: `${SPORT.MOTORSPORT}/f1`,
           status: setSessionStatus(
             new Date(item.FirstPractice.date + "T" + item.FirstPractice.time),
+            F1SessionType.Practice1,
           ),
           logo: resolveSportImage(item.raceName),
           sessionSlug: `${season}/${item.round}/${F1SessionType.Practice1}`,
@@ -62,6 +64,7 @@ export async function f1EventSchedule(season: number) {
           sport: `${SPORT.MOTORSPORT}/f1`,
           status: setSessionStatus(
             new Date(item.SecondPractice.date + "T" + item.SecondPractice.time),
+            F1SessionType.Practice2,
           ),
           sessionSlug: `${season}/${item.round}/${F1SessionType.Practice2}`,
         });
@@ -78,6 +81,7 @@ export async function f1EventSchedule(season: number) {
           sport: `${SPORT.MOTORSPORT}/f1`,
           status: setSessionStatus(
             new Date(item.ThirdPractice.date + "T" + item.ThirdPractice.time),
+            F1SessionType.Practice3,
           ),
           sessionSlug: `${season}/${item.round}/${F1SessionType.Practice3}`,
         });
@@ -96,6 +100,7 @@ export async function f1EventSchedule(season: number) {
             new Date(
               item.SprintQualifying.date + "T" + item.SprintQualifying.time,
             ),
+            F1SessionType.SprintQualifying,
           ),
           sessionSlug: `${season}/${item.round}/${F1SessionType.SprintQualifying}`,
         });
@@ -109,6 +114,7 @@ export async function f1EventSchedule(season: number) {
           sport: `${SPORT.MOTORSPORT}/f1`,
           status: setSessionStatus(
             new Date(item.Sprint.date + "T" + item.Sprint.time),
+            F1SessionType.Sprint,
           ),
           sessionSlug: `${season}/${item.round}/${F1SessionType.Sprint}`,
         });
@@ -124,6 +130,7 @@ export async function f1EventSchedule(season: number) {
           sport: `${SPORT.MOTORSPORT}/f1`,
           status: setSessionStatus(
             new Date(item.Qualifying.date + "T" + item.Qualifying.time),
+            F1SessionType.Qualifying,
           ),
           sessionSlug: `${season}/${item.round}/${F1SessionType.Qualifying}`,
         });
@@ -136,7 +143,10 @@ export async function f1EventSchedule(season: number) {
         sessionType: F1SessionType.Race,
         sessionName: F1SessionType.Race,
         sport: `${SPORT.MOTORSPORT}/f1`,
-        status: setSessionStatus(new Date(item.date + "T" + item.time)),
+        status: setSessionStatus(
+          new Date(item.date + "T" + item.time),
+          F1SessionType.Race,
+        ),
         sessionSlug: `${season}/${item.round}/${F1SessionType.Race}`,
       });
 
@@ -341,7 +351,7 @@ export async function f1DriverStandings(season: number) {
   }
 
   return {
-    standings: rawStandings.map((item) => {
+    standings: rawStandings.map((item, index) => {
       return {
         driver: {
           id: Number(item.Driver.permanentNumber),
@@ -349,8 +359,9 @@ export async function f1DriverStandings(season: number) {
           img: resolveSportImage(
             item.Driver.givenName + " " + item.Driver.familyName,
           ),
+          teamimg: resolveSportImage(item.Constructors[0].name),
         },
-        position: Number(item.position),
+        position: Number(item.position) ?? index + 1,
         points: Number(item.points),
         wins: Number(item.wins),
       };
@@ -366,31 +377,46 @@ export async function f1ConstructorStandings(season: number) {
   }
 
   return {
-    standings: rawStandings.map((item) => {
+    standings: rawStandings.map((item, index) => {
       return {
         team: {
           id: item.Constructor.constructorId,
           name: item.Constructor.name,
           logo: resolveSportImage(item.Constructor.name),
         },
-        position: Number(item.position),
+        position: Number(item.position) ?? index + 1,
         points: Number(item.points),
       };
     }),
   } as F1ConstructorStandingsPage;
 }
 
-function setSessionStatus(sessionDate: Date) {
+function setSessionStatus(sessionDate: Date, sessionType: F1SessionType) {
   let currentDate = new Date();
-  let liveDate = new Date();
-  liveDate.setHours(liveDate.getHours() - 3);
 
   if (sessionDate > currentDate) {
     return null;
-  } else if (sessionDate > liveDate) {
-    return "In Progress";
   } else {
-    return "Completed";
+    switch (sessionType) {
+      case F1SessionType.Practice1:
+      case F1SessionType.Practice2:
+      case F1SessionType.Practice3:
+        return sessionDate > addHours(currentDate, -1)
+          ? "In Progress"
+          : "Completed";
+      case F1SessionType.Qualifying:
+      case F1SessionType.SprintQualifying:
+      case F1SessionType.Sprint:
+        return sessionDate > addHours(currentDate, -2)
+          ? "In Progress"
+          : "Completed";
+      case F1SessionType.Race:
+        return sessionDate > addHours(currentDate, -3)
+          ? "In Progress"
+          : "Completed";
+      default:
+        return "Completed";
+    }
   }
 }
 

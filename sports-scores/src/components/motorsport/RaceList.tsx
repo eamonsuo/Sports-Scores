@@ -1,7 +1,7 @@
 "use client";
 
-import { formatTime } from "@/lib/projUtils";
 import { SessionSummary } from "@/types/f1";
+import { format } from "date-fns";
 import React, { useEffect } from "react";
 import SectionDate from "../all-sports/SectionDate";
 import SessionSummaryCard from "./SessionSummaryCard";
@@ -96,7 +96,7 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
             <SessionSummaryCard
               href={`/sports/${item.sport}/${item.sessionSlug}`}
               sessionType={item.sessionName ?? item.sessionType}
-              status={item.status ?? formatTime(item.startDate)}
+              status={item.status ?? format(item.startDate, "E h:mm a ")}
             />
           </React.Fragment>
         );

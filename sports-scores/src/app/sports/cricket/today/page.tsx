@@ -1,32 +1,20 @@
 import FixtureList from "@/components/all-sports/FixtureList";
 import Placeholder from "@/components/misc-ui/Placeholder";
-import { cricketMatchesByDate } from "@/services/cricket.service";
-import { addDays } from "date-fns";
+import { cricketMatchesRecent } from "@/services/cricket.service";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
   const curDate = new Date();
-  const matches = await cricketMatchesByDate(curDate);
-  const yesterdayMatches = await cricketMatchesByDate(addDays(curDate, -1));
-  const tomorrowMatches = await cricketMatchesByDate(addDays(curDate, 1));
+  const matches = await cricketMatchesRecent(curDate);
 
-  if (
-    matches === null &&
-    yesterdayMatches === null &&
-    tomorrowMatches === null
-  ) {
+  if (matches === null) {
     return <Placeholder>NO DATA</Placeholder>;
   }
 
   return (
     // <FixtureRoundList data={matches.fixtures} curRound={matches.currentRound} />
-    <FixtureList
-      data={(yesterdayMatches ?? []).concat(
-        matches ?? [],
-        tomorrowMatches ?? [],
-      )}
-    />
+    <FixtureList data={matches} />
   );
 }
 

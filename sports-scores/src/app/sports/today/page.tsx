@@ -1,5 +1,6 @@
 import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
 import { GOLF_TOURS, MOTORSPORT_CATEGORIES } from "@/lib/constants";
+import { getClientDate } from "@/lib/serverUtils";
 import { americanFootballMatchesByDate } from "@/services/american-football.service";
 import { aussieRulesCurrentMatches } from "@/services/aussie-rules.service";
 import { baseballMatchesByDate } from "@/services/baseball.service";
@@ -17,7 +18,7 @@ import { FixtureRound, SPORT } from "@/types/misc";
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const curDate = new Date();
+  const curDate = await getClientDate();
   const [
     cricketoday,
     tennisToday,
