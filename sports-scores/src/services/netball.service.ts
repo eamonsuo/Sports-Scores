@@ -44,9 +44,13 @@ export async function netballMatches(tournamentId: number, seasonId: number) {
     new Map(allMatches.map((match) => [match.idEvent, match])).values(),
   );
 
+  const displayType =
+    NETBALL_LEAGUES.find((l) => Number(l.slug) === tournamentId)?.display ??
+    DISPLAY_TYPES.ROUND;
+
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SPORTSDB,
-    DISPLAY_TYPES.ROUND,
+    displayType,
     matches,
     mapNetballMatch,
     false,
@@ -54,7 +58,7 @@ export async function netballMatches(tournamentId: number, seasonId: number) {
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(DISPLAY_TYPES.ROUND, fixture),
+    currentRound: getCurrentRound(displayType, fixture),
   } as NetballFixturesPage;
 }
 

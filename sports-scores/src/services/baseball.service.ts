@@ -19,14 +19,27 @@ import {
 } from "@/endpoints/sofascore.api";
 import { BASEBALL_LEAGUES } from "@/lib/constants";
 import { resolveSportImage } from "@/lib/imageMapping";
-import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils";
+import {
+  getCurrentRound,
+  mapFixtureRound,
+  mapMatchSummary,
+  shortenTeamNames,
+} from "@/lib/projUtils";
 import {
   BaseballFixturesPage,
   BaseballLadderPage,
   BaseballMatchPage,
   BaseballTodayPage,
 } from "@/types/baseball";
-import { FixtureRound, MatchSummary, SPORT } from "@/types/misc";
+import {
+  API_EVENT_TYPES,
+  DISPLAY_TYPES,
+  MatchSummary,
+  SPORT,
+} from "@/types/misc";
+import { Sofascore_Event } from "@/types/sofascore";
+import { TZDate } from "@date-fns/tz";
+import { isSameDay } from "date-fns";
 
 export async function baseballMatches(tournamentId: number, seasonId: number) {
   const lastMatches = await (
@@ -43,70 +56,21 @@ export async function baseballMatches(tournamentId: number, seasonId: number) {
 
   const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
 
-  for (let i = 1; i < matches.length; i++) {
-    if (matches[i].roundInfo === undefined) {
-      matches[i].roundInfo = { round: 0 };
-    }
-  }
+  const displayType =
+    BASEBALL_LEAGUES.find((l) => Number(l.slug) === tournamentId)?.display ??
+    DISPLAY_TYPES.ROUND;
 
-  const rounds = [...new Set(matches.map((item) => item.roundInfo?.round))];
+  const fixture = mapFixtureRound(
+    API_EVENT_TYPES.SOFASCORE,
+    displayType,
+    matches,
+    mapBaseballMatch,
+    false,
+  );
 
   return {
-    fixtures: rounds.map((round) => {
-      //Get all teams playing in the round
-      let teams = matches
-        .filter((item) => item.roundInfo?.round === round)
-        .flatMap((game) => [game.homeTeam.name, game.awayTeam.name]);
-
-      return {
-        matches: matches
-          .filter((item) => item.roundInfo?.round === round)
-          .map((match) => {
-            var startDate = new Date(0);
-            startDate.setUTCSeconds(match.startTimestamp);
-
-            return {
-              startDate: startDate,
-              roundLabel: `Round ${match.roundInfo?.round}`,
-              timer:
-                match.status.type === "notstarted"
-                  ? startDate
-                  : match.status.description,
-              timerDisplayColour:
-                match.status.type === "inprogress" ? "green" : "gray",
-              id: match.id,
-              matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
-              sport: SPORT.BASEBALL,
-              status: match.status.description,
-              venue: "",
-              summaryText: setMatchSummary(
-                match.status.type,
-                match.homeTeam.name,
-                match.homeScore.current,
-                match.awayTeam.name,
-                match.awayScore.current,
-              ),
-              homeDetails: {
-                name: shortenTeamNames(match.homeTeam.name),
-                score: match.homeScore.current?.toString() ?? "0",
-                img: resolveSportImage(match.homeTeam.name),
-              },
-              awayDetails: {
-                name: shortenTeamNames(match.awayTeam.name),
-                score: match.awayScore.current?.toString() ?? "0",
-                img: resolveSportImage(match.awayTeam.name),
-              },
-            } as MatchSummary;
-          }),
-        roundLabel: `Round ${round}`,
-      } as FixtureRound;
-    }),
-
-    currentRound: `Round ${
-      nextMatches?.events?.[0]?.roundInfo?.round ??
-      lastMatches?.events?.[lastMatches?.events.length - 1]?.roundInfo?.round ??
-      0
-    }`,
+    fixtures: fixture,
+    currentRound: getCurrentRound(displayType, fixture),
   } as BaseballFixturesPage;
 }
 
@@ -274,76 +238,34 @@ export async function baseballMatchesByDate(date: Date) {
   }
 
   const validLeagueIds = BASEBALL_LEAGUES.map((l) => Number(l.slug));
-  const leagueIdToName = Object.fromEntries(
-    BASEBALL_LEAGUES.map((l) => [
-      Number(l.slug),
-      { name: l.name, currentSeason: l.seasons[0].slug },
-    ]),
-  );
+
+  const timezone = date instanceof TZDate ? date.timeZone : "UTC";
 
   matches.events = matches.events
+    .filter((item) => {
+      const eventDate = new TZDate(item.startTimestamp * 1000, timezone);
+      return isSameDay(eventDate, date);
+    })
     .filter((item) =>
       validLeagueIds.includes(item.tournament.uniqueTournament.id),
     )
     .sort((a, b) => a.startTimestamp - b.startTimestamp);
 
-  // Get unique league ids in order
-  const rounds = [
-    ...new Set(
-      matches.events.map((item) => item.tournament.uniqueTournament.id),
-    ),
-  ];
+  if (!matches.events || matches.events.length === 0) return null;
+
+  const fixture = mapFixtureRound(
+    API_EVENT_TYPES.SOFASCORE,
+    DISPLAY_TYPES.LEAGUE,
+    matches.events,
+    mapBaseballMatch,
+    false,
+    undefined,
+    SPORT.BASEBALL,
+  );
 
   return {
-    fixtures: rounds.map((leagueId) => {
-      const roundLabel = leagueIdToName[leagueId]?.name ?? "";
-      const seasonId = leagueIdToName[leagueId]?.currentSeason ?? "";
-      return {
-        matches: matches.events
-          .filter((item) => item.tournament.uniqueTournament.id === leagueId)
-          .map((match) => {
-            var startDate = new Date(0);
-            startDate.setUTCSeconds(match.startTimestamp);
-
-            return {
-              startDate: startDate,
-              roundLabel: roundLabel,
-              timer:
-                match.status.type === "notstarted"
-                  ? startDate
-                  : match.status.description,
-              timerDisplayColour:
-                match.status.type === "inprogress" ? "green" : "gray",
-              id: match.id,
-              matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
-              sport: SPORT.BASEBALL,
-              status: match.status.description,
-              venue: "",
-              summaryText: setMatchSummary(
-                match.status.type,
-                match.homeTeam.name,
-                match.homeScore.current,
-                match.awayTeam.name,
-                match.awayScore.current,
-              ),
-              homeDetails: {
-                name: shortenTeamNames(match.homeTeam.name),
-                score: match.homeScore.current?.toString() ?? "0",
-                img: resolveSportImage(match.homeTeam.name),
-              },
-              awayDetails: {
-                name: shortenTeamNames(match.awayTeam.name),
-                score: match.awayScore.current?.toString() ?? "0",
-                img: resolveSportImage(match.awayTeam.name),
-              },
-            } as MatchSummary;
-          }),
-        roundLabel: roundLabel,
-        roundSlug: `${SPORT.BASEBALL}/${leagueId}/${seasonId}`,
-      } as FixtureRound;
-    }),
-
-    currentRound: leagueIdToName[rounds[0]]?.name ?? "",
+    fixtures: fixture,
+    currentRound: getCurrentRound(DISPLAY_TYPES.LEAGUE, fixture),
   } as BaseballTodayPage;
 }
 
@@ -352,4 +274,17 @@ function tableOrder(name: string): number {
   if (name === "MLB") return 2;
   if (name.split(" ").length == 2) return 1;
   return 0; // Division tables
+}
+
+function mapBaseballMatch(
+  match: Sofascore_Event,
+  roundLabel: string,
+): MatchSummary {
+  let startDate = new Date(0);
+  startDate.setUTCSeconds(match.startTimestamp);
+
+  return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.BASEBALL, match, {
+    startDate: startDate,
+    roundLabel: roundLabel,
+  });
 }

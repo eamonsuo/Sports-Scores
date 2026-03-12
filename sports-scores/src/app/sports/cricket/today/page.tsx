@@ -1,11 +1,12 @@
 import FixtureList from "@/components/all-sports/FixtureList";
 import Placeholder from "@/components/misc-ui/Placeholder";
+import { getClientDate } from "@/lib/serverUtils";
 import { cricketMatchesRecent } from "@/services/cricket.service";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const curDate = new Date();
+  const curDate = await getClientDate();
   const matches = await cricketMatchesRecent(curDate);
 
   if (matches === null) {

@@ -32,6 +32,8 @@ import {
   TennisTeamFixturesPage,
   TennisTodayPage,
 } from "@/types/tennis";
+import { TZDate } from "@date-fns/tz";
+import { format, isSameDay } from "date-fns";
 
 export async function tennisTournamentMatches(
   tournamentId: number,
@@ -241,10 +243,8 @@ export async function TennisMatchDetails(matchId: number) {
   } as TennisMatchPage;
 }
 
-export async function TennisMatchesByDate(
-  date: Date,
-  timezone: string = "UTC",
-) {
+export async function TennisMatchesByDate(date: Date) {
+  const timezone = date instanceof TZDate ? date.timeZone : "UTC";
   const matches = await (process.env.DEV_MODE
     ? fetchEventsByDate("tennis", date)
     : fetchTennisMatchesByDate(date));
@@ -263,19 +263,29 @@ export async function TennisMatchesByDate(
     ]),
   );
 
-  const filteredMatches = matches.events.filter(
-    (item) =>
-      (validLeagueIds.includes(item.tournament.category.id) ||
-        validLeagueIds.includes(item.tournament.uniqueTournament.id)) &&
-      item.status.type !== "canceled",
-  );
+  const filteredMatches = matches.events
+    .filter((item) => {
+      const eventDate = new TZDate(item.startTimestamp * 1000, timezone);
+      return isSameDay(eventDate, date);
+    })
+    .filter(
+      (item) =>
+        (validLeagueIds.includes(item.tournament.category.id) ||
+          validLeagueIds.includes(item.tournament.uniqueTournament.id)) &&
+        item.status.type !== "canceled",
+    );
 
-  const aussieMatches = matches.events.filter(
-    (item) =>
-      (item.homeTeam.country.name === "Australia" ||
-        item.awayTeam.country.name === "Australia") &&
-      item.status.type !== "canceled",
-  );
+  const aussieMatches = matches.events
+    .filter((item) => {
+      const eventDate = new TZDate(item.startTimestamp * 1000, timezone);
+      return isSameDay(eventDate, date);
+    })
+    .filter(
+      (item) =>
+        (item.homeTeam.country.name === "Australia" ||
+          item.awayTeam.country.name === "Australia") &&
+        item.status.type !== "canceled",
+    );
 
   // Get unique league ids in order
   const rounds = [
@@ -625,12 +635,7 @@ function sortMatchesByDateAndTournament(
 ): MatchSummary[] {
   // Group matches by date (in the user's timezone) and tournament
   const getLocalDateStr = (timestamp: number) =>
-    new Intl.DateTimeFormat("en-CA", {
-      timeZone: timezone,
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    }).format(new Date(timestamp * 1000));
+    format(new TZDate(timestamp * 1000, timezone), "yyyy-MM-dd");
 
   const groupKey = (match: Tennis_Sofascore_Event) =>
     `${getLocalDateStr(match.startTimestamp)}_${match.tournament.uniqueTournament.id}`;
