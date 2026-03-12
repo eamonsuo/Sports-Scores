@@ -39,6 +39,8 @@ import {
   RugbyUnionTodayPage,
 } from "@/types/rugby-union";
 import { Sofascore_Event } from "@/types/sofascore";
+import { TZDate } from "@date-fns/tz";
+import { isSameDay } from "date-fns";
 
 export async function rugbyUnionMatches(
   tournamentId: number,
@@ -57,9 +59,13 @@ export async function rugbyUnionMatches(
 
   const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
 
+  const displayType =
+    RUGBY_UNION_LEAGUES.find((l) => Number(l.slug) === tournamentId)?.display ??
+    DISPLAY_TYPES.ROUND;
+
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    DISPLAY_TYPES.ROUND,
+    displayType,
     matches,
     mapRugbyUnionMatch,
     tournamentId === 422,
@@ -68,7 +74,7 @@ export async function rugbyUnionMatches(
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(DISPLAY_TYPES.ROUND, fixture),
+    currentRound: getCurrentRound(displayType, fixture),
   } as RugbyUnionFixturesPage;
 }
 
@@ -179,8 +185,13 @@ export async function rugbyUnionMatchesByDate(date: Date) {
   if (!matches) return null;
 
   const validLeagueIds = RUGBY_UNION_LEAGUES.map((l) => Number(l.slug));
+  const timezone = date instanceof TZDate ? date.timeZone : "UTC";
 
   matches.events = matches.events
+    .filter((item) => {
+      const eventDate = new TZDate(item.startTimestamp * 1000, timezone);
+      return isSameDay(eventDate, date);
+    })
     .filter((item) =>
       validLeagueIds.includes(item.tournament.uniqueTournament.id),
     )

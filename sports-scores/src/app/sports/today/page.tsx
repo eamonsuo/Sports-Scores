@@ -1,6 +1,6 @@
 import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
 import { GOLF_TOURS, MOTORSPORT_CATEGORIES } from "@/lib/constants";
-import { getClientDate, getClientTimezone } from "@/lib/serverUtils";
+import { getClientDate } from "@/lib/serverUtils";
 import { americanFootballMatchesByDate } from "@/services/american-football.service";
 import { aussieRulesCurrentMatches } from "@/services/aussie-rules.service";
 import { baseballMatchesByDate } from "@/services/baseball.service";
@@ -19,7 +19,6 @@ export const dynamic = "force-dynamic";
 
 export default async function Page() {
   const curDate = await getClientDate();
-  const timezone = await getClientTimezone();
   const [
     cricketoday,
     tennisToday,
@@ -38,13 +37,13 @@ export default async function Page() {
     cyclingToday,
   ] = await Promise.all([
     cricketMatchesByDate(curDate),
-    tennisMatchesByDate(curDate, timezone),
+    tennisMatchesByDate(curDate),
     footballMatchesByDate(curDate),
     basketballMatchesByDate(curDate),
     baseballMatchesByDate(curDate),
     americanFootballMatchesByDate(curDate),
     rugbyLeagueMatchesByDate(curDate),
-    aussieRulesCurrentMatches("TODAY"),
+    aussieRulesCurrentMatches(curDate),
     golfTournamentsByDate(curDate),
     motorsportCategoriesByDate(curDate),
     rugbyUnionMatchesByDate(curDate),
@@ -58,7 +57,7 @@ export default async function Page() {
     .concat([
       {
         matches: cricketoday ?? [],
-        roundLabel: "🏏 Cricket",
+        roundLabel: "Cricket",
         roundSlug: `${SPORT.CRICKET}/main/matches`,
       },
     ])
@@ -68,14 +67,14 @@ export default async function Page() {
     .concat([
       {
         matches: golfToday ?? [],
-        roundLabel: "⛳ Golf",
+        roundLabel: "Golf",
         roundSlug: `${SPORT.GOLF}/${GOLF_TOURS[0].slug}/${GOLF_TOURS[0].seasons[0].slug}`,
       },
     ])
     .concat([
       {
         matches: motorsportToday ?? [],
-        roundLabel: "🏎️ Motorsport",
+        roundLabel: "Motorsport",
         roundSlug: `${SPORT.MOTORSPORT}/${MOTORSPORT_CATEGORIES[0].slug}/${MOTORSPORT_CATEGORIES[0].seasons[0].slug}`,
       },
     ])

@@ -2,7 +2,6 @@
 
 import EventCardGrid from "@/components/event-calendar/EventCardGrid";
 import RegularSeasonsView from "@/components/event-calendar/RegularSeasonsView";
-import { upcomingAndCurrentEvents } from "@/lib/constants";
 import { getUpcomingEvents } from "@/services/event-calendar.service";
 import { clsx } from "clsx";
 import { useState } from "react";
@@ -12,7 +11,7 @@ type ViewMode = "major" | "regular";
 export default function Home() {
   const [viewMode, setViewMode] = useState<ViewMode>("major");
   const adjustedDate = new Date();
-  adjustedDate.setDate(adjustedDate.getDate() - 10);
+  adjustedDate.setDate(adjustedDate.getDate() - 5);
 
   const upcomingEvents = getUpcomingEvents(adjustedDate);
 

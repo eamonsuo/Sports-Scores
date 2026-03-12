@@ -16,14 +16,28 @@ import {
 } from "@/endpoints/sofascore.api";
 import { AFL_TEAM_NAMES, AUSSIE_RULES_LEAGUES } from "@/lib/constants";
 import { resolveSportImage } from "@/lib/imageMapping";
-import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils";
+import {
+  getCurrentRound,
+  mapFixtureRound,
+  mapMatchSummary,
+  shortenTeamNames,
+} from "@/lib/projUtils";
 import {
   AussieRulesFixturesPage,
   AussieRulesLadderPage,
   AussieRulesMatchPage,
   AussieRulesStanding,
+  AussieRulesTodayPage,
 } from "@/types/aussie-rules";
-import { FixtureRound, MatchSummary, SPORT } from "@/types/misc";
+import {
+  API_EVENT_TYPES,
+  DISPLAY_TYPES,
+  MatchSummary,
+  SPORT,
+} from "@/types/misc";
+import { Sofascore_Event } from "@/types/sofascore";
+import { TZDate } from "@date-fns/tz";
+import { isSameDay } from "date-fns";
 
 export async function aussieRulesMatches(league: number, season: number) {
   const lastMatches = await (
@@ -39,73 +53,25 @@ export async function aussieRulesMatches(league: number, season: number) {
 
   const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
 
-  for (let i = 1; i < matches.length; i++) {
-    if (matches[i].roundInfo === undefined) {
-      matches[i].roundInfo = { round: 0 };
-    }
-  }
+  const displayType =
+    AUSSIE_RULES_LEAGUES.find((l) => Number(l.slug) === league)?.display ??
+    DISPLAY_TYPES.ROUND;
 
-  const rounds = [...new Set(matches.map((item) => item.roundInfo?.round))];
+  const fixture = mapFixtureRound(
+    API_EVENT_TYPES.SOFASCORE,
+    displayType,
+    matches,
+    mapAussieRulesMatch,
+    league === 656,
+    AFL_TEAM_NAMES.map((team) => ({
+      name: team,
+      img: resolveSportImage(team),
+    })),
+  );
 
   return {
-    fixtures: rounds.map((round) => {
-      //Get all teams playing in the round
-      let teams = matches
-        .filter((item) => item.roundInfo?.round === round)
-        .flatMap((game) => [game.homeTeam.name, game.awayTeam.name]);
-
-      return {
-        matches: matches
-          .filter((item) => item.roundInfo?.round === round)
-          .map((match) => {
-            var startDate = new Date(0);
-            startDate.setUTCSeconds(match.startTimestamp);
-
-            return {
-              startDate: startDate,
-              roundLabel: `Round ${match.roundInfo?.round}`,
-              timer:
-                match.status.type === "notstarted"
-                  ? startDate
-                  : match.status.description,
-              timerDisplayColour:
-                match.status.type === "inprogress" ? "green" : "gray",
-              id: match.id,
-              matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
-              sport: SPORT.AUSSIE_RULES,
-              status: match.status.description,
-              venue: "",
-              summaryText: setMatchSummary(
-                match.status.type,
-                match.homeTeam.name,
-                match.homeScore.current,
-                match.awayTeam.name,
-                match.awayScore.current,
-              ),
-              homeDetails: {
-                name: shortenTeamNames(match.homeTeam.name),
-                score: match.homeScore.current?.toString() ?? "0",
-                img: resolveSportImage(match.homeTeam.name),
-              },
-              awayDetails: {
-                name: shortenTeamNames(match.awayTeam.name),
-                score: match.awayScore.current?.toString() ?? "0",
-                img: resolveSportImage(match.awayTeam.name),
-              },
-            } as MatchSummary;
-          }),
-        roundLabel: `Round ${round}`,
-        byes: AFL_TEAM_NAMES.filter((x) => !teams.includes(x)).map((team) => {
-          return { name: team, img: resolveSportImage(team) };
-        }),
-      } as FixtureRound;
-    }),
-
-    currentRound: `Round ${
-      nextMatches?.events?.[0]?.roundInfo?.round ??
-      lastMatches?.events?.[lastMatches?.events.length - 1]?.roundInfo?.round ??
-      0
-    }`,
+    fixtures: fixture,
+    currentRound: getCurrentRound(displayType, fixture),
   } as AussieRulesFixturesPage;
 }
 
@@ -208,11 +174,9 @@ export async function aussieRulesMatchDetails(matchId: number) {
   } as AussieRulesMatchPage;
 }
 
-export async function aussieRulesCurrentMatches(
-  date: "TODAY" | "YESTERDAY" | "TOMORROW",
-) {
+export async function aussieRulesCurrentMatches(date: Date) {
   const matches = await (process.env.DEV_MODE
-    ? fetchEventsByDate("aussie-rules", new Date())
+    ? fetchEventsByDate("aussie-rules", date)
     : fetchScheduledEvents(87));
 
   if (!matches) {
@@ -220,14 +184,14 @@ export async function aussieRulesCurrentMatches(
   }
 
   const validLeagueIds = AUSSIE_RULES_LEAGUES.map((l) => Number(l.slug));
-  const leagueIdToName = Object.fromEntries(
-    AUSSIE_RULES_LEAGUES.map((l) => [
-      Number(l.slug),
-      { name: l.name, currentSeason: l.seasons[0].slug },
-    ]),
-  );
+
+  const timezone = date instanceof TZDate ? date.timeZone : "UTC";
 
   matches.events = matches.events
+    .filter((item) => {
+      const eventDate = new TZDate(item.startTimestamp * 1000, timezone);
+      return isSameDay(eventDate, date);
+    })
     .filter((item) =>
       validLeagueIds.includes(item.tournament.uniqueTournament.id),
     )
@@ -237,62 +201,33 @@ export async function aussieRulesCurrentMatches(
         validLeagueIds.indexOf(b.tournament.uniqueTournament.id),
     );
 
-  // Get unique league ids in order
-  const rounds = [
-    ...new Set(
-      matches.events.map((item) => item.tournament.uniqueTournament.id),
-    ),
-  ];
+  if (!matches.events || matches.events.length === 0) return null;
+
+  const fixture = mapFixtureRound(
+    API_EVENT_TYPES.SOFASCORE,
+    DISPLAY_TYPES.LEAGUE,
+    matches.events,
+    mapAussieRulesMatch,
+    false,
+    undefined,
+    SPORT.AUSSIE_RULES,
+  );
 
   return {
-    fixtures: rounds.map((leagueId) => {
-      const roundLabel = leagueIdToName[leagueId]?.name ?? "";
+    fixtures: fixture,
+    currentRound: getCurrentRound(DISPLAY_TYPES.LEAGUE, fixture),
+  } as AussieRulesTodayPage;
+}
 
-      return {
-        matches: matches.events
-          .filter((item) => item.tournament.uniqueTournament.id === leagueId)
-          .map((match) => {
-            var startDate = new Date(0);
-            startDate.setUTCSeconds(match.startTimestamp);
+function mapAussieRulesMatch(
+  match: Sofascore_Event,
+  roundLabel: string,
+): MatchSummary {
+  let startDate = new Date(0);
+  startDate.setUTCSeconds(match.startTimestamp);
 
-            return {
-              startDate: startDate,
-              roundLabel: roundLabel,
-              timer:
-                match.status.type === "notstarted"
-                  ? startDate
-                  : match.status.description,
-              timerDisplayColour:
-                match.status.type === "inprogress" ? "green" : "gray",
-              id: match.id,
-              matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
-              sport: SPORT.AUSSIE_RULES,
-              status: match.status.description,
-              venue: "",
-              summaryText: setMatchSummary(
-                match.status.type,
-                match.homeTeam.name,
-                match.homeScore.current,
-                match.awayTeam.name,
-                match.awayScore.current,
-              ),
-              homeDetails: {
-                name: shortenTeamNames(match.homeTeam.name),
-                score: match.homeScore.current?.toString() ?? "0",
-                img: resolveSportImage(match.homeTeam.name),
-              },
-              awayDetails: {
-                name: shortenTeamNames(match.awayTeam.name),
-                score: match.awayScore.current?.toString() ?? "0",
-                img: resolveSportImage(match.awayTeam.name),
-              },
-            } as MatchSummary;
-          }),
-        roundLabel: roundLabel,
-        roundSlug: `${SPORT.AUSSIE_RULES}/${leagueId}/${leagueIdToName[leagueId]?.currentSeason}`,
-      } as FixtureRound;
-    }),
-
-    currentRound: "AFL",
-  } as AussieRulesFixturesPage;
+  return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.AUSSIE_RULES, match, {
+    startDate: startDate,
+    roundLabel: roundLabel,
+  });
 }

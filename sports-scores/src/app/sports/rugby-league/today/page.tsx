@@ -1,11 +1,13 @@
 import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
 import Placeholder from "@/components/misc-ui/Placeholder";
+import { getClientDate } from "@/lib/serverUtils";
 import { rugbyLeagueMatchesByDate } from "@/services/rugby-league.service";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const pageData = await rugbyLeagueMatchesByDate(new Date());
+  const curDate = await getClientDate();
+  const pageData = await rugbyLeagueMatchesByDate(curDate);
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;

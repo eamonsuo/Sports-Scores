@@ -36,6 +36,8 @@ import {
   SPORT,
 } from "@/types/misc";
 import { Sofascore_Event } from "@/types/sofascore";
+import { TZDate } from "@date-fns/tz";
+import { isSameDay } from "date-fns";
 
 export async function iceHockeyMatches(tournamentId: number, seasonId: number) {
   const lastMatches = await (
@@ -51,9 +53,13 @@ export async function iceHockeyMatches(tournamentId: number, seasonId: number) {
 
   const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
 
+  const displayType =
+    ICE_HOCKEY_LEAGUES.find((l) => Number(l.slug) === tournamentId)?.display ??
+    DISPLAY_TYPES.ROUND;
+
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    DISPLAY_TYPES.ROUND,
+    displayType,
     matches,
     mapIceHockeyMatch,
     false,
@@ -61,7 +67,7 @@ export async function iceHockeyMatches(tournamentId: number, seasonId: number) {
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(DISPLAY_TYPES.ROUND, fixture),
+    currentRound: getCurrentRound(displayType, fixture),
   } as IceHockeyFixturesPage;
 }
 
@@ -177,8 +183,13 @@ export async function iceHockeyMatchesByDate(date: Date) {
   if (!matches) return null;
 
   const validLeagueIds = ICE_HOCKEY_LEAGUES.map((l) => Number(l.slug));
+  const timezone = date instanceof TZDate ? date.timeZone : "UTC";
 
   matches.events = matches.events
+    .filter((item) => {
+      const eventDate = new TZDate(item.startTimestamp * 1000, timezone);
+      return isSameDay(eventDate, date);
+    })
     .filter((item) =>
       validLeagueIds.includes(item.tournament.uniqueTournament.id),
     )

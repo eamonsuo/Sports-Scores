@@ -27,7 +27,13 @@ import {
 } from "@/endpoints/sofascore.api";
 import { FOOTBALL_LEAGUES } from "@/lib/constants";
 import { resolveSportImage } from "@/lib/imageMapping";
-import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils";
+import {
+  getCurrentRound,
+  mapFixtureRound,
+  mapMatchSummary,
+  setMatchSummary,
+  shortenTeamNames,
+} from "@/lib/projUtils";
 import {
   FootballBracketPage,
   FootballFixturesPage,
@@ -36,7 +42,15 @@ import {
   FootballTeamFixturesPage,
   FootballTodayPage,
 } from "@/types/football";
-import { FixtureRound, MatchSummary, SPORT } from "@/types/misc";
+import {
+  API_EVENT_TYPES,
+  DISPLAY_TYPES,
+  MatchSummary,
+  SPORT,
+} from "@/types/misc";
+import { Sofascore_Event } from "@/types/sofascore";
+import { TZDate } from "@date-fns/tz";
+import { isSameDay } from "date-fns";
 
 export async function footballMatches(tournamentId: number, seasonId: number) {
   const lastMatches = await (
@@ -53,90 +67,21 @@ export async function footballMatches(tournamentId: number, seasonId: number) {
 
   const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
 
-  for (let i = 1; i < matches.length; i++) {
-    if (matches[i].roundInfo === undefined) {
-      matches[i].roundInfo = { round: 0 };
-    }
-  }
+  const displayType =
+    FOOTBALL_LEAGUES.find((l) => Number(l.slug) === tournamentId)?.display ??
+    DISPLAY_TYPES.ROUND;
 
-  const rounds = [
-    ...new Set(
-      matches.map((item) => item.roundInfo?.name ?? item.roundInfo?.round),
-    ),
-  ];
+  const fixture = mapFixtureRound(
+    API_EVENT_TYPES.SOFASCORE,
+    displayType,
+    matches,
+    mapFootballMatch,
+    false,
+  );
 
   return {
-    fixtures: rounds.map((round) => {
-      //Get all teams playing in the round
-      let teams = matches
-        .filter(
-          (item) => (item.roundInfo?.name ?? item.roundInfo?.round) === round,
-        )
-        .flatMap((game) => [game.homeTeam.name, game.awayTeam.name]);
-
-      return {
-        matches: matches
-          .filter(
-            (item) => (item.roundInfo?.name ?? item.roundInfo?.round) === round,
-          )
-          .map((match) => {
-            let startDate = new Date(0);
-            startDate.setUTCSeconds(match.startTimestamp);
-
-            return {
-              startDate: startDate,
-              roundLabel:
-                match.roundInfo?.name ?? `Round ${match.roundInfo?.round}`,
-              timer:
-                match.status.type === "notstarted"
-                  ? startDate
-                  : match.status.description,
-              timerDisplayColour:
-                match.status.type === "inprogress" ? "green" : "gray",
-              id: match.id,
-              matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
-              sport: SPORT.FOOTBALL,
-              status: match.status.description,
-              venue: "",
-              summaryText: setMatchSummary(
-                match.status.type,
-                match.homeTeam.name,
-                match.homeScore.current,
-                match.awayTeam.name,
-                match.awayScore.current,
-              ),
-              homeDetails: {
-                name: shortenTeamNames(match.homeTeam.name),
-                score: match.homeScore.current?.toString() ?? "0",
-                img: resolveSportImage(match.homeTeam.name),
-              },
-              awayDetails: {
-                name: shortenTeamNames(match.awayTeam.name),
-                score: match.awayScore.current?.toString() ?? "0",
-                img: resolveSportImage(match.awayTeam.name),
-              },
-            } as MatchSummary;
-          }),
-        roundLabel: typeof round === "string" ? round : `Round ${round}`,
-        // byes: NRL_TEAM_NAMES.filter((x) => !teams.includes(x)).map((team) => {
-        //   return { name: team, img: resolveNRLImages(team) };
-        // }),
-      } as FixtureRound;
-    }),
-
-    currentRound: (() => {
-      if (nextMatches !== null && nextMatches.events.length > 0) {
-        if (nextMatches?.events[0]?.roundInfo?.name !== undefined) {
-          return nextMatches?.events[0]?.roundInfo?.name;
-        } else {
-          const round = nextMatches?.events[0]?.roundInfo?.round ?? 0;
-          return `Round ${round}`;
-        }
-      } else {
-        return lastMatches?.events[lastMatches?.events.length - 1]?.roundInfo
-          ?.name;
-      }
-    })(),
+    fixtures: fixture,
+    currentRound: getCurrentRound(displayType, fixture),
   } as FootballFixturesPage;
 }
 
@@ -311,14 +256,14 @@ export async function footballMatchesByDate(date: Date) {
   }
 
   const validLeagueIds = FOOTBALL_LEAGUES.map((l) => Number(l.slug));
-  const leagueIdToName = Object.fromEntries(
-    FOOTBALL_LEAGUES.map((l) => [
-      Number(l.slug),
-      { name: l.name, currentSeason: l.seasons[0].slug },
-    ]),
-  );
+
+  const timezone = date instanceof TZDate ? date.timeZone : "UTC";
 
   matches.events = matches.events
+    .filter((item) => {
+      const eventDate = new TZDate(item.startTimestamp * 1000, timezone);
+      return isSameDay(eventDate, date);
+    })
     .filter((item) =>
       validLeagueIds.includes(item.tournament.uniqueTournament.id),
     )
@@ -328,63 +273,21 @@ export async function footballMatchesByDate(date: Date) {
         validLeagueIds.indexOf(b.tournament.uniqueTournament.id),
     );
 
-  // Get unique league ids in order
-  const rounds = [
-    ...new Set(
-      matches.events.map((item) => item.tournament.uniqueTournament.id),
-    ),
-  ];
+  if (!matches.events || matches.events.length === 0) return null;
+
+  const fixture = mapFixtureRound(
+    API_EVENT_TYPES.SOFASCORE,
+    DISPLAY_TYPES.LEAGUE,
+    matches.events,
+    mapFootballMatch,
+    false,
+    undefined,
+    SPORT.FOOTBALL,
+  );
 
   return {
-    fixtures: rounds.map((leagueId) => {
-      const roundLabel = leagueIdToName[leagueId]?.name ?? "";
-      const seasonId = leagueIdToName[leagueId]?.currentSeason ?? "";
-      return {
-        matches: matches.events
-          .filter((item) => item.tournament.uniqueTournament.id === leagueId)
-          .map((match) => {
-            let startDate = new Date(0);
-            startDate.setUTCSeconds(match.startTimestamp);
-
-            return {
-              startDate: startDate,
-              roundLabel: roundLabel,
-              timer:
-                match.status.type === "notstarted"
-                  ? startDate
-                  : match.status.description,
-              timerDisplayColour:
-                match.status.type === "inprogress" ? "green" : "gray",
-              id: match.id,
-              matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
-              sport: SPORT.FOOTBALL,
-              status: match.status.description,
-              venue: "",
-              summaryText: setMatchSummary(
-                match.status.type,
-                match.homeTeam.name,
-                match.homeScore.current,
-                match.awayTeam.name,
-                match.awayScore.current,
-              ),
-              homeDetails: {
-                name: shortenTeamNames(match.homeTeam.name),
-                score: match.homeScore.current?.toString() ?? "0",
-                img: resolveSportImage(match.homeTeam.name),
-              },
-              awayDetails: {
-                name: shortenTeamNames(match.awayTeam.name),
-                score: match.awayScore.current?.toString() ?? "0",
-                img: resolveSportImage(match.awayTeam.name),
-              },
-            } as MatchSummary;
-          }),
-        roundLabel: roundLabel,
-        roundSlug: `${SPORT.FOOTBALL}/${leagueId}/${seasonId}`,
-      } as FixtureRound;
-    }),
-
-    currentRound: leagueIdToName[rounds[0]]?.name ?? "",
+    fixtures: fixture,
+    currentRound: getCurrentRound(DISPLAY_TYPES.LEAGUE, fixture),
   } as FootballTodayPage;
 }
 
@@ -465,4 +368,17 @@ export async function footballBrackets(tournamentId: number, seasonId: number) {
   return {
     brackets: tempBrackets,
   } as FootballBracketPage;
+}
+
+function mapFootballMatch(
+  match: Sofascore_Event,
+  roundLabel: string,
+): MatchSummary {
+  let startDate = new Date(0);
+  startDate.setUTCSeconds(match.startTimestamp);
+
+  return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.FOOTBALL, match, {
+    startDate: startDate,
+    roundLabel: roundLabel,
+  });
 }
