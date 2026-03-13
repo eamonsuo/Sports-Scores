@@ -15,10 +15,7 @@ import {
   fetchNextEvents,
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
-import {
-  RUGBY_UNION_LEAGUES,
-  SUPER_RUGBY_TEAMS_NAME_LOGO,
-} from "@/lib/constants";
+import { RUGBY_UNION_LEAGUES } from "@/lib/constants";
 import { resolveSportImage } from "@/lib/imageMapping";
 import {
   getCurrentRound,
@@ -59,22 +56,24 @@ export async function rugbyUnionMatches(
 
   const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
 
-  const displayType =
-    RUGBY_UNION_LEAGUES.find((l) => Number(l.slug) === tournamentId)?.display ??
-    DISPLAY_TYPES.ROUND;
+  const leagueConfig = RUGBY_UNION_LEAGUES.find(
+    (l) => Number(l.slug) === tournamentId,
+  );
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    displayType,
+    SPORT.RUGBY_UNION,
+    leagueConfig ?? { name: "", slug: "", seasons: [] },
     matches,
     mapRugbyUnionMatch,
-    tournamentId === 422,
-    SUPER_RUGBY_TEAMS_NAME_LOGO,
   );
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(displayType, fixture),
+    currentRound: getCurrentRound(
+      leagueConfig?.display ?? DISPLAY_TYPES.ROUND,
+      fixture,
+    ),
   } as RugbyUnionFixturesPage;
 }
 
@@ -205,12 +204,10 @@ export async function rugbyUnionMatchesByDate(date: Date) {
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    DISPLAY_TYPES.LEAGUE,
+    SPORT.RUGBY_UNION,
+    { name: "", slug: "", seasons: [], display: DISPLAY_TYPES.LEAGUE },
     matches.events,
     mapRugbyUnionMatch,
-    false,
-    undefined,
-    SPORT.RUGBY_UNION,
   );
 
   return {

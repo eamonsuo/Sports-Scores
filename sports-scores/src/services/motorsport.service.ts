@@ -429,7 +429,7 @@ export function motorsportCategoriesByDate(date: Date) {
     slug: string,
   ) {
     return {
-      id: id,
+      id: id.toString(),
       sport: SPORT.MOTORSPORT,
       summaryText: name,
       startDate: date,
