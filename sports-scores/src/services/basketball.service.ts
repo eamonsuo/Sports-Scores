@@ -60,21 +60,24 @@ export async function basketballMatches(
 
   const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
 
-  const displayType =
-    BASKETBALL_LEAGUES.find((l) => Number(l.slug) === tournamentId)?.display ??
-    DISPLAY_TYPES.ROUND;
+  const leagueConfig = BASKETBALL_LEAGUES.find(
+    (l) => Number(l.slug) === tournamentId,
+  );
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    displayType,
+    SPORT.BASKETBALL,
+    leagueConfig ?? { name: "", slug: "", seasons: [] },
     matches,
     mapBasketballMatch,
-    false,
   );
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(displayType, fixture),
+    currentRound: getCurrentRound(
+      leagueConfig?.display ?? DISPLAY_TYPES.ROUND,
+      fixture,
+    ),
   } as BasketballFixturesPage;
 }
 
@@ -243,12 +246,10 @@ export async function basketballMatchesByDate(
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    DISPLAY_TYPES.LEAGUE,
+    SPORT.BASKETBALL,
+    { name: "", slug: "", seasons: [], display: DISPLAY_TYPES.LEAGUE },
     matches.events,
     mapBasketballMatch,
-    false,
-    undefined,
-    SPORT.BASKETBALL,
   );
 
   return {

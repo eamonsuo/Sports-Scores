@@ -1062,7 +1062,7 @@ export const NRL_TEAMS_NAME_LOGO = [
   img: resolveSportImage(team),
 }));
 
-export const AFL_TEAM_NAMES = [
+export const AFL_TEAM_NAME_LOGO = [
   "Adelaide Crows",
   "Brisbane Lions",
   "Carlton Blues",
@@ -1081,9 +1081,12 @@ export const AFL_TEAM_NAMES = [
   "Sydney Swans",
   "West Coast Eagles",
   "Western Bulldogs",
-];
+].map((team) => ({
+  name: team,
+  img: resolveSportImage(team),
+}));
 
-export const NFL_TEAM_NAMES = [
+export const NFL_TEAM_NAME_LOGO = [
   "Arizona Cardinals",
   "Atlanta Falcons",
   "Baltimore Ravens",
@@ -1116,7 +1119,10 @@ export const NFL_TEAM_NAMES = [
   "Tampa Bay Buccaneers",
   "Tennessee Titans",
   "Washington Commanders",
-];
+].map((team) => ({
+  name: team,
+  img: resolveSportImage(team),
+}));
 
 export const SUPER_RUGBY_TEAMS_NAME_LOGO = [
   "Queensland Reds",
@@ -1245,6 +1251,7 @@ export const RUGBY_LEAGUE_LEAGUES = [
       { name: "2007", slug: "42987" },
     ],
     qualifyingPosition: 8,
+    byes: NRL_TEAMS_NAME_LOGO,
   },
   {
     name: "NRLW",
@@ -1394,6 +1401,7 @@ export const AUSSIE_RULES_LEAGUES = [
       { name: "2007", slug: "42987" },
     ],
     qualifyingPosition: 8,
+    byes: AFL_TEAM_NAME_LOGO,
   },
   {
     name: "AFLW",
@@ -1489,6 +1497,7 @@ export const AMERICAN_FOOTBALL_LEAGUES = [
       { name: "02/03", slug: "9705" },
       { name: "01/02", slug: "36659" },
     ],
+    byes: NFL_TEAM_NAME_LOGO,
   },
   {
     name: "NFL Preseason",

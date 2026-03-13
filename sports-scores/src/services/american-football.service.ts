@@ -18,7 +18,7 @@ import {
   fetchNextEvents,
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
-import { AMERICAN_FOOTBALL_LEAGUES, NFL_TEAM_NAMES } from "@/lib/constants";
+import { AMERICAN_FOOTBALL_LEAGUES } from "@/lib/constants";
 import { resolveSportImage } from "@/lib/imageMapping";
 import {
   getCurrentRound,
@@ -58,25 +58,24 @@ export async function americanFootballMatches(league: number, season: number) {
     nextMatches?.events ?? [],
   ) as AmericanFootball_Sofascore_Event[];
 
-  const displayType =
-    AMERICAN_FOOTBALL_LEAGUES.find((l) => Number(l.slug) === league)?.display ??
-    DISPLAY_TYPES.ROUND;
+  const leagueConfig = AMERICAN_FOOTBALL_LEAGUES.find(
+    (l) => Number(l.slug) === league,
+  );
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    displayType,
+    SPORT.AMERICAN_FOOTBALL,
+    leagueConfig ?? { name: "", slug: "", seasons: [] },
     matches,
     mapAmericanFootballMatch,
-    league === 9464,
-    NFL_TEAM_NAMES.map((team) => ({
-      name: team,
-      img: resolveSportImage(team),
-    })),
   );
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(displayType, fixture),
+    currentRound: getCurrentRound(
+      leagueConfig?.display ?? DISPLAY_TYPES.ROUND,
+      fixture,
+    ),
   } as AmericanFootballFixturesPage;
 }
 
@@ -240,12 +239,10 @@ export async function americanFootballMatchesByDate(date: Date) {
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    DISPLAY_TYPES.LEAGUE,
+    SPORT.AMERICAN_FOOTBALL,
+    { name: "", slug: "", seasons: [], display: DISPLAY_TYPES.LEAGUE },
     matches.events,
     mapAmericanFootballMatch,
-    false,
-    undefined,
-    SPORT.AMERICAN_FOOTBALL,
   );
 
   return {

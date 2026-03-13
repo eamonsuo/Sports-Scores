@@ -60,7 +60,7 @@ export type TeamScoreDetails = {
 };
 
 export type MatchSummary = {
-  id: number;
+  id: string;
   startDate: Date;
   endDate?: Date;
   sport: string;
@@ -77,6 +77,8 @@ export type MatchSummary = {
   matchSlug?: string;
   seriesSlug?: string; // Used to navigate to cricket series
   winner?: number;
+  tournamentId?: string;
+  seasonId?: string;
 };
 
 export type MatchStatus = "LIVE" | "UPCOMING" | "COMPLETED";

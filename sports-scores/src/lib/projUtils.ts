@@ -1,3 +1,4 @@
+import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
 import {
   API_EVENT_TYPES,
   APIEventTypes,
@@ -261,7 +262,7 @@ function mapSofascoreEventToMatchSummary(
   startDate.setUTCSeconds(event.startTimestamp);
 
   return {
-    id: options?.id ?? event.id,
+    id: options?.id ?? event.id.toString(),
     startDate: options?.startDate ?? startDate,
     endDate: options?.endDate,
     sport: sport,
@@ -311,6 +312,9 @@ function mapSofascoreEventToMatchSummary(
         "0",
       img: options?.awayDetails?.img ?? resolveSportImage(event.awayTeam.name),
     },
+    seasonId: options?.seasonId ?? event.season.id.toString(),
+    tournamentId:
+      options?.tournamentId ?? event.tournament.uniqueTournament.id.toString(),
   };
 }
 
@@ -331,7 +335,7 @@ function mapSportsDBEventToMatchSummary(
       : "UPCOMING";
 
   return {
-    id: options?.id ?? Number(event.idEvent),
+    id: options?.id ?? event.idEvent,
     startDate: options?.startDate ?? startDate,
     endDate: options?.endDate,
     sport: sport,
@@ -368,62 +372,114 @@ function mapSportsDBEventToMatchSummary(
         options?.awayDetails?.score ?? (event.intAwayScore ?? 0).toString(),
       img: options?.awayDetails?.img ?? event.strAwayTeamBadge,
     },
+    seasonId: options?.seasonId ?? event.strSeason,
+    tournamentId: options?.tournamentId ?? event.idLeague,
   };
 }
 
 export function mapFixtureRound(
   type: APIEventTypes,
-  roundDisplayType: DisplayTypes,
+  sport: SportCodes,
+  leagueConfig: LeagueSeasonConfig,
   matches: any[],
   matchesMapper: (match: any, roundLabel: string) => MatchSummary,
-  showByes: boolean,
-  teams?: { name: string; img: string }[], // Required if showByes is true
-  sport?: SportCodes,
+  extraMatches?: MatchSummary[],
 ) {
+  let fixture: FixtureRound[];
   switch (type) {
     case API_EVENT_TYPES.SOFASCORE:
-      return mapSofascoreEventsToFixtureRounds(
-        roundDisplayType,
+      fixture = mapSofascoreEventsToFixtureRounds(
+        leagueConfig.display ?? DISPLAY_TYPES.ROUND,
         matches,
         matchesMapper,
-        showByes,
-        teams,
+        leagueConfig.byes !== undefined,
+        leagueConfig.byes,
         sport,
+        extraMatches,
       );
+      break;
     case API_EVENT_TYPES.SPORTSDB:
-      return mapSportsDBEventsToFixtureRounds(
-        roundDisplayType,
+      fixture = mapSportsDBEventsToFixtureRounds(
+        leagueConfig.display ?? DISPLAY_TYPES.ROUND,
         matches,
         matchesMapper,
-        showByes,
-        teams,
+        leagueConfig.byes !== undefined,
+        leagueConfig.byes,
         sport,
+        extraMatches,
       );
+      break;
     case API_EVENT_TYPES.SPORTSMONKS_CRICKET:
     default:
-      return [
+      fixture = [
         {
           matches: matches.map((match) => matchesMapper(match, "")),
           roundLabel: "",
         } as FixtureRound,
       ];
   }
+
+  return fixture;
+}
+
+//TODO: Review
+function mergeExtraMatches(
+  fixture: FixtureRound[],
+  extraMatches?: MatchSummary[],
+) {
+  if (!extraMatches || extraMatches.length === 0) return;
+
+  const existingIds = new Set(
+    fixture.flatMap((r) => r.matches.map((m) => m.id)),
+  );
+  const newMatches = extraMatches.filter((m) => !existingIds.has(m.id));
+
+  for (const match of newMatches) {
+    const label = match.roundLabel ?? "";
+    const existing = fixture.find((r) => r.roundLabel === label);
+    if (existing) {
+      existing.matches.push(match);
+    } else {
+      fixture.push({ roundLabel: label, matches: [match] });
+    }
+  }
+
+  // Sort matches within each round by startDate
+  for (const round of fixture) {
+    round.matches.sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+    );
+  }
+
+  // Sort rounds by their earliest match startDate
+  fixture.sort((a, b) => {
+    const aTime = Math.min(
+      ...a.matches.map((m) => new Date(m.startDate).getTime()),
+    );
+    const bTime = Math.min(
+      ...b.matches.map((m) => new Date(m.startDate).getTime()),
+    );
+    return aTime - bTime;
+  });
 }
 
 function mapSofascoreEventsToFixtureRounds(
-  roundDisplayType: DisplayTypes,
+  leagueConfig: DisplayTypes,
   matches: Sofascore_Event[],
   matchesMapper: (match: Sofascore_Event, roundLabel: string) => MatchSummary,
   showByes: boolean,
   teams?: { name: string; img: string }[], // Required if showByes is true
   sport?: SportCodes,
+  extraMatches?: MatchSummary[],
 ) {
+  let displayLeagueLink = false;
   // Create rounds object { round: string; matches: Sofascore_Event[]; byes: { name: string; img: string }[] }
   const tempRounds = Object.values(
     matches.reduce(
       (acc, match) => {
         let round = "";
-        switch (roundDisplayType) {
+        switch (leagueConfig) {
           case DISPLAY_TYPES.ROUND:
             round =
               match.roundInfo?.name ?? `Round ${match.roundInfo?.round ?? 0}`;
@@ -437,6 +493,7 @@ function mapSofascoreEventsToFixtureRounds(
             break;
           case DISPLAY_TYPES.LEAGUE:
             round = match.tournament.name;
+            displayLeagueLink = true;
             break;
         }
 
@@ -448,7 +505,7 @@ function mapSofascoreEventsToFixtureRounds(
           }
 
           acc[round].matches.push(match);
-          acc[round].roundSlug = sport
+          acc[round].roundSlug = displayLeagueLink
             ? `${sport}/${match.tournament.uniqueTournament.id}/${match.season.id}`
             : undefined;
           if (showByes) {
@@ -473,7 +530,7 @@ function mapSofascoreEventsToFixtureRounds(
     ),
   );
 
-  return tempRounds.map((roundData) => {
+  const fixture = tempRounds.map((roundData) => {
     return {
       matches: roundData.matches.map((match) =>
         matchesMapper(match, roundData.round),
@@ -483,22 +540,26 @@ function mapSofascoreEventsToFixtureRounds(
       roundSlug: roundData.roundSlug,
     } as FixtureRound;
   });
+
+  mergeExtraMatches(fixture, extraMatches);
+  return fixture;
 }
 
 function mapSportsDBEventsToFixtureRounds(
-  roundDisplayType: DisplayTypes,
+  leagueConfig: DisplayTypes,
   matches: SportsDB_Event[],
   matchesMapper: (match: SportsDB_Event, roundLabel: string) => MatchSummary,
   showByes: boolean,
   teams?: { name: string; img: string }[], // Required if showByes is true
   sport?: SportCodes,
+  extraMatches?: MatchSummary[],
 ) {
   // Create rounds object { round: string; matches: SportsDB_Event[]; byes: { name: string; img: string }[] }
   const tempRounds = Object.values(
     matches.reduce(
       (acc, match) => {
         let round = "";
-        switch (roundDisplayType) {
+        switch (leagueConfig) {
           case DISPLAY_TYPES.ROUND:
             round = `Round ${match.intRound ?? 0}`;
             break;
@@ -545,7 +606,7 @@ function mapSportsDBEventsToFixtureRounds(
     ),
   );
 
-  return tempRounds.map((roundData) => {
+  const fixture = tempRounds.map((roundData) => {
     return {
       matches: roundData.matches.map((match) =>
         matchesMapper(match, roundData.round),
@@ -555,13 +616,16 @@ function mapSportsDBEventsToFixtureRounds(
       roundSlug: roundData.roundSlug,
     } as FixtureRound;
   });
+
+  mergeExtraMatches(fixture, extraMatches);
+  return fixture;
 }
 
 export function getCurrentRound(
-  roundDisplayType: DisplayTypes,
+  leagueConfig: DisplayTypes,
   rounds: FixtureRound[],
 ) {
-  switch (roundDisplayType) {
+  switch (leagueConfig) {
     case DISPLAY_TYPES.ROUND:
     case DISPLAY_TYPES.DATE:
       // Find first round with upcoming matches

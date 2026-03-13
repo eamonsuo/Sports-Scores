@@ -56,21 +56,24 @@ export async function baseballMatches(tournamentId: number, seasonId: number) {
 
   const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
 
-  const displayType =
-    BASEBALL_LEAGUES.find((l) => Number(l.slug) === tournamentId)?.display ??
-    DISPLAY_TYPES.ROUND;
+  const leagueConfig = BASEBALL_LEAGUES.find(
+    (l) => Number(l.slug) === tournamentId,
+  );
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    displayType,
+    SPORT.BASEBALL,
+    leagueConfig ?? { name: "", slug: "", seasons: [] },
     matches,
     mapBaseballMatch,
-    false,
   );
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(displayType, fixture),
+    currentRound: getCurrentRound(
+      leagueConfig?.display ?? DISPLAY_TYPES.ROUND,
+      fixture,
+    ),
   } as BaseballFixturesPage;
 }
 
@@ -255,12 +258,10 @@ export async function baseballMatchesByDate(date: Date) {
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    DISPLAY_TYPES.LEAGUE,
+    SPORT.BASEBALL,
+    { name: "", slug: "", seasons: [], display: DISPLAY_TYPES.LEAGUE },
     matches.events,
     mapBaseballMatch,
-    false,
-    undefined,
-    SPORT.BASEBALL,
   );
 
   return {

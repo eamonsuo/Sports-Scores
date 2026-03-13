@@ -77,7 +77,7 @@ export async function cricketMatchesRecent(date: Date) {
           : "";
 
         return {
-          id: Number(event.Eid),
+          id: event.Eid,
           startDate: sDate,
           endDate:
             sDate.toDateString() !== endDate.toDateString()
@@ -133,7 +133,7 @@ export async function cricketMatchesByDate(date: Date) {
         : "";
 
       return {
-        id: Number(event.Eid),
+        id: event.Eid,
         startDate: sDate,
         endDate:
           sDate.toDateString() !== endDate.toDateString() ? endDate : undefined,
@@ -187,7 +187,7 @@ export async function cricketMyTeamsMatches() {
         //   ? `& ${event.Tr2CW2 ?? 0}/${event.Tr2C2 ?? 0}${event.Tr2CD2 === 1 ? "d" : ""}`
         //   : "";
         return {
-          id: Number(event.Eid),
+          id: event.Eid,
           startDate: sDate,
           sport: SPORT.CRICKET,
           venue: "",
@@ -296,7 +296,7 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
         : "";
 
       return {
-        id: Number(event.Eid),
+        id: event.Eid,
         startDate: sDate,
         endDate: convertNumbertoDate(event.Ese ?? event.Esd),
         sport: SPORT.CRICKET,
@@ -494,12 +494,10 @@ export async function cricketMatchesByDateSofascore(date: Date) {
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    DISPLAY_TYPES.DATE,
+    SPORT.CRICKET,
+    { name: "", slug: "", seasons: [], display: DISPLAY_TYPES.DATE },
     matches.events,
     mapCricketMatch,
-    false,
-    undefined,
-    SPORT.CRICKET,
   );
 
   return {

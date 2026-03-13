@@ -67,21 +67,24 @@ export async function footballMatches(tournamentId: number, seasonId: number) {
 
   const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
 
-  const displayType =
-    FOOTBALL_LEAGUES.find((l) => Number(l.slug) === tournamentId)?.display ??
-    DISPLAY_TYPES.ROUND;
+  const leagueConfig = FOOTBALL_LEAGUES.find(
+    (l) => Number(l.slug) === tournamentId,
+  );
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    displayType,
+    SPORT.FOOTBALL,
+    leagueConfig ?? { name: "", slug: "", seasons: [] },
     matches,
     mapFootballMatch,
-    false,
   );
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(displayType, fixture),
+    currentRound: getCurrentRound(
+      leagueConfig?.display ?? DISPLAY_TYPES.ROUND,
+      fixture,
+    ),
   } as FootballFixturesPage;
 }
 
@@ -113,7 +116,7 @@ export async function footballTeamMatches(teamId: number) {
             ? startDate
             : match.status.description,
         timerDisplayColour: match.status.type === "inprogress" ? "green" : null,
-        id: match.id,
+        id: match.id.toString(),
         matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
         sport: SPORT.FOOTBALL,
         status: match.status.description,
@@ -277,12 +280,10 @@ export async function footballMatchesByDate(date: Date) {
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    DISPLAY_TYPES.LEAGUE,
+    SPORT.FOOTBALL,
+    { name: "", slug: "", seasons: [], display: DISPLAY_TYPES.LEAGUE },
     matches.events,
     mapFootballMatch,
-    false,
-    undefined,
-    SPORT.FOOTBALL,
   );
 
   return {

@@ -21,6 +21,10 @@ export type LeagueSeasonConfig = {
   qualifyingPosition?: number;
   display?: DisplayTypes;
   externalURL?: string;
+  byes?: {
+    name: string;
+    img: string;
+  }[];
 };
 
 export default function LeagueSeasonToggle({
