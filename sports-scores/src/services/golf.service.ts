@@ -204,7 +204,7 @@ export function golfTournamentsByDate(date: Date) {
 
   function createGolfMatchSummary(id: number, name: string, slug: string) {
     return {
-      id: id,
+      id: id.toString(),
       sport: SPORT.GOLF,
       summaryText: name,
       startDate: date,

@@ -4,7 +4,10 @@ import { getCountryImageUrl } from "./projUtils";
 const fallback = "/vercel.svg";
 
 export function resolveSportImage(teamName: string) {
-  teamName = teamName.replace(/\s((W|A|U19|Women)(\sW)?)$/i, "");
+  teamName = teamName.replace(
+    /\s((W|A|U19|Women|Reserve|Reserves)(\sW)?)$/i,
+    "",
+  );
   switch (teamName) {
     // LIV Teams
     case "4ACES GC":
@@ -64,6 +67,7 @@ export function resolveSportImage(teamName: string) {
     case "Gold Coast Titans":
       return "/nrl/titans.svg";
     case "Manly Sea Eagles":
+    case "Manly Warringah Sea Eagles":
       return "/nrl/eagles.svg";
     case "Melbourne Storm":
       return "/nrl/storm.svg";
@@ -129,8 +133,10 @@ export function resolveSportImage(teamName: string) {
     case "Richmond Tigers II":
       return "/afl/tigers.svg";
     case "St Kilda Saints":
+    case "St Kilda Saints II":
       return "/afl/saints.svg";
     case "Sydney Swans":
+    case "Sydney Swans II":
       return "/afl/swans.svg";
     case "West Coast Eagles":
       return "/afl/eagles.svg";

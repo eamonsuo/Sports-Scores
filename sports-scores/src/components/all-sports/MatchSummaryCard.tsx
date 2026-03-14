@@ -17,7 +17,7 @@ export default function MatchSummaryCard({
   bottomInfo,
   className,
 }: {
-  id: number;
+  id: string;
   href: string;
   matchSummary: string;
   homeInfo: TeamScoreDetails;

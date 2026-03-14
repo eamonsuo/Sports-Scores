@@ -18,13 +18,13 @@ import {
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
 import { BASEBALL_LEAGUES } from "@/lib/constants";
-import { resolveSportImage } from "@/lib/imageMapping";
 import {
   getCurrentRound,
   mapFixtureRound,
   mapMatchSummary,
-  shortenTeamNames,
-} from "@/lib/projUtils";
+} from "@/lib/eventMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
+import { shortenTeamNames } from "@/lib/projUtils";
 import {
   BaseballFixturesPage,
   BaseballLadderPage,
@@ -56,21 +56,24 @@ export async function baseballMatches(tournamentId: number, seasonId: number) {
 
   const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
 
-  const displayType =
-    BASEBALL_LEAGUES.find((l) => Number(l.slug) === tournamentId)?.display ??
-    DISPLAY_TYPES.ROUND;
+  const leagueConfig = BASEBALL_LEAGUES.find(
+    (l) => Number(l.slug) === tournamentId,
+  );
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    displayType,
+    SPORT.BASEBALL,
+    leagueConfig ?? { name: "", slug: "", seasons: [] },
     matches,
     mapBaseballMatch,
-    false,
   );
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(displayType, fixture),
+    currentRound: getCurrentRound(
+      leagueConfig?.display ?? DISPLAY_TYPES.ROUND,
+      fixture,
+    ),
   } as BaseballFixturesPage;
 }
 
@@ -255,12 +258,10 @@ export async function baseballMatchesByDate(date: Date) {
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    DISPLAY_TYPES.LEAGUE,
+    SPORT.BASEBALL,
+    BASEBALL_LEAGUES,
     matches.events,
     mapBaseballMatch,
-    false,
-    undefined,
-    SPORT.BASEBALL,
   );
 
   return {
@@ -280,11 +281,7 @@ function mapBaseballMatch(
   match: Sofascore_Event,
   roundLabel: string,
 ): MatchSummary {
-  let startDate = new Date(0);
-  startDate.setUTCSeconds(match.startTimestamp);
-
   return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.BASEBALL, match, {
-    startDate: startDate,
-    roundLabel: roundLabel,
+    roundLabel,
   });
 }

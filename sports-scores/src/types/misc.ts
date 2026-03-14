@@ -60,7 +60,7 @@ export type TeamScoreDetails = {
 };
 
 export type MatchSummary = {
-  id: number;
+  id: string;
   startDate: Date;
   endDate?: Date;
   sport: string;
@@ -77,6 +77,8 @@ export type MatchSummary = {
   matchSlug?: string;
   seriesSlug?: string; // Used to navigate to cricket series
   winner?: number;
+  tournamentId?: string;
+  seasonId?: string;
 };
 
 export type MatchStatus = "LIVE" | "UPCOMING" | "COMPLETED";
@@ -206,24 +208,17 @@ export enum SPORT {
   DARTS = "darts",
 }
 
-export type SportCodes = (typeof SPORT)[keyof typeof SPORT];
-
 export enum DISPLAY_TYPES {
   ROUND = "round",
   DATE = "date",
   LEAGUE = "league",
 }
 
-export type DisplayTypes = (typeof DISPLAY_TYPES)[keyof typeof DISPLAY_TYPES];
-
 export enum API_EVENT_TYPES {
   SOFASCORE = "SOFASCORE",
   SPORTSMONKS_CRICKET = "SPORTSMONKS_CRICKET",
   SPORTSDB = "SPORTSDB",
 }
-
-export type APIEventTypes =
-  (typeof API_EVENT_TYPES)[keyof typeof API_EVENT_TYPES];
 
 export enum CountryFlagCode {
   Afghanistan = "af",

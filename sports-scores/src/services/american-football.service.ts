@@ -18,14 +18,14 @@ import {
   fetchNextEvents,
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
-import { AMERICAN_FOOTBALL_LEAGUES, NFL_TEAM_NAMES } from "@/lib/constants";
-import { resolveSportImage } from "@/lib/imageMapping";
+import { AMERICAN_FOOTBALL_LEAGUES } from "@/lib/constants";
 import {
   getCurrentRound,
   mapFixtureRound,
   mapMatchSummary,
-  shortenTeamNames,
-} from "@/lib/projUtils";
+} from "@/lib/eventMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
+import { shortenTeamNames } from "@/lib/projUtils";
 import {
   AmericanFootball_AmericanFootballApi_CategorySchedule_Response,
   AmericanFootball_Sofascore_Event,
@@ -58,25 +58,24 @@ export async function americanFootballMatches(league: number, season: number) {
     nextMatches?.events ?? [],
   ) as AmericanFootball_Sofascore_Event[];
 
-  const displayType =
-    AMERICAN_FOOTBALL_LEAGUES.find((l) => Number(l.slug) === league)?.display ??
-    DISPLAY_TYPES.ROUND;
+  const leagueConfig = AMERICAN_FOOTBALL_LEAGUES.find(
+    (l) => Number(l.slug) === league,
+  );
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    displayType,
+    SPORT.AMERICAN_FOOTBALL,
+    leagueConfig ?? { name: "", slug: "", seasons: [] },
     matches,
     mapAmericanFootballMatch,
-    league === 9464,
-    NFL_TEAM_NAMES.map((team) => ({
-      name: team,
-      img: resolveSportImage(team),
-    })),
   );
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(displayType, fixture),
+    currentRound: getCurrentRound(
+      leagueConfig?.display ?? DISPLAY_TYPES.ROUND,
+      fixture,
+    ),
   } as AmericanFootballFixturesPage;
 }
 
@@ -240,12 +239,10 @@ export async function americanFootballMatchesByDate(date: Date) {
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    DISPLAY_TYPES.LEAGUE,
+    SPORT.AMERICAN_FOOTBALL,
+    AMERICAN_FOOTBALL_LEAGUES,
     matches.events,
     mapAmericanFootballMatch,
-    false,
-    undefined,
-    SPORT.AMERICAN_FOOTBALL,
   );
 
   return {
@@ -258,25 +255,22 @@ function mapAmericanFootballMatch(
   match: AmericanFootball_Sofascore_Event,
   roundLabel: string,
 ): MatchSummary {
-  let startDate = new Date(0);
-  startDate.setUTCSeconds(match.startTimestamp);
-
-  const summary = mapMatchSummary(
+  return mapMatchSummary(
     API_EVENT_TYPES.SOFASCORE,
     SPORT.AMERICAN_FOOTBALL,
     match,
     {
-      startDate: startDate,
-      roundLabel: roundLabel,
+      roundLabel,
+      homeDetails: {
+        winDrawLoss: match.homeTeamSeasonHistoricalForm
+          ? `${match.homeTeamSeasonHistoricalForm.wins ?? 0}-${match.homeTeamSeasonHistoricalForm.losses ?? 0}${match.homeTeamSeasonHistoricalForm.draws ? "-" + match.homeTeamSeasonHistoricalForm.draws : ""}`
+          : undefined,
+      },
+      awayDetails: {
+        winDrawLoss: match.awayTeamSeasonHistoricalForm
+          ? `${match.awayTeamSeasonHistoricalForm.wins ?? 0}-${match.awayTeamSeasonHistoricalForm.losses ?? 0}${match.awayTeamSeasonHistoricalForm.draws ? "-" + match.awayTeamSeasonHistoricalForm.draws : ""}`
+          : undefined,
+      },
     },
   );
-
-  summary.homeDetails.winDrawLoss = match.homeTeamSeasonHistoricalForm
-    ? `${match.homeTeamSeasonHistoricalForm.wins ?? 0}-${match.homeTeamSeasonHistoricalForm.losses ?? 0}${match.homeTeamSeasonHistoricalForm.draws ? "-" + match.homeTeamSeasonHistoricalForm.draws : ""}`
-    : undefined;
-  summary.awayDetails.winDrawLoss = match.awayTeamSeasonHistoricalForm
-    ? `${match.awayTeamSeasonHistoricalForm.wins ?? 0}-${match.awayTeamSeasonHistoricalForm.losses ?? 0}${match.awayTeamSeasonHistoricalForm.draws ? "-" + match.awayTeamSeasonHistoricalForm.draws : ""}`
-    : undefined;
-
-  return summary;
 }

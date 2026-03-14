@@ -11,8 +11,8 @@ import {
   getCurrentRound,
   mapFixtureRound,
   mapMatchSummary,
-  shortenTeamNames,
-} from "@/lib/projUtils";
+} from "@/lib/eventMapping";
+import { shortenTeamNames } from "@/lib/projUtils";
 import {
   API_EVENT_TYPES,
   DISPLAY_TYPES,
@@ -44,21 +44,24 @@ export async function netballMatches(tournamentId: number, seasonId: number) {
     new Map(allMatches.map((match) => [match.idEvent, match])).values(),
   );
 
-  const displayType =
-    NETBALL_LEAGUES.find((l) => Number(l.slug) === tournamentId)?.display ??
-    DISPLAY_TYPES.ROUND;
+  const leagueConfig = NETBALL_LEAGUES.find(
+    (l) => Number(l.slug) === tournamentId,
+  );
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SPORTSDB,
-    displayType,
+    SPORT.NETBALL,
+    leagueConfig ?? { name: "", slug: "", seasons: [] },
     matches,
     mapNetballMatch,
-    false,
   );
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(displayType, fixture),
+    currentRound: getCurrentRound(
+      leagueConfig?.display ?? DISPLAY_TYPES.ROUND,
+      fixture,
+    ),
   } as NetballFixturesPage;
 }
 
@@ -169,12 +172,10 @@ export async function netballMatchesByDate(date: Date) {
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SPORTSDB,
-    DISPLAY_TYPES.LEAGUE,
+    SPORT.NETBALL,
+    NETBALL_LEAGUES,
     matches.events,
     mapNetballMatch,
-    false,
-    undefined,
-    SPORT.NETBALL,
   );
 
   return {

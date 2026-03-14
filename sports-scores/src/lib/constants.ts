@@ -1,11 +1,8 @@
 import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
 import { SportEvent } from "@/types/event-calendar";
 import { DISPLAY_TYPES } from "@/types/misc";
-import { format } from "date-fns";
 import { resolveSportImage } from "./imageMapping";
-
-const formatDate = (date: Date) => format(date, "d MMM");
-const formatDateYear = (date: Date) => format(date, "d MMM yyyy");
+import { formatDate, formatDateYear } from "./projUtils";
 
 // Event Data
 export const upcomingAndCurrentEvents: SportEvent[] = [
@@ -20,7 +17,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/a/a2/National_Football_League_logo.svg",
     link: "/sports/american-football/9464/75522",
-    notes: "Playoffs Start: Jan 10 \nSuperbowl: Feb 9",
+    notes: "Playoffs Start: 10 Jan \nSuperbowl: 9 Feb",
   },
   {
     id: "10",
@@ -74,7 +71,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/9/91/AFL-Logo_RGB_white_border.png",
     link: "/sports/aussie-rules/656/86748",
-    notes: "Finals Series Start: Aug 29 \nGrand Final: Sep 26",
+    notes: "Finals Series Start: 29 Aug \nGrand Final: 26 Sep",
   },
   {
     id: "rs-aflw-2026",
@@ -126,7 +123,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
       "https://upload.wikimedia.org/wikipedia/commons/a/a6/Major_League_Baseball_logo.svg",
     link: "/sports/baseball/11205/84695",
     // dateDisplay: `${formatDate(new Date("2026-03-25T00:00:00Z"))} - Nov 2026`,
-    notes: "Playoffs Start: Sep 30 \nWorld Series: Oct 24 - Nov 1",
+    notes: "Playoffs Start: 30 Sep \nWorld Series: 24 Oct - 1 Nov",
   },
   {
     id: "34",
@@ -140,7 +137,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     link: "/sports/baseball/11205/84695",
     location: "USA",
     tags: ["👨"],
-    // notes: "Game 1: Oct 24 \nGame 7: Nov 1 (if necessary)",
+    // notes: "Game 1: 24 Oct \nGame 7: 1 Nov (if necessary)",
   },
 
   // Basketball
@@ -155,7 +152,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
       "https://upload.wikimedia.org/wikipedia/en/b/b2/NBL_%28Australia%29_logo.svg",
     link: "/sports/basketball/1524/77205",
     dateDisplay: `${formatDateYear(new Date("2025-09-18T00:00:00Z"))} - Apr 2026`,
-    notes: "Playoffs Start: Mar 4 \nChampionship Series: Not before March 18",
+    notes: "Playoffs Start: 4 Mar \nChampionship Series: Not before 18 Mar",
   },
   {
     id: "rs-nba-2026",
@@ -167,7 +164,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/0/03/National_Basketball_Association_logo.svg",
     link: "/sports/basketball/132/80229",
-    notes: "Playoffs Start: Apr 15 \nNBA Finals: Jun 4",
+    notes: "Playoffs Start: 15 Apr \nNBA Finals: 4 Jun",
   },
   {
     id: "rs-wnba-2026",
@@ -179,7 +176,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     dateDisplay: `${formatDate(new Date("2026-05-09T00:00:00Z"))} - Oct 2026`,
     imageUrl: "https://upload.wikimedia.org/wikipedia/en/9/97/WNBA_logo.svg",
     link: "/sports/basketball/",
-    notes: "Playoffs Start: Sep 25 \nWNBA Finals: ??",
+    notes: "Playoffs Start: 25 Sep \nWNBA Finals: ??",
   },
   {
     id: "15",
@@ -541,7 +538,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
       "https://upload.wikimedia.org/wikipedia/en/7/77/PGA_Tour_logo.svg",
     link: "/sports/golf/pga/2026",
     notes:
-      "FedEx Playoffs: 14 Aug - 31 Aug\nTour Championship: 28 Aug - 31 Aug\nFedEx Fall: 18 Sep - 23 Nov",
+      "FedEx Playoffs: 14-31 Aug\nTour Championship: 28-31 Aug\nFedEx Fall: 18 Sep - 23 Nov",
   },
   {
     id: "rs-liv-golf-2026",
@@ -678,7 +675,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "regular-season",
     startDate: new Date("2026-04-17T00:00:00+10:00"),
     endDate: new Date("2026-08-30T00:00:00+10:00"),
-    notes: "AIHL Finals Series: August 28-30",
+    notes: "AIHL Finals Series: 28-30 August",
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/f/f6/Australian_Ice_Hockey_League_Logo.png",
     link: "/sports/ice-hockey/11059/72392/",
@@ -692,7 +689,6 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     endDate: new Date("2026-04-26T00:00:00+10:00"),
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/f/ff/2026_IIHF_World_Championship_Division_II_A_logo.png",
-
     link: "https://en.wikipedia.org/wiki/2026_IIHF_World_Championship_Division_II",
     // link: "/sports/ice-hockey/13446/69168",
     location: "Al Ain, UAE",
@@ -914,7 +910,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     startDate: new Date("2026-02-13T06:00:00Z"),
     endDate: new Date("2026-06-30T00:00:00Z"),
     dateDisplay: "13 Feb - 30 Jun 2026",
-    notes: "Finals: after 30 May 2026",
+    notes: "Finals: after 30 May",
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/2/25/Super_Rugby_Pacific_logo.png",
     link: "/sports/rugby-union/422/86502",
@@ -926,7 +922,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     type: "major",
     startDate: new Date("2026-06-21T00:00:00Z"),
     endDate: new Date("2026-06-21T00:00:00Z"),
-    dateDisplay: "Jun 2026",
+    dateDisplay: "June 2026",
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/en/2/25/Super_Rugby_Pacific_logo.png",
     link: "/sports/rugby-union",
@@ -1062,7 +1058,7 @@ export const NRL_TEAMS_NAME_LOGO = [
   img: resolveSportImage(team),
 }));
 
-export const AFL_TEAM_NAMES = [
+export const AFL_TEAM_NAME_LOGO = [
   "Adelaide Crows",
   "Brisbane Lions",
   "Carlton Blues",
@@ -1081,9 +1077,12 @@ export const AFL_TEAM_NAMES = [
   "Sydney Swans",
   "West Coast Eagles",
   "Western Bulldogs",
-];
+].map((team) => ({
+  name: team,
+  img: resolveSportImage(team),
+}));
 
-export const NFL_TEAM_NAMES = [
+export const NFL_TEAM_NAME_LOGO = [
   "Arizona Cardinals",
   "Atlanta Falcons",
   "Baltimore Ravens",
@@ -1116,7 +1115,10 @@ export const NFL_TEAM_NAMES = [
   "Tampa Bay Buccaneers",
   "Tennessee Titans",
   "Washington Commanders",
-];
+].map((team) => ({
+  name: team,
+  img: resolveSportImage(team),
+}));
 
 export const SUPER_RUGBY_TEAMS_NAME_LOGO = [
   "Queensland Reds",
@@ -1153,7 +1155,7 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
   },
 ];
 
-export const MOTORSPORT_CATEGORIES = [
+export const MOTORSPORT_CATEGORIES: LeagueSeasonConfig[] = [
   {
     name: "Formula 1",
     slug: "f1",
@@ -1169,9 +1171,9 @@ export const MOTORSPORT_CATEGORIES = [
     slug: "supercars",
     seasons: [{ name: "2026", slug: "2026" }],
   },
-] as LeagueSeasonConfig[];
+];
 
-export const GOLF_TOURS = [
+export const GOLF_TOURS: LeagueSeasonConfig[] = [
   {
     name: "PGA Tour",
     slug: "pga",
@@ -1216,9 +1218,9 @@ export const GOLF_TOURS = [
       { name: "2025", slug: "2025" },
     ],
   },
-] as LeagueSeasonConfig[];
+];
 
-export const RUGBY_LEAGUE_LEAGUES = [
+export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "NRL",
     slug: "294",
@@ -1245,6 +1247,7 @@ export const RUGBY_LEAGUE_LEAGUES = [
       { name: "2007", slug: "42987" },
     ],
     qualifyingPosition: 8,
+    byes: NRL_TEAMS_NAME_LOGO,
   },
   {
     name: "NRLW",
@@ -1365,9 +1368,9 @@ export const RUGBY_LEAGUE_LEAGUES = [
     ],
     qualifyingPosition: 6,
   },
-] as LeagueSeasonConfig[];
+];
 
-export const AUSSIE_RULES_LEAGUES = [
+export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "AFL",
     slug: "656",
@@ -1394,6 +1397,7 @@ export const AUSSIE_RULES_LEAGUES = [
       { name: "2007", slug: "42987" },
     ],
     qualifyingPosition: 8,
+    byes: AFL_TEAM_NAME_LOGO,
   },
   {
     name: "AFLW",
@@ -1456,9 +1460,9 @@ export const AUSSIE_RULES_LEAGUES = [
     slug: "25029",
     seasons: [{ name: "2025", slug: "72022" }],
   },
-] as LeagueSeasonConfig[];
+];
 
-export const AMERICAN_FOOTBALL_LEAGUES = [
+export const AMERICAN_FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "NFL",
     slug: "9464",
@@ -1489,6 +1493,7 @@ export const AMERICAN_FOOTBALL_LEAGUES = [
       { name: "02/03", slug: "9705" },
       { name: "01/02", slug: "36659" },
     ],
+    byes: NFL_TEAM_NAME_LOGO,
   },
   {
     name: "NFL Preseason",
@@ -1523,9 +1528,9 @@ export const AMERICAN_FOOTBALL_LEAGUES = [
       { name: "23/24", slug: "56827" },
     ],
   },
-] as LeagueSeasonConfig[];
+];
 
-export const FOOTBALL_LEAGUES = [
+export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   //Australia - category 34
   {
     name: "🇦🇺 A-League Men",
@@ -1840,9 +1845,9 @@ export const FOOTBALL_LEAGUES = [
   // South America - category 1470
   // Africa - category 1466
   // Oceania - category 1471
-] as LeagueSeasonConfig[];
+];
 
-export const BASEBALL_LEAGUES = [
+export const BASEBALL_LEAGUES: LeagueSeasonConfig[] = [
   //Australia - category 34
   {
     name: "MLB",
@@ -1874,9 +1879,9 @@ export const BASEBALL_LEAGUES = [
     slug: "11206",
     seasons: [{ name: "2024", slug: "65281" }],
   },
-] as LeagueSeasonConfig[];
+];
 
-export const BASKETBALL_LEAGUES = [
+export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "NBL",
     slug: "1524",
@@ -1937,9 +1942,9 @@ export const BASKETBALL_LEAGUES = [
   //     { name: "2024", slug: "57477" },
   //   ],
   // },
-] as LeagueSeasonConfig[];
+];
 
-export const TENNIS_CATEGORIES = [
+export const TENNIS_CATEGORIES: LeagueSeasonConfig[] = [
   {
     name: "ATP",
     slug: "3",
@@ -1963,9 +1968,9 @@ export const TENNIS_CATEGORIES = [
     slug: "74",
     seasons: [{ name: "2026", slug: "" }],
   },
-] as LeagueSeasonConfig[];
+];
 
-export const TENNIS_LEAGUES = [
+export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "Australian Open - Mens Singles",
     slug: "2363",
@@ -2018,9 +2023,9 @@ export const TENNIS_LEAGUES = [
     slug: "wtaRank",
     seasons: [{ name: "Current", slug: "" }],
   },
-] as LeagueSeasonConfig[];
+];
 
-export const DARTS_LEAGUES = [
+export const DARTS_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "Home",
     slug: "",
@@ -2047,7 +2052,7 @@ export const DARTS_LEAGUES = [
       { name: "24/25", slug: "" },
     ],
   },
-] as LeagueSeasonConfig[];
+];
 
 export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
   {

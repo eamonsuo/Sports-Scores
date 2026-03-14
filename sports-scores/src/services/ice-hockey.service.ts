@@ -16,13 +16,13 @@ import {
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
 import { ICE_HOCKEY_LEAGUES } from "@/lib/constants";
-import { resolveSportImage } from "@/lib/imageMapping";
 import {
   getCurrentRound,
   mapFixtureRound,
   mapMatchSummary,
-  shortenTeamNames,
-} from "@/lib/projUtils";
+} from "@/lib/eventMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
+import { shortenTeamNames } from "@/lib/projUtils";
 import {
   IceHockeyFixturesPage,
   IceHockeyLadderPage,
@@ -53,21 +53,24 @@ export async function iceHockeyMatches(tournamentId: number, seasonId: number) {
 
   const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
 
-  const displayType =
-    ICE_HOCKEY_LEAGUES.find((l) => Number(l.slug) === tournamentId)?.display ??
-    DISPLAY_TYPES.ROUND;
+  const leagueConfig = ICE_HOCKEY_LEAGUES.find(
+    (l) => Number(l.slug) === tournamentId,
+  );
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    displayType,
+    SPORT.ICE_HOCKEY,
+    leagueConfig ?? { name: "", slug: "", seasons: [] },
     matches,
     mapIceHockeyMatch,
-    false,
   );
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(displayType, fixture),
+    currentRound: getCurrentRound(
+      leagueConfig?.display ?? DISPLAY_TYPES.ROUND,
+      fixture,
+    ),
   } as IceHockeyFixturesPage;
 }
 
@@ -203,12 +206,10 @@ export async function iceHockeyMatchesByDate(date: Date) {
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    DISPLAY_TYPES.LEAGUE,
+    SPORT.ICE_HOCKEY,
+    ICE_HOCKEY_LEAGUES,
     matches.events,
     mapIceHockeyMatch,
-    false,
-    undefined,
-    SPORT.ICE_HOCKEY,
   );
 
   return {
@@ -221,11 +222,7 @@ function mapIceHockeyMatch(
   match: Sofascore_Event,
   roundLabel: string,
 ): MatchSummary {
-  let startDate = new Date(0);
-  startDate.setUTCSeconds(match.startTimestamp);
-
   return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.ICE_HOCKEY, match, {
-    startDate: startDate,
-    roundLabel: roundLabel,
+    roundLabel,
   });
 }

@@ -14,14 +14,14 @@ import {
   fetchNextEvents,
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
-import { AFL_TEAM_NAMES, AUSSIE_RULES_LEAGUES } from "@/lib/constants";
-import { resolveSportImage } from "@/lib/imageMapping";
+import { AUSSIE_RULES_LEAGUES } from "@/lib/constants";
 import {
   getCurrentRound,
   mapFixtureRound,
   mapMatchSummary,
-  shortenTeamNames,
-} from "@/lib/projUtils";
+} from "@/lib/eventMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
+import { shortenTeamNames } from "@/lib/projUtils";
 import {
   AussieRulesFixturesPage,
   AussieRulesLadderPage,
@@ -53,25 +53,24 @@ export async function aussieRulesMatches(league: number, season: number) {
 
   const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
 
-  const displayType =
-    AUSSIE_RULES_LEAGUES.find((l) => Number(l.slug) === league)?.display ??
-    DISPLAY_TYPES.ROUND;
+  const leagueConfig = AUSSIE_RULES_LEAGUES.find(
+    (l) => Number(l.slug) === league,
+  );
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    displayType,
+    SPORT.AUSSIE_RULES,
+    leagueConfig ?? { name: "", slug: "", seasons: [] },
     matches,
     mapAussieRulesMatch,
-    league === 656,
-    AFL_TEAM_NAMES.map((team) => ({
-      name: team,
-      img: resolveSportImage(team),
-    })),
   );
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(displayType, fixture),
+    currentRound: getCurrentRound(
+      leagueConfig?.display ?? DISPLAY_TYPES.ROUND,
+      fixture,
+    ),
   } as AussieRulesFixturesPage;
 }
 
@@ -205,12 +204,10 @@ export async function aussieRulesCurrentMatches(date: Date) {
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    DISPLAY_TYPES.LEAGUE,
+    SPORT.AUSSIE_RULES,
+    AUSSIE_RULES_LEAGUES,
     matches.events,
     mapAussieRulesMatch,
-    false,
-    undefined,
-    SPORT.AUSSIE_RULES,
   );
 
   return {
@@ -223,11 +220,7 @@ function mapAussieRulesMatch(
   match: Sofascore_Event,
   roundLabel: string,
 ): MatchSummary {
-  let startDate = new Date(0);
-  startDate.setUTCSeconds(match.startTimestamp);
-
   return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.AUSSIE_RULES, match, {
-    startDate: startDate,
-    roundLabel: roundLabel,
+    roundLabel,
   });
 }

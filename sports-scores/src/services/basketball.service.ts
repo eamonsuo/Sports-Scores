@@ -19,13 +19,13 @@ import {
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
 import { BASKETBALL_LEAGUES } from "@/lib/constants";
-import { resolveSportImage } from "@/lib/imageMapping";
 import {
   getCurrentRound,
   mapFixtureRound,
   mapMatchSummary,
-  shortenTeamNames,
-} from "@/lib/projUtils";
+} from "@/lib/eventMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
+import { shortenTeamNames } from "@/lib/projUtils";
 import {
   BasketballFixturesPage,
   BasketballLadderPage,
@@ -60,21 +60,24 @@ export async function basketballMatches(
 
   const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
 
-  const displayType =
-    BASKETBALL_LEAGUES.find((l) => Number(l.slug) === tournamentId)?.display ??
-    DISPLAY_TYPES.ROUND;
+  const leagueConfig = BASKETBALL_LEAGUES.find(
+    (l) => Number(l.slug) === tournamentId,
+  );
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    displayType,
+    SPORT.BASKETBALL,
+    leagueConfig ?? { name: "", slug: "", seasons: [] },
     matches,
     mapBasketballMatch,
-    false,
   );
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(displayType, fixture),
+    currentRound: getCurrentRound(
+      leagueConfig?.display ?? DISPLAY_TYPES.ROUND,
+      fixture,
+    ),
   } as BasketballFixturesPage;
 }
 
@@ -243,12 +246,10 @@ export async function basketballMatchesByDate(
 
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
-    DISPLAY_TYPES.LEAGUE,
+    SPORT.BASKETBALL,
+    BASKETBALL_LEAGUES,
     matches.events,
     mapBasketballMatch,
-    false,
-    undefined,
-    SPORT.BASKETBALL,
   );
 
   return {
@@ -261,11 +262,7 @@ function mapBasketballMatch(
   match: Sofascore_Event,
   roundLabel: string,
 ): MatchSummary {
-  let startDate = new Date(0);
-  startDate.setUTCSeconds(match.startTimestamp);
-
   return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.BASKETBALL, match, {
-    startDate: startDate,
-    roundLabel: roundLabel,
+    roundLabel,
   });
 }

@@ -18,7 +18,7 @@ export default function TennisMatchCard({
   winner,
   className,
 }: {
-  id: number;
+  id: string;
   href: string;
   matchSummary: string;
   homeInfo: TeamScoreDetails;
