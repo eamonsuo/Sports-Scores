@@ -19,13 +19,13 @@ import {
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
 import { AMERICAN_FOOTBALL_LEAGUES } from "@/lib/constants";
-import { resolveSportImage } from "@/lib/imageMapping";
 import {
   getCurrentRound,
   mapFixtureRound,
   mapMatchSummary,
-  shortenTeamNames,
-} from "@/lib/projUtils";
+} from "@/lib/eventMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
+import { shortenTeamNames } from "@/lib/projUtils";
 import {
   AmericanFootball_AmericanFootballApi_CategorySchedule_Response,
   AmericanFootball_Sofascore_Event,
@@ -240,7 +240,7 @@ export async function americanFootballMatchesByDate(date: Date) {
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
     SPORT.AMERICAN_FOOTBALL,
-    { name: "", slug: "", seasons: [], display: DISPLAY_TYPES.LEAGUE },
+    AMERICAN_FOOTBALL_LEAGUES,
     matches.events,
     mapAmericanFootballMatch,
   );
@@ -255,25 +255,22 @@ function mapAmericanFootballMatch(
   match: AmericanFootball_Sofascore_Event,
   roundLabel: string,
 ): MatchSummary {
-  let startDate = new Date(0);
-  startDate.setUTCSeconds(match.startTimestamp);
-
-  const summary = mapMatchSummary(
+  return mapMatchSummary(
     API_EVENT_TYPES.SOFASCORE,
     SPORT.AMERICAN_FOOTBALL,
     match,
     {
-      startDate: startDate,
-      roundLabel: roundLabel,
+      roundLabel,
+      homeDetails: {
+        winDrawLoss: match.homeTeamSeasonHistoricalForm
+          ? `${match.homeTeamSeasonHistoricalForm.wins ?? 0}-${match.homeTeamSeasonHistoricalForm.losses ?? 0}${match.homeTeamSeasonHistoricalForm.draws ? "-" + match.homeTeamSeasonHistoricalForm.draws : ""}`
+          : undefined,
+      },
+      awayDetails: {
+        winDrawLoss: match.awayTeamSeasonHistoricalForm
+          ? `${match.awayTeamSeasonHistoricalForm.wins ?? 0}-${match.awayTeamSeasonHistoricalForm.losses ?? 0}${match.awayTeamSeasonHistoricalForm.draws ? "-" + match.awayTeamSeasonHistoricalForm.draws : ""}`
+          : undefined,
+      },
     },
   );
-
-  summary.homeDetails.winDrawLoss = match.homeTeamSeasonHistoricalForm
-    ? `${match.homeTeamSeasonHistoricalForm.wins ?? 0}-${match.homeTeamSeasonHistoricalForm.losses ?? 0}${match.homeTeamSeasonHistoricalForm.draws ? "-" + match.homeTeamSeasonHistoricalForm.draws : ""}`
-    : undefined;
-  summary.awayDetails.winDrawLoss = match.awayTeamSeasonHistoricalForm
-    ? `${match.awayTeamSeasonHistoricalForm.wins ?? 0}-${match.awayTeamSeasonHistoricalForm.losses ?? 0}${match.awayTeamSeasonHistoricalForm.draws ? "-" + match.awayTeamSeasonHistoricalForm.draws : ""}`
-    : undefined;
-
-  return summary;
 }

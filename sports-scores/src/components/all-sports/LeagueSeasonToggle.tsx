@@ -1,6 +1,6 @@
 "use client";
 
-import { DisplayTypes, SPORT } from "@/types/misc";
+import { DISPLAY_TYPES, SPORT } from "@/types/misc";
 import { format } from "date-fns/format";
 import { ChevronDownIcon, ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
@@ -19,7 +19,7 @@ export type LeagueSeasonConfig = {
   slug: string;
   seasons: { name: string; slug: string }[];
   qualifyingPosition?: number;
-  display?: DisplayTypes;
+  display?: DISPLAY_TYPES;
   externalURL?: string;
   byes?: {
     name: string;

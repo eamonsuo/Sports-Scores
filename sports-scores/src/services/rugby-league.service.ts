@@ -16,14 +16,14 @@ import {
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
 import { RUGBY_LEAGUE_LEAGUES } from "@/lib/constants";
-import { resolveSportImage } from "@/lib/imageMapping";
 import {
   getCurrentRound,
   mapFixtureRound,
   mapMatchSummary,
-  shortenTeamNames,
-} from "@/lib/projUtils";
-import { getMatchSummariesByTournament } from "@/services/dataverse.service";
+} from "@/lib/eventMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
+import { shortenTeamNames } from "@/lib/projUtils";
+import { matchSummariesByTournament } from "@/services/dataverse.service";
 import {
   API_EVENT_TYPES,
   DISPLAY_TYPES,
@@ -55,7 +55,7 @@ export async function rugbyLeagueMatches(
       seasonId,
       0,
     ),
-    getMatchSummariesByTournament(tournamentId, seasonId, SPORT.RUGBY_LEAGUE),
+    matchSummariesByTournament(tournamentId, seasonId, SPORT.RUGBY_LEAGUE),
   ]);
 
   if (!lastMatches && !nextMatches && !dataverseMatches) {
@@ -212,7 +212,7 @@ export async function rugbyLeagueMatchesByDate(date: Date) {
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
     SPORT.RUGBY_LEAGUE,
-    { name: "", slug: "", seasons: [], display: DISPLAY_TYPES.LEAGUE },
+    RUGBY_LEAGUE_LEAGUES,
     matches.events,
     mapRugbyLeagueMatch,
   );
@@ -227,11 +227,7 @@ function mapRugbyLeagueMatch(
   match: Sofascore_Event,
   roundLabel: string,
 ): MatchSummary {
-  let startDate = new Date(0);
-  startDate.setUTCSeconds(match.startTimestamp);
-
   return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.RUGBY_LEAGUE, match, {
-    startDate: startDate,
-    roundLabel: roundLabel,
+    roundLabel,
   });
 }

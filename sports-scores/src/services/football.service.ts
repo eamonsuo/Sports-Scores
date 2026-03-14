@@ -26,14 +26,13 @@ import {
   fetchTeamNextEvents,
 } from "@/endpoints/sofascore.api";
 import { FOOTBALL_LEAGUES } from "@/lib/constants";
-import { resolveSportImage } from "@/lib/imageMapping";
 import {
   getCurrentRound,
   mapFixtureRound,
   mapMatchSummary,
-  setMatchSummary,
-  shortenTeamNames,
-} from "@/lib/projUtils";
+} from "@/lib/eventMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
+import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils";
 import {
   FootballBracketPage,
   FootballFixturesPage,
@@ -281,7 +280,7 @@ export async function footballMatchesByDate(date: Date) {
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
     SPORT.FOOTBALL,
-    { name: "", slug: "", seasons: [], display: DISPLAY_TYPES.LEAGUE },
+    FOOTBALL_LEAGUES,
     matches.events,
     mapFootballMatch,
   );
@@ -375,11 +374,7 @@ function mapFootballMatch(
   match: Sofascore_Event,
   roundLabel: string,
 ): MatchSummary {
-  let startDate = new Date(0);
-  startDate.setUTCSeconds(match.startTimestamp);
-
   return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.FOOTBALL, match, {
-    startDate: startDate,
-    roundLabel: roundLabel,
+    roundLabel,
   });
 }

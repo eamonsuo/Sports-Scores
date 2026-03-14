@@ -16,13 +16,13 @@ import {
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
 import { RUGBY_UNION_LEAGUES } from "@/lib/constants";
-import { resolveSportImage } from "@/lib/imageMapping";
 import {
   getCurrentRound,
   mapFixtureRound,
   mapMatchSummary,
-  shortenTeamNames,
-} from "@/lib/projUtils";
+} from "@/lib/eventMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
+import { shortenTeamNames } from "@/lib/projUtils";
 import {
   API_EVENT_TYPES,
   DISPLAY_TYPES,
@@ -205,7 +205,7 @@ export async function rugbyUnionMatchesByDate(date: Date) {
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
     SPORT.RUGBY_UNION,
-    { name: "", slug: "", seasons: [], display: DISPLAY_TYPES.LEAGUE },
+    RUGBY_UNION_LEAGUES,
     matches.events,
     mapRugbyUnionMatch,
   );
@@ -220,11 +220,7 @@ function mapRugbyUnionMatch(
   match: Sofascore_Event,
   roundLabel: string,
 ): MatchSummary {
-  let startDate = new Date(0);
-  startDate.setUTCSeconds(match.startTimestamp);
-
   return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.RUGBY_UNION, match, {
-    startDate: startDate,
-    roundLabel: roundLabel,
+    roundLabel,
   });
 }

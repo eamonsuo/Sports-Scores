@@ -11,8 +11,8 @@ import {
   getCurrentRound,
   mapFixtureRound,
   mapMatchSummary,
-  shortenTeamNames,
-} from "@/lib/projUtils";
+} from "@/lib/eventMapping";
+import { shortenTeamNames } from "@/lib/projUtils";
 import {
   API_EVENT_TYPES,
   DISPLAY_TYPES,
@@ -173,7 +173,7 @@ export async function netballMatchesByDate(date: Date) {
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SPORTSDB,
     SPORT.NETBALL,
-    { name: "", slug: "", seasons: [], display: DISPLAY_TYPES.LEAGUE },
+    NETBALL_LEAGUES,
     matches.events,
     mapNetballMatch,
   );

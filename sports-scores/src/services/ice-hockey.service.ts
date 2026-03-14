@@ -16,13 +16,13 @@ import {
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
 import { ICE_HOCKEY_LEAGUES } from "@/lib/constants";
-import { resolveSportImage } from "@/lib/imageMapping";
 import {
   getCurrentRound,
   mapFixtureRound,
   mapMatchSummary,
-  shortenTeamNames,
-} from "@/lib/projUtils";
+} from "@/lib/eventMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
+import { shortenTeamNames } from "@/lib/projUtils";
 import {
   IceHockeyFixturesPage,
   IceHockeyLadderPage,
@@ -207,7 +207,7 @@ export async function iceHockeyMatchesByDate(date: Date) {
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
     SPORT.ICE_HOCKEY,
-    { name: "", slug: "", seasons: [], display: DISPLAY_TYPES.LEAGUE },
+    ICE_HOCKEY_LEAGUES,
     matches.events,
     mapIceHockeyMatch,
   );
@@ -222,11 +222,7 @@ function mapIceHockeyMatch(
   match: Sofascore_Event,
   roundLabel: string,
 ): MatchSummary {
-  let startDate = new Date(0);
-  startDate.setUTCSeconds(match.startTimestamp);
-
   return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.ICE_HOCKEY, match, {
-    startDate: startDate,
-    roundLabel: roundLabel,
+    roundLabel,
   });
 }

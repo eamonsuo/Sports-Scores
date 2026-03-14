@@ -15,13 +15,13 @@ import {
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
 import { AUSSIE_RULES_LEAGUES } from "@/lib/constants";
-import { resolveSportImage } from "@/lib/imageMapping";
 import {
   getCurrentRound,
   mapFixtureRound,
   mapMatchSummary,
-  shortenTeamNames,
-} from "@/lib/projUtils";
+} from "@/lib/eventMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
+import { shortenTeamNames } from "@/lib/projUtils";
 import {
   AussieRulesFixturesPage,
   AussieRulesLadderPage,
@@ -205,7 +205,7 @@ export async function aussieRulesCurrentMatches(date: Date) {
   const fixture = mapFixtureRound(
     API_EVENT_TYPES.SOFASCORE,
     SPORT.AUSSIE_RULES,
-    { name: "", slug: "", seasons: [], display: DISPLAY_TYPES.LEAGUE },
+    AUSSIE_RULES_LEAGUES,
     matches.events,
     mapAussieRulesMatch,
   );
@@ -220,11 +220,7 @@ function mapAussieRulesMatch(
   match: Sofascore_Event,
   roundLabel: string,
 ): MatchSummary {
-  let startDate = new Date(0);
-  startDate.setUTCSeconds(match.startTimestamp);
-
   return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.AUSSIE_RULES, match, {
-    startDate: startDate,
-    roundLabel: roundLabel,
+    roundLabel,
   });
 }

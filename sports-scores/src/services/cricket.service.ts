@@ -13,12 +13,12 @@ import {
   fetchCricketSeriesMatches,
 } from "@/endpoints/cricket.api";
 import { fetchEventsByDate } from "@/endpoints/sofascore.api";
-import { resolveSportImage } from "@/lib/imageMapping";
 import {
   getCurrentRound,
   mapFixtureRound,
   mapMatchSummary,
-} from "@/lib/projUtils";
+} from "@/lib/eventMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
 import {
   Cricket_LiveScoreAPI_MatchesGetInnings,
   Cricket_LiveScoreAPI_MatchesGetScoreBoard,
@@ -107,10 +107,13 @@ export async function cricketMatchesRecent(date: Date) {
       });
     });
 
-  // Sort by start date
-  return matches.sort((a, b) => {
-    return a.startDate.getTime() - b.startDate.getTime();
-  });
+  // Remove duplicates and sort by start date
+  return matches
+    .filter(
+      (match, index, self) =>
+        self.findIndex((m) => m.id === match.id) === index,
+    )
+    .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 }
 
 export async function cricketMatchesByDate(date: Date) {
