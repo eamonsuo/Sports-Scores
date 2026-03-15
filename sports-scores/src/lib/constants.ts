@@ -843,7 +843,7 @@ export const upcomingAndCurrentEvents: SportEvent[] = [
     sport: "Olympics",
     type: "major",
     startDate: new Date("2026-03-06T00:00:00Z"),
-    endDate: new Date("2026-03-15T00:00:00Z"),
+    endDate: new Date("2026-03-16T07:00:00+10:00"),
     imageUrl: "/olympic-rings.svg",
     link: "/sports/olympics",
     location: "Milan & Cortina, Italy",

@@ -18,7 +18,7 @@ import {
 import { ICE_HOCKEY_LEAGUES } from "@/lib/constants";
 import {
   getCurrentRound,
-  mapFixtureRound,
+  mapFixtureRounds,
   mapMatchSummary,
 } from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
@@ -51,18 +51,26 @@ export async function iceHockeyMatches(tournamentId: number, seasonId: number) {
     return null;
   }
 
-  const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
+  const allMatches = (lastMatches?.events ?? [])
+    .concat(nextMatches?.events ?? [])
+    .map((event) =>
+      mapIceHockeyMatch(
+        event,
+        event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
+      ),
+    )
+    .sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+    );
 
   const leagueConfig = ICE_HOCKEY_LEAGUES.find(
     (l) => Number(l.slug) === tournamentId,
   );
 
-  const fixture = mapFixtureRound(
-    API_EVENT_TYPES.SOFASCORE,
-    SPORT.ICE_HOCKEY,
+  const fixture = mapFixtureRounds(
     leagueConfig ?? { name: "", slug: "", seasons: [] },
-    matches,
-    mapIceHockeyMatch,
+    allMatches,
   );
 
   return {
@@ -204,13 +212,14 @@ export async function iceHockeyMatchesByDate(date: Date) {
 
   if (!matches.events || matches.events.length === 0) return null;
 
-  const fixture = mapFixtureRound(
-    API_EVENT_TYPES.SOFASCORE,
-    SPORT.ICE_HOCKEY,
-    ICE_HOCKEY_LEAGUES,
-    matches.events,
-    mapIceHockeyMatch,
+  const allMatches = matches.events.map((event) =>
+    mapIceHockeyMatch(
+      event,
+      event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
+    ),
   );
+
+  const fixture = mapFixtureRounds(ICE_HOCKEY_LEAGUES, allMatches);
 
   return {
     fixtures: fixture,

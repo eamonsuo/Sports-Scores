@@ -20,7 +20,7 @@ import {
 import { BASEBALL_LEAGUES } from "@/lib/constants";
 import {
   getCurrentRound,
-  mapFixtureRound,
+  mapFixtureRounds,
   mapMatchSummary,
 } from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
@@ -54,18 +54,26 @@ export async function baseballMatches(tournamentId: number, seasonId: number) {
     return null;
   }
 
-  const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
+  const allMatches = (lastMatches?.events ?? [])
+    .concat(nextMatches?.events ?? [])
+    .map((event) =>
+      mapBaseballMatch(
+        event,
+        event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
+      ),
+    )
+    .sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+    );
 
   const leagueConfig = BASEBALL_LEAGUES.find(
     (l) => Number(l.slug) === tournamentId,
   );
 
-  const fixture = mapFixtureRound(
-    API_EVENT_TYPES.SOFASCORE,
-    SPORT.BASEBALL,
+  const fixture = mapFixtureRounds(
     leagueConfig ?? { name: "", slug: "", seasons: [] },
-    matches,
-    mapBaseballMatch,
+    allMatches,
   );
 
   return {
@@ -256,13 +264,14 @@ export async function baseballMatchesByDate(date: Date) {
 
   if (!matches.events || matches.events.length === 0) return null;
 
-  const fixture = mapFixtureRound(
-    API_EVENT_TYPES.SOFASCORE,
-    SPORT.BASEBALL,
-    BASEBALL_LEAGUES,
-    matches.events,
-    mapBaseballMatch,
+  const allMatches = matches.events.map((event) =>
+    mapBaseballMatch(
+      event,
+      event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
+    ),
   );
+
+  const fixture = mapFixtureRounds(BASEBALL_LEAGUES, allMatches);
 
   return {
     fixtures: fixture,

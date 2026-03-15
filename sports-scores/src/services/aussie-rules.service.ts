@@ -17,7 +17,7 @@ import {
 import { AUSSIE_RULES_LEAGUES } from "@/lib/constants";
 import {
   getCurrentRound,
-  mapFixtureRound,
+  mapFixtureRounds,
   mapMatchSummary,
 } from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
@@ -51,18 +51,26 @@ export async function aussieRulesMatches(league: number, season: number) {
     return null;
   }
 
-  const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
+  const allMatches = (lastMatches?.events ?? [])
+    .concat(nextMatches?.events ?? [])
+    .map((event) =>
+      mapAussieRulesMatch(
+        event,
+        event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
+      ),
+    )
+    .sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+    );
 
   const leagueConfig = AUSSIE_RULES_LEAGUES.find(
     (l) => Number(l.slug) === league,
   );
 
-  const fixture = mapFixtureRound(
-    API_EVENT_TYPES.SOFASCORE,
-    SPORT.AUSSIE_RULES,
+  const fixture = mapFixtureRounds(
     leagueConfig ?? { name: "", slug: "", seasons: [] },
-    matches,
-    mapAussieRulesMatch,
+    allMatches,
   );
 
   return {
@@ -202,13 +210,14 @@ export async function aussieRulesCurrentMatches(date: Date) {
 
   if (!matches.events || matches.events.length === 0) return null;
 
-  const fixture = mapFixtureRound(
-    API_EVENT_TYPES.SOFASCORE,
-    SPORT.AUSSIE_RULES,
-    AUSSIE_RULES_LEAGUES,
-    matches.events,
-    mapAussieRulesMatch,
+  const allMatches = matches.events.map((event) =>
+    mapAussieRulesMatch(
+      event,
+      event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
+    ),
   );
+
+  const fixture = mapFixtureRounds(AUSSIE_RULES_LEAGUES, allMatches);
 
   return {
     fixtures: fixture,

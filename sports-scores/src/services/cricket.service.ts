@@ -15,7 +15,7 @@ import {
 import { fetchEventsByDate } from "@/endpoints/sofascore.api";
 import {
   getCurrentRound,
-  mapFixtureRound,
+  mapFixtureRounds,
   mapMatchSummary,
 } from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
@@ -495,12 +495,16 @@ export async function cricketMatchesByDateSofascore(date: Date) {
 
   if (!matches.events || matches.events.length === 0) return null;
 
-  const fixture = mapFixtureRound(
-    API_EVENT_TYPES.SOFASCORE,
-    SPORT.CRICKET,
+  const allMatches = matches.events.map((event) =>
+    mapCricketMatch(
+      event,
+      event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
+    ),
+  );
+
+  const fixture = mapFixtureRounds(
     { name: "", slug: "", seasons: [], display: DISPLAY_TYPES.DATE },
-    matches.events,
-    mapCricketMatch,
+    allMatches,
   );
 
   return {
