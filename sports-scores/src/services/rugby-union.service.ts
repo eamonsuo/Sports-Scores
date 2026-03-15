@@ -18,7 +18,7 @@ import {
 import { RUGBY_UNION_LEAGUES } from "@/lib/constants";
 import {
   getCurrentRound,
-  mapFixtureRound,
+  mapFixtureRounds,
   mapMatchSummary,
 } from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
@@ -54,18 +54,26 @@ export async function rugbyUnionMatches(
     return null;
   }
 
-  const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
+  const allMatches = (lastMatches?.events ?? [])
+    .concat(nextMatches?.events ?? [])
+    .map((event) =>
+      mapRugbyUnionMatch(
+        event,
+        event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
+      ),
+    )
+    .sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+    );
 
   const leagueConfig = RUGBY_UNION_LEAGUES.find(
     (l) => Number(l.slug) === tournamentId,
   );
 
-  const fixture = mapFixtureRound(
-    API_EVENT_TYPES.SOFASCORE,
-    SPORT.RUGBY_UNION,
+  const fixture = mapFixtureRounds(
     leagueConfig ?? { name: "", slug: "", seasons: [] },
-    matches,
-    mapRugbyUnionMatch,
+    allMatches,
   );
 
   return {
@@ -202,13 +210,14 @@ export async function rugbyUnionMatchesByDate(date: Date) {
 
   if (!matches.events || matches.events.length === 0) return null;
 
-  const fixture = mapFixtureRound(
-    API_EVENT_TYPES.SOFASCORE,
-    SPORT.RUGBY_UNION,
-    RUGBY_UNION_LEAGUES,
-    matches.events,
-    mapRugbyUnionMatch,
+  const allMatches = matches.events.map((event) =>
+    mapRugbyUnionMatch(
+      event,
+      event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
+    ),
   );
+
+  const fixture = mapFixtureRounds(RUGBY_UNION_LEAGUES, allMatches);
 
   return {
     fixtures: fixture,

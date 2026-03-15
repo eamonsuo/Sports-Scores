@@ -8,32 +8,31 @@ interface ApiQuotaInfo {
 
 // Global variable to store quota info across requests
 declare global {
-  var aflApiQuota: ApiQuotaInfo | null;
-  var nrlApiQuota: ApiQuotaInfo | null;
-  var nflApiQuota: ApiQuotaInfo | null;
-  var cricketApiQuota: ApiQuotaInfo | null;
-  var golfApiQuota: ApiQuotaInfo | null;
+  var apiQuotas: Record<string, ApiQuotaInfo>;
 }
 
-if (!globalThis.aflApiQuota) {
-  globalThis.aflApiQuota = null;
+if (!globalThis.apiQuotas) {
+  globalThis.apiQuotas = {};
 }
+
+export const API_RESET_PERIOD: Partial<Record<SPORT, string>> = {
+  [SPORT.CRICKET]: "per month",
+  [SPORT.AUSSIE_RULES]: "per month",
+  [SPORT.GOLF]: "per month",
+  [SPORT.BASEBALL]: "per day",
+  [SPORT.BASKETBALL]: "per day",
+  [SPORT.FOOTBALL]: "per day",
+  [SPORT.AMERICAN_FOOTBALL]: "per day",
+  [SPORT.RUGBY_UNION]: "per day",
+  [SPORT.RUGBY_LEAGUE]: "per day",
+  [SPORT.ICE_HOCKEY]: "per day",
+  [SPORT.NETBALL]: "per day",
+  [SPORT.TENNIS]: "per day",
+  [SPORT.CYCLING]: "per day",
+};
 
 export function getGlobalApiQuota(sport: SPORT): ApiQuotaInfo | null {
-  switch (sport) {
-    case SPORT.AUSSIE_RULES:
-      return globalThis.aflApiQuota;
-    case SPORT.RUGBY_LEAGUE:
-      return globalThis.nrlApiQuota;
-    case SPORT.AMERICAN_FOOTBALL:
-      return globalThis.nflApiQuota;
-    case SPORT.CRICKET:
-      return globalThis.cricketApiQuota;
-    case SPORT.GOLF:
-      return globalThis.golfApiQuota;
-    default:
-      return null;
-  }
+  return globalThis.apiQuotas[sport] ?? null;
 }
 
 export function updateGlobalApiQuota(
@@ -41,28 +40,9 @@ export function updateGlobalApiQuota(
   requestsLimit: number,
   sport: SPORT,
 ): void {
-  let percentUsed = Math.round((1 - requestsRemaining / requestsLimit) * 100);
+  const percentUsed = Math.round((1 - requestsRemaining / requestsLimit) * 100);
 
-  switch (sport) {
-    case SPORT.AUSSIE_RULES:
-      globalThis.aflApiQuota = {
-        percentUsed,
-      };
-    case SPORT.RUGBY_LEAGUE:
-      globalThis.nrlApiQuota = {
-        percentUsed,
-      };
-    case SPORT.AMERICAN_FOOTBALL:
-      globalThis.nflApiQuota = {
-        percentUsed,
-      };
-    case SPORT.CRICKET:
-      globalThis.cricketApiQuota = {
-        percentUsed,
-      };
-    case SPORT.GOLF:
-      globalThis.golfApiQuota = {
-        percentUsed,
-      };
-  }
+  globalThis.apiQuotas[sport] = {
+    percentUsed,
+  };
 }

@@ -5,7 +5,7 @@ const fallback = "/vercel.svg";
 
 export function resolveSportImage(teamName: string) {
   teamName = teamName.replace(
-    /\s((W|A|U19|Women|Reserve|Reserves)(\sW)?)$/i,
+    /\s((W|A|U19|Women|Reserve|Reserves|7s)(\sW)?)$/i,
     "",
   );
   switch (teamName) {
@@ -63,6 +63,7 @@ export function resolveSportImage(teamName: string) {
     case "Cronulla Sharks":
       return "/nrl/sharks.svg";
     case "Dolphins":
+    case "Redcliffe Dolphins":
       return "/nrl/dolphins.svg";
     case "Gold Coast Titans":
       return "/nrl/titans.svg";
@@ -90,9 +91,51 @@ export function resolveSportImage(teamName: string) {
     case "Wests Tigers":
       return "/nrl/tigers.svg";
     case "Queensland Maroons":
-      return "https://upload.wikimedia.org/wikipedia/commons/d/d1/State_of_Origin_QLD_Maroons_Logo.jpg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/sec7911719410143.png";
     case "New South Wales Blues":
       return "https://upload.wikimedia.org/wikipedia/en/8/80/NSW_Blues_Logo_2023.png";
+
+    // QLD Cup
+    case "Brisbane Tigers":
+      return "https://upload.wikimedia.org/wikipedia/en/e/e6/Brisbane-Tigers-black-text-Logo.svg";
+    case "Burleigh Bears":
+      return "https://upload.wikimedia.org/wikipedia/en/8/8e/Burleigh_Bears_Logo.svg";
+    case "Central Queensland Capras":
+    case "Central Capras":
+      return "https://upload.wikimedia.org/wikipedia/en/1/18/Central_Queensland_Capras_logo.png";
+    case "Ipswich Jets":
+      return "https://upload.wikimedia.org/wikipedia/en/5/53/Ipswich_Jets_logo.svg";
+    case "Mackay Cutters":
+      return "https://upload.wikimedia.org/wikipedia/en/e/e3/Mackay_Cutters_logo.png";
+    case "Norths Devils":
+      return "https://upload.wikimedia.org/wikipedia/en/1/17/Norths_Devils_Logo1.png";
+    case "Northern Pride":
+      return "https://upload.wikimedia.org/wikipedia/en/7/78/Northern_pride.png";
+    case "Papua New Guinea Hunters":
+      return "https://upload.wikimedia.org/wikipedia/en/4/42/PNG_Hunters_logo.png";
+    // case "Redcliffe Dolphins":
+    //   return "https://upload.wikimedia.org/wikipedia/en/7/7b/Redcliffe_Dolphins_Logo.png";
+    case "Souths Logan Magpies":
+      return "https://upload.wikimedia.org/wikipedia/en/d/d8/Souths_Logan_Magpies_logo.png";
+    case "Sunshine Coast Falcons":
+      return "https://upload.wikimedia.org/wikipedia/en/7/7b/Sunshine_Coast_Falcons_logo_2014.png";
+    case "Townsville Blackhawks":
+      return "https://upload.wikimedia.org/wikipedia/en/e/e7/Townsville_%26_Districts_Blackhawks_RLFC_logo.png";
+    case "Tweed Heads":
+    case "Tweed Heads Seagulls":
+      return "https://upload.wikimedia.org/wikipedia/en/9/9f/Tweed_heads_seagulls.png";
+    case "Western Clydesdales":
+      return "https://upload.wikimedia.org/wikipedia/en/b/b9/Western_Clydesdales_Logo_2023.png";
+    case "Wynnum Manly Seagulls":
+      return "https://upload.wikimedia.org/wikipedia/en/c/cf/Wynnum_Manly_Seagulls_logo.svg";
+
+    //NSW Cup
+    case "Newtown Jets":
+      return "https://upload.wikimedia.org/wikipedia/en/1/19/Newtown_Jets_Logo.svg";
+    case "North Sydney Bears":
+      return "https://upload.wikimedia.org/wikipedia/en/6/64/North_Sydney_Bears_Logo.svg";
+    case "Western Suburbs Magpies":
+      return "https://upload.wikimedia.org/wikipedia/en/7/74/Western_Suburbs_Magpies_Logo.svg";
 
     //AFL
     case "Adelaide Crows":
@@ -121,6 +164,7 @@ export function resolveSportImage(teamName: string) {
     case "GWS Giants II":
       return "/afl/giants.svg";
     case "Hawthorn Hawks":
+    case "Box Hill Hawks":
       return "/afl/hawks.svg";
     case "Melbourne Demons":
       return "/afl/demons.svg";
@@ -141,7 +185,28 @@ export function resolveSportImage(teamName: string) {
     case "West Coast Eagles":
       return "/afl/eagles.svg";
     case "Western Bulldogs":
+    case "Footscray Bulldogs":
       return "/afl/bulldogs.svg";
+
+    //VFL
+    case "Casey Demons":
+      return "https://upload.wikimedia.org/wikipedia/en/6/6b/Casey_Demons_Logo.png";
+    case "Coburg Lions":
+      return "https://upload.wikimedia.org/wikipedia/commons/7/7d/Coburg_Football_Club_Logo_2026.svg";
+    case "Frankston FC":
+      return "https://upload.wikimedia.org/wikipedia/en/b/bd/FrankstonFC2024.png";
+    case "Port Melbourne":
+      return "https://upload.wikimedia.org/wikipedia/en/5/52/Port_melbourne_fc_logo.png";
+    case "Sandringham FC":
+      return "https://upload.wikimedia.org/wikipedia/en/a/aa/Sandringham_fc_zebras_logo.png";
+    case "Southport Sharks":
+      return "https://upload.wikimedia.org/wikipedia/en/3/32/SouthportSharks.webp";
+    case "Tasmania FC":
+      return "https://upload.wikimedia.org/wikipedia/en/6/64/Tasmania_Football_Club_Logo.svg";
+    case "Werribee Tigers":
+      return "https://upload.wikimedia.org/wikipedia/commons/0/0f/New_WFC_Logo_2017_-_On_White.png";
+    case "Williamstown Seagulls":
+      return "https://upload.wikimedia.org/wikipedia/en/1/15/Williamstown_seagulls_logo.png";
 
     //NFL
     case "Arizona Cardinals":
@@ -1256,6 +1321,7 @@ export function resolveSportImage(teamName: string) {
 
     // Rugby Union
     case "All Blacks":
+    case "New Zealand All Blacks":
       return getCountryImageUrl(CountryFlagCode.NewZealand);
     // Super Rugby
     case "Queensland Reds":

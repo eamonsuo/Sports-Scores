@@ -21,7 +21,7 @@ import {
 import { AMERICAN_FOOTBALL_LEAGUES } from "@/lib/constants";
 import {
   getCurrentRound,
-  mapFixtureRound,
+  mapFixtureRounds,
   mapMatchSummary,
 } from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
@@ -54,20 +54,29 @@ export async function americanFootballMatches(league: number, season: number) {
     return null;
   }
 
-  const matches = (lastMatches?.events ?? []).concat(
-    nextMatches?.events ?? [],
-  ) as AmericanFootball_Sofascore_Event[];
+  const allMatches = (
+    (lastMatches?.events ?? []).concat(
+      nextMatches?.events ?? [],
+    ) as AmericanFootball_Sofascore_Event[]
+  )
+    .map((event) =>
+      mapAmericanFootballMatch(
+        event,
+        event.roundInfo?.name ?? `Week ${event.roundInfo?.round}`,
+      ),
+    )
+    .sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+    );
 
   const leagueConfig = AMERICAN_FOOTBALL_LEAGUES.find(
     (l) => Number(l.slug) === league,
   );
 
-  const fixture = mapFixtureRound(
-    API_EVENT_TYPES.SOFASCORE,
-    SPORT.AMERICAN_FOOTBALL,
+  const fixture = mapFixtureRounds(
     leagueConfig ?? { name: "", slug: "", seasons: [] },
-    matches,
-    mapAmericanFootballMatch,
+    allMatches,
   );
 
   return {
@@ -237,13 +246,14 @@ export async function americanFootballMatchesByDate(date: Date) {
 
   if (!matches.events || matches.events.length === 0) return null;
 
-  const fixture = mapFixtureRound(
-    API_EVENT_TYPES.SOFASCORE,
-    SPORT.AMERICAN_FOOTBALL,
-    AMERICAN_FOOTBALL_LEAGUES,
-    matches.events,
-    mapAmericanFootballMatch,
+  const allMatches = matches.events.map((event) =>
+    mapAmericanFootballMatch(
+      event,
+      event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
+    ),
   );
+
+  const fixture = mapFixtureRounds(AMERICAN_FOOTBALL_LEAGUES, allMatches);
 
   return {
     fixtures: fixture,

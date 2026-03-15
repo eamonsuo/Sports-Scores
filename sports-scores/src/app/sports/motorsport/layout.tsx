@@ -1,6 +1,5 @@
 import LeagueSeasonToggle from "@/components/all-sports/LeagueSeasonToggle";
 import APIStatus from "@/components/misc-ui/ApiStatus";
-import { getGlobalApiQuota } from "@/lib/apiCounter";
 import { MOTORSPORT_CATEGORIES } from "@/lib/constants";
 import { SPORT } from "@/types/misc";
 
@@ -9,7 +8,6 @@ export default async function SportsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  var quota = getGlobalApiQuota(SPORT.MOTORSPORT);
   return (
     <div className="flex h-full flex-col">
       <LeagueSeasonToggle
@@ -17,7 +15,7 @@ export default async function SportsLayout({
         leagues={MOTORSPORT_CATEGORIES}
       />
       {children}
-      <APIStatus status={"N/A"} />
+      <APIStatus sport={SPORT.MOTORSPORT} />
     </div>
   );
 }

@@ -171,48 +171,9 @@ function mapSportsDBEventToMatchSummary(
   };
 }
 
-export function mapFixtureRound(
-  type: API_EVENT_TYPES,
-  sport: SPORT,
+export function mapFixtureRounds(
   leagueConfig: LeagueSeasonConfig | LeagueSeasonConfig[],
-  matches: any[],
-  matchesMapper: (match: any, roundLabel: string) => MatchSummary,
-  extraMatches?: MatchSummary[],
-) {
-  switch (type) {
-    case API_EVENT_TYPES.SOFASCORE:
-      return mapSofascoreEventsToFixtureRounds(
-        sport,
-        leagueConfig,
-        matches,
-        matchesMapper,
-        extraMatches,
-      );
-    case API_EVENT_TYPES.SPORTSDB:
-      return mapSportsDBEventsToFixtureRounds(
-        sport,
-        leagueConfig,
-        matches,
-        matchesMapper,
-        extraMatches,
-      );
-    case API_EVENT_TYPES.SPORTSMONKS_CRICKET:
-    default:
-      return [
-        {
-          matches: matches.map((match) => matchesMapper(match, "")),
-          roundLabel: "",
-        } as FixtureRound,
-      ];
-  }
-}
-
-function mapSofascoreEventsToFixtureRounds(
-  sport: SPORT,
-  leagueConfig: LeagueSeasonConfig | LeagueSeasonConfig[],
-  matches: Sofascore_Event[],
-  matchesMapper: (match: Sofascore_Event, roundLabel: string) => MatchSummary,
-  extraMatches?: MatchSummary[],
+  matches: MatchSummary[],
 ) {
   const isMultiLeague = Array.isArray(leagueConfig);
   const displayType: DISPLAY_TYPES = isMultiLeague
@@ -221,198 +182,47 @@ function mapSofascoreEventsToFixtureRounds(
   const byes = isMultiLeague ? undefined : leagueConfig.byes;
   const showByes = byes !== undefined;
 
-  // Create rounds object { round: string; matches: Sofascore_Event[]; byes: { name: string; img: string }[] }
-  const tempRounds = Object.values(
+  return Object.values(
     matches.reduce(
       (acc, match) => {
-        let round = "";
+        let roundLabel = "";
         switch (displayType) {
           case DISPLAY_TYPES.ROUND:
-            round =
-              match.roundInfo?.name ?? `Round ${match.roundInfo?.round ?? 0}`;
+            roundLabel = match.roundLabel ?? "Round 0";
             break;
           case DISPLAY_TYPES.DATE:
-            var startDate = new Date(0);
-            startDate.setUTCSeconds(match.startTimestamp);
-            round = format(startDate, "eee d MMM");
+            roundLabel = format(new Date(match.startDate), "eee d MMM");
             break;
           case DISPLAY_TYPES.LEAGUE:
-            round = isMultiLeague
-              ? (leagueConfig.find(
-                  (l) =>
-                    l.slug === match.tournament.uniqueTournament.id.toString(),
-                )?.name ?? match.tournament.name)
-              : match.tournament.name;
+            roundLabel = isMultiLeague
+              ? (leagueConfig.find((l) => l.slug === match.tournamentId)
+                  ?.name ?? roundLabel)
+              : (match.roundLabel ?? "");
             break;
         }
 
-        if (round !== undefined) {
-          if (!acc[round]) {
-            acc[round] = { round, matches: [], byes: byes };
-          }
-
-          acc[round].matches.push(match);
-          acc[round].roundSlug =
-            displayType === DISPLAY_TYPES.LEAGUE
-              ? `${sport}/${match.tournament.uniqueTournament.id}/${match.season.id}`
-              : undefined;
-          if (showByes) {
-            acc[round].byes = acc[round]?.byes?.filter(
-              (team) =>
-                team.name !== match.homeTeam.name &&
-                team.name !== match.awayTeam.name,
-            );
-          }
-        }
-        return acc;
-      },
-      {} as Record<
-        string,
-        {
-          round: string;
-          matches: Sofascore_Event[];
-          byes?: { name: string; img: string }[];
-          roundSlug?: string;
-        }
-      >,
-    ),
-  );
-
-  const fixture = tempRounds.map((roundData) => {
-    return {
-      matches: roundData.matches.map((match) =>
-        matchesMapper(match, roundData.round),
-      ),
-      roundLabel: roundData.round,
-      byes: roundData.byes,
-      roundSlug: roundData.roundSlug,
-    } as FixtureRound;
-  });
-
-  mergeExtraMatches(fixture, extraMatches);
-  return fixture;
-}
-
-function mapSportsDBEventsToFixtureRounds(
-  sport: SPORT,
-  leagueConfig: LeagueSeasonConfig | LeagueSeasonConfig[],
-  matches: SportsDB_Event[],
-  matchesMapper: (match: SportsDB_Event, roundLabel: string) => MatchSummary,
-  extraMatches?: MatchSummary[],
-) {
-  const isMultiLeague = Array.isArray(leagueConfig);
-  const displayType: DISPLAY_TYPES = isMultiLeague
-    ? DISPLAY_TYPES.LEAGUE
-    : (leagueConfig.display ?? DISPLAY_TYPES.ROUND);
-  const byes = isMultiLeague ? undefined : leagueConfig.byes;
-  const showByes = byes !== undefined;
-
-  // Create rounds object { round: string; matches: SportsDB_Event[]; byes: { name: string; img: string }[] }
-  const tempRounds = Object.values(
-    matches.reduce(
-      (acc, match) => {
-        let round = "";
-        switch (displayType) {
-          case DISPLAY_TYPES.ROUND:
-            round = `Round ${match.intRound ?? 0}`;
-            break;
-          case DISPLAY_TYPES.DATE:
-            const startDate = new Date(match.strTimestamp + "Z");
-
-            round = format(startDate, "eee d MMM");
-            break;
-          case DISPLAY_TYPES.LEAGUE:
-            round = match.strLeague;
-            break;
+        if (!acc[roundLabel]) {
+          acc[roundLabel] = { roundLabel, matches: [], byes: byes };
         }
 
-        if (round !== undefined) {
-          if (!acc[round]) {
-            acc[round] = showByes
-              ? { round, matches: [], byes: byes }
-              : { round, matches: [] };
-          }
-
-          acc[round].matches.push(match);
-          acc[round].roundSlug = sport
-            ? `${sport}/${match.idLeague}/${match.strSeason}`
+        acc[roundLabel].matches.push(match);
+        acc[roundLabel].roundSlug =
+          displayType === DISPLAY_TYPES.LEAGUE
+            ? `${match.sport}/${match.tournamentId}/${match.seasonId}`
             : undefined;
-          // if (showByes) {
-          //   acc[round].byes = acc[round]?.byes?.filter(
-          //     (team) =>
-          //       team.name !== match.homeTeam.name &&
-          //       team.name !== match.awayTeam.name,
-          //   );
-          // }
+        if (showByes) {
+          acc[roundLabel].byes = acc[roundLabel]?.byes?.filter(
+            (team) =>
+              shortenTeamNames(team.name ?? "") !== match.homeDetails.name &&
+              shortenTeamNames(team.name ?? "") !== match.awayDetails.name,
+          );
         }
+
         return acc;
       },
-      {} as Record<
-        string,
-        {
-          round: string;
-          matches: SportsDB_Event[];
-          byes?: { name: string; img: string }[];
-          roundSlug?: string;
-        }
-      >,
+      {} as Record<string, FixtureRound>,
     ),
   );
-
-  const fixture = tempRounds.map((roundData) => {
-    return {
-      matches: roundData.matches.map((match) =>
-        matchesMapper(match, roundData.round),
-      ),
-      roundLabel: roundData.round,
-      byes: roundData.byes,
-      roundSlug: roundData.roundSlug,
-    } as FixtureRound;
-  });
-
-  mergeExtraMatches(fixture, extraMatches);
-  return fixture;
-}
-
-function mergeExtraMatches(
-  fixture: FixtureRound[],
-  extraMatches?: MatchSummary[],
-) {
-  if (!extraMatches || extraMatches.length === 0) return;
-
-  const existingIds = new Set(
-    fixture.flatMap((r) => r.matches.map((m) => m.id)),
-  );
-  const newMatches = extraMatches.filter((m) => !existingIds.has(m.id));
-
-  for (const match of newMatches) {
-    const label = match.roundLabel ?? "";
-    const existing = fixture.find((r) => r.roundLabel === label);
-    if (existing) {
-      existing.matches.push(match);
-    } else {
-      fixture.push({ roundLabel: label, matches: [match] });
-    }
-  }
-
-  // Sort matches within each round by startDate
-  for (const round of fixture) {
-    round.matches.sort(
-      (a, b) =>
-        new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-    );
-  }
-
-  // Sort rounds by their earliest match startDate
-  fixture.sort((a, b) => {
-    const aTime = Math.min(
-      ...a.matches.map((m) => new Date(m.startDate).getTime()),
-    );
-    const bTime = Math.min(
-      ...b.matches.map((m) => new Date(m.startDate).getTime()),
-    );
-    return aTime - bTime;
-  });
 }
 
 export function getCurrentRound(
