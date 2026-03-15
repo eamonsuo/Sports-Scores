@@ -289,7 +289,7 @@ function mapSofascoreEventsToFixtureRounds(
     } as FixtureRound;
   });
 
-  mergeExtraMatches(fixture, extraMatches);
+  mergeExtraMatches(fixture, extraMatches, byes);
   return fixture;
 }
 
@@ -377,6 +377,7 @@ function mapSportsDBEventsToFixtureRounds(
 function mergeExtraMatches(
   fixture: FixtureRound[],
   extraMatches?: MatchSummary[],
+  teamForByes?: { name: string; img: string }[],
 ) {
   if (!extraMatches || extraMatches.length === 0) return;
 
@@ -413,6 +414,18 @@ function mergeExtraMatches(
     );
     return aTime - bTime;
   });
+
+  // Recompute byes: teams from teamForByes not playing in the round
+  if (teamForByes && teamForByes.length > 0) {
+    for (const round of fixture) {
+      const playingTeams = new Set(
+        round.matches.flatMap((m) => [m.homeDetails.name, m.awayDetails.name]),
+      );
+      round.byes = teamForByes.filter(
+        (team) => !playingTeams.has(shortenTeamNames(team.name)),
+      );
+    }
+  }
 }
 
 export function getCurrentRound(

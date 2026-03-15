@@ -1,14 +1,10 @@
 import NavButtonGroup from "@/components/misc-ui/NavButtonGroup";
-import { getGlobalApiQuota } from "@/lib/apiCounter";
-import { SPORT } from "@/types/misc";
 
 export default async function SportsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  var quota = getGlobalApiQuota(SPORT.ICE_HOCKEY);
-
   return (
     <>
       <NavButtonGroup
