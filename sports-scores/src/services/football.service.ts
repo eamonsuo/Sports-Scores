@@ -28,7 +28,7 @@ import {
 import { FOOTBALL_LEAGUES } from "@/lib/constants";
 import {
   getCurrentRound,
-  mapFixtureRound,
+  mapFixtureRounds,
   mapMatchSummary,
 } from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
@@ -64,18 +64,26 @@ export async function footballMatches(tournamentId: number, seasonId: number) {
     return null;
   }
 
-  const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
+  const allMatches = (lastMatches?.events ?? [])
+    .concat(nextMatches?.events ?? [])
+    .map((event) =>
+      mapFootballMatch(
+        event,
+        event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
+      ),
+    )
+    .sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+    );
 
   const leagueConfig = FOOTBALL_LEAGUES.find(
     (l) => Number(l.slug) === tournamentId,
   );
 
-  const fixture = mapFixtureRound(
-    API_EVENT_TYPES.SOFASCORE,
-    SPORT.FOOTBALL,
+  const fixture = mapFixtureRounds(
     leagueConfig ?? { name: "", slug: "", seasons: [] },
-    matches,
-    mapFootballMatch,
+    allMatches,
   );
 
   return {
@@ -277,13 +285,14 @@ export async function footballMatchesByDate(date: Date) {
 
   if (!matches.events || matches.events.length === 0) return null;
 
-  const fixture = mapFixtureRound(
-    API_EVENT_TYPES.SOFASCORE,
-    SPORT.FOOTBALL,
-    FOOTBALL_LEAGUES,
-    matches.events,
-    mapFootballMatch,
+  const allMatches = matches.events.map((event) =>
+    mapFootballMatch(
+      event,
+      event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
+    ),
   );
+
+  const fixture = mapFixtureRounds(FOOTBALL_LEAGUES, allMatches);
 
   return {
     fixtures: fixture,

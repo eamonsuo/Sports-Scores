@@ -18,7 +18,7 @@ import {
 import { RUGBY_LEAGUE_LEAGUES } from "@/lib/constants";
 import {
   getCurrentRound,
-  mapFixtureRound,
+  mapFixtureRounds,
   mapMatchSummary,
 } from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
@@ -62,19 +62,31 @@ export async function rugbyLeagueMatches(
     return null;
   }
 
-  const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
+  const apiMatches = (lastMatches?.events ?? [])
+    .concat(nextMatches?.events ?? [])
+    .map((event) =>
+      mapRugbyLeagueMatch(
+        event,
+        event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
+      ),
+    );
+
+  // Merge API and dataverse matches, deduplicating by id (API takes priority)
+  const apiIds = new Set(apiMatches.map((m) => m.id));
+  const allMatches = apiMatches
+    .concat((dataverseMatches ?? []).filter((m) => !apiIds.has(m.id)))
+    .sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+    );
 
   const leagueConfig = RUGBY_LEAGUE_LEAGUES.find(
     (l) => Number(l.slug) === tournamentId,
   );
 
-  const fixture = mapFixtureRound(
-    API_EVENT_TYPES.SOFASCORE,
-    SPORT.RUGBY_LEAGUE,
+  const fixture = mapFixtureRounds(
     leagueConfig ?? { name: "", slug: "", seasons: [] },
-    matches,
-    mapRugbyLeagueMatch,
-    dataverseMatches ?? undefined,
+    allMatches,
   );
 
   return {
@@ -209,13 +221,14 @@ export async function rugbyLeagueMatchesByDate(date: Date) {
 
   if (!matches.events || matches.events.length === 0) return null;
 
-  const fixture = mapFixtureRound(
-    API_EVENT_TYPES.SOFASCORE,
-    SPORT.RUGBY_LEAGUE,
-    RUGBY_LEAGUE_LEAGUES,
-    matches.events,
-    mapRugbyLeagueMatch,
+  const allMatches = matches.events.map((event) =>
+    mapRugbyLeagueMatch(
+      event,
+      event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
+    ),
   );
+
+  const fixture = mapFixtureRounds(RUGBY_LEAGUE_LEAGUES, allMatches);
 
   return {
     fixtures: fixture,
