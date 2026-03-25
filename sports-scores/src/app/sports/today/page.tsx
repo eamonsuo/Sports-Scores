@@ -8,6 +8,7 @@ import { basketballMatchesByDate } from "@/services/basketball.service";
 import { cricketMatchesByDate } from "@/services/cricket.service";
 import { footballMatchesByDate } from "@/services/football.service";
 import { golfTournamentsByDate } from "@/services/golf.service";
+import { iceHockeyMatchesByDate } from "@/services/ice-hockey.service";
 import { motorsportCategoriesByDate } from "@/services/motorsport.service";
 import { netballMatchesByDate } from "@/services/netball.service";
 import { rugbyLeagueMatchesByDate } from "@/services/rugby-league.service";
@@ -28,6 +29,7 @@ export default async function Page() {
     americanFootballToday,
     rugbyLeagueToday,
     aussieRulesToday,
+    iceHockeyToday,
     golfToday,
     motorsportToday,
     rugbyUnionToday,
@@ -44,6 +46,7 @@ export default async function Page() {
     americanFootballMatchesByDate(curDate),
     rugbyLeagueMatchesByDate(curDate),
     aussieRulesCurrentMatches(curDate),
+    iceHockeyMatchesByDate(curDate),
     golfTournamentsByDate(curDate),
     motorsportCategoriesByDate(curDate),
     rugbyUnionMatchesByDate(curDate),
@@ -81,6 +84,7 @@ export default async function Page() {
     .concat(footballToday?.fixtures ?? [])
     .concat(basketballToday?.fixtures ?? [])
     .concat(baseballToday?.fixtures ?? [])
+    .concat(iceHockeyToday?.fixtures ?? [])
     .concat(tennisToday?.fixtures ?? [])
     .concat(rugbyUnionToday?.fixtures ?? [])
     .concat(netballToday?.fixtures ?? []);

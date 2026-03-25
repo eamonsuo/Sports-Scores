@@ -32,12 +32,7 @@ const footerLinks: {
     img: "/footer/calendar.png",
     altText: "Calendar",
   },
-  {
-    sport: SPORT.OLYMPICS,
-    link: `/sports/${SPORT.OLYMPICS}`,
-    img: "/olympic-rings.svg",
-    altText: "Olympics",
-  },
+
   {
     sport: SPORT.CRICKET,
     link: `/sports/${SPORT.CRICKET}/today`,
@@ -57,12 +52,6 @@ const footerLinks: {
     altText: "AUSSIE RULES",
   },
   {
-    sport: SPORT.AMERICAN_FOOTBALL,
-    link: `/sports/${SPORT.AMERICAN_FOOTBALL}/${AMERICAN_FOOTBALL_LEAGUES[0].slug}/${AMERICAN_FOOTBALL_LEAGUES[0].seasons[0].slug}/matches#current-date`,
-    img: "/footer/american-football.svg",
-    altText: "AMERICAN FOOTBALL",
-  },
-  {
     sport: SPORT.MOTORSPORT,
     link: `/sports/${SPORT.MOTORSPORT}/${MOTORSPORT_CATEGORIES[0].slug}/${MOTORSPORT_CATEGORIES[0].seasons[0].slug}/races`,
     img: "/footer/f1-helmet.svg",
@@ -75,23 +64,18 @@ const footerLinks: {
     altText: "Golf",
   },
   {
-    sport: SPORT.FOOTBALL,
-    link: `/sports/${SPORT.FOOTBALL}/today`,
-    img: "/footer/football.svg",
-    altText: "Football",
-  },
-  {
-    sport: SPORT.BASEBALL,
-    link: `/sports/${SPORT.BASEBALL}/today`,
-    img: "/footer/baseball.svg",
-    altText: "Baseball",
-  },
-  {
     sport: SPORT.BASKETBALL,
     link: `/sports/${SPORT.BASKETBALL}/today`,
     img: "/footer/basketball.svg",
     altText: "Basketball",
   },
+  {
+    sport: SPORT.FOOTBALL,
+    link: `/sports/${SPORT.FOOTBALL}/today`,
+    img: "/footer/football.svg",
+    altText: "Football",
+  },
+
   {
     sport: SPORT.TENNIS,
     link: `/sports/${SPORT.TENNIS}/today`,
@@ -105,16 +89,22 @@ const footerLinks: {
     altText: "Netball",
   },
   {
+    sport: SPORT.RUGBY_UNION,
+    link: `/sports/${SPORT.RUGBY_UNION}/today`,
+    img: "/footer/union.png",
+    altText: "Rugby Union",
+  },
+  {
     sport: SPORT.ICE_HOCKEY,
     link: `/sports/${SPORT.ICE_HOCKEY}/today`,
     img: "/footer/hockey-puck.svg",
     altText: "Hockey",
   },
   {
-    sport: SPORT.RUGBY_UNION,
-    link: `/sports/${SPORT.RUGBY_UNION}/today`,
-    img: "/footer/union.png",
-    altText: "Rugby Union",
+    sport: SPORT.BASEBALL,
+    link: `/sports/${SPORT.BASEBALL}/today`,
+    img: "/footer/baseball.svg",
+    altText: "Baseball",
   },
   {
     sport: SPORT.DARTS,
@@ -135,6 +125,19 @@ const footerLinks: {
     link: `https://www.flashscore.com.au/cycling/`,
     img: "/footer/bike.svg",
     altText: "Cycling",
+  },
+  {
+    sport: SPORT.AMERICAN_FOOTBALL,
+    link: `/sports/${SPORT.AMERICAN_FOOTBALL}/${AMERICAN_FOOTBALL_LEAGUES[0].slug}/${AMERICAN_FOOTBALL_LEAGUES[0].seasons[0].slug}/matches#current-date`,
+    img: "/footer/american-football.svg",
+    altText: "AMERICAN FOOTBALL",
+  },
+
+  {
+    sport: SPORT.OLYMPICS,
+    link: `/sports/${SPORT.OLYMPICS}`,
+    img: "/olympic-rings.svg",
+    altText: "Olympics",
   },
 ];
 
