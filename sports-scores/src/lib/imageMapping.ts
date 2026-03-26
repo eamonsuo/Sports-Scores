@@ -1124,6 +1124,7 @@ export function resolveSportImage(teamName: string) {
     // Golf Players - Other European
     case "Ludvig Åberg":
     case "Henrik Stenson":
+    case "Alex Noren":
       return getCountryImageUrl(CountryFlagCode.Sweden);
     case "Viktor Hovland":
       return getCountryImageUrl(CountryFlagCode.Norway);
@@ -1216,21 +1217,31 @@ export function resolveSportImage(teamName: string) {
 
     // Golf Tournaments - LIV
     case "Riyadh":
+    case "LIV Golf Riyadh":
       return getCountryImageUrl(CountryFlagCode.SaudiArabia);
     case "Adelaide":
+    case "LIV Golf Adelaide":
       return getCountryImageUrl(CountryFlagCode.Australia);
     case "Hong Kong":
+    case "LIV Golf Hong Kong":
       return getCountryImageUrl(CountryFlagCode.HongKong);
     case "Singapore":
+    case "LIV Golf Singapore":
       return getCountryImageUrl(CountryFlagCode.Singapore);
     case "Mexico City":
+    case "LIV Golf Mexico City":
       return getCountryImageUrl(CountryFlagCode.Mexico);
     case "Korea":
+    case "LIV Golf Korea":
       return getCountryImageUrl(CountryFlagCode.KoreaSouth);
     case "Andalucía":
+    case "LIV Golf Andalucia":
       return getCountryImageUrl(CountryFlagCode.Spain);
     case "United Kingdom":
+    case "LIV Golf UK":
       return getCountryImageUrl(CountryFlagCode.UnitedKingdom);
+    case "LIV Golf South Africa":
+      return getCountryImageUrl(CountryFlagCode.SouthAfrica);
 
     // F1 - Grand Prix
     case "Australian Grand Prix":

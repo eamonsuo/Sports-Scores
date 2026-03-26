@@ -23,98 +23,77 @@ import {
 //   }
 // }
 
-export async function fetchF1Events(season: number) {
-  const rawEvents = await fetch(`${process.env.F1_BASEURL}/f1/${season}/races`);
+async function fetchJolpicaApi(endpoint: string) {
+  const res = await fetch(process.env.F1_BASEURL + endpoint);
 
-  if (!rawEvents.ok) {
+  if (!res.ok) {
     return null;
   }
 
-  const jsonResponse = (await rawEvents.json()) as F1_Jolpica_Races_Response;
+  return res.json();
+}
 
-  return jsonResponse.MRData.RaceTable.Races;
+async function fetchOpenF1Api(endpoint: string) {
+  const res = await fetch(process.env.OPENF1_BASEURL + endpoint);
+
+  if (!res.ok) {
+    return null;
+  }
+
+  return res.json();
+}
+
+export async function fetchF1Events(season: number) {
+  const data = (await fetchJolpicaApi(
+    `/f1/${season}/races`,
+  )) as F1_Jolpica_Races_Response | null;
+  return data?.MRData.RaceTable.Races ?? null;
 }
 
 export async function fetchF1RaceResult(season: number, round: number) {
-  const rawSession = await fetch(
-    `${process.env.F1_BASEURL}/f1/${season}/${round}/results/`,
-  );
-
-  if (!rawSession.ok) {
-    return null;
-  }
-
-  const jsonResponse =
-    (await rawSession.json()) as F1_Jolpica_RaceResults_Response;
-
-  return jsonResponse.MRData.RaceTable.Races.length > 0
-    ? jsonResponse.MRData.RaceTable.Races
+  const data = (await fetchJolpicaApi(
+    `/f1/${season}/${round}/results/`,
+  )) as F1_Jolpica_RaceResults_Response | null;
+  if (!data) return null;
+  return data.MRData.RaceTable.Races.length > 0
+    ? data.MRData.RaceTable.Races
     : null;
 }
 
 export async function fetchF1QualifyingResult(season: number, round: number) {
-  const rawSession = await fetch(
-    `${process.env.F1_BASEURL}/f1/${season}/${round}/qualifying/`,
-  );
-
-  if (!rawSession.ok) {
-    return null;
-  }
-
-  const jsonResponse =
-    (await rawSession.json()) as F1_Jolpica_QualifyingResults_Response;
-
-  return jsonResponse.MRData.RaceTable.Races.length > 0
-    ? jsonResponse.MRData.RaceTable.Races
+  const data = (await fetchJolpicaApi(
+    `/f1/${season}/${round}/qualifying/`,
+  )) as F1_Jolpica_QualifyingResults_Response | null;
+  if (!data) return null;
+  return data.MRData.RaceTable.Races.length > 0
+    ? data.MRData.RaceTable.Races
     : null;
 }
 
 export async function fetchF1SprintResult(season: number, round: number) {
-  const rawSession = await fetch(
-    `${process.env.F1_BASEURL}/f1/${season}/${round}/sprint/`,
-  );
-
-  if (!rawSession.ok) {
-    return null;
-  }
-
-  const jsonResponse =
-    (await rawSession.json()) as F1_Jolpica_SprintResults_Response;
-
-  return jsonResponse.MRData.RaceTable.Races.length > 0
-    ? jsonResponse.MRData.RaceTable.Races
+  const data = (await fetchJolpicaApi(
+    `/f1/${season}/${round}/sprint/`,
+  )) as F1_Jolpica_SprintResults_Response | null;
+  if (!data) return null;
+  return data.MRData.RaceTable.Races.length > 0
+    ? data.MRData.RaceTable.Races
     : null;
 }
 
 export async function fetchF1DriverStandings(season: number) {
-  const rawStandings = await fetch(
-    `${process.env.F1_BASEURL}/f1/${season}/driverstandings`,
-  );
-
-  if (!rawStandings.ok) {
-    return null;
-  }
-
-  const jsonResponse =
-    (await rawStandings.json()) as F1_Jolpica_DriverStandings_Response;
-
-  return jsonResponse.MRData.StandingsTable.StandingsLists[0].DriverStandings;
+  const data = (await fetchJolpicaApi(
+    `/f1/${season}/driverstandings`,
+  )) as F1_Jolpica_DriverStandings_Response | null;
+  return data?.MRData.StandingsTable.StandingsLists[0].DriverStandings ?? null;
 }
 
 export async function fetchF1ConstructorStandings(season: number) {
-  const rawStandings = await fetch(
-    `${process.env.F1_BASEURL}/f1/${season}/constructorstandings`,
+  const data = (await fetchJolpicaApi(
+    `/f1/${season}/constructorstandings`,
+  )) as F1_Jolpica_ConstructorStandings_Response | null;
+  return (
+    data?.MRData.StandingsTable.StandingsLists[0].ConstructorStandings ?? null
   );
-
-  if (!rawStandings.ok) {
-    return null;
-  }
-
-  const jsonResponse =
-    (await rawStandings.json()) as F1_Jolpica_ConstructorStandings_Response;
-
-  return jsonResponse.MRData.StandingsTable.StandingsLists[0]
-    .ConstructorStandings;
 }
 
 export async function fetchF1Positions(
@@ -124,54 +103,35 @@ export async function fetchF1Positions(
   date?: string, //UTC ISO format: YYYY-MM-DDTHH:mm:ssZ
   meetingId?: number,
 ) {
-  let searchUrl = `${process.env.OPENF1_BASEURL}/position?`;
+  let endpoint = `/position?`;
+  if (sessionId) endpoint += `session_key=${sessionId}&`;
+  if (driverId) endpoint += `driver_number=${driverId}&`;
+  if (position) endpoint += `position=${position}&`;
+  if (date) endpoint += `date=${date}&`;
+  if (meetingId) endpoint += `meeting_key=${meetingId}&`;
 
-  if (sessionId) searchUrl += `session_key=${sessionId}&`;
-  if (driverId) searchUrl += `driver_number=${driverId}&`;
-  if (position) searchUrl += `position=${position}&`;
-  if (date) searchUrl += `date=${date}&`;
-  if (meetingId) searchUrl += `meeting_key=${meetingId}&`;
-
-  const rawPositions = await fetch(searchUrl);
-
-  if (!rawPositions.ok) {
-    return null;
-  }
-
-  return (await rawPositions.json()) as F1_OpenF1_Positions_Response[];
+  return (await fetchOpenF1Api(endpoint)) as
+    | F1_OpenF1_Positions_Response[]
+    | null;
 }
 
 export async function fetchF1DriverDetails(
   sessionId?: number,
   driverId?: number,
 ) {
-  let searchUrl = `${process.env.OPENF1_BASEURL}/drivers?`;
+  let endpoint = `/drivers?`;
+  if (sessionId) endpoint += `session_key=${sessionId}&`;
+  if (driverId) endpoint += `driver_number=${driverId}&`;
 
-  if (sessionId) searchUrl += `session_key=${sessionId}&`;
-  if (driverId) searchUrl += `driver_number=${driverId}&`;
-
-  const rawDrivers = await fetch(searchUrl);
-
-  if (!rawDrivers.ok) {
-    return null;
-  }
-
-  return (await rawDrivers.json()) as F1_OpenF1_Drivers_Response[];
+  return (await fetchOpenF1Api(endpoint)) as
+    | F1_OpenF1_Drivers_Response[]
+    | null;
 }
 
 export async function fetchF1Meetings(year: number) {
-  let searchUrl = `${process.env.OPENF1_BASEURL}/meetings?year=${year}&`;
-
-  // if (session) searchUrl += `session_key=${session}&`;
-  // if (driver) searchUrl += `driver_number=${driver}&`;
-
-  const rawMeetings = await fetch(searchUrl);
-
-  if (!rawMeetings.ok) {
-    return null;
-  }
-
-  return (await rawMeetings.json()) as F1_OpenF1_Meetings_Response[];
+  return (await fetchOpenF1Api(`/meetings?year=${year}&`)) as
+    | F1_OpenF1_Meetings_Response[]
+    | null;
 }
 
 export async function fetchF1Sessions(
@@ -179,16 +139,11 @@ export async function fetchF1Sessions(
   meetingId?: number,
   sessionName?: string,
 ) {
-  let searchUrl = `${process.env.OPENF1_BASEURL}/sessions?year=${year}&`;
+  let endpoint = `/sessions?year=${year}&`;
+  if (meetingId) endpoint += `meeting_key=${meetingId}&`;
+  if (sessionName) endpoint += `session_name=${sessionName}&`;
 
-  if (meetingId) searchUrl += `meeting_key=${meetingId}&`;
-  if (sessionName) searchUrl += `session_name=${sessionName}&`;
-
-  const rawSessions = await fetch(searchUrl);
-
-  if (!rawSessions.ok) {
-    return null;
-  }
-
-  return (await rawSessions.json()) as F1_OpenF1_Sessions_Response[];
+  return (await fetchOpenF1Api(endpoint)) as
+    | F1_OpenF1_Sessions_Response[]
+    | null;
 }

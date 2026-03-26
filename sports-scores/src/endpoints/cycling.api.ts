@@ -1,9 +1,6 @@
 import { updateGlobalApiQuota } from "@/lib/apiCounter";
 import { SPORT } from "@/types/misc";
 
-const reqHeaders = new Headers();
-reqHeaders.append("x-rapidapi-key", process.env.RapidAPIKey ?? "");
-
 function updateQuota(response: Response) {
   const limit = response.headers.get("x-ratelimit-requests-limit");
   const remaining = response.headers.get("x-ratelimit-requests-remaining");
@@ -16,56 +13,37 @@ function updateQuota(response: Response) {
   }
 }
 
-export async function fetchCyclingSeasonRaces(seasonId: number) {
-  const rawRaces = await fetch(
-    `${process.env.CYCLING_BASEURL}/cycling/stage/${seasonId}/extended`,
-    {
-      headers: reqHeaders,
+async function fetchCyclingApi(endpoint: string) {
+  const url = process.env.CYCLING_BASEURL + endpoint;
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Key": process.env.RapidAPIKey ?? "",
     },
-  );
+  });
 
-  if (!rawRaces.ok || rawRaces.status === 204) {
+  if (!res.ok || res.status === 204) {
     return null;
   }
 
-  updateQuota(rawRaces);
+  updateQuota(res);
 
-  return (await rawRaces.json()) as any;
+  return res.json();
+}
+
+export async function fetchCyclingSeasonRaces(seasonId: number) {
+  return (await fetchCyclingApi(`/cycling/stage/${seasonId}/extended`)) as any;
 }
 
 export async function fetchCyclingRaceStages(stageId: number) {
-  const rawStages = await fetch(
-    `${process.env.CYCLING_BASEURL}/cycling/stage/${stageId}/substages`,
-    {
-      headers: reqHeaders,
-    },
-  );
-
-  if (!rawStages.ok || rawStages.status === 204) {
-    return null;
-  }
-
-  updateQuota(rawStages);
-
-  return (await rawStages.json()) as any;
+  return (await fetchCyclingApi(`/cycling/stage/${stageId}/substages`)) as any;
 }
 
 export async function fetchCyclingRiderSeasonRaces(
   riderId: number,
   seasonId: number,
 ) {
-  const rawRaces = await fetch(
-    `${process.env.CYCLING_BASEURL}/cycling/team/${riderId}/stage/season/${seasonId}/races`,
-    {
-      headers: reqHeaders,
-    },
-  );
-
-  if (!rawRaces.ok || rawRaces.status === 204) {
-    return null;
-  }
-
-  updateQuota(rawRaces);
-
-  return (await rawRaces.json()) as any;
+  return (await fetchCyclingApi(
+    `/cycling/team/${riderId}/stage/season/${seasonId}/races`,
+  )) as any;
 }

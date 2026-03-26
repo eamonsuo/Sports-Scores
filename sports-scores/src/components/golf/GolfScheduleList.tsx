@@ -43,7 +43,7 @@ export default function GolfScheduleList({
           retryCount++;
         }, 100);
       }
-    }, 200);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);

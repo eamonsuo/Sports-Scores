@@ -26,9 +26,6 @@ const MY_TEAMS_IDs = [
   86295, // QLD men
 ];
 
-const reqHeaders = new Headers();
-reqHeaders.append("x-rapidapi-key", `${process.env.RapidAPIKey}`);
-
 function updateQuota(response: Response) {
   const limit = response.headers.get("x-ratelimit-requests-limit");
   const remaining = response.headers.get("x-ratelimit-requests-remaining");
@@ -41,23 +38,31 @@ function updateQuota(response: Response) {
   }
 }
 
+async function fetchCricketApi(endpoint: string) {
+  const url = process.env.CRICKET_BASEURL + endpoint;
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Key": process.env.RapidAPIKey ?? "",
+    },
+  });
+
+  if (!res.ok) {
+    return null;
+  }
+
+  updateQuota(res);
+
+  return res.json();
+}
+
 export async function fetchCricketMyTeams() {
   let matches: Cricket_LiveScoreAPI_TeamDetails[] = [];
 
-  for (let i = 0; i < MY_TEAMS_IDs.length; i++) {
-    const rawFixtures = await fetch(
-      `${process.env.CRICKET_BASEURL}/teams/detail?ID=${MY_TEAMS_IDs[i]}`,
-      {
-        headers: reqHeaders,
-      },
-    );
-
-    if (rawFixtures.ok) {
-      matches.push(
-        (await rawFixtures.json()) as Cricket_LiveScoreAPI_TeamDetails,
-      );
-
-      updateQuota(rawFixtures);
+  for (const teamId of MY_TEAMS_IDs) {
+    const result = await fetchCricketApi(`/teams/detail?ID=${teamId}`);
+    if (result) {
+      matches.push(result as Cricket_LiveScoreAPI_TeamDetails);
     }
   }
 
@@ -69,41 +74,25 @@ export async function fetchCricketMyTeams() {
 }
 
 export async function fetchCricketAllSeries() {
-  const rawFixtures = await fetch(
-    `${process.env.CRICKET_BASEURL}/leagues/v2/list-popular?Category=cricket`,
-    {
-      headers: reqHeaders,
-    },
-  );
-
-  if (!rawFixtures.ok) {
-    return null;
-  }
-
-  updateQuota(rawFixtures);
-
-  return (await rawFixtures.json()) as Cricket_LiveScoreAPI_LeaguesListPopular;
+  return (await fetchCricketApi(
+    `/leagues/v2/list-popular?Category=cricket`,
+  )) as Cricket_LiveScoreAPI_LeaguesListPopular;
 }
 
 export async function fetchCricketMatchesByDateLiveScore(date: Date) {
-  const rawFixtures = await fetch(
-    `${process.env.CRICKET_BASEURL}/matches/v2/list-by-date?Category=cricket&Date=${format(date, "yyyyMMdd")}&Timezone=10`,
-    {
-      headers: reqHeaders,
-    },
-  );
-  if (!rawFixtures.ok) {
-    return null;
-  }
-  updateQuota(rawFixtures);
-  return (await rawFixtures.json()) as Cricket_LiveScoreAPI_MatchesListByDate;
+  return (await fetchCricketApi(
+    `/matches/v2/list-by-date?Category=cricket&Date=${format(date, "yyyyMMdd")}&Timezone=10`,
+  )) as Cricket_LiveScoreAPI_MatchesListByDate;
 }
 
 export async function fetchCricketMatchesByDateSofascore(date: Date) {
   const rawFixtures = await fetch(
     `https://cricketapi21.p.rapidapi.com/api/cricket/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
     {
-      headers: reqHeaders,
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Key": process.env.RapidAPIKey ?? "",
+      },
     },
   );
   if (!rawFixtures.ok) {
@@ -114,54 +103,21 @@ export async function fetchCricketMatchesByDateSofascore(date: Date) {
 }
 
 export async function fetchCricketMatchInnings(id: number) {
-  const rawInnings = await fetch(
-    `${process.env.CRICKET_BASEURL}/matches/v2/get-innings?Category=cricket&Eid=${id}`,
-    {
-      headers: reqHeaders,
-    },
-  );
-
-  if (!rawInnings.ok) {
-    return null;
-  }
-
-  updateQuota(rawInnings);
-
-  return (await rawInnings.json()) as Cricket_LiveScoreAPI_MatchesGetInnings;
+  return (await fetchCricketApi(
+    `/matches/v2/get-innings?Category=cricket&Eid=${id}`,
+  )) as Cricket_LiveScoreAPI_MatchesGetInnings;
 }
 
 export async function fetchCricketMatchDetails(id: number) {
-  const rawMatch = await fetch(
-    `${process.env.CRICKET_BASEURL}/matches/v2/get-scoreboard?Category=cricket&Eid=${id}`,
-    {
-      headers: reqHeaders,
-    },
-  );
-
-  if (!rawMatch.ok) {
-    return null;
-  }
-
-  updateQuota(rawMatch);
-
-  return (await rawMatch.json()) as Cricket_LiveScoreAPI_MatchesGetScoreBoard;
+  return (await fetchCricketApi(
+    `/matches/v2/get-scoreboard?Category=cricket&Eid=${id}`,
+  )) as Cricket_LiveScoreAPI_MatchesGetScoreBoard;
 }
 
 export async function fetchCricketSeriesMatches(ccd: string, scd: string) {
-  const rawFixtures = await fetch(
-    `${process.env.CRICKET_BASEURL}/matches/v2/list-by-league?Category=cricket&Ccd=${ccd}&Scd=${scd}`,
-    {
-      headers: reqHeaders,
-    },
-  );
-
-  if (!rawFixtures.ok) {
-    return null;
-  }
-
-  updateQuota(rawFixtures);
-
-  return (await rawFixtures.json()) as Cricket_LiveScoreAPI_MatchesListByLeague;
+  return (await fetchCricketApi(
+    `/matches/v2/list-by-league?Category=cricket&Ccd=${ccd}&Scd=${scd}`,
+  )) as Cricket_LiveScoreAPI_MatchesListByLeague;
 }
 
 export async function fetchCricketSeriesStandings(url: string) {}

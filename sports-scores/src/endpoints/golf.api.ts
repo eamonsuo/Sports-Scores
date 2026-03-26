@@ -6,9 +6,6 @@ import {
 } from "@/types/golf";
 import { SPORT } from "@/types/misc";
 
-const reqHeaders = new Headers();
-reqHeaders.append("x-rapidapi-key", process.env.RapidAPIKey ?? "");
-
 function updateQuota(response: Response) {
   const limit = response.headers.get("x-ratelimit-requests-limit");
   const remaining = response.headers.get("x-ratelimit-requests-remaining");
@@ -21,38 +18,35 @@ function updateQuota(response: Response) {
   }
 }
 
-export async function fetchGolfSchedule(orgId: 1 | 2, year: string) {
-  const rawTournaments = await fetch(
-    `${process.env.GOLF_BASEURL}/schedule?orgId=${orgId}&year=${year}`,
-    {
-      headers: reqHeaders,
+async function fetchGolfApi(endpoint: string) {
+  const url = process.env.GOLF_BASEURL + endpoint;
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "x-rapidapi-key": process.env.RapidAPIKey ?? "",
+      Accept: "application/json",
     },
-  );
+  });
 
-  if (!rawTournaments.ok) {
+  if (!res.ok) {
     return null;
   }
 
-  updateQuota(rawTournaments);
+  updateQuota(res);
 
-  return (await rawTournaments.json()) as Golf_SlashGolfAPI_Schedule;
+  return res.json();
+}
+
+export async function fetchGolfSchedule(orgId: 1 | 2, year: string) {
+  return (await fetchGolfApi(
+    `/schedule?orgId=${orgId}&year=${year}`,
+  )) as Golf_SlashGolfAPI_Schedule;
 }
 
 export async function fetchGolfRankings(statId: string, year: string) {
-  const rawRankings = await fetch(
-    `${process.env.GOLF_BASEURL}/stats?year=${year}&statId=${statId}`,
-    {
-      headers: reqHeaders,
-    },
-  );
-
-  if (!rawRankings.ok) {
-    return null;
-  }
-
-  updateQuota(rawRankings);
-
-  return (await rawRankings.json()) as Golf_SlashGolfAPI_Stats;
+  return (await fetchGolfApi(
+    `/stats?year=${year}&statId=${statId}`,
+  )) as Golf_SlashGolfAPI_Stats;
 }
 
 export async function fetchGolfLeaderboard(
@@ -61,18 +55,7 @@ export async function fetchGolfLeaderboard(
   year: string,
   roundId?: number,
 ) {
-  const rawLeaderboard = await fetch(
-    `${process.env.GOLF_BASEURL}/leaderboard?orgId=${orgId}&tournId=${tournId}&year=${year}${roundId != undefined ? `&roundId=${roundId}` : ""}`,
-    {
-      headers: reqHeaders,
-    },
-  );
-
-  if (!rawLeaderboard.ok) {
-    return null;
-  }
-
-  updateQuota(rawLeaderboard);
-
-  return (await rawLeaderboard.json()) as Golf_SlashGolfAPI_Leaderboard;
+  return (await fetchGolfApi(
+    `/leaderboard?orgId=${orgId}&tournId=${tournId}&year=${year}${roundId != undefined ? `&roundId=${roundId}` : ""}`,
+  )) as Golf_SlashGolfAPI_Leaderboard;
 }

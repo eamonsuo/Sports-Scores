@@ -48,9 +48,9 @@ export async function golfOWGRankings(year: string) {
         return {
           name: playerName,
           img: resolveSportImage(playerName),
-          position: item.rank.$numberInt.toString(),
-          totalPoints: item.avgPoints.$numberDouble.toString(),
-          pointsBehind: item.previousRank.$numberInt.toString(),
+          position: item.rank.toString(),
+          totalPoints: item.avgPoints.toString(),
+          pointsBehind: item.previousRank.toString(),
         };
       },
     ),
@@ -70,9 +70,9 @@ export async function golfFedExRankings(year: string) {
         return {
           name: playerName,
           img: resolveSportImage(playerName),
-          position: item.rank.$numberInt.toString(),
+          position: item.rank.toString(),
           totalPoints: item.totalPoints?.toString() ?? "",
-          pointsBehind: item.pointsBehind,
+          pointsBehind: item.pointsBehind?.toString() ?? "",
         };
       },
     ),
@@ -150,13 +150,11 @@ export function mapGolfSchedule(
   data: Golf_SlashGolfAPI_Schedule,
   tour: string,
 ) {
+  // console.log("Mapping golf schedule for tour:", tour, "with data:", data);
   return {
     schedule: data.schedule.map((item) => {
-      var startDate = new Date(0);
-      startDate.setUTCSeconds(item.date.start.$date.$numberLong / 1000);
-
-      var endDate = new Date(0);
-      endDate.setUTCSeconds(item.date.end.$date.$numberLong / 1000);
+      var startDate = new Date(item.date.start + "Z");
+      var endDate = new Date(item.date.end + "Z");
 
       const tournamentImage = resolveSportImage(item.name);
 
