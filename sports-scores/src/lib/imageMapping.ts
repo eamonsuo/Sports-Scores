@@ -338,6 +338,49 @@ export function resolveSportImage(teamName: string) {
     case "Perth Scorchers":
       return "https://static-files.cricket-australia.pulselive.com/flag/120/95@2x.png";
 
+    // IPL Teams
+    case "Chennai Super Kings":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/cricket/500/335974.png";
+    case "Delhi Capitals":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/cricket/500/335975.png";
+    case "Gujarat Titans":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/cricket/500/1298769.png";
+    case "Kolkata Knight Riders":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/cricket/500/335971.png";
+    case "Lucknow Super Giants":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/cricket/500/1298768.png";
+    case "Mumbai Indians":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/cricket/500/335978.png";
+    case "Punjab Kings":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/cricket/500/335973.png";
+    case "Rajasthan Royals":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/cricket/500/335977.png";
+    case "Royal Challengers Bengaluru":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/cricket/500/335970.png";
+    case "Sunrisers Hyderabad":
+      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/cricket/500/628333.png";
+
+    // The Hundred
+    case "Birmingham Phoenix":
+      return "https://r2.thesportsdb.com/images/media/team/badge/aihn2d1641785176.png";
+    case "London Spirit":
+      return "https://r2.thesportsdb.com/images/media/team/badge/3xjjir1692900192.png";
+    case "Manchester Super Giants":
+    case "Manchester Originals":
+      return "https://r2.thesportsdb.com/images/media/team/badge/0szv2n1641785166.png";
+    case "MI London":
+    case "Oval Invincibles":
+      return "https://r2.thesportsdb.com/images/media/team/badge/0y1wnl1645212994.png";
+    case "Southern Brave":
+      return "https://r2.thesportsdb.com/images/media/team/badge/whbl2x1692900272.png";
+    case "Sunrisers Leeds":
+    case "Northern Superchargers":
+      return "https://r2.thesportsdb.com/images/media/team/badge/utb0so1641785170.png";
+    case "Trent Rockets":
+      return "https://r2.thesportsdb.com/images/media/team/badge/9cp1ac1692900475.png";
+    case "Welsh Fire":
+      return "https://r2.thesportsdb.com/images/media/team/badge/49jl241645213505.png";
+
     // Football
     // A Leagues
     case "Brisbane Roar":
@@ -1124,6 +1167,7 @@ export function resolveSportImage(teamName: string) {
     // Golf Players - Other European
     case "Ludvig Åberg":
     case "Henrik Stenson":
+    case "Alex Noren":
       return getCountryImageUrl(CountryFlagCode.Sweden);
     case "Viktor Hovland":
       return getCountryImageUrl(CountryFlagCode.Norway);
@@ -1216,21 +1260,31 @@ export function resolveSportImage(teamName: string) {
 
     // Golf Tournaments - LIV
     case "Riyadh":
+    case "LIV Golf Riyadh":
       return getCountryImageUrl(CountryFlagCode.SaudiArabia);
     case "Adelaide":
+    case "LIV Golf Adelaide":
       return getCountryImageUrl(CountryFlagCode.Australia);
     case "Hong Kong":
+    case "LIV Golf Hong Kong":
       return getCountryImageUrl(CountryFlagCode.HongKong);
     case "Singapore":
+    case "LIV Golf Singapore":
       return getCountryImageUrl(CountryFlagCode.Singapore);
     case "Mexico City":
+    case "LIV Golf Mexico City":
       return getCountryImageUrl(CountryFlagCode.Mexico);
     case "Korea":
+    case "LIV Golf Korea":
       return getCountryImageUrl(CountryFlagCode.KoreaSouth);
     case "Andalucía":
+    case "LIV Golf Andalucia":
       return getCountryImageUrl(CountryFlagCode.Spain);
     case "United Kingdom":
+    case "LIV Golf UK":
       return getCountryImageUrl(CountryFlagCode.UnitedKingdom);
+    case "LIV Golf South Africa":
+      return getCountryImageUrl(CountryFlagCode.SouthAfrica);
 
     // F1 - Grand Prix
     case "Australian Grand Prix":

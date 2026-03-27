@@ -8,9 +8,6 @@ import {
   RugbyLeague_RugbyAPI2_MatchIncidents_Response,
 } from "@/types/rugby-league";
 
-const reqHeaders = new Headers();
-reqHeaders.append("x-rapidapi-key", process.env.RapidAPIKey ?? "");
-
 function updateQuota(response: Response) {
   const limit = response.headers.get("x-ratelimit-requests-limit");
   const remaining = response.headers.get("x-ratelimit-requests-remaining");
@@ -23,25 +20,32 @@ function updateQuota(response: Response) {
   }
 }
 
+async function fetchRugbyLeagueApi(endpoint: string) {
+  const url = process.env.NRL_BASEURL + endpoint;
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Key": process.env.RapidAPIKey ?? "",
+    },
+  });
+
+  if (!res.ok || res.status === 204) {
+    return null;
+  }
+
+  updateQuota(res);
+
+  return res.json();
+}
+
 export async function fetchRugbyLeagueLastMatches(
   tournamentId: number,
   seasonId: number,
   pageNumber: number = 0,
 ) {
-  const rawMatches = await fetch(
-    `${process.env.NRL_BASEURL}/rugby/tournament/${tournamentId}/season/${seasonId}/matches/last/${pageNumber}`,
-    {
-      headers: reqHeaders,
-    },
-  );
-
-  if (!rawMatches.ok || rawMatches.status === 204) {
-    return null;
-  }
-
-  updateQuota(rawMatches);
-
-  return (await rawMatches.json()) as RugbyLeague_RugbyAPI2_FixturePage_Response;
+  return (await fetchRugbyLeagueApi(
+    `/rugby/tournament/${tournamentId}/season/${seasonId}/matches/last/${pageNumber}`,
+  )) as RugbyLeague_RugbyAPI2_FixturePage_Response;
 }
 
 export async function fetchRugbyLeagueNextMatches(
@@ -49,89 +53,34 @@ export async function fetchRugbyLeagueNextMatches(
   seasonId: number,
   pageNumber: number = 0,
 ) {
-  const rawMatches = await fetch(
-    `${process.env.NRL_BASEURL}/rugby/tournament/${tournamentId}/season/${seasonId}/matches/next/${pageNumber}`,
-    {
-      headers: reqHeaders,
-    },
-  );
-
-  if (!rawMatches.ok || rawMatches.status === 204) {
-    return null;
-  }
-
-  updateQuota(rawMatches);
-
-  return (await rawMatches.json()) as RugbyLeague_RugbyAPI2_FixturePage_Response;
+  return (await fetchRugbyLeagueApi(
+    `/rugby/tournament/${tournamentId}/season/${seasonId}/matches/next/${pageNumber}`,
+  )) as RugbyLeague_RugbyAPI2_FixturePage_Response;
 }
 
 export async function fetchRugbyLeagueStandings(
   tournamentId: number,
   seasonId: number,
 ) {
-  const rawStandings = await fetch(
-    `${process.env.NRL_BASEURL}/rugby/tournament/${tournamentId}/season/${seasonId}/standings/total`,
-    {
-      headers: reqHeaders,
-    },
-  );
-
-  if (!rawStandings.ok || rawStandings.status === 204) {
-    return null;
-  }
-
-  updateQuota(rawStandings);
-
-  return (await rawStandings.json()) as RugbyLeague_RugbyAPI2_LeagueTotalStandings_Response;
+  return (await fetchRugbyLeagueApi(
+    `/rugby/tournament/${tournamentId}/season/${seasonId}/standings/total`,
+  )) as RugbyLeague_RugbyAPI2_LeagueTotalStandings_Response;
 }
 
 export async function fetchRugbyLeagueMatchDetails(matchId: number) {
-  const rawMatch = await fetch(
-    `${process.env.NRL_BASEURL}/rugby/match/${matchId}`,
-    {
-      headers: reqHeaders,
-    },
-  );
-
-  if (!rawMatch.ok || rawMatch.status === 204) {
-    return null;
-  }
-
-  updateQuota(rawMatch);
-
-  return (await rawMatch.json()) as RugbyLeague_RugbyAPI2_Match_Response;
+  return (await fetchRugbyLeagueApi(
+    `/rugby/match/${matchId}`,
+  )) as RugbyLeague_RugbyAPI2_Match_Response;
 }
 
 export async function fetchRugbyLeagueMatchIncidents(matchId: number) {
-  const rawMatch = await fetch(
-    `${process.env.NRL_BASEURL}/rugby/match/${matchId}/incidents`,
-    {
-      headers: reqHeaders,
-    },
-  );
-
-  if (!rawMatch.ok || rawMatch.status === 204) {
-    return null;
-  }
-
-  updateQuota(rawMatch);
-
-  return (await rawMatch.json()) as RugbyLeague_RugbyAPI2_MatchIncidents_Response;
+  return (await fetchRugbyLeagueApi(
+    `/rugby/match/${matchId}/incidents`,
+  )) as RugbyLeague_RugbyAPI2_MatchIncidents_Response;
 }
 
 export async function fetchRugbyLeagueMatchesByDate(date: Date) {
-  const rawFixtures = await fetch(
-    `${process.env.NRL_BASEURL}/rugby/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-    {
-      headers: reqHeaders,
-    },
-  );
-
-  if (!rawFixtures.ok || rawFixtures.status === 204) {
-    return null;
-  }
-
-  updateQuota(rawFixtures);
-
-  return (await rawFixtures.json()) as RugbyLeague_RugbyAPI2_CategorySchedules_Response;
+  return (await fetchRugbyLeagueApi(
+    `/rugby/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+  )) as RugbyLeague_RugbyAPI2_CategorySchedules_Response;
 }

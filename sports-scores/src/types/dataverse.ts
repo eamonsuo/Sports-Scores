@@ -34,6 +34,22 @@ export interface DataverseMatchSummary {
   ss_seasonid: string | null;
 }
 
+// ss_sporteventschedule table
+export interface DataverseSportEvent {
+  ss_sporteventscheduleid: string;
+  ss_name: string | null;
+  ss_sport: string | null;
+  ss_event_type: 100000000 | 100000001 | null; // 100000000=major, 100000001=regular-season
+  ss_start_date: string | null; // ISO date string
+  ss_end_date: string | null; // ISO date string
+  ss_date_display: string | null;
+  ss_image_url: string | null;
+  ss_link: string | null;
+  ss_location: string | null;
+  ss_tags: string | null; // JSON array
+  ss_notes: string | null;
+}
+
 // Standard Dataverse Contact entity
 export interface DataverseContact {
   contactid: string;

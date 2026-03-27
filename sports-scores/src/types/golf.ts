@@ -19,8 +19,8 @@ export interface SlashGolf_Tournament {
 }
 
 export interface SlashGolf_TournamentDate {
-  start: { $date: { $numberLong: number } };
-  end: { $date: { $numberLong: number } };
+  start: string;
+  end: string;
   weekNumber: string | number;
 }
 
@@ -38,7 +38,7 @@ export interface SlashGolf_PlayerRanking_FedExCup {
   firstName: string;
   fullName: string;
   playerId: string;
-  rank: { $numberInt: number };
+  rank: number;
   previousRank: number;
   events: number;
   totalPoints: number;
@@ -53,11 +53,11 @@ export interface SlashGolf_PlayerRanking_OWGR {
   firstName: string;
   fullName: string;
   playerId: string;
-  rank: { $numberInt: number };
-  previousRank: { $numberInt: number };
+  rank: number;
+  previousRank: number;
   events: number;
-  totalPoints: { $numberDouble: number };
-  avgPoints: { $numberDouble: number };
+  totalPoints: number;
+  avgPoints: number;
   pointsLost: number;
   pointsGained: number;
 }

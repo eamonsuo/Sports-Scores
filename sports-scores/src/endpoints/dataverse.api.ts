@@ -1,4 +1,8 @@
-import { DataverseMatchSummary, DataverseResponse } from "@/types/dataverse";
+import {
+  DataverseMatchSummary,
+  DataverseResponse,
+  DataverseSportEvent,
+} from "@/types/dataverse";
 
 const ENVIRONMENT_URL = process.env.DATAVERSE_ENVIRONMENT_URL ?? "";
 const TENANT_ID = process.env.DATAVERSE_TENANT_ID ?? "";
@@ -204,4 +208,16 @@ export async function updateDataverseMatchSummary(
     id,
     record as Record<string, unknown>,
   );
+}
+
+// --- SportEventSchedule table ---
+
+export async function fetchSportEvents(): Promise<
+  DataverseSportEvent[] | null
+> {
+  const result = (await fetchDataverseApi(
+    "ss_sporteventschedules",
+    "$orderby=ss_start_date asc",
+  )) as DataverseResponse<DataverseSportEvent> | null;
+  return result?.value ?? null;
 }
