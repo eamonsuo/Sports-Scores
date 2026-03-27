@@ -106,15 +106,35 @@ export const SUPER_RUGBY_TEAMS_NAME_LOGO = [
 
 export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
   // {
-  //   name: "BBL",
-  //   slug: "bbl",
-  //   seasons: [{ name: "25/26", slug: "" }],
-  // },
-  // {
   //   name: "WTC",
   //   slug: "wtc",
   //   seasons: [{ name: "2025-2027", slug: "" }],
   // },
+  {
+    name: "IPL",
+    slug: "india",
+    seasons: [{ name: "2026", slug: "ipl" }],
+  },
+  {
+    name: "The Hundred - Men",
+    slug: "the-hundred",
+    seasons: [{ name: "2026", slug: "the-hundred-men" }],
+  },
+  {
+    name: "The Hundred - Women",
+    slug: "the-hundred",
+    seasons: [{ name: "2026", slug: "the-hundred-women" }],
+  },
+  {
+    name: "BBL",
+    slug: "australia",
+    seasons: [{ name: "25/26", slug: "big-bash-league" }],
+  },
+  {
+    name: "WBBL",
+    slug: "australia",
+    seasons: [{ name: "25/26", slug: "big-bash-league-women" }],
+  },
   {
     name: "ICC Mens T20 World Cup",
     slug: "icc-mens-t20-world-cup",

@@ -289,6 +289,7 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
   const matches = rawMatches.Stages.flatMap((item) => {
     return item.Events.map((event) => {
       let sDate = convertNumbertoDate(event.Esd);
+      let endDate = convertNumbertoDate(event.Ese);
       let longFormat =
         (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
       let home2Ing = longFormat
@@ -301,7 +302,8 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
       return {
         id: event.Eid,
         startDate: sDate,
-        endDate: convertNumbertoDate(event.Ese ?? event.Esd),
+        endDate:
+          sDate.toDateString() !== endDate.toDateString() ? endDate : undefined,
         sport: SPORT.CRICKET,
         venue: "",
         status: mapCricketStatus(event.Eps),
