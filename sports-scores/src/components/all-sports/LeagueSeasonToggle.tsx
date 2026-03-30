@@ -140,9 +140,9 @@ export default function LeagueSeasonToggle({
           align="center"
           className="w-full border bg-background"
         >
-          {leagues.map((league) => (
+          {leagues.map((league, i) => (
             <DropdownMenuItem
-              key={league.slug}
+              key={`${league.slug}-${i}`}
               onClick={() => handleLeagueChange(league)}
             >
               {league.name}
@@ -171,9 +171,9 @@ export default function LeagueSeasonToggle({
           align="center"
           className="w-full border bg-background"
         >
-          {selectedLeague.seasons.map((season) => (
+          {selectedLeague.seasons.map((season, i) => (
             <DropdownMenuItem
-              key={season.slug}
+              key={`${season.slug}-${i}`}
               onClick={() => {
                 setSelectedSeason(season);
                 redirectToRoute(selectedLeague.slug, season.slug);
