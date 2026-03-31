@@ -10,9 +10,11 @@ import {
 } from "@/types/misc";
 import { Sofascore_Event } from "@/types/sofascore";
 import { SportsDB_Event } from "@/types/sportsdb";
+import { TZDate } from "@date-fns/tz/date";
 import { format } from "date-fns/format";
 import { resolveSportImage } from "./imageMapping";
 import { setMatchSummary, shortenTeamNames } from "./projUtils";
+import { getClientTimezone } from "./serverUtils";
 
 export function mapMatchSummary(
   type: API_EVENT_TYPES,
@@ -171,7 +173,7 @@ function mapSportsDBEventToMatchSummary(
   };
 }
 
-export function mapFixtureRounds(
+export async function mapFixtureRounds(
   leagueConfig: LeagueSeasonConfig | LeagueSeasonConfig[],
   matches: MatchSummary[],
 ) {
@@ -181,6 +183,7 @@ export function mapFixtureRounds(
     : (leagueConfig.display ?? DISPLAY_TYPES.ROUND);
   const byes = isMultiLeague ? undefined : leagueConfig.byes;
   const showByes = byes !== undefined;
+  const timezone = await getClientTimezone();
 
   return Object.values(
     matches.reduce(
@@ -191,7 +194,12 @@ export function mapFixtureRounds(
             roundLabel = match.roundLabel ?? "Round 0";
             break;
           case DISPLAY_TYPES.DATE:
-            roundLabel = format(new Date(match.startDate), "eee d MMM");
+            roundLabel =
+              // match.roundLabel ??
+              format(
+                new TZDate(match.startDate, timezone ?? "UTC"),
+                "eee d MMM",
+              );
             break;
           case DISPLAY_TYPES.LEAGUE:
             roundLabel = isMultiLeague

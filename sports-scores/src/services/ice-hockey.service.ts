@@ -68,7 +68,7 @@ export async function iceHockeyMatches(tournamentId: number, seasonId: number) {
     (l) => Number(l.slug) === tournamentId,
   );
 
-  const fixture = mapFixtureRounds(
+  const fixture = await mapFixtureRounds(
     leagueConfig ?? { name: "", slug: "", seasons: [] },
     allMatches,
   );
@@ -219,7 +219,7 @@ export async function iceHockeyMatchesByDate(date: Date) {
     ),
   );
 
-  const fixture = mapFixtureRounds(ICE_HOCKEY_LEAGUES, allMatches);
+  const fixture = await mapFixtureRounds(ICE_HOCKEY_LEAGUES, allMatches);
 
   return {
     fixtures: fixture,

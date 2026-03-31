@@ -74,7 +74,7 @@ export async function americanFootballMatches(league: number, season: number) {
     (l) => Number(l.slug) === league,
   );
 
-  const fixture = mapFixtureRounds(
+  const fixture = await mapFixtureRounds(
     leagueConfig ?? { name: "", slug: "", seasons: [] },
     allMatches,
   );
@@ -253,7 +253,7 @@ export async function americanFootballMatchesByDate(date: Date) {
     ),
   );
 
-  const fixture = mapFixtureRounds(AMERICAN_FOOTBALL_LEAGUES, allMatches);
+  const fixture = await mapFixtureRounds(AMERICAN_FOOTBALL_LEAGUES, allMatches);
 
   return {
     fixtures: fixture,

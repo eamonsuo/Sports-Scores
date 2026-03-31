@@ -75,7 +75,7 @@ export async function basketballMatches(
     (l) => Number(l.slug) === tournamentId,
   );
 
-  const fixture = mapFixtureRounds(
+  const fixture = await mapFixtureRounds(
     leagueConfig ?? { name: "", slug: "", seasons: [] },
     allMatches,
   );
@@ -259,7 +259,7 @@ export async function basketballMatchesByDate(
     ),
   );
 
-  const fixture = mapFixtureRounds(BASKETBALL_LEAGUES, allMatches);
+  const fixture = await mapFixtureRounds(BASKETBALL_LEAGUES, allMatches);
 
   return {
     fixtures: fixture,

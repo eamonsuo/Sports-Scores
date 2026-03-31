@@ -68,7 +68,7 @@ export async function aussieRulesMatches(league: number, season: number) {
     (l) => Number(l.slug) === league,
   );
 
-  const fixture = mapFixtureRounds(
+  const fixture = await mapFixtureRounds(
     leagueConfig ?? { name: "", slug: "", seasons: [] },
     allMatches,
   );
@@ -217,7 +217,7 @@ export async function aussieRulesCurrentMatches(date: Date) {
     ),
   );
 
-  const fixture = mapFixtureRounds(AUSSIE_RULES_LEAGUES, allMatches);
+  const fixture = await mapFixtureRounds(AUSSIE_RULES_LEAGUES, allMatches);
 
   return {
     fixtures: fixture,

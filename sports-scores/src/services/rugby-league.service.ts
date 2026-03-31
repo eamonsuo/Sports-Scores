@@ -84,7 +84,7 @@ export async function rugbyLeagueMatches(
     (l) => Number(l.slug) === tournamentId,
   );
 
-  const fixture = mapFixtureRounds(
+  const fixture = await mapFixtureRounds(
     leagueConfig ?? { name: "", slug: "", seasons: [] },
     allMatches,
   );
@@ -228,7 +228,7 @@ export async function rugbyLeagueMatchesByDate(date: Date) {
     ),
   );
 
-  const fixture = mapFixtureRounds(RUGBY_LEAGUE_LEAGUES, allMatches);
+  const fixture = await mapFixtureRounds(RUGBY_LEAGUE_LEAGUES, allMatches);
 
   return {
     fixtures: fixture,

@@ -55,7 +55,7 @@ export async function netballMatches(tournamentId: number, seasonId: number) {
         new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
     );
 
-  const fixture = mapFixtureRounds(
+  const fixture = await mapFixtureRounds(
     leagueConfig ?? { name: "", slug: "", seasons: [] },
     sortedMatches,
   );
@@ -178,7 +178,7 @@ export async function netballMatchesByDate(date: Date) {
     mapNetballMatch(match, `Round ${match.intRound ?? 0}`),
   );
 
-  const fixture = mapFixtureRounds(NETBALL_LEAGUES, allMatches);
+  const fixture = await mapFixtureRounds(NETBALL_LEAGUES, allMatches);
 
   return {
     fixtures: fixture,
