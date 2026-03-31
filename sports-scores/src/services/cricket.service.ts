@@ -504,7 +504,7 @@ export async function cricketMatchesByDateSofascore(date: Date) {
     ),
   );
 
-  const fixture = mapFixtureRounds(
+  const fixture = await mapFixtureRounds(
     { name: "", slug: "", seasons: [], display: DISPLAY_TYPES.DATE },
     allMatches,
   );

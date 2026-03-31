@@ -81,6 +81,7 @@ async function fetchDataverseApi(entity: string, queryParams?: string) {
       console.error(
         `[Dataverse] API request failed: ${res.status} ${res.statusText} — ${entity}`,
         errorBody,
+        res,
       );
       return null;
     }

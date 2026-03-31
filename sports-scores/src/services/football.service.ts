@@ -81,7 +81,7 @@ export async function footballMatches(tournamentId: number, seasonId: number) {
     (l) => Number(l.slug) === tournamentId,
   );
 
-  const fixture = mapFixtureRounds(
+  const fixture = await mapFixtureRounds(
     leagueConfig ?? { name: "", slug: "", seasons: [] },
     allMatches,
   );
@@ -292,7 +292,7 @@ export async function footballMatchesByDate(date: Date) {
     ),
   );
 
-  const fixture = mapFixtureRounds(FOOTBALL_LEAGUES, allMatches);
+  const fixture = await mapFixtureRounds(FOOTBALL_LEAGUES, allMatches);
 
   return {
     fixtures: fixture,
