@@ -1,4 +1,3 @@
-import { RugbyLeagueStanding } from "@/components/rugby-league/RugbyLeagueLadder";
 import {
   fetchRugbyLeagueLastMatches,
   fetchRugbyLeagueMatchDetails,
@@ -15,7 +14,10 @@ import {
   fetchNextEvents,
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
-import { RUGBY_LEAGUE_LEAGUES } from "@/lib/constants";
+import {
+  RUGBY_LEAGUE_LADDER_HEADINGS,
+  RUGBY_LEAGUE_LEAGUES,
+} from "@/lib/constants";
 import {
   getCurrentRound,
   mapFixtureRounds,
@@ -110,31 +112,43 @@ export async function rugbyLeagueStandings(
     return null;
   }
 
+  const leagueConfig = RUGBY_LEAGUE_LEAGUES.find(
+    (l) => Number(l.slug) === tournamentId,
+  );
+  const headings = RUGBY_LEAGUE_LADDER_HEADINGS;
+
+  const seasonConfig = leagueConfig?.seasons.find(
+    (s) => Number(s.slug) === seasonId,
+  );
+
   return {
-    standings: standings?.standings.map((table) =>
-      table.rows.map((item) => {
-        return {
-          position: item.position,
-          points: item.points,
-          team: {
-            id: item.team.id,
-            name: shortenTeamNames(item.team.name),
-            logo: resolveSportImage(item.team.name),
-          },
-          games: {
-            played: item.matches,
-            win: item.wins,
-            lost: item.losses,
-            drawn: item.draws,
-          },
-          scores: { against: item.scoresAgainst, for: item.scoresFor },
-        } as RugbyLeagueStanding;
-      }),
-    ),
-    qualifyingPosition:
-      RUGBY_LEAGUE_LEAGUES.find((l) => Number(l.slug) === tournamentId)
-        ?.qualifyingPosition ?? -1,
-  } as RugbyLeagueLadderPage;
+    standings: standings?.standings.map((table) => {
+      return {
+        headings,
+        data: table.rows.map((item) => {
+          return {
+            position: item.position,
+            team: {
+              id: item.team.id.toString(),
+              name: shortenTeamNames(item.team.name),
+              logo: resolveSportImage(item.team.name),
+            },
+
+            Pts: item.points,
+            P: item.matches,
+            W: item.wins,
+            L: item.losses,
+            D: item.draws,
+            Diff: item.scoresFor - item.scoresAgainst,
+            F: item.scoresFor,
+          };
+        }),
+        placingCategories:
+          leagueConfig?.ladderConfig?.[seasonConfig?.ladderConfig ?? 0]
+            ?.placingCategories ?? [],
+      };
+    }),
+  } as RugbyLeagueLadderPage<typeof headings>;
 }
 
 export async function rugbyLeagueMatchDetails(matchId: number) {

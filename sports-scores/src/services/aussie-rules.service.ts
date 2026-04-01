@@ -14,7 +14,10 @@ import {
   fetchNextEvents,
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
-import { AUSSIE_RULES_LEAGUES } from "@/lib/constants";
+import {
+  AUSSIE_RULES_LADDER_HEADINGS,
+  AUSSIE_RULES_LEAGUES,
+} from "@/lib/constants";
 import {
   getCurrentRound,
   mapFixtureRounds,
@@ -26,7 +29,6 @@ import {
   AussieRulesFixturesPage,
   AussieRulesLadderPage,
   AussieRulesMatchPage,
-  AussieRulesStanding,
   AussieRulesTodayPage,
 } from "@/types/aussie-rules";
 import {
@@ -91,29 +93,41 @@ export async function aussieRulesStandings(league: number, season: number) {
     return null;
   }
 
+  const leagueConfig = AUSSIE_RULES_LEAGUES.find(
+    (l) => Number(l.slug) === league,
+  );
+  const headings = AUSSIE_RULES_LADDER_HEADINGS;
+
+  const seasonConfig = leagueConfig?.seasons.find(
+    (s) => Number(s.slug) === season,
+  );
+
   return {
-    standings: standings?.standings[0].rows.map((item) => {
+    standings: standings?.standings.map((table) => {
       return {
-        position: item.position,
-        pts: item.points,
-        team: {
-          id: item.team.id,
-          name: shortenTeamNames(item.team.name),
-          logo: resolveSportImage(item.team.name),
-        },
-        games: {
-          played: item.matches,
-          win: item.wins,
-          lost: item.losses,
-          drawn: item.draws,
-        },
-        scores: { against: item.scoresAgainst, for: item.scoresFor },
-      } as AussieRulesStanding;
+        headings,
+        data: table.rows.map((item) => {
+          return {
+            position: item.position,
+            team: {
+              id: item.team.id,
+              name: shortenTeamNames(item.team.name),
+              logo: resolveSportImage(item.team.name),
+            },
+            P: item.matches,
+            W: item.wins,
+            "%": item.scoresAgainst
+              ? Math.round((item.scoresFor / item.scoresAgainst) * 100)
+              : 0,
+            Pts: item.points,
+          };
+        }),
+        placingCategories:
+          leagueConfig?.ladderConfig?.[seasonConfig?.ladderConfig ?? 0]
+            ?.placingCategories ?? [],
+      };
     }),
-    qualifyingPosition:
-      AUSSIE_RULES_LEAGUES.find((l) => Number(l.slug) === league)
-        ?.qualifyingPosition ?? -1,
-  } as AussieRulesLadderPage;
+  } as AussieRulesLadderPage<typeof headings>;
 }
 
 export async function aussieRulesMatchDetails(matchId: number) {

@@ -1,5 +1,5 @@
+import { SportsLadder } from "@/components/all-sports/Ladder";
 import { ScoreDifference } from "@/components/all-sports/ScoreChart";
-import { AmericanFootballStanding } from "@/components/american-football/AmericanFootballLadder";
 import { AmericanFootballScoreBreakdown } from "@/components/american-football/AmericanFootballScoreBreakdown";
 import { APISportsResponse, FixtureRound, TeamScoreDetails } from "./misc";
 import {
@@ -50,8 +50,8 @@ export interface AmericanFootballFixturesPage {
   currentRound: string;
 }
 
-export interface AmericanFootballLadderPage {
-  tables: AmericanFootballStanding[];
+export interface AmericanFootballLadderPage<T extends readonly string[]> {
+  standings: SportsLadder<T>[];
 }
 
 export interface AmericanFootballMatchPage {

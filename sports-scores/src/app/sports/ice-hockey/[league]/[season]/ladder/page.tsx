@@ -1,4 +1,4 @@
-import IceHockeyLadder from "@/components/ice-hockey/IceHockeyLadder";
+import Ladder from "@/components/all-sports/Ladder";
 import Placeholder from "@/components/misc-ui/Placeholder";
 import { iceHockeyStandings } from "@/services/ice-hockey.service";
 
@@ -13,14 +13,15 @@ export default async function Page(props: {
   }
 
   return (
-    <>
+    <div className="flex-1 overflow-y-auto px-4">
       {pageData.standings.map((table, index) => (
-        <IceHockeyLadder
+        <Ladder
           key={index}
-          data={table}
-          qualifyingPosition={pageData.qualifyingPosition}
+          data={table.data}
+          headings={table.headings}
+          placingCategories={table.placingCategories}
         />
       ))}
-    </>
+    </div>
   );
 }

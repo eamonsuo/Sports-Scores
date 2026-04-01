@@ -25,6 +25,22 @@ export const NRL_TEAMS_NAME_LOGO = [
   img: resolveSportImage(team),
 }));
 
+export const RUGBY_LEAGUE_LADDER_HEADINGS = ["P", "W", "Diff", "Pts"] as const;
+export const FOOTBALL_LADDER_HEADINGS = ["P", "W", "D", "L", "Pts"] as const;
+export const AUSSIE_RULES_LADDER_HEADINGS = ["P", "W", "%", "Pts"] as const;
+export const BASKETBALL_LADDER_HEADINGS = ["P", "W", "L", "PCT"] as const;
+export const BASEBALL_LADDER_HEADINGS = ["P", "W", "L", "PCT"] as const;
+export const ICE_HOCKEY_LADDER_HEADINGS = ["P", "W", "Diff", "Pts"] as const;
+export const RUGBY_UNION_LADDER_HEADINGS = [
+  "P",
+  "W",
+  "L",
+  "Diff",
+  "BP",
+  "Pts",
+] as const;
+export const AMERICAN_FOOTBALL_LADDER_HEADINGS = ["P", "W", "L", "D"] as const;
+
 export const AFL_TEAM_NAME_LOGO = [
   "Adelaide Crows",
   "Brisbane Lions",
@@ -233,7 +249,13 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2008", slug: "1153" },
       { name: "2007", slug: "42987" },
     ],
-    qualifyingPosition: 8,
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "Finals", position: [1, 2, 3, 4, 5, 6, 7, 8] },
+        ],
+      },
+    ],
     byes: NRL_TEAMS_NAME_LOGO,
   },
   {
@@ -246,7 +268,11 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2023", slug: "51393" },
     ],
 
-    qualifyingPosition: 6,
+    ladderConfig: [
+      {
+        placingCategories: [{ label: "Finals", position: [1, 2, 3, 4, 5, 6] }],
+      },
+    ],
   },
   {
     name: "State of Origin",
@@ -288,7 +314,13 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2016", slug: "11366" },
       { name: "2015", slug: "10176" },
     ],
-    qualifyingPosition: 8,
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "Finals", position: [1, 2, 3, 4, 5, 6, 7, 8] },
+        ],
+      },
+    ],
   },
   {
     name: "New South Wales Cup",
@@ -298,7 +330,13 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2025", slug: "69962" },
       { name: "2024", slug: "57568" },
     ],
-    qualifyingPosition: 8,
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "Finals", position: [1, 2, 3, 4, 5, 6, 7, 8] },
+        ],
+      },
+    ],
   },
   {
     name: "World Cup",
@@ -306,6 +344,11 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     seasons: [
       { name: "2026", slug: "87548" },
       { name: "2021", slug: "42989" },
+    ],
+    ladderConfig: [
+      {
+        placingCategories: [{ label: "Quarterfinals", position: [1, 2] }],
+      },
     ],
   },
   {
@@ -353,7 +396,11 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2025", slug: "69930" },
       { name: "2024", slug: "57044" },
     ],
-    qualifyingPosition: 6,
+    ladderConfig: [
+      {
+        placingCategories: [{ label: "Finals", position: [1, 2, 3, 4, 5, 6] }],
+      },
+    ],
   },
 ];
 
@@ -363,27 +410,39 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
     slug: "656",
     seasons: [
       { name: "2026", slug: "86748" },
-      { name: "2025", slug: "71308" },
-      { name: "2024", slug: "58226" },
-      { name: "2023", slug: "47887" },
-      { name: "2022", slug: "39988" },
-      { name: "2021", slug: "35137" },
-      { name: "2020", slug: "26039" },
-      { name: "2019", slug: "19486" },
-      { name: "2018", slug: "15780" },
-      { name: "2017", slug: "13037" },
-      { name: "2016", slug: "11060" },
-      { name: "2015", slug: "9775" },
-      { name: "2014", slug: "7608" },
-      { name: "2013", slug: "5633" },
-      { name: "2012", slug: "4090" },
-      { name: "2011", slug: "3166" },
-      { name: "2010", slug: "2594" },
-      { name: "2009", slug: "2099" },
-      { name: "2008", slug: "1153" },
-      { name: "2007", slug: "42987" },
+      { name: "2025", slug: "71308", ladderConfig: 1 },
+      { name: "2024", slug: "58226", ladderConfig: 1 },
+      { name: "2023", slug: "47887", ladderConfig: 1 },
+      { name: "2022", slug: "39988", ladderConfig: 1 },
+      { name: "2021", slug: "35137", ladderConfig: 1 },
+      { name: "2020", slug: "26039", ladderConfig: 1 },
+      { name: "2019", slug: "19486", ladderConfig: 1 },
+      { name: "2018", slug: "15780", ladderConfig: 1 },
+      { name: "2017", slug: "13037", ladderConfig: 1 },
+      { name: "2016", slug: "11060", ladderConfig: 1 },
+      { name: "2015", slug: "9775", ladderConfig: 1 },
+      { name: "2014", slug: "7608", ladderConfig: 1 },
+      { name: "2013", slug: "5633", ladderConfig: 1 },
+      { name: "2012", slug: "4090", ladderConfig: 1 },
+      { name: "2011", slug: "3166", ladderConfig: 1 },
+      { name: "2010", slug: "2594", ladderConfig: 1 },
+      { name: "2009", slug: "2099", ladderConfig: 1 },
+      { name: "2008", slug: "1153", ladderConfig: 1 },
+      { name: "2007", slug: "42987", ladderConfig: 1 },
     ],
-    qualifyingPosition: 8,
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "Finals", position: [1, 2, 3, 4, 5, 6] },
+          { label: "Wildcard Finals", position: [7, 8, 9, 10] },
+        ],
+      },
+      {
+        placingCategories: [
+          { label: "Finals", position: [1, 2, 3, 4, 5, 6, 7, 8] },
+        ],
+      },
+    ],
     byes: AFL_TEAM_NAME_LOGO,
   },
   {
@@ -401,7 +460,13 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2018", slug: "15781" },
       { name: "2017", slug: "12890" },
     ],
-    qualifyingPosition: 8,
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "Finals", position: [1, 2, 3, 4, 5, 6, 7, 8] },
+        ],
+      },
+    ],
   },
   {
     name: "VFL",
@@ -411,7 +476,13 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2025", slug: "73301" },
       { name: "2024", slug: "57568" },
     ],
-    qualifyingPosition: 8,
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "Finals", position: [1, 2, 3, 4, 5, 6, 7, 8] },
+        ],
+      },
+    ],
   },
   {
     name: "SANFL",
@@ -421,7 +492,11 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2025", slug: "71309" },
       { name: "2024", slug: "59236" },
     ],
-    qualifyingPosition: 5,
+    ladderConfig: [
+      {
+        placingCategories: [{ label: "Finals", position: [1, 2, 3, 4, 5] }],
+      },
+    ],
   },
   {
     name: "WAFL",
@@ -431,7 +506,11 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2025", slug: "71310" },
       { name: "2024", slug: "59237" },
     ],
-    qualifyingPosition: 5,
+    ladderConfig: [
+      {
+        placingCategories: [{ label: "Finals", position: [1, 2, 3, 4, 5] }],
+      },
+    ],
   },
   {
     name: "AFL Preseason",
@@ -526,7 +605,11 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       { name: "25/26", slug: "82603" },
       { name: "24/25", slug: "64864" },
     ],
-    qualifyingPosition: 6,
+    ladderConfig: [
+      {
+        placingCategories: [{ label: "Finals", position: [1, 2, 3, 4, 5, 6] }],
+      },
+    ],
   },
   {
     name: "🇦🇺 A-League Women",
@@ -534,6 +617,11 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     seasons: [
       { name: "25/26", slug: "82605" },
       { name: "24/25", slug: "66775" },
+    ],
+    ladderConfig: [
+      {
+        placingCategories: [{ label: "Finals", position: [1, 2, 3, 4, 5, 6] }],
+      },
     ],
   },
   {
@@ -567,6 +655,16 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       { name: "25/26", slug: "76986" },
       { name: "24/25", slug: "61627" },
     ],
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "Champions League", position: [1, 2, 3, 4] },
+          { label: "Europa League", position: [5] },
+          { label: "Conference League", position: [6] },
+          { label: "Relegation", position: [18, 19, 20], colour: "bg-red-500" },
+        ],
+      },
+    ],
   },
   {
     name: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 WSL",
@@ -575,6 +673,19 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       { name: "25/26", slug: "79227" },
       { name: "24/25", slug: "64370" },
     ],
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "Champions League - League Phase", position: [1, 2] },
+          { label: "Champions League - Third Round Qualifiers", position: [3] },
+          {
+            label: "Relegation Play-off",
+            position: [12],
+            colour: "bg-red-500",
+          },
+        ],
+      },
+    ],
   },
   {
     name: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Championship",
@@ -582,6 +693,15 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     seasons: [
       { name: "25/26", slug: "77347" },
       { name: "24/25", slug: "61961" },
+    ],
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "Premier League Promotion", position: [1, 2] },
+          { label: "Promotion Playoffs", position: [3, 4, 5, 6] },
+          { label: "Relegation", position: [22, 23, 24], colour: "bg-red-500" },
+        ],
+      },
     ],
   },
   {
@@ -640,11 +760,29 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2026", slug: "58210" },
       { name: "2022", slug: "41087" },
     ],
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "Round of 32", position: [1, 2] },
+          {
+            label: "Possible Round of 32 - Best 8/12 3rd placed teams",
+            position: [3],
+          },
+        ],
+      },
+    ],
   },
   {
     name: "🌍 FIFA World Cup Qualifiers",
     slug: "fifaQualifiers",
     seasons: [{ name: "2026", slug: "wiki" }],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_FIFA_World_Cup_qualification",
+  },
+  {
+    name: "🌍 FIFA World Cup Qualifiers - Inter-Confed...",
+    slug: "10618",
+    seasons: [{ name: "2026", slug: "86613" }],
     externalURL:
       "https://en.wikipedia.org/wiki/2026_FIFA_World_Cup_qualification",
   },
@@ -754,21 +892,83 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     name: "🇪🇺 UEFA Champions League",
     slug: "7",
     seasons: [{ name: "25/26", slug: "76953" }],
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "Round of 16 (seeded)", position: [1, 2, 3, 4, 5, 6, 7, 8] },
+          {
+            label: "Knockout Playoffs (seeded)",
+            position: [9, 10, 11, 12, 13, 14, 15, 16],
+          },
+          {
+            label: "Knockout Playoffs (unseeded)",
+            position: [17, 18, 19, 20, 21, 22, 23, 24],
+          },
+        ],
+      },
+    ],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2025%E2%80%9326_UEFA_Champions_League",
   },
   {
     name: "🇪🇺 UEFA Women's Champions League",
     slug: "696",
     seasons: [{ name: "25/26", slug: "77328" }],
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "Quarter Finals (seeded)", position: [1, 2, 3, 4] },
+          { label: "Knockout Playoffs (seeded)", position: [5, 6, 7, 8] },
+          { label: "Knockout Playoffs (unseeded)", position: [9, 10, 11, 12] },
+        ],
+      },
+    ],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2025%E2%80%9326_UEFA_Women%27s_Champions_League",
   },
   {
     name: "🇪🇺 UEFA Europa League",
     slug: "679",
     seasons: [{ name: "25/26", slug: "76984" }],
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "Round of 16 (seeded)", position: [1, 2, 3, 4, 5, 6, 7, 8] },
+          {
+            label: "Knockout Playoffs (seeded)",
+            position: [9, 10, 11, 12, 13, 14, 15, 16],
+          },
+          {
+            label: "Knockout Playoffs (unseeded)",
+            position: [17, 18, 19, 20, 21, 22, 23, 24],
+          },
+        ],
+      },
+    ],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2025%E2%80%9326_UEFA_Europa_League",
   },
   {
     name: "🇪🇺 UEFA Conference League",
     slug: "17015",
     seasons: [{ name: "25/26", slug: "76960" }],
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "Round of 16 (seeded)", position: [1, 2, 3, 4, 5, 6, 7, 8] },
+          {
+            label: "Knockout Playoffs (seeded)",
+            position: [9, 10, 11, 12, 13, 14, 15, 16],
+          },
+          {
+            label: "Knockout Playoffs (unseeded)",
+            position: [17, 18, 19, 20, 21, 22, 23, 24],
+          },
+        ],
+      },
+    ],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2025%E2%80%9326_UEFA_Conference_League",
   },
 
   {
@@ -796,42 +996,194 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "🇺🇸 MLS",
     slug: "242",
-    seasons: [{ name: "2025", slug: "70158" }],
+    seasons: [
+      { name: "2026", slug: "86668" },
+      { name: "2025", slug: "70158" },
+    ],
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "CONCACAF Champions Cup", position: [1] },
+          {
+            label: "Playoffs",
+            position: [2, 3, 4, 5, 6, 7],
+          },
+          {
+            label: "Wild Card",
+            position: [8, 9],
+          },
+        ],
+      },
+    ],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_Major_League_Soccer_season",
   },
   {
     name: "🇺🇸 NWSL",
     slug: "1690",
     seasons: [{ name: "2025", slug: "71412" }],
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "CONCACAF Champions Cup", position: [1, 2] },
+          {
+            label: "Playoffs",
+            position: [3, 4, 5, 6, 7, 8],
+          },
+        ],
+      },
+    ],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_National_Women%27s_Soccer_League_season",
   },
   // France - category 7
   {
     name: "🇫🇷 Ligue 1",
     slug: "34",
     seasons: [{ name: "25/26", slug: "77356" }],
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "Champions League", position: [1, 2, 3] },
+          {
+            label: "Champions League - Third Round Qualifiers",
+            position: [4],
+          },
+          {
+            label: "Europa League",
+            position: [5],
+          },
+          {
+            label: "Conference League",
+            position: [6],
+          },
+          {
+            label: "Relegation Playoffs",
+            position: [16],
+            colour: "bg-red-300",
+          },
+          {
+            label: "Relegation",
+            position: [17, 18],
+            colour: "bg-red-500",
+          },
+        ],
+      },
+    ],
+    externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Ligue_1",
   },
   // Germany - category 30
   {
     name: "🇩🇪 Bundesliga",
     slug: "35",
     seasons: [{ name: "25/26", slug: "77333" }],
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "Champions League", position: [1, 2, 3, 4] },
+          {
+            label: "Europa League",
+            position: [5],
+          },
+          {
+            label: "Conference League",
+            position: [6],
+          },
+          {
+            label: "Relegation Playoffs",
+            position: [16],
+            colour: "bg-red-300",
+          },
+          {
+            label: "Relegation",
+            position: [17, 18],
+            colour: "bg-red-500",
+          },
+        ],
+      },
+    ],
+    externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Bundesliga",
   },
   // Italy - category 31
   {
     name: "🇮🇹 Serie A",
     slug: "23",
     seasons: [{ name: "25/26", slug: "76457" }],
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "Champions League", position: [1, 2, 3, 4] },
+          {
+            label: "Europa League",
+            position: [5],
+          },
+          {
+            label: "Conference League",
+            position: [6],
+          },
+          {
+            label: "Relegation",
+            position: [18, 19, 20],
+            colour: "bg-red-500",
+          },
+        ],
+      },
+    ],
+    externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Serie_A",
   },
   // Spain - category 32
   {
     name: "🇪🇸 La Liga",
     slug: "8",
     seasons: [{ name: "25/26", slug: "77559" }],
+    ladderConfig: [
+      {
+        placingCategories: [
+          { label: "Champions League", position: [1, 2, 3, 4] },
+          {
+            label: "Europa League",
+            position: [5],
+          },
+          {
+            label: "Conference League",
+            position: [6],
+          },
+          {
+            label: "Relegation",
+            position: [18, 19, 20],
+            colour: "bg-red-500",
+          },
+        ],
+      },
+    ],
+    externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_La_Liga",
   },
 
   // North & Central America - category 1469
   // South America - category 1470
   // Africa - category 1466
   // Oceania - category 1471
+
+  {
+    name: "🌍 International Friendlies - Men",
+    slug: "851",
+    seasons: [{ name: "2026", slug: "87155" }],
+  },
+  {
+    name: "🌍 International Friendlies - Women",
+    slug: "852",
+    seasons: [{ name: "2026", slug: "86730" }],
+  },
+  {
+    name: "🌍 FIFA Series - Men",
+    slug: "32832",
+    seasons: [{ name: "2026", slug: "91220" }],
+  },
+  {
+    name: "🌍 FIFA Series - Women",
+    slug: "32833",
+    seasons: [{ name: "2026", slug: "91221" }],
+  },
 ];
 
 export const BASEBALL_LEAGUES: LeagueSeasonConfig[] = [
@@ -877,7 +1229,11 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
       { name: "25/26", slug: "77205" },
       { name: "24/25", slug: "61848" },
     ],
-    qualifyingPosition: 6,
+    ladderConfig: [
+      {
+        placingCategories: [{ label: "Finals", position: [1, 2, 3, 4, 5, 6] }],
+      },
+    ],
   },
   {
     name: "WNBL",
@@ -1055,7 +1411,11 @@ export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2024", slug: "56889" },
       { name: "2023", slug: "47476" },
     ],
-    qualifyingPosition: 6,
+    ladderConfig: [
+      {
+        placingCategories: [{ label: "Finals", position: [1, 2, 3, 4, 5, 6] }],
+      },
+    ],
   },
   {
     name: "Rugby Championship",
@@ -1087,7 +1447,11 @@ export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2026", slug: "87649" },
       { name: "2025", slug: "69968" },
     ],
-    qualifyingPosition: 4,
+    ladderConfig: [
+      {
+        placingCategories: [{ label: "Finals", position: [1, 2, 3, 4] }],
+      },
+    ],
   },
   {
     name: "Int. Friendly Games",

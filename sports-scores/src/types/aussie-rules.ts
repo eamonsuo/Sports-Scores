@@ -1,3 +1,4 @@
+import { SportsLadder } from "@/components/all-sports/Ladder";
 import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import { FixtureRound, TeamScoreDetails } from "./misc";
 
@@ -6,9 +7,8 @@ export interface AussieRulesFixturesPage {
   currentRound: string;
 }
 
-export interface AussieRulesLadderPage {
-  standings: AussieRulesStanding[];
-  qualifyingPosition: number;
+export interface AussieRulesLadderPage<T extends readonly string[]> {
+  standings: SportsLadder<T>[];
 }
 
 export interface AussieRulesMatchPage {

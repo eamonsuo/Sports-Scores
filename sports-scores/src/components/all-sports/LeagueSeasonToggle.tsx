@@ -13,12 +13,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../zzzshadcn/dropdown-menu";
+import { LadderPlacingCategory } from "./Ladder";
 
 export type LeagueSeasonConfig = {
   name: string;
   slug: string;
-  seasons: { name: string; slug: string }[];
-  qualifyingPosition?: number;
+  seasons: { name: string; slug: string; ladderConfig?: number }[];
+  ladderConfig?: {
+    // headings: string[];
+    placingCategories?: LadderPlacingCategory[];
+  }[]; // Multiple configs can be specified for different seasons, these will then be initiated via the seasons array
   display?: DISPLAY_TYPES;
   externalURL?: string;
   byes?: {

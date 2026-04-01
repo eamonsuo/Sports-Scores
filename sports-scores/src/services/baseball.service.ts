@@ -1,7 +1,3 @@
-import {
-  BaseballStanding,
-  BaseballTeamStanding,
-} from "@/components/baseball/BaseballLadder";
 import { BaseballScoreBreakdown } from "@/components/baseball/BaseballScoreBreakdown";
 import {
   fetchBaseballCurrentMatches as fetchBaseballByDateMatches,
@@ -17,7 +13,7 @@ import {
   fetchNextEvents,
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
-import { BASEBALL_LEAGUES } from "@/lib/constants";
+import { BASEBALL_LADDER_HEADINGS, BASEBALL_LEAGUES } from "@/lib/constants";
 import {
   getCurrentRound,
   mapFixtureRounds,
@@ -97,8 +93,10 @@ export async function baseballStandings(
     return null;
   }
 
+  const headings = BASEBALL_LADDER_HEADINGS;
+
   return {
-    tables: standings?.standings
+    standings: standings?.standings
       .sort((a, b) => {
         const orderA = tableOrder(a.name);
         const orderB = tableOrder(b.name);
@@ -108,23 +106,25 @@ export async function baseballStandings(
       .map((table) => {
         return {
           tableName: table.name,
-          standings: table.rows.map((standing) => {
+          headings,
+          data: table.rows.map((standing) => {
             return {
               position: standing.position,
-              played: standing.wins + standing.losses,
-              won: standing.wins,
-              lost: standing.losses,
-              pct: standing.percentage,
               team: {
                 id: standing.team.id,
                 name: shortenTeamNames(standing.team.name),
                 logo: resolveSportImage(standing.team.name),
               },
-            } as BaseballTeamStanding;
+              P: standing.wins + standing.losses,
+              W: standing.wins,
+              L: standing.losses,
+              PCT: standing.percentage,
+            };
           }),
-        } as BaseballStanding;
+          placingCategories: [],
+        };
       }),
-  } as BaseballLadderPage;
+  } as BaseballLadderPage<typeof headings>;
 }
 
 export async function baseballMatchDetails(matchId: number) {

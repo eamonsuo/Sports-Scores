@@ -1,4 +1,4 @@
-import AussieRulesLadder from "@/components/aussie-rules/AussieRulesLadder";
+import Ladder from "@/components/all-sports/Ladder";
 import Placeholder from "@/components/misc-ui/Placeholder";
 import { aussieRulesStandings } from "@/services/aussie-rules.service";
 
@@ -15,9 +15,15 @@ export default async function Page(props: {
   }
 
   return (
-    <AussieRulesLadder
-      data={pageData.standings}
-      qualifyingPosition={pageData.qualifyingPosition}
-    />
+    <div className="flex-1 overflow-y-auto px-4">
+      {pageData.standings.map((table, index) => (
+        <Ladder
+          key={index}
+          data={table.data}
+          headings={table.headings}
+          placingCategories={table.placingCategories}
+        />
+      ))}
+    </div>
   );
 }

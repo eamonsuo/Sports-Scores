@@ -1,8 +1,4 @@
 import {
-  BasketballStanding,
-  BasketballTeamStanding,
-} from "@/components/basketball/BasketballLadder";
-import {
   fetchBasketballLastMatches,
   fetchBasketballMatchDetails,
   fetchBasketballMatchesByDate,
@@ -18,7 +14,7 @@ import {
   fetchNextEvents,
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
-import { BASKETBALL_LEAGUES } from "@/lib/constants";
+import { BASKETBALL_LADDER_HEADINGS, BASKETBALL_LEAGUES } from "@/lib/constants";
 import {
   getCurrentRound,
   mapFixtureRounds,
@@ -101,38 +97,42 @@ export async function basketballStandings(
     return null;
   }
 
+  const leagueConfig = BASKETBALL_LEAGUES.find(
+    (l) => Number(l.slug) === tournamentId,
+  );
+  const headings = BASKETBALL_LADDER_HEADINGS;
+
+  const seasonConfig = leagueConfig?.seasons.find(
+    (s) => Number(s.slug) === seasonId,
+  );
+
   return {
     standings: standings?.standings
       // .sort((a, b) => b.name.localeCompare(a.name))
       .map((table) => {
         return {
           tableName: table.name,
-          standings: table.rows.map((standing) => {
+          headings,
+          data: table.rows.map((standing) => {
             return {
               position: standing.position,
-              played: standing.matches,
-              won: standing.wins,
-              lost: standing.losses,
-              // ties: standing.draws,
               team: {
                 id: standing.team.id,
                 name: shortenTeamNames(standing.team.name),
                 logo: resolveSportImage(standing.team.name),
               },
-              points: {
-                for: standing.scoresFor,
-                against: standing.scoresAgainst,
-              },
-              pct: standing.percentage,
-            } as BasketballTeamStanding;
+              P: standing.matches,
+              W: standing.wins,
+              L: standing.losses,
+              PCT: standing.percentage,
+            };
           }),
-        } as BasketballStanding;
+          placingCategories:
+            leagueConfig?.ladderConfig?.[seasonConfig?.ladderConfig ?? 0]
+              ?.placingCategories ?? [],
+        };
       }),
-
-    qualifyingPosition:
-      BASKETBALL_LEAGUES.find((l) => Number(l.slug) === tournamentId)
-        ?.qualifyingPosition ?? -1,
-  } as BasketballLadderPage;
+  } as BasketballLadderPage<typeof headings>;
 }
 
 export async function basketballMatchDetails(matchId: number) {

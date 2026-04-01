@@ -1,4 +1,4 @@
-import { BasketballStanding } from "@/components/basketball/BasketballLadder";
+import { SportsLadder } from "@/components/all-sports/Ladder";
 import { BasketballScoreBreakdown } from "@/components/basketball/BasketballScoreBreakdown";
 import { FixtureRound, TeamScoreDetails } from "./misc";
 import {
@@ -29,9 +29,8 @@ export interface BasketballFixturesPage {
   currentRound: string;
 }
 
-export interface BasketballLadderPage {
-  standings: BasketballStanding[];
-  qualifyingPosition?: number;
+export interface BasketballLadderPage<T extends readonly string[]> {
+  standings: SportsLadder<T>[];
 }
 
 export interface BasketballMatchPage {

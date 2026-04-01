@@ -1,11 +1,12 @@
-import AmericanFootballLadder, {
-  AmericanFootballStanding,
-  AmericanFootballTeamStanding,
-} from "@/components/american-football/AmericanFootballLadder";
+import Ladder, { SportsLadder } from "@/components/all-sports/Ladder";
 import type { PlayoffPictureProps } from "@/components/american-football/PlayoffPicture";
 import PlayoffPicture from "@/components/american-football/PlayoffPicture";
 import Placeholder from "@/components/misc-ui/Placeholder";
+import { AMERICAN_FOOTBALL_LADDER_HEADINGS } from "@/lib/constants";
 import { americanFootballStandings } from "@/services/american-football.service";
+
+type AFTable = SportsLadder<typeof AMERICAN_FOOTBALL_LADDER_HEADINGS>;
+type AFTeam = AFTable["data"][number];
 
 export const dynamic = "force-dynamic";
 
@@ -25,19 +26,25 @@ export default async function Page(props: {
   return (
     <div className="flex-1 overflow-y-auto px-4">
       {league === "9464" && (
-        <PlayoffPicture {...getNFLPlayoffPicture(pageData.tables)} />
+        <PlayoffPicture {...getNFLPlayoffPicture(pageData.standings)} />
       )}
-      {pageData.tables.map((item) => (
-        <AmericanFootballLadder key={item.tableName} data={item} />
+      {pageData.standings.map((table, index) => (
+        <Ladder
+          key={index}
+          data={table.data}
+          headings={table.headings}
+          placingCategories={table.placingCategories}
+          tableName={table.tableName}
+        />
       ))}
     </div>
   );
 }
 
-function getNFLPlayoffPicture(NFLTables: AmericanFootballStanding[]) {
+function getNFLPlayoffPicture(NFLTables: AFTable[]) {
   // --------- AFC ------------
   const afcStandings =
-    NFLTables.find((t) => t.tableName === "NFL 25/26, AFC")?.standings ?? []; //Get the conference standings
+    NFLTables.find((t) => t.tableName === "NFL 25/26, AFC")?.data ?? []; //Get the conference standings
 
   const afcWildCards = afcStandings.slice(4, 7) ?? []; // Get wild card teams (pos 5-7)
 
@@ -45,7 +52,7 @@ function getNFLPlayoffPicture(NFLTables: AmericanFootballStanding[]) {
 
   // Get AFC division tables for divisional playoff checks
   const afcDivisionTables = NFLTables.filter(
-    (t) => t.tableName.includes("AFC") && t.tableName !== "NFL 25/26, AFC",
+    (t) => t.tableName?.includes("AFC") && t.tableName !== "NFL 25/26, AFC",
   );
 
   const afcNonPlayoff = getPlayoffStatus(
@@ -56,7 +63,7 @@ function getNFLPlayoffPicture(NFLTables: AmericanFootballStanding[]) {
 
   // --------- NFC ------------
   const nfcStandings =
-    NFLTables.find((t) => t.tableName === "NFL 25/26, NFC")?.standings ?? []; //Get the conference standings
+    NFLTables.find((t) => t.tableName === "NFL 25/26, NFC")?.data ?? []; //Get the conference standings
 
   const nfcWildCards = nfcStandings.slice(4, 7) ?? []; // Get wild card teams (pos 5-7)
 
@@ -64,7 +71,7 @@ function getNFLPlayoffPicture(NFLTables: AmericanFootballStanding[]) {
 
   // Get NFC division tables for divisional playoff checks
   const nfcDivisionTables = NFLTables.filter(
-    (t) => t.tableName.includes("NFC") && t.tableName !== "NFL 25/26, NFC",
+    (t) => t.tableName?.includes("NFC") && t.tableName !== "NFL 25/26, NFC",
   );
 
   const nfcNonPlayoff = getPlayoffStatus(
@@ -74,7 +81,7 @@ function getNFLPlayoffPicture(NFLTables: AmericanFootballStanding[]) {
   );
 
   // -------- Combine Results ------------
-  function mapTeams(team: AmericanFootballTeamStanding, seedOverride?: number) {
+  function mapTeams(team: AFTeam, seedOverride?: number) {
     return {
       name: team.team.name,
       seed: seedOverride ?? team.position,
@@ -107,33 +114,33 @@ function getNFLPlayoffPicture(NFLTables: AmericanFootballStanding[]) {
 }
 
 function getPlayoffStatus(
-  teamsNotInWildCard: AmericanFootballTeamStanding[],
-  wildCardTeams: AmericanFootballTeamStanding[],
-  divisionTables: AmericanFootballStanding[],
+  teamsNotInWildCard: AFTeam[],
+  wildCardTeams: AFTeam[],
+  divisionTables: AFTable[],
 ) {
   const TotalGames = 17;
 
-  const eliminated: AmericanFootballTeamStanding[] = [];
-  const inTheHunt: AmericanFootballTeamStanding[] = [];
+  const eliminated: AFTeam[] = [];
+  const inTheHunt: AFTeam[] = [];
 
   // Helper function to calculate win percentage
-  const calculateWinPercentage = (team: AmericanFootballTeamStanding) => {
-    const totalGames = team.played;
+  const calculateWinPercentage = (team: AFTeam) => {
+    const totalGames = Number(team.P);
     if (totalGames === 0) return 0;
-    return (team.won + team.ties * 0.5) / totalGames;
+    return (Number(team.W) + Number(team.D) * 0.5) / totalGames;
   };
 
   // Helper function to calculate maximum possible win percentage
-  const calculateMaxWinPercentage = (team: AmericanFootballTeamStanding) => {
-    const gamesRemaining = TotalGames - team.played;
-    const maxWins = team.won + gamesRemaining;
-    return (maxWins + team.ties * 0.5) / TotalGames;
+  const calculateMaxWinPercentage = (team: AFTeam) => {
+    const gamesRemaining = TotalGames - Number(team.P);
+    const maxWins = Number(team.W) + gamesRemaining;
+    return (maxWins + Number(team.D) * 0.5) / TotalGames;
   };
 
   // Helper function to calculate win percentage
-  const calculateMinWinPercentage = (team: AmericanFootballTeamStanding) => {
-    if (team.played === 0) return 0;
-    return (team.won + team.ties * 0.5) / TotalGames;
+  const calculateMinWinPercentage = (team: AFTeam) => {
+    if (Number(team.P) === 0) return 0;
+    return (Number(team.W) + Number(team.D) * 0.5) / TotalGames;
   };
 
   // Find the lowest win percentage among the wild-card teams
@@ -142,10 +149,10 @@ function getPlayoffStatus(
   );
 
   // Find which division each team belongs to
-  const getTeamDivision = (teamId: number): AmericanFootballStanding | null => {
+  const getTeamDivision = (teamId: string | number): AFTable | null => {
     return (
       divisionTables.find((divTable) =>
-        divTable.standings.some((standing) => standing.team.id === teamId),
+        divTable.data.some((standing) => standing.team.id === teamId),
       ) || null
     );
   };
@@ -162,7 +169,7 @@ function getPlayoffStatus(
 
     if (teamDivision) {
       // Find the current division leader (first team in division standings)
-      const divisionLeader = teamDivision.standings[0];
+      const divisionLeader = teamDivision.data[0];
 
       // Only check if this team is not already the division leader
       if (divisionLeader.team.id !== team.team.id) {
@@ -171,7 +178,7 @@ function getPlayoffStatus(
 
         // Check if team can achieve a better win percentage than current division leader by seasons end
         canWinDivision =
-          TotalGames - team.played == 0
+          TotalGames - Number(team.P) == 0
             ? maxPossibleWinPct > divisionLeaderCurrentWinPct
             : maxPossibleWinPct >= divisionLeaderCurrentWinPct;
       }

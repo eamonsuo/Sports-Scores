@@ -1,9 +1,5 @@
 import { Match as BracketMatch } from "@/components/bracket/types";
 import {
-  FootballStanding,
-  FootballTeamStanding,
-} from "@/components/football/FootballLadder";
-import {
   fetchFootballCupTrees,
   fetchFootballLastMatches,
   fetchFootballMatchDetails,
@@ -25,7 +21,7 @@ import {
   fetchTeamLastEvents,
   fetchTeamNextEvents,
 } from "@/endpoints/sofascore.api";
-import { FOOTBALL_LEAGUES } from "@/lib/constants";
+import { FOOTBALL_LADDER_HEADINGS, FOOTBALL_LEAGUES } from "@/lib/constants";
 import {
   getCurrentRound,
   mapFixtureRounds,
@@ -163,39 +159,43 @@ export async function footballStandings(
     return null;
   }
 
+  const leagueConfig = FOOTBALL_LEAGUES.find(
+    (l) => Number(l.slug) === tournamentId,
+  );
+  const headings = FOOTBALL_LADDER_HEADINGS;
+
+  const seasonConfig = leagueConfig?.seasons.find(
+    (s) => Number(s.slug) === seasonId,
+  );
+
   return {
-    tables: standings?.standings
+    standings: standings?.standings
       // .sort((a, b) => b.name.localeCompare(a.name))
       .map((table) => {
         return {
           tableName: table.name ?? "test",
-          standings: table.rows.map((standing) => {
+          headings,
+          data: table.rows.map((standing) => {
             return {
               position: standing.position,
-              points: standing.points,
               team: {
                 id: standing.team.id,
                 name: shortenTeamNames(standing.team.name),
                 logo: resolveSportImage(standing.team.name),
               },
-              games: {
-                played: standing.matches,
-                win: standing.wins,
-                lost: standing.losses,
-                drawn: standing.draws,
-              },
-              scores: {
-                against: standing.scoresAgainst,
-                for: standing.scoresFor,
-              },
-            } as FootballTeamStanding;
+              P: standing.matches,
+              W: standing.wins,
+              D: standing.draws,
+              L: standing.losses,
+              Pts: standing.points,
+            };
           }),
-          qualifyingPosition:
-            FOOTBALL_LEAGUES.find((l) => Number(l.slug) === tournamentId)
-              ?.qualifyingPosition ?? -1,
-        } as FootballStanding;
+          placingCategories:
+            leagueConfig?.ladderConfig?.[seasonConfig?.ladderConfig ?? 0]
+              ?.placingCategories ?? [],
+        };
       }),
-  } as FootballLadderPage;
+  } as FootballLadderPage<typeof headings>;
 }
 
 export async function footballMatchDetails(matchId: number) {

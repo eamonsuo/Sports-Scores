@@ -1,6 +1,6 @@
+import { SportsLadder } from "@/components/all-sports/Ladder";
 import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import { RugbyLeagueScoreBreakdown } from "@/components/rugby-league/RugbyLeagueScoreBreakdown";
-import { RugbyUnionStanding } from "@/components/rugby-union/RugbyUnionLadder";
 import { FixtureRound, TeamScoreDetails } from "./misc";
 import {
   Sofascore_Event_Response,
@@ -30,9 +30,8 @@ export interface RugbyUnionFixturesPage {
   currentRound: string;
 }
 
-export interface RugbyUnionLadderPage {
-  standings: RugbyUnionStanding[][];
-  qualifyingPosition: number;
+export interface RugbyUnionLadderPage<T extends readonly string[]> {
+  standings: SportsLadder<T>[];
 }
 
 export interface RugbyUnionMatchPage {
