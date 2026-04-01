@@ -1,4 +1,3 @@
-import { IceHockeyStanding } from "@/components/ice-hockey/IceHockeyLadder";
 import {
   fetchIceHockeyLastMatches,
   fetchIceHockeyMatchDetails,
@@ -15,7 +14,7 @@ import {
   fetchNextEvents,
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
-import { ICE_HOCKEY_LEAGUES } from "@/lib/constants";
+import { ICE_HOCKEY_LADDER_HEADINGS, ICE_HOCKEY_LEAGUES } from "@/lib/constants";
 import {
   getCurrentRound,
   mapFixtureRounds,
@@ -94,31 +93,39 @@ export async function iceHockeyStandings(
     return null;
   }
 
+  const leagueConfig = ICE_HOCKEY_LEAGUES.find(
+    (l) => Number(l.slug) === tournamentId,
+  );
+  const headings = ICE_HOCKEY_LADDER_HEADINGS;
+
+  const seasonConfig = leagueConfig?.seasons.find(
+    (s) => Number(s.slug) === seasonId,
+  );
+
   return {
-    standings: standings?.standings.map((table) =>
-      table.rows.map((item) => {
-        return {
-          position: item.position,
-          points: item.points,
-          team: {
-            id: item.team.id,
-            name: shortenTeamNames(item.team.name),
-            logo: resolveSportImage(item.team.name),
-          },
-          games: {
-            played: item.matches,
-            win: item.wins,
-            lost: item.losses,
-            drawn: item.draws,
-          },
-          scores: { against: item.scoresAgainst, for: item.scoresFor },
-        } as IceHockeyStanding;
-      }),
-    ),
-    qualifyingPosition:
-      ICE_HOCKEY_LEAGUES.find((l) => Number(l.slug) === tournamentId)
-        ?.qualifyingPosition ?? -1,
-  } as IceHockeyLadderPage;
+    standings: standings?.standings.map((table) => {
+      return {
+        headings,
+        data: table.rows.map((item) => {
+          return {
+            position: item.position,
+            team: {
+              id: item.team.id,
+              name: shortenTeamNames(item.team.name),
+              logo: resolveSportImage(item.team.name),
+            },
+            P: item.matches,
+            W: item.wins,
+            Diff: item.scoresFor - item.scoresAgainst,
+            Pts: item.points,
+          };
+        }),
+        placingCategories:
+          leagueConfig?.ladderConfig?.[seasonConfig?.ladderConfig ?? 0]
+            ?.placingCategories ?? [],
+      };
+    }),
+  } as IceHockeyLadderPage<typeof headings>;
 }
 
 export async function iceHockeyMatchDetails(matchId: number) {

@@ -1,8 +1,4 @@
 import {
-  AmericanFootballStanding,
-  AmericanFootballTeamStanding,
-} from "@/components/american-football/AmericanFootballLadder";
-import {
   fetchAmericanFootballLastMatches,
   fetchAmericanFootballMatchDetails,
   fetchAmericanFootballCurrentMatches as fetchAmericanFootballMatchesByDate,
@@ -18,7 +14,10 @@ import {
   fetchNextEvents,
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
-import { AMERICAN_FOOTBALL_LEAGUES } from "@/lib/constants";
+import {
+  AMERICAN_FOOTBALL_LADDER_HEADINGS,
+  AMERICAN_FOOTBALL_LEAGUES,
+} from "@/lib/constants";
 import {
   getCurrentRound,
   mapFixtureRounds,
@@ -99,33 +98,33 @@ export async function americanFootballStandings(
     return null;
   }
 
+  const headings = AMERICAN_FOOTBALL_LADDER_HEADINGS;
+
   return {
-    tables: standings?.standings
+    standings: standings?.standings
       .sort((a, b) => b.name.localeCompare(a.name))
       .map((table) => {
         return {
           tableName: table.name,
-          standings: table.rows.map((standing) => {
+          headings,
+          data: table.rows.map((standing) => {
             return {
               position: standing.position,
-              played: standing.matches,
-              won: standing.wins,
-              lost: standing.losses,
-              ties: standing.draws,
               team: {
                 id: standing.team.id,
                 name: shortenTeamNames(standing.team.name),
                 logo: resolveSportImage(standing.team.name),
               },
-              points: {
-                for: standing.scoresFor,
-                against: standing.scoresAgainst,
-              },
-            } as AmericanFootballTeamStanding;
+              P: standing.matches,
+              W: standing.wins,
+              L: standing.losses,
+              D: standing.draws,
+            };
           }),
-        } as AmericanFootballStanding;
+          placingCategories: [],
+        };
       }),
-  } as AmericanFootballLadderPage;
+  } as AmericanFootballLadderPage<typeof headings>;
 }
 
 export async function americanFootballMatchDetails(matchId: number) {

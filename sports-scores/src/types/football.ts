@@ -1,6 +1,6 @@
+import { SportsLadder } from "@/components/all-sports/Ladder";
 import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import { Match as BracketMatch } from "@/components/bracket/types";
-import { FootballStanding } from "@/components/football/FootballLadder";
 import { FootballScoreBreakdown } from "@/components/football/FootballScoreBreakdown";
 import { FixtureRound, MatchSummary, TeamScoreDetails } from "./misc";
 import {
@@ -40,8 +40,8 @@ export interface FootballTeamFixturesPage {
   fixtures: MatchSummary[];
 }
 
-export interface FootballLadderPage {
-  tables: FootballStanding[];
+export interface FootballLadderPage<T extends readonly string[]> {
+  standings: SportsLadder<T>[];
 }
 
 export interface FootballMatchPage {

@@ -1,5 +1,5 @@
+import { SportsLadder } from "@/components/all-sports/Ladder";
 import { ScoreDifference } from "@/components/all-sports/ScoreChart";
-import { IceHockeyStanding } from "@/components/ice-hockey/IceHockeyLadder";
 import { IceHockeyScoreBreakdown } from "@/components/ice-hockey/IceHockeyScoreBreakdown";
 import { FixtureRound, TeamScoreDetails } from "./misc";
 import {
@@ -30,9 +30,8 @@ export interface IceHockeyFixturesPage {
   currentRound: string;
 }
 
-export interface IceHockeyLadderPage {
-  standings: IceHockeyStanding[][];
-  qualifyingPosition: number;
+export interface IceHockeyLadderPage<T extends readonly string[]> {
+  standings: SportsLadder<T>[];
 }
 
 export interface IceHockeyMatchPage {

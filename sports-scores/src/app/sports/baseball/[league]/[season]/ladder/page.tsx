@@ -1,4 +1,4 @@
-import BaseballLadder from "@/components/baseball/BaseballLadder";
+import Ladder from "@/components/all-sports/Ladder";
 import Placeholder from "@/components/misc-ui/Placeholder";
 import { baseballStandings } from "@/services/baseball.service";
 
@@ -14,11 +14,14 @@ export default async function Page(props: {
 
   return (
     <div className="flex-1 overflow-y-auto px-4">
-      {/* {league === "9464" && (
-          <PlayoffPicture {...getNFLPlayoffPicture(pageData.tables)} />
-        )} */}
-      {pageData.tables.map((item) => (
-        <BaseballLadder key={item.tableName} data={item} />
+      {pageData.standings.map((table, index) => (
+        <Ladder
+          key={index}
+          data={table.data}
+          headings={table.headings}
+          placingCategories={table.placingCategories}
+          tableName={table.tableName}
+        />
       ))}
     </div>
   );

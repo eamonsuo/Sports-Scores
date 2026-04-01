@@ -1,5 +1,5 @@
+import { SportsLadder } from "@/components/all-sports/Ladder";
 import { ScoreDifference } from "@/components/all-sports/ScoreChart";
-import { RugbyLeagueStanding } from "@/components/rugby-league/RugbyLeagueLadder";
 import { RugbyLeagueScoreBreakdown } from "@/components/rugby-league/RugbyLeagueScoreBreakdown";
 import { FixtureRound, TeamScoreDetails } from "./misc";
 import {
@@ -30,9 +30,8 @@ export interface RugbyLeagueFixturesPage {
   currentRound: string;
 }
 
-export interface RugbyLeagueLadderPage {
-  standings: RugbyLeagueStanding[][];
-  qualifyingPosition: number;
+export interface RugbyLeagueLadderPage<T extends readonly string[]> {
+  standings: SportsLadder<T>[];
 }
 
 export interface RugbyLeagueMatchPage {

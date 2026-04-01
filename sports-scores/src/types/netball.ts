@@ -1,5 +1,4 @@
 import { ScoreDifference } from "@/components/all-sports/ScoreChart";
-import { NetballStanding } from "@/components/netball/NetballLadder";
 import { NetballScoreBreakdown } from "@/components/netball/NetballScoreBreakdown";
 import { FixtureRound, TeamScoreDetails } from "./misc";
 import { SportsDB_Events_Response } from "./sportsdb";
@@ -23,7 +22,7 @@ export interface NetballFixturesPage {
 }
 
 export interface NetballLadderPage {
-  standings: NetballStanding[][];
+  standings: any[][];
   qualifyingPosition: number;
 }
 

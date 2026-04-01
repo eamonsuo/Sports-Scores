@@ -1606,12 +1606,16 @@ export function resolveSportImage(teamName: string) {
     case "Congo":
       return getCountryImageUrl(CountryFlagCode.Congo);
     case "Congo Democratic Republic":
+    case "DR Congo":
       return getCountryImageUrl(CountryFlagCode.CongoDemocraticRepublic);
     case "Cook Islands":
       return getCountryImageUrl(CountryFlagCode.CookIslands);
     case "Costa Rica":
       return getCountryImageUrl(CountryFlagCode.CostaRica);
     case "Cote D'Ivoire":
+    case "Côte D'Ivoire":
+    case "Côte d'Ivoire":
+    case "Ivory Coast":
       return getCountryImageUrl(CountryFlagCode.CoteDIvoire);
     case "Croatia":
       return getCountryImageUrl(CountryFlagCode.Croatia);

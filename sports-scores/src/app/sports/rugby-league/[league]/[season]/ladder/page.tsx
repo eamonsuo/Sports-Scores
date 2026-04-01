@@ -1,5 +1,5 @@
+import Ladder from "@/components/all-sports/Ladder";
 import Placeholder from "@/components/misc-ui/Placeholder";
-import NRLLadder from "@/components/rugby-league/RugbyLeagueLadder";
 import { rugbyLeagueStandings } from "@/services/rugby-league.service";
 
 export default async function Page(props: {
@@ -13,14 +13,15 @@ export default async function Page(props: {
   }
 
   return (
-    <>
+    <div className="flex-1 overflow-y-auto px-4">
       {pageData.standings.map((table, index) => (
-        <NRLLadder
+        <Ladder
           key={index}
-          data={table}
-          qualifyingPosition={pageData.qualifyingPosition}
+          data={table.data}
+          headings={table.headings}
+          placingCategories={table.placingCategories}
         />
       ))}
-    </>
+    </div>
   );
 }

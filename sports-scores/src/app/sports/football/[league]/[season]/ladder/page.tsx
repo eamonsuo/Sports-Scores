@@ -1,4 +1,4 @@
-import FootballLadder from "@/components/football/FootballLadder";
+import Ladder from "@/components/all-sports/Ladder";
 import Placeholder from "@/components/misc-ui/Placeholder";
 import { footballStandings } from "@/services/football.service";
 
@@ -14,11 +14,13 @@ export default async function Page(props: {
 
   return (
     <div className="flex-1 overflow-y-auto px-4">
-      {pageData.tables.map((item) => (
-        <FootballLadder
-          key={item.tableName}
-          data={item}
-          qualifyingPosition={item.qualifyingPosition}
+      {pageData.standings.map((table, index) => (
+        <Ladder
+          key={index}
+          data={table.data}
+          headings={table.headings}
+          placingCategories={table.placingCategories}
+          tableName={table.tableName}
         />
       ))}
     </div>
