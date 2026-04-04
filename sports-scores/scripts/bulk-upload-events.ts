@@ -1,12 +1,12 @@
 /**
- * Fetches all historical rugby league matches for a given tournament/season
- * from the RugbyAPI and bulk-uploads them to the Dataverse ss_matchsummary table.
+ * Fetches all matches for a given tournament/season from the Sofascore API
+ * and bulk-uploads them to the Dataverse ss_matchsummary table.
  *
  * Run from the sports-scores directory:
- *   npx tsx scripts/bulk-upload-rugby-league.ts <tournamentId> <seasonId>
+ *   npx tsx scripts/bulk-upload-events.ts <tournamentId> <seasonId> <sport> [displayType]
  *
  * Example (NRL 2025):
- *   npx tsx scripts/bulk-upload-rugby-league.ts 294 63614
+ *   npx tsx scripts/bulk-upload-events.ts 294 63614 rugby-league round
  */
 
 import { fetchLastEvents, fetchNextEvents } from "@/endpoints/sofascore.api";

@@ -139,54 +139,54 @@ export function resolveSportImage(teamName: string) {
 
     //AFL
     case "Adelaide Crows":
-      return "/afl/crows.svg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/2nh2z01731592341.png";
     case "Brisbane Lions":
     case "Brisbane Lions II":
-      return "/afl/lions.svg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/tvvxvp1474038810.png";
     case "Carlton Blues":
     case "Carlton Blues II":
-      return "/afl/blues.svg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/k9no791584810309.png";
     case "Collingwood Magpies":
     case "Collingwood Magpies II":
-      return "/afl/magpies.svg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/a2uqkd1584810538.png";
     case "Essendon Bombers":
     case "Essendon Bombers II":
-      return "/afl/bombers.svg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/xwupps1474039541.png";
     case "Fremantle Dockers":
-      return "/afl/dockers.svg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/hw34ii1647870691.png";
     case "Geelong Cats":
     case "Geelong Cats II":
-      return "/afl/cats.svg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/xapo7t1647870681.png";
     case "Gold Coast Suns":
     case "Gold Coast Suns II":
-      return "/afl/suns.svg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/4os77n1731592560.png";
     case "GWS Giants":
     case "GWS Giants II":
-      return "/afl/giants.svg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/ef6rqs1647870839.png";
     case "Hawthorn Hawks":
     case "Box Hill Hawks":
-      return "/afl/hawks.svg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/18y3ks1647870779.png";
     case "Melbourne Demons":
-      return "/afl/demons.svg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/xvtstv1474039391.png";
     case "North Melbourne":
     case "North Melbourne Kangaroos II":
-      return "/afl/kangaroos.svg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/u5x1ok1584811490.png";
     case "Port Adelaide Power":
-      return "/afl/power.svg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/7qvqn81584810882.png";
     case "Richmond Tigers":
     case "Richmond Tigers II":
-      return "/afl/tigers.svg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/xkqlvb1647870792.png";
     case "St Kilda Saints":
     case "St Kilda Saints II":
-      return "/afl/saints.svg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/fvj5ez1732026459.png";
     case "Sydney Swans":
     case "Sydney Swans II":
-      return "/afl/swans.svg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/ndeir91647870648.png";
     case "West Coast Eagles":
-      return "/afl/eagles.svg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/xpcp2f1647870746.png";
     case "Western Bulldogs":
     case "Footscray Bulldogs":
-      return "/afl/bulldogs.svg";
+      return "https://r2.thesportsdb.com/images/media/team/badge/e3hg551647870757.png";
 
     //VFL
     case "Casey Demons":

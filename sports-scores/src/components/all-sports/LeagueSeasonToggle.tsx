@@ -1,10 +1,16 @@
 "use client";
 
+import { Calendar } from "@/components/zzzshadcn/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/zzzshadcn/popover";
 import { DISPLAY_TYPES, SPORT } from "@/types/misc";
 import { format } from "date-fns/format";
 import { ChevronDownIcon, ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "../misc-ui/Button";
 import {
@@ -40,6 +46,7 @@ export default function LeagueSeasonToggle({
 }) {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   // Helper to parse league and season from URL
   function getLeagueAndSeasonFromPath(path: string) {
@@ -78,11 +85,20 @@ export default function LeagueSeasonToggle({
   const [todayActive, setTodayActive] = useState(
     pathname?.includes("/today") ?? false,
   );
+  const [selectedDate, setSelectedDate] = useState<Date>(() => {
+    const dateParam = searchParams?.get("date");
+    return dateParam ? new Date(dateParam) : new Date();
+  });
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
   // Update state if URL changes (e.g., via navigation)
   useEffect(() => {
     if (pathname?.includes("/today")) {
       setTodayActive(true);
+      const dateParam = searchParams?.get("date");
+      if (dateParam) {
+        setSelectedDate(new Date(dateParam));
+      }
     } else {
       setTodayActive(false);
       const { leagueSlug, seasonSlug } = getLeagueAndSeasonFromPath(
@@ -93,7 +109,7 @@ export default function LeagueSeasonToggle({
       setSelectedSeason(season);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname, leagues]);
+  }, [pathname, searchParams, leagues]);
 
   // Helper to redirect to the correct route
   const redirectToRoute = (league: string, season: string) => {
@@ -112,11 +128,21 @@ export default function LeagueSeasonToggle({
   const handleTodayClick = () => {
     if (!todayActive) {
       setTodayActive(true);
+      setSelectedDate(new Date());
       router.push(`/sports/${sport}/today`);
     } else {
       setTodayActive(false);
       redirectToRoute(selectedLeague.slug, selectedSeason.slug);
     }
+  };
+
+  // When a date is selected from the calendar
+  const handleDateSelect = (date: Date | undefined) => {
+    if (!date) return;
+    setSelectedDate(date);
+    setCalendarOpen(false);
+    const dateStr = format(date, "yyyy-MM-dd");
+    router.push(`/sports/${sport}/today?date=${dateStr}`);
   };
 
   // Helper to truncate long names
@@ -136,7 +162,7 @@ export default function LeagueSeasonToggle({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="justify-between">
-            {todayActive ? "Today" : truncateName(selectedLeague.name)}
+            {todayActive ? "League" : truncateName(selectedLeague.name)}
             <ChevronDownIcon className="ml-2 h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -163,32 +189,50 @@ export default function LeagueSeasonToggle({
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* Season/Year Dropdown */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="justify-between">
-            {todayActive ? format(new Date(), "d MMM") : selectedSeason.name}
-            <ChevronDownIcon className="ml-2 h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="center"
-          className="w-full border bg-background"
-        >
-          {selectedLeague.seasons.map((season, i) => (
-            <DropdownMenuItem
-              key={`${season.slug}-${i}`}
-              onClick={() => {
-                setSelectedSeason(season);
-                redirectToRoute(selectedLeague.slug, season.slug);
-              }}
-              className="flex items-center justify-between"
-            >
-              {season.name}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      {/* Season/Year Dropdown or Date Picker */}
+      {todayActive ? (
+        <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+          <PopoverTrigger asChild>
+            <Button variant="outline" className="justify-between">
+              {format(selectedDate, "d MMM yy")}
+              <ChevronDownIcon className="ml-2 h-4 w-4" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="center">
+            <Calendar
+              mode="single"
+              selected={selectedDate}
+              onSelect={handleDateSelect}
+            />
+          </PopoverContent>
+        </Popover>
+      ) : (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="justify-between">
+              {selectedSeason.name}
+              <ChevronDownIcon className="ml-2 h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="center"
+            className="w-full border bg-background"
+          >
+            {selectedLeague.seasons.map((season, i) => (
+              <DropdownMenuItem
+                key={`${season.slug}-${i}`}
+                onClick={() => {
+                  setSelectedSeason(season);
+                  redirectToRoute(selectedLeague.slug, season.slug);
+                }}
+                className="flex items-center justify-between"
+              >
+                {season.name}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
     </div>
   );
 }
