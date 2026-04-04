@@ -31,7 +31,6 @@ import {
   SPORT,
 } from "@/types/misc";
 import { Sofascore_Event } from "@/types/sofascore";
-import { addDays } from "date-fns";
 
 const excludedSeries = [
   "CSA",
@@ -43,78 +42,6 @@ const excludedSeries = [
   "Bangladesh Premier League",
   "Plunket",
 ];
-
-export async function cricketMatchesRecent(date: Date) {
-  const rawMatchesYesterday = await fetchCricketMatchesByDateLiveScore(
-    addDays(date, -1),
-  );
-  const rawMatches = await fetchCricketMatchesByDateLiveScore(date);
-
-  const rawMatchesTomorrow = await fetchCricketMatchesByDateLiveScore(
-    addDays(date, 1),
-  );
-
-  const allMatches = [
-    ...(rawMatchesYesterday?.Stages ?? []),
-    ...(rawMatches?.Stages ?? []),
-    ...(rawMatchesTomorrow?.Stages ?? []),
-  ];
-  if (!allMatches || !allMatches.length) return null;
-
-  const matches = allMatches
-    .filter((series) => !excludedSeries.some((str) => series.Snm.includes(str)))
-    .flatMap((item) => {
-      return item.Events.map((event) => {
-        let sDate = convertNumbertoDate(event.Esd);
-        let endDate = convertNumbertoDate(event.Ese);
-        let longFormat =
-          (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
-        let home2Ing = longFormat
-          ? `, ${event.Tr1CW2 ?? 0}/${event.Tr1C2 ?? 0}${event.Tr1CD2 === 1 ? "d" : ""}`
-          : "";
-        let away2Ing = longFormat
-          ? `, ${event.Tr2CW2 ?? 0}/${event.Tr2C2 ?? 0}${event.Tr2CD2 === 1 ? "d" : ""}`
-          : "";
-
-        return {
-          id: event.Eid,
-          startDate: sDate,
-          endDate:
-            sDate.toDateString() !== endDate.toDateString()
-              ? endDate
-              : undefined,
-          sport: SPORT.CRICKET,
-          venue: "",
-          status: mapCricketStatus(event.Eps),
-          summaryText: event.Eps === "NS" ? "" : event.ECo,
-          timer: event.Eps === "L" ? "Live" : event.Eps === "NS" ? sDate : null,
-          timerDisplayColour: event.Eps === "L" ? "green" : "gray",
-          otherDetail: event.ErnInf,
-          homeDetails: {
-            img: resolveSportImage(event.T1[0].Nm),
-            score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
-            name: event.T1[0].Nm,
-          },
-          awayDetails: {
-            img: resolveSportImage(event.T2[0].Nm),
-            score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
-            name: event.T2[0].Nm,
-          },
-          seriesName: item.Snm,
-          matchSlug: `${item.Ccd}/${item.Scd}/${event.Eid}`,
-          seriesSlug: `${item.Ccd}/${item.Scd}`,
-        } as MatchSummary;
-      });
-    });
-
-  // Remove duplicates and sort by start date
-  return matches
-    .filter(
-      (match, index, self) =>
-        self.findIndex((m) => m.id === match.id) === index,
-    )
-    .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
-}
 
 export async function cricketMatchesByDate(date: Date) {
   const rawMatches = await fetchCricketMatchesByDateLiveScore(date);

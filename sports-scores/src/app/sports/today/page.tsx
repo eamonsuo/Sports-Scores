@@ -1,4 +1,5 @@
 import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
+import DateNav from "@/components/misc-ui/DateNav";
 import { GOLF_TOURS, MOTORSPORT_CATEGORIES } from "@/lib/constants";
 import { getClientDate } from "@/lib/serverUtils";
 import { americanFootballMatchesByDate } from "@/services/american-football.service";
@@ -15,11 +16,19 @@ import { rugbyLeagueMatchesByDate } from "@/services/rugby-league.service";
 import { rugbyUnionMatchesByDate } from "@/services/rugby-union.service";
 import { TennisMatchesByDate as tennisMatchesByDate } from "@/services/tennis.service";
 import { FixtureRound, SPORT } from "@/types/misc";
+import { TZDate } from "@date-fns/tz/date";
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const date = (await searchParams)?.date; //Gets ?date= query string
   const curDate = await getClientDate();
+  const parsedDate =
+    date === undefined ? curDate : new TZDate(date as string, curDate.timeZone);
   const [
     cricketoday,
     tennisToday,
@@ -38,19 +47,19 @@ export default async function Page() {
     dartsToday,
     cyclingToday,
   ] = await Promise.all([
-    cricketMatchesByDate(curDate),
-    tennisMatchesByDate(curDate),
-    footballMatchesByDate(curDate),
-    basketballMatchesByDate(curDate),
-    baseballMatchesByDate(curDate),
-    americanFootballMatchesByDate(curDate),
-    rugbyLeagueMatchesByDate(curDate),
-    aussieRulesCurrentMatches(curDate),
-    iceHockeyMatchesByDate(curDate),
-    golfTournamentsByDate(curDate),
-    motorsportCategoriesByDate(curDate),
-    rugbyUnionMatchesByDate(curDate),
-    netballMatchesByDate(curDate),
+    cricketMatchesByDate(parsedDate),
+    tennisMatchesByDate(parsedDate),
+    footballMatchesByDate(parsedDate),
+    basketballMatchesByDate(parsedDate),
+    baseballMatchesByDate(parsedDate),
+    americanFootballMatchesByDate(parsedDate),
+    rugbyLeagueMatchesByDate(parsedDate),
+    aussieRulesCurrentMatches(parsedDate),
+    iceHockeyMatchesByDate(parsedDate),
+    golfTournamentsByDate(parsedDate),
+    motorsportCategoriesByDate(parsedDate),
+    rugbyUnionMatchesByDate(parsedDate),
+    netballMatchesByDate(parsedDate),
     null,
     null,
     null,
@@ -98,6 +107,7 @@ export default async function Page() {
         data={allSports}
         curRound={allSports[0]?.roundLabel ?? ""}
       />
+      <DateNav date={parsedDate} />
     </div>
   );
 }

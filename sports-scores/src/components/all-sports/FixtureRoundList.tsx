@@ -102,7 +102,7 @@ export default function FixtureRoundList({
     <>
       <div
         ref={btnListRef}
-        className="hideScroll mx-2 mb-2 flex gap-1 overflow-x-auto"
+        className="hideScroll mx-4 mb-2 flex gap-1 overflow-x-auto"
       >
         {roundLabels.map((item) => (
           <button
