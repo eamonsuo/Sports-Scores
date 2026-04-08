@@ -4,7 +4,9 @@ import EventCardGrid from "@/components/event-calendar/EventCardGrid";
 import RegularSeasonsView from "@/components/event-calendar/RegularSeasonsView";
 import { SportEvent } from "@/types/event-calendar";
 import { clsx } from "clsx";
+import Link from "next/link";
 import { useState } from "react";
+import { Button } from "../misc-ui/Button";
 
 type ViewMode = "major" | "regular";
 
@@ -56,6 +58,12 @@ export default function EventsCalendarClient({
             📅 Leagues
           </button>
         </div>
+        <Link
+          href={"/sports/today"}
+          className="mt-6 flex justify-center rounded"
+        >
+          <Button variant={"secondary"}>Today&apos;s Sports</Button>
+        </Link>
       </div>
 
       {/* Content */}
