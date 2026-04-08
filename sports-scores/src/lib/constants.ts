@@ -130,6 +130,11 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
     name: "IPL",
     slug: "india",
     seasons: [{ name: "2026", slug: "ipl" }],
+    ladderConfig: [
+      {
+        placingCategories: [{ label: "Playoffs", position: [1, 2, 3, 4] }],
+      },
+    ],
   },
   {
     name: "The Hundred - Men",
