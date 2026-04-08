@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    minimumCacheTTL: 604800, // 7 days
     remotePatterns: [
       // National Flags
       {
