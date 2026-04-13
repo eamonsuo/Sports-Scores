@@ -94,6 +94,7 @@ function mapToMatchSummary(r: DataverseMatchSummary): MatchSummary {
     winner: r.ss_winner ?? undefined,
     tournamentId: r.ss_tournamentid ?? undefined,
     seasonId: r.ss_seasonid ?? undefined,
+    dataverseGUID: r.ss_matchsummaryid,
   };
 }
 

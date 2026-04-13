@@ -14,7 +14,10 @@ import {
   fetchNextEvents,
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
-import { RUGBY_UNION_LADDER_HEADINGS, RUGBY_UNION_LEAGUES } from "@/lib/constants";
+import {
+  RUGBY_UNION_LADDER_HEADINGS,
+  RUGBY_UNION_LEAGUES,
+} from "@/lib/constants";
 import {
   getCurrentRound,
   mapFixtureRounds,
@@ -70,17 +73,11 @@ export async function rugbyUnionMatches(
     (l) => Number(l.slug) === tournamentId,
   );
 
-  const fixture = await mapFixtureRounds(
-    leagueConfig ?? { name: "", slug: "", seasons: [] },
-    allMatches,
-  );
+  const fixture = await mapFixtureRounds(allMatches, leagueConfig);
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(
-      leagueConfig?.display ?? DISPLAY_TYPES.ROUND,
-      fixture,
-    ),
+    currentRound: getCurrentRound(fixture, leagueConfig?.display),
   } as RugbyUnionFixturesPage;
 }
 
@@ -224,11 +221,11 @@ export async function rugbyUnionMatchesByDate(date: Date) {
     ),
   );
 
-  const fixture = await mapFixtureRounds(RUGBY_UNION_LEAGUES, allMatches);
+  const fixture = await mapFixtureRounds(allMatches, RUGBY_UNION_LEAGUES);
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(DISPLAY_TYPES.LEAGUE, fixture),
+    currentRound: getCurrentRound(fixture, DISPLAY_TYPES.LEAGUE),
   } as RugbyUnionTodayPage;
 }
 

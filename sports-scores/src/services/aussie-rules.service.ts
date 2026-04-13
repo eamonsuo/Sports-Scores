@@ -70,17 +70,11 @@ export async function aussieRulesMatches(league: number, season: number) {
     (l) => Number(l.slug) === league,
   );
 
-  const fixture = await mapFixtureRounds(
-    leagueConfig ?? { name: "", slug: "", seasons: [] },
-    allMatches,
-  );
+  const fixture = await mapFixtureRounds(allMatches, leagueConfig);
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(
-      leagueConfig?.display ?? DISPLAY_TYPES.ROUND,
-      fixture,
-    ),
+    currentRound: getCurrentRound(fixture, leagueConfig?.display),
   } as AussieRulesFixturesPage;
 }
 
@@ -231,11 +225,11 @@ export async function aussieRulesCurrentMatches(date: Date) {
     ),
   );
 
-  const fixture = await mapFixtureRounds(AUSSIE_RULES_LEAGUES, allMatches);
+  const fixture = await mapFixtureRounds(allMatches, AUSSIE_RULES_LEAGUES);
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(DISPLAY_TYPES.LEAGUE, fixture),
+    currentRound: getCurrentRound(fixture, DISPLAY_TYPES.LEAGUE),
   } as AussieRulesTodayPage;
 }
 

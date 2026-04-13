@@ -14,7 +14,10 @@ import {
   fetchNextEvents,
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
-import { BASKETBALL_LADDER_HEADINGS, BASKETBALL_LEAGUES } from "@/lib/constants";
+import {
+  BASKETBALL_LADDER_HEADINGS,
+  BASKETBALL_LEAGUES,
+} from "@/lib/constants";
 import {
   getCurrentRound,
   mapFixtureRounds,
@@ -71,17 +74,11 @@ export async function basketballMatches(
     (l) => Number(l.slug) === tournamentId,
   );
 
-  const fixture = await mapFixtureRounds(
-    leagueConfig ?? { name: "", slug: "", seasons: [] },
-    allMatches,
-  );
+  const fixture = await mapFixtureRounds(allMatches, leagueConfig);
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(
-      leagueConfig?.display ?? DISPLAY_TYPES.ROUND,
-      fixture,
-    ),
+    currentRound: getCurrentRound(fixture, leagueConfig?.display),
   } as BasketballFixturesPage;
 }
 
@@ -259,11 +256,11 @@ export async function basketballMatchesByDate(
     ),
   );
 
-  const fixture = await mapFixtureRounds(BASKETBALL_LEAGUES, allMatches);
+  const fixture = await mapFixtureRounds(allMatches, BASKETBALL_LEAGUES);
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(DISPLAY_TYPES.LEAGUE, fixture),
+    currentRound: getCurrentRound(fixture, DISPLAY_TYPES.LEAGUE),
   } as BasketballTodayPage;
 }
 

@@ -25,7 +25,10 @@ import {
 } from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
 import { shortenTeamNames } from "@/lib/projUtils";
-import { matchSummariesByTournament } from "@/services/dataverse.service";
+import {
+  matchSummariesByTournament,
+  matchSummaryUpdate,
+} from "@/services/dataverse.service";
 import {
   API_EVENT_TYPES,
   DISPLAY_TYPES,
@@ -75,28 +78,37 @@ export async function rugbyLeagueMatches(
 
   // Merge API and dataverse matches, deduplicating by id (API takes priority)
   const apiIds = new Set(apiMatches.map((m) => m.id));
+  const duplicateDataverseMatches = (dataverseMatches ?? []).filter((m) =>
+    apiIds.has(m.id),
+  );
+  const uniqueDataverseMatches = (dataverseMatches ?? []).filter(
+    (m) => !apiIds.has(m.id),
+  );
+
   const allMatches = apiMatches
-    .concat((dataverseMatches ?? []).filter((m) => !apiIds.has(m.id)))
+    .concat(uniqueDataverseMatches)
     .sort(
       (a, b) =>
         new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
     );
 
+  // Update dataverse records with matches from the API
+  apiMatches.forEach((m) =>
+    matchSummaryUpdate(
+      duplicateDataverseMatches.find((d) => d.id === m.id)?.dataverseGUID ?? "",
+      m,
+    ).catch(() => {}),
+  );
+
   const leagueConfig = RUGBY_LEAGUE_LEAGUES.find(
     (l) => Number(l.slug) === tournamentId,
   );
 
-  const fixture = await mapFixtureRounds(
-    leagueConfig ?? { name: "", slug: "", seasons: [] },
-    allMatches,
-  );
+  const fixture = await mapFixtureRounds(allMatches, leagueConfig);
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(
-      leagueConfig?.display ?? DISPLAY_TYPES.ROUND,
-      fixture,
-    ),
+    currentRound: getCurrentRound(fixture, leagueConfig?.display),
   } as RugbyLeagueFixturesPage;
 }
 
@@ -242,11 +254,11 @@ export async function rugbyLeagueMatchesByDate(date: Date) {
     ),
   );
 
-  const fixture = await mapFixtureRounds(RUGBY_LEAGUE_LEAGUES, allMatches);
+  const fixture = await mapFixtureRounds(allMatches, RUGBY_LEAGUE_LEAGUES);
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(DISPLAY_TYPES.LEAGUE, fixture),
+    currentRound: getCurrentRound(fixture, DISPLAY_TYPES.LEAGUE),
   } as RugbyLeagueTodayPage;
 }
 

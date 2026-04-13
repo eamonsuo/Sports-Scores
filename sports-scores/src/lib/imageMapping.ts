@@ -701,7 +701,8 @@ export function resolveSportImage(teamName: string) {
     case "Inter":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/110.png";
     case "Juventus":
-      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/111.png";
+      // return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/111.png";
+      return "https://r2.thesportsdb.com/images/media/team/badge/uxf0gr1742983727.png";
     case "Lazio":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/112.png";
     case "Lecce":
@@ -728,6 +729,8 @@ export function resolveSportImage(teamName: string) {
     case "Atlético Madrid":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/1068.png";
     case "Barcelona":
+    case "FC Barcelona":
+    case "Fútbol Club Barcelona":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/83.png";
     case "Celta Vigo":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/85.png";

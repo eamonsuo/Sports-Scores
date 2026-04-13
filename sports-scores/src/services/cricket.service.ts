@@ -431,14 +431,11 @@ export async function cricketMatchesByDateSofascore(date: Date) {
     ),
   );
 
-  const fixture = await mapFixtureRounds(
-    { name: "", slug: "", seasons: [], display: DISPLAY_TYPES.DATE },
-    allMatches,
-  );
+  const fixture = await mapFixtureRounds(allMatches);
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(DISPLAY_TYPES.DATE, fixture),
+    currentRound: getCurrentRound(fixture, DISPLAY_TYPES.DATE),
   };
 }
 

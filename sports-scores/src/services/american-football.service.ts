@@ -73,17 +73,11 @@ export async function americanFootballMatches(league: number, season: number) {
     (l) => Number(l.slug) === league,
   );
 
-  const fixture = await mapFixtureRounds(
-    leagueConfig ?? { name: "", slug: "", seasons: [] },
-    allMatches,
-  );
+  const fixture = await mapFixtureRounds(allMatches, leagueConfig);
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(
-      leagueConfig?.display ?? DISPLAY_TYPES.ROUND,
-      fixture,
-    ),
+    currentRound: getCurrentRound(fixture, leagueConfig?.display),
   } as AmericanFootballFixturesPage;
 }
 
@@ -252,11 +246,11 @@ export async function americanFootballMatchesByDate(date: Date) {
     ),
   );
 
-  const fixture = await mapFixtureRounds(AMERICAN_FOOTBALL_LEAGUES, allMatches);
+  const fixture = await mapFixtureRounds(allMatches, AMERICAN_FOOTBALL_LEAGUES);
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(DISPLAY_TYPES.LEAGUE, fixture),
+    currentRound: getCurrentRound(fixture, DISPLAY_TYPES.LEAGUE),
   } as AmericanFootballFixturesPage;
 }
 

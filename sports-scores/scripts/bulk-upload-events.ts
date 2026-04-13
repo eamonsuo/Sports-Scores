@@ -37,7 +37,7 @@ const displayType = (displayTypeArg as DISPLAY_TYPES) ?? DISPLAY_TYPES.ROUND;
 
 if (!tournamentId || !seasonId || !sport) {
   console.error(
-    "Usage: npx tsx scripts/bulk-upload-sofascore-events.ts <tournamentId> <seasonId> <sport> <displayType?>",
+    "Usage: npx tsx scripts/bulk-upload-events.ts <tournamentId> <seasonId> <sport> <displayType?>",
   );
   process.exit(1);
 }

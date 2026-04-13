@@ -14,7 +14,10 @@ import {
   fetchNextEvents,
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
-import { ICE_HOCKEY_LADDER_HEADINGS, ICE_HOCKEY_LEAGUES } from "@/lib/constants";
+import {
+  ICE_HOCKEY_LADDER_HEADINGS,
+  ICE_HOCKEY_LEAGUES,
+} from "@/lib/constants";
 import {
   getCurrentRound,
   mapFixtureRounds,
@@ -67,17 +70,11 @@ export async function iceHockeyMatches(tournamentId: number, seasonId: number) {
     (l) => Number(l.slug) === tournamentId,
   );
 
-  const fixture = await mapFixtureRounds(
-    leagueConfig ?? { name: "", slug: "", seasons: [] },
-    allMatches,
-  );
+  const fixture = await mapFixtureRounds(allMatches, leagueConfig);
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(
-      leagueConfig?.display ?? DISPLAY_TYPES.ROUND,
-      fixture,
-    ),
+    currentRound: getCurrentRound(fixture, leagueConfig?.display),
   } as IceHockeyFixturesPage;
 }
 
@@ -226,11 +223,11 @@ export async function iceHockeyMatchesByDate(date: Date) {
     ),
   );
 
-  const fixture = await mapFixtureRounds(ICE_HOCKEY_LEAGUES, allMatches);
+  const fixture = await mapFixtureRounds(allMatches, ICE_HOCKEY_LEAGUES);
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(DISPLAY_TYPES.LEAGUE, fixture),
+    currentRound: getCurrentRound(fixture, DISPLAY_TYPES.LEAGUE),
   } as IceHockeyTodayPage;
 }
 

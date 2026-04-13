@@ -79,6 +79,7 @@ export type MatchSummary = {
   winner?: number;
   tournamentId?: string;
   seasonId?: string;
+  dataverseGUID?: string;
 };
 
 export type MatchStatus = "LIVE" | "UPCOMING" | "COMPLETED";

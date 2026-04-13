@@ -16,6 +16,13 @@ import { resolveSportImage } from "./imageMapping";
 import { setMatchSummary, shortenTeamNames } from "./projUtils";
 import { getClientTimezone } from "./serverUtils";
 
+const DEFAULT_LEAGUE_SEASON_CONFIG: LeagueSeasonConfig = {
+  name: "",
+  slug: "",
+  seasons: [],
+};
+const DEFAULT_DISPLAY_TYPE = DISPLAY_TYPES.ROUND;
+
 export function mapMatchSummary(
   type: API_EVENT_TYPES,
   sport: SPORT,
@@ -174,8 +181,10 @@ function mapSportsDBEventToMatchSummary(
 }
 
 export async function mapFixtureRounds(
-  leagueConfig: LeagueSeasonConfig | LeagueSeasonConfig[],
   matches: MatchSummary[],
+  leagueConfig:
+    | LeagueSeasonConfig
+    | LeagueSeasonConfig[] = DEFAULT_LEAGUE_SEASON_CONFIG,
 ) {
   const isMultiLeague = Array.isArray(leagueConfig);
   const displayType: DISPLAY_TYPES = isMultiLeague
@@ -234,8 +243,8 @@ export async function mapFixtureRounds(
 }
 
 export function getCurrentRound(
-  leagueConfig: DISPLAY_TYPES,
   rounds: FixtureRound[],
+  leagueConfig: DISPLAY_TYPES = DEFAULT_DISPLAY_TYPE,
 ) {
   switch (leagueConfig) {
     case DISPLAY_TYPES.ROUND:
