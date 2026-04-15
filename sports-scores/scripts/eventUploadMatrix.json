@@ -1,0 +1,30 @@
+[
+  {
+    "name": "NRL 2026",
+    "tournamentId": "294",
+    "seasonId": "86317",
+    "sport": "rugby-league",
+    "displayType": "round"
+  },
+  {
+    "name": "NRLW 2026",
+    "tournamentId": "19120",
+    "seasonId": "87573",
+    "sport": "rugby-league",
+    "displayType": "round"
+  },
+  {
+    "name": "Queensland Cup 2026",
+    "tournamentId": "2135",
+    "seasonId": "88763",
+    "sport": "rugby-league",
+    "displayType": "round"
+  },
+  {
+    "name": "New South Wales Cup 2026",
+    "tournamentId": "2134",
+    "seasonId": "89006",
+    "sport": "rugby-league",
+    "displayType": "round"
+  }
+]

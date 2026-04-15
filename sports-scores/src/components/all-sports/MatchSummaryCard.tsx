@@ -56,6 +56,7 @@ export default function MatchSummaryCard({
           <div className="flex items-center justify-center overflow-visible">
             {timer.display && (
               <p
+                suppressHydrationWarning
                 className={clsx(
                   "whitespace-nowrap rounded-sm px-2 py-1 text-center text-xs",
 

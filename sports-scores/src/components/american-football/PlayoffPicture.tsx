@@ -59,7 +59,8 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
                   <Image
                     src={afc.divisional.logo}
                     alt={"Team Logo"}
-                    className="h-8 w-8"
+                    width={32}
+                    height={32}
                   />
                 )}
               </div>
@@ -77,7 +78,8 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
                     <Image
                       src={home.logo}
                       alt={"Team Logo"}
-                      className="h-8 w-8"
+                      width={32}
+                      height={32}
                     />
                   )}
                   <span className="mx-2 text-xs text-gray-400">vs</span>
@@ -86,7 +88,8 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
                     <Image
                       src={away.logo}
                       alt={"Team Logo"}
-                      className="h-8 w-8"
+                      width={32}
+                      height={32}
                     />
                   )}
                 </div>
@@ -108,7 +111,8 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
                             <Image
                               src={team.logo}
                               alt={"Team Logo"}
-                              className="h-8 w-8"
+                              width={32}
+                              height={32}
                             />
                           )}
                         </span>
@@ -133,7 +137,8 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
                             <Image
                               src={team.logo}
                               alt={"Team Logo"}
-                              className="h-8 w-8"
+                              width={32}
+                              height={32}
                             />
                           )}
                         </span>
@@ -159,7 +164,8 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
                   <Image
                     src={nfc.divisional.logo}
                     alt={"Team Logo"}
-                    className="h-8 w-8"
+                    width={32}
+                    height={32}
                   />
                 )}
               </div>
@@ -177,7 +183,8 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
                     <Image
                       src={home.logo}
                       alt={"Team Logo"}
-                      className="h-8 w-8"
+                      width={32}
+                      height={32}
                     />
                   )}
                   <span className="mx-2 text-xs text-gray-400">vs</span>
@@ -186,7 +193,8 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
                     <Image
                       src={away.logo}
                       alt={"Team Logo"}
-                      className="h-8 w-8"
+                      width={32}
+                      height={32}
                     />
                   )}
                 </div>
@@ -208,7 +216,8 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
                             <Image
                               src={team.logo}
                               alt={"Team Logo"}
-                              className="h-8 w-8"
+                              width={32}
+                              height={32}
                             />
                           )}
                         </span>
@@ -233,7 +242,8 @@ export default function PlayoffPicture({ afc, nfc }: PlayoffPictureProps) {
                             <Image
                               src={team.logo}
                               alt={"Team Logo"}
-                              className="h-8 w-8"
+                              width={32}
+                              height={32}
                             />
                           )}
                         </span>

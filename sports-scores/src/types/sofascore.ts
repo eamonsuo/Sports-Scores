@@ -23,7 +23,7 @@ export interface Sofascore_TournamentCupTrees_Response {
   cupTrees: Sofascore_CupTree[];
 }
 
-export interface Sofascore_Rankings_Response {
+interface Sofascore_Rankings_Response {
   rankingType: {
     sport: Sofascore_Sport;
     name: string;
@@ -96,7 +96,7 @@ export interface Sofascore_Event {
   isEditor: boolean;
 }
 
-export interface Sofascore_Tournament {
+interface Sofascore_Tournament {
   name: string;
   slug: string;
   category: Sofascore_Category;
@@ -108,7 +108,7 @@ export interface Sofascore_Tournament {
   fieldTranslations: Sofascore_FieldTranslations;
 }
 
-export interface Sofascore_Category {
+interface Sofascore_Category {
   id: number;
   country: Sofascore_Country;
   name: string;
@@ -118,25 +118,25 @@ export interface Sofascore_Category {
   fieldTranslations: Sofascore_FieldTranslations;
 }
 
-export interface Sofascore_Country {
+interface Sofascore_Country {
   alpha2?: string;
   alpha3?: string;
   name?: string;
   slug?: string;
 }
 
-export interface Sofascore_Sport {
+interface Sofascore_Sport {
   name: string;
   slug: string;
   id: number;
 }
 
-export interface Sofascore_FieldTranslations {
+interface Sofascore_FieldTranslations {
   nameTranslation: { [key: string]: string };
   shortNameTranslation: { [key: string]: string };
 }
 
-export interface Sofascore_UniqueTournament {
+interface Sofascore_UniqueTournament {
   name: string;
   slug: string;
   primaryColorHex: string;
@@ -153,20 +153,20 @@ export interface Sofascore_UniqueTournament {
   groundType?: string; // Only for tennis unique tournaments, e.g. "Hardcourt outdoor", "Clay", "Grass"
 }
 
-export interface Sofascore_Season {
+interface Sofascore_Season {
   name: string;
   year: string;
   editor: boolean;
   id: number;
 }
 
-export interface Sofascore_RoundInfo {
+interface Sofascore_RoundInfo {
   round: number;
   name?: string;
   cupRoundType?: string;
 }
 
-export interface Sofascore_Status {
+interface Sofascore_Status {
   code: number;
   description: string;
   type: string;
@@ -191,7 +191,7 @@ export interface Sofascore_Team {
   fieldTranslations: Sofascore_FieldTranslations;
 }
 
-export interface Sofascore_TeamColors {
+interface Sofascore_TeamColors {
   primary: string;
   secondary: string;
   text: string;
@@ -222,14 +222,14 @@ export interface Sofascore_Score {
   };
 }
 
-export interface Sofascore_Score_Inning {
+interface Sofascore_Score_Inning {
   score: number;
   wickets: number;
   overs: number;
   runRate: number;
 }
 
-export interface Sofascore_Time {
+interface Sofascore_Time {
   played: number;
   periodLength: number;
   overtimeLength: number;
@@ -237,12 +237,12 @@ export interface Sofascore_Time {
   currentPeriodStartTimestamp: number;
 }
 
-export interface Sofascore_Changes {
+interface Sofascore_Changes {
   changes: string[];
   changeTimestamp: number;
 }
 
-export interface Sofascore_Venue {
+interface Sofascore_Venue {
   city: Sofascore_City;
   hidden: boolean;
   slug: string;
@@ -254,16 +254,16 @@ export interface Sofascore_Venue {
   stadium: Sofascore_Stadium;
 }
 
-export interface Sofascore_City {
+interface Sofascore_City {
   name: string;
 }
 
-export interface Sofascore_Stadium {
+interface Sofascore_Stadium {
   name: string;
   capacity: number;
 }
 
-export interface Sofascore_Referee {
+interface Sofascore_Referee {
   name: string;
   slug: string;
   yellowCards: number;
@@ -282,12 +282,12 @@ export interface Sofascore_Standing {
   type: string;
   descriptions: any[];
   tieBreakingRule?: { text: string; id: number };
-  rows: Sofascore_Row[];
+  rows: Sofascore_StandingRow[];
   id: number;
   updatedAtTimestamp: number;
 }
 
-export interface Sofascore_Row {
+export interface Sofascore_StandingRow {
   team: Sofascore_Team;
   descriptions: any[];
   promotion?: Sofascore_Promotion;
@@ -305,12 +305,12 @@ export interface Sofascore_Row {
   scoreDiffFormatted: string;
 }
 
-export interface Sofascore_Promotion {
+interface Sofascore_Promotion {
   text: string;
   id: number;
 }
 
-export interface Sofascore_Incident {
+interface Sofascore_Incident {
   text?: string; // For incidents like "FT" or "HT"
   homeScore?: number;
   awayScore?: number;
@@ -333,7 +333,7 @@ export interface Sofascore_Incident {
   rescinded?: boolean; // For card incidents
 }
 
-export interface Sofascore_Player {
+interface Sofascore_Player {
   name: string;
   slug: string;
   shortName: string;
@@ -347,7 +347,7 @@ export interface Sofascore_Player {
   fieldTranslations?: Sofascore_FieldTranslations;
 }
 
-export interface Sofascore_CupTrees_Response {
+interface Sofascore_CupTrees_Response {
   cupTrees: Sofascore_CupTree[];
 }
 
@@ -363,7 +363,7 @@ export interface Sofascore_CupTree {
   hideRoundsWithoutParticipants: boolean;
 }
 
-export interface Sofascore_CupRound {
+interface Sofascore_CupRound {
   order: number;
   type: number;
   description: string;
@@ -371,7 +371,7 @@ export interface Sofascore_CupRound {
   id: number;
 }
 
-export interface Sofascore_CupBlock {
+interface Sofascore_CupBlock {
   finished?: boolean;
   matchesInRound: number;
   order?: number;
@@ -388,7 +388,7 @@ export interface Sofascore_CupBlock {
   automaticProgression: boolean;
 }
 
-export interface Sofascore_CupParticipant {
+interface Sofascore_CupParticipant {
   team: Sofascore_Team;
   winner: boolean;
   sourceBlockId?: number;
@@ -397,4 +397,4 @@ export interface Sofascore_CupParticipant {
   id: number;
 }
 
-export interface Sofascore_Ranking {}
+interface Sofascore_Ranking {}

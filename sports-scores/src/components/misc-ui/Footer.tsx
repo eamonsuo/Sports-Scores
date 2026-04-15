@@ -1,13 +1,15 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 import {
   AMERICAN_FOOTBALL_LEAGUES,
   AUSSIE_RULES_LEAGUES,
   GOLF_TOURS,
   MOTORSPORT_CATEGORIES,
+  NETBALL_LEAGUES,
   RUGBY_LEAGUE_LEAGUES,
+  RUGBY_UNION_LEAGUES,
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { SPORT } from "@/types/misc";
@@ -84,13 +86,13 @@ const footerLinks: {
   },
   {
     sport: SPORT.NETBALL,
-    link: `/sports/${SPORT.NETBALL}/today`,
+    link: `/sports/${SPORT.NETBALL}/${NETBALL_LEAGUES[0].slug}/${NETBALL_LEAGUES[0].seasons[0].slug}/matches`,
     img: "/footer/netball.png",
     altText: "Netball",
   },
   {
     sport: SPORT.RUGBY_UNION,
-    link: `/sports/${SPORT.RUGBY_UNION}/today`,
+    link: `/sports/${SPORT.RUGBY_UNION}/${RUGBY_UNION_LEAGUES[0].slug}/${RUGBY_UNION_LEAGUES[0].seasons[0].slug}/matches`,
     img: "/footer/union.png",
     altText: "Rugby Union",
   },
@@ -142,20 +144,23 @@ const footerLinks: {
 ];
 
 export default function Footer() {
-  const [curSport, setCurSport] = useState("");
+  const pathname = usePathname();
+
+  const isActive = (link: string) => {
+    if (link === "/") return pathname === "/";
+    if (link.startsWith("http")) return false;
+    return pathname.startsWith(link.split("/").slice(0, 3).join("/"));
+  };
+
   return (
     <footer className="bg-gray-200 dark:bg-neutral-900">
       <div className="hideScroll flex h-16 w-full flex-row place-items-center gap-2 overflow-auto p-2">
         {footerLinks.map((item) => (
-          <Link
-            key={item.sport}
-            href={item.link}
-            onClick={() => setCurSport(item.sport)}
-          >
+          <Link key={item.sport} href={item.link}>
             <Avatar
               className={cn(
                 "size-11 p-[6px]",
-                curSport === item.sport
+                isActive(item.link)
                   ? "bg-gray-500 dark:bg-neutral-400"
                   : "bg-gray-400 dark:bg-neutral-600",
               )}
