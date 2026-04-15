@@ -1,4 +1,5 @@
 ﻿import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
+import { PLAYOFF_PICTURE_TYPE } from "@/lib/playoffPictureMapping";
 import { DISPLAY_TYPES } from "@/types/misc";
 import { resolveSportImage } from "./imageMapping";
 
@@ -272,6 +273,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
           { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
           { label: "Finals", position: [5, 6, 7, 8] },
         ],
+        playoffPictureConfig: PLAYOFF_PICTURE_TYPE.TOP_8,
       },
     ],
     byes: NRL_TEAMS_NAME_LOGO,
@@ -338,6 +340,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
           { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
           { label: "Finals", position: [5, 6, 7, 8] },
         ],
+        playoffPictureConfig: PLAYOFF_PICTURE_TYPE.TOP_8,
       },
     ],
   },
@@ -355,6 +358,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
           { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
           { label: "Finals", position: [5, 6, 7, 8] },
         ],
+        playoffPictureConfig: PLAYOFF_PICTURE_TYPE.TOP_8,
       },
     ],
   },
@@ -463,6 +467,7 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
           { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
           { label: "Finals", position: [5, 6, 7, 8] },
         ],
+        playoffPictureConfig: PLAYOFF_PICTURE_TYPE.TOP_8,
       },
     ],
     byes: AFL_TEAM_NAME_LOGO,

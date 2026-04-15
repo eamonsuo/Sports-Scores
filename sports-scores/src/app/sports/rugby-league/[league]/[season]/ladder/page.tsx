@@ -1,4 +1,5 @@
 import Ladder from "@/components/all-sports/Ladder";
+import PlayoffPicture from "@/components/all-sports/PlayoffPicture";
 import Placeholder from "@/components/misc-ui/Placeholder";
 import { rugbyLeagueStandings } from "@/services/rugby-league.service";
 
@@ -14,6 +15,12 @@ export default async function Page(props: {
 
   return (
     <div className="flex-1 overflow-y-auto px-4">
+      {pageData.playoffPicture && (
+        <PlayoffPicture
+          data={pageData.playoffPicture}
+          buttonLabel="Finals Series"
+        />
+      )}
       {pageData.standings.map((table, index) => (
         <Ladder
           key={index}
