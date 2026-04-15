@@ -1,4 +1,8 @@
 import {
+  LadderPlacingCategory,
+  SportsLadder,
+} from "@/components/all-sports/Ladder";
+import {
   fetchRugbyLeagueLastMatches,
   fetchRugbyLeagueMatchDetails,
   fetchRugbyLeagueMatchesByDate,
@@ -24,11 +28,9 @@ import {
   mapMatchSummary,
 } from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
-import { shortenTeamNames } from "@/lib/projUtils";
-import {
-  matchSummariesByTournament,
-  matchSummaryUpdate,
-} from "@/services/dataverse.service";
+import { resolvePlayoffPicture } from "@/lib/playoffPictureMapping";
+import { getSportConfigurations, shortenTeamNames } from "@/lib/projUtils";
+import { matchSummariesByTournament } from "@/services/dataverse.service";
 import {
   API_EVENT_TYPES,
   DISPLAY_TYPES,
@@ -41,7 +43,7 @@ import {
   RugbyLeagueMatchPage,
   RugbyLeagueTodayPage,
 } from "@/types/rugby-league";
-import { Sofascore_Event } from "@/types/sofascore";
+import { Sofascore_Event, Sofascore_Standing } from "@/types/sofascore";
 import { TZDate } from "@date-fns/tz";
 import { isSameDay } from "date-fns";
 
@@ -78,30 +80,18 @@ export async function rugbyLeagueMatches(
 
   // Merge API and dataverse matches, deduplicating by id (API takes priority)
   const apiIds = new Set(apiMatches.map((m) => m.id));
-  const duplicateDataverseMatches = (dataverseMatches ?? []).filter((m) =>
-    apiIds.has(m.id),
-  );
-  const uniqueDataverseMatches = (dataverseMatches ?? []).filter(
-    (m) => !apiIds.has(m.id),
-  );
 
   const allMatches = apiMatches
-    .concat(uniqueDataverseMatches)
+    .concat((dataverseMatches ?? []).filter((m) => !apiIds.has(m.id)))
     .sort(
       (a, b) =>
         new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
     );
 
-  // Update dataverse records with matches from the API
-  apiMatches.forEach((m) =>
-    matchSummaryUpdate(
-      duplicateDataverseMatches.find((d) => d.id === m.id)?.dataverseGUID ?? "",
-      m,
-    ).catch(() => {}),
-  );
-
-  const leagueConfig = RUGBY_LEAGUE_LEAGUES.find(
-    (l) => Number(l.slug) === tournamentId,
+  const { leagueConfig } = getSportConfigurations(
+    RUGBY_LEAGUE_LEAGUES,
+    tournamentId,
+    seasonId,
   );
 
   const fixture = await mapFixtureRounds(allMatches, leagueConfig);
@@ -124,43 +114,48 @@ export async function rugbyLeagueStandings(
     return null;
   }
 
-  const leagueConfig = RUGBY_LEAGUE_LEAGUES.find(
-    (l) => Number(l.slug) === tournamentId,
-  );
-  const headings = RUGBY_LEAGUE_LADDER_HEADINGS;
-
-  const seasonConfig = leagueConfig?.seasons.find(
-    (s) => Number(s.slug) === seasonId,
+  const { ladderConfig } = getSportConfigurations(
+    RUGBY_LEAGUE_LEAGUES,
+    tournamentId,
+    seasonId,
   );
 
   return {
-    standings: standings?.standings.map((table) => {
-      return {
-        headings,
-        data: table.rows.map((item) => {
-          return {
-            position: item.position,
-            team: {
-              id: item.team.id.toString(),
-              name: shortenTeamNames(item.team.name),
-              logo: resolveSportImage(item.team.name),
-            },
+    standings: standings?.standings.map((table) =>
+      mapStandingsTable(table, ladderConfig?.placingCategories),
+    ),
+    playoffPicture: resolvePlayoffPicture(ladderConfig?.playoffPictureConfig, {
+      sofascoreStandings: standings?.standings,
+    }),
+  } as RugbyLeagueLadderPage<typeof RUGBY_LEAGUE_LADDER_HEADINGS>;
+}
 
-            Pts: item.points,
-            P: item.matches,
-            W: item.wins,
-            L: item.losses,
-            D: item.draws,
-            Diff: item.scoresFor - item.scoresAgainst,
-            F: item.scoresFor,
-          };
-        }),
-        placingCategories:
-          leagueConfig?.ladderConfig?.[seasonConfig?.ladderConfig ?? 0]
-            ?.placingCategories ?? [],
+function mapStandingsTable(
+  table: Sofascore_Standing,
+  placingCategories: LadderPlacingCategory[] = [],
+) {
+  return {
+    headings: RUGBY_LEAGUE_LADDER_HEADINGS,
+    data: table.rows.map((item) => {
+      return {
+        position: item.position,
+        team: {
+          id: item.team.id.toString(),
+          name: shortenTeamNames(item.team.name),
+          logo: resolveSportImage(item.team.name),
+        },
+
+        Pts: item.points,
+        P: item.matches,
+        W: item.wins,
+        L: item.losses,
+        D: item.draws,
+        Diff: item.scoresFor - item.scoresAgainst,
+        F: item.scoresFor,
       };
     }),
-  } as RugbyLeagueLadderPage<typeof headings>;
+    placingCategories,
+  } as SportsLadder<typeof RUGBY_LEAGUE_LADDER_HEADINGS>;
 }
 
 export async function rugbyLeagueMatchDetails(matchId: number) {

@@ -1,4 +1,5 @@
 import { SportsLadder } from "@/components/all-sports/Ladder";
+import { PlayoffConference } from "@/components/all-sports/PlayoffPicture";
 import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import { RugbyLeagueScoreBreakdown } from "@/components/rugby-league/RugbyLeagueScoreBreakdown";
 import { FixtureRound, TeamScoreDetails } from "./misc";
@@ -32,6 +33,7 @@ export interface RugbyLeagueFixturesPage {
 
 export interface RugbyLeagueLadderPage<T extends readonly string[]> {
   standings: SportsLadder<T>[];
+  playoffPicture?: PlayoffConference[];
 }
 
 export interface RugbyLeagueMatchPage {
