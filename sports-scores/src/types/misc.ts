@@ -197,6 +197,11 @@ export interface Matches {
   currentRound: string;
 }
 
+export interface MatchDetail {
+  fixtures: FixtureRound[];
+  currentRound: string;
+}
+
 export interface Standings<T extends readonly string[]> {
   standings: SportsLadder<T>[];
   playoffPicture?: PlayoffPictureGroup[];
