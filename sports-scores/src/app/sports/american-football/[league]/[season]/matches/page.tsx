@@ -9,7 +9,7 @@ export default async function Page(props: {
 }) {
   const { league, season } = await props.params;
 
-  const pageData = await americanFootballService.americanFootballMatches(
+  const pageData = await americanFootballService.matchesAll(
     Number(league),
     Number(season),
   );

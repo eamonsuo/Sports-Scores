@@ -1,15 +1,11 @@
 import {
-  fetchAmericanFootballLastMatches,
   fetchAmericanFootballMatchDetails,
-  fetchAmericanFootballCurrentMatches as fetchAmericanFootballMatchesByDate,
   fetchAmericanFootballMatchIncidents,
-  fetchAmericanFootballNextMatches,
   fetchAmericanFootballStandings,
 } from "@/endpoints/american-football.api";
 import {
   fetchEventDetails,
   fetchEventIncidents,
-  fetchEventsByDate,
   fetchLastEvents,
   fetchNextEvents,
   fetchStandingsTotal,
@@ -18,29 +14,16 @@ import {
   AMERICAN_FOOTBALL_LADDER_HEADINGS,
   AMERICAN_FOOTBALL_LEAGUES,
 } from "@/lib/constants";
-import {
-  getCurrentRound,
-  mapFixtureRounds,
-  mapMatchSummary,
-} from "@/lib/eventMapping";
+import { mapMatchSummary } from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
 import { shortenTeamNames } from "@/lib/projUtils";
 import {
-  AmericanFootball_AmericanFootballApi_CategorySchedule_Response,
   AmericanFootball_Sofascore_Event,
-  AmericanFootballFixturesPage,
   AmericanFootballLadderPage,
   AmericanFootballMatchPage,
 } from "@/types/american-football";
-import {
-  API_EVENT_TYPES,
-  DISPLAY_TYPES,
-  MatchSummary,
-  SPORT,
-} from "@/types/misc";
+import { API_EVENT_TYPES, MatchSummary, SPORT } from "@/types/misc";
 import { SofascoreSportURL } from "@/types/sofascore";
-import { TZDate } from "@date-fns/tz";
-import { isSameDay } from "date-fns";
 import { SofascoreSport } from "./sofascore.service";
 
 class AmericanFootballService extends SofascoreSport {
@@ -65,44 +48,8 @@ class AmericanFootballService extends SofascoreSport {
     );
   }
 
-  async americanFootballMatches(league: number, season: number) {
-    const lastMatches = await (
-      process.env.DEV_MODE ? fetchLastEvents : fetchAmericanFootballLastMatches
-    )(league, season, 0);
-    const nextMatches = await (
-      process.env.DEV_MODE ? fetchNextEvents : fetchAmericanFootballNextMatches
-    )(league, season, 0);
-
-    if (!lastMatches && !nextMatches) {
-      return null;
-    }
-
-    const allMatches = (
-      (lastMatches?.events ?? []).concat(
-        nextMatches?.events ?? [],
-      ) as AmericanFootball_Sofascore_Event[]
-    )
-      .map((event) =>
-        this.mapAmericanFootballMatch(
-          event,
-          event.roundInfo?.name ?? `Week ${event.roundInfo?.round}`,
-        ),
-      )
-      .sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-      );
-
-    const leagueConfig = AMERICAN_FOOTBALL_LEAGUES.find(
-      (l) => Number(l.slug) === league,
-    );
-
-    const fixture = await mapFixtureRounds(allMatches, leagueConfig);
-
-    return {
-      fixtures: fixture,
-      currentRound: getCurrentRound(fixture, leagueConfig?.display),
-    } as AmericanFootballFixturesPage;
+  override matchesAll(tournamentId: number, seasonId: number) {
+    return super.matchesAll(tournamentId, seasonId, "Week");
   }
 
   async americanFootballStandings(league: number, season: number) {
@@ -233,56 +180,7 @@ class AmericanFootballService extends SofascoreSport {
     } as AmericanFootballMatchPage;
   }
 
-  async americanFootballMatchesByDate(date: Date) {
-    const matches = (await (process.env.DEV_MODE
-      ? fetchEventsByDate(SofascoreSportURL.AMERICAN_FOOTBALL, date)
-      : fetchAmericanFootballMatchesByDate(
-          date,
-        ))) as AmericanFootball_AmericanFootballApi_CategorySchedule_Response;
-
-    if (!matches || matches.events.length === 0) {
-      return null;
-    }
-
-    const validLeagueIds = AMERICAN_FOOTBALL_LEAGUES.map((l) => Number(l.slug));
-
-    const timezone = date instanceof TZDate ? date.timeZone : "UTC";
-
-    matches.events = matches.events
-      .filter((item) => {
-        const eventDate = new TZDate(item.startTimestamp * 1000, timezone);
-        return isSameDay(eventDate, date);
-      })
-      .filter((item) =>
-        validLeagueIds.includes(item.tournament.uniqueTournament.id),
-      )
-      .sort(
-        (a, b) =>
-          validLeagueIds.indexOf(a.tournament.uniqueTournament.id) -
-          validLeagueIds.indexOf(b.tournament.uniqueTournament.id),
-      );
-
-    if (!matches.events || matches.events.length === 0) return null;
-
-    const allMatches = matches.events.map((event) =>
-      this.mapAmericanFootballMatch(
-        event,
-        event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
-      ),
-    );
-
-    const fixture = await mapFixtureRounds(
-      allMatches,
-      AMERICAN_FOOTBALL_LEAGUES,
-    );
-
-    return {
-      fixtures: fixture,
-      currentRound: getCurrentRound(fixture, DISPLAY_TYPES.LEAGUE),
-    } as AmericanFootballFixturesPage;
-  }
-
-  mapAmericanFootballMatch(
+  override eventMapper(
     match: AmericanFootball_Sofascore_Event,
     roundLabel: string,
   ): MatchSummary {

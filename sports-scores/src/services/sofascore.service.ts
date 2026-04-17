@@ -58,7 +58,11 @@ export class SofascoreSport {
     this.headings = headings;
   }
 
-  async matchesAll(tournamentId: number, seasonId: number) {
+  async matchesAll(
+    tournamentId: number,
+    seasonId: number,
+    defaultRoundLabel: string = "Round",
+  ) {
     const [lastMatches, nextMatches, dataverseMatches] = await Promise.all([
       (process.env.DEV_MODE
         ? fetchLastEvents
@@ -78,7 +82,8 @@ export class SofascoreSport {
       .map((event) =>
         this.eventMapper(
           event,
-          event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
+          event.roundInfo?.name ??
+            `${defaultRoundLabel} ${event.roundInfo?.round}`,
         ),
       );
 

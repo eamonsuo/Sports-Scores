@@ -17,8 +17,7 @@ export default async function Page({
   const parsedDate =
     date === undefined ? curDate : new TZDate(date as string, curDate.timeZone);
 
-  const pageData =
-    await americanFootballService.americanFootballMatchesByDate(parsedDate);
+  const pageData = await americanFootballService.matchesByDate(parsedDate);
 
   if (pageData === null) {
     return <NoData href={"https://www.google.com/search?q=nfl"} />;

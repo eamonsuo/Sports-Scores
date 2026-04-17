@@ -52,7 +52,7 @@ export default async function Page({
     footballService.footballMatchesByDate(parsedDate),
     basketballService.basketballMatchesByDate(parsedDate),
     baseballService.baseballMatchesByDate(parsedDate),
-    americanFootballService.americanFootballMatchesByDate(parsedDate),
+    americanFootballService.matchesByDate(parsedDate),
     rugbyLeagueService.matchesByDate(parsedDate),
     aussieRulesService.matchesByDate(parsedDate),
     iceHockeyService.iceHockeyMatchesByDate(parsedDate),
