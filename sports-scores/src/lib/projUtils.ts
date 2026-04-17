@@ -1,3 +1,4 @@
+import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
 import { CountryFlagCode } from "@/types/misc";
 import { Sofascore_Score } from "@/types/sofascore";
 import { format } from "date-fns/format";
@@ -214,4 +215,23 @@ export function setTennisMatchSummary(
     default:
       return "";
   }
+}
+
+export function getSportConfigurations(
+  leagueConfigs: LeagueSeasonConfig[],
+  tournamentId: number,
+  seasonId: number,
+) {
+  const leagueConfig = leagueConfigs.find(
+    (l) => Number(l.slug) === tournamentId,
+  );
+
+  const seasonConfig = leagueConfig?.seasons.find(
+    (s) => Number(s.slug) === seasonId,
+  );
+
+  const ladderConfig =
+    leagueConfig?.ladderConfig?.[seasonConfig?.ladderConfig ?? 0];
+
+  return { leagueConfig, seasonConfig, ladderConfig };
 }

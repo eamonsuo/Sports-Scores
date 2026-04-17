@@ -2,7 +2,7 @@ import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
 import DateNav from "@/components/misc-ui/DateNav";
 import NoData from "@/components/misc-ui/NoData";
 import { getClientDate } from "@/lib/serverUtils";
-import { americanFootballMatchesByDate } from "@/services/american-football.service";
+import { americanFootballService } from "@/services/american-football.service";
 import { TZDate } from "@date-fns/tz/date";
 
 // export const dynamic = "force-dynamic";
@@ -17,7 +17,7 @@ export default async function Page({
   const parsedDate =
     date === undefined ? curDate : new TZDate(date as string, curDate.timeZone);
 
-  const pageData = await americanFootballMatchesByDate(parsedDate);
+  const pageData = await americanFootballService.matchesByDate(parsedDate);
 
   if (pageData === null) {
     return <NoData href={"https://www.google.com/search?q=nfl"} />;

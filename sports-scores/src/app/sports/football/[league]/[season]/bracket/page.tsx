@@ -1,13 +1,16 @@
 import Match from "@/components/bracket/components/match";
 import FlexibleSingleEliminationBracket from "@/components/bracket/FlexibleSingleEliminationBracket";
 import Placeholder from "@/components/misc-ui/Placeholder";
-import { footballBrackets } from "@/services/football.service";
+import { footballService } from "@/services/football.service";
 
 export default async function Page(props: {
   params: Promise<{ league: string; season: string }>;
 }) {
   const { league, season } = await props.params;
-  const pageData = await footballBrackets(Number(league), Number(season));
+  const pageData = await footballService.footballBrackets(
+    Number(league),
+    Number(season),
+  );
   // await pageData = fetch(
   //   `https://www.sofascore.com/api/v1/unique-tournament/19/season/67958/cuptrees`,
   // );

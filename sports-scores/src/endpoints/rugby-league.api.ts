@@ -7,6 +7,7 @@ import {
   RugbyLeague_RugbyAPI2_Match_Response,
   RugbyLeague_RugbyAPI2_MatchIncidents_Response,
 } from "@/types/rugby-league";
+import { SofascoreAPI } from "@/types/sofascore";
 
 function updateQuota(response: Response) {
   const limit = response.headers.get("x-ratelimit-requests-limit");
@@ -84,3 +85,16 @@ export async function fetchRugbyLeagueMatchesByDate(date: Date) {
     `/rugby/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
   )) as RugbyLeague_RugbyAPI2_CategorySchedules_Response;
 }
+
+export const rugbyLeagueAPI: SofascoreAPI = {
+  fetchNextEvents: fetchRugbyLeagueNextMatches,
+  fetchLastEvents: fetchRugbyLeagueLastMatches,
+  fetchStandingsTotal: fetchRugbyLeagueStandings,
+  fetchEventDetails: fetchRugbyLeagueMatchDetails,
+  fetchEventIncidents: fetchRugbyLeagueMatchIncidents,
+  fetchEventsByDate: fetchRugbyLeagueMatchesByDate,
+  fetchCupTrees: async () => null,
+  fetchPlayerRankings: async () => null,
+  fetchTeamLastEvents: async () => null,
+  fetchTeamNextEvents: async () => null,
+};

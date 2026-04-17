@@ -3,10 +3,10 @@
  * and bulk-uploads them to the Dataverse ss_matchsummary table.
  *
  * Run from the sports-scores directory:
- *   npx tsx scripts/bulk-upload-events.ts <tournamentId> <seasonId> <sport> [displayType]
+ *   npx tsx scripts/bulk-upload-events.ts <tournamentId> <seasonId> <sport> [displayType] [allEventsMode]
  *
  * Example (NRL 2025):
- *   npx tsx scripts/bulk-upload-events.ts 294 63614 rugby-league round
+ *   npx tsx scripts/bulk-upload-events.ts 294 63614 rugby-league round false
  */
 
 import { fetchLastEvents, fetchNextEvents } from "@/endpoints/sofascore.api";
@@ -28,8 +28,16 @@ const CLIENT_SECRET = process.env.DATAVERSE_CLIENT_SECRET ?? "";
 const TABLE = "ss_matchsummaries";
 const CHUNK_SIZE = 100;
 
-const [, , tournamentIdArg, seasonIdArg, sportArg, displayTypeArg] =
-  process.argv;
+const [
+  ,
+  ,
+  tournamentIdArg,
+  seasonIdArg,
+  sportArg,
+  displayTypeArg,
+  allEventsArg,
+] = process.argv;
+const allEventsMode = allEventsArg === "false" ? false : true;
 const tournamentId = tournamentIdArg;
 const seasonId = seasonIdArg;
 const sport = sportArg as SPORT;
@@ -37,7 +45,7 @@ const displayType = (displayTypeArg as DISPLAY_TYPES) ?? DISPLAY_TYPES.ROUND;
 
 if (!tournamentId || !seasonId || !sport) {
   console.error(
-    "Usage: npx tsx scripts/bulk-upload-sofascore-events.ts <tournamentId> <seasonId> <sport> <displayType?>",
+    "Usage: npx tsx scripts/bulk-upload-events.ts <tournamentId> <seasonId> <sport> <displayType?> <allEventsMode?>",
   );
   process.exit(1);
 }
@@ -67,7 +75,7 @@ async function getAccessToken() {
 }
 
 // ---------------------------------------------------------------------------
-// Rugby API types & fetch
+// Fetch records from API
 // ---------------------------------------------------------------------------
 
 async function fetchAllPages(label: string, fn: typeof fetchLastEvents) {
@@ -92,17 +100,16 @@ async function fetchAllRecords() {
   ]);
 
   return [...lastEvents, ...nextEvents];
+}
 
-  // Deduplicate by event ID if needed
-  // const seenIds = new Set<number>();
-  // const all: Sofascore_Event[] = [];
-  // for (const event of [...lastEvents, ...nextEvents]) {
-  //   if (!seenIds.has(event.id)) {
-  //     seenIds.add(event.id);
-  //     all.push(event);
-  //   }
-  // }
-  // return all;
+async function fetchLatestEvents() {
+  const events: Sofascore_Event[] = [];
+  console.log(`Fetching latest events `);
+  const data = await fetchLastEvents(Number(tournamentId), Number(seasonId));
+  if (!data || data.events.length === 0) return events;
+  events.push(...data.events);
+  console.log(`Fetched ${events.length} latest events.`);
+  return events;
 }
 
 // ---------------------------------------------------------------------------
@@ -267,7 +274,9 @@ async function main() {
   const existingRecords = await fetchExistingRecords(token);
   console.log(`Found ${existingRecords.size} existing matches in Dataverse.`);
 
-  const events = await fetchAllRecords();
+  const events = await (allEventsMode
+    ? fetchAllRecords()
+    : fetchLatestEvents());
   console.log(`Fetched ${events.length} matches from API.`);
 
   const operations: BatchOperation[] = events.map((e) => {

@@ -11,12 +11,14 @@ const defaultColours = [
   "bg-yellow-300",
 ];
 
-type TeamInfo = {
-  team: {
-    id: string | number;
-    name: string;
-    logo?: string;
-  };
+type LadderTeamDetail = {
+  id: string | number;
+  name: string;
+  logo?: string;
+};
+
+type LadderTeam = {
+  team: LadderTeamDetail;
   position: number;
 };
 
@@ -26,10 +28,14 @@ export type LadderPlacingCategory = {
   colour?: string;
 };
 
+export type LadderRow = LadderTeam & {
+  [key: string]: string | number | LadderTeamDetail | undefined;
+};
+
 export interface SportsLadder<H extends readonly string[]> {
   tableName?: string;
   headings: H;
-  data: (Record<H[number], string | number | undefined> & TeamInfo)[]; // Team data + each value related to a specified heading
+  data: LadderRow[];
   placingCategories: LadderPlacingCategory[];
 }
 
@@ -87,7 +93,9 @@ export default function Ladder<const H extends readonly string[]>({
                 </td>
 
                 {headings.map((heading) => (
-                  <td key={heading}>{item[heading as H[number]]}</td>
+                  <td key={heading}>
+                    {item[heading] as string | number | undefined}
+                  </td>
                 ))}
               </tr>
             );

@@ -1,11 +1,11 @@
 import Placeholder from "@/components/misc-ui/Placeholder";
 import RankingsLeaderboard from "@/components/tennis/RankingsLeaderboard";
-import { TennisWorldRankings } from "@/services/tennis.service";
+import { tennisService } from "@/services/tennis.service";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const pageData = await TennisWorldRankings("atp");
+  const pageData = await tennisService.TennisWorldRankings("atp");
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;

@@ -1,13 +1,13 @@
 import MatchDetailsHero from "@/components/all-sports/MatchDetailsHero";
 import Placeholder from "@/components/misc-ui/Placeholder";
 import TennisScoreBreakdown from "@/components/tennis/TennisScoreBreakdown";
-import { TennisMatchDetails } from "@/services/tennis.service";
+import { tennisService } from "@/services/tennis.service";
 
 export default async function Page(props: {
   params: Promise<{ league: string; season: string; id: string }>;
 }) {
   const { league, season, id } = await props.params;
-  const pageData = await TennisMatchDetails(Number(id));
+  const pageData = await tennisService.TennisMatchDetails(Number(id));
 
   if (pageData === null || pageData.matchDetails === null) {
     return <Placeholder>NO DATA</Placeholder>;

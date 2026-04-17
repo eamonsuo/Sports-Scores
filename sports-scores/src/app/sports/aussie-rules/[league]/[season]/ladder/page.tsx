@@ -1,6 +1,7 @@
 import Ladder from "@/components/all-sports/Ladder";
+import PlayoffPicture from "@/components/all-sports/PlayoffPicture";
 import Placeholder from "@/components/misc-ui/Placeholder";
-import { aussieRulesStandings } from "@/services/aussie-rules.service";
+import { aussieRulesService } from "@/services/aussie-rules.service";
 
 export const dynamic = "force-dynamic";
 
@@ -8,7 +9,10 @@ export default async function Page(props: {
   params: Promise<{ league: string; season: string }>;
 }) {
   const { league, season } = await props.params;
-  const pageData = await aussieRulesStandings(Number(league), Number(season));
+  const pageData = await aussieRulesService.standings(
+    Number(league),
+    Number(season),
+  );
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;
@@ -16,6 +20,12 @@ export default async function Page(props: {
 
   return (
     <div className="flex-1 overflow-y-auto px-4">
+      {pageData.playoffPicture && (
+        <PlayoffPicture
+          data={pageData.playoffPicture}
+          buttonLabel="Finals Series"
+        />
+      )}{" "}
       {pageData.standings.map((table, index) => (
         <Ladder
           key={index}

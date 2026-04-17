@@ -55,17 +55,11 @@ export async function netballMatches(tournamentId: number, seasonId: number) {
         new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
     );
 
-  const fixture = await mapFixtureRounds(
-    leagueConfig ?? { name: "", slug: "", seasons: [] },
-    sortedMatches,
-  );
+  const fixture = await mapFixtureRounds(sortedMatches, leagueConfig);
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(
-      leagueConfig?.display ?? DISPLAY_TYPES.ROUND,
-      fixture,
-    ),
+    currentRound: getCurrentRound(fixture, leagueConfig?.display),
   } as NetballFixturesPage;
 }
 
@@ -178,11 +172,11 @@ export async function netballMatchesByDate(date: Date) {
     mapNetballMatch(match, `Round ${match.intRound ?? 0}`),
   );
 
-  const fixture = await mapFixtureRounds(NETBALL_LEAGUES, allMatches);
+  const fixture = await mapFixtureRounds(allMatches, NETBALL_LEAGUES);
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(DISPLAY_TYPES.LEAGUE, fixture),
+    currentRound: getCurrentRound(fixture, DISPLAY_TYPES.LEAGUE),
   } as NetballTodayPage;
 }
 

@@ -2,7 +2,7 @@ import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
 import DateNav from "@/components/misc-ui/DateNav";
 import Placeholder from "@/components/misc-ui/Placeholder";
 import { getClientDate } from "@/lib/serverUtils";
-import { aussieRulesCurrentMatches } from "@/services/aussie-rules.service";
+import { aussieRulesService } from "@/services/aussie-rules.service";
 import { TZDate } from "@date-fns/tz/date";
 
 // export const dynamic = "force-dynamic";
@@ -17,7 +17,7 @@ export default async function Page({
   const parsedDate =
     date === undefined ? curDate : new TZDate(date as string, curDate.timeZone);
 
-  const pageData = await aussieRulesCurrentMatches(parsedDate);
+  const pageData = await aussieRulesService.matchesByDate(parsedDate);
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;

@@ -1,0 +1,814 @@
+[
+  {
+    "name": "NRL 2026",
+    "tournamentId": "294",
+    "seasonId": "86317",
+    "sport": "rugby-league",
+    "displayType": "round"
+  },
+  {
+    "name": "NRLW 2026",
+    "tournamentId": "19120",
+    "seasonId": "87573",
+    "sport": "rugby-league",
+    "displayType": "round"
+  },
+  {
+    "name": "State of Origin 2026",
+    "tournamentId": "791",
+    "seasonId": "87571",
+    "sport": "rugby-league",
+    "displayType": "round"
+  },
+  {
+    "name": "Queensland Cup 2026",
+    "tournamentId": "2135",
+    "seasonId": "88763",
+    "sport": "rugby-league",
+    "displayType": "round"
+  },
+  {
+    "name": "New South Wales Cup 2026",
+    "tournamentId": "2134",
+    "seasonId": "89006",
+    "sport": "rugby-league",
+    "displayType": "round"
+  },
+  {
+    "name": "World Cup 2026",
+    "tournamentId": "431",
+    "seasonId": "87548",
+    "sport": "rugby-league",
+    "displayType": "round"
+  },
+  {
+    "name": "World Cup - Women 2026",
+    "tournamentId": "10683",
+    "seasonId": "87572",
+    "sport": "rugby-league",
+    "displayType": "round"
+  },
+  {
+    "name": "Pacific Champs 2025",
+    "tournamentId": "13667",
+    "seasonId": "81655",
+    "sport": "rugby-league",
+    "displayType": "round"
+  },
+  {
+    "name": "Pacific Champs W 2025",
+    "tournamentId": "21300",
+    "seasonId": "881656",
+    "sport": "rugby-league",
+    "displayType": "round"
+  },
+  {
+    "name": "Int. Friendly Games 2025",
+    "tournamentId": "977",
+    "seasonId": "69571",
+    "sport": "rugby-league",
+    "displayType": "round"
+  },
+  {
+    "name": "World Club Challenge 2026",
+    "tournamentId": "1590",
+    "seasonId": "87449",
+    "sport": "rugby-league",
+    "displayType": "round"
+  },
+  {
+    "name": "Super League 2026",
+    "tournamentId": "302",
+    "seasonId": "86986",
+    "sport": "rugby-league",
+    "displayType": "round"
+  },
+  {
+    "name": "🇦🇺 A-League Men 25/26",
+    "tournamentId": "136",
+    "seasonId": "82603",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🇦🇺 A-League Women 25/26",
+    "tournamentId": "1894",
+    "seasonId": "82605",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🇦🇺 Australia Cup 2025",
+    "tournamentId": "1786",
+    "seasonId": "75270",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🇦🇺 Australian Championship 2025",
+    "tournamentId": "29010",
+    "seasonId": "81331",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League 25/26",
+    "tournamentId": "17",
+    "seasonId": "76986",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 WSL 25/26",
+    "tournamentId": "1044",
+    "seasonId": "79227",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Championship 25/26",
+    "tournamentId": "18",
+    "seasonId": "77347",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 FA Cup 25/26",
+    "tournamentId": "19",
+    "seasonId": "82557",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Women's FA Cup 25/26",
+    "tournamentId": "11666",
+    "seasonId": "84634",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 EFL Cup 25/26",
+    "tournamentId": "21",
+    "seasonId": "77500",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🌍 FIFA World Cup 2026",
+    "tournamentId": "16",
+    "seasonId": "58210",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🌍 FIFA World Cup Qualifiers 2026",
+    "tournamentId": "fifaQualifiers",
+    "seasonId": "wiki",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🌍 FIFA World Cup Qualifiers - Inter-Confed... 2026",
+    "tournamentId": "10618",
+    "seasonId": "86613",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🌍 FIFA Women's World Cup 2023",
+    "tournamentId": "290",
+    "seasonId": "46930",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🌍 FIFA Women's World Cup Qualifiers 2027",
+    "tournamentId": "fifaWQualifiers",
+    "seasonId": "wiki",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🌍 FIFA Intercontinental Cup 2025",
+    "tournamentId": "23674",
+    "seasonId": "78702",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🌍 FIFA Club World Cup 2025",
+    "tournamentId": "357",
+    "seasonId": "69619",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🌏 AFC Asian Cup 2023",
+    "tournamentId": "246",
+    "seasonId": "51384",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🌏 AFC Asian Cup - Women 2026",
+    "tournamentId": "1692",
+    "seasonId": "79569",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🌏 AFC World Cup Qualifiers 23-25",
+    "tournamentId": "308",
+    "seasonId": "53508",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🌏 AFC Women's World Cup Qualifiers 26-27",
+    "tournamentId": "308-women",
+    "seasonId": "wiki",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🌏 AFC Champions League Elite 25/26",
+    "tournamentId": "463",
+    "seasonId": "77010",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🌏 AFC Women's Champions League 25/26",
+    "tournamentId": "23009",
+    "seasonId": "77726",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🇪🇺 UEFA Champions League 25/26",
+    "tournamentId": "7",
+    "seasonId": "76953",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🇪🇺 UEFA Women's Champions League 25/26",
+    "tournamentId": "696",
+    "seasonId": "77328",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🇪🇺 UEFA Europa League 25/26",
+    "tournamentId": "679",
+    "seasonId": "76984",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🇪🇺 UEFA Conference League 25/26",
+    "tournamentId": "17015",
+    "seasonId": "76960",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🇪🇺 UEFA European Championship 2024",
+    "tournamentId": "1",
+    "seasonId": "56953",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🇪🇺 UEFA European Women's Championship 2025",
+    "tournamentId": "477",
+    "seasonId": "69935",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🇺🇸 MLS 2026",
+    "tournamentId": "242",
+    "seasonId": "86668",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🇺🇸 NWSL 2025",
+    "tournamentId": "1690",
+    "seasonId": "71412",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🇫🇷 Ligue 1 25/26",
+    "tournamentId": "34",
+    "seasonId": "77356",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🇩🇪 Bundesliga 25/26",
+    "tournamentId": "35",
+    "seasonId": "77333",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🇮🇹 Serie A 25/26",
+    "tournamentId": "23",
+    "seasonId": "76457",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🇪🇸 La Liga 25/26",
+    "tournamentId": "8",
+    "seasonId": "77559",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🌍 International Friendlies - Men 2026",
+    "tournamentId": "851",
+    "seasonId": "87155",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🌍 International Friendlies - Women 2026",
+    "tournamentId": "852",
+    "seasonId": "86730",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🌍 FIFA Series - Men 2026",
+    "tournamentId": "32832",
+    "seasonId": "91220",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🌍 FIFA Series - Women 2026",
+    "tournamentId": "32833",
+    "seasonId": "91221",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "AFL 2026",
+    "tournamentId": "656",
+    "seasonId": "86748",
+    "sport": "aussie-rules",
+    "displayType": "round"
+  },
+  {
+    "name": "AFLW 2025",
+    "tournamentId": "10159",
+    "seasonId": "76123",
+    "sport": "aussie-rules",
+    "displayType": "round"
+  },
+  {
+    "name": "VFL 2026",
+    "tournamentId": "25506",
+    "seasonId": "90001",
+    "sport": "aussie-rules",
+    "displayType": "round"
+  },
+  {
+    "name": "SANFL 2026",
+    "tournamentId": "20126",
+    "seasonId": "89835",
+    "sport": "aussie-rules",
+    "displayType": "round"
+  },
+  {
+    "name": "WAFL 2026",
+    "tournamentId": "20160",
+    "seasonId": "89836",
+    "sport": "aussie-rules",
+    "displayType": "round"
+  },
+  {
+    "name": "AFL Preseason 2026",
+    "tournamentId": "22064",
+    "seasonId": "89834",
+    "sport": "aussie-rules",
+    "displayType": "round"
+  },
+  {
+    "name": "AFL All Stars 2025",
+    "tournamentId": "25029",
+    "seasonId": "72022",
+    "sport": "aussie-rules",
+    "displayType": "round"
+  },
+  {
+    "name": "NFL 25/26",
+    "tournamentId": "9464",
+    "seasonId": "75522",
+    "sport": "american-football",
+    "displayType": "round"
+  },
+  {
+    "name": "NFL Preseason 2025",
+    "tournamentId": "9465",
+    "seasonId": "75587",
+    "sport": "american-football",
+    "displayType": "round"
+  },
+  {
+    "name": "NCAA, Regular Season 25/26",
+    "tournamentId": "19510",
+    "seasonId": "74693",
+    "sport": "american-football",
+    "displayType": "round"
+  },
+  {
+    "name": "NCAA Division I, FBS Post Season 24/25",
+    "tournamentId": "19750",
+    "seasonId": "69101",
+    "sport": "american-football",
+    "displayType": "round"
+  },
+  {
+    "name": "NCAA Division I, FCS National Championship 24/25",
+    "tournamentId": "19717",
+    "seasonId": "69309",
+    "sport": "american-football",
+    "displayType": "round"
+  },
+  {
+    "name": "NBL 25/26",
+    "tournamentId": "1524",
+    "seasonId": "77205",
+    "sport": "basketball",
+    "displayType": "date"
+  },
+  {
+    "name": "WNBL 25/26",
+    "tournamentId": "1506",
+    "seasonId": "77204",
+    "sport": "basketball",
+    "displayType": "date"
+  },
+  {
+    "name": "NBA 25/26",
+    "tournamentId": "132",
+    "seasonId": "80229",
+    "sport": "basketball",
+    "displayType": "date"
+  },
+  {
+    "name": "WNBA 2026",
+    "tournamentId": "486",
+    "seasonId": "89004",
+    "sport": "basketball",
+    "displayType": "date"
+  },
+  {
+    "name": "March Madness 2026",
+    "tournamentId": "13434",
+    "seasonId": "91315",
+    "sport": "basketball",
+    "displayType": "date"
+  },
+  {
+    "name": "MLB 2026",
+    "tournamentId": "11205",
+    "seasonId": "84695",
+    "sport": "baseball",
+    "displayType": "date"
+  },
+  {
+    "name": "ALB 25/26",
+    "tournamentId": "19445",
+    "seasonId": "81328",
+    "sport": "baseball",
+    "displayType": "date"
+  },
+  {
+    "name": "World Baseball Classic 2026",
+    "tournamentId": "11207",
+    "seasonId": "75868",
+    "sport": "baseball",
+    "displayType": "date"
+  },
+  {
+    "name": "WBSC Premier12 2024",
+    "tournamentId": "11206",
+    "seasonId": "65281",
+    "sport": "baseball",
+    "displayType": "date"
+  },
+  {
+    "name": "AIHL 2026",
+    "tournamentId": "11059",
+    "seasonId": "86527",
+    "sport": "ice-hockey",
+    "displayType": "date"
+  },
+  {
+    "name": "NHL 25/26",
+    "tournamentId": "234",
+    "seasonId": "78476",
+    "sport": "ice-hockey",
+    "displayType": "date"
+  },
+  {
+    "name": "World Championship 2026",
+    "tournamentId": "3",
+    "seasonId": "81043",
+    "sport": "ice-hockey",
+    "displayType": "date"
+  },
+  {
+    "name": "World Championship - Australia 2026",
+    "tournamentId": "13446",
+    "seasonId": "wiki",
+    "sport": "ice-hockey",
+    "displayType": "date"
+  },
+  {
+    "name": "World Championship - Women 2026",
+    "tournamentId": "428",
+    "seasonId": "wiki",
+    "sport": "ice-hockey",
+    "displayType": "date"
+  },
+  {
+    "name": "World Championship - Women - Australia 2026",
+    "tournamentId": "wiki",
+    "seasonId": "wiki",
+    "sport": "ice-hockey",
+    "displayType": "date"
+  },
+  {
+    "name": "Int. Friendly Games 2026",
+    "tournamentId": "873",
+    "seasonId": "87173",
+    "sport": "ice-hockey",
+    "displayType": "date"
+  },
+  {
+    "name": "Super Rugby 2026",
+    "tournamentId": "422",
+    "seasonId": "86502",
+    "sport": "rugby-union",
+    "displayType": "round"
+  },
+  {
+    "name": "Rugby Championship 2025",
+    "tournamentId": "789",
+    "seasonId": "76747",
+    "sport": "rugby-union",
+    "displayType": "round"
+  },
+  {
+    "name": "Six Nations 2026",
+    "tournamentId": "423",
+    "seasonId": "86339",
+    "sport": "rugby-union",
+    "displayType": "round"
+  },
+  {
+    "name": "Super Rugby AUS 2025",
+    "tournamentId": "29227",
+    "seasonId": "82008",
+    "sport": "rugby-union",
+    "displayType": "round"
+  },
+  {
+    "name": "Queensland Premier Rugby 2026",
+    "tournamentId": "2048",
+    "seasonId": "87649",
+    "sport": "rugby-union",
+    "displayType": "round"
+  },
+  {
+    "name": "Int. Friendly Games 2026",
+    "tournamentId": "876",
+    "seasonId": "87128",
+    "sport": "rugby-union",
+    "displayType": "round"
+  },
+  {
+    "name": "World Cup 2023",
+    "tournamentId": "421",
+    "seasonId": "46701",
+    "sport": "rugby-union",
+    "displayType": "round"
+  },
+  {
+    "name": "World Cup - Women 2025",
+    "tournamentId": "1826",
+    "seasonId": "69966",
+    "sport": "rugby-union",
+    "displayType": "round"
+  },
+  {
+    "name": "British and Irish Lions Tour 2025",
+    "tournamentId": "27512",
+    "seasonId": "77221",
+    "sport": "rugby-union",
+    "displayType": "round"
+  },
+  {
+    "name": "Rugby Sevens World Series 25/26",
+    "tournamentId": "10055",
+    "seasonId": "85821",
+    "sport": "rugby-union",
+    "displayType": "round"
+  },
+  {
+    "name": "Rugby Sevens World Series - Women 25/26",
+    "tournamentId": "11623",
+    "seasonId": "85845",
+    "sport": "rugby-union",
+    "displayType": "round"
+  },
+  {
+    "name": "World Cup Sevens 2022",
+    "tournamentId": "11276",
+    "seasonId": "45756",
+    "sport": "rugby-union",
+    "displayType": "round"
+  },
+  {
+    "name": "World Cup Sevens - Women 2022",
+    "tournamentId": "11277",
+    "seasonId": "45757",
+    "sport": "rugby-union",
+    "displayType": "round"
+  },
+  {
+    "name": "IPL 2026",
+    "tournamentId": "india",
+    "seasonId": "ipl",
+    "sport": "cricket",
+    "displayType": "round"
+  },
+  {
+    "name": "The Hundred - Men 2026",
+    "tournamentId": "the-hundred",
+    "seasonId": "the-hundred-men",
+    "sport": "cricket",
+    "displayType": "round"
+  },
+  {
+    "name": "The Hundred - Women 2026",
+    "tournamentId": "the-hundred",
+    "seasonId": "the-hundred-women",
+    "sport": "cricket",
+    "displayType": "round"
+  },
+  {
+    "name": "BBL 25/26",
+    "tournamentId": "australia",
+    "seasonId": "big-bash-league",
+    "sport": "cricket",
+    "displayType": "round"
+  },
+  {
+    "name": "WBBL 25/26",
+    "tournamentId": "australia",
+    "seasonId": "big-bash-league-women",
+    "sport": "cricket",
+    "displayType": "round"
+  },
+  {
+    "name": "ICC Mens T20 World Cup 2026",
+    "tournamentId": "icc-mens-t20-world-cup",
+    "seasonId": "icc-mens-t20-world-cup",
+    "sport": "cricket",
+    "displayType": "round"
+  },
+  {
+    "name": "Super Netball 2026",
+    "tournamentId": "4540",
+    "seasonId": "2026",
+    "sport": "netball",
+    "displayType": "round"
+  },
+  {
+    "name": "Constellation Cup 2025",
+    "tournamentId": "5793",
+    "seasonId": "2025",
+    "sport": "netball",
+    "displayType": "round"
+  },
+  {
+    "name": "World Cup 2023",
+    "tournamentId": "5790",
+    "seasonId": "2023",
+    "sport": "netball",
+    "displayType": "round"
+  },
+  {
+    "name": "Quad Series 2025",
+    "tournamentId": "5792",
+    "seasonId": "2025",
+    "sport": "netball",
+    "displayType": "round"
+  },
+  {
+    "name": "Australian Open - Mens Singles 2026",
+    "tournamentId": "2363",
+    "seasonId": "80012",
+    "sport": "tennis",
+    "displayType": "round"
+  },
+  {
+    "name": "Australian Open - Womens Singles 2026",
+    "tournamentId": "2571",
+    "seasonId": "80013",
+    "sport": "tennis",
+    "displayType": "round"
+  },
+  {
+    "name": "Australian Open - Mens Doubles 2026",
+    "tournamentId": "2455",
+    "seasonId": "85948",
+    "sport": "tennis",
+    "displayType": "round"
+  },
+  {
+    "name": "Australian Open - Womens Doubles 2026",
+    "tournamentId": "2650",
+    "seasonId": "85949",
+    "sport": "tennis",
+    "displayType": "round"
+  },
+  {
+    "name": "Australian Open - Mixed Doubles 2026",
+    "tournamentId": "2403",
+    "seasonId": "85950",
+    "sport": "tennis",
+    "displayType": "round"
+  },
+  {
+    "name": "Brisbane International - Men 2026",
+    "tournamentId": "2437",
+    "seasonId": "80014",
+    "sport": "tennis",
+    "displayType": "round"
+  },
+  {
+    "name": "Brisbane International - Women 2026",
+    "tournamentId": "2644",
+    "seasonId": "85608",
+    "sport": "tennis",
+    "displayType": "round"
+  },
+  {
+    "name": "Formula 1 2026",
+    "tournamentId": "f1",
+    "seasonId": "2026",
+    "sport": "motorsport",
+    "displayType": "round"
+  },
+  {
+    "name": "Supercars 2026",
+    "tournamentId": "supercars",
+    "seasonId": "2026",
+    "sport": "motorsport",
+    "displayType": "round"
+  },
+  {
+    "name": "PGA Tour 2026",
+    "tournamentId": "pga",
+    "seasonId": "2026",
+    "sport": "golf",
+    "displayType": "round"
+  },
+  {
+    "name": "LIV Golf 2026",
+    "tournamentId": "liv",
+    "seasonId": "2026",
+    "sport": "golf",
+    "displayType": "round"
+  },
+  {
+    "name": "OWGR Current",
+    "tournamentId": "owgr",
+    "seasonId": "2026",
+    "sport": "golf",
+    "displayType": "round"
+  },
+  {
+    "name": "Men 2026",
+    "tournamentId": "9",
+    "seasonId": "220825",
+    "sport": "cycling",
+    "displayType": "round"
+  },
+  {
+    "name": "Women 2026",
+    "tournamentId": "94",
+    "seasonId": "220906",
+    "sport": "cycling",
+    "displayType": "round"
+  }
+]

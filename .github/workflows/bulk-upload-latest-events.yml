@@ -1,0 +1,123 @@
+name: Bulk Upload Events
+
+on:
+  schedule:
+    # Runs weekly on Tuesday at 23:00 UTC
+    - cron: "0 23 * * 2"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Run latest matrix entries, all leagues, or a single tournament"
+        required: true
+        type: choice
+        default: "latest"
+        options:
+          - latest
+          - all
+          - single
+      tournamentId:
+        description: "Sofascore tournament ID (single mode only)"
+        required: false
+        type: string
+      seasonId:
+        description: "Sofascore season ID (single mode only)"
+        required: false
+        type: string
+      sport:
+        description: "Sport key e.g. rugby-league (single mode only)"
+        required: false
+        type: string
+      displayType:
+        description: "Display type e.g. round, date (single mode only)"
+        required: false
+        default: "round"
+        type: string
+
+jobs:
+  # ---- Read the committed matrix JSON ----
+  read-matrix:
+    if: ${{ github.event_name == 'schedule' || inputs.mode == 'latest' || inputs.mode == 'all' }}
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: set-matrix
+        run: |
+          if [ "${{ inputs.mode }}" = "all" ]; then
+            echo "matrix=$(cat sports-scores/scripts/eventUploadMatrixAll.json)" >> $GITHUB_OUTPUT
+          else
+            echo "matrix=$(cat sports-scores/scripts/eventUploadMatrix.json)" >> $GITHUB_OUTPUT
+          fi
+
+  # ---- Runs matrix entries (scheduled/manual "matrix"/manual "all") ----
+  upload-matrix:
+    needs: read-matrix
+    runs-on: ubuntu-latest
+    name: Upload — ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.read-matrix.outputs.matrix) }}
+    defaults:
+      run:
+        working-directory: sports-scores
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: sports-scores/package-lock.json
+
+      - run: npm ci
+
+      - name: Run bulk upload - ${{ matrix.name }}
+        run: |
+          npx tsx scripts/bulk-upload-events.ts \
+            "${{ matrix.tournamentId }}" \
+            "${{ matrix.seasonId }}" \
+            "${{ matrix.sport }}" \
+            "${{ matrix.displayType }}" \
+            ${{ inputs.mode == 'all' && 'true' || 'false' }}
+        env:
+          DATAVERSE_ENVIRONMENT_URL: ${{ secrets.DATAVERSE_ENVIRONMENT_URL }}
+          DATAVERSE_TENANT_ID: ${{ secrets.DATAVERSE_TENANT_ID }}
+          DATAVERSE_CLIENT_ID: ${{ secrets.DATAVERSE_CLIENT_ID }}
+          DATAVERSE_CLIENT_SECRET: ${{ secrets.DATAVERSE_CLIENT_SECRET }}
+
+  # ---- Runs a single tournament (manual only) ----
+  upload-single:
+    if: ${{ inputs.mode == 'single' }}
+    runs-on: ubuntu-latest
+    name: Upload All ${{ inputs.sport }} ${{ inputs.tournamentId }} Matches
+    defaults:
+      run:
+        working-directory: sports-scores
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: sports-scores/package-lock.json
+
+      - run: npm ci
+
+      - name: Run bulk upload - ${{ inputs.sport }} ${{ inputs.tournamentId }}
+        run: |
+          npx tsx scripts/bulk-upload-events.ts \
+            "${{ inputs.tournamentId }}" \
+            "${{ inputs.seasonId }}" \
+            "${{ inputs.sport }}" \
+            "${{ inputs.displayType }}" \
+            true
+
+        env:
+          DATAVERSE_ENVIRONMENT_URL: ${{ secrets.DATAVERSE_ENVIRONMENT_URL }}
+          DATAVERSE_TENANT_ID: ${{ secrets.DATAVERSE_TENANT_ID }}
+          DATAVERSE_CLIENT_ID: ${{ secrets.DATAVERSE_CLIENT_ID }}
+          DATAVERSE_CLIENT_SECRET: ${{ secrets.DATAVERSE_CLIENT_SECRET }}

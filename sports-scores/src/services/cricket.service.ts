@@ -30,7 +30,7 @@ import {
   MatchSummary,
   SPORT,
 } from "@/types/misc";
-import { Sofascore_Event } from "@/types/sofascore";
+import { Sofascore_Event, SofascoreSportURL } from "@/types/sofascore";
 
 const excludedSeries = [
   "CSA",
@@ -41,6 +41,7 @@ const excludedSeries = [
   "Super Smash",
   "Bangladesh Premier League",
   "Plunket",
+  "One-Day Cup Women",
 ];
 
 export async function cricketMatchesByDate(date: Date) {
@@ -408,7 +409,7 @@ export function convertNumbertoDate(dateNumber: number) {
 
 export async function cricketMatchesByDateSofascore(date: Date) {
   const matches = await (process.env.DEV_MODE
-    ? fetchEventsByDate("cricket", date)
+    ? fetchEventsByDate(SofascoreSportURL.CRICKET, date)
     : fetchCricketMatchesByDateSofascore(date));
 
   if (!matches) return null;
@@ -431,14 +432,11 @@ export async function cricketMatchesByDateSofascore(date: Date) {
     ),
   );
 
-  const fixture = await mapFixtureRounds(
-    { name: "", slug: "", seasons: [], display: DISPLAY_TYPES.DATE },
-    allMatches,
-  );
+  const fixture = await mapFixtureRounds(allMatches);
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(DISPLAY_TYPES.DATE, fixture),
+    currentRound: getCurrentRound(fixture, DISPLAY_TYPES.DATE),
   };
 }
 

@@ -1,6 +1,6 @@
 import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
 import Placeholder from "@/components/misc-ui/Placeholder";
-import { aussieRulesMatches } from "@/services/aussie-rules.service";
+import { aussieRulesService } from "@/services/aussie-rules.service";
 
 export const dynamic = "force-dynamic";
 
@@ -8,7 +8,10 @@ export default async function Page(props: {
   params: Promise<{ league: string; season: string }>;
 }) {
   const { league, season } = await props.params;
-  const pageData = await aussieRulesMatches(Number(league), Number(season));
+  const pageData = await aussieRulesService.matchesAll(
+    Number(league),
+    Number(season),
+  );
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;

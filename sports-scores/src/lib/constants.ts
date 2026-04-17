@@ -1,6 +1,19 @@
 ﻿import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
 import { DISPLAY_TYPES } from "@/types/misc";
+import {
+  PlayoffPictureStructure,
+  type PlayoffPictureConfig,
+} from "@/types/playoff-picture";
 import { resolveSportImage } from "./imageMapping";
+
+const RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG: PlayoffPictureConfig = {
+  rankingSystem: "points",
+  pointsPerWin: 2,
+  pointsPerDraw: 1,
+  totalSeasonGames: 24,
+  qualifyingPositions: 8,
+  structure: PlayoffPictureStructure.Top8,
+};
 
 export const NRL_TEAMS_NAME_LOGO = [
   "Brisbane Broncos",
@@ -25,9 +38,21 @@ export const NRL_TEAMS_NAME_LOGO = [
   img: resolveSportImage(team),
 }));
 
-export const RUGBY_LEAGUE_LADDER_HEADINGS = ["P", "W", "Diff", "Pts"] as const;
+export const RUGBY_LEAGUE_LADDER_HEADINGS = [
+  "P",
+  "W",
+  "D",
+  "Diff",
+  "Pts",
+] as const;
 export const FOOTBALL_LADDER_HEADINGS = ["P", "W", "D", "L", "Pts"] as const;
-export const AUSSIE_RULES_LADDER_HEADINGS = ["P", "W", "%", "Pts"] as const;
+export const AUSSIE_RULES_LADDER_HEADINGS = [
+  "P",
+  "W",
+  "D",
+  "%",
+  "Pts",
+] as const;
 export const BASKETBALL_LADDER_HEADINGS = ["P", "W", "L", "PCT"] as const;
 export const BASEBALL_LADDER_HEADINGS = ["P", "W", "L", "PCT"] as const;
 export const ICE_HOCKEY_LADDER_HEADINGS = ["P", "W", "Diff", "Pts"] as const;
@@ -257,8 +282,10 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     ladderConfig: [
       {
         placingCategories: [
-          { label: "Finals", position: [1, 2, 3, 4, 5, 6, 7, 8] },
+          { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
+          { label: "Finals", position: [5, 6, 7, 8] },
         ],
+        playoffPictureConfig: RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG,
       },
     ],
     byes: NRL_TEAMS_NAME_LOGO,
@@ -322,8 +349,10 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     ladderConfig: [
       {
         placingCategories: [
-          { label: "Finals", position: [1, 2, 3, 4, 5, 6, 7, 8] },
+          { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
+          { label: "Finals", position: [5, 6, 7, 8] },
         ],
+        playoffPictureConfig: RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG,
       },
     ],
   },
@@ -338,8 +367,10 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     ladderConfig: [
       {
         placingCategories: [
-          { label: "Finals", position: [1, 2, 3, 4, 5, 6, 7, 8] },
+          { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
+          { label: "Finals", position: [5, 6, 7, 8] },
         ],
+        playoffPictureConfig: RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG,
       },
     ],
   },
@@ -438,14 +469,32 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
     ladderConfig: [
       {
         placingCategories: [
-          { label: "Finals", position: [1, 2, 3, 4, 5, 6] },
-          { label: "Wildcard Finals", position: [7, 8, 9, 10] },
+          { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
+          { label: "Finals", position: [5, 6] },
+          { label: "Finals - Wildcard Round", position: [7, 8, 9, 10] },
         ],
+        playoffPictureConfig: {
+          rankingSystem: "points",
+          pointsPerWin: 4,
+          pointsPerDraw: 2,
+          totalSeasonGames: 23,
+          qualifyingPositions: 10,
+          structure: PlayoffPictureStructure.Top10,
+        },
       },
       {
         placingCategories: [
-          { label: "Finals", position: [1, 2, 3, 4, 5, 6, 7, 8] },
+          { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
+          { label: "Finals", position: [5, 6, 7, 8] },
         ],
+        playoffPictureConfig: {
+          rankingSystem: "points",
+          pointsPerWin: 4,
+          pointsPerDraw: 2,
+          totalSeasonGames: 23,
+          qualifyingPositions: 8,
+          structure: PlayoffPictureStructure.Top8,
+        },
       },
     ],
     byes: AFL_TEAM_NAME_LOGO,
@@ -1583,7 +1632,7 @@ export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
   },
   {
     name: "World Championship - Women - Australia",
-    slug: "wiki",
+    slug: "wc-div2",
     seasons: [{ name: "2026", slug: "wiki" }],
     externalURL:
       "https://en.wikipedia.org/wiki/2026_IIHF_Women%27s_World_Championship_Division_II",

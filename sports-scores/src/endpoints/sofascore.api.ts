@@ -5,7 +5,7 @@ import {
   Sofascore_Events_Response,
   Sofascore_TotalStandings_Response,
   Sofascore_TournamentCupTrees_Response,
-  SofascoreSport,
+  SofascoreSportURL,
 } from "@/types/sofascore";
 import { format } from "date-fns";
 
@@ -63,7 +63,7 @@ export async function fetchEventIncidents(eventId: number) {
   )) as Sofascore_EventIncidents_Response;
 }
 
-export async function fetchEventsByDate(sport: SofascoreSport, date: Date) {
+export async function fetchEventsByDate(sport: SofascoreSportURL, date: Date) {
   return (await fetchSofascoreApi(
     `/sport/${sport}/scheduled-events/${format(date, "yyyy-MM-dd")}`,
   )) as Sofascore_Events_Response;

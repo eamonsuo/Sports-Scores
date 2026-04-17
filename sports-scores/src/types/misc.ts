@@ -1,3 +1,6 @@
+import { SportsLadder } from "@/components/all-sports/Ladder";
+import type { PlayoffPictureGroup } from "@/types/playoff-picture";
+
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends Date
     ? T[P]
@@ -79,6 +82,7 @@ export type MatchSummary = {
   winner?: number;
   tournamentId?: string;
   seasonId?: string;
+  dataverseGUID?: string;
 };
 
 export type MatchStatus = "LIVE" | "UPCOMING" | "COMPLETED";
@@ -187,6 +191,21 @@ type SportsmonksMatchCricket = {
     updated_at: string;
   };
 };
+
+export interface Matches {
+  fixtures: FixtureRound[];
+  currentRound: string;
+}
+
+export interface MatchDetail {
+  fixtures: FixtureRound[];
+  currentRound: string;
+}
+
+export interface Standings<T extends readonly string[]> {
+  standings: SportsLadder<T>[];
+  playoffPicture?: PlayoffPictureGroup[];
+}
 
 export enum SPORT {
   AUSSIE_RULES = "aussie-rules",

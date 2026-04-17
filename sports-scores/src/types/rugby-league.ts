@@ -1,6 +1,7 @@
 import { SportsLadder } from "@/components/all-sports/Ladder";
 import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import { RugbyLeagueScoreBreakdown } from "@/components/rugby-league/RugbyLeagueScoreBreakdown";
+import type { PlayoffPictureGroup } from "@/types/playoff-picture";
 import { FixtureRound, TeamScoreDetails } from "./misc";
 import {
   Sofascore_Event_Response,
@@ -32,6 +33,7 @@ export interface RugbyLeagueFixturesPage {
 
 export interface RugbyLeagueLadderPage<T extends readonly string[]> {
   standings: SportsLadder<T>[];
+  playoffPicture?: PlayoffPictureGroup[];
 }
 
 export interface RugbyLeagueMatchPage {
