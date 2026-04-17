@@ -2,13 +2,13 @@ import MatchDetailsHero from "@/components/all-sports/MatchDetailsHero";
 import ScoreChart from "@/components/all-sports/ScoreChart";
 import IceHockeyScoreBreakdown from "@/components/ice-hockey/IceHockeyScoreBreakdown";
 import Placeholder from "@/components/misc-ui/Placeholder";
-import { iceHockeyMatchDetails } from "@/services/ice-hockey.service";
+import { iceHockeyService } from "@/services/ice-hockey.service";
 
 export default async function Page(props: {
   params: Promise<{ league: string; season: string; id: string }>;
 }) {
   const { league, season, id } = await props.params;
-  const pageData = await iceHockeyMatchDetails(Number(id));
+  const pageData = await iceHockeyService.iceHockeyMatchDetails(Number(id));
 
   if (pageData === null || pageData.matchDetails === null) {
     return <Placeholder>NO DATA</Placeholder>;

@@ -2,7 +2,7 @@ import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
 import DateNav from "@/components/misc-ui/DateNav";
 import Placeholder from "@/components/misc-ui/Placeholder";
 import { getClientDate } from "@/lib/serverUtils";
-import { iceHockeyMatchesByDate } from "@/services/ice-hockey.service";
+import { iceHockeyService } from "@/services/ice-hockey.service";
 import { TZDate } from "@date-fns/tz/date";
 
 // export const dynamic = "force-dynamic";
@@ -17,7 +17,7 @@ export default async function Page({
   const parsedDate =
     date === undefined ? curDate : new TZDate(date as string, curDate.timeZone);
 
-  const pageData = await iceHockeyMatchesByDate(parsedDate);
+  const pageData = await iceHockeyService.iceHockeyMatchesByDate(parsedDate);
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;

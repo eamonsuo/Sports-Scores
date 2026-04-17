@@ -1,12 +1,15 @@
 import Ladder from "@/components/all-sports/Ladder";
 import Placeholder from "@/components/misc-ui/Placeholder";
-import { basketballStandings } from "@/services/basketball.service";
+import { basketballService } from "@/services/basketball.service";
 
 export default async function Page(props: {
   params: Promise<{ league: string; season: string }>;
 }) {
   const { league, season } = await props.params;
-  const pageData = await basketballStandings(Number(league), Number(season));
+  const pageData = await basketballService.basketballStandings(
+    Number(league),
+    Number(season),
+  );
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;

@@ -1,7 +1,19 @@
 ﻿import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
-import { PLAYOFF_PICTURE_TYPE } from "@/lib/playoffPictureMapping";
 import { DISPLAY_TYPES } from "@/types/misc";
+import {
+  PlayoffPictureStructure,
+  type PlayoffPictureConfig,
+} from "@/types/playoff-picture";
 import { resolveSportImage } from "./imageMapping";
+
+const RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG: PlayoffPictureConfig = {
+  rankingSystem: "points",
+  pointsPerWin: 2,
+  pointsPerDraw: 1,
+  totalSeasonGames: 24,
+  qualifyingPositions: 8,
+  structure: PlayoffPictureStructure.Top8,
+};
 
 export const NRL_TEAMS_NAME_LOGO = [
   "Brisbane Broncos",
@@ -273,7 +285,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
           { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
           { label: "Finals", position: [5, 6, 7, 8] },
         ],
-        playoffPictureConfig: PLAYOFF_PICTURE_TYPE.TOP_8,
+        playoffPictureConfig: RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG,
       },
     ],
     byes: NRL_TEAMS_NAME_LOGO,
@@ -340,7 +352,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
           { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
           { label: "Finals", position: [5, 6, 7, 8] },
         ],
-        playoffPictureConfig: PLAYOFF_PICTURE_TYPE.TOP_8,
+        playoffPictureConfig: RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG,
       },
     ],
   },
@@ -358,7 +370,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
           { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
           { label: "Finals", position: [5, 6, 7, 8] },
         ],
-        playoffPictureConfig: PLAYOFF_PICTURE_TYPE.TOP_8,
+        playoffPictureConfig: RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG,
       },
     ],
   },
@@ -461,13 +473,28 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
           { label: "Finals", position: [5, 6] },
           { label: "Finals - Wildcard Round", position: [7, 8, 9, 10] },
         ],
+        playoffPictureConfig: {
+          rankingSystem: "points",
+          pointsPerWin: 4,
+          pointsPerDraw: 2,
+          totalSeasonGames: 23,
+          qualifyingPositions: 10,
+          structure: PlayoffPictureStructure.Top10,
+        },
       },
       {
         placingCategories: [
           { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
           { label: "Finals", position: [5, 6, 7, 8] },
         ],
-        playoffPictureConfig: PLAYOFF_PICTURE_TYPE.TOP_8,
+        playoffPictureConfig: {
+          rankingSystem: "points",
+          pointsPerWin: 4,
+          pointsPerDraw: 2,
+          totalSeasonGames: 23,
+          qualifyingPositions: 8,
+          structure: PlayoffPictureStructure.Top8,
+        },
       },
     ],
     byes: AFL_TEAM_NAME_LOGO,

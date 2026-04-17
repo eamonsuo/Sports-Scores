@@ -1,116 +1,194 @@
-import {
-  PlayoffConference,
-  PlayoffSection,
-  PlayoffTeam,
-} from "@/components/all-sports/PlayoffPicture";
-import { Sofascore_Standing, Sofascore_StandingRow } from "@/types/sofascore";
-import { resolveSportImage } from "./imageMapping";
-import { shortenTeamNames } from "./projUtils";
+import type {
+  PlayoffPictureConfig,
+  PlayoffPictureGroup,
+  PlayoffPictureSection,
+  PlayoffPictureStanding,
+  PlayoffPictureStandingsGroup,
+  PlayoffPictureStructure,
+  PlayoffPictureTeam,
+} from "@/types/playoff-picture";
 
-export enum PLAYOFF_PICTURE_TYPE {
-  TOP_8 = "top8",
-  TOP_10 = "top10",
-}
-
-export type PlayoffPictureContext = {
-  sofascoreStandings?: Sofascore_Standing[];
-};
-
-const PLAYOFF_PICTURE_MAP: Record<
-  PLAYOFF_PICTURE_TYPE,
-  (context: PlayoffPictureContext) => PlayoffConference[]
-> = {
-  [PLAYOFF_PICTURE_TYPE.TOP_8]: (ctx) =>
-    ctx.sofascoreStandings ? top8PlayoffPicture(ctx.sofascoreStandings) : [],
-  [PLAYOFF_PICTURE_TYPE.TOP_10]: () => [],
-};
+// ── Public API ──
 
 export function resolvePlayoffPicture(
-  key: PLAYOFF_PICTURE_TYPE | undefined,
-  context: PlayoffPictureContext | undefined,
-) {
-  if (!key || !context) return undefined;
-  return PLAYOFF_PICTURE_MAP[key]?.(context);
+  config: PlayoffPictureConfig | undefined,
+  standingsGroups: PlayoffPictureStandingsGroup[] | undefined,
+): PlayoffPictureGroup[] | undefined {
+  if (!config || !standingsGroups?.length) return undefined;
+
+  const buildStructure = STRUCTURE_MAP[config.structure];
+  if (!buildStructure) return undefined;
+
+  return buildStructure(standingsGroups, config);
 }
 
-function mapTeam(team: Sofascore_StandingRow): PlayoffTeam {
+// ── Ranking helpers (exported for reuse) ──
+
+export function getRankingValue(
+  team: PlayoffPictureStanding,
+  config: PlayoffPictureConfig,
+): number {
+  if (config.customRankingValue) return config.customRankingValue(team);
+  if (config.rankingSystem === "percentage") {
+    if (team.played === 0) return 0;
+    return (team.wins + team.draws * 0.5) / team.played;
+  }
+  return (
+    team.wins * (config.pointsPerWin ?? 2) +
+    team.draws * (config.pointsPerDraw ?? 1)
+  );
+}
+
+export function getMaxRankingValue(
+  team: PlayoffPictureStanding,
+  config: PlayoffPictureConfig,
+): number {
+  if (config.customRankingValue) {
+    const projected: PlayoffPictureStanding = {
+      ...team,
+      wins: team.wins + (team.totalSeasonGames - team.played),
+      played: team.totalSeasonGames,
+    };
+    return config.customRankingValue(projected);
+  }
+  const remaining = team.totalSeasonGames - team.played;
+  if (config.rankingSystem === "percentage") {
+    return (team.wins + remaining + team.draws * 0.5) / team.totalSeasonGames;
+  }
+  return (
+    (team.wins + remaining) * (config.pointsPerWin ?? 2) +
+    team.draws * (config.pointsPerDraw ?? 1)
+  );
+}
+
+// ── Internal helpers ──
+
+function toTeam(standing: PlayoffPictureStanding): PlayoffPictureTeam {
   return {
-    name: shortenTeamNames(team.team.name),
-    logo: resolveSportImage(team.team.name),
-    seed: team.position,
+    id: standing.team.id,
+    name: standing.team.name,
+    logo: standing.team.logo,
+    position: standing.position,
+    positionDisplay: standing.position,
   };
 }
 
-function top8PlayoffPicture(standings: Sofascore_Standing[]) {
-  const finalsTeams = standings[0].rows.slice(0, 8);
-  const teamsNotInFinals = standings[0].rows.slice(8);
-
-  return [
-    {
-      conferenceMatches: [
-        {
-          title: "Qualifying Finals",
-          teams: [
-            [mapTeam(finalsTeams[0]), mapTeam(finalsTeams[3])],
-            [mapTeam(finalsTeams[1]), mapTeam(finalsTeams[2])],
-          ],
-        },
-        {
-          title: "Elimination Finals",
-          teams: [
-            [mapTeam(finalsTeams[4]), mapTeam(finalsTeams[7])],
-            [mapTeam(finalsTeams[5]), mapTeam(finalsTeams[6])],
-          ],
-        },
-        ...getPlayoffStatus(finalsTeams, teamsNotInFinals),
-      ],
-    },
-  ] as PlayoffConference[];
-}
-
-function getPlayoffStatus(
-  finalsTeams: Sofascore_StandingRow[],
-  teamsNotInFinals: Sofascore_StandingRow[],
+function classifyNonQualifiers(
+  qualifiers: PlayoffPictureStanding[],
+  rest: PlayoffPictureStanding[],
+  config: PlayoffPictureConfig,
 ) {
-  const TotalGames = 24;
-
-  const eliminatedTeams: PlayoffTeam[] = [];
-  const inTheHuntTeams: PlayoffTeam[] = [];
-
-  // Helper function to calculate maximum possible win percentage
-  const calculateMaxPoints = (team: Sofascore_StandingRow) => {
-    const gamesRemaining = TotalGames - Number(team.matches);
-    const maxWins = Number(team.wins) + gamesRemaining;
-    return calculatePoints(maxWins, Number(team.draws));
-  };
-
-  // Helper function to calculate win percentage
-  const calculateCurrentPoints = (team: Sofascore_StandingRow) => {
-    if (Number(team.matches) === 0) return 0;
-    return calculatePoints(Number(team.wins), Number(team.draws));
-  };
-
-  // Helper function to calculate win percentage
-  const calculatePoints = (won: number, draws: number) => {
-    return won * 2 + draws;
-  };
-
-  // Find the lowest win percentage among the finals teams
-  const minFinalsPoints = Math.min(
-    ...finalsTeams.map((team) => calculateCurrentPoints(team)),
+  const minQualifyingValue = Math.min(
+    ...qualifiers.map((t) => getRankingValue(t, config)),
   );
 
-  teamsNotInFinals.forEach((team) => {
-    const maxPossiblePoints = calculateMaxPoints(team);
+  const inTheHunt: PlayoffPictureStanding[] = [];
+  const eliminated: PlayoffPictureStanding[] = [];
 
-    // Check 1: Can they catch the worst finals team?
-    maxPossiblePoints >= minFinalsPoints
-      ? inTheHuntTeams.push(mapTeam(team))
-      : eliminatedTeams.push(mapTeam(team));
+  rest.forEach((team) => {
+    getMaxRankingValue(team, config) >= minQualifyingValue
+      ? inTheHunt.push(team)
+      : eliminated.push(team);
   });
 
-  return [
-    { title: "In the Hunt", teams: inTheHuntTeams },
-    { title: "Eliminated", teams: eliminatedTeams },
-  ] as PlayoffSection[];
+  return { inTheHunt, eliminated };
 }
+
+// ── Structure map: layout + classification per structure ──
+
+const STRUCTURE_MAP: Record<
+  PlayoffPictureStructure,
+  (
+    groups: PlayoffPictureStandingsGroup[],
+    config: PlayoffPictureConfig,
+  ) => PlayoffPictureGroup[]
+> = {
+  top8: (groups, config) => {
+    const standings = groups[0]?.standings ?? [];
+
+    const qualifiers = standings.slice(0, config.qualifyingPositions);
+    const rest = standings.slice(config.qualifyingPositions);
+    const { inTheHunt, eliminated } = classifyNonQualifiers(
+      qualifiers,
+      rest,
+      config,
+    );
+
+    return [
+      {
+        conferenceMatches: [
+          {
+            title: "Qualifying Finals",
+            teams: [
+              [toTeam(qualifiers[0]), toTeam(qualifiers[3])],
+              [toTeam(qualifiers[1]), toTeam(qualifiers[2])],
+            ],
+          } as PlayoffPictureSection,
+          {
+            title: "Elimination Finals",
+            teams: [
+              [toTeam(qualifiers[4]), toTeam(qualifiers[7])],
+              [toTeam(qualifiers[5]), toTeam(qualifiers[6])],
+            ],
+          } as PlayoffPictureSection,
+          ...[{ title: "In the Hunt", teams: inTheHunt.map(toTeam) }],
+          ...[{ title: "Eliminated", teams: eliminated.map(toTeam) }],
+        ],
+      },
+    ];
+  },
+  top10: (groups, config) => {
+    const standings = groups[0]?.standings ?? [];
+    const qualifiers = standings.slice(0, config.qualifyingPositions);
+    const rest = standings.slice(config.qualifyingPositions);
+    const { inTheHunt, eliminated } = classifyNonQualifiers(
+      qualifiers,
+      rest,
+      config,
+    );
+
+    return [
+      {
+        conferenceMatches: [
+          {
+            title: "Qualifying Finals",
+            teams: [
+              [toTeam(qualifiers[0]), toTeam(qualifiers[3])],
+              [toTeam(qualifiers[1]), toTeam(qualifiers[2])],
+            ],
+          } as PlayoffPictureSection,
+          {
+            title: "Elimination Finals",
+            teams: [
+              [
+                toTeam(qualifiers[4]),
+                {
+                  id: "LowWild",
+                  name: "Low Wild Card seed",
+                  positionDisplay: "LowWC",
+                },
+              ],
+              [
+                toTeam(qualifiers[5]),
+                {
+                  id: "HighWild",
+                  name: "High Wild Card seed",
+                  positionDisplay: "HighWC",
+                },
+              ],
+            ],
+          } as PlayoffPictureSection,
+          {
+            title: "Wild Card Finals",
+            teams: [
+              [toTeam(qualifiers[6]), toTeam(qualifiers[9])],
+              [toTeam(qualifiers[7]), toTeam(qualifiers[8])],
+            ],
+          } as PlayoffPictureSection,
+          ...[{ title: "In the Hunt", teams: inTheHunt.map(toTeam) }],
+          ...[{ title: "Eliminated", teams: eliminated.map(toTeam) }],
+        ],
+      },
+    ];
+  },
+};

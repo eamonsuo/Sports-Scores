@@ -23,6 +23,7 @@ import { TENNIS_CATEGORIES, TENNIS_LEAGUES } from "@/lib/constants";
 import { resolveSportImage } from "@/lib/imageMapping";
 import { setTennisMatchSummary, shortenTeamNames } from "@/lib/projUtils";
 import { FixtureRound, MatchSummary, SPORT } from "@/types/misc";
+import { SofascoreSportURL } from "@/types/sofascore";
 import {
   Tennis_Sofascore_Event,
   TennisBracketPage,
@@ -34,361 +35,423 @@ import {
 } from "@/types/tennis";
 import { TZDate } from "@date-fns/tz";
 import { isSameDay } from "date-fns";
+import { SofascoreSport } from "./sofascore.service";
 
-export async function tennisTournamentMatches(
-  tournamentId: number,
-  seasonId: number,
-) {
-  const lastMatches = await (
-    process.env.DEV_MODE ? fetchLastEvents : fetchTennisTournamentLastMatches
-  )(tournamentId, seasonId);
-
-  const nextMatches = await (
-    process.env.DEV_MODE ? fetchNextEvents : fetchTennisTournamentNextMatches
-  )(tournamentId, seasonId);
-
-  if (!lastMatches && !nextMatches) {
-    return null;
+class TennisService extends SofascoreSport {
+  constructor() {
+    super(
+      {
+        fetchStandingsTotal: async () => null,
+        fetchLastEvents,
+        fetchNextEvents,
+        fetchEventDetails,
+        fetchEventIncidents: async () => null,
+        fetchCupTrees,
+        fetchEventsByDate: async () => null,
+        fetchPlayerRankings: async () => null,
+        fetchTeamLastEvents,
+        fetchTeamNextEvents,
+      },
+      SPORT.TENNIS,
+      SofascoreSportURL.TENNIS,
+      TENNIS_LEAGUES,
+      [] as const,
+    );
   }
 
-  const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
+  async tennisTournamentMatches(
+    tournamentId: number,
+    seasonId: number,
+  ) {
+    const lastMatches = await (
+      process.env.DEV_MODE ? fetchLastEvents : fetchTennisTournamentLastMatches
+    )(tournamentId, seasonId);
 
-  for (let i = 1; i < matches.length; i++) {
-    if (matches[i].roundInfo === undefined) {
-      matches[i].roundInfo = { round: 0, name: "Unknown" };
+    const nextMatches = await (
+      process.env.DEV_MODE ? fetchNextEvents : fetchTennisTournamentNextMatches
+    )(tournamentId, seasonId);
+
+    if (!lastMatches && !nextMatches) {
+      return null;
     }
-  }
 
-  const rounds = [...new Set(matches.map((item) => item.roundInfo?.name))];
-
-  return {
-    fixtures: rounds.map((round) => {
-      return {
-        matches: matches
-          .filter(
-            (item) =>
-              item.roundInfo?.name === round && item.status.type !== "canceled",
-          )
-          .map((match) => {
-            return mapTennisMatches(match);
-          }),
-        roundLabel: `${round}`,
-        cardVariant: "tennis",
-      } as FixtureRound;
-    }),
-
-    currentRound: `${
-      nextMatches?.events?.[0]?.roundInfo?.name ??
-      lastMatches?.events?.[lastMatches?.events.length - 1]?.roundInfo?.name ??
-      0
-    }`,
-  } as TennisFixturesPage;
-}
-
-export async function TennisPlayerMatches(teamId: number) {
-  const lastMatches = await (
-    process.env.DEV_MODE ? fetchTeamLastEvents : fetchTennisPlayerLastMatches
-  )(teamId, 0);
-
-  const nextMatches = await (
-    process.env.DEV_MODE ? fetchTeamNextEvents : fetchTennisPlayerNextMatches
-  )(teamId, 0);
-
-  if (!lastMatches && !nextMatches) {
-    return null;
-  }
-
-  const matches = (lastMatches?.events ?? []).concat(nextMatches?.events ?? []);
-
-  return {
-    fixtures: matches
-      .toReversed()
-
-      .map((match) => {
-        return mapTennisMatches(match);
-      }),
-  } as TennisTeamFixturesPage;
-}
-
-// export async function TennisStandings(tournamentId: number, seasonId: number) {
-//   const standings = await fetchTennisStandings(tournamentId, seasonId);
-
-//   if (!standings) {
-//     return null;
-//   }
-
-//   return {
-//     standings: standings?.standings[0].rows.map((item) => {
-//       return {
-//         position: item.position,
-//         points: item.points,
-//         team: {
-//           id: item.team.id,
-//           name: shortenTeamNames(item.team.name),
-//           logo: resolveSportImage(item.team.name),
-//         },
-//         games: {
-//           played: item.matches,
-//           win: item.wins,
-//           lost: item.losses,
-//           drawn: item.draws,
-//         },
-//         scores: { against: item.scoresAgainst, for: item.scoresFor },
-//       } as TennisStanding;
-//     }),
-//     qualifyingPosition:
-//       TENNIS_LEAGUES.find((l) => Number(l.slug) === tournamentId)
-//         ?.qualifyingPosition ?? -1,
-//   } as TennisLadderPage;
-// }
-
-export async function TennisMatchDetails(matchId: number) {
-  const match = await (
-    process.env.DEV_MODE ? fetchEventDetails : fetchTennisMatchDetails
-  )(matchId);
-  // const incidents = await fetchTennisMatchIncidents(matchId);
-
-  const matchDetails = match?.event;
-  // const scoreIncidents = incidents?.incidents
-  //   ? incidents?.incidents
-  //       .filter((item) => item.incidentType === "goal")
-  //       .toReversed()
-  //   : null;
-
-  return {
-    // scoreEvents: !scoreIncidents
-    //   ? null
-    //   : scoreIncidents.map((item) => {
-    //       return {
-    //         event: item.incidentClass,
-    //         difference: (item.homeScore ?? 0) - (item.awayScore ?? 0),
-    //       };
-    //     }),
-    matchDetails: !matchDetails
-      ? null
-      : {
-          status: matchDetails?.status.description,
-          homeTeam: {
-            name: shortenTeamNames(matchDetails.homeTeam.name),
-            score: matchDetails?.homeScore?.current?.toString() ?? "0",
-            img:
-              matchDetails.homeTeam.subTeams &&
-              matchDetails.homeTeam.subTeams.length > 0
-                ? matchDetails.homeTeam.subTeams.map((subTeam) =>
-                    resolveSportImage(subTeam.country.name ?? subTeam.name),
-                  )
-                : resolveSportImage(
-                    matchDetails.homeTeam.country.name ??
-                      matchDetails.homeTeam.name,
-                  ),
-          },
-          awayTeam: {
-            name: shortenTeamNames(matchDetails?.awayTeam.name),
-            score: matchDetails?.awayScore?.current?.toString() ?? "0",
-            img:
-              matchDetails.awayTeam.subTeams &&
-              matchDetails.awayTeam.subTeams.length > 0
-                ? matchDetails.awayTeam.subTeams.map((subTeam) =>
-                    resolveSportImage(subTeam.country.name ?? subTeam.name),
-                  )
-                : resolveSportImage(
-                    matchDetails.awayTeam.country.name ??
-                      matchDetails.awayTeam.name,
-                  ),
-          },
-          scoreBreakdown: [
-            {
-              periodName: "1st",
-              teams: {
-                home: { score: matchDetails.homeScore?.period1 ?? "0" },
-                away: { score: matchDetails.awayScore?.period1 ?? "0" },
-              },
-            },
-            {
-              periodName: "2nd",
-              teams: {
-                home: { score: matchDetails.homeScore?.period2 ?? "0" },
-                away: { score: matchDetails.awayScore?.period2 ?? "0" },
-              },
-            },
-            matchDetails.homeScore?.period3
-              ? {
-                  periodName: "3rd",
-                  teams: {
-                    home: { score: matchDetails.homeScore?.period3 ?? "0" },
-                    away: { score: matchDetails.awayScore?.period3 ?? "0" },
-                  },
-                }
-              : null,
-            matchDetails.homeScore?.period4
-              ? {
-                  periodName: "4th",
-                  teams: {
-                    home: { score: matchDetails.homeScore?.period4 ?? "0" },
-                    away: { score: matchDetails.awayScore?.period4 ?? "0" },
-                  },
-                }
-              : null,
-            matchDetails.homeScore?.period5
-              ? {
-                  periodName: "5th",
-                  teams: {
-                    home: { score: matchDetails.homeScore?.period5 ?? "0" },
-                    away: { score: matchDetails.awayScore?.period5 ?? "0" },
-                  },
-                }
-              : null,
-          ].filter((set) => set !== null),
-        },
-  } as TennisMatchPage;
-}
-
-export async function TennisMatchesByDate(date: Date) {
-  const timezone = date instanceof TZDate ? date.timeZone : "UTC";
-  const matches = await (process.env.DEV_MODE
-    ? fetchEventsByDate("tennis", date)
-    : fetchTennisMatchesByDate(date));
-
-  if (!matches) {
-    return null;
-  }
-
-  const validLeagueIds = TENNIS_CATEGORIES.concat(TENNIS_LEAGUES).map((l) =>
-    Number(l.slug),
-  );
-  const leagueIdToName = Object.fromEntries(
-    TENNIS_CATEGORIES.concat(TENNIS_LEAGUES).map((l) => [
-      Number(l.slug),
-      l.name,
-    ]),
-  );
-
-  const filteredMatches = matches.events
-    .filter((item) => {
-      const eventDate = new TZDate(item.startTimestamp * 1000, timezone);
-      return isSameDay(eventDate, date);
-    })
-    .filter(
-      (item) =>
-        (validLeagueIds.includes(item.tournament.category.id) ||
-          validLeagueIds.includes(item.tournament.uniqueTournament.id)) &&
-        item.status.type !== "canceled",
+    const matches = (lastMatches?.events ?? []).concat(
+      nextMatches?.events ?? [],
     );
 
-  const aussieMatches = matches.events
-    .filter((item) => {
-      const eventDate = new TZDate(item.startTimestamp * 1000, timezone);
-      return isSameDay(eventDate, date);
-    })
-    .filter(
-      (item) =>
-        (item.homeTeam.country.name === "Australia" ||
-          item.awayTeam.country.name === "Australia") &&
-        item.status.type !== "canceled",
-    );
+    for (let i = 1; i < matches.length; i++) {
+      if (matches[i].roundInfo === undefined) {
+        matches[i].roundInfo = { round: 0, name: "Unknown" };
+      }
+    }
 
-  // Get unique league ids in order
-  const rounds = [
-    ...new Set(filteredMatches.map((item) => item.tournament.category.id)),
-  ];
+    const rounds = [...new Set(matches.map((item) => item.roundInfo?.name))];
 
-  const firstTournament =
-    rounds.length > 0 ? (leagueIdToName[rounds[0]] ?? "Other") : "";
-
-  return {
-    fixtures: rounds
-      .map((leagueId) => {
-        const roundLabel = leagueIdToName[leagueId] ?? "Other";
-
-        // Filter matches for this league
-        const leagueMatches = filteredMatches.filter(
-          (item) => item.tournament.category.id === leagueId,
-        );
-
+    return {
+      fixtures: rounds.map((round) => {
         return {
-          matches: sortMatchesByDateAndTournament(leagueMatches, timezone),
-          roundLabel: roundLabel,
+          matches: matches
+            .filter(
+              (item) =>
+                item.roundInfo?.name === round &&
+                item.status.type !== "canceled",
+            )
+            .map((match) => {
+              return mapTennisMatches(match);
+            }),
+          roundLabel: `${round}`,
+          cardVariant: "tennis",
+        } as FixtureRound;
+      }),
+
+      currentRound: `${
+        nextMatches?.events?.[0]?.roundInfo?.name ??
+        lastMatches?.events?.[lastMatches?.events.length - 1]?.roundInfo
+          ?.name ??
+        0
+      }`,
+    } as TennisFixturesPage;
+  }
+
+  async TennisPlayerMatches(teamId: number) {
+    const lastMatches = await (
+      process.env.DEV_MODE ? fetchTeamLastEvents : fetchTennisPlayerLastMatches
+    )(teamId, 0);
+
+    const nextMatches = await (
+      process.env.DEV_MODE ? fetchTeamNextEvents : fetchTennisPlayerNextMatches
+    )(teamId, 0);
+
+    if (!lastMatches && !nextMatches) {
+      return null;
+    }
+
+    const matches = (lastMatches?.events ?? []).concat(
+      nextMatches?.events ?? [],
+    );
+
+    return {
+      fixtures: matches
+        .toReversed()
+
+        .map((match) => {
+          return mapTennisMatches(match);
+        }),
+    } as TennisTeamFixturesPage;
+  }
+
+  // export async function TennisStandings(tournamentId: number, seasonId: number) {
+  //   const standings = await fetchTennisStandings(tournamentId, seasonId);
+
+  //   if (!standings) {
+  //     return null;
+  //   }
+
+  //   return {
+  //     standings: standings?.standings[0].rows.map((item) => {
+  //       return {
+  //         position: item.position,
+  //         points: item.points,
+  //         team: {
+  //           id: item.team.id,
+  //           name: shortenTeamNames(item.team.name),
+  //           logo: resolveSportImage(item.team.name),
+  //         },
+  //         games: {
+  //           played: item.matches,
+  //           win: item.wins,
+  //           lost: item.losses,
+  //           drawn: item.draws,
+  //         },
+  //         scores: { against: item.scoresAgainst, for: item.scoresFor },
+  //       } as TennisStanding;
+  //     }),
+  //     qualifyingPosition:
+  //       TENNIS_LEAGUES.find((l) => Number(l.slug) === tournamentId)
+  //         ?.qualifyingPosition ?? -1,
+  //   } as TennisLadderPage;
+  // }
+
+  async TennisMatchDetails(matchId: number) {
+    const match = await (
+      process.env.DEV_MODE ? fetchEventDetails : fetchTennisMatchDetails
+    )(matchId);
+    // const incidents = await fetchTennisMatchIncidents(matchId);
+
+    const matchDetails = match?.event;
+    // const scoreIncidents = incidents?.incidents
+    //   ? incidents?.incidents
+    //       .filter((item) => item.incidentType === "goal")
+    //       .toReversed()
+    //   : null;
+
+    return {
+      // scoreEvents: !scoreIncidents
+      //   ? null
+      //   : scoreIncidents.map((item) => {
+      //       return {
+      //         event: item.incidentClass,
+      //         difference: (item.homeScore ?? 0) - (item.awayScore ?? 0),
+      //       };
+      //     }),
+      matchDetails: !matchDetails
+        ? null
+        : {
+            status: matchDetails?.status.description,
+            homeTeam: {
+              name: shortenTeamNames(matchDetails.homeTeam.name),
+              score: matchDetails?.homeScore?.current?.toString() ?? "0",
+              img:
+                matchDetails.homeTeam.subTeams &&
+                matchDetails.homeTeam.subTeams.length > 0
+                  ? matchDetails.homeTeam.subTeams.map((subTeam) =>
+                      resolveSportImage(subTeam.country.name ?? subTeam.name),
+                    )
+                  : resolveSportImage(
+                      matchDetails.homeTeam.country.name ??
+                        matchDetails.homeTeam.name,
+                    ),
+            },
+            awayTeam: {
+              name: shortenTeamNames(matchDetails?.awayTeam.name),
+              score: matchDetails?.awayScore?.current?.toString() ?? "0",
+              img:
+                matchDetails.awayTeam.subTeams &&
+                matchDetails.awayTeam.subTeams.length > 0
+                  ? matchDetails.awayTeam.subTeams.map((subTeam) =>
+                      resolveSportImage(subTeam.country.name ?? subTeam.name),
+                    )
+                  : resolveSportImage(
+                      matchDetails.awayTeam.country.name ??
+                        matchDetails.awayTeam.name,
+                    ),
+            },
+            scoreBreakdown: [
+              {
+                periodName: "1st",
+                teams: {
+                  home: { score: matchDetails.homeScore?.period1 ?? "0" },
+                  away: { score: matchDetails.awayScore?.period1 ?? "0" },
+                },
+              },
+              {
+                periodName: "2nd",
+                teams: {
+                  home: { score: matchDetails.homeScore?.period2 ?? "0" },
+                  away: { score: matchDetails.awayScore?.period2 ?? "0" },
+                },
+              },
+              matchDetails.homeScore?.period3
+                ? {
+                    periodName: "3rd",
+                    teams: {
+                      home: { score: matchDetails.homeScore?.period3 ?? "0" },
+                      away: { score: matchDetails.awayScore?.period3 ?? "0" },
+                    },
+                  }
+                : null,
+              matchDetails.homeScore?.period4
+                ? {
+                    periodName: "4th",
+                    teams: {
+                      home: { score: matchDetails.homeScore?.period4 ?? "0" },
+                      away: { score: matchDetails.awayScore?.period4 ?? "0" },
+                    },
+                  }
+                : null,
+              matchDetails.homeScore?.period5
+                ? {
+                    periodName: "5th",
+                    teams: {
+                      home: { score: matchDetails.homeScore?.period5 ?? "0" },
+                      away: { score: matchDetails.awayScore?.period5 ?? "0" },
+                    },
+                  }
+                : null,
+            ].filter((set) => set !== null),
+          },
+    } as TennisMatchPage;
+  }
+
+  async TennisMatchesByDate(date: Date) {
+    const timezone = date instanceof TZDate ? date.timeZone : "UTC";
+    const matches = await (process.env.DEV_MODE
+      ? fetchEventsByDate(SofascoreSportURL.TENNIS, date)
+      : fetchTennisMatchesByDate(date));
+
+    if (!matches) {
+      return null;
+    }
+
+    const validLeagueIds = TENNIS_CATEGORIES.concat(TENNIS_LEAGUES).map((l) =>
+      Number(l.slug),
+    );
+    const leagueIdToName = Object.fromEntries(
+      TENNIS_CATEGORIES.concat(TENNIS_LEAGUES).map((l) => [
+        Number(l.slug),
+        l.name,
+      ]),
+    );
+
+    const filteredMatches = matches.events
+      .filter((item) => {
+        const eventDate = new TZDate(item.startTimestamp * 1000, timezone);
+        return isSameDay(eventDate, date);
+      })
+      .filter(
+        (item) =>
+          (validLeagueIds.includes(item.tournament.category.id) ||
+            validLeagueIds.includes(item.tournament.uniqueTournament.id)) &&
+          item.status.type !== "canceled",
+      );
+
+    const aussieMatches = matches.events
+      .filter((item) => {
+        const eventDate = new TZDate(item.startTimestamp * 1000, timezone);
+        return isSameDay(eventDate, date);
+      })
+      .filter(
+        (item) =>
+          (item.homeTeam.country.name === "Australia" ||
+            item.awayTeam.country.name === "Australia") &&
+          item.status.type !== "canceled",
+      );
+
+    // Get unique league ids in order
+    const rounds = [
+      ...new Set(filteredMatches.map((item) => item.tournament.category.id)),
+    ];
+
+    const firstTournament =
+      rounds.length > 0 ? (leagueIdToName[rounds[0]] ?? "Other") : "";
+
+    return {
+      fixtures: rounds
+        .map((leagueId) => {
+          const roundLabel = leagueIdToName[leagueId] ?? "Other";
+
+          // Filter matches for this league
+          const leagueMatches = filteredMatches.filter(
+            (item) => item.tournament.category.id === leagueId,
+          );
+
+          return {
+            matches: sortMatchesByDateAndTournament(leagueMatches, timezone),
+            roundLabel: roundLabel,
+            cardVariant: "tennis",
+            roundSlug: `${SPORT.TENNIS}/today`,
+          } as FixtureRound;
+        })
+        .concat({
+          matches: sortMatchesByDateAndTournament(aussieMatches, timezone),
+          roundLabel: "Australians",
           cardVariant: "tennis",
           roundSlug: `${SPORT.TENNIS}/today`,
-        } as FixtureRound;
-      })
-      .concat({
-        matches: sortMatchesByDateAndTournament(aussieMatches, timezone),
-        roundLabel: "Australians",
-        cardVariant: "tennis",
-        roundSlug: `${SPORT.TENNIS}/today`,
-      } as FixtureRound),
+        } as FixtureRound),
 
-    currentRound: firstTournament,
-  } as TennisTodayPage;
-}
-
-export async function tennisBrackets(tournamentId: number, seasonId: number) {
-  const trees = await (
-    process.env.DEV_MODE ? fetchCupTrees : fetchTennisBracket
-  )(tournamentId, seasonId);
-
-  if (!trees) {
-    return null;
+      currentRound: firstTournament,
+    } as TennisTodayPage;
   }
 
-  const tempBrackets = trees.cupTrees.map((tree) => {
-    return {
-      id: tree.id,
-      name: tree.name,
-      currentRound: tree.currentRound,
-      matches: tree.rounds.flatMap((round, roundIndex) =>
-        round.blocks.map((match) => {
-          let startDate = new Date(0);
-          startDate.setUTCSeconds(match.seriesStartDateTimestamp ?? 0);
-          return {
-            id: match.blockId,
-            nextMatchId: null,
-            participants: match.participants.map((team, teamIndex) => ({
-              id: team.team.id,
-              isWinner: team.winner,
-              name: team.team.name,
-              resultText:
-                teamIndex === 0 ? match.homeTeamScore : match.awayTeamScore,
-              status: match.finished ? "PLAYED" : "SCHEDULED",
-            })),
-            startTime: startDate,
-            tournamentRoundText: (roundIndex + 1).toString(),
-            state: match.finished ? "PLAYED" : "SCHEDULED",
-            name: "",
-            href: `./${match?.events?.[0] ?? ""}`,
-          } as BracketMatch;
-        }),
-      ),
-    };
-  });
+  async tennisBrackets(tournamentId: number, seasonId: number) {
+    const trees = await (
+      process.env.DEV_MODE ? fetchCupTrees : fetchTennisBracket
+    )(tournamentId, seasonId);
 
-  // Build a lookup map first to avoid O(n²) complexity
-  const matchMap = new Map();
-  tempBrackets.forEach((bracket) => {
-    bracket.matches.forEach((match) => {
-      matchMap.set(match.id, match);
+    if (!trees) {
+      return null;
+    }
+
+    const tempBrackets = trees.cupTrees.map((tree) => {
+      return {
+        id: tree.id,
+        name: tree.name,
+        currentRound: tree.currentRound,
+        matches: tree.rounds.flatMap((round, roundIndex) =>
+          round.blocks.map((match) => {
+            let startDate = new Date(0);
+            startDate.setUTCSeconds(match.seriesStartDateTimestamp ?? 0);
+            return {
+              id: match.blockId,
+              nextMatchId: null,
+              participants: match.participants.map((team, teamIndex) => ({
+                id: team.team.id,
+                isWinner: team.winner,
+                name: team.team.name,
+                resultText:
+                  teamIndex === 0 ? match.homeTeamScore : match.awayTeamScore,
+                status: match.finished ? "PLAYED" : "SCHEDULED",
+              })),
+              startTime: startDate,
+              tournamentRoundText: (roundIndex + 1).toString(),
+              state: match.finished ? "PLAYED" : "SCHEDULED",
+              name: "",
+              href: `./${match?.events?.[0] ?? ""}`,
+            } as BracketMatch;
+          }),
+        ),
+      };
     });
-  });
 
-  trees.cupTrees.forEach((tree) => {
-    tree.rounds.forEach((round) => {
-      round.blocks.forEach((match) => {
-        match.participants.forEach((team) => {
-          if (team.sourceBlockId) {
-            const matchToUpdate = matchMap.get(team.sourceBlockId);
-            if (matchToUpdate) {
-              matchToUpdate.nextMatchId = match.blockId;
+    // Build a lookup map first to avoid O(n²) complexity
+    const matchMap = new Map();
+    tempBrackets.forEach((bracket) => {
+      bracket.matches.forEach((match) => {
+        matchMap.set(match.id, match);
+      });
+    });
+
+    trees.cupTrees.forEach((tree) => {
+      tree.rounds.forEach((round) => {
+        round.blocks.forEach((match) => {
+          match.participants.forEach((team) => {
+            if (team.sourceBlockId) {
+              const matchToUpdate = matchMap.get(team.sourceBlockId);
+              if (matchToUpdate) {
+                matchToUpdate.nextMatchId = match.blockId;
+              }
             }
-          }
+          });
         });
       });
     });
-  });
 
-  return {
-    brackets: tempBrackets,
-  } as TennisBracketPage;
+    return {
+      brackets: tempBrackets,
+    } as TennisBracketPage;
+  }
+
+  async TennisWorldRankings(rankingList: RankingList) {
+    let rankings;
+    if (process.env.DEV_MODE) {
+      // rankings = await fetchPlayerRankings(rankingList);
+    } else {
+      switch (rankingList) {
+        case RANKING_LIST.WTA:
+          rankings = await fetchTennisWTARankings();
+          break;
+        case RANKING_LIST.ATP:
+          rankings = await fetchTennisATPRankings();
+          break;
+        default:
+          return null;
+      }
+    }
+
+    if (!rankings) {
+      return null;
+    }
+
+    return {
+      players: rankings.rankings.map((rank) => ({
+        name: rank.rowName,
+        position: rank.ranking,
+        img: resolveSportImage(rank.team.country.name ?? rank.team.name),
+        totalPoints: rank.points,
+        previousRank: rank.previousRanking,
+      })),
+    } as TennisRankingPage;
+  }
 }
 
 const RANKING_LIST = {
@@ -397,38 +460,6 @@ const RANKING_LIST = {
 } as const;
 
 type RankingList = (typeof RANKING_LIST)[keyof typeof RANKING_LIST];
-
-export async function TennisWorldRankings(rankingList: RankingList) {
-  let rankings;
-  if (process.env.DEV_MODE) {
-    // rankings = await fetchPlayerRankings(rankingList);
-  } else {
-    switch (rankingList) {
-      case RANKING_LIST.WTA:
-        rankings = await fetchTennisWTARankings();
-        break;
-      case RANKING_LIST.ATP:
-        rankings = await fetchTennisATPRankings();
-        break;
-      default:
-        return null;
-    }
-  }
-
-  if (!rankings) {
-    return null;
-  }
-
-  return {
-    players: rankings.rankings.map((rank) => ({
-      name: rank.rowName,
-      position: rank.ranking,
-      img: resolveSportImage(rank.team.country.name ?? rank.team.name),
-      totalPoints: rank.points,
-      previousRank: rank.previousRanking,
-    })),
-  } as TennisRankingPage;
-}
 
 function mapTennisMatches(match: Tennis_Sofascore_Event) {
   let startDate = new Date(0);
@@ -567,3 +598,5 @@ function sortMatchesByDateAndTournament(
     })
     .flatMap(([, group]) => group);
 }
+
+export const tennisService = new TennisService();

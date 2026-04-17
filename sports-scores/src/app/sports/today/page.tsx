@@ -2,19 +2,19 @@ import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
 import DateNav from "@/components/misc-ui/DateNav";
 import { GOLF_TOURS, MOTORSPORT_CATEGORIES } from "@/lib/constants";
 import { getClientDate } from "@/lib/serverUtils";
-import { americanFootballMatchesByDate } from "@/services/american-football.service";
-import { aussieRulesCurrentMatches } from "@/services/aussie-rules.service";
-import { baseballMatchesByDate } from "@/services/baseball.service";
-import { basketballMatchesByDate } from "@/services/basketball.service";
+import { americanFootballService } from "@/services/american-football.service";
+import { aussieRulesService } from "@/services/aussie-rules.service";
+import { baseballService } from "@/services/baseball.service";
+import { basketballService } from "@/services/basketball.service";
 import { cricketMatchesByDate } from "@/services/cricket.service";
-import { footballMatchesByDate } from "@/services/football.service";
+import { footballService } from "@/services/football.service";
 import { golfTournamentsByDate } from "@/services/golf.service";
-import { iceHockeyMatchesByDate } from "@/services/ice-hockey.service";
+import { iceHockeyService } from "@/services/ice-hockey.service";
 import { motorsportCategoriesByDate } from "@/services/motorsport.service";
 import { netballMatchesByDate } from "@/services/netball.service";
-import { rugbyLeagueMatchesByDate } from "@/services/rugby-league.service";
-import { rugbyUnionMatchesByDate } from "@/services/rugby-union.service";
-import { TennisMatchesByDate as tennisMatchesByDate } from "@/services/tennis.service";
+import { rugbyLeagueService } from "@/services/rugby-league.service";
+import { rugbyUnionService } from "@/services/rugby-union.service";
+import { tennisService } from "@/services/tennis.service";
 import { FixtureRound, SPORT } from "@/types/misc";
 import { TZDate } from "@date-fns/tz/date";
 
@@ -48,17 +48,17 @@ export default async function Page({
     cyclingToday,
   ] = await Promise.all([
     cricketMatchesByDate(parsedDate),
-    tennisMatchesByDate(parsedDate),
-    footballMatchesByDate(parsedDate),
-    basketballMatchesByDate(parsedDate),
-    baseballMatchesByDate(parsedDate),
-    americanFootballMatchesByDate(parsedDate),
-    rugbyLeagueMatchesByDate(parsedDate),
-    aussieRulesCurrentMatches(parsedDate),
-    iceHockeyMatchesByDate(parsedDate),
+    tennisService.TennisMatchesByDate(parsedDate),
+    footballService.footballMatchesByDate(parsedDate),
+    basketballService.basketballMatchesByDate(parsedDate),
+    baseballService.baseballMatchesByDate(parsedDate),
+    americanFootballService.americanFootballMatchesByDate(parsedDate),
+    rugbyLeagueService.matchesByDate(parsedDate),
+    aussieRulesService.matchesByDate(parsedDate),
+    iceHockeyService.iceHockeyMatchesByDate(parsedDate),
     golfTournamentsByDate(parsedDate),
     motorsportCategoriesByDate(parsedDate),
-    rugbyUnionMatchesByDate(parsedDate),
+    rugbyUnionService.rugbyUnionMatchesByDate(parsedDate),
     netballMatchesByDate(parsedDate),
     null,
     null,

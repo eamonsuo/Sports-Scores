@@ -23,6 +23,45 @@ export interface Sofascore_TournamentCupTrees_Response {
   cupTrees: Sofascore_CupTree[];
 }
 
+export interface SofascoreAPI {
+  fetchLastEvents: (
+    tournamentId: number,
+    seasonId: number,
+    pageNumber: number,
+  ) => Promise<Sofascore_EventPage_Response | null>;
+  fetchNextEvents: (
+    tournamentId: number,
+    seasonId: number,
+    pageNumber: number,
+  ) => Promise<Sofascore_EventPage_Response | null>;
+  fetchStandingsTotal: (
+    tournamentId: number,
+    seasonId: number,
+  ) => Promise<Sofascore_TotalStandings_Response | null>;
+  fetchEventDetails: (
+    eventId: number,
+  ) => Promise<Sofascore_Event_Response | null>;
+  fetchEventIncidents: (
+    eventId: number,
+  ) => Promise<Sofascore_EventIncidents_Response | null>;
+  fetchEventsByDate: (date: Date) => Promise<Sofascore_Events_Response | null>;
+  fetchTeamLastEvents: (
+    teamId: number,
+    pageNumber?: number,
+  ) => Promise<Sofascore_EventPage_Response | null>;
+  fetchTeamNextEvents: (
+    teamId: number,
+    pageNumber?: number,
+  ) => Promise<Sofascore_EventPage_Response | null>;
+  fetchCupTrees: (
+    tournamentId: number,
+    seasonId: number,
+  ) => Promise<Sofascore_TournamentCupTrees_Response | null>;
+  fetchPlayerRankings: (
+    rankingId: string,
+  ) => Promise<Sofascore_Rankings_Response | null>;
+}
+
 interface Sofascore_Rankings_Response {
   rankingType: {
     sport: Sofascore_Sport;
@@ -35,32 +74,33 @@ interface Sofascore_Rankings_Response {
   rankingRows: Sofascore_Ranking[];
 }
 
-export type SofascoreSport =
-  | "american-football"
-  | "aussie-rules"
-  | "badminton"
-  | "bandy"
-  | "baseball"
-  | "basketball"
-  | "beach-volley"
-  | "cricket"
-  | "cycling"
-  | "darts"
-  | "esports"
-  | "floorball"
-  | "football"
-  | "futsal"
-  | "handball"
-  | "ice-hockey"
-  | "minifootball"
-  | "mma"
-  | "motorsport"
-  | "rugby"
-  | "snooker"
-  | "table-tennis"
-  | "tennis"
-  | "volleyball"
-  | "water-polo";
+export enum SofascoreSportURL {
+  AMERICAN_FOOTBALL = "american-football",
+  AUSSIE_RULES = "aussie-rules",
+  BADMINTON = "badminton",
+  BANDY = "bandy",
+  BASEBALL = "baseball",
+  BASKETBALL = "basketball",
+  BEACH_VOLLEY = "beach-volley",
+  CRICKET = "cricket",
+  CYCLING = "cycling",
+  DARTS = "darts",
+  ESPORTS = "esports",
+  FLOORBALL = "floorball",
+  FOOTBALL = "football",
+  FUTSAL = "futsal",
+  HANDBALL = "handball",
+  ICE_HOCKEY = "ice-hockey",
+  MINIFOOTBALL = "minifootball",
+  MMA = "mma",
+  MOTORSPORT = "motorsport",
+  RUGBY = "rugby",
+  SNOOKER = "snooker",
+  TABLE_TENNIS = "table-tennis",
+  TENNIS = "tennis",
+  VOLLEYBALL = "volleyball",
+  WATER_POLO = "water-polo",
+}
 
 export interface Sofascore_Event {
   tournament: Sofascore_Tournament;

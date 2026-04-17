@@ -2,13 +2,13 @@ import MatchDetailsHero from "@/components/all-sports/MatchDetailsHero";
 import ScoreChart from "@/components/all-sports/ScoreChart";
 import FootballScoreBreakdown from "@/components/football/FootballScoreBreakdown";
 import Placeholder from "@/components/misc-ui/Placeholder";
-import { footballMatchDetails } from "@/services/football.service";
+import { footballService } from "@/services/football.service";
 
 export default async function Page(props: {
   params: Promise<{ league: string; season: string; id: string }>;
 }) {
   const { league, season, id } = await props.params;
-  const pageData = await footballMatchDetails(Number(id));
+  const pageData = await footballService.footballMatchDetails(Number(id));
 
   if (pageData === null || pageData.matchDetails === null) {
     return <Placeholder>NO DATA</Placeholder>;

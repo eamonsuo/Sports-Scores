@@ -1,13 +1,13 @@
 import MatchDetailsHero from "@/components/all-sports/MatchDetailsHero";
 import BaseballScoreBreakdown from "@/components/baseball/BaseballScoreBreakdown";
 import Placeholder from "@/components/misc-ui/Placeholder";
-import { baseballMatchDetails } from "@/services/baseball.service";
+import { baseballService } from "@/services/baseball.service";
 
 export default async function Page(props: {
   params: Promise<{ league: string; season: string; id: string }>;
 }) {
   const { league, season, id } = await props.params;
-  const pageData = await baseballMatchDetails(Number(id));
+  const pageData = await baseballService.baseballMatchDetails(Number(id));
 
   if (pageData === null || pageData.matchDetails === null) {
     return <Placeholder>NO DATA</Placeholder>;

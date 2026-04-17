@@ -509,7 +509,7 @@ export function resolveSportImage(teamName: string) {
     case "Stoke City":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/336.png";
     case "Swansea City":
-      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/318.png";
+      return "https://r2.thesportsdb.com/images/media/team/badge/474rco1686920744.png";
     case "Watford":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/395.png";
     case "Wrexham":

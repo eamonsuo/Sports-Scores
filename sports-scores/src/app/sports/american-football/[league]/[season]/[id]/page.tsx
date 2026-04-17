@@ -2,13 +2,15 @@ import MatchDetailsHero from "@/components/all-sports/MatchDetailsHero";
 import ScoreChart from "@/components/all-sports/ScoreChart";
 import AmericanFootballScoreBreakdown from "@/components/american-football/AmericanFootballScoreBreakdown";
 import Placeholder from "@/components/misc-ui/Placeholder";
-import { americanFootballMatchDetails } from "@/services/american-football.service";
+import { americanFootballService } from "@/services/american-football.service";
 
 export default async function Page(props: {
   params: Promise<{ league: string; season: string; id: string }>;
 }) {
   const { league, season, id } = await props.params;
-  const pageData = await americanFootballMatchDetails(Number(id));
+  const pageData = await americanFootballService.americanFootballMatchDetails(
+    Number(id),
+  );
 
   if (pageData === null || pageData.matchDetails === null) {
     return <Placeholder>NO DATA</Placeholder>;

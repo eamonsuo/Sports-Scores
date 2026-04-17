@@ -1,6 +1,6 @@
 import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
 import Placeholder from "@/components/misc-ui/Placeholder";
-import { americanFootballMatches } from "@/services/american-football.service";
+import { americanFootballService } from "@/services/american-football.service";
 
 export const dynamic = "force-dynamic";
 
@@ -9,7 +9,7 @@ export default async function Page(props: {
 }) {
   const { league, season } = await props.params;
 
-  const pageData = await americanFootballMatches(
+  const pageData = await americanFootballService.americanFootballMatches(
     Number(league),
     Number(season),
   );

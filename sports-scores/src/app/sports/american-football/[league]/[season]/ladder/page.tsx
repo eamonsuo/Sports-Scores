@@ -3,7 +3,7 @@ import type { PlayoffPictureProps } from "@/components/american-football/Playoff
 import PlayoffPicture from "@/components/american-football/PlayoffPicture";
 import Placeholder from "@/components/misc-ui/Placeholder";
 import { AMERICAN_FOOTBALL_LADDER_HEADINGS } from "@/lib/constants";
-import { americanFootballStandings } from "@/services/american-football.service";
+import { americanFootballService } from "@/services/american-football.service";
 
 type AFTable = SportsLadder<typeof AMERICAN_FOOTBALL_LADDER_HEADINGS>;
 type AFTeam = AFTable["data"][number];
@@ -14,7 +14,7 @@ export default async function Page(props: {
   params: Promise<{ league: string; season: string }>;
 }) {
   const { league, season } = await props.params;
-  const pageData = await americanFootballStandings(
+  const pageData = await americanFootballService.americanFootballStandings(
     Number(league),
     Number(season),
   );
