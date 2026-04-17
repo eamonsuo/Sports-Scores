@@ -2,13 +2,13 @@ import MatchDetailsHero from "@/components/all-sports/MatchDetailsHero";
 import ScoreChart from "@/components/all-sports/ScoreChart";
 import AussieRulesScoreBreakdown from "@/components/aussie-rules/AussieRulesScoreBreakdown";
 import Placeholder from "@/components/misc-ui/Placeholder";
-import { aussieRulesMatchDetails } from "@/services/aussie-rules.service";
+import { aussieRulesService } from "@/services/aussie-rules.service";
 
 export default async function Page(props: {
   params: Promise<{ league: string; season: string; id: string }>;
 }) {
   const { league, season, id } = await props.params;
-  const pageData = await aussieRulesMatchDetails(Number(id));
+  const pageData = await aussieRulesService.aussieRulesMatchDetails(Number(id));
 
   if (pageData === null || pageData.matchDetails === null) {
     return <Placeholder>NO DATA</Placeholder>;
