@@ -44,6 +44,7 @@ import {
 } from "@/endpoints/tennis.api";
 import { mapMatchSummary } from "@/lib/eventMapping";
 import { mapToDataverseMatchSummary } from "@/services/dataverse.service";
+import { AmericanFootball_Sofascore_Event } from "@/types/american-football";
 import { DataverseMatchSummary } from "@/types/dataverse";
 import { API_EVENT_TYPES, DISPLAY_TYPES, SPORT } from "@/types/misc";
 import { Sofascore_Event } from "@/types/sofascore";
@@ -206,6 +207,8 @@ function mapEventToRecord(
     //   break;
   }
 
+  const afEvent = event as AmericanFootball_Sofascore_Event;
+
   const matchSummary = mapMatchSummary(
     API_EVENT_TYPES.SOFASCORE,
     sport,
@@ -213,13 +216,13 @@ function mapEventToRecord(
     {
       roundLabel,
       homeDetails: {
-        winDrawLoss: event.homeTeamSeasonHistoricalForm
-          ? `${event.homeTeamSeasonHistoricalForm.wins ?? 0}-${event.homeTeamSeasonHistoricalForm.losses ?? 0}${event.homeTeamSeasonHistoricalForm.draws ? "-" + event.homeTeamSeasonHistoricalForm.draws : ""}`
+        winDrawLoss: afEvent.homeTeamSeasonHistoricalForm
+          ? `${afEvent.homeTeamSeasonHistoricalForm.wins ?? 0}-${afEvent.homeTeamSeasonHistoricalForm.losses ?? 0}${afEvent.homeTeamSeasonHistoricalForm.draws ? "-" + afEvent.homeTeamSeasonHistoricalForm.draws : ""}`
           : undefined,
       },
       awayDetails: {
-        winDrawLoss: event.awayTeamSeasonHistoricalForm
-          ? `${event.awayTeamSeasonHistoricalForm.wins ?? 0}-${event.awayTeamSeasonHistoricalForm.losses ?? 0}${event.awayTeamSeasonHistoricalForm.draws ? "-" + event.awayTeamSeasonHistoricalForm.draws : ""}`
+        winDrawLoss: afEvent.awayTeamSeasonHistoricalForm
+          ? `${afEvent.awayTeamSeasonHistoricalForm.wins ?? 0}-${afEvent.awayTeamSeasonHistoricalForm.losses ?? 0}${afEvent.awayTeamSeasonHistoricalForm.draws ? "-" + afEvent.awayTeamSeasonHistoricalForm.draws : ""}`
           : undefined,
       },
     },
