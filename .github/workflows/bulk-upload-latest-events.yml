@@ -10,7 +10,7 @@ on:
         description: "Run latest matrix entries, all leagues, or a single tournament"
         required: true
         type: choice
-        default: "latest"
+        default: "single"
         options:
           - latest
           - all
@@ -55,6 +55,22 @@ on:
         required: false
         default: "round"
         type: string
+
+env:
+  DATAVERSE_ENVIRONMENT_URL: ${{ secrets.DATAVERSE_ENVIRONMENT_URL }}
+  DATAVERSE_TENANT_ID: ${{ secrets.DATAVERSE_TENANT_ID }}
+  DATAVERSE_CLIENT_ID: ${{ secrets.DATAVERSE_CLIENT_ID }}
+  DATAVERSE_CLIENT_SECRET: ${{ secrets.DATAVERSE_CLIENT_SECRET }}
+  SOFASCORE_API_BASEURL: ${{ secrets.SOFASCORE_API_BASEURL }}
+  RapidAPIKey: ${{ secrets.RAPIDAPIKEY }}
+  NFL_BASEURL: ${{ secrets.NFL_BASEURL }}
+  BASEBALL_BASEURL: ${{ secrets.BASEBALL_BASEURL }}
+  BASKETBALL_BASEURL: ${{ secrets.BASKETBALL_BASEURL }}
+  FOOTBALL_BASEURL: ${{ secrets.FOOTBALL_BASEURL }}
+  ICE_HOCKEY_BASEURL: ${{ secrets.ICE_HOCKEY_BASEURL }}
+  NRL_BASEURL: ${{ secrets.NRL_BASEURL }}
+  TENNIS_BASEURL: ${{ secrets.TENNIS_BASEURL }}
+  RUGBY_UNION_BASEURL: ${{ secrets.RUGBY_UNION_BASEURL }}
 
 jobs:
   # ---- Read the committed matrix JSON ----
@@ -106,11 +122,6 @@ jobs:
             "${{ matrix.displayType }}" \
             ${{ inputs.mode == 'all' && 'true' || 'false' }} \
             ${{ inputs.useSportApi }}
-        env:
-          DATAVERSE_ENVIRONMENT_URL: ${{ secrets.DATAVERSE_ENVIRONMENT_URL }}
-          DATAVERSE_TENANT_ID: ${{ secrets.DATAVERSE_TENANT_ID }}
-          DATAVERSE_CLIENT_ID: ${{ secrets.DATAVERSE_CLIENT_ID }}
-          DATAVERSE_CLIENT_SECRET: ${{ secrets.DATAVERSE_CLIENT_SECRET }}
 
   # ---- Runs a single tournament (manual only) ----
   upload-single:
@@ -140,9 +151,3 @@ jobs:
             "${{ inputs.displayType }}" \
             true \
             ${{ inputs.useSportApi }}
-
-        env:
-          DATAVERSE_ENVIRONMENT_URL: ${{ secrets.DATAVERSE_ENVIRONMENT_URL }}
-          DATAVERSE_TENANT_ID: ${{ secrets.DATAVERSE_TENANT_ID }}
-          DATAVERSE_CLIENT_ID: ${{ secrets.DATAVERSE_CLIENT_ID }}
-          DATAVERSE_CLIENT_SECRET: ${{ secrets.DATAVERSE_CLIENT_SECRET }}
