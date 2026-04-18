@@ -99,7 +99,10 @@ export default function EventCard({ event }: EventCardProps) {
           </h3>
 
           {/* Date */}
-          <div className="mb-2 text-sm text-gray-700 dark:text-neutral-300">
+          <div
+            className="mb-2 text-sm text-gray-700 dark:text-neutral-300"
+            suppressHydrationWarning
+          >
             <p>{getDateDisplay()}</p>
           </div>
 

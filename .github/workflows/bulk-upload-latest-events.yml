@@ -15,6 +15,11 @@ on:
           - latest
           - all
           - single
+      useSportApi:
+        description: "Use sport-specific API instead of generic Sofascore API"
+        required: true
+        default: true
+        type: boolean
       tournamentId:
         description: "Sofascore tournament ID (single mode only)"
         required: false
@@ -24,9 +29,27 @@ on:
         required: false
         type: string
       sport:
-        description: "Sport key e.g. rugby-league (single mode only)"
+        description: "Sport key (single mode only)"
         required: false
-        type: string
+        type: choice
+        options:
+          - aussie-rules
+          - baseball
+          - cricket
+          - american-football
+          - motorsport
+          - rugby-league
+          - golf
+          - olympics
+          - football
+          - surfing
+          - tennis
+          - basketball
+          - ice-hockey
+          - netball
+          - rugby-union
+          - cycling
+          - darts
       displayType:
         description: "Display type e.g. round, date (single mode only)"
         required: false
@@ -81,7 +104,8 @@ jobs:
             "${{ matrix.seasonId }}" \
             "${{ matrix.sport }}" \
             "${{ matrix.displayType }}" \
-            ${{ inputs.mode == 'all' && 'true' || 'false' }}
+            ${{ inputs.mode == 'all' && 'true' || 'false' }} \
+            ${{ inputs.useSportApi }}
         env:
           DATAVERSE_ENVIRONMENT_URL: ${{ secrets.DATAVERSE_ENVIRONMENT_URL }}
           DATAVERSE_TENANT_ID: ${{ secrets.DATAVERSE_TENANT_ID }}
@@ -114,7 +138,8 @@ jobs:
             "${{ inputs.seasonId }}" \
             "${{ inputs.sport }}" \
             "${{ inputs.displayType }}" \
-            true
+            true \
+            ${{ inputs.useSportApi }}
 
         env:
           DATAVERSE_ENVIRONMENT_URL: ${{ secrets.DATAVERSE_ENVIRONMENT_URL }}

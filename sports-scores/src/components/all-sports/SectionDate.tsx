@@ -18,6 +18,7 @@ export default function SectionDate({
     <div
       id={currentDate ? "current-date" : undefined}
       className={cn("mt-4 text-black dark:text-neutral-400", className)}
+      suppressHydrationWarning
     >
       {formatDateLong(sectionDate)}
       {sectionDateEnd ? ` - ${formatDateLong(sectionDateEnd)}` : ""}
