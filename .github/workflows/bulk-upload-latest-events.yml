@@ -85,9 +85,9 @@ jobs:
       - id: set-matrix
         run: |
           if [ "${{ inputs.mode }}" = "all" ]; then
-            echo "matrix=$(cat sports-scores/scripts/eventUploadMatrixAll.json)" >> $GITHUB_OUTPUT
+            echo "matrix=$(jq -c . sports-scores/scripts/eventUploadMatrixAll.json)" >> $GITHUB_OUTPUT
           else
-            echo "matrix=$(cat sports-scores/scripts/eventUploadMatrix.json)" >> $GITHUB_OUTPUT
+            echo "matrix=$(jq -c . sports-scores/scripts/eventUploadMatrix.json)" >> $GITHUB_OUTPUT
           fi
 
   # ---- Runs matrix entries (scheduled/manual "matrix"/manual "all") ----
