@@ -1,14 +1,14 @@
 import {
   fetchMatchDetails,
   fetchMatchIncidents,
+  fetchScheduledEvents,
+  fetchTournamentLastMatches,
+  fetchTournamentNextMatches,
   fetchTournamentStandings,
 } from "@/endpoints/sofascore-rapid-api.api";
 import {
   fetchEventDetails,
   fetchEventIncidents,
-  fetchLastEvents,
-  fetchNextEvents,
-  fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
 import {
   AUSSIE_RULES_LADDER_HEADINGS,
@@ -16,10 +16,7 @@ import {
 } from "@/lib/constants";
 import { resolveSportImage } from "@/lib/imageMapping";
 import { shortenTeamNames } from "@/lib/projUtils";
-import {
-  AussieRulesLadderPage,
-  AussieRulesMatchPage,
-} from "@/types/aussie-rules";
+import { AussieRulesMatchPage } from "@/types/aussie-rules";
 import { SPORT } from "@/types/misc";
 import { SofascoreSportURL } from "@/types/sofascore";
 import { SofascoreSport } from "./sofascore.service";
@@ -28,13 +25,13 @@ class AussieRulesService extends SofascoreSport {
   constructor() {
     super(
       {
-        fetchStandingsTotal,
-        fetchLastEvents,
-        fetchNextEvents,
-        fetchEventDetails,
-        fetchEventIncidents,
+        fetchLastEvents: fetchTournamentLastMatches,
+        fetchNextEvents: fetchTournamentNextMatches,
+        fetchEventsByDate: (date: Date) => fetchScheduledEvents(87, date),
+        fetchEventDetails: fetchMatchDetails,
+        fetchEventIncidents: fetchMatchIncidents,
+        fetchStandingsTotal: fetchTournamentStandings,
         fetchCupTrees: async () => null,
-        fetchEventsByDate: async () => null,
         fetchPlayerRankings: async () => null,
         fetchTeamLastEvents: async () => null,
         fetchTeamNextEvents: async () => null,
@@ -44,52 +41,6 @@ class AussieRulesService extends SofascoreSport {
       AUSSIE_RULES_LEAGUES,
       AUSSIE_RULES_LADDER_HEADINGS,
     );
-  }
-
-  async aussieRulesStandings(league: number, season: number) {
-    const standings = await (
-      process.env.DEV_MODE ? fetchStandingsTotal : fetchTournamentStandings
-    )(league, season);
-
-    if (!standings) {
-      return null;
-    }
-
-    const leagueConfig = AUSSIE_RULES_LEAGUES.find(
-      (l) => Number(l.slug) === league,
-    );
-    const headings = AUSSIE_RULES_LADDER_HEADINGS;
-
-    const seasonConfig = leagueConfig?.seasons.find(
-      (s) => Number(s.slug) === season,
-    );
-
-    return {
-      standings: standings?.standings.map((table) => {
-        return {
-          headings,
-          data: table.rows.map((item) => {
-            return {
-              position: item.position,
-              team: {
-                id: item.team.id,
-                name: shortenTeamNames(item.team.name),
-                logo: resolveSportImage(item.team.name),
-              },
-              P: item.matches,
-              W: item.wins,
-              "%": item.scoresAgainst
-                ? Math.round((item.scoresFor / item.scoresAgainst) * 100)
-                : 0,
-              Pts: item.points,
-            };
-          }),
-          placingCategories:
-            leagueConfig?.ladderConfig?.[seasonConfig?.ladderConfig ?? 0]
-              ?.placingCategories ?? [],
-        };
-      }),
-    } as AussieRulesLadderPage<typeof headings>;
   }
 
   async aussieRulesMatchDetails(matchId: number) {

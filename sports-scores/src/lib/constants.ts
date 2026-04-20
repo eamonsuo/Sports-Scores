@@ -1,4 +1,5 @@
-﻿import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
+﻿import { LadderPlacingCategory } from "@/components/all-sports/Ladder";
+import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
 import { DISPLAY_TYPES } from "@/types/misc";
 import {
   PlayoffPictureStructure,
@@ -14,6 +15,11 @@ const RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG: PlayoffPictureConfig = {
   qualifyingPositions: 8,
   structure: PlayoffPictureStructure.Top8,
 };
+
+const TOP_8_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
+  { label: "Finals", position: [5, 6, 7, 8] },
+];
 
 export const NRL_TEAMS_NAME_LOGO = [
   "Brisbane Broncos",
@@ -42,6 +48,7 @@ export const RUGBY_LEAGUE_LADDER_HEADINGS = [
   "P",
   "W",
   "D",
+  "L",
   "Diff",
   "Pts",
 ] as const;
@@ -50,12 +57,20 @@ export const AUSSIE_RULES_LADDER_HEADINGS = [
   "P",
   "W",
   "D",
+  "L",
   "%",
   "Pts",
 ] as const;
 export const BASKETBALL_LADDER_HEADINGS = ["P", "W", "L", "PCT"] as const;
 export const BASEBALL_LADDER_HEADINGS = ["P", "W", "L", "PCT"] as const;
-export const ICE_HOCKEY_LADDER_HEADINGS = ["P", "W", "Diff", "Pts"] as const;
+export const ICE_HOCKEY_LADDER_HEADINGS = [
+  "P",
+  "W",
+  "OTL",
+  "L",
+  "Diff",
+  "Pts",
+] as const;
 export const RUGBY_UNION_LADDER_HEADINGS = [
   "P",
   "W",
@@ -281,10 +296,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     ],
     ladderConfig: [
       {
-        placingCategories: [
-          { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
-          { label: "Finals", position: [5, 6, 7, 8] },
-        ],
+        placingCategories: TOP_8_LADDER_CONFIG,
         playoffPictureConfig: RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG,
       },
     ],
@@ -348,10 +360,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     ],
     ladderConfig: [
       {
-        placingCategories: [
-          { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
-          { label: "Finals", position: [5, 6, 7, 8] },
-        ],
+        placingCategories: TOP_8_LADDER_CONFIG,
         playoffPictureConfig: RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG,
       },
     ],
@@ -366,10 +375,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     ],
     ladderConfig: [
       {
-        placingCategories: [
-          { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
-          { label: "Finals", position: [5, 6, 7, 8] },
-        ],
+        placingCategories: TOP_8_LADDER_CONFIG,
         playoffPictureConfig: RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG,
       },
     ],
@@ -483,10 +489,7 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
         },
       },
       {
-        placingCategories: [
-          { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
-          { label: "Finals", position: [5, 6, 7, 8] },
-        ],
+        placingCategories: TOP_8_LADDER_CONFIG,
         playoffPictureConfig: {
           rankingSystem: "points",
           pointsPerWin: 4,

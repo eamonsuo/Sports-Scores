@@ -9,50 +9,29 @@ import {
 import {
   fetchEventDetails,
   fetchEventIncidents,
-  fetchEventsByDate,
-  fetchLastEvents,
-  fetchNextEvents,
-  fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
 import {
   BASKETBALL_LADDER_HEADINGS,
   BASKETBALL_LEAGUES,
 } from "@/lib/constants";
-import {
-  getCurrentRound,
-  mapFixtureRounds,
-  mapMatchSummary,
-} from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
 import { shortenTeamNames } from "@/lib/projUtils";
-import {
-  BasketballFixturesPage,
-  BasketballLadderPage,
-  BasketballMatchPage,
-  BasketballTodayPage,
-} from "@/types/basketball";
-import {
-  API_EVENT_TYPES,
-  DISPLAY_TYPES,
-  MatchSummary,
-  SPORT,
-} from "@/types/misc";
-import { Sofascore_Event, SofascoreSportURL } from "@/types/sofascore";
-import { TZDate } from "@date-fns/tz";
-import { isSameDay } from "date-fns";
+import { BasketballMatchPage } from "@/types/basketball";
+import { SPORT } from "@/types/misc";
+import { SofascoreSportURL } from "@/types/sofascore";
 import { SofascoreSport } from "./sofascore.service";
 
 class BasketballService extends SofascoreSport {
   constructor() {
     super(
       {
-        fetchStandingsTotal,
-        fetchLastEvents,
-        fetchNextEvents,
-        fetchEventDetails,
-        fetchEventIncidents,
+        fetchLastEvents: fetchBasketballLastMatches,
+        fetchNextEvents: fetchBasketballNextMatches,
+        fetchEventsByDate: fetchBasketballMatchesByDate,
+        fetchEventDetails: fetchBasketballMatchDetails,
+        fetchEventIncidents: fetchBasketballMatchIncidents,
+        fetchStandingsTotal: fetchBasketballStandings,
         fetchCupTrees: async () => null,
-        fetchEventsByDate: async () => null,
         fetchPlayerRankings: async () => null,
         fetchTeamLastEvents: async () => null,
         fetchTeamNextEvents: async () => null,
@@ -62,91 +41,6 @@ class BasketballService extends SofascoreSport {
       BASKETBALL_LEAGUES,
       BASKETBALL_LADDER_HEADINGS,
     );
-  }
-
-  async basketballMatches(tournamentId: number, seasonId: number) {
-    const lastMatches = await (
-      process.env.DEV_MODE ? fetchLastEvents : fetchBasketballLastMatches
-    )(tournamentId, seasonId, 0);
-
-    const nextMatches = await (
-      process.env.DEV_MODE ? fetchNextEvents : fetchBasketballNextMatches
-    )(tournamentId, seasonId, 0);
-
-    if (!lastMatches && !nextMatches) {
-      return null;
-    }
-
-    const allMatches = (lastMatches?.events ?? [])
-      .concat(nextMatches?.events ?? [])
-      .map((event) =>
-        this.mapBasketballMatch(
-          event,
-          event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
-        ),
-      )
-      .sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-      );
-
-    const leagueConfig = BASKETBALL_LEAGUES.find(
-      (l) => Number(l.slug) === tournamentId,
-    );
-
-    const fixture = await mapFixtureRounds(allMatches, leagueConfig);
-
-    return {
-      fixtures: fixture,
-      currentRound: getCurrentRound(fixture, leagueConfig?.display),
-    } as BasketballFixturesPage;
-  }
-
-  async basketballStandings(tournamentId: number, seasonId: number) {
-    const standings = await (
-      process.env.DEV_MODE ? fetchStandingsTotal : fetchBasketballStandings
-    )(tournamentId, seasonId);
-
-    if (!standings) {
-      return null;
-    }
-
-    const leagueConfig = BASKETBALL_LEAGUES.find(
-      (l) => Number(l.slug) === tournamentId,
-    );
-    const headings = BASKETBALL_LADDER_HEADINGS;
-
-    const seasonConfig = leagueConfig?.seasons.find(
-      (s) => Number(s.slug) === seasonId,
-    );
-
-    return {
-      standings: standings?.standings
-        // .sort((a, b) => b.name.localeCompare(a.name))
-        .map((table) => {
-          return {
-            tableName: table.name,
-            headings,
-            data: table.rows.map((standing) => {
-              return {
-                position: standing.position,
-                team: {
-                  id: standing.team.id,
-                  name: shortenTeamNames(standing.team.name),
-                  logo: resolveSportImage(standing.team.name),
-                },
-                P: standing.matches,
-                W: standing.wins,
-                L: standing.losses,
-                PCT: standing.percentage,
-              };
-            }),
-            placingCategories:
-              leagueConfig?.ladderConfig?.[seasonConfig?.ladderConfig ?? 0]
-                ?.placingCategories ?? [],
-          };
-        }),
-    } as BasketballLadderPage<typeof headings>;
   }
 
   async basketballMatchDetails(matchId: number) {
@@ -232,59 +126,6 @@ class BasketballService extends SofascoreSport {
           }),
       matchDetails: scoreDetails,
     } as BasketballMatchPage;
-  }
-
-  async basketballMatchesByDate(
-    date: Date,
-    // categoryId: number,
-  ) {
-    const matches = await (process.env.DEV_MODE
-      ? fetchEventsByDate(SofascoreSportURL.BASKETBALL, date)
-      : fetchBasketballMatchesByDate(date));
-
-    if (!matches) {
-      return null;
-    }
-
-    const validLeagueIds = BASKETBALL_LEAGUES.map((l) => Number(l.slug));
-
-    const timezone = date instanceof TZDate ? date.timeZone : "UTC";
-
-    matches.events = matches.events
-      .filter((item) => {
-        const eventDate = new TZDate(item.startTimestamp * 1000, timezone);
-        return isSameDay(eventDate, date);
-      })
-      .filter((item) =>
-        validLeagueIds.includes(item.tournament.uniqueTournament.id),
-      )
-      .sort(
-        (a, b) =>
-          validLeagueIds.indexOf(a.tournament.uniqueTournament.id) -
-          validLeagueIds.indexOf(b.tournament.uniqueTournament.id),
-      );
-
-    if (!matches.events || matches.events.length === 0) return null;
-
-    const allMatches = matches.events.map((event) =>
-      this.mapBasketballMatch(
-        event,
-        event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
-      ),
-    );
-
-    const fixture = await mapFixtureRounds(allMatches, BASKETBALL_LEAGUES);
-
-    return {
-      fixtures: fixture,
-      currentRound: getCurrentRound(fixture, DISPLAY_TYPES.LEAGUE),
-    } as BasketballTodayPage;
-  }
-
-  mapBasketballMatch(match: Sofascore_Event, roundLabel: string): MatchSummary {
-    return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.BASKETBALL, match, {
-      roundLabel,
-    });
   }
 }
 

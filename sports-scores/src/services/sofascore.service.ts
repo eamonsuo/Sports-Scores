@@ -130,6 +130,7 @@ export class SofascoreSport {
         validLeagueIds.includes(item.tournament.uniqueTournament.id),
       )
       .sort(
+        // TODO: How do I want to sort this??
         (a, b) =>
           validLeagueIds.indexOf(a.tournament.uniqueTournament.id) -
           validLeagueIds.indexOf(b.tournament.uniqueTournament.id),
@@ -170,9 +171,14 @@ export class SofascoreSport {
     );
 
     return {
-      standings: standings?.standings.map((table) =>
-        this.standingsMapper(table, ladderConfig?.placingCategories),
-      ),
+      standings: standings?.standings
+        // TODO: How do I want to sort tables??
+        .sort((a, b) => {
+          return 0;
+        })
+        .map((table) =>
+          this.standingsMapper(table, ladderConfig?.placingCategories),
+        ),
       playoffPicture: resolvePlayoffPicture(
         ladderConfig?.playoffPictureConfig,
         standings?.standings.map((table) => ({
@@ -204,6 +210,7 @@ export class SofascoreSport {
     placingCategories?: LadderPlacingCategory[],
   ): SportsLadder<typeof this.headings> {
     return {
+      tableName: table.name,
       headings: this.headings,
       data: table.rows.map((item) => {
         return {
@@ -217,13 +224,17 @@ export class SofascoreSport {
           Pts: item.points,
           P: item.matches,
           W: item.wins,
+          OTL: item.overtimeLosses,
           L: item.losses,
           D: item.draws,
-          Diff: item.scoresFor - item.scoresAgainst,
           F: item.scoresFor,
+          A: item.scoresAgainst,
+          Diff: item.scoresFor - item.scoresAgainst,
+          PCT: item.percentage,
           "%": item.scoresAgainst
             ? Math.round((item.scoresFor / item.scoresAgainst) * 100)
             : 0,
+          BP: (item.points ?? 0) - item.wins * 4 - (item.draws ?? 0) * 2,
         };
       }),
       placingCategories,

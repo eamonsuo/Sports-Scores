@@ -1,5 +1,11 @@
-import { SportsLadder } from "@/components/all-sports/Ladder";
-import type { PlayoffPictureGroup } from "@/types/playoff-picture";
+import {
+  LadderPlacingCategory,
+  SportsLadder,
+} from "@/components/all-sports/Ladder";
+import type {
+  PlayoffPictureConfig,
+  PlayoffPictureGroup,
+} from "@/types/playoff-picture";
 
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends Date
@@ -96,6 +102,12 @@ export interface FixtureRound {
   cardVariant?: CardVariant;
   roundSlug?: string;
 }
+
+export type LadderConfig = {
+  // headings: string[];
+  placingCategories?: LadderPlacingCategory[];
+  playoffPictureConfig?: PlayoffPictureConfig;
+};
 
 export interface SportsmonksCricket {
   data: SportsmonksMatchCricket[];

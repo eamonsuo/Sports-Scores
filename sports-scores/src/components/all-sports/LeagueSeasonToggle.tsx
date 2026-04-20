@@ -6,8 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/zzzshadcn/popover";
-import { DISPLAY_TYPES, SPORT } from "@/types/misc";
-import type { PlayoffPictureConfig } from "@/types/playoff-picture";
+import { DISPLAY_TYPES, LadderConfig, SPORT } from "@/types/misc";
 import { format } from "date-fns/format";
 import { ChevronDownIcon, ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
@@ -20,17 +19,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../zzzshadcn/dropdown-menu";
-import { LadderPlacingCategory } from "./Ladder";
 
 export type LeagueSeasonConfig = {
   name: string;
   slug: string;
   seasons: { name: string; slug: string; ladderConfig?: number }[];
-  ladderConfig?: {
-    // headings: string[];
-    placingCategories?: LadderPlacingCategory[];
-    playoffPictureConfig?: PlayoffPictureConfig;
-  }[]; // Multiple configs can be specified for different seasons, these will then be initiated via the seasons array
+  ladderConfig?: LadderConfig[]; // Multiple configs can be specified for different seasons, these will then be initiated via the seasons array
   display?: DISPLAY_TYPES;
   externalURL?: string;
   byes?: {

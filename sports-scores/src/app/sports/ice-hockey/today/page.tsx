@@ -17,7 +17,7 @@ export default async function Page({
   const parsedDate =
     date === undefined ? curDate : new TZDate(date as string, curDate.timeZone);
 
-  const pageData = await iceHockeyService.iceHockeyMatchesByDate(parsedDate);
+  const pageData = await iceHockeyService.matchesByDate(parsedDate);
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;

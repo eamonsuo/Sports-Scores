@@ -14,98 +14,41 @@ import {
   fetchCupTrees,
   fetchEventDetails,
   fetchEventIncidents,
-  fetchEventsByDate,
-  fetchLastEvents,
-  fetchNextEvents,
-  fetchStandingsTotal,
   fetchTeamLastEvents,
   fetchTeamNextEvents,
 } from "@/endpoints/sofascore.api";
 import { FOOTBALL_LADDER_HEADINGS, FOOTBALL_LEAGUES } from "@/lib/constants";
-import {
-  getCurrentRound,
-  mapFixtureRounds,
-  mapMatchSummary,
-} from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
 import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils";
 import {
   FootballBracketPage,
-  FootballFixturesPage,
-  FootballLadderPage,
   FootballMatchPage,
   FootballTeamFixturesPage,
-  FootballTodayPage,
 } from "@/types/football";
-import {
-  API_EVENT_TYPES,
-  DISPLAY_TYPES,
-  MatchSummary,
-  SPORT,
-} from "@/types/misc";
-import { Sofascore_Event, SofascoreSportURL } from "@/types/sofascore";
-import { TZDate } from "@date-fns/tz";
-import { isSameDay } from "date-fns";
+import { MatchSummary, SPORT } from "@/types/misc";
+import { SofascoreSportURL } from "@/types/sofascore";
 import { SofascoreSport } from "./sofascore.service";
 
 class FootballService extends SofascoreSport {
   constructor() {
     super(
       {
-        fetchStandingsTotal,
-        fetchLastEvents,
-        fetchNextEvents,
-        fetchEventDetails,
-        fetchEventIncidents,
-        fetchCupTrees,
-        fetchEventsByDate: async () => null,
+        fetchLastEvents: fetchFootballLastMatches,
+        fetchNextEvents: fetchFootballNextMatches,
+        fetchEventsByDate: fetchFootballMatchesByDate,
+        fetchEventDetails: fetchFootballMatchDetails,
+        fetchEventIncidents: fetchFootballMatchIncidents,
+        fetchStandingsTotal: fetchFootballStandings,
+        fetchCupTrees: fetchFootballCupTrees,
         fetchPlayerRankings: async () => null,
-        fetchTeamLastEvents,
-        fetchTeamNextEvents,
+        fetchTeamLastEvents: fetchFootballTeamLastMatches,
+        fetchTeamNextEvents: fetchFootballTeamNextMatches,
       },
       SPORT.FOOTBALL,
       SofascoreSportURL.FOOTBALL,
       FOOTBALL_LEAGUES,
       FOOTBALL_LADDER_HEADINGS,
     );
-  }
-
-  async footballMatches(tournamentId: number, seasonId: number) {
-    const lastMatches = await (
-      process.env.DEV_MODE ? fetchLastEvents : fetchFootballLastMatches
-    )(tournamentId, seasonId, 0);
-
-    const nextMatches = await (
-      process.env.DEV_MODE ? fetchNextEvents : fetchFootballNextMatches
-    )(tournamentId, seasonId, 0);
-
-    if (!lastMatches && !nextMatches) {
-      return null;
-    }
-
-    const allMatches = (lastMatches?.events ?? [])
-      .concat(nextMatches?.events ?? [])
-      .map((event) =>
-        this.mapFootballMatch(
-          event,
-          event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
-        ),
-      )
-      .sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-      );
-
-    const leagueConfig = FOOTBALL_LEAGUES.find(
-      (l) => Number(l.slug) === tournamentId,
-    );
-
-    const fixture = await mapFixtureRounds(allMatches, leagueConfig);
-
-    return {
-      fixtures: fixture,
-      currentRound: getCurrentRound(fixture, leagueConfig?.display),
-    } as FootballFixturesPage;
   }
 
   async footballTeamMatches(teamId: number) {
@@ -167,54 +110,6 @@ class FootballService extends SofascoreSport {
     } as FootballTeamFixturesPage;
   }
 
-  async footballStandings(tournamentId: number, seasonId: number) {
-    const standings = await (
-      process.env.DEV_MODE ? fetchStandingsTotal : fetchFootballStandings
-    )(tournamentId, seasonId);
-
-    if (!standings) {
-      return null;
-    }
-
-    const leagueConfig = FOOTBALL_LEAGUES.find(
-      (l) => Number(l.slug) === tournamentId,
-    );
-    const headings = FOOTBALL_LADDER_HEADINGS;
-
-    const seasonConfig = leagueConfig?.seasons.find(
-      (s) => Number(s.slug) === seasonId,
-    );
-
-    return {
-      standings: standings?.standings
-        // .sort((a, b) => b.name.localeCompare(a.name))
-        .map((table) => {
-          return {
-            tableName: table.name ?? "test",
-            headings,
-            data: table.rows.map((standing) => {
-              return {
-                position: standing.position,
-                team: {
-                  id: standing.team.id,
-                  name: shortenTeamNames(standing.team.name),
-                  logo: resolveSportImage(standing.team.name),
-                },
-                P: standing.matches,
-                W: standing.wins,
-                D: standing.draws,
-                L: standing.losses,
-                Pts: standing.points,
-              };
-            }),
-            placingCategories:
-              leagueConfig?.ladderConfig?.[seasonConfig?.ladderConfig ?? 0]
-                ?.placingCategories ?? [],
-          };
-        }),
-    } as FootballLadderPage<typeof headings>;
-  }
-
   async footballMatchDetails(matchId: number) {
     const match = await (
       process.env.DEV_MODE ? fetchEventDetails : fetchFootballMatchDetails
@@ -271,50 +166,6 @@ class FootballService extends SofascoreSport {
             ],
           },
     } as FootballMatchPage;
-  }
-
-  async footballMatchesByDate(date: Date) {
-    const matches = await (process.env.DEV_MODE
-      ? fetchEventsByDate(SofascoreSportURL.FOOTBALL, date)
-      : fetchFootballMatchesByDate(date));
-
-    if (!matches) {
-      return null;
-    }
-
-    const validLeagueIds = FOOTBALL_LEAGUES.map((l) => Number(l.slug));
-
-    const timezone = date instanceof TZDate ? date.timeZone : "UTC";
-
-    matches.events = matches.events
-      .filter((item) => {
-        const eventDate = new TZDate(item.startTimestamp * 1000, timezone);
-        return isSameDay(eventDate, date);
-      })
-      .filter((item) =>
-        validLeagueIds.includes(item.tournament.uniqueTournament.id),
-      )
-      .sort(
-        (a, b) =>
-          validLeagueIds.indexOf(a.tournament.uniqueTournament.id) -
-          validLeagueIds.indexOf(b.tournament.uniqueTournament.id),
-      );
-
-    if (!matches.events || matches.events.length === 0) return null;
-
-    const allMatches = matches.events.map((event) =>
-      this.mapFootballMatch(
-        event,
-        event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
-      ),
-    );
-
-    const fixture = await mapFixtureRounds(allMatches, FOOTBALL_LEAGUES);
-
-    return {
-      fixtures: fixture,
-      currentRound: getCurrentRound(fixture, DISPLAY_TYPES.LEAGUE),
-    } as FootballTodayPage;
   }
 
   async footballBrackets(tournamentId: number, seasonId: number) {
@@ -396,12 +247,6 @@ class FootballService extends SofascoreSport {
     return {
       brackets: tempBrackets,
     } as FootballBracketPage;
-  }
-
-  mapFootballMatch(match: Sofascore_Event, roundLabel: string): MatchSummary {
-    return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.FOOTBALL, match, {
-      roundLabel,
-    });
   }
 }
 

@@ -6,7 +6,7 @@ export default async function Page(props: {
   params: Promise<{ league: string; season: string }>;
 }) {
   const { league, season } = await props.params;
-  const pageData = await iceHockeyService.iceHockeyMatches(
+  const pageData = await iceHockeyService.matchesAll(
     Number(league),
     Number(season),
   );

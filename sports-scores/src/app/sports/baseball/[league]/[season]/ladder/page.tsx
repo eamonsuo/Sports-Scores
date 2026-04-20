@@ -6,7 +6,7 @@ export default async function Page(props: {
   params: Promise<{ league: string; season: string }>;
 }) {
   const { league, season } = await props.params;
-  const pageData = await baseballService.baseballStandings(
+  const pageData = await baseballService.standings(
     Number(league),
     Number(season),
   );

@@ -7,6 +7,7 @@ import {
   Sofascore_Events_Response,
   Sofascore_TotalStandings_Response,
 } from "@/types/sofascore";
+import { format } from "date-fns/format";
 
 function updateQuota(response: Response) {
   const limit = response.headers.get("x-ratelimit-requests-limit");
@@ -79,8 +80,8 @@ export async function fetchMatchIncidents(matchId: number) {
   )) as Sofascore_EventIncidents_Response;
 }
 
-export async function fetchScheduledEvents(categoryId: number, date?: string) {
+export async function fetchScheduledEvents(categoryId: number, date?: Date) {
   return (await fetchSofascoreRapidApi(
-    `/tournaments/get-scheduled-events?categoryId=${categoryId}${date ? `&date=${date}` : ""}`,
+    `/tournaments/get-scheduled-events?categoryId=${categoryId}${date ? `&date=${format(date, "yyyy-MM-dd")}` : ""}`,
   )) as Sofascore_Events_Response;
 }
