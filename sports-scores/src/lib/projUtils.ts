@@ -230,8 +230,7 @@ export function getSportConfigurations(
     (s) => Number(s.slug) === seasonId,
   );
 
-  const ladderConfig =
-    leagueConfig?.ladderConfig?.[seasonConfig?.ladderConfig ?? 0];
+  const ladderConfig = seasonConfig?.ladderConfig;
 
   return { leagueConfig, seasonConfig, ladderConfig };
 }

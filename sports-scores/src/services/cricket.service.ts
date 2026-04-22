@@ -42,6 +42,7 @@ const excludedSeries = [
   "Bangladesh Premier League",
   "Plunket",
   "One-Day Cup Women",
+  "One-Day Cup 2 Women",
 ];
 
 export async function cricketMatchesByDate(date: Date) {

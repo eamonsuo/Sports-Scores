@@ -23,8 +23,7 @@ import {
 export type LeagueSeasonConfig = {
   name: string;
   slug: string;
-  seasons: { name: string; slug: string; ladderConfig?: number }[];
-  ladderConfig?: LadderConfig[]; // Multiple configs can be specified for different seasons, these will then be initiated via the seasons array
+  seasons: { name: string; slug: string; ladderConfig?: LadderConfig }[];
   display?: DISPLAY_TYPES;
   externalURL?: string;
   byes?: {

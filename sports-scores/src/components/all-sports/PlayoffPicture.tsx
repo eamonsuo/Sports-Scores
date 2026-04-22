@@ -25,19 +25,23 @@ function Matchup({
   return (
     <div className="flex items-center justify-center gap-2 py-1">
       <span className="w-4 text-right">{home.positionDisplay}</span>
-      <Image
-        src={home.logo ?? fallback}
-        alt={"Team Logo"}
-        width={32}
-        height={32}
-      />
+      {home.logo && (
+        <Image
+          src={home.logo ?? fallback}
+          alt={"Team Logo"}
+          width={32}
+          height={32}
+        />
+      )}
       <span className="mx-2 text-xs text-gray-400">vs</span>
-      <Image
-        src={away.logo ?? fallback}
-        alt={"Team Logo"}
-        width={32}
-        height={32}
-      />
+      {away.logo && (
+        <Image
+          src={away.logo ?? fallback}
+          alt={"Team Logo"}
+          width={32}
+          height={32}
+        />
+      )}
       <span className="w-4 text-left">{away.positionDisplay}</span>
     </div>
   );

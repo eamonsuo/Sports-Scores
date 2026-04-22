@@ -257,7 +257,7 @@ function mapSofascoreToStanding(
     totalSeasonGames,
     wins: row.wins,
     losses: row.losses,
-    draws: row.draws ?? 0,
+    draws: row.overtimeLosses ?? row.draws ?? 0,
     tiebreakers: {
       pointsFor: row.scoresFor,
       pointsAgainst: row.scoresAgainst,

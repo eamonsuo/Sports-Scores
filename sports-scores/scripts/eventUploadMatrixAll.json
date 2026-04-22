@@ -540,7 +540,7 @@
   },
   {
     "name": "World Championship - Women - Australia 2026",
-    "tournamentId": "wiki",
+    "tournamentId": "wc-div2",
     "seasonId": "wiki",
     "sport": "ice-hockey",
     "displayType": "date"

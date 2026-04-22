@@ -36,7 +36,7 @@ export interface SportsLadder<H extends readonly string[]> {
   tableName?: string;
   headings: H;
   data: LadderRow[];
-  placingCategories: LadderPlacingCategory[];
+  placingCategories?: LadderPlacingCategory[];
 }
 
 export default function Ladder<const H extends readonly string[]>({
@@ -65,11 +65,12 @@ export default function Ladder<const H extends readonly string[]>({
         <tbody className="text-center">
           {data.map((item, idx) => {
             // Get the colour for this placing if specified
-            const categoryIdx = placingCategories.findIndex((c) =>
-              c.position.includes(item.position),
-            );
+            const categoryIdx =
+              placingCategories?.findIndex((c) =>
+                c.position.includes(item.position),
+              ) ?? -1;
             const category =
-              categoryIdx >= 0 ? placingCategories[categoryIdx] : undefined;
+              categoryIdx >= 0 ? placingCategories?.[categoryIdx] : undefined;
             const colour =
               category?.colour ??
               (categoryIdx >= 0
@@ -103,7 +104,7 @@ export default function Ladder<const H extends readonly string[]>({
         </tbody>
       </table>
       {/* Display placing category labels */}
-      {placingCategories.length > 0 && (
+      {placingCategories && placingCategories.length > 0 && (
         <div className="my-4 flex flex-col flex-wrap gap-4 text-sm">
           {placingCategories.map((category, idx) => (
             <div key={category.label} className="flex items-center gap-2">
