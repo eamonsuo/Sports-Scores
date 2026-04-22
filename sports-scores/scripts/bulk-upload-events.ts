@@ -9,9 +9,42 @@
  *   npx tsx scripts/bulk-upload-events.ts 294 63614 rugby-league round false
  */
 
+import {
+  fetchAmericanFootballLastMatches,
+  fetchAmericanFootballNextMatches,
+} from "@/endpoints/american-football.api";
+import {
+  fetchBaseballLastMatches,
+  fetchBaseballNextMatches,
+} from "@/endpoints/baseball.api";
+import {
+  fetchBasketballLastMatches,
+  fetchBasketballNextMatches,
+} from "@/endpoints/basketball.api";
+import {
+  fetchFootballLastMatches,
+  fetchFootballNextMatches,
+} from "@/endpoints/football.api";
+import {
+  fetchIceHockeyLastMatches,
+  fetchIceHockeyNextMatches,
+} from "@/endpoints/ice-hockey.api";
+import {
+  fetchRugbyLeagueLastMatches,
+  fetchRugbyLeagueNextMatches,
+} from "@/endpoints/rugby-league.api";
+import {
+  fetchTournamentLastMatches,
+  fetchTournamentNextMatches,
+} from "@/endpoints/sofascore-rapid-api.api";
 import { fetchLastEvents, fetchNextEvents } from "@/endpoints/sofascore.api";
+import {
+  fetchTennisTournamentLastMatches,
+  fetchTennisTournamentNextMatches,
+} from "@/endpoints/tennis.api";
 import { mapMatchSummary } from "@/lib/eventMapping";
 import { mapToDataverseMatchSummary } from "@/services/dataverse.service";
+import { AmericanFootball_Sofascore_Event } from "@/types/american-football";
 import { DataverseMatchSummary } from "@/types/dataverse";
 import { API_EVENT_TYPES, DISPLAY_TYPES, SPORT } from "@/types/misc";
 import { Sofascore_Event } from "@/types/sofascore";
@@ -36,16 +69,42 @@ const [
   sportArg,
   displayTypeArg,
   allEventsArg,
+  useSportApiArg,
 ] = process.argv;
 const allEventsMode = allEventsArg === "false" ? false : true;
+const useSportApi = useSportApiArg === "true";
 const tournamentId = tournamentIdArg;
 const seasonId = seasonIdArg;
 const sport = sportArg as SPORT;
 const displayType = (displayTypeArg as DISPLAY_TYPES) ?? DISPLAY_TYPES.ROUND;
 
+const sportFetchLastEventsMap: Partial<Record<SPORT, typeof fetchLastEvents>> =
+  {
+    [SPORT.AMERICAN_FOOTBALL]: fetchAmericanFootballLastMatches,
+    [SPORT.AUSSIE_RULES]: fetchTournamentLastMatches,
+    [SPORT.BASEBALL]: fetchBaseballLastMatches,
+    [SPORT.BASKETBALL]: fetchBasketballLastMatches,
+    [SPORT.FOOTBALL]: fetchFootballLastMatches,
+    [SPORT.ICE_HOCKEY]: fetchIceHockeyLastMatches,
+    [SPORT.RUGBY_LEAGUE]: fetchRugbyLeagueLastMatches,
+    [SPORT.TENNIS]: fetchTennisTournamentLastMatches,
+  };
+
+const sportFetchNextEventsMap: Partial<Record<SPORT, typeof fetchNextEvents>> =
+  {
+    [SPORT.AMERICAN_FOOTBALL]: fetchAmericanFootballNextMatches,
+    [SPORT.AUSSIE_RULES]: fetchTournamentNextMatches,
+    [SPORT.BASEBALL]: fetchBaseballNextMatches,
+    [SPORT.BASKETBALL]: fetchBasketballNextMatches,
+    [SPORT.FOOTBALL]: fetchFootballNextMatches,
+    [SPORT.ICE_HOCKEY]: fetchIceHockeyNextMatches,
+    [SPORT.RUGBY_LEAGUE]: fetchRugbyLeagueNextMatches,
+    [SPORT.TENNIS]: fetchTennisTournamentNextMatches,
+  };
+
 if (!tournamentId || !seasonId || !sport) {
   console.error(
-    "Usage: npx tsx scripts/bulk-upload-events.ts <tournamentId> <seasonId> <sport> <displayType?> <allEventsMode?>",
+    "Usage: npx tsx scripts/bulk-upload-events.ts <tournamentId> <seasonId> <sport> <displayType?> <allEventsMode?> <useSportApi?>",
   );
   process.exit(1);
 }
@@ -94,9 +153,16 @@ async function fetchAllPages(label: string, fn: typeof fetchLastEvents) {
 }
 
 async function fetchAllRecords() {
+  const lastFn = useSportApi
+    ? (sportFetchLastEventsMap[sport] ?? fetchLastEvents)
+    : fetchLastEvents;
+  const nextFn = useSportApi
+    ? (sportFetchNextEventsMap[sport] ?? fetchNextEvents)
+    : fetchNextEvents;
+
   const [lastEvents, nextEvents] = await Promise.all([
-    fetchAllPages("last", fetchLastEvents),
-    fetchAllPages("next", fetchNextEvents),
+    fetchAllPages("last", lastFn),
+    fetchAllPages("next", nextFn),
   ]);
 
   return [...lastEvents, ...nextEvents];
@@ -104,8 +170,9 @@ async function fetchAllRecords() {
 
 async function fetchLatestEvents() {
   const events: Sofascore_Event[] = [];
+  const fetchFn = sportFetchLastEventsMap[sport] ?? fetchLastEvents;
   console.log(`Fetching latest events `);
-  const data = await fetchLastEvents(Number(tournamentId), Number(seasonId));
+  const data = await fetchFn(Number(tournamentId), Number(seasonId));
   if (!data || data.events.length === 0) return events;
   events.push(...data.events);
   console.log(`Fetched ${events.length} latest events.`);
@@ -140,11 +207,25 @@ function mapEventToRecord(
     //   break;
   }
 
+  const afEvent = event as AmericanFootball_Sofascore_Event;
+
   const matchSummary = mapMatchSummary(
     API_EVENT_TYPES.SOFASCORE,
     sport,
     event,
-    { roundLabel, tournamentId, seasonId },
+    {
+      roundLabel,
+      homeDetails: {
+        winDrawLoss: afEvent.homeTeamSeasonHistoricalForm
+          ? `${afEvent.homeTeamSeasonHistoricalForm.wins ?? 0}-${afEvent.homeTeamSeasonHistoricalForm.losses ?? 0}${afEvent.homeTeamSeasonHistoricalForm.draws ? "-" + afEvent.homeTeamSeasonHistoricalForm.draws : ""}`
+          : undefined,
+      },
+      awayDetails: {
+        winDrawLoss: afEvent.awayTeamSeasonHistoricalForm
+          ? `${afEvent.awayTeamSeasonHistoricalForm.wins ?? 0}-${afEvent.awayTeamSeasonHistoricalForm.losses ?? 0}${afEvent.awayTeamSeasonHistoricalForm.draws ? "-" + afEvent.awayTeamSeasonHistoricalForm.draws : ""}`
+          : undefined,
+      },
+    },
   );
 
   return mapToDataverseMatchSummary(matchSummary);

@@ -9,50 +9,29 @@ import {
 import {
   fetchEventDetails,
   fetchEventIncidents,
-  fetchEventsByDate,
-  fetchLastEvents,
-  fetchNextEvents,
-  fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
 import {
   ICE_HOCKEY_LADDER_HEADINGS,
   ICE_HOCKEY_LEAGUES,
 } from "@/lib/constants";
-import {
-  getCurrentRound,
-  mapFixtureRounds,
-  mapMatchSummary,
-} from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
 import { shortenTeamNames } from "@/lib/projUtils";
-import {
-  IceHockeyFixturesPage,
-  IceHockeyLadderPage,
-  IceHockeyMatchPage,
-  IceHockeyTodayPage,
-} from "@/types/ice-hockey";
-import {
-  API_EVENT_TYPES,
-  DISPLAY_TYPES,
-  MatchSummary,
-  SPORT,
-} from "@/types/misc";
-import { Sofascore_Event, SofascoreSportURL } from "@/types/sofascore";
-import { TZDate } from "@date-fns/tz";
-import { isSameDay } from "date-fns";
+import { IceHockeyMatchPage } from "@/types/ice-hockey";
+import { SPORT } from "@/types/misc";
+import { SofascoreSportURL } from "@/types/sofascore";
 import { SofascoreSport } from "./sofascore.service";
 
 class IceHockeyService extends SofascoreSport {
   constructor() {
     super(
       {
-        fetchStandingsTotal,
-        fetchLastEvents,
-        fetchNextEvents,
-        fetchEventDetails,
-        fetchEventIncidents,
+        fetchLastEvents: fetchIceHockeyLastMatches,
+        fetchNextEvents: fetchIceHockeyNextMatches,
+        fetchEventsByDate: fetchIceHockeyMatchesByDate,
+        fetchEventDetails: fetchIceHockeyMatchDetails,
+        fetchEventIncidents: fetchIceHockeyMatchIncidents,
+        fetchStandingsTotal: fetchIceHockeyStandings,
         fetchCupTrees: async () => null,
-        fetchEventsByDate: async () => null,
         fetchPlayerRankings: async () => null,
         fetchTeamLastEvents: async () => null,
         fetchTeamNextEvents: async () => null,
@@ -62,87 +41,6 @@ class IceHockeyService extends SofascoreSport {
       ICE_HOCKEY_LEAGUES,
       ICE_HOCKEY_LADDER_HEADINGS,
     );
-  }
-
-  async iceHockeyMatches(tournamentId: number, seasonId: number) {
-    const lastMatches = await (
-      process.env.DEV_MODE ? fetchLastEvents : fetchIceHockeyLastMatches
-    )(tournamentId, seasonId, 0);
-    const nextMatches = await (
-      process.env.DEV_MODE ? fetchNextEvents : fetchIceHockeyNextMatches
-    )(tournamentId, seasonId, 0);
-
-    if (!lastMatches && !nextMatches) {
-      return null;
-    }
-
-    const allMatches = (lastMatches?.events ?? [])
-      .concat(nextMatches?.events ?? [])
-      .map((event) =>
-        this.mapIceHockeyMatch(
-          event,
-          event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
-        ),
-      )
-      .sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-      );
-
-    const leagueConfig = ICE_HOCKEY_LEAGUES.find(
-      (l) => Number(l.slug) === tournamentId,
-    );
-
-    const fixture = await mapFixtureRounds(allMatches, leagueConfig);
-
-    return {
-      fixtures: fixture,
-      currentRound: getCurrentRound(fixture, leagueConfig?.display),
-    } as IceHockeyFixturesPage;
-  }
-
-  async iceHockeyStandings(tournamentId: number, seasonId: number) {
-    const standings = await (
-      process.env.DEV_MODE ? fetchStandingsTotal : fetchIceHockeyStandings
-    )(tournamentId, seasonId);
-
-    if (!standings) {
-      return null;
-    }
-
-    const leagueConfig = ICE_HOCKEY_LEAGUES.find(
-      (l) => Number(l.slug) === tournamentId,
-    );
-    const headings = ICE_HOCKEY_LADDER_HEADINGS;
-
-    const seasonConfig = leagueConfig?.seasons.find(
-      (s) => Number(s.slug) === seasonId,
-    );
-
-    return {
-      standings: standings?.standings.map((table) => {
-        return {
-          headings,
-          data: table.rows.map((item) => {
-            return {
-              position: item.position,
-              team: {
-                id: item.team.id,
-                name: shortenTeamNames(item.team.name),
-                logo: resolveSportImage(item.team.name),
-              },
-              P: item.matches,
-              W: item.wins,
-              Diff: item.scoresFor - item.scoresAgainst,
-              Pts: item.points,
-            };
-          }),
-          placingCategories:
-            leagueConfig?.ladderConfig?.[seasonConfig?.ladderConfig ?? 0]
-              ?.placingCategories ?? [],
-        };
-      }),
-    } as IceHockeyLadderPage<typeof headings>;
   }
 
   async iceHockeyMatchDetails(matchId: number) {
@@ -208,53 +106,6 @@ class IceHockeyService extends SofascoreSport {
             ],
           },
     } as IceHockeyMatchPage;
-  }
-
-  async iceHockeyMatchesByDate(date: Date) {
-    const matches = await (process.env.DEV_MODE
-      ? fetchEventsByDate(SofascoreSportURL.ICE_HOCKEY, date)
-      : fetchIceHockeyMatchesByDate(date));
-
-    if (!matches) return null;
-
-    const validLeagueIds = ICE_HOCKEY_LEAGUES.map((l) => Number(l.slug));
-    const timezone = date instanceof TZDate ? date.timeZone : "UTC";
-
-    matches.events = matches.events
-      .filter((item) => {
-        const eventDate = new TZDate(item.startTimestamp * 1000, timezone);
-        return isSameDay(eventDate, date);
-      })
-      .filter((item) =>
-        validLeagueIds.includes(item.tournament.uniqueTournament.id),
-      )
-      .sort(
-        (a, b) =>
-          validLeagueIds.indexOf(a.tournament.uniqueTournament.id) -
-          validLeagueIds.indexOf(b.tournament.uniqueTournament.id),
-      );
-
-    if (!matches.events || matches.events.length === 0) return null;
-
-    const allMatches = matches.events.map((event) =>
-      this.mapIceHockeyMatch(
-        event,
-        event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
-      ),
-    );
-
-    const fixture = await mapFixtureRounds(allMatches, ICE_HOCKEY_LEAGUES);
-
-    return {
-      fixtures: fixture,
-      currentRound: getCurrentRound(fixture, DISPLAY_TYPES.LEAGUE),
-    } as IceHockeyTodayPage;
-  }
-
-  mapIceHockeyMatch(match: Sofascore_Event, roundLabel: string): MatchSummary {
-    return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.ICE_HOCKEY, match, {
-      roundLabel,
-    });
   }
 }
 

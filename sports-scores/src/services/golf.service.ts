@@ -219,7 +219,7 @@ export function golfTournamentsByDate(date: Date) {
   switch (date.getDay()) {
     case 2: // Tuesday
     case 3: // Wednesday
-      golfTours.push(createGolfMatchSummary(0, "TGL", "tgl"));
+      // golfTours.push(createGolfMatchSummary(0, "TGL", "tgl"));
       break;
     case 4: // Thursday
       golfTours.push(

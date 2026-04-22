@@ -1,4 +1,11 @@
-import { rugbyLeagueAPI } from "@/endpoints/rugby-league.api";
+import {
+  fetchRugbyLeagueLastMatches,
+  fetchRugbyLeagueMatchDetails,
+  fetchRugbyLeagueMatchesByDate,
+  fetchRugbyLeagueMatchIncidents,
+  fetchRugbyLeagueNextMatches,
+  fetchRugbyLeagueStandings,
+} from "@/endpoints/rugby-league.api";
 import {
   fetchEventDetails,
   fetchEventIncidents,
@@ -17,7 +24,18 @@ import { SofascoreSport } from "./sofascore.service";
 class RugbyLeagueService extends SofascoreSport {
   constructor() {
     super(
-      rugbyLeagueAPI,
+      {
+        fetchNextEvents: fetchRugbyLeagueNextMatches,
+        fetchLastEvents: fetchRugbyLeagueLastMatches,
+        fetchEventsByDate: fetchRugbyLeagueMatchesByDate,
+        fetchEventDetails: fetchRugbyLeagueMatchDetails,
+        fetchEventIncidents: fetchRugbyLeagueMatchIncidents,
+        fetchStandingsTotal: fetchRugbyLeagueStandings,
+        fetchCupTrees: async () => null,
+        fetchPlayerRankings: async () => null,
+        fetchTeamLastEvents: async () => null,
+        fetchTeamNextEvents: async () => null,
+      },
       SPORT.RUGBY_LEAGUE,
       SofascoreSportURL.RUGBY,
       RUGBY_LEAGUE_LEAGUES,

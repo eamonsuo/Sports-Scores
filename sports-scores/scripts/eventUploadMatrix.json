@@ -26,5 +26,103 @@
     "seasonId": "89006",
     "sport": "rugby-league",
     "displayType": "round"
+  },
+  {
+    "name": "AFL 2026",
+    "tournamentId": "656",
+    "seasonId": "86748",
+    "sport": "aussie-rules",
+    "displayType": "round"
+  },
+  {
+    "name": "AFLW 2025",
+    "tournamentId": "10159",
+    "seasonId": "76123",
+    "sport": "aussie-rules",
+    "displayType": "round"
+  },
+  {
+    "name": "VFL 2026",
+    "tournamentId": "25506",
+    "seasonId": "90001",
+    "sport": "aussie-rules",
+    "displayType": "round"
+  },
+  {
+    "name": "SANFL 2026",
+    "tournamentId": "20126",
+    "seasonId": "89835",
+    "sport": "aussie-rules",
+    "displayType": "round"
+  },
+  {
+    "name": "WAFL 2026",
+    "tournamentId": "20160",
+    "seasonId": "89836",
+    "sport": "aussie-rules",
+    "displayType": "round"
+  },
+  {
+    "name": "NFL 25/26",
+    "tournamentId": "9464",
+    "seasonId": "75522",
+    "sport": "american-football",
+    "displayType": "round"
+  },
+  {
+    "name": "NBL 25/26",
+    "tournamentId": "1524",
+    "seasonId": "77205",
+    "sport": "basketball",
+    "displayType": "date"
+  },
+  {
+    "name": "WNBL 25/26",
+    "tournamentId": "1506",
+    "seasonId": "77204",
+    "sport": "basketball",
+    "displayType": "date"
+  },
+  {
+    "name": "NBA 25/26",
+    "tournamentId": "132",
+    "seasonId": "80229",
+    "sport": "basketball",
+    "displayType": "date"
+  },
+  {
+    "name": "WNBA 2026",
+    "tournamentId": "486",
+    "seasonId": "89004",
+    "sport": "basketball",
+    "displayType": "date"
+  },
+  {
+    "name": "MLB 2026",
+    "tournamentId": "11205",
+    "seasonId": "84695",
+    "sport": "baseball",
+    "displayType": "date"
+  },
+  {
+    "name": "ALB 25/26",
+    "tournamentId": "19445",
+    "seasonId": "81328",
+    "sport": "baseball",
+    "displayType": "date"
+  },
+  {
+    "name": "AIHL 2026",
+    "tournamentId": "11059",
+    "seasonId": "86527",
+    "sport": "ice-hockey",
+    "displayType": "date"
+  },
+  {
+    "name": "NHL 25/26",
+    "tournamentId": "234",
+    "seasonId": "78476",
+    "sport": "ice-hockey",
+    "displayType": "date"
   }
 ]

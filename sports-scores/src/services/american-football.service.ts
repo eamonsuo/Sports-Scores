@@ -1,14 +1,14 @@
 import {
+  fetchAmericanFootballLastMatches,
   fetchAmericanFootballMatchDetails,
+  fetchAmericanFootballCurrentMatches as fetchAmericanFootballMatchesByDate,
   fetchAmericanFootballMatchIncidents,
+  fetchAmericanFootballNextMatches,
   fetchAmericanFootballStandings,
 } from "@/endpoints/american-football.api";
 import {
   fetchEventDetails,
-  fetchEventIncidents,
-  fetchLastEvents,
-  fetchNextEvents,
-  fetchStandingsTotal,
+  fetchEventIncidents
 } from "@/endpoints/sofascore.api";
 import {
   AMERICAN_FOOTBALL_LADDER_HEADINGS,
@@ -19,8 +19,7 @@ import { resolveSportImage } from "@/lib/imageMapping";
 import { shortenTeamNames } from "@/lib/projUtils";
 import {
   AmericanFootball_Sofascore_Event,
-  AmericanFootballLadderPage,
-  AmericanFootballMatchPage,
+  AmericanFootballMatchPage
 } from "@/types/american-football";
 import { API_EVENT_TYPES, MatchSummary, SPORT } from "@/types/misc";
 import { SofascoreSportURL } from "@/types/sofascore";
@@ -30,13 +29,13 @@ class AmericanFootballService extends SofascoreSport {
   constructor() {
     super(
       {
-        fetchStandingsTotal,
-        fetchLastEvents,
-        fetchNextEvents,
-        fetchEventDetails,
-        fetchEventIncidents,
+        fetchLastEvents: fetchAmericanFootballLastMatches,
+        fetchNextEvents: fetchAmericanFootballNextMatches,
+        fetchEventsByDate: fetchAmericanFootballMatchesByDate,
+        fetchEventDetails: fetchAmericanFootballMatchDetails,
+        fetchEventIncidents: fetchAmericanFootballMatchIncidents,
+        fetchStandingsTotal: fetchAmericanFootballStandings,
         fetchCupTrees: async () => null,
-        fetchEventsByDate: async () => null,
         fetchPlayerRankings: async () => null,
         fetchTeamLastEvents: async () => null,
         fetchTeamNextEvents: async () => null,
@@ -52,44 +51,6 @@ class AmericanFootballService extends SofascoreSport {
     return super.matchesAll(tournamentId, seasonId, "Week");
   }
 
-  async americanFootballStandings(league: number, season: number) {
-    const standings = await (
-      process.env.DEV_MODE
-        ? fetchStandingsTotal
-        : fetchAmericanFootballStandings
-    )(league, season);
-    if (!standings) {
-      return null;
-    }
-
-    const headings = AMERICAN_FOOTBALL_LADDER_HEADINGS;
-
-    return {
-      standings: standings?.standings
-        .sort((a, b) => b.name.localeCompare(a.name))
-        .map((table) => {
-          return {
-            tableName: table.name,
-            headings,
-            data: table.rows.map((standing) => {
-              return {
-                position: standing.position,
-                team: {
-                  id: standing.team.id,
-                  name: shortenTeamNames(standing.team.name),
-                  logo: resolveSportImage(standing.team.name),
-                },
-                P: standing.matches,
-                W: standing.wins,
-                L: standing.losses,
-                D: standing.draws,
-              };
-            }),
-            placingCategories: [],
-          };
-        }),
-    } as AmericanFootballLadderPage<typeof headings>;
-  }
 
   async americanFootballMatchDetails(matchId: number) {
     const match = await (

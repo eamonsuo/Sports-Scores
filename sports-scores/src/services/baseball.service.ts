@@ -1,54 +1,31 @@
 import { BaseballScoreBreakdown } from "@/components/baseball/BaseballScoreBreakdown";
 import {
-  fetchBaseballCurrentMatches as fetchBaseballByDateMatches,
   fetchBaseballLastMatches,
   fetchBaseballMatchDetails,
+  fetchBaseballMatchesByDate,
   fetchBaseballNextMatches,
   fetchBaseballStandings,
 } from "@/endpoints/baseball.api";
-import {
-  fetchEventDetails,
-  fetchEventsByDate,
-  fetchLastEvents,
-  fetchNextEvents,
-  fetchStandingsTotal,
-} from "@/endpoints/sofascore.api";
+import { fetchEventDetails } from "@/endpoints/sofascore.api";
 import { BASEBALL_LADDER_HEADINGS, BASEBALL_LEAGUES } from "@/lib/constants";
-import {
-  getCurrentRound,
-  mapFixtureRounds,
-  mapMatchSummary,
-} from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
 import { shortenTeamNames } from "@/lib/projUtils";
-import {
-  BaseballFixturesPage,
-  BaseballLadderPage,
-  BaseballMatchPage,
-  BaseballTodayPage,
-} from "@/types/baseball";
-import {
-  API_EVENT_TYPES,
-  DISPLAY_TYPES,
-  MatchSummary,
-  SPORT,
-} from "@/types/misc";
-import { Sofascore_Event, SofascoreSportURL } from "@/types/sofascore";
-import { TZDate } from "@date-fns/tz";
-import { isSameDay } from "date-fns";
+import { BaseballMatchPage } from "@/types/baseball";
+import { SPORT } from "@/types/misc";
+import { SofascoreSportURL } from "@/types/sofascore";
 import { SofascoreSport } from "./sofascore.service";
 
 class BaseballService extends SofascoreSport {
   constructor() {
     super(
       {
-        fetchStandingsTotal,
-        fetchLastEvents,
-        fetchNextEvents,
-        fetchEventDetails,
+        fetchLastEvents: fetchBaseballLastMatches,
+        fetchNextEvents: fetchBaseballNextMatches,
+        fetchEventsByDate: fetchBaseballMatchesByDate,
+        fetchEventDetails: fetchBaseballMatchDetails,
         fetchEventIncidents: async () => null,
+        fetchStandingsTotal: fetchBaseballStandings,
         fetchCupTrees: async () => null,
-        fetchEventsByDate: async () => null,
         fetchPlayerRankings: async () => null,
         fetchTeamLastEvents: async () => null,
         fetchTeamNextEvents: async () => null,
@@ -58,87 +35,6 @@ class BaseballService extends SofascoreSport {
       BASEBALL_LEAGUES,
       BASEBALL_LADDER_HEADINGS,
     );
-  }
-
-  async baseballMatches(tournamentId: number, seasonId: number) {
-    const lastMatches = await (
-      process.env.DEV_MODE ? fetchLastEvents : fetchBaseballLastMatches
-    )(tournamentId, seasonId, 0);
-
-    const nextMatches = await (
-      process.env.DEV_MODE ? fetchNextEvents : fetchBaseballNextMatches
-    )(tournamentId, seasonId, 0);
-
-    if (!lastMatches && !nextMatches) {
-      return null;
-    }
-
-    const allMatches = (lastMatches?.events ?? [])
-      .concat(nextMatches?.events ?? [])
-      .map((event) =>
-        this.mapBaseballMatch(
-          event,
-          event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
-        ),
-      )
-      .sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-      );
-
-    const leagueConfig = BASEBALL_LEAGUES.find(
-      (l) => Number(l.slug) === tournamentId,
-    );
-
-    const fixture = await mapFixtureRounds(allMatches, leagueConfig);
-
-    return {
-      fixtures: fixture,
-      currentRound: getCurrentRound(fixture, leagueConfig?.display),
-    } as BaseballFixturesPage;
-  }
-
-  async baseballStandings(tournamentId: number, seasonId: number) {
-    const standings = await (
-      process.env.DEV_MODE ? fetchStandingsTotal : fetchBaseballStandings
-    )(tournamentId, seasonId);
-
-    if (!standings) {
-      return null;
-    }
-
-    const headings = BASEBALL_LADDER_HEADINGS;
-
-    return {
-      standings: standings?.standings
-        .sort((a, b) => {
-          const orderA = tableOrder(a.name);
-          const orderB = tableOrder(b.name);
-          if (orderA !== orderB) return orderA - orderB;
-          return a.name.localeCompare(b.name); // Alphabetical within group
-        })
-        .map((table) => {
-          return {
-            tableName: table.name,
-            headings,
-            data: table.rows.map((standing) => {
-              return {
-                position: standing.position,
-                team: {
-                  id: standing.team.id,
-                  name: shortenTeamNames(standing.team.name),
-                  logo: resolveSportImage(standing.team.name),
-                },
-                P: standing.wins + standing.losses,
-                W: standing.wins,
-                L: standing.losses,
-                PCT: standing.percentage,
-              };
-            }),
-            placingCategories: [],
-          };
-        }),
-    } as BaseballLadderPage<typeof headings>;
   }
 
   async baseballMatchDetails(matchId: number) {
@@ -251,52 +147,6 @@ class BaseballService extends SofascoreSport {
     return {
       matchDetails: scoreDetails,
     } as BaseballMatchPage;
-  }
-
-  async baseballMatchesByDate(date: Date) {
-    const matches = await (process.env.DEV_MODE
-      ? fetchEventsByDate(SofascoreSportURL.BASEBALL, date)
-      : fetchBaseballByDateMatches(date));
-
-    if (!matches) {
-      return null;
-    }
-
-    const validLeagueIds = BASEBALL_LEAGUES.map((l) => Number(l.slug));
-
-    const timezone = date instanceof TZDate ? date.timeZone : "UTC";
-
-    matches.events = matches.events
-      .filter((item) => {
-        const eventDate = new TZDate(item.startTimestamp * 1000, timezone);
-        return isSameDay(eventDate, date);
-      })
-      .filter((item) =>
-        validLeagueIds.includes(item.tournament.uniqueTournament.id),
-      )
-      .sort((a, b) => a.startTimestamp - b.startTimestamp);
-
-    if (!matches.events || matches.events.length === 0) return null;
-
-    const allMatches = matches.events.map((event) =>
-      this.mapBaseballMatch(
-        event,
-        event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
-      ),
-    );
-
-    const fixture = await mapFixtureRounds(allMatches, BASEBALL_LEAGUES);
-
-    return {
-      fixtures: fixture,
-      currentRound: getCurrentRound(fixture, DISPLAY_TYPES.LEAGUE),
-    } as BaseballTodayPage;
-  }
-
-  mapBaseballMatch(match: Sofascore_Event, roundLabel: string): MatchSummary {
-    return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.BASEBALL, match, {
-      roundLabel,
-    });
   }
 }
 

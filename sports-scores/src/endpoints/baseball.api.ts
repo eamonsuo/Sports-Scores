@@ -78,7 +78,7 @@ export async function fetchBaseballMatchDetails(matchId: number) {
 //   )) as Baseball_BaseballApi_MatchIncidents_Response;
 // }
 
-export async function fetchBaseballCurrentMatches(date: Date) {
+export async function fetchBaseballMatchesByDate(date: Date) {
   return (await fetchBaseballApi(
     `/baseball/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
   )) as Baseball_BaseballApi_MatchSchedules_Response;

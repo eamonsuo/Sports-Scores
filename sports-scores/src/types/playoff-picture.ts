@@ -42,6 +42,10 @@ export type PlayoffPictureConfig<
 export enum PlayoffPictureStructure {
   Top8 = "top8",
   Top10 = "top10",
+  NFL = "nfl",
+  NBA = "nba",
+  NHL = "nhl",
+  MLB = "mlb",
 }
 
 // ── Output types (consumed by the component) ──
@@ -57,7 +61,7 @@ export type PlayoffPictureGroup = {
 };
 
 // ── Input: grouped standings from any data source ──
-export type PlayoffPictureStandingsGroup = {
+export type PlayoffPictureStandingTables = {
   name?: string;
   standings: PlayoffPictureStanding[];
 };

@@ -18,7 +18,6 @@ export default function GlobalError({
     <html className="dark">
       <body className={inter.className}>
         <div className="flex min-h-dvh w-dvw flex-col">
-          {/* <Header></Header> */}
           <main className="flex-1 items-center overflow-y-auto bg-neutral-950">
             <ErrorPage />
           </main>

@@ -342,6 +342,7 @@ export interface Sofascore_StandingRow {
   points?: number;
   percentage?: number;
   streak?: number;
+  overtimeLosses?: number; //Ice Hockey
   scoreDiffFormatted: string;
 }
 

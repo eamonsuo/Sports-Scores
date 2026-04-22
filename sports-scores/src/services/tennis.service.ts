@@ -41,16 +41,16 @@ class TennisService extends SofascoreSport {
   constructor() {
     super(
       {
-        fetchStandingsTotal: async () => null,
-        fetchLastEvents,
-        fetchNextEvents,
-        fetchEventDetails,
+        fetchLastEvents: fetchTennisTournamentLastMatches,
+        fetchNextEvents: fetchTennisTournamentNextMatches,
+        fetchEventsByDate: fetchTennisMatchesByDate,
+        fetchEventDetails: fetchTennisMatchDetails,
         fetchEventIncidents: async () => null,
-        fetchCupTrees,
-        fetchEventsByDate: async () => null,
+        fetchStandingsTotal: async () => null,
+        fetchCupTrees: fetchTennisBracket,
         fetchPlayerRankings: async () => null,
-        fetchTeamLastEvents,
-        fetchTeamNextEvents,
+        fetchTeamLastEvents: async () => null,
+        fetchTeamNextEvents: async () => null,
       },
       SPORT.TENNIS,
       SofascoreSportURL.TENNIS,
@@ -59,10 +59,7 @@ class TennisService extends SofascoreSport {
     );
   }
 
-  async tennisTournamentMatches(
-    tournamentId: number,
-    seasonId: number,
-  ) {
+  async tennisTournamentMatches(tournamentId: number, seasonId: number) {
     const lastMatches = await (
       process.env.DEV_MODE ? fetchLastEvents : fetchTennisTournamentLastMatches
     )(tournamentId, seasonId);

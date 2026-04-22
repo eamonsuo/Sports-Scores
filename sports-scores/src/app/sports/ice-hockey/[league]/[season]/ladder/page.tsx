@@ -1,4 +1,5 @@
 import Ladder from "@/components/all-sports/Ladder";
+import PlayoffPicture from "@/components/all-sports/PlayoffPicture";
 import Placeholder from "@/components/misc-ui/Placeholder";
 import { iceHockeyService } from "@/services/ice-hockey.service";
 
@@ -6,7 +7,7 @@ export default async function Page(props: {
   params: Promise<{ league: string; season: string }>;
 }) {
   const { league, season } = await props.params;
-  const pageData = await iceHockeyService.iceHockeyStandings(
+  const pageData = await iceHockeyService.standings(
     Number(league),
     Number(season),
   );
@@ -17,12 +18,16 @@ export default async function Page(props: {
 
   return (
     <div className="flex-1 overflow-y-auto px-4">
+      {pageData.playoffPicture && (
+        <PlayoffPicture data={pageData.playoffPicture} />
+      )}
       {pageData.standings.map((table, index) => (
         <Ladder
           key={index}
           data={table.data}
           headings={table.headings}
           placingCategories={table.placingCategories}
+          tableName={table.tableName}
         />
       ))}
     </div>

@@ -49,9 +49,9 @@ export function resolveSportImage(teamName: string) {
     case "IRON HEADS GC":
       return "/liv/ironheads.webp";
     case "Korean Golf Club":
-      return "https://www.thesportsdb.com/images/media/team/badge/e2ccn51770673557.png";
+      return "https://r2.thesportsdb.com/images/media/team/badge/e2ccn51770673557.png";
     case "Southern Guards GC":
-      return "https://www.thesportsdb.com/images/media/team/badge/ng8z1o1770673163.png";
+      return "https://r2.thesportsdb.com/images/media/team/badge/ng8z1o1770673163.png";
 
     //NRL
     case "Brisbane Broncos":

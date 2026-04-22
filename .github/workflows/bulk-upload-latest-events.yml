@@ -10,11 +10,16 @@ on:
         description: "Run latest matrix entries, all leagues, or a single tournament"
         required: true
         type: choice
-        default: "latest"
+        default: "single"
         options:
           - latest
           - all
           - single
+      useSportApi:
+        description: "Use sport-specific API instead of generic Sofascore API"
+        required: true
+        default: true
+        type: boolean
       tournamentId:
         description: "Sofascore tournament ID (single mode only)"
         required: false
@@ -24,14 +29,48 @@ on:
         required: false
         type: string
       sport:
-        description: "Sport key e.g. rugby-league (single mode only)"
+        description: "Sport key (single mode only)"
         required: false
-        type: string
+        type: choice
+        options:
+          - aussie-rules
+          - baseball
+          - cricket
+          - american-football
+          - motorsport
+          - rugby-league
+          - golf
+          - olympics
+          - football
+          - surfing
+          - tennis
+          - basketball
+          - ice-hockey
+          - netball
+          - rugby-union
+          - cycling
+          - darts
       displayType:
         description: "Display type e.g. round, date (single mode only)"
         required: false
         default: "round"
         type: string
+
+env:
+  DATAVERSE_ENVIRONMENT_URL: ${{ secrets.DATAVERSE_ENVIRONMENT_URL }}
+  DATAVERSE_TENANT_ID: ${{ secrets.DATAVERSE_TENANT_ID }}
+  DATAVERSE_CLIENT_ID: ${{ secrets.DATAVERSE_CLIENT_ID }}
+  DATAVERSE_CLIENT_SECRET: ${{ secrets.DATAVERSE_CLIENT_SECRET }}
+  SOFASCORE_API_BASEURL: ${{ secrets.SOFASCORE_API_BASEURL }}
+  RapidAPIKey: ${{ secrets.RAPIDAPIKEY }}
+  NFL_BASEURL: ${{ secrets.NFL_BASEURL }}
+  BASEBALL_BASEURL: ${{ secrets.BASEBALL_BASEURL }}
+  BASKETBALL_BASEURL: ${{ secrets.BASKETBALL_BASEURL }}
+  FOOTBALL_BASEURL: ${{ secrets.FOOTBALL_BASEURL }}
+  ICE_HOCKEY_BASEURL: ${{ secrets.ICE_HOCKEY_BASEURL }}
+  NRL_BASEURL: ${{ secrets.NRL_BASEURL }}
+  TENNIS_BASEURL: ${{ secrets.TENNIS_BASEURL }}
+  RUGBY_UNION_BASEURL: ${{ secrets.RUGBY_UNION_BASEURL }}
 
 jobs:
   # ---- Read the committed matrix JSON ----
@@ -46,9 +85,9 @@ jobs:
       - id: set-matrix
         run: |
           if [ "${{ inputs.mode }}" = "all" ]; then
-            echo "matrix=$(cat sports-scores/scripts/eventUploadMatrixAll.json)" >> $GITHUB_OUTPUT
+            echo "matrix=$(jq -c . sports-scores/scripts/eventUploadMatrixAll.json)" >> $GITHUB_OUTPUT
           else
-            echo "matrix=$(cat sports-scores/scripts/eventUploadMatrix.json)" >> $GITHUB_OUTPUT
+            echo "matrix=$(jq -c . sports-scores/scripts/eventUploadMatrix.json)" >> $GITHUB_OUTPUT
           fi
 
   # ---- Runs matrix entries (scheduled/manual "matrix"/manual "all") ----
@@ -81,12 +120,8 @@ jobs:
             "${{ matrix.seasonId }}" \
             "${{ matrix.sport }}" \
             "${{ matrix.displayType }}" \
-            ${{ inputs.mode == 'all' && 'true' || 'false' }}
-        env:
-          DATAVERSE_ENVIRONMENT_URL: ${{ secrets.DATAVERSE_ENVIRONMENT_URL }}
-          DATAVERSE_TENANT_ID: ${{ secrets.DATAVERSE_TENANT_ID }}
-          DATAVERSE_CLIENT_ID: ${{ secrets.DATAVERSE_CLIENT_ID }}
-          DATAVERSE_CLIENT_SECRET: ${{ secrets.DATAVERSE_CLIENT_SECRET }}
+            ${{ inputs.mode == 'all' && 'true' || 'false' }} \
+            ${{ inputs.useSportApi }}
 
   # ---- Runs a single tournament (manual only) ----
   upload-single:
@@ -114,10 +149,5 @@ jobs:
             "${{ inputs.seasonId }}" \
             "${{ inputs.sport }}" \
             "${{ inputs.displayType }}" \
-            true
-
-        env:
-          DATAVERSE_ENVIRONMENT_URL: ${{ secrets.DATAVERSE_ENVIRONMENT_URL }}
-          DATAVERSE_TENANT_ID: ${{ secrets.DATAVERSE_TENANT_ID }}
-          DATAVERSE_CLIENT_ID: ${{ secrets.DATAVERSE_CLIENT_ID }}
-          DATAVERSE_CLIENT_SECRET: ${{ secrets.DATAVERSE_CLIENT_SECRET }}
+            true \
+            ${{ inputs.useSportApi }}
