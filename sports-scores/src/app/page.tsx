@@ -5,7 +5,7 @@ export const revalidate = 3600;
 
 export default async function Home() {
   const adjustedDate = new Date();
-  adjustedDate.setDate(adjustedDate.getDate() - 5);
+  adjustedDate.setDate(adjustedDate.getDate() - 3);
 
   const upcomingEvents = await getUpcomingEvents(adjustedDate);
 

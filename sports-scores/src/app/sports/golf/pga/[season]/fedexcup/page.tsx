@@ -1,4 +1,4 @@
-import RankingsLeaderboard from "@/components/golf/RankingsLeaderboard";
+import Ladder from "@/components/all-sports/Ladder";
 import { golfFedExRankings } from "@/services/golf.service";
 
 export const dynamic = "force-dynamic";
@@ -16,7 +16,11 @@ export default async function Page(props: {
 
   return (
     <div className="flex-1 overflow-y-auto px-4">
-      <RankingsLeaderboard players={pageData.rankings} type="fedex" />
+      <Ladder
+        data={pageData.data}
+        headings={pageData.headings}
+        placingCategories={pageData.placingCategories}
+      />
     </div>
   );
 }

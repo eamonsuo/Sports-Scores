@@ -1,4 +1,6 @@
 import NavButtonGroup from "@/components/misc-ui/NavButtonGroup";
+import { SPORT_ROUTE_CONFIG } from "@/lib/routeConfig";
+import { SPORT } from "@/types/misc";
 
 export default async function SportsLayout({
   children,
@@ -8,23 +10,7 @@ export default async function SportsLayout({
   return (
     <>
       <NavButtonGroup
-        buttons={[
-          {
-            href: "./matches",
-            label: "Matches",
-            page: "matches",
-          },
-          {
-            href: "./ladder",
-            label: "Ladder",
-            page: "ladder",
-          },
-          {
-            href: "./bracket",
-            label: "Bracket",
-            page: "bracket",
-          },
-        ]}
+        buttons={SPORT_ROUTE_CONFIG[SPORT.FOOTBALL].navButtons ?? []}
       />
       {children}
     </>

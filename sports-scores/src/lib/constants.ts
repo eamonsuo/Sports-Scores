@@ -1,11 +1,32 @@
 ﻿import { LadderPlacingCategory } from "@/components/all-sports/Ladder";
 import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
+import { PeriodConfig } from "@/services/sofascore.service";
 import { DISPLAY_TYPES, LadderConfig } from "@/types/misc";
 import {
   PlayoffPictureStructure,
   type PlayoffPictureConfig,
 } from "@/types/playoff-picture";
 import { resolveSportImage } from "./imageMapping";
+
+export const SCORE_BREAKDOWN_HALVES_CONFIG: PeriodConfig = {
+  periodNames: ["1st Half", "2nd Half"],
+  overtimeName: "Extra Time",
+};
+
+export const SCORE_BREAKDOWN_QUARTERS_CONFIG: PeriodConfig = {
+  periodNames: ["Q1", "Q2", "Q3", "Q4"],
+  overtimeName: "OT",
+};
+
+export const SCORE_BREAKDOWN_INNINGS_CONFIG: PeriodConfig = {
+  periodNames: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+  overtimeName: "EI",
+};
+
+export const SCORE_BREAKDOWN_PERIODS_CONFIG: PeriodConfig = {
+  periodNames: ["P1", "P2", "P3"],
+  overtimeName: "OT",
+};
 
 const RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG: PlayoffPictureConfig = {
   rankingSystem: "points",
@@ -228,6 +249,28 @@ const MLB_2022_LADDER_CONFIG: LadderConfig = {
   },
 };
 
+// PGA
+const PGA_2013_LADDER_CONFIG: LadderConfig = {
+  placingCategories: [
+    {
+      label: "TOUR Championship",
+      position: Array.from({ length: 30 }, (_, i) => i + 1),
+    },
+    {
+      label: "BMW Championship",
+      position: Array.from({ length: 20 }, (_, i) => i + 31),
+    },
+    {
+      label: "St. Jude Championship",
+      position: Array.from({ length: 20 }, (_, i) => i + 51),
+    },
+    {
+      label: "Full TOUR Card",
+      position: Array.from({ length: 30 }, (_, i) => i + 71),
+    },
+  ],
+};
+
 export const NRL_TEAMS_NAME_LOGO = [
   "Brisbane Broncos",
   "Canberra Raiders",
@@ -287,6 +330,7 @@ export const RUGBY_UNION_LADDER_HEADINGS = [
   "Pts",
 ] as const;
 export const AMERICAN_FOOTBALL_LADDER_HEADINGS = ["P", "W", "L", "D"] as const;
+export const GOLF_FEDEXCUP_LADDER_HEADINGS = ["Total", "Behind"] as const;
 
 export const AFL_TEAM_NAME_LOGO = [
   "Adelaide Crows",
@@ -434,8 +478,8 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
     name: "PGA Tour",
     slug: "pga",
     seasons: [
-      { name: "2026", slug: "2026" },
-      { name: "2025", slug: "2025" },
+      { name: "2026", slug: "2026", ladderConfig: PGA_2013_LADDER_CONFIG },
+      { name: "2025", slug: "2025", ladderConfig: PGA_2013_LADDER_CONFIG },
     ],
   },
   {

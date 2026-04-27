@@ -2,6 +2,8 @@ import {
   LadderPlacingCategory,
   SportsLadder,
 } from "@/components/all-sports/Ladder";
+import { PeriodScore } from "@/components/all-sports/ScoreBreakdown";
+import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import type {
   PlayoffPictureConfig,
   PlayoffPictureGroup,
@@ -204,14 +206,32 @@ type SportsmonksMatchCricket = {
   };
 };
 
+export interface SportService {
+  matchesAll(tournamentId: number, seasonId: number): Promise<Matches | null>;
+
+  matchesByDate(date: Date): Promise<Matches | null>;
+
+  standings(
+    tournamentId: number,
+    seasonId: number,
+  ): Promise<Standings<readonly string[]> | null>;
+
+  matchDetails(matchId: number): Promise<MatchDetail | null>;
+}
+
 export interface Matches {
   fixtures: FixtureRound[];
   currentRound: string;
 }
 
 export interface MatchDetail {
-  fixtures: FixtureRound[];
-  currentRound: string;
+  matchDetails: {
+    homeTeam: TeamScoreDetails;
+    awayTeam: TeamScoreDetails;
+    status: string;
+  };
+  scoreEvents: ScoreDifference[];
+  scoreBreakdown: PeriodScore[];
 }
 
 export interface Standings<T extends readonly string[]> {

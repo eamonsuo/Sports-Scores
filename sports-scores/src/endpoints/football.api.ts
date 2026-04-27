@@ -1,13 +1,13 @@
 import { updateGlobalApiQuota } from "@/lib/apiCounter";
-import {
-  Football_FootApi_FixturePage_Response,
-  Football_FootApi_LeagueCupTrees_Response,
-  Football_FootApi_LeagueTotalStandings_Response,
-  Football_FootApi_Match_Response,
-  Football_FootApi_MatchIncidents_Response,
-  Football_FootApi_MatchSchedules_Response,
-} from "@/types/football";
+import { Football_FootApi_LeagueCupTrees_Response } from "@/types/football";
 import { SPORT } from "@/types/misc";
+import {
+  Sofascore_Event_Response,
+  Sofascore_EventIncidents_Response,
+  Sofascore_EventPage_Response,
+  Sofascore_Events_Response,
+  Sofascore_TotalStandings_Response,
+} from "@/types/sofascore";
 
 function updateQuota(response: Response) {
   const limit = response.headers.get("x-ratelimit-requests-limit");
@@ -46,7 +46,7 @@ export async function fetchFootballLastMatches(
 ) {
   return (await fetchFootballApi(
     `/tournament/${tournamentId}/season/${seasonId}/matches/last/${pageNumber}`,
-  )) as Football_FootApi_FixturePage_Response;
+  )) as Sofascore_EventPage_Response;
 }
 
 export async function fetchFootballNextMatches(
@@ -56,7 +56,7 @@ export async function fetchFootballNextMatches(
 ) {
   return (await fetchFootballApi(
     `/tournament/${tournamentId}/season/${seasonId}/matches/next/${pageNumber}`,
-  )) as Football_FootApi_FixturePage_Response;
+  )) as Sofascore_EventPage_Response;
 }
 
 export async function fetchFootballStandings(
@@ -65,25 +65,25 @@ export async function fetchFootballStandings(
 ) {
   return (await fetchFootballApi(
     `/tournament/${tournamentId}/season/${seasonId}/standings/total`,
-  )) as Football_FootApi_LeagueTotalStandings_Response;
+  )) as Sofascore_TotalStandings_Response;
 }
 
 export async function fetchFootballMatchDetails(matchId: number) {
   return (await fetchFootballApi(
     `/match/${matchId}`,
-  )) as Football_FootApi_Match_Response;
+  )) as Sofascore_Event_Response;
 }
 
 export async function fetchFootballMatchIncidents(matchId: number) {
   return (await fetchFootballApi(
     `/match/${matchId}/incidents`,
-  )) as Football_FootApi_MatchIncidents_Response;
+  )) as Sofascore_EventIncidents_Response;
 }
 
 export async function fetchFootballMatchesByDate(date: Date) {
   return (await fetchFootballApi(
     `/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-  )) as Football_FootApi_MatchSchedules_Response;
+  )) as Sofascore_Events_Response;
 }
 
 export async function fetchFootballTeamLastMatches(
@@ -92,7 +92,7 @@ export async function fetchFootballTeamLastMatches(
 ) {
   return (await fetchFootballApi(
     `/team/${teamId}/matches/previous/${pageNumber}`,
-  )) as Football_FootApi_FixturePage_Response;
+  )) as Sofascore_EventPage_Response;
 }
 
 export async function fetchFootballTeamNextMatches(
@@ -101,7 +101,7 @@ export async function fetchFootballTeamNextMatches(
 ) {
   return (await fetchFootballApi(
     `/team/${teamId}/matches/next/${pageNumber}`,
-  )) as Football_FootApi_FixturePage_Response;
+  )) as Sofascore_EventPage_Response;
 }
 
 export async function fetchFootballCupTrees(

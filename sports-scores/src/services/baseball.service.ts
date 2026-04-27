@@ -1,4 +1,3 @@
-import { BaseballScoreBreakdown } from "@/components/baseball/BaseballScoreBreakdown";
 import {
   fetchBaseballLastMatches,
   fetchBaseballMatchDetails,
@@ -6,11 +5,11 @@ import {
   fetchBaseballNextMatches,
   fetchBaseballStandings,
 } from "@/endpoints/baseball.api";
-import { fetchEventDetails } from "@/endpoints/sofascore.api";
-import { BASEBALL_LADDER_HEADINGS, BASEBALL_LEAGUES } from "@/lib/constants";
-import { resolveSportImage } from "@/lib/imageMapping";
-import { shortenTeamNames } from "@/lib/projUtils";
-import { BaseballMatchPage } from "@/types/baseball";
+import {
+  BASEBALL_LADDER_HEADINGS,
+  BASEBALL_LEAGUES,
+  SCORE_BREAKDOWN_INNINGS_CONFIG,
+} from "@/lib/constants";
 import { SPORT } from "@/types/misc";
 import { SofascoreSportURL } from "@/types/sofascore";
 import { SofascoreSport } from "./sofascore.service";
@@ -34,119 +33,8 @@ class BaseballService extends SofascoreSport {
       SofascoreSportURL.BASEBALL,
       BASEBALL_LEAGUES,
       BASEBALL_LADDER_HEADINGS,
+      SCORE_BREAKDOWN_INNINGS_CONFIG,
     );
-  }
-
-  async baseballMatchDetails(matchId: number) {
-    const match = await (
-      process.env.DEV_MODE ? fetchEventDetails : fetchBaseballMatchDetails
-    )(matchId);
-
-    const matchDetails = match?.event;
-
-    let scoreDetails = !matchDetails
-      ? null
-      : {
-          status: matchDetails?.status.description,
-          homeTeam: {
-            name: shortenTeamNames(matchDetails.homeTeam.name),
-            score: matchDetails?.homeScore?.current?.toString() ?? "0",
-            img: resolveSportImage(matchDetails.homeTeam.name),
-          },
-          awayTeam: {
-            name: shortenTeamNames(matchDetails?.awayTeam.name),
-            score: matchDetails?.awayScore?.current?.toString() ?? "0",
-            img: resolveSportImage(matchDetails.awayTeam.name),
-          },
-
-          scoreBreakdown: [
-            {
-              inning: "1",
-              teams: {
-                home: { score: matchDetails.homeScore?.period1 ?? "0" },
-                away: { score: matchDetails.awayScore?.period1 ?? "0" },
-              },
-            },
-            {
-              inning: "2",
-              teams: {
-                home: { score: matchDetails.homeScore?.period2 ?? "0" },
-                away: { score: matchDetails.awayScore?.period2 ?? "0" },
-              },
-            },
-            {
-              inning: "3",
-              teams: {
-                home: { score: matchDetails.homeScore?.period3 ?? "0" },
-                away: { score: matchDetails.awayScore?.period3 ?? "0" },
-              },
-            },
-            {
-              inning: "4",
-              teams: {
-                home: { score: matchDetails.homeScore?.period4 ?? "0" },
-                away: { score: matchDetails.awayScore?.period4 ?? "0" },
-              },
-            },
-            {
-              inning: "5",
-              teams: {
-                home: { score: matchDetails.homeScore?.period5 ?? "0" },
-                away: { score: matchDetails.awayScore?.period5 ?? "0" },
-              },
-            },
-            {
-              inning: "6",
-              teams: {
-                home: { score: matchDetails.homeScore?.period6 ?? "0" },
-                away: { score: matchDetails.awayScore?.period6 ?? "0" },
-              },
-            },
-            {
-              inning: "7",
-              teams: {
-                home: { score: matchDetails.homeScore?.period7 ?? "0" },
-                away: { score: matchDetails.awayScore?.period7 ?? "0" },
-              },
-            },
-            {
-              inning: "8",
-              teams: {
-                home: { score: matchDetails.homeScore?.period8 ?? "0" },
-                away: { score: matchDetails.awayScore?.period8 ?? "0" },
-              },
-            },
-            {
-              inning: "9",
-              teams: {
-                home: { score: matchDetails.homeScore?.period9 ?? "0" },
-                away: { score: matchDetails.awayScore?.period9 ?? "0" },
-              },
-            },
-          ] as BaseballScoreBreakdown[],
-        };
-
-    if (scoreDetails && matchDetails?.status.description === "AET") {
-      scoreDetails.scoreBreakdown.push({
-        inning: "Extra",
-        teams: {
-          home: {
-            score:
-              (matchDetails.homeScore?.current ?? 0) -
-              (matchDetails.homeScore?.normaltime ?? 0),
-          },
-          away: {
-            score:
-              (matchDetails.awayScore?.current ?? 0) -
-              (matchDetails.awayScore?.normaltime ?? 0),
-          },
-        },
-      });
-    }
-
-    return {
-      matchDetails: scoreDetails,
-    } as BaseballMatchPage;
   }
 }
 

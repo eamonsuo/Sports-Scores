@@ -8,7 +8,8 @@ import {
   MatchSummary,
   SPORT,
 } from "@/types/misc";
-import { Sofascore_Event } from "@/types/sofascore";
+import { PlayoffPictureStanding } from "@/types/playoff-picture";
+import { Sofascore_Event, Sofascore_StandingRow } from "@/types/sofascore";
 import { SportsDB_Event } from "@/types/sportsdb";
 import { TZDate } from "@date-fns/tz/date";
 import { format } from "date-fns/format";
@@ -83,7 +84,10 @@ function mapSofascoreEventToMatchSummary(
     matchSlug:
       options?.matchSlug ??
       `${event.tournament.uniqueTournament.id}/${event.season.id}/${event.id}`,
-    venue: options?.venue ?? event?.venue?.name ?? "",
+    venue:
+      options?.venue ??
+      (event?.venue?.name &&
+        `${event?.venue?.name}, ${event?.venue?.city.name}`),
     seriesName: options?.seriesName,
     seriesSlug: options?.seriesSlug,
     summaryText:
@@ -261,4 +265,28 @@ export function getCurrentRound(
     case DISPLAY_TYPES.LEAGUE:
       return rounds[0].roundLabel ?? "League";
   }
+}
+
+export function mapSofascoreToStanding(
+  row: Sofascore_StandingRow,
+  totalSeasonGames: number,
+): PlayoffPictureStanding {
+  return {
+    team: {
+      id: row.team.id,
+      name: shortenTeamNames(row.team.name),
+      logo: resolveSportImage(row.team.name),
+    },
+    position: row.position,
+    played: row.matches,
+    totalSeasonGames,
+    wins: row.wins,
+    losses: row.losses,
+    draws: row.overtimeLosses ?? row.draws ?? 0,
+    tiebreakers: {
+      pointsFor: row.scoresFor,
+      pointsAgainst: row.scoresAgainst,
+      pointsDiff: row.scoresFor - row.scoresAgainst,
+    },
+  };
 }

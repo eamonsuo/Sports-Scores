@@ -2,11 +2,13 @@ import { updateGlobalApiQuota } from "@/lib/apiCounter";
 import {
   AmericanFootball_AmericanFootballApi_CategorySchedule_Response,
   AmericanFootball_AmericanFootballApi_FixturePage_Response,
-  AmericanFootball_AmericanFootballApi_LeagueTotalStandings_Response,
   AmericanFootball_AmericanFootballApi_Match_Response,
-  AmericanFootball_AmericanFootballApi_MatchIncidents_Response,
 } from "@/types/american-football";
 import { SPORT } from "@/types/misc";
+import {
+  Sofascore_EventIncidents_Response,
+  Sofascore_TotalStandings_Response,
+} from "@/types/sofascore";
 
 function updateQuota(response: Response) {
   const limit = response.headers.get("x-ratelimit-requests-limit");
@@ -64,7 +66,7 @@ export async function fetchAmericanFootballStandings(
 ) {
   return (await fetchAmericanFootballApi(
     `/american-football/tournament/${tournamentId}/season/${seasonId}/standings/total`,
-  )) as AmericanFootball_AmericanFootballApi_LeagueTotalStandings_Response;
+  )) as Sofascore_TotalStandings_Response;
 }
 
 export async function fetchAmericanFootballMatchDetails(matchId: number) {
@@ -76,7 +78,7 @@ export async function fetchAmericanFootballMatchDetails(matchId: number) {
 export async function fetchAmericanFootballMatchIncidents(matchId: number) {
   return (await fetchAmericanFootballApi(
     `/american-football/match/${matchId}/incidents`,
-  )) as AmericanFootball_AmericanFootballApi_MatchIncidents_Response;
+  )) as Sofascore_EventIncidents_Response;
 }
 
 export async function fetchAmericanFootballCurrentMatches(date: Date) {

@@ -12,17 +12,18 @@ import {
 } from "@/endpoints/football.api";
 import {
   fetchCupTrees,
-  fetchEventDetails,
-  fetchEventIncidents,
   fetchTeamLastEvents,
   fetchTeamNextEvents,
 } from "@/endpoints/sofascore.api";
-import { FOOTBALL_LADDER_HEADINGS, FOOTBALL_LEAGUES } from "@/lib/constants";
+import {
+  FOOTBALL_LADDER_HEADINGS,
+  FOOTBALL_LEAGUES,
+  SCORE_BREAKDOWN_HALVES_CONFIG,
+} from "@/lib/constants";
 import { resolveSportImage } from "@/lib/imageMapping";
 import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils";
 import {
   FootballBracketPage,
-  FootballMatchPage,
   FootballTeamFixturesPage,
 } from "@/types/football";
 import { MatchSummary, SPORT } from "@/types/misc";
@@ -48,6 +49,7 @@ class FootballService extends SofascoreSport {
       SofascoreSportURL.FOOTBALL,
       FOOTBALL_LEAGUES,
       FOOTBALL_LADDER_HEADINGS,
+      SCORE_BREAKDOWN_HALVES_CONFIG,
     );
   }
 
@@ -108,64 +110,6 @@ class FootballService extends SofascoreSport {
         } as MatchSummary;
       }),
     } as FootballTeamFixturesPage;
-  }
-
-  async footballMatchDetails(matchId: number) {
-    const match = await (
-      process.env.DEV_MODE ? fetchEventDetails : fetchFootballMatchDetails
-    )(matchId);
-    const incidents = await (
-      process.env.DEV_MODE ? fetchEventIncidents : fetchFootballMatchIncidents
-    )(matchId);
-
-    const matchDetails = match?.event;
-    const scoreIncidents = incidents?.incidents
-      ? incidents?.incidents
-          .filter((item) => item.incidentType === "goal")
-          .toReversed()
-      : null;
-
-    return {
-      scoreEvents: !scoreIncidents
-        ? null
-        : scoreIncidents.map((item) => {
-            return {
-              event: item.incidentClass,
-              difference: (item.homeScore ?? 0) - (item.awayScore ?? 0),
-            };
-          }),
-      matchDetails: !matchDetails
-        ? null
-        : {
-            status: matchDetails?.status.description,
-            homeTeam: {
-              name: shortenTeamNames(matchDetails.homeTeam.name),
-              score: matchDetails?.homeScore?.current?.toString() ?? "0",
-              img: resolveSportImage(matchDetails.homeTeam.name),
-            },
-            awayTeam: {
-              name: shortenTeamNames(matchDetails?.awayTeam.name),
-              score: matchDetails?.awayScore?.current?.toString() ?? "0",
-              img: resolveSportImage(matchDetails.awayTeam.name),
-            },
-            scoreBreakdown: [
-              {
-                periodName: "1st Half",
-                teams: {
-                  home: { score: matchDetails.homeScore?.period1 ?? "0" },
-                  away: { score: matchDetails.awayScore?.period1 ?? "0" },
-                },
-              },
-              {
-                periodName: "2nd Half",
-                teams: {
-                  home: { score: matchDetails.homeScore?.period2 ?? "0" },
-                  away: { score: matchDetails.awayScore?.period2 ?? "0" },
-                },
-              },
-            ],
-          },
-    } as FootballMatchPage;
   }
 
   async footballBrackets(tournamentId: number, seasonId: number) {

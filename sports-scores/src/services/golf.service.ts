@@ -1,11 +1,13 @@
+import { SportsLadder } from "@/components/all-sports/Ladder";
 import { GolfLeaderboardPlayerRow } from "@/components/golf/TournamentLeaderboard";
 import {
   fetchGolfLeaderboard,
   fetchGolfRankings,
   fetchGolfSchedule,
 } from "@/endpoints/golf.api";
+import { GOLF_FEDEXCUP_LADDER_HEADINGS, GOLF_TOURS } from "@/lib/constants";
 import { resolveSportImage } from "@/lib/imageMapping";
-import { getCountryImageUrl } from "@/lib/projUtils";
+import { getCountryImageUrl, getSportConfigurations } from "@/lib/projUtils";
 import {
   Golf_SlashGolfAPI_Leaderboard,
   Golf_SlashGolfAPI_Schedule,
@@ -63,20 +65,28 @@ export async function golfFedExRankings(year: string) {
     return null;
   }
 
+  const { ladderConfig } = getSportConfigurations(GOLF_TOURS, "pga", year);
+
   return {
-    rankings: (rawRanking.rankings as SlashGolf_PlayerRanking_FedExCup[]).map(
+    // tableName: table.name,
+    headings: GOLF_FEDEXCUP_LADDER_HEADINGS,
+    data: (rawRanking.rankings as SlashGolf_PlayerRanking_FedExCup[]).map(
       (item) => {
         let playerName = item.firstName + " " + item.lastName;
         return {
-          name: playerName,
-          img: resolveSportImage(playerName),
-          position: item.rank.toString(),
-          totalPoints: item.totalPoints?.toString() ?? "",
-          pointsBehind: item.pointsBehind?.toString() ?? "",
+          position: item.rank,
+          team: {
+            id: item.playerId,
+            name: playerName,
+            logo: resolveSportImage(playerName),
+          },
+          Total: item.totalPoints?.toString() ?? "",
+          Behind: item.pointsBehind?.toString() ?? "",
         };
       },
     ),
-  } as GolfRankingsPage;
+    placingCategories: ladderConfig?.placingCategories,
+  } as SportsLadder<typeof GOLF_FEDEXCUP_LADDER_HEADINGS>;
 }
 
 export async function golfPGATournamentLeaderboard(

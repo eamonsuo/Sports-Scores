@@ -1,14 +1,8 @@
-import { SportsLadder } from "@/components/all-sports/Ladder";
-import { ScoreDifference } from "@/components/all-sports/ScoreChart";
-import { AmericanFootballScoreBreakdown } from "@/components/american-football/AmericanFootballScoreBreakdown";
-import { APISportsResponse, FixtureRound, TeamScoreDetails } from "./misc";
 import {
   Sofascore_Event,
   Sofascore_Event_Response,
-  Sofascore_EventIncidents_Response,
   Sofascore_EventPage_Response,
   Sofascore_Events_Response,
-  Sofascore_TotalStandings_Response,
 } from "./sofascore";
 
 export interface AmericanFootball_Sofascore_Event extends Sofascore_Event {
@@ -34,145 +28,7 @@ export interface AmericanFootball_AmericanFootballApi_Match_Response
   event: AmericanFootball_Sofascore_Event;
 }
 
-export interface AmericanFootball_AmericanFootballApi_LeagueTotalStandings_Response
-  extends Sofascore_TotalStandings_Response {}
-
-export interface AmericanFootball_AmericanFootballApi_MatchIncidents_Response
-  extends Sofascore_EventIncidents_Response {}
-
 export interface AmericanFootball_AmericanFootballApi_CategorySchedule_Response
   extends Sofascore_Events_Response {
   events: AmericanFootball_Sofascore_Event[];
 }
-
-export interface AmericanFootballFixturesPage {
-  fixtures: FixtureRound[];
-  currentRound: string;
-}
-
-export interface AmericanFootballLadderPage<T extends readonly string[]> {
-  standings: SportsLadder<T>[];
-}
-
-export interface AmericanFootballMatchPage {
-  matchDetails: {
-    homeTeam: TeamScoreDetails;
-    awayTeam: TeamScoreDetails;
-    status: string;
-    scoreBreakdown: AmericanFootballScoreBreakdown[];
-  };
-  scoreEvents: ScoreDifference[];
-}
-
-export interface AmericanFootballResponse<T> extends APISportsResponse {
-  response: T[];
-}
-
-export type AmericanFootballGame = {
-  game: {
-    id: number;
-    stage: string;
-    week: string;
-    date: {
-      timezone: string;
-      date: string;
-      time: string;
-      timestamp: number;
-    };
-    venue: {
-      name: string | null;
-      city: string | null;
-    };
-    status: {
-      short:
-        | "NS"
-        | "Q1"
-        | "Q2"
-        | "Q3"
-        | "Q4"
-        | "OT"
-        | "FT"
-        | "HT"
-        | "AOT"
-        | "CANC"
-        | "PST";
-      long:
-        | "Not Started"
-        | "First Quarter"
-        | "Second Quarter"
-        | "Third Quarter"
-        | "Fourth Quarter"
-        | "Overtime"
-        | "After Over Time"
-        | "Finished"
-        | "Halftime"
-        | "Cancelled"
-        | "Postponed";
-      timer: string | null;
-    };
-  };
-  league: AmericanFootballLeagueDetails;
-  teams: {
-    home: {
-      id: number;
-      name: string | null;
-      logo: string;
-    };
-    away: {
-      id: number;
-      name: string | null;
-      logo: string;
-    };
-  };
-  scores: {
-    home: {
-      quarter_1: number | null;
-      quarter_2: number | null;
-      quarter_3: number | null;
-      quarter_4: number | null;
-      overtime: number | null;
-      total: number | null;
-    };
-    away: {
-      quarter_1: number | null;
-      quarter_2: number | null;
-      quarter_3: number | null;
-      quarter_4: number | null;
-      overtime: number | null;
-      total: number | null;
-    };
-  };
-};
-
-export type AmericanFootballGameEvents = {
-  quarter: string;
-  minute: string;
-  team: {
-    id: number;
-    name: string;
-    logo: string;
-  };
-  player: {
-    id: number;
-    name: string;
-    image: string;
-  };
-  type: string;
-  comment: string;
-  score: {
-    home: number;
-    away: number;
-  };
-};
-
-type AmericanFootballLeagueDetails = {
-  id: number;
-  name: string;
-  season: number;
-  logo: string;
-  country: {
-    name: string;
-    code: string;
-    flag: string;
-  };
-};

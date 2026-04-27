@@ -1,12 +1,12 @@
 import { updateGlobalApiQuota } from "@/lib/apiCounter";
-import {
-  IceHockey_IceHockeyApi2_CategorySchedules_Response,
-  IceHockey_IceHockeyApi2_FixturePage_Response,
-  IceHockey_IceHockeyApi2_LeagueTotalStandings_Response,
-  IceHockey_IceHockeyApi2_Match_Response,
-  IceHockey_IceHockeyApi2_MatchIncidents_Response,
-} from "@/types/ice-hockey";
 import { SPORT } from "@/types/misc";
+import {
+  Sofascore_Event_Response,
+  Sofascore_EventIncidents_Response,
+  Sofascore_EventPage_Response,
+  Sofascore_Events_Response,
+  Sofascore_TotalStandings_Response,
+} from "@/types/sofascore";
 
 function updateQuota(response: Response) {
   const limit = response.headers.get("x-ratelimit-requests-limit");
@@ -45,7 +45,7 @@ export async function fetchIceHockeyLastMatches(
 ) {
   return (await fetchIceHockeyApi(
     `/ice-hockey/tournament/${tournamentId}/season/${seasonId}/matches/last/${pageNumber}`,
-  )) as IceHockey_IceHockeyApi2_FixturePage_Response;
+  )) as Sofascore_EventPage_Response;
 }
 
 export async function fetchIceHockeyNextMatches(
@@ -55,7 +55,7 @@ export async function fetchIceHockeyNextMatches(
 ) {
   return (await fetchIceHockeyApi(
     `/ice-hockey/tournament/${tournamentId}/season/${seasonId}/matches/next/${pageNumber}`,
-  )) as IceHockey_IceHockeyApi2_FixturePage_Response;
+  )) as Sofascore_EventPage_Response;
 }
 
 export async function fetchIceHockeyStandings(
@@ -64,23 +64,23 @@ export async function fetchIceHockeyStandings(
 ) {
   return (await fetchIceHockeyApi(
     `/ice-hockey/tournament/${tournamentId}/season/${seasonId}/standings/total`,
-  )) as IceHockey_IceHockeyApi2_LeagueTotalStandings_Response;
+  )) as Sofascore_TotalStandings_Response;
 }
 
 export async function fetchIceHockeyMatchDetails(matchId: number) {
   return (await fetchIceHockeyApi(
     `/ice-hockey/match/${matchId}`,
-  )) as IceHockey_IceHockeyApi2_Match_Response;
+  )) as Sofascore_Event_Response;
 }
 
 export async function fetchIceHockeyMatchIncidents(matchId: number) {
   return (await fetchIceHockeyApi(
     `/ice-hockey/match/${matchId}/incidents`,
-  )) as IceHockey_IceHockeyApi2_MatchIncidents_Response;
+  )) as Sofascore_EventIncidents_Response;
 }
 
 export async function fetchIceHockeyMatchesByDate(date: Date) {
   return (await fetchIceHockeyApi(
     `/ice-hockey/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-  )) as IceHockey_IceHockeyApi2_CategorySchedules_Response;
+  )) as Sofascore_Events_Response;
 }

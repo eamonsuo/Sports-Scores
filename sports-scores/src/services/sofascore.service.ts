@@ -3,16 +3,19 @@ import {
   SportsLadder,
 } from "@/components/all-sports/Ladder";
 import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
+import { PeriodScore } from "@/components/all-sports/ScoreBreakdown";
 import {
+  fetchEventDetails,
+  fetchEventIncidents,
   fetchEventsByDate,
   fetchLastEvents,
-  fetchNextEvents,
   fetchStandingsTotal,
 } from "@/endpoints/sofascore.api";
 import {
   getCurrentRound,
   mapFixtureRounds,
   mapMatchSummary,
+  mapSofascoreToStanding,
 } from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
 import { resolvePlayoffPicture } from "@/lib/playoffPictureMapping";
@@ -20,16 +23,17 @@ import { getSportConfigurations, shortenTeamNames } from "@/lib/projUtils";
 import {
   API_EVENT_TYPES,
   DISPLAY_TYPES,
+  MatchDetail,
   Matches,
   MatchSummary,
   SPORT,
+  SportService,
   Standings,
 } from "@/types/misc";
-import type { PlayoffPictureStanding } from "@/types/playoff-picture";
 import {
+  PeriodKey,
   Sofascore_Event,
   Sofascore_Standing,
-  Sofascore_StandingRow,
   SofascoreAPI,
   SofascoreSportURL,
 } from "@/types/sofascore";
@@ -37,12 +41,18 @@ import { TZDate } from "@date-fns/tz/date";
 import { isSameDay } from "date-fns";
 import { matchSummariesByTournament } from "./dataverse.service";
 
-export class SofascoreSport {
+export type PeriodConfig = {
+  periodNames: string[];
+  overtimeName?: string;
+};
+
+export abstract class SofascoreSport implements SportService {
   protected apiEndpoints: SofascoreAPI;
   protected sport: SPORT;
   protected sofascoreSport: SofascoreSportURL;
   protected leagues: LeagueSeasonConfig[];
   protected headings: readonly string[];
+  protected periodConfig?: PeriodConfig;
 
   constructor(
     apiEndpoints: SofascoreAPI,
@@ -50,12 +60,14 @@ export class SofascoreSport {
     sofascoreSport: SofascoreSportURL,
     leagues: LeagueSeasonConfig[],
     headings: readonly string[],
+    periodConfig?: PeriodConfig,
   ) {
     this.apiEndpoints = apiEndpoints;
     this.sport = sport;
     this.sofascoreSport = sofascoreSport;
     this.leagues = leagues;
     this.headings = headings;
+    this.periodConfig = periodConfig;
   }
 
   async matchesAll(
@@ -67,9 +79,10 @@ export class SofascoreSport {
       (process.env.DEV_MODE
         ? fetchLastEvents
         : this.apiEndpoints.fetchLastEvents)(tournamentId, seasonId, 0),
-      (process.env.DEV_MODE
-        ? fetchNextEvents
-        : this.apiEndpoints.fetchNextEvents)(tournamentId, seasonId, 0),
+      null,
+      // (process.env.DEV_MODE
+      //   ? fetchNextEvents
+      //   : this.apiEndpoints.fetchNextEvents)(tournamentId, seasonId, 0),
       matchSummariesByTournament(tournamentId, seasonId, this.sport),
     ]);
 
@@ -78,7 +91,7 @@ export class SofascoreSport {
     }
 
     const apiMatches = (lastMatches?.events ?? [])
-      .concat(nextMatches?.events ?? [])
+      // .concat(nextMatches?.events ?? [])
       .map((event) =>
         this.eventMapper(
           event,
@@ -99,8 +112,8 @@ export class SofascoreSport {
 
     const { leagueConfig } = getSportConfigurations(
       this.leagues,
-      tournamentId,
-      seasonId,
+      String(tournamentId),
+      String(seasonId),
     );
 
     const fixture = await mapFixtureRounds(allMatches, leagueConfig);
@@ -166,8 +179,8 @@ export class SofascoreSport {
 
     const { ladderConfig } = getSportConfigurations(
       this.leagues,
-      tournamentId,
-      seasonId,
+      String(tournamentId),
+      String(seasonId),
     );
 
     return {
@@ -194,7 +207,52 @@ export class SofascoreSport {
     } as Standings<typeof this.headings>;
   }
 
-  async matchDetails(matchId: number): Promise<any> {}
+  async matchDetails(matchId: number): Promise<MatchDetail | null> {
+    const match = await (
+      process.env.DEV_MODE
+        ? fetchEventDetails
+        : this.apiEndpoints.fetchEventDetails
+    )(matchId);
+    const incidents = await (
+      process.env.DEV_MODE
+        ? fetchEventIncidents
+        : this.apiEndpoints.fetchEventIncidents
+    )(matchId);
+
+    const matchDetails = match?.event;
+    const scoreIncidents = incidents?.incidents
+      ? incidents?.incidents
+          .filter((item) => item.incidentType === "goal")
+          .toReversed()
+      : null;
+
+    return {
+      scoreEvents: !scoreIncidents
+        ? []
+        : scoreIncidents.map((item) => {
+            return {
+              event: item.incidentClass ?? "",
+              difference: (item.homeScore ?? 0) - (item.awayScore ?? 0),
+            };
+          }),
+      matchDetails: {
+        status: `${matchDetails?.status.description}`,
+        homeTeam: {
+          name: shortenTeamNames(matchDetails?.homeTeam.name ?? ""),
+          score: matchDetails?.homeScore?.current?.toString() ?? "0",
+          img: resolveSportImage(matchDetails?.homeTeam.name ?? ""),
+        },
+        awayTeam: {
+          name: shortenTeamNames(matchDetails?.awayTeam.name ?? ""),
+          score: matchDetails?.awayScore?.current?.toString() ?? "0",
+          img: resolveSportImage(matchDetails?.awayTeam.name ?? ""),
+        },
+      },
+      scoreBreakdown: matchDetails
+        ? this.scoreBreakdownMapper(matchDetails)
+        : [],
+    };
+  }
 
   protected eventMapper(
     match: Sofascore_Event,
@@ -240,28 +298,40 @@ export class SofascoreSport {
       placingCategories,
     } as SportsLadder<typeof this.headings>;
   }
-}
 
-function mapSofascoreToStanding(
-  row: Sofascore_StandingRow,
-  totalSeasonGames: number,
-): PlayoffPictureStanding {
-  return {
-    team: {
-      id: row.team.id,
-      name: shortenTeamNames(row.team.name),
-      logo: resolveSportImage(row.team.name),
-    },
-    position: row.position,
-    played: row.matches,
-    totalSeasonGames,
-    wins: row.wins,
-    losses: row.losses,
-    draws: row.overtimeLosses ?? row.draws ?? 0,
-    tiebreakers: {
-      pointsFor: row.scoresFor,
-      pointsAgainst: row.scoresAgainst,
-      pointsDiff: row.scoresFor - row.scoresAgainst,
-    },
-  };
+  protected scoreBreakdownMapper(match: Sofascore_Event): PeriodScore[] {
+    if (!this.periodConfig) return [];
+
+    const breakdown: PeriodScore[] = this.periodConfig.periodNames.map(
+      (name, i) => {
+        const periodKey = `period${i + 1}` as PeriodKey;
+        return {
+          periodName: name,
+          teams: {
+            home: {
+              score: match.homeScore?.[periodKey] ?? "0",
+            },
+            away: {
+              score: match.awayScore?.[periodKey] ?? "0",
+            },
+          },
+        };
+      },
+    );
+
+    if (
+      this.periodConfig.overtimeName &&
+      match.homeScore?.overtime != undefined
+    ) {
+      breakdown.push({
+        periodName: this.periodConfig.overtimeName,
+        teams: {
+          home: { score: match.homeScore?.overtime ?? "0" },
+          away: { score: match.awayScore?.overtime ?? "0" },
+        },
+      });
+    }
+
+    return breakdown;
+  }
 }

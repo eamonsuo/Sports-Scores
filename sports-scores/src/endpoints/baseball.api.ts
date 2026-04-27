@@ -1,11 +1,11 @@
 import { updateGlobalApiQuota } from "@/lib/apiCounter";
-import {
-  Baseball_BaseballApi_FixturePage_Response,
-  Baseball_BaseballApi_LeagueTotalStandings_Response,
-  Baseball_BaseballApi_Match_Response,
-  Baseball_BaseballApi_MatchSchedules_Response,
-} from "@/types/baseball";
 import { SPORT } from "@/types/misc";
+import {
+  Sofascore_Event_Response,
+  Sofascore_EventPage_Response,
+  Sofascore_Events_Response,
+  Sofascore_TotalStandings_Response,
+} from "@/types/sofascore";
 
 function updateQuota(response: Response) {
   const limit = response.headers.get("x-ratelimit-requests-limit");
@@ -44,7 +44,7 @@ export async function fetchBaseballLastMatches(
 ) {
   return (await fetchBaseballApi(
     `/baseball/tournament/${tournamentId}/season/${seasonId}/matches/last/${pageNumber}`,
-  )) as Baseball_BaseballApi_FixturePage_Response;
+  )) as Sofascore_EventPage_Response;
 }
 
 export async function fetchBaseballNextMatches(
@@ -54,7 +54,7 @@ export async function fetchBaseballNextMatches(
 ) {
   return (await fetchBaseballApi(
     `/baseball/tournament/${tournamentId}/season/${seasonId}/matches/next/${pageNumber}`,
-  )) as Baseball_BaseballApi_FixturePage_Response;
+  )) as Sofascore_EventPage_Response;
 }
 
 export async function fetchBaseballStandings(
@@ -63,13 +63,13 @@ export async function fetchBaseballStandings(
 ) {
   return (await fetchBaseballApi(
     `/baseball/tournament/${tournamentId}/season/${seasonId}/standings/total`,
-  )) as Baseball_BaseballApi_LeagueTotalStandings_Response;
+  )) as Sofascore_TotalStandings_Response;
 }
 
 export async function fetchBaseballMatchDetails(matchId: number) {
   return (await fetchBaseballApi(
     `/baseball/match/${matchId}`,
-  )) as Baseball_BaseballApi_Match_Response;
+  )) as Sofascore_Event_Response;
 }
 
 // export async function fetchBaseballMatchIncidents(matchId: number) {
@@ -81,5 +81,5 @@ export async function fetchBaseballMatchDetails(matchId: number) {
 export async function fetchBaseballMatchesByDate(date: Date) {
   return (await fetchBaseballApi(
     `/baseball/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-  )) as Baseball_BaseballApi_MatchSchedules_Response;
+  )) as Sofascore_Events_Response;
 }

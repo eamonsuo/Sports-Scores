@@ -237,6 +237,17 @@ interface Sofascore_TeamColors {
   text: string;
 }
 
+export type PeriodKey =
+  | "period1"
+  | "period2"
+  | "period3"
+  | "period4"
+  | "period5"
+  | "period6"
+  | "period7"
+  | "period8"
+  | "period9";
+
 export interface Sofascore_Score {
   current: number;
   display: number;

@@ -6,7 +6,7 @@
  *   npx tsx scripts/bulk-upload-events.ts <tournamentId> <seasonId> <sport> [displayType] [allEventsMode]
  *
  * Example (NRL 2025):
- *   npx tsx scripts/bulk-upload-events.ts 294 63614 rugby-league round false
+ *   npx tsx scripts/bulk-upload-events.ts 294 69277 rugby-league round false
  */
 
 import {

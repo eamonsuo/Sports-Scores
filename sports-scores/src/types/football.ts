@@ -1,62 +1,13 @@
-import { SportsLadder } from "@/components/all-sports/Ladder";
-import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import { Match as BracketMatch } from "@/components/bracket/types";
-import { FootballScoreBreakdown } from "@/components/football/FootballScoreBreakdown";
-import { FixtureRound, MatchSummary, TeamScoreDetails } from "./misc";
-import {
-  Sofascore_CupTree,
-  Sofascore_Event_Response,
-  Sofascore_EventIncidents_Response,
-  Sofascore_EventPage_Response,
-  Sofascore_Events_Response,
-  Sofascore_TotalStandings_Response,
-} from "./sofascore";
-
-export interface Football_FootApi_FixturePage_Response
-  extends Sofascore_EventPage_Response {}
-
-export interface Football_FootApi_Match_Response
-  extends Sofascore_Event_Response {}
-
-export interface Football_FootApi_LeagueTotalStandings_Response
-  extends Sofascore_TotalStandings_Response {}
-
-export interface Football_FootApi_MatchIncidents_Response
-  extends Sofascore_EventIncidents_Response {}
-
-export interface Football_FootApi_MatchSchedules_Response
-  extends Sofascore_Events_Response {}
+import { MatchSummary } from "./misc";
+import { Sofascore_CupTree } from "./sofascore";
 
 export interface Football_FootApi_LeagueCupTrees_Response {
   cupTrees: Sofascore_CupTree[];
 }
 
-export interface FootballFixturesPage {
-  fixtures: FixtureRound[];
-  currentRound: string;
-}
-
 export interface FootballTeamFixturesPage {
   fixtures: MatchSummary[];
-}
-
-export interface FootballLadderPage<T extends readonly string[]> {
-  standings: SportsLadder<T>[];
-}
-
-export interface FootballMatchPage {
-  matchDetails: {
-    homeTeam: TeamScoreDetails;
-    awayTeam: TeamScoreDetails;
-    status: string;
-    scoreBreakdown: FootballScoreBreakdown[];
-  };
-  scoreEvents: ScoreDifference[];
-}
-
-export interface FootballTodayPage {
-  fixtures: FixtureRound[];
-  currentRound: string;
 }
 
 export interface FootballBracketPage {

@@ -21,7 +21,9 @@ import {
   SessionSummary,
 } from "@/types/f1";
 import { MatchSummary, SPORT } from "@/types/misc";
+import { format, isSameDay } from "date-fns";
 import { addHours } from "date-fns/addHours";
+import { TZDate } from "react-day-picker";
 
 export async function f1EventSchedule(season: number) {
   const rawEvents = await fetchF1Events(season);
@@ -43,13 +45,13 @@ export async function f1EventSchedule(season: number) {
           ),
           sessionType: F1SessionType.Practice1,
           sessionName: F1SessionType.Practice1.replace("-", " "),
-          sport: `${SPORT.MOTORSPORT}/f1`,
+          sport: `${SPORT.MOTORSPORT}`,
           status: setSessionStatus(
             new Date(item.FirstPractice.date + "T" + item.FirstPractice.time),
             F1SessionType.Practice1,
           ),
           logo: resolveSportImage(item.raceName),
-          sessionSlug: `${season}/${item.round}/${F1SessionType.Practice1}`,
+          sessionSlug: `f1/${season}/${item.round}/${F1SessionType.Practice1}`,
         });
       }
       if (item.SecondPractice) {
@@ -61,12 +63,12 @@ export async function f1EventSchedule(season: number) {
           ),
           sessionType: F1SessionType.Practice2,
           sessionName: F1SessionType.Practice2.replace("-", " "),
-          sport: `${SPORT.MOTORSPORT}/f1`,
+          sport: `${SPORT.MOTORSPORT}`,
           status: setSessionStatus(
             new Date(item.SecondPractice.date + "T" + item.SecondPractice.time),
             F1SessionType.Practice2,
           ),
-          sessionSlug: `${season}/${item.round}/${F1SessionType.Practice2}`,
+          sessionSlug: `f1/${season}/${item.round}/${F1SessionType.Practice2}`,
         });
       }
       if (item.ThirdPractice) {
@@ -78,12 +80,12 @@ export async function f1EventSchedule(season: number) {
           ),
           sessionType: F1SessionType.Practice3,
           sessionName: F1SessionType.Practice3.replace("-", " "),
-          sport: `${SPORT.MOTORSPORT}/f1`,
+          sport: `${SPORT.MOTORSPORT}`,
           status: setSessionStatus(
             new Date(item.ThirdPractice.date + "T" + item.ThirdPractice.time),
             F1SessionType.Practice3,
           ),
-          sessionSlug: `${season}/${item.round}/${F1SessionType.Practice3}`,
+          sessionSlug: `f1/${season}/${item.round}/${F1SessionType.Practice3}`,
         });
       }
       if (item.SprintQualifying) {
@@ -95,14 +97,14 @@ export async function f1EventSchedule(season: number) {
           ),
           sessionType: F1SessionType.SprintQualifying,
           sessionName: F1SessionType.SprintQualifying.replace("-", " "),
-          sport: `${SPORT.MOTORSPORT}/f1`,
+          sport: `${SPORT.MOTORSPORT}`,
           status: setSessionStatus(
             new Date(
               item.SprintQualifying.date + "T" + item.SprintQualifying.time,
             ),
             F1SessionType.SprintQualifying,
           ),
-          sessionSlug: `${season}/${item.round}/${F1SessionType.SprintQualifying}`,
+          sessionSlug: `f1/${season}/${item.round}/${F1SessionType.SprintQualifying}`,
         });
       }
       if (item.Sprint) {
@@ -111,12 +113,12 @@ export async function f1EventSchedule(season: number) {
           grandPrixName: item.raceName,
           startDate: new Date(item.Sprint.date + "T" + item.Sprint.time),
           sessionType: F1SessionType.Sprint,
-          sport: `${SPORT.MOTORSPORT}/f1`,
+          sport: `${SPORT.MOTORSPORT}`,
           status: setSessionStatus(
             new Date(item.Sprint.date + "T" + item.Sprint.time),
             F1SessionType.Sprint,
           ),
-          sessionSlug: `${season}/${item.round}/${F1SessionType.Sprint}`,
+          sessionSlug: `f1/${season}/${item.round}/${F1SessionType.Sprint}`,
         });
       }
       if (item.Qualifying) {
@@ -127,12 +129,12 @@ export async function f1EventSchedule(season: number) {
             item.Qualifying.date + "T" + item.Qualifying.time,
           ),
           sessionType: F1SessionType.Qualifying,
-          sport: `${SPORT.MOTORSPORT}/f1`,
+          sport: `${SPORT.MOTORSPORT}`,
           status: setSessionStatus(
             new Date(item.Qualifying.date + "T" + item.Qualifying.time),
             F1SessionType.Qualifying,
           ),
-          sessionSlug: `${season}/${item.round}/${F1SessionType.Qualifying}`,
+          sessionSlug: `f1/${season}/${item.round}/${F1SessionType.Qualifying}`,
         });
       }
 
@@ -142,12 +144,12 @@ export async function f1EventSchedule(season: number) {
         startDate: new Date(item.date + "T" + item.time),
         sessionType: F1SessionType.Race,
         sessionName: F1SessionType.Race,
-        sport: `${SPORT.MOTORSPORT}/f1`,
+        sport: `${SPORT.MOTORSPORT}`,
         status: setSessionStatus(
           new Date(item.date + "T" + item.time),
           F1SessionType.Race,
         ),
-        sessionSlug: `${season}/${item.round}/${F1SessionType.Race}`,
+        sessionSlug: `f1/${season}/${item.round}/${F1SessionType.Race}`,
       });
 
       return gpSessions;
@@ -420,27 +422,33 @@ function setSessionStatus(sessionDate: Date, sessionType: F1SessionType) {
   }
 }
 
-export function motorsportCategoriesByDate(date: Date) {
-  // Placeholder for golf matches fetching logic
+export async function motorsportCategoriesByDate(date: Date) {
+  const races = await f1EventSchedule(Number(format(date, "yyyy")));
+  const timezone = date instanceof TZDate ? date.timeZone : "UTC";
 
-  function createMotorsportMatchSummary(
-    id: number,
-    name: string,
-    slug: string,
-  ) {
-    return {
-      id: id.toString(),
-      sport: SPORT.MOTORSPORT,
-      summaryText: name,
-      startDate: date,
-      status: "UPCOMING",
-      awayDetails: { score: "", name: "" },
-      homeDetails: { score: "", name: "" },
-      matchSlug: slug,
-    } as MatchSummary;
-  }
+  const todaySessions = races?.sessions
+    .filter((item) => {
+      const eventDate = new TZDate(item.startDate, timezone);
+      return isSameDay(eventDate, date);
+    })
+    .map((session) => {
+      return {
+        id: session.grandPrixName + session.sessionType,
+        sport: SPORT.MOTORSPORT,
+        summaryText:
+          session.grandPrixName +
+          " - " +
+          (session.sessionName ?? session.sessionType),
+        startDate: date,
+        status: session.status,
+        awayDetails: { score: "", name: "" },
+        homeDetails: { score: "", name: "" },
+        matchSlug: session.sessionSlug,
+      } as MatchSummary;
+    });
 
   const motorsportEvents: MatchSummary[] = [];
+  motorsportEvents.push(...(todaySessions ?? []));
 
   // Basic check for tournaments
   switch (date.getDay()) {
@@ -452,10 +460,16 @@ export function motorsportCategoriesByDate(date: Date) {
     case 6: // Saturday
     case 0: // Sunday
     case 1: // Monday
-      motorsportEvents.push(
-        createMotorsportMatchSummary(2, "F1", "f1/2026"),
-        createMotorsportMatchSummary(1, "Supercars", "supercars/2026"),
-      );
+      motorsportEvents.push({
+        id: "Supercars",
+        sport: SPORT.MOTORSPORT,
+        summaryText: "Supercars",
+        startDate: date,
+        status: "UPCOMING",
+        awayDetails: { score: "", name: "" },
+        homeDetails: { score: "", name: "" },
+        matchSlug: "supercars/2026",
+      });
       break;
   }
   return motorsportEvents;

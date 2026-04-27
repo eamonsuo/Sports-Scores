@@ -15,6 +15,7 @@ export default function ScoreChart({
   homeLogo?: string | string[];
   awayLogo?: string | string[];
 }) {
+  console.log("ScoreChart rendered with scoreDifference:", scoreDifference);
   // Use first image if array (for doubles tennis), and handle empty strings
   const homeLogoSrc = Array.isArray(homeLogo)
     ? homeLogo[0] || undefined
@@ -65,7 +66,13 @@ export default function ScoreChart({
             />
             <XAxis tickLine={false} tick={false} axisLine={false} height={5} />
             <CartesianGrid strokeDasharray="4" vertical={false} />
-            <Line type="stepAfter" dataKey="difference" dot={false} />
+            <Line
+              type="stepAfter"
+              dataKey="difference"
+              stroke="var(--color-desktop)"
+              strokeWidth={2}
+              dot={false}
+            />
           </LineChart>
         </ChartContainer>
       </div>

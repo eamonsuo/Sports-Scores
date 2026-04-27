@@ -1,12 +1,12 @@
 import { updateGlobalApiQuota } from "@/lib/apiCounter";
 import { SPORT } from "@/types/misc";
 import {
-  RugbyLeague_RugbyAPI2_CategorySchedules_Response,
-  RugbyLeague_RugbyAPI2_FixturePage_Response,
-  RugbyLeague_RugbyAPI2_LeagueTotalStandings_Response,
-  RugbyLeague_RugbyAPI2_Match_Response,
-  RugbyLeague_RugbyAPI2_MatchIncidents_Response,
-} from "@/types/rugby-league";
+  Sofascore_Event_Response,
+  Sofascore_EventIncidents_Response,
+  Sofascore_EventPage_Response,
+  Sofascore_Events_Response,
+  Sofascore_TotalStandings_Response,
+} from "@/types/sofascore";
 
 function updateQuota(response: Response) {
   const limit = response.headers.get("x-ratelimit-requests-limit");
@@ -45,7 +45,7 @@ export async function fetchRugbyLeagueLastMatches(
 ) {
   return (await fetchRugbyLeagueApi(
     `/rugby/tournament/${tournamentId}/season/${seasonId}/matches/last/${pageNumber}`,
-  )) as RugbyLeague_RugbyAPI2_FixturePage_Response;
+  )) as Sofascore_EventPage_Response;
 }
 
 export async function fetchRugbyLeagueNextMatches(
@@ -55,7 +55,7 @@ export async function fetchRugbyLeagueNextMatches(
 ) {
   return (await fetchRugbyLeagueApi(
     `/rugby/tournament/${tournamentId}/season/${seasonId}/matches/next/${pageNumber}`,
-  )) as RugbyLeague_RugbyAPI2_FixturePage_Response;
+  )) as Sofascore_EventPage_Response;
 }
 
 export async function fetchRugbyLeagueStandings(
@@ -64,23 +64,23 @@ export async function fetchRugbyLeagueStandings(
 ) {
   return (await fetchRugbyLeagueApi(
     `/rugby/tournament/${tournamentId}/season/${seasonId}/standings/total`,
-  )) as RugbyLeague_RugbyAPI2_LeagueTotalStandings_Response;
+  )) as Sofascore_TotalStandings_Response;
 }
 
 export async function fetchRugbyLeagueMatchDetails(matchId: number) {
   return (await fetchRugbyLeagueApi(
     `/rugby/match/${matchId}`,
-  )) as RugbyLeague_RugbyAPI2_Match_Response;
+  )) as Sofascore_Event_Response;
 }
 
 export async function fetchRugbyLeagueMatchIncidents(matchId: number) {
   return (await fetchRugbyLeagueApi(
     `/rugby/match/${matchId}/incidents`,
-  )) as RugbyLeague_RugbyAPI2_MatchIncidents_Response;
+  )) as Sofascore_EventIncidents_Response;
 }
 
 export async function fetchRugbyLeagueMatchesByDate(date: Date) {
   return (await fetchRugbyLeagueApi(
     `/rugby/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-  )) as RugbyLeague_RugbyAPI2_CategorySchedules_Response;
+  )) as Sofascore_Events_Response;
 }

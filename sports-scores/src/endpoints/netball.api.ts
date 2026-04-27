@@ -1,11 +1,8 @@
 import { updateGlobalApiQuota } from "@/lib/apiCounter";
 import { SPORT } from "@/types/misc";
 import {
-  Netball_SportsDB_DayEvents_Response,
   Netball_SportsDB_LeagueTotalStandings_Response,
-  Netball_SportsDB_Match_Response,
   Netball_SportsDB_MatchIncidents_Response,
-  Netball_SportsDB_SeasonEvent_Response,
 } from "@/types/netball";
 import { SportsDB_Events_Response } from "@/types/sportsdb";
 import { format } from "date-fns";
@@ -42,7 +39,7 @@ export async function fetchNetballLastMatches(
 ) {
   return (await fetchNetballApi(
     `/eventspastleague.php?id=${tournamentId}`,
-  )) as Netball_SportsDB_SeasonEvent_Response;
+  )) as SportsDB_Events_Response;
 }
 
 export async function fetchNetballNextMatches(
@@ -52,7 +49,7 @@ export async function fetchNetballNextMatches(
 ) {
   return (await fetchNetballApi(
     `/eventsnextleague.php?id=${tournamentId}`,
-  )) as Netball_SportsDB_SeasonEvent_Response;
+  )) as SportsDB_Events_Response;
 }
 
 export async function fetchNetballSeasonMatches(
@@ -74,7 +71,7 @@ export async function fetchNetballStandings(
 export async function fetchNetballMatchDetails(matchId: number) {
   return (await fetchNetballApi(
     `/lookupevent.php?id=${matchId}`,
-  )) as Netball_SportsDB_Match_Response;
+  )) as SportsDB_Events_Response;
 }
 
 export async function fetchNetballMatchIncidents(
@@ -86,5 +83,5 @@ export async function fetchNetballMatchIncidents(
 export async function fetchNetballMatchesByDate(date: Date) {
   return (await fetchNetballApi(
     `/eventsday.php?d=${format(date, "yyyy-MM-dd")}&s=Netball${date.getMonth() > 1 && date.getMonth() < 7 ? "&l=Australian Super Netball League" : ""}`,
-  )) as Netball_SportsDB_DayEvents_Response;
+  )) as SportsDB_Events_Response;
 }

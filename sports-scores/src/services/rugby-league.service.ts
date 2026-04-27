@@ -6,19 +6,17 @@ import {
   fetchRugbyLeagueNextMatches,
   fetchRugbyLeagueStandings,
 } from "@/endpoints/rugby-league.api";
-import {
-  fetchEventDetails,
-  fetchEventIncidents,
-} from "@/endpoints/sofascore.api";
+import { fetchStandingsTotal } from "@/endpoints/sofascore.api";
 import {
   RUGBY_LEAGUE_LADDER_HEADINGS,
   RUGBY_LEAGUE_LEAGUES,
+  SCORE_BREAKDOWN_HALVES_CONFIG,
 } from "@/lib/constants";
-import { resolveSportImage } from "@/lib/imageMapping";
-import { shortenTeamNames } from "@/lib/projUtils";
-import { SPORT } from "@/types/misc";
-import { RugbyLeagueMatchPage } from "@/types/rugby-league";
-import { SofascoreSportURL } from "@/types/sofascore";
+import { mapSofascoreToStanding } from "@/lib/eventMapping";
+import { resolvePlayoffPicture } from "@/lib/playoffPictureMapping";
+import { getSportConfigurations } from "@/lib/projUtils";
+import { SPORT, Standings } from "@/types/misc";
+import { Sofascore_Standing, SofascoreSportURL } from "@/types/sofascore";
 import { SofascoreSport } from "./sofascore.service";
 
 class RugbyLeagueService extends SofascoreSport {
@@ -40,69 +38,61 @@ class RugbyLeagueService extends SofascoreSport {
       SofascoreSportURL.RUGBY,
       RUGBY_LEAGUE_LEAGUES,
       RUGBY_LEAGUE_LADDER_HEADINGS,
+      SCORE_BREAKDOWN_HALVES_CONFIG,
     );
   }
 
-  override async matchDetails(matchId: number) {
-    const match = await (
+  override async standings(tournamentId: number, seasonId: number) {
+    const standings = await (
       process.env.DEV_MODE
-        ? fetchEventDetails
-        : this.apiEndpoints.fetchEventDetails
-    )(matchId);
-    const incidents = await (
-      process.env.DEV_MODE
-        ? fetchEventIncidents
-        : this.apiEndpoints.fetchEventIncidents
-    )(matchId);
+        ? fetchStandingsTotal
+        : this.apiEndpoints.fetchStandingsTotal
+    )(tournamentId, seasonId);
 
-    const matchDetails = match?.event;
-    const scoreIncidents = incidents?.incidents
-      ? incidents?.incidents
-          .filter((item) => item.incidentType === "goal")
-          .toReversed()
-      : null;
+    if (!standings) {
+      return null;
+    }
+
+    const { ladderConfig } = getSportConfigurations(
+      this.leagues,
+      String(tournamentId),
+      String(seasonId),
+    );
+
+    const remappedStandings: Sofascore_Standing[] = standings.standings.map(
+      (table) => ({
+        ...table,
+        rows: table.rows
+          .map((row) => ({
+            ...row,
+            points: row.wins * 2 + (row.draws ?? 0),
+          }))
+          .sort(
+            (a, b) =>
+              b.points! - a.points! ||
+              b.scoresFor - b.scoresAgainst - (a.scoresFor - a.scoresAgainst),
+          )
+          .map((row, index) => ({ ...row, position: index + 1 })),
+      }),
+    );
 
     return {
-      scoreEvents: !scoreIncidents
-        ? null
-        : scoreIncidents.map((item) => {
-            return {
-              event: item.incidentClass,
-              difference: (item.homeScore ?? 0) - (item.awayScore ?? 0),
-            };
-          }),
-      matchDetails: !matchDetails
-        ? null
-        : {
-            status: matchDetails?.status.description,
-            homeTeam: {
-              name: shortenTeamNames(matchDetails.homeTeam.name),
-              score: matchDetails?.homeScore?.current?.toString() ?? "0",
-              img: resolveSportImage(matchDetails.homeTeam.name),
-            },
-            awayTeam: {
-              name: shortenTeamNames(matchDetails?.awayTeam.name),
-              score: matchDetails?.awayScore?.current?.toString() ?? "0",
-              img: resolveSportImage(matchDetails.awayTeam.name),
-            },
-            scoreBreakdown: [
-              {
-                periodName: "1st Half",
-                teams: {
-                  home: { score: matchDetails.homeScore?.period1 ?? "0" },
-                  away: { score: matchDetails.awayScore?.period1 ?? "0" },
-                },
-              },
-              {
-                periodName: "2nd Half",
-                teams: {
-                  home: { score: matchDetails.homeScore?.period2 ?? "0" },
-                  away: { score: matchDetails.awayScore?.period2 ?? "0" },
-                },
-              },
-            ],
-          },
-    } as RugbyLeagueMatchPage;
+      standings: remappedStandings.map((table) =>
+        this.standingsMapper(table, ladderConfig?.placingCategories),
+      ),
+      playoffPicture: resolvePlayoffPicture(
+        ladderConfig?.playoffPictureConfig,
+        remappedStandings.map((table) => ({
+          name: table.name,
+          standings: table.rows.map((row) =>
+            mapSofascoreToStanding(
+              row,
+              ladderConfig?.playoffPictureConfig?.totalSeasonGames ?? 0,
+            ),
+          ),
+        })),
+      ),
+    } as Standings<typeof RUGBY_LEAGUE_LADDER_HEADINGS>;
   }
 }
 

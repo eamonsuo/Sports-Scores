@@ -41,9 +41,9 @@ export default function GolfScheduleList({
             clearInterval(retryInterval);
           }
           retryCount++;
-        }, 100);
+        }, 500);
       }
-    }, 500);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);

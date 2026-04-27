@@ -219,16 +219,12 @@ export function setTennisMatchSummary(
 
 export function getSportConfigurations(
   leagueConfigs: LeagueSeasonConfig[],
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
 ) {
-  const leagueConfig = leagueConfigs.find(
-    (l) => Number(l.slug) === tournamentId,
-  );
+  const leagueConfig = leagueConfigs.find((l) => l.slug === tournamentId);
 
-  const seasonConfig = leagueConfig?.seasons.find(
-    (s) => Number(s.slug) === seasonId,
-  );
+  const seasonConfig = leagueConfig?.seasons.find((s) => s.slug === seasonId);
 
   const ladderConfig = seasonConfig?.ladderConfig;
 
