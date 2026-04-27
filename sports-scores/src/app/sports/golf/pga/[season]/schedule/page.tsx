@@ -1,8 +1,6 @@
 import GolfSchedule from "@/components/golf/GolfScheduleList";
 import { golfPGASchedule } from "@/services/golf.service";
 
-export const dynamic = "force-dynamic";
-
 export default async function Page(props: {
   params: Promise<{ season: string }>;
 }) {

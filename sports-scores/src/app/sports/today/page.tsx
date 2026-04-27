@@ -18,8 +18,6 @@ import { tennisService } from "@/services/tennis.service";
 import { FixtureRound, SPORT } from "@/types/misc";
 import { TZDate } from "@date-fns/tz/date";
 
-// export const dynamic = "force-dynamic";
-
 export default async function Page({
   searchParams,
 }: {

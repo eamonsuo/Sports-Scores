@@ -2,8 +2,6 @@ import Placeholder from "@/components/misc-ui/Placeholder";
 import RaceList from "@/components/motorsport/RaceList";
 import { f1EventSchedule } from "@/services/motorsport.service";
 
-export const dynamic = "force-dynamic";
-
 export default async function Page(props: {
   params: Promise<{ season: string }>;
 }) {

@@ -2,8 +2,6 @@ import Placeholder from "@/components/misc-ui/Placeholder";
 import RankingsLeaderboard from "@/components/tennis/RankingsLeaderboard";
 import { tennisService } from "@/services/tennis.service";
 
-export const dynamic = "force-dynamic";
-
 export default async function Page() {
   const pageData = await tennisService.TennisWorldRankings("wta");
 

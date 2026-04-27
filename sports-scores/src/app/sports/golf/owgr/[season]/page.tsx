@@ -1,8 +1,6 @@
 import RankingsLeaderboard from "@/components/golf/RankingsLeaderboard";
 import { golfOWGRankings } from "@/services/golf.service";
 
-export const dynamic = "force-dynamic";
-
 export default async function Page(props: {
   params: Promise<{ season: string }>;
 }) {

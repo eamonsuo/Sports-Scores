@@ -5,8 +5,6 @@ import { getClientDate } from "@/lib/serverUtils";
 import { tennisService } from "@/services/tennis.service";
 import { TZDate } from "@date-fns/tz/date";
 
-// export const dynamic = "force-dynamic";
-
 export default async function Page({
   searchParams,
 }: {

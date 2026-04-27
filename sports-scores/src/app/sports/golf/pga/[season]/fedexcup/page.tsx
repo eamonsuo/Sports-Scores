@@ -1,8 +1,6 @@
 import Ladder from "@/components/all-sports/Ladder";
 import { golfFedExRankings } from "@/services/golf.service";
 
-export const dynamic = "force-dynamic";
-
 export default async function Page(props: {
   params: Promise<{ season: string }>;
 }) {

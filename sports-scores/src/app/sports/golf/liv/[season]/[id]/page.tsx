@@ -3,8 +3,6 @@ import TournamentLeaderboard from "@/components/golf/TournamentLeaderboard";
 import Placeholder from "@/components/misc-ui/Placeholder";
 import { golfLIVTournamentLeaderboard } from "@/services/golf.service";
 
-export const dynamic = "force-dynamic";
-
 export default async function Page(props: {
   params: Promise<{ season: string; id: string }>;
 }) {

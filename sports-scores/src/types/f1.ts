@@ -1,7 +1,6 @@
 import { F1DriverStandings } from "@/components/motorsport/f1/F1DriverStandings";
 import { F1SessionResults } from "@/components/motorsport/f1/F1SessionStandings";
 import { F1TeamStandings } from "@/components/motorsport/f1/F1TeamStandings";
-import { APISportsResponse } from "./misc";
 
 // Page Types
 export interface F1RacesPage {
@@ -371,62 +370,6 @@ export interface Jolpica_Session {
   date: string;
   time: string;
 }
-
-//Old API Response
-export interface F1Response<T> extends APISportsResponse {
-  response: T[];
-}
-
-export type F1Session = {
-  id: number;
-  competition: Competition;
-  circuit: Circuit;
-  season: number;
-  type: string;
-  laps: Laps;
-  fastest_lap: FastestLap;
-  distance: string | null;
-  timezone: string;
-  date: string;
-  weather: any;
-  status: string;
-};
-
-type Competition = {
-  id: number;
-  name: string;
-  location: { country: string; city: string };
-};
-
-type Circuit = {
-  id: number;
-  name: string;
-  image: string;
-};
-
-type Laps = {
-  current: number | null;
-  total: number | null;
-};
-
-type FastestLap = {
-  driver: { id: number | null };
-  time: string | null;
-};
-
-type Driver = {
-  id: number;
-  name: string;
-  abbr: string;
-  number: number;
-  image: string;
-};
-
-type Team = {
-  id: number;
-  name: string;
-  logo: string;
-};
 
 export type SessionSummary = {
   round: number;
