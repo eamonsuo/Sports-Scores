@@ -35,8 +35,9 @@ export default async function CricketScorecardBowl({
               <Image
                 src={item.image ?? fallback}
                 alt=""
-                width={10}
-                height={10}
+                width={30}
+                height={30}
+                style={{ width: "10px", height: "auto" }}
               ></Image>{" "}
               {item.name}
             </td>

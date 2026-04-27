@@ -60,8 +60,9 @@ export default function EventCard({ event }: EventCardProps) {
             <Image
               src={event.imageUrl}
               alt={event.name}
-              width={60}
-              height={60}
+              width={150}
+              height={150}
+              style={{ width: "60px", height: "auto" }}
               className="object-contain"
             />
           </div>

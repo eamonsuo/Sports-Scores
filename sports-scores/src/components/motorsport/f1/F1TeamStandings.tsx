@@ -27,11 +27,12 @@ export default function F1TeamStandingsTable({
             <tr key={item.team.id} className="border">
               <td className="py-2 pe-2">{item.position}</td>
               <td className="text-left">
-                <div className="flex">
+                <div className="flex items-center">
                   <Image
                     src={item.team.logo ?? fallback}
-                    height={10}
-                    width={15}
+                    height={40}
+                    width={40}
+                    style={{ width: "15px", height: "auto" }}
                     alt={"Logo"}
                     className="me-2"
                   />

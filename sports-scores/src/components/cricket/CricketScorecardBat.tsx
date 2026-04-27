@@ -46,8 +46,9 @@ export default async function CricketScorecardBat({
               <Image
                 src={item.image ?? fallback}
                 alt=""
-                width={10}
-                height={10}
+                width={30}
+                height={30}
+                style={{ width: "10px", height: "auto" }}
               ></Image>
               <div className="flex flex-col">
                 <p>{item.name}</p>

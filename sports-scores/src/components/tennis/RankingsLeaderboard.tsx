@@ -34,8 +34,9 @@ export default function RankingsLeaderboard({
                 <div className="flex items-center justify-center">
                   <Image
                     src={item.img ?? fallback}
-                    height={25}
-                    width={25}
+                    height={60}
+                    width={60}
+                    style={{ width: "25px", height: "auto" }}
                     alt={`Flag`}
                   />
                 </div>

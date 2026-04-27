@@ -29,8 +29,9 @@ function Matchup({
         <Image
           src={home.logo ?? fallback}
           alt={"Team Logo"}
-          width={32}
-          height={32}
+          width={80}
+          height={80}
+          style={{ width: "32px", height: "auto" }}
         />
       )}
       <span className="mx-2 text-xs text-gray-400">vs</span>
@@ -38,8 +39,9 @@ function Matchup({
         <Image
           src={away.logo ?? fallback}
           alt={"Team Logo"}
-          width={32}
-          height={32}
+          width={80}
+          height={80}
+          style={{ width: "32px", height: "auto" }}
         />
       )}
       <span className="w-4 text-left">{away.positionDisplay}</span>
@@ -104,8 +106,9 @@ export default function PlayoffPicture({
                                 <Image
                                   src={team.logo ?? fallback}
                                   alt={"Team Logo"}
-                                  width={32}
-                                  height={32}
+                                  width={80}
+                                  height={80}
+                                  style={{ width: "32px", height: "auto" }}
                                 />
                               </span>
                             ))}

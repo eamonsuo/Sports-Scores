@@ -37,8 +37,9 @@ export default function NetballScoreBreakdown({
           <td>
             <Image
               src={homeLogoSrc ?? fallback}
-              width={15}
-              height={15}
+              width={40}
+              height={40}
+              style={{ width: "15px", height: "auto" }}
               alt="Home Logo"
             />
           </td>
@@ -50,8 +51,9 @@ export default function NetballScoreBreakdown({
           <td>
             <Image
               src={awayLogoSrc ?? fallback}
-              width={15}
-              height={15}
+              width={40}
+              height={40}
+              style={{ width: "15px", height: "auto" }}
               alt="Away Logo"
             />
           </td>

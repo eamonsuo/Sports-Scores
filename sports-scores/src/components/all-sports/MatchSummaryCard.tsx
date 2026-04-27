@@ -15,6 +15,7 @@ export default function MatchSummaryCard({
   venue,
   topInfo,
   bottomInfo,
+  winner,
   className,
 }: {
   id: string;
@@ -26,6 +27,7 @@ export default function MatchSummaryCard({
   venue: string;
   topInfo?: string;
   bottomInfo?: string;
+  winner?: number;
   className?: string;
 }) {
   return (
@@ -45,12 +47,18 @@ export default function MatchSummaryCard({
           <div className="content-center justify-self-start">
             <Image
               src={homeInfo.img ?? fallback}
-              width={40}
-              height={40}
+              width={100}
+              height={100}
+              style={{ width: "auto", height: "40px" }}
               alt="Home team image"
             />
           </div>
-          <p className="content-center dark:text-neutral-400">
+          <p
+            className={clsx(
+              "content-center dark:text-neutral-400",
+              winner === 1 && "font-bold",
+            )}
+          >
             {homeInfo.score}
           </p>
           <div className="flex items-center justify-center overflow-visible">
@@ -73,22 +81,38 @@ export default function MatchSummaryCard({
             )}
           </div>
 
-          <p className="content-center text-right dark:text-neutral-400">
+          <p
+            className={clsx(
+              "content-center text-right dark:text-neutral-400",
+              winner !== 1 && winner !== undefined && "font-bold",
+            )}
+          >
             {awayInfo.score}
           </p>
           <div className="content-center justify-self-end">
             <Image
               src={awayInfo.img ?? fallback}
-              width={40}
-              height={40}
+              width={100}
+              height={100}
+              style={{ width: "auto", height: "40px" }}
               alt="Away team image"
             />
           </div>
-          <p className="col-span-2 text-left text-xs text-gray-700 dark:text-neutral-500">
+          <p
+            className={clsx(
+              "col-span-2 text-left text-xs text-gray-700 dark:text-neutral-500",
+              winner === 1 && "font-bold",
+            )}
+          >
             {homeInfo.name} <br /> {homeInfo.winDrawLoss}
           </p>
           <div></div>
-          <p className="col-span-2 text-right text-xs text-gray-700 dark:text-neutral-500">
+          <p
+            className={clsx(
+              "col-span-2 text-right text-xs text-gray-700 dark:text-neutral-500",
+              winner !== 1 && winner !== undefined && "font-bold",
+            )}
+          >
             {awayInfo.name} <br /> {awayInfo.winDrawLoss}
           </p>
         </div>

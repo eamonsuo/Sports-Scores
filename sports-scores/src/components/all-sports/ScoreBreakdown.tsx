@@ -34,8 +34,9 @@ export default function ScoreBreakdown({
                   <Image
                     key={idx}
                     src={img || fallback}
-                    width={15}
-                    height={15}
+                    width={40}
+                    height={40}
+                    style={{ width: "15px", height: "auto" }}
                     alt={`Home player ${idx + 1}`}
                     className="rounded-full border border-white dark:border-neutral-800"
                   />
@@ -44,8 +45,9 @@ export default function ScoreBreakdown({
             ) : (
               <Image
                 src={homeLogo ?? fallback}
-                width={15}
-                height={15}
+                width={40}
+                height={40}
+                style={{ width: "15px", height: "auto" }}
                 alt="Home Logo"
               />
             )}
@@ -62,8 +64,9 @@ export default function ScoreBreakdown({
                   <Image
                     key={idx}
                     src={img || fallback}
-                    width={15}
-                    height={15}
+                    width={40}
+                    height={40}
+                    style={{ width: "15px", height: "auto" }}
                     alt={`Away player ${idx + 1}`}
                     className="rounded-full border border-white dark:border-neutral-800"
                   />
@@ -72,8 +75,9 @@ export default function ScoreBreakdown({
             ) : (
               <Image
                 src={awayLogo ?? fallback}
-                width={15}
-                height={15}
+                width={40}
+                height={40}
+                style={{ width: "15px", height: "auto" }}
                 alt="Away Logo"
               />
             )}

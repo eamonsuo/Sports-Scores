@@ -167,7 +167,13 @@ export default function Footer() {
             >
               <AvatarImage src={item.img} alt={item.sport} />
               <AvatarFallback>
-                <Image src={"/vercel.svg"} width={30} height={10} alt="" />
+                <Image
+                  src={"/vercel.svg"}
+                  width={60}
+                  height={20}
+                  style={{ width: "30px", height: "auto" }}
+                  alt=""
+                />
               </AvatarFallback>
             </Avatar>
           </Link>

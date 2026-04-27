@@ -81,11 +81,12 @@ export default function Ladder<const H extends readonly string[]>({
                 <td className={clsx("w-1 p-0", colour)} />
                 <td className="py-2 pe-2 ps-1">{item.position}</td>
                 <td className="text-left text-sm">
-                  <div className="flex">
+                  <div className="flex items-center">
                     <Image
                       src={item.team.logo ?? fallback}
-                      height={10}
-                      width={15}
+                      height={40}
+                      width={40}
+                      style={{ width: "auto", height: "15px" }}
                       alt={"Logo"}
                       className="me-2"
                     />

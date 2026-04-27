@@ -22,8 +22,9 @@ export default function MatchDetailsHero({
               <Image
                 key={idx}
                 src={img || fallback}
-                width={60}
-                height={60}
+                width={150}
+                height={150}
+                style={{ width: "60px", height: "auto" }}
                 alt={`Home team player ${idx + 1}`}
                 className="rounded-full border-2 border-white dark:border-neutral-800"
               />
@@ -32,8 +33,9 @@ export default function MatchDetailsHero({
         ) : (
           <Image
             src={homeImg || fallback}
-            width={60}
-            height={60}
+            width={150}
+            height={150}
+            style={{ width: "60px", height: "auto" }}
             alt="Home team image"
           />
         )}
@@ -47,8 +49,9 @@ export default function MatchDetailsHero({
               <Image
                 key={idx}
                 src={img || fallback}
-                width={60}
-                height={60}
+                width={150}
+                height={150}
+                style={{ width: "60px", height: "auto" }}
                 alt={`Away team player ${idx + 1}`}
                 className="rounded-full border-2 border-white dark:border-neutral-800"
               />
@@ -57,8 +60,9 @@ export default function MatchDetailsHero({
         ) : (
           <Image
             src={awayImg || fallback}
-            width={60}
-            height={60}
+            width={150}
+            height={150}
+            style={{ width: "60px", height: "auto" }}
             alt="Away team image"
           />
         )}

@@ -298,7 +298,7 @@ export function resolveSportImage(teamName: string) {
       return "/f1/williams-f1.svg";
     case "Audi":
       return "https://upload.wikimedia.org/wikipedia/commons/0/03/Audif1.com_logo17_%28cropped%29.svg";
-    case "Cadillac":
+    case "Cadillac F1 Team":
       return "https://upload.wikimedia.org/wikipedia/en/b/bc/Cadillac_Formula_1_Team_Logo_%282025%29.svg";
 
     //Cricket

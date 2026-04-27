@@ -75,8 +75,9 @@ export default function TennisMatchCard({
                   <Image
                     key={idx}
                     src={img || fallback}
-                    width={32}
-                    height={32}
+                    width={100}
+                    height={100}
+                    style={{ width: "32px", height: "auto" }}
                     alt={`${homeInfo.name} player ${idx + 1}`}
                     className="me-0.5"
                   />
@@ -85,8 +86,9 @@ export default function TennisMatchCard({
             ) : (
               <Image
                 src={homeInfo.img || fallback}
-                width={32}
-                height={32}
+                width={80}
+                height={80}
+                style={{ width: "32px", height: "auto" }}
                 alt={homeInfo.name}
               />
             )}
@@ -119,8 +121,9 @@ export default function TennisMatchCard({
                   <Image
                     key={idx}
                     src={img || fallback}
-                    width={32}
-                    height={32}
+                    width={80}
+                    height={80}
+                    style={{ width: "32px", height: "auto" }}
                     alt={`${awayInfo.name} player ${idx + 1}`}
                     className="me-0.5"
                   />
@@ -129,8 +132,9 @@ export default function TennisMatchCard({
             ) : (
               <Image
                 src={awayInfo.img || fallback}
-                width={32}
-                height={32}
+                width={80}
+                height={80}
+                style={{ width: "32px", height: "auto" }}
                 alt={awayInfo.name}
               />
             )}

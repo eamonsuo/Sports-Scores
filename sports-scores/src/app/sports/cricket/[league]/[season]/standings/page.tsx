@@ -42,8 +42,9 @@ export default async function Page(props: {
           <p className="pt-6 dark:text-neutral-400">TOURNAMENT WINNER </p>
           <Image
             src={tournamentWinner.img}
-            height={150}
-            width={150}
+            height={300}
+            width={300}
+            style={{ width: "150px", height: "auto" }}
             alt={"Winning Team"}
             className="m-4"
           />

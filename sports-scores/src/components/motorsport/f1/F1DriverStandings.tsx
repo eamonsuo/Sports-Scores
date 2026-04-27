@@ -28,18 +28,20 @@ export default function F1DriverStandingsTable({
             <tr key={item.driver.id} className="border">
               <td className="py-2 pe-2">{item.position}</td>
               <td className="text-left">
-                <div className="flex">
+                <div className="flex items-center">
                   <Image
                     src={item.driver.img ?? fallback}
-                    height={20}
-                    width={20}
+                    height={50}
+                    width={50}
+                    style={{ width: "20px", height: "auto" }}
                     alt={"Logo"}
                     className="me-2"
                   />
                   <Image
                     src={item.driver.teamimg ?? fallback}
-                    height={15}
-                    width={15}
+                    height={40}
+                    width={40}
+                    style={{ width: "15px", height: "auto" }}
                     alt={"Team Logo"}
                     className="me-2"
                   />

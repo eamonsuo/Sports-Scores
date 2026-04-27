@@ -45,14 +45,16 @@ export default function ScoreChart({
         <div className="flex flex-col place-content-around">
           <Image
             src={homeLogoSrc ?? fallback}
-            width={15}
-            height={15}
+            width={40}
+            height={40}
+            style={{ width: "15px", height: "auto" }}
             alt="Home team image"
           />
           <Image
             src={awayLogoSrc ?? fallback}
-            width={15}
-            height={15}
+            width={40}
+            height={40}
+            style={{ width: "15px", height: "auto" }}
             alt="Away team image"
           />
         </div>

@@ -16,8 +16,9 @@ export default function CricketSeriesResult({
         <div className="content-center justify-self-center">
           <Image
             src={homeInfo.img}
-            width={60}
-            height={60}
+            width={150}
+            height={150}
+            style={{ width: "60px", height: "auto" }}
             alt="Home team image"
           />
         </div>
@@ -32,8 +33,9 @@ export default function CricketSeriesResult({
         <div className="content-center justify-self-center">
           <Image
             src={awayInfo.img}
-            width={60}
-            height={60}
+            width={150}
+            height={150}
+            style={{ width: "60px", height: "auto" }}
             alt="Away team image"
           />
         </div>

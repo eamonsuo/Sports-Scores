@@ -298,7 +298,6 @@ export const RUGBY_LEAGUE_LADDER_HEADINGS = [
   "P",
   "W",
   "D",
-  "L",
   "Diff",
   "Pts",
 ] as const;
@@ -307,7 +306,6 @@ export const AUSSIE_RULES_LADDER_HEADINGS = [
   "P",
   "W",
   "D",
-  "L",
   "%",
   "Pts",
 ] as const;

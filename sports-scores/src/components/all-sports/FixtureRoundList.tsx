@@ -149,8 +149,9 @@ export default function FixtureRoundList({
                   <Image
                     key={x.name}
                     src={x.img ?? fallback}
-                    width={25}
-                    height={25}
+                    width={60}
+                    height={60}
+                    style={{ width: "25px", height: "auto" }}
                     alt="Bye team"
                   />
                 ))}

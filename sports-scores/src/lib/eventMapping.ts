@@ -120,6 +120,7 @@ function mapSofascoreEventToMatchSummary(
     seasonId: options?.seasonId ?? event.season.id.toString(),
     tournamentId:
       options?.tournamentId ?? event.tournament.uniqueTournament.id.toString(),
+    winner: options?.winner ?? event.winnerCode,
   };
 }
 
