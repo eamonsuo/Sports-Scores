@@ -11,15 +11,18 @@ export default function NavButtonGroup({
 }) {
   const pathname: string = usePathname();
 
+  const activeIndex = buttons.findIndex((item) => pathname.includes(item.page));
+  const resolvedIndex = activeIndex === -1 ? 0 : activeIndex;
+
   return (
     <div className="m-4 flex rounded-lg bg-gray-200 p-1 dark:bg-neutral-800">
-      {buttons.map((item) => (
+      {buttons.map((item, index) => (
         <Link
           key={item.href}
           href={item.href}
           className={clsx(
             "flex-1 place-content-center rounded-md px-2 py-2 text-center focus:relative",
-            pathname.includes(item.page)
+            index === resolvedIndex
               ? "bg-white text-black shadow-sm dark:bg-neutral-600 dark:text-neutral-200"
               : "text-gray-500 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-200",
           )}

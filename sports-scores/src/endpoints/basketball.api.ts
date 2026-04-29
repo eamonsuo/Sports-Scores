@@ -58,6 +58,24 @@ export async function fetchBasketballNextMatches(
   )) as Sofascore_EventPage_Response;
 }
 
+export async function fetchBasketballTeamLastMatches(
+  teamId: number,
+  pageNumber: number = 0,
+) {
+  return (await fetchBasketballApi(
+    `/basketball/team/${teamId}/matches/previous/${pageNumber}`,
+  )) as Sofascore_EventPage_Response;
+}
+
+export async function fetchBasketballTeamNextMatches(
+  teamId: number,
+  pageNumber: number = 0,
+) {
+  return (await fetchBasketballApi(
+    `/basketball/team/${teamId}/matches/next/${pageNumber}`,
+  )) as Sofascore_EventPage_Response;
+}
+
 export async function fetchBasketballStandings(
   tournamentId: number,
   seasonId: number,

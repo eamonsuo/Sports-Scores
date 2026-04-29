@@ -10,6 +10,8 @@ import {
   fetchEventsByDate,
   fetchLastEvents,
   fetchStandingsTotal,
+  fetchTeamLastEvents,
+  fetchTeamNextEvents,
 } from "@/endpoints/sofascore.api";
 import {
   getCurrentRound,
@@ -22,6 +24,7 @@ import { resolvePlayoffPicture } from "@/lib/playoffPictureMapping";
 import { getSportConfigurations, shortenTeamNames } from "@/lib/projUtils";
 import {
   API_EVENT_TYPES,
+  CardVariant,
   DISPLAY_TYPES,
   MatchDetail,
   Matches,
@@ -53,6 +56,7 @@ export abstract class SofascoreSport implements SportService {
   protected leagues: LeagueSeasonConfig[];
   protected headings: readonly string[];
   protected periodConfig?: PeriodConfig;
+  protected cardVariant?: CardVariant;
 
   constructor(
     apiEndpoints: SofascoreAPI,
@@ -61,6 +65,7 @@ export abstract class SofascoreSport implements SportService {
     leagues: LeagueSeasonConfig[],
     headings: readonly string[],
     periodConfig?: PeriodConfig,
+    cardVariant?: CardVariant,
   ) {
     this.apiEndpoints = apiEndpoints;
     this.sport = sport;
@@ -68,13 +73,14 @@ export abstract class SofascoreSport implements SportService {
     this.leagues = leagues;
     this.headings = headings;
     this.periodConfig = periodConfig;
+    this.cardVariant = cardVariant;
   }
 
-  async matchesAll(
+  async matchesByLeagueSeason(
     tournamentId: number,
     seasonId: number,
     defaultRoundLabel: string = "Round",
-  ) {
+  ): Promise<Matches | null> {
     const [lastMatches, nextMatches, dataverseMatches] = await Promise.all([
       (process.env.DEV_MODE
         ? fetchLastEvents
@@ -86,7 +92,11 @@ export abstract class SofascoreSport implements SportService {
       matchSummariesByTournament(tournamentId, seasonId, this.sport),
     ]);
 
-    if (!lastMatches && !nextMatches && !dataverseMatches) {
+    if (
+      !lastMatches &&
+      !nextMatches &&
+      (!dataverseMatches || dataverseMatches.length === 0)
+    ) {
       return null;
     }
 
@@ -116,7 +126,11 @@ export abstract class SofascoreSport implements SportService {
       String(seasonId),
     );
 
-    const fixture = await mapFixtureRounds(allMatches, leagueConfig);
+    const fixture = await mapFixtureRounds(
+      allMatches,
+      leagueConfig,
+      this.cardVariant,
+    );
 
     return {
       fixtures: fixture,
@@ -124,7 +138,7 @@ export abstract class SofascoreSport implements SportService {
     } as Matches;
   }
 
-  async matchesByDate(date: Date) {
+  async matchesByDate(date: Date): Promise<Matches | null> {
     const matches = await (process.env.DEV_MODE
       ? fetchEventsByDate(this.sofascoreSport, date)
       : this.apiEndpoints.fetchEventsByDate(date));
@@ -158,15 +172,129 @@ export abstract class SofascoreSport implements SportService {
       ),
     );
 
-    const fixture = await mapFixtureRounds(allMatches, this.leagues);
+    const fixture = await mapFixtureRounds(
+      allMatches,
+      this.leagues,
+      this.cardVariant,
+    );
 
     return {
       fixtures: fixture,
       currentRound: getCurrentRound(fixture, DISPLAY_TYPES.LEAGUE),
-    } as Matches;
+    };
   }
 
-  async standings(tournamentId: number, seasonId: number) {
+  async matchesByTeam(teamId: number): Promise<Matches | null> {
+    const lastMatches = await (
+      process.env.DEV_MODE
+        ? fetchTeamLastEvents
+        : this.apiEndpoints.fetchTeamLastEvents
+    )(teamId, 0);
+
+    const nextMatches = await (
+      process.env.DEV_MODE
+        ? fetchTeamNextEvents
+        : this.apiEndpoints.fetchTeamNextEvents
+    )(teamId, 0);
+
+    if (!lastMatches && !nextMatches) {
+      return null;
+    }
+
+    const matches = (lastMatches?.events ?? []).concat(
+      nextMatches?.events ?? [],
+    );
+
+    const allMatches = matches.map((event) =>
+      this.eventMapper(
+        event,
+        event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
+      ),
+    );
+
+    const fixture = await mapFixtureRounds(
+      allMatches,
+      this.leagues,
+      this.cardVariant,
+    );
+
+    return {
+      fixtures: fixture,
+      currentRound: getCurrentRound(fixture, DISPLAY_TYPES.LEAGUE),
+    };
+  }
+
+  async matchDetails(matchId: number): Promise<MatchDetail | null> {
+    const match = await (
+      process.env.DEV_MODE
+        ? fetchEventDetails
+        : this.apiEndpoints.fetchEventDetails
+    )(matchId);
+    const incidents = await (
+      process.env.DEV_MODE
+        ? fetchEventIncidents
+        : this.apiEndpoints.fetchEventIncidents
+    )(matchId);
+
+    const matchDetails = match?.event;
+    const scoreIncidents = incidents?.incidents
+      ? incidents?.incidents
+          .filter((item) => item.incidentType === "goal")
+          .toReversed()
+      : null;
+
+    return {
+      scoreEvents: !scoreIncidents
+        ? undefined
+        : scoreIncidents.map((item) => {
+            return {
+              event: item.incidentClass ?? "",
+              difference: (item.homeScore ?? 0) - (item.awayScore ?? 0),
+            };
+          }),
+      matchDetails: {
+        status: `${matchDetails?.status.description}`,
+        homeTeam: {
+          name: shortenTeamNames(matchDetails?.homeTeam.name ?? ""),
+          score: matchDetails?.homeScore?.current?.toString() ?? "0",
+          img:
+            matchDetails?.homeTeam.subTeams &&
+            matchDetails?.homeTeam.subTeams.length > 0
+              ? matchDetails.homeTeam.subTeams.map((subTeam) =>
+                  resolveSportImage(subTeam.country.name ?? subTeam.name),
+                )
+              : resolveSportImage(
+                  matchDetails?.homeTeam.country.name ??
+                    matchDetails?.homeTeam.name ??
+                    "",
+                ),
+        },
+        awayTeam: {
+          name: shortenTeamNames(matchDetails?.awayTeam.name ?? ""),
+          score: matchDetails?.awayScore?.current?.toString() ?? "0",
+          img:
+            matchDetails?.awayTeam.subTeams &&
+            matchDetails?.awayTeam.subTeams.length > 0
+              ? matchDetails?.awayTeam.subTeams.map((subTeam) =>
+                  resolveSportImage(subTeam.country.name ?? subTeam.name),
+                )
+              : resolveSportImage(
+                  matchDetails?.awayTeam.country.name ??
+                    matchDetails?.awayTeam.name ??
+                    "",
+                ),
+        },
+      },
+      scoreBreakdown: matchDetails
+        ? this.scoreBreakdownMapper(matchDetails)
+        : [],
+    };
+  }
+
+  async standings(
+    tournamentId: number,
+    seasonId: number,
+  ): Promise<Standings<readonly string[]> | null> {
     const standings = await (
       process.env.DEV_MODE
         ? fetchStandingsTotal
@@ -205,53 +333,6 @@ export abstract class SofascoreSport implements SportService {
         })),
       ),
     } as Standings<typeof this.headings>;
-  }
-
-  async matchDetails(matchId: number): Promise<MatchDetail | null> {
-    const match = await (
-      process.env.DEV_MODE
-        ? fetchEventDetails
-        : this.apiEndpoints.fetchEventDetails
-    )(matchId);
-    const incidents = await (
-      process.env.DEV_MODE
-        ? fetchEventIncidents
-        : this.apiEndpoints.fetchEventIncidents
-    )(matchId);
-
-    const matchDetails = match?.event;
-    const scoreIncidents = incidents?.incidents
-      ? incidents?.incidents
-          .filter((item) => item.incidentType === "goal")
-          .toReversed()
-      : null;
-
-    return {
-      scoreEvents: !scoreIncidents
-        ? []
-        : scoreIncidents.map((item) => {
-            return {
-              event: item.incidentClass ?? "",
-              difference: (item.homeScore ?? 0) - (item.awayScore ?? 0),
-            };
-          }),
-      matchDetails: {
-        status: `${matchDetails?.status.description}`,
-        homeTeam: {
-          name: shortenTeamNames(matchDetails?.homeTeam.name ?? ""),
-          score: matchDetails?.homeScore?.current?.toString() ?? "0",
-          img: resolveSportImage(matchDetails?.homeTeam.name ?? ""),
-        },
-        awayTeam: {
-          name: shortenTeamNames(matchDetails?.awayTeam.name ?? ""),
-          score: matchDetails?.awayScore?.current?.toString() ?? "0",
-          img: resolveSportImage(matchDetails?.awayTeam.name ?? ""),
-        },
-      },
-      scoreBreakdown: matchDetails
-        ? this.scoreBreakdownMapper(matchDetails)
-        : [],
-    };
   }
 
   protected eventMapper(

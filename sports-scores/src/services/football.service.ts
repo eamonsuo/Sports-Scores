@@ -10,23 +10,14 @@ import {
   fetchFootballTeamLastMatches,
   fetchFootballTeamNextMatches,
 } from "@/endpoints/football.api";
-import {
-  fetchCupTrees,
-  fetchTeamLastEvents,
-  fetchTeamNextEvents,
-} from "@/endpoints/sofascore.api";
+import { fetchCupTrees } from "@/endpoints/sofascore.api";
 import {
   FOOTBALL_LADDER_HEADINGS,
   FOOTBALL_LEAGUES,
   SCORE_BREAKDOWN_HALVES_CONFIG,
 } from "@/lib/constants";
-import { resolveSportImage } from "@/lib/imageMapping";
-import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils";
-import {
-  FootballBracketPage,
-  FootballTeamFixturesPage,
-} from "@/types/football";
-import { MatchSummary, SPORT } from "@/types/misc";
+import { FootballBracketPage } from "@/types/football";
+import { SPORT } from "@/types/misc";
 import { SofascoreSportURL } from "@/types/sofascore";
 import { SofascoreSport } from "./sofascore.service";
 
@@ -51,65 +42,6 @@ class FootballService extends SofascoreSport {
       FOOTBALL_LADDER_HEADINGS,
       SCORE_BREAKDOWN_HALVES_CONFIG,
     );
-  }
-
-  async footballTeamMatches(teamId: number) {
-    const lastMatches = await (
-      process.env.DEV_MODE ? fetchTeamLastEvents : fetchFootballTeamLastMatches
-    )(teamId, 0);
-
-    const nextMatches = await (
-      process.env.DEV_MODE ? fetchTeamNextEvents : fetchFootballTeamNextMatches
-    )(teamId, 0);
-
-    if (!lastMatches && !nextMatches) {
-      return null;
-    }
-
-    const matches = (lastMatches?.events ?? []).concat(
-      nextMatches?.events ?? [],
-    );
-
-    return {
-      fixtures: matches.toReversed().map((match) => {
-        let startDate = new Date(0);
-        startDate.setUTCSeconds(match.startTimestamp);
-
-        return {
-          startDate: startDate,
-          // roundLabel: `Round ${match?.roundInfo?.round ?? "--"}`,
-          timer:
-            match.status.type === "notstarted"
-              ? startDate
-              : match.status.description,
-          timerDisplayColour:
-            match.status.type === "inprogress" ? "green" : null,
-          id: match.id.toString(),
-          matchSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/${match.id}`,
-          sport: SPORT.FOOTBALL,
-          status: match.status.description,
-          venue: "",
-          summaryText: setMatchSummary(
-            match.status.type,
-            match.homeTeam.name,
-            match.homeScore.current,
-            match.awayTeam.name,
-            match.awayScore.current,
-          ),
-          homeDetails: {
-            name: shortenTeamNames(match.homeTeam.name),
-            score: match.homeScore.current?.toString() ?? "0",
-            img: resolveSportImage(match.homeTeam.name),
-          },
-          awayDetails: {
-            name: shortenTeamNames(match.awayTeam.name),
-            score: match.awayScore.current?.toString() ?? "0",
-            img: resolveSportImage(match.awayTeam.name),
-          },
-          otherDetail: match.tournament.name,
-        } as MatchSummary;
-      }),
-    } as FootballTeamFixturesPage;
   }
 
   async footballBrackets(tournamentId: number, seasonId: number) {
@@ -152,7 +84,7 @@ class FootballService extends SofascoreSport {
                 tournamentRoundText: (roundIndex + 1).toString(),
                 state: match.finished ? "PLAYED" : "SCHEDULED",
                 name: "",
-                href: `./${match?.events?.[0] ?? ""}`,
+                href: `./match/${match?.events?.[0] ?? ""}`,
               }) as BracketMatch,
           ),
         ),

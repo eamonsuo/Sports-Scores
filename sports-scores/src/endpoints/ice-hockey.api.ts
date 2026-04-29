@@ -58,6 +58,24 @@ export async function fetchIceHockeyNextMatches(
   )) as Sofascore_EventPage_Response;
 }
 
+export async function fetchIceHockeyTeamLastMatches(
+  teamId: number,
+  pageNumber: number = 0,
+) {
+  return (await fetchIceHockeyApi(
+    `/ice-hockey/team/${teamId}/matches/previous/${pageNumber}`,
+  )) as Sofascore_EventPage_Response;
+}
+
+export async function fetchIceHockeyTeamNextMatches(
+  teamId: number,
+  pageNumber: number = 0,
+) {
+  return (await fetchIceHockeyApi(
+    `/ice-hockey/team/${teamId}/matches/next/${pageNumber}`,
+  )) as Sofascore_EventPage_Response;
+}
+
 export async function fetchIceHockeyStandings(
   tournamentId: number,
   seasonId: number,

@@ -5,6 +5,8 @@ import {
   fetchIceHockeyMatchIncidents,
   fetchIceHockeyNextMatches,
   fetchIceHockeyStandings,
+  fetchIceHockeyTeamLastMatches,
+  fetchIceHockeyTeamNextMatches,
 } from "@/endpoints/ice-hockey.api";
 import {
   ICE_HOCKEY_LADDER_HEADINGS,
@@ -27,8 +29,8 @@ class IceHockeyService extends SofascoreSport {
         fetchStandingsTotal: fetchIceHockeyStandings,
         fetchCupTrees: async () => null,
         fetchPlayerRankings: async () => null,
-        fetchTeamLastEvents: async () => null,
-        fetchTeamNextEvents: async () => null,
+        fetchTeamLastEvents: fetchIceHockeyTeamLastMatches,
+        fetchTeamNextEvents: fetchIceHockeyTeamNextMatches,
       },
       SPORT.ICE_HOCKEY,
       SofascoreSportURL.ICE_HOCKEY,

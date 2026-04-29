@@ -4,7 +4,7 @@ import MatchSummaryCard from "@/components/all-sports/MatchSummaryCard";
 import TennisMatchCard from "@/components/tennis/TennisMatchCard";
 import { formatTime } from "@/lib/projUtils";
 import { CardVariant, MatchSummary } from "@/types/misc";
-import React from "react";
+import React, { useEffect } from "react";
 import Placeholder from "../misc-ui/Placeholder";
 import LeagueSeriesHeader from "./LeagueSeriesHeader";
 import SectionDate from "./SectionDate";
@@ -12,13 +12,42 @@ import SectionDate from "./SectionDate";
 // Assumes data prop is already sorted in desired order
 export default function FixtureList({
   data,
-  cardVariant = "default",
+  cardVariant = CardVariant.DEFAULT,
 }: {
   data: MatchSummary[];
   cardVariant?: CardVariant;
 }) {
   const CardComponent =
-    cardVariant === "tennis" ? TennisMatchCard : MatchSummaryCard;
+    cardVariant === CardVariant.TENNIS ? TennisMatchCard : MatchSummaryCard;
+
+  useEffect(() => {
+    const scrollToAnchor = () => {
+      const element = document.getElementById("current-date");
+      if (element) {
+        element.scrollIntoView(true);
+        return true;
+      }
+      return false;
+    };
+
+    // Wait a bit longer for layout to complete before scrolling
+    const timer = setTimeout(() => {
+      if (!scrollToAnchor()) {
+        // If not found, retry with intervals
+        const maxRetries = 10;
+        let retryCount = 0;
+
+        const retryInterval = setInterval(() => {
+          if (scrollToAnchor() || retryCount >= maxRetries) {
+            clearInterval(retryInterval);
+          }
+          retryCount++;
+        }, 100);
+      }
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const currentDate: Date = new Date();
 

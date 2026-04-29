@@ -58,6 +58,24 @@ export async function fetchRugbyLeagueNextMatches(
   )) as Sofascore_EventPage_Response;
 }
 
+export async function fetchRugbyLeagueTeamLastMatches(
+  teamId: number,
+  pageNumber: number = 0,
+) {
+  return (await fetchRugbyLeagueApi(
+    `/rugby/team/${teamId}/matches/previous/${pageNumber}`,
+  )) as Sofascore_EventPage_Response;
+}
+
+export async function fetchRugbyLeagueTeamNextMatches(
+  teamId: number,
+  pageNumber: number = 0,
+) {
+  return (await fetchRugbyLeagueApi(
+    `/rugby/team/${teamId}/matches/next/${pageNumber}`,
+  )) as Sofascore_EventPage_Response;
+}
+
 export async function fetchRugbyLeagueStandings(
   tournamentId: number,
   seasonId: number,

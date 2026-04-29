@@ -38,6 +38,11 @@ export interface Tennis_TennisApi_Match_Response
 export interface Tennis_TennisApi_TournamentStandings_Response
   extends Sofascore_TotalStandings_Response {}
 
+export enum RankingList {
+  WTA = "wta",
+  ATP = "atp",
+}
+
 export interface Tennis_StatisticsItem {
   name: string;
   home: string;

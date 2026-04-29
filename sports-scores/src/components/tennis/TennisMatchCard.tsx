@@ -108,7 +108,14 @@ export default function TennisMatchCard({
                   key={idx}
                   className="px-1 text-center dark:text-neutral-400"
                 >
-                  {set}
+                  {set.split(" ").length > 1 ? (
+                    <>
+                      {set.split(" ")[0]}
+                      <sup>{set.split(" ")[1]}</sup>
+                    </>
+                  ) : (
+                    set
+                  )}
                 </span>
               ))}
           </div>
@@ -154,7 +161,14 @@ export default function TennisMatchCard({
                   key={idx}
                   className="px-1 text-center dark:text-neutral-400"
                 >
-                  {set}
+                  {set.split(" ").length > 1 ? (
+                    <>
+                      {set.split(" ")[0]}
+                      <sup>{set.split(" ")[1]}</sup>
+                    </>
+                  ) : (
+                    set
+                  )}
                 </span>
               ))}
           </div>

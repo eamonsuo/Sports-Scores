@@ -33,6 +33,11 @@ type SportRouteConfig = {
   hasWikiPages?: boolean;
 };
 
+export const DEFAULT_NAV_BUTTONS = [
+  { href: "#current-date", label: "Matches", page: "matches" },
+  { href: "ladder", label: "Standings", page: "ladder" },
+];
+
 export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
   [SPORT.AMERICAN_FOOTBALL]: {
     leagues: AMERICAN_FOOTBALL_LEAGUES,
@@ -66,9 +71,9 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
     leagues: FOOTBALL_LEAGUES,
     service: footballService,
     navButtons: [
-      { href: "./matches", label: "Matches", page: "matches" },
-      { href: "./ladder", label: "Ladder", page: "ladder" },
-      { href: "./bracket", label: "Bracket", page: "bracket" },
+      { href: "#current-date", label: "Matches", page: "matches" },
+      { href: "ladder", label: "Ladder", page: "ladder" },
+      { href: "bracket", label: "Bracket", page: "bracket" },
     ],
     hasWikiPages: true,
   },
@@ -107,5 +112,9 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
   [SPORT.TENNIS]: {
     leagues: TENNIS_LEAGUES,
     service: tennisService,
+    navButtons: [
+      { href: "#current-date", label: "Matches", page: "matches" },
+      { href: "bracket", label: "Bracket", page: "bracket" },
+    ],
   },
 };

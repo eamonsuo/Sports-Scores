@@ -1,22 +1,24 @@
 import NavButtonGroup from "@/components/misc-ui/NavButtonGroup";
-import { SPORT_ROUTE_CONFIG } from "@/lib/routeConfig";
+import { DEFAULT_NAV_BUTTONS, SPORT_ROUTE_CONFIG } from "@/lib/routeConfig";
 import { SPORT } from "@/types/misc";
-
-const DEFAULT_NAV_BUTTONS = [
-  { href: "./matches#current-date", label: "Matches", page: "matches" },
-  { href: "./ladder", label: "Standings", page: "ladder" },
-];
 
 export default async function SportsLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ sport: string }>;
+  params: Promise<{ sport: string; league: string; season: string }>;
 }) {
-  const { sport } = await params;
+  const { sport, league, season } = await params;
   const config = SPORT_ROUTE_CONFIG[sport as SPORT];
-  const buttons = config.navButtons ?? DEFAULT_NAV_BUTTONS;
+  const basePath = `/sports/${sport}/${league}/${season}`;
+  const rawButtons = config.navButtons ?? DEFAULT_NAV_BUTTONS;
+  const buttons = rawButtons.map((btn) => ({
+    ...btn,
+    href: btn.href.startsWith("/")
+      ? btn.href
+      : `${basePath}/${btn.href.replace(/^\.\//, "")}`,
+  }));
 
   return (
     <>

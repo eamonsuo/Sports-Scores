@@ -43,13 +43,13 @@ const footerLinks: {
   },
   {
     sport: SPORT.RUGBY_LEAGUE,
-    link: `/sports/${SPORT.RUGBY_LEAGUE}/${RUGBY_LEAGUE_LEAGUES[0].slug}/${RUGBY_LEAGUE_LEAGUES[0].seasons[0].slug}/matches`,
+    link: `/sports/${SPORT.RUGBY_LEAGUE}/${RUGBY_LEAGUE_LEAGUES[0].slug}/${RUGBY_LEAGUE_LEAGUES[0].seasons[0].slug}`,
     img: "/footer/nrl-ball.svg",
     altText: "RUGBY LEAGUE",
   },
   {
     sport: SPORT.AUSSIE_RULES,
-    link: `/sports/${SPORT.AUSSIE_RULES}/${AUSSIE_RULES_LEAGUES[0].slug}/${AUSSIE_RULES_LEAGUES[0].seasons[0].slug}/matches`,
+    link: `/sports/${SPORT.AUSSIE_RULES}/${AUSSIE_RULES_LEAGUES[0].slug}/${AUSSIE_RULES_LEAGUES[0].seasons[0].slug}`,
     img: "/footer/afl-ball.svg",
     altText: "AUSSIE RULES",
   },
@@ -92,7 +92,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.RUGBY_UNION,
-    link: `/sports/${SPORT.RUGBY_UNION}/${RUGBY_UNION_LEAGUES[0].slug}/${RUGBY_UNION_LEAGUES[0].seasons[0].slug}/matches`,
+    link: `/sports/${SPORT.RUGBY_UNION}/${RUGBY_UNION_LEAGUES[0].slug}/${RUGBY_UNION_LEAGUES[0].seasons[0].slug}`,
     img: "/footer/union.png",
     altText: "Rugby Union",
   },
@@ -130,7 +130,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.AMERICAN_FOOTBALL,
-    link: `/sports/${SPORT.AMERICAN_FOOTBALL}/${AMERICAN_FOOTBALL_LEAGUES[0].slug}/${AMERICAN_FOOTBALL_LEAGUES[0].seasons[0].slug}/matches#current-date`,
+    link: `/sports/${SPORT.AMERICAN_FOOTBALL}/${AMERICAN_FOOTBALL_LEAGUES[0].slug}/${AMERICAN_FOOTBALL_LEAGUES[0].seasons[0].slug}`,
     img: "/footer/american-football.svg",
     altText: "AMERICAN FOOTBALL",
   },

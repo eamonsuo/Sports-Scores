@@ -96,7 +96,7 @@ export default function GolfScheduleList({
               status={item.status}
               leader={item.leader}
               location={item.location}
-              url={`/sports/golf/${item.tourName}/${season}/${item.id}`}
+              url={`/sports/golf/${item.tourName}/${season}/match/${item.id}`}
             />
           </React.Fragment>
         );

@@ -547,6 +547,11 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     byes: NRL_TEAMS_NAME_LOGO,
   },
   {
+    name: "Brisbane Broncos",
+    slug: "team/4258",
+    seasons: [{ name: "Current", slug: "" }],
+  },
+  {
     name: "NRLW",
     slug: "19120",
     seasons: [
@@ -691,6 +696,11 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
     byes: AFL_TEAM_NAME_LOGO,
   },
   {
+    name: "Brisbane Lions",
+    slug: "team/4444",
+    seasons: [{ name: "Current", slug: "" }],
+  },
+  {
     name: "AFLW",
     slug: "10159",
     seasons: [
@@ -796,6 +806,11 @@ export const AMERICAN_FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
+    name: "Seattle Seahawks",
+    slug: "team/4430",
+    seasons: [{ name: "Current", slug: "" }],
+  },
+  {
     name: "NCAA, Regular Season",
     slug: "19510",
     seasons: [
@@ -871,12 +886,12 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "🇦🇺 Australia Men",
     slug: "team/4741",
-    seasons: [{ name: "--", slug: "" }],
+    seasons: [{ name: "Current", slug: "" }],
   },
   {
     name: "🇦🇺 Australia Women",
     slug: "team/7410",
-    seasons: [{ name: "--", slug: "" }],
+    seasons: [{ name: "Current", slug: "" }],
   },
   //England - category 1
   {
@@ -1418,19 +1433,52 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "Australian Open - Mens Doubles",
-    slug: "2455",
-    seasons: [{ name: "2026", slug: "85948" }],
+    name: "French Open - Mens Singles",
+    slug: "2480",
+    seasons: [
+      // { name: "2026", slug: "80012" },
+      { name: "2025", slug: "61364" },
+    ],
   },
   {
-    name: "Australian Open - Womens Doubles",
-    slug: "2650",
-    seasons: [{ name: "2026", slug: "85949" }],
+    name: "French Open - Womens Singles",
+    slug: "2577",
+    seasons: [
+      // { name: "2026", slug: "80013" },
+      { name: "2025", slug: "61365" },
+    ],
   },
   {
-    name: "Australian Open - Mixed Doubles",
-    slug: "2403",
-    seasons: [{ name: "2026", slug: "85950" }],
+    name: "Wimbledon - Mens Singles",
+    slug: "2361",
+    seasons: [
+      // { name: "2026", slug: "80012" },
+      { name: "2025", slug: "63966" },
+    ],
+  },
+  {
+    name: "Wimbledon - Womens Singles",
+    slug: "2600",
+    seasons: [
+      // { name: "2026", slug: "80013" },
+      { name: "2025", slug: "63967" },
+    ],
+  },
+  {
+    name: "US Open - Mens Singles",
+    slug: "2449",
+    seasons: [
+      // { name: "2026", slug: "80012" },
+      { name: "2025", slug: "67287" },
+    ],
+  },
+  {
+    name: "US Open - Womens Singles",
+    slug: "2601",
+    seasons: [
+      // { name: "2026", slug: "80013" },
+      { name: "2025", slug: "69937" },
+    ],
   },
 
   {
@@ -1442,6 +1490,11 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     name: "Brisbane International - Women",
     slug: "2644",
     seasons: [{ name: "2026", slug: "85608" }],
+  },
+  {
+    name: "Alex De Minaur",
+    slug: "team/201239",
+    seasons: [{ name: "Current", slug: "" }],
   },
   {
     name: "ATP Rankings",

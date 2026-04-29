@@ -1,6 +1,7 @@
 import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
 import {
   API_EVENT_TYPES,
+  CardVariant,
   DeepPartial,
   DISPLAY_TYPES,
   FixtureRound,
@@ -66,10 +67,10 @@ function mapSofascoreEventToMatchSummary(
     status:
       options?.status ??
       (event.status.type === "inprogress" || event.status.type === "interrupted"
-        ? "LIVE"
+        ? MatchStatus.LIVE
         : event.status.type === "notstarted"
-          ? "UPCOMING"
-          : "COMPLETED"),
+          ? MatchStatus.UPCOMING
+          : MatchStatus.COMPLETED),
     roundLabel: options?.roundLabel ?? `Round ${event.roundInfo?.round}`,
     timer:
       options?.timer ??
@@ -83,7 +84,7 @@ function mapSofascoreEventToMatchSummary(
         : "gray"),
     matchSlug:
       options?.matchSlug ??
-      `${event.tournament.uniqueTournament.id}/${event.season.id}/${event.id}`,
+      `${event.tournament.uniqueTournament.id}/${event.season.id}/match/${event.id}`,
     venue:
       options?.venue ??
       (event?.venue?.name &&
@@ -137,8 +138,8 @@ function mapSportsDBEventToMatchSummary(
 
   const status: MatchStatus =
     event.intHomeScore !== null && event.intAwayScore !== null
-      ? "COMPLETED"
-      : "UPCOMING";
+      ? MatchStatus.COMPLETED
+      : MatchStatus.UPCOMING;
 
   return {
     id: options?.id ?? event.idEvent,
@@ -149,18 +150,20 @@ function mapSportsDBEventToMatchSummary(
     roundLabel: options?.roundLabel ?? `Round ${event.intRound}`,
     timer:
       options?.timer ??
-      (status === "UPCOMING" ? (options?.startDate ?? startDate) : "Ended"),
+      (status === MatchStatus.UPCOMING
+        ? (options?.startDate ?? startDate)
+        : "Ended"),
     timerDisplayColour: options?.timerDisplayColour ?? "gray",
     matchSlug:
       options?.matchSlug ??
-      `${event.idLeague}/${event.strSeason}/${event.idEvent}`,
+      `${event.idLeague}/${event.strSeason}/match/${event.idEvent}`,
     venue: options?.venue ?? event?.strVenue ?? "",
     seriesName: options?.seriesName,
     seriesSlug: options?.seriesSlug,
     summaryText:
       options?.summaryText ??
       setMatchSummary(
-        status === "UPCOMING" ? "notstarted" : "finished",
+        status === MatchStatus.UPCOMING ? "notstarted" : "finished",
         event.strHomeTeam,
         event.intHomeScore ?? 0,
         event.strAwayTeam,
@@ -190,6 +193,7 @@ export async function mapFixtureRounds(
   leagueConfig:
     | LeagueSeasonConfig
     | LeagueSeasonConfig[] = DEFAULT_LEAGUE_SEASON_CONFIG,
+  cardVariant?: CardVariant,
 ) {
   const isMultiLeague = Array.isArray(leagueConfig);
   const displayType: DISPLAY_TYPES = isMultiLeague
@@ -224,7 +228,12 @@ export async function mapFixtureRounds(
         }
 
         if (!acc[roundLabel]) {
-          acc[roundLabel] = { roundLabel, matches: [], byes: byes };
+          acc[roundLabel] = {
+            roundLabel,
+            matches: [],
+            byes: byes,
+            cardVariant,
+          };
         }
 
         acc[roundLabel].matches.push(match);
@@ -257,7 +266,11 @@ export function getCurrentRound(
       // Find first round with upcoming matches
       return (
         rounds.find((r) =>
-          r.matches.some((m) => m.status === "UPCOMING" || m.status === "LIVE"),
+          r.matches.some(
+            (m) =>
+              m.status === MatchStatus.UPCOMING ||
+              m.status === MatchStatus.LIVE,
+          ),
         )?.roundLabel ??
         rounds[rounds.length - 1]?.roundLabel ??
         "Round 0"

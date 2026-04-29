@@ -69,6 +69,24 @@ export async function fetchAmericanFootballStandings(
   )) as Sofascore_TotalStandings_Response;
 }
 
+export async function fetchAmericanFootballTeamLastMatches(
+  teamId: number,
+  pageNumber: number = 0,
+) {
+  return (await fetchAmericanFootballApi(
+    `/american-football/team/${teamId}/matches/previous/${pageNumber}`,
+  )) as AmericanFootball_AmericanFootballApi_FixturePage_Response;
+}
+
+export async function fetchAmericanFootballTeamNextMatches(
+  teamId: number,
+  pageNumber: number = 0,
+) {
+  return (await fetchAmericanFootballApi(
+    `/american-football/team/${teamId}/matches/next/${pageNumber}`,
+  )) as AmericanFootball_AmericanFootballApi_FixturePage_Response;
+}
+
 export async function fetchAmericanFootballMatchDetails(matchId: number) {
   return (await fetchAmericanFootballApi(
     `/american-football/match/${matchId}`,

@@ -47,9 +47,16 @@ export type MatchSummary = {
   dataverseGUID?: string;
 };
 
-export type MatchStatus = "LIVE" | "UPCOMING" | "COMPLETED";
+export enum MatchStatus {
+  LIVE = "LIVE",
+  UPCOMING = "UPCOMING",
+  COMPLETED = "COMPLETED",
+}
 
-export type CardVariant = "tennis" | "default";
+export enum CardVariant {
+  TENNIS = "tennis",
+  DEFAULT = "default",
+}
 
 export interface FixtureRound {
   matches: MatchSummary[];
@@ -66,7 +73,10 @@ export type LadderConfig = {
 };
 
 export interface SportService {
-  matchesAll(tournamentId: number, seasonId: number): Promise<Matches | null>;
+  matchesByLeagueSeason(
+    tournamentId: number,
+    seasonId: number,
+  ): Promise<Matches | null>;
 
   matchesByDate(date: Date): Promise<Matches | null>;
 
@@ -76,6 +86,8 @@ export interface SportService {
   ): Promise<Standings<readonly string[]> | null>;
 
   matchDetails(matchId: number): Promise<MatchDetail | null>;
+
+  matchesByTeam(teamId: number): Promise<Matches | null>;
 }
 
 export interface Matches {
@@ -89,8 +101,8 @@ export interface MatchDetail {
     awayTeam: TeamScoreDetails;
     status: string;
   };
-  scoreEvents: ScoreDifference[];
   scoreBreakdown: PeriodScore[];
+  scoreEvents?: ScoreDifference[];
 }
 
 export interface Standings<T extends readonly string[]> {
@@ -310,6 +322,7 @@ export enum CountryFlagCode {
   Oman = "om",
   Pakistan = "pk",
   Palau = "pw",
+  Palestine = "ps",
   Panama = "pa",
   PapuaNewGuinea = "pg",
   Paraguay = "py",

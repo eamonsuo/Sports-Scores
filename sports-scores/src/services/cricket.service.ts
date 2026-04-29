@@ -1,4 +1,4 @@
-import { CricketScorecardPage } from "@/app/sports/cricket/[league]/[season]/[match]/page";
+import { CricketScorecardPage } from "@/app/sports/cricket/[league]/[season]/match/[match]/page";
 import { MatchDetailsPage } from "@/components/cricket/CricketMatchDetailsPage";
 import { CricketScorecardBatProps } from "@/components/cricket/CricketScorecardBat";
 import { CricketScorecardBowlProps } from "@/components/cricket/CricketScorecardBowl";
@@ -87,7 +87,7 @@ export async function cricketMatchesByDate(date: Date) {
           name: event.T2[0].Nm,
         },
         seriesName: item.Snm,
-        matchSlug: `${item.Ccd}/${item.Scd}/${event.Eid}`,
+        matchSlug: `${item.Ccd}/${item.Scd}/match/${event.Eid}`,
         seriesSlug: `${item.Ccd}/${item.Scd}`,
       } as MatchSummary;
     });
@@ -251,7 +251,7 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
           name: event.T2[0].Nm,
         },
         seriesName: item.Snm,
-        matchSlug: `${item.Ccd}/${item.Scd}/${event.Eid}`,
+        matchSlug: `${item.Ccd}/${item.Scd}/match/${event.Eid}`,
         seriesSlug: `${item.Ccd}/${item.Scd}`,
       } as MatchSummary;
     });
@@ -266,13 +266,13 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
 function mapCricketStatus(status?: string): MatchStatus {
   switch (status) {
     case "NS":
-      return "UPCOMING";
+      return MatchStatus.UPCOMING;
     case "L":
-      return "LIVE";
+      return MatchStatus.LIVE;
     case "FT":
-      return "COMPLETED";
+      return MatchStatus.COMPLETED;
     default:
-      return "LIVE";
+      return MatchStatus.LIVE;
   }
 }
 

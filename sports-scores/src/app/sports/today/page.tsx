@@ -46,7 +46,7 @@ export default async function Page({
     cyclingToday,
   ] = await Promise.all([
     cricketMatchesByDate(parsedDate),
-    tennisService.TennisMatchesByDate(parsedDate),
+    tennisService.matchesByDate(parsedDate),
     footballService.matchesByDate(parsedDate),
     basketballService.matchesByDate(parsedDate),
     baseballService.matchesByDate(parsedDate),

@@ -5,6 +5,8 @@ import {
   fetchBasketballMatchIncidents,
   fetchBasketballNextMatches,
   fetchBasketballStandings,
+  fetchBasketballTeamLastMatches,
+  fetchBasketballTeamNextMatches,
 } from "@/endpoints/basketball.api";
 import {
   BASKETBALL_LADDER_HEADINGS,
@@ -27,8 +29,8 @@ class BasketballService extends SofascoreSport {
         fetchStandingsTotal: fetchBasketballStandings,
         fetchCupTrees: async () => null,
         fetchPlayerRankings: async () => null,
-        fetchTeamLastEvents: async () => null,
-        fetchTeamNextEvents: async () => null,
+        fetchTeamLastEvents: fetchBasketballTeamLastMatches,
+        fetchTeamNextEvents: fetchBasketballTeamNextMatches,
       },
       SPORT.BASKETBALL,
       SofascoreSportURL.BASKETBALL,

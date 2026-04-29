@@ -15,9 +15,9 @@ import {
 // --- MatchSummary Utilities ---
 
 const STATUS_MAP: Record<0 | 1 | 2, MatchStatus> = {
-  0: "LIVE",
-  1: "UPCOMING",
-  2: "COMPLETED",
+  0: MatchStatus.LIVE,
+  1: MatchStatus.UPCOMING,
+  2: MatchStatus.COMPLETED,
 };
 
 const COLOUR_MAP: Record<0 | 1 | 2, "green" | "yellow" | "gray"> = {
@@ -27,9 +27,9 @@ const COLOUR_MAP: Record<0 | 1 | 2, "green" | "yellow" | "gray"> = {
 };
 
 const STATUS_REVERSE: Record<MatchStatus, 0 | 1 | 2> = {
-  LIVE: 0,
-  UPCOMING: 1,
-  COMPLETED: 2,
+  [MatchStatus.LIVE]: 0,
+  [MatchStatus.UPCOMING]: 1,
+  [MatchStatus.COMPLETED]: 2,
 };
 
 const COLOUR_REVERSE: Record<"green" | "yellow" | "gray", 0 | 1 | 2> = {
@@ -74,7 +74,8 @@ function mapToMatchSummary(r: DataverseMatchSummary): MatchSummary {
     endDate: r.ss_enddate ? new Date(r.ss_enddate) : undefined,
     sport: r.ss_sport ?? "",
     venue: r.ss_venue ?? undefined,
-    status: r.ss_status != null ? STATUS_MAP[r.ss_status] : "UPCOMING",
+    status:
+      r.ss_status != null ? STATUS_MAP[r.ss_status] : MatchStatus.UPCOMING,
     summaryText: r.ss_summarytext,
     otherDetail: r.ss_otherdetail ?? undefined,
     homeDetails,

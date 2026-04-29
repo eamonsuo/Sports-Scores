@@ -5,6 +5,8 @@ import {
   fetchRugbyLeagueMatchIncidents,
   fetchRugbyLeagueNextMatches,
   fetchRugbyLeagueStandings,
+  fetchRugbyLeagueTeamLastMatches,
+  fetchRugbyLeagueTeamNextMatches,
 } from "@/endpoints/rugby-league.api";
 import {
   RUGBY_UNION_LADDER_HEADINGS,
@@ -27,8 +29,8 @@ class RugbyUnionService extends SofascoreSport {
         fetchStandingsTotal: fetchRugbyLeagueStandings,
         fetchCupTrees: async () => null,
         fetchPlayerRankings: async () => null,
-        fetchTeamLastEvents: async () => null,
-        fetchTeamNextEvents: async () => null,
+        fetchTeamLastEvents: fetchRugbyLeagueTeamLastMatches,
+        fetchTeamNextEvents: fetchRugbyLeagueTeamNextMatches,
       },
       SPORT.RUGBY_UNION,
       SofascoreSportURL.RUGBY,

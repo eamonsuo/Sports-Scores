@@ -20,7 +20,7 @@ import {
   F1SessionType,
   SessionSummary,
 } from "@/types/f1";
-import { MatchSummary, SPORT } from "@/types/misc";
+import { MatchStatus, MatchSummary, SPORT } from "@/types/misc";
 import { format, isSameDay } from "date-fns";
 import { addHours } from "date-fns/addHours";
 import { TZDate } from "react-day-picker";
@@ -465,7 +465,7 @@ export async function motorsportCategoriesByDate(date: Date) {
         sport: SPORT.MOTORSPORT,
         summaryText: "Supercars",
         startDate: date,
-        status: "UPCOMING",
+        status: MatchStatus.UPCOMING,
         awayDetails: { score: "", name: "" },
         homeDetails: { score: "", name: "" },
         matchSlug: "supercars/2026",

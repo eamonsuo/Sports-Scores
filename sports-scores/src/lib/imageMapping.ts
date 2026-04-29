@@ -1625,6 +1625,7 @@ export function resolveSportImage(teamName: string) {
     case "Cuba":
       return getCountryImageUrl(CountryFlagCode.Cuba);
     case "Curacao":
+    case "Curaçao":
       return getCountryImageUrl(CountryFlagCode.Curacao);
     case "Cyprus":
       return getCountryImageUrl(CountryFlagCode.Cyprus);
@@ -1863,6 +1864,8 @@ export function resolveSportImage(teamName: string) {
       return getCountryImageUrl(CountryFlagCode.Pakistan);
     case "Palau":
       return getCountryImageUrl(CountryFlagCode.Palau);
+    case "Palestine":
+      return getCountryImageUrl(CountryFlagCode.Palestine);
     case "Panama":
       return getCountryImageUrl(CountryFlagCode.Panama);
     case "Papua New Guinea":

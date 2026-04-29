@@ -49,7 +49,7 @@ export default function MatchSummaryCard({
               src={homeInfo.img ?? fallback}
               width={100}
               height={100}
-              style={{ width: "auto", height: "40px" }}
+              style={{ width: "40px", height: "auto" }}
               alt="Home team image"
             />
           </div>
@@ -94,7 +94,7 @@ export default function MatchSummaryCard({
               src={awayInfo.img ?? fallback}
               width={100}
               height={100}
-              style={{ width: "auto", height: "40px" }}
+              style={{ width: "40px", height: "auto" }}
               alt="Away team image"
             />
           </div>

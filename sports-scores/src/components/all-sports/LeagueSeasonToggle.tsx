@@ -46,9 +46,21 @@ export default function LeagueSeasonToggle({
   // Helper to parse league and season from URL
   function getLeagueAndSeasonFromPath(path: string) {
     // Example: /sports/football/epl/2024
+    // Team routes: /sports/football/team/4741//matches
     const parts = path.split("/");
     const sportIdx = parts.indexOf("sports");
     if (sportIdx !== -1 && parts.length > sportIdx + 3) {
+      // Check if combining two segments matches a league slug (e.g. "team/4741")
+      const combinedSlug = `${parts[sportIdx + 2]}/${parts[sportIdx + 3]}`;
+      if (
+        parts.length > sportIdx + 4 &&
+        leagues.some((l) => l.slug === combinedSlug)
+      ) {
+        return {
+          leagueSlug: combinedSlug,
+          seasonSlug: parts[sportIdx + 4],
+        };
+      }
       return {
         leagueSlug: parts[sportIdx + 2],
         seasonSlug: parts[sportIdx + 3],
