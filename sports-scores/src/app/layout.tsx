@@ -41,6 +41,7 @@ export default function RootLayout({
         type="image/png"
         sizes="180x180"
       />
+      <link rel="apple-touch-startup-image" href="/ios-splash.png" />
 
       <body className={inter.className}>
         <ClientDateSetter />
