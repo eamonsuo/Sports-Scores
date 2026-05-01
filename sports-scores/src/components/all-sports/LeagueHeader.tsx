@@ -1,13 +1,16 @@
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 import Link from "next/link";
 
-export default function LeagueSeriesHeader({
+export default function LeagueHeader({
   href,
   seriesName,
+  img,
   className,
 }: {
   href: string;
   seriesName: string;
+  img?: string;
   className?: string;
 }) {
   return (
@@ -18,6 +21,15 @@ export default function LeagueSeriesHeader({
           className,
         )}
       >
+        {img && (
+          <Image
+            src={img}
+            height={100}
+            width={100}
+            style={{ width: "auto", height: "25px" }}
+            alt="Circuit Logo"
+          />
+        )}
         <p>{seriesName}</p>
         <p>{">"}</p>
       </div>

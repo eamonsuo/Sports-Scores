@@ -14,7 +14,6 @@ import {
   SCORE_BREAKDOWN_QUARTERS_CONFIG,
 } from "@/lib/constants";
 import { SPORT } from "@/types/misc";
-import { SofascoreSportURL } from "@/types/sofascore";
 import { SofascoreSport } from "./sofascore.service";
 
 class BasketballService extends SofascoreSport {
@@ -33,7 +32,6 @@ class BasketballService extends SofascoreSport {
         fetchTeamNextEvents: fetchBasketballTeamNextMatches,
       },
       SPORT.BASKETBALL,
-      SofascoreSportURL.BASKETBALL,
       BASKETBALL_LEAGUES,
       BASKETBALL_LADDER_HEADINGS,
       SCORE_BREAKDOWN_QUARTERS_CONFIG,

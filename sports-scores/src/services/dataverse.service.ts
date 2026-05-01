@@ -144,12 +144,12 @@ export async function matchSummariesAll(): Promise<MatchSummary[] | null> {
 }
 
 export async function matchSummariesByTournament(
-  tournamentId: number,
-  seasonId: number,
+  leagueId: string,
+  seasonId: string,
   sport: SPORT,
 ): Promise<MatchSummary[] | null> {
   const filters = [
-    `ss_tournamentid eq '${tournamentId}'`,
+    `ss_tournamentid eq '${leagueId}'`,
     `ss_seasonid eq '${seasonId}'`,
     `ss_sport eq '${sport}'`,
   ];

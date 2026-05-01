@@ -27,7 +27,7 @@ import {
   TENNIS_CATEGORIES,
   TENNIS_LEAGUES,
 } from "@/lib/constants";
-import { DISPLAY_TYPES } from "@/types/misc";
+import { DisplayTypes } from "@/types/misc";
 
 // ---------------------------------------------------------------------------
 // Configure which leagues to sync. Each entry maps a sport key + display type
@@ -36,7 +36,7 @@ import { DISPLAY_TYPES } from "@/types/misc";
 
 type SyncEntry = {
   sport: string;
-  displayType: DISPLAY_TYPES;
+  displayType: DisplayTypes;
   leagues: LeagueSeasonConfig[];
   /** Slugs to include. Omit or use ["*"] for all. */
   slugs?: string[];
@@ -45,7 +45,7 @@ type SyncEntry = {
 const SYNC_CONFIG: SyncEntry[] = [
   {
     sport: "rugby-league",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: RUGBY_LEAGUE_LEAGUES,
     slugs: ["294", "19120", "2135", "2134"],
   },
@@ -63,31 +63,31 @@ const SYNC_CONFIG: SyncEntry[] = [
   // },
   {
     sport: "aussie-rules",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: AUSSIE_RULES_LEAGUES,
     slugs: ["656", "10159", "25506", "20126", "20160"],
   },
   {
     sport: "american-football",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: AMERICAN_FOOTBALL_LEAGUES,
     slugs: ["9464"],
   },
   {
     sport: "basketball",
-    displayType: DISPLAY_TYPES.DATE,
+    displayType: DisplayTypes.DATE,
     leagues: BASKETBALL_LEAGUES,
     slugs: ["1524", "1506", "132", "486"],
   },
   {
     sport: "baseball",
-    displayType: DISPLAY_TYPES.DATE,
+    displayType: DisplayTypes.DATE,
     leagues: BASEBALL_LEAGUES,
     slugs: ["11205", "19445"],
   },
   {
     sport: "ice-hockey",
-    displayType: DISPLAY_TYPES.DATE,
+    displayType: DisplayTypes.DATE,
     leagues: ICE_HOCKEY_LEAGUES,
     slugs: ["11059", "234"],
   },
@@ -188,74 +188,74 @@ for (const config of SYNC_CONFIG) {
 const ALL_LEAGUES_CONFIG: SyncEntry[] = [
   {
     sport: "rugby-league",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: RUGBY_LEAGUE_LEAGUES,
   },
   {
     sport: "football",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: FOOTBALL_LEAGUES,
   },
   {
     sport: "aussie-rules",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: AUSSIE_RULES_LEAGUES,
   },
   {
     sport: "american-football",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: AMERICAN_FOOTBALL_LEAGUES,
   },
   {
     sport: "basketball",
-    displayType: DISPLAY_TYPES.DATE,
+    displayType: DisplayTypes.DATE,
     leagues: BASKETBALL_LEAGUES,
   },
   {
     sport: "baseball",
-    displayType: DISPLAY_TYPES.DATE,
+    displayType: DisplayTypes.DATE,
     leagues: BASEBALL_LEAGUES,
   },
   {
     sport: "ice-hockey",
-    displayType: DISPLAY_TYPES.DATE,
+    displayType: DisplayTypes.DATE,
     leagues: ICE_HOCKEY_LEAGUES,
   },
   {
     sport: "rugby-union",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: RUGBY_UNION_LEAGUES,
   },
   {
     sport: "cricket",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: CRICKET_LEAGUES,
   },
   {
     sport: "netball",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: NETBALL_LEAGUES,
   },
   {
     sport: "tennis",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: TENNIS_LEAGUES,
   },
   {
     sport: "tennis",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: TENNIS_CATEGORIES,
   },
-  { sport: "darts", displayType: DISPLAY_TYPES.ROUND, leagues: DARTS_LEAGUES },
+  { sport: "darts", displayType: DisplayTypes.ROUND, leagues: DARTS_LEAGUES },
   {
     sport: "motorsport",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: MOTORSPORT_CATEGORIES,
   },
-  { sport: "golf", displayType: DISPLAY_TYPES.ROUND, leagues: GOLF_TOURS },
+  { sport: "golf", displayType: DisplayTypes.ROUND, leagues: GOLF_TOURS },
   {
     sport: "cycling",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: CYCLING_TOURS,
   },
 ];

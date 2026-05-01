@@ -40,8 +40,8 @@ async function fetchSofascoreRapidApi(endpoint: string) {
 }
 
 export async function fetchTournamentLastMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchSofascoreRapidApi(
@@ -50,8 +50,8 @@ export async function fetchTournamentLastMatches(
 }
 
 export async function fetchTournamentNextMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchSofascoreRapidApi(
@@ -60,7 +60,7 @@ export async function fetchTournamentNextMatches(
 }
 
 export async function fetchTeamLastMatches(
-  teamId: number,
+  teamId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchSofascoreRapidApi(
@@ -69,7 +69,7 @@ export async function fetchTeamLastMatches(
 }
 
 export async function fetchTeamNextMatches(
-  teamId: number,
+  teamId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchSofascoreRapidApi(
@@ -78,27 +78,27 @@ export async function fetchTeamNextMatches(
 }
 
 export async function fetchTournamentStandings(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
 ) {
   return (await fetchSofascoreRapidApi(
     `/tournaments/get-standings?tournamentId=${tournamentId}&seasonId=${seasonId}&type=total`,
   )) as Sofascore_TotalStandings_Response;
 }
 
-export async function fetchMatchDetails(matchId: number) {
+export async function fetchMatchDetails(matchId: string) {
   return (await fetchSofascoreRapidApi(
     `/matches/detail?matchId=${matchId}`,
   )) as Sofascore_Event_Response;
 }
 
-export async function fetchMatchIncidents(matchId: number) {
+export async function fetchMatchIncidents(matchId: string) {
   return (await fetchSofascoreRapidApi(
     `/matches/get-incidents?matchId=${matchId}`,
   )) as Sofascore_EventIncidents_Response;
 }
 
-export async function fetchScheduledEvents(categoryId: number, date?: Date) {
+export async function fetchScheduledEvents(categoryId: string, date?: Date) {
   return (await fetchSofascoreRapidApi(
     `/tournaments/get-scheduled-events?categoryId=${categoryId}${date ? `&date=${format(date, "yyyy-MM-dd")}` : ""}`,
   )) as Sofascore_Events_Response;

@@ -4,7 +4,7 @@ import { tennisService } from "@/services/tennis.service";
 import { RankingList } from "@/types/tennis";
 
 export default async function Page() {
-  const pageData = await tennisService.TennisWorldRankings(RankingList.WTA);
+  const pageData = await tennisService.tennisRankings(RankingList.WTA);
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;

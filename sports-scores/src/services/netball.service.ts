@@ -7,15 +7,12 @@ import {
   fetchNetballStandings,
 } from "@/endpoints/netball.api";
 import { NETBALL_LEAGUES } from "@/lib/constants";
+import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping";
+import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils";
 import {
-  getCurrentRound,
-  mapFixtureRounds,
-  mapMatchSummary,
-} from "@/lib/eventMapping";
-import { shortenTeamNames } from "@/lib/projUtils";
-import {
-  API_EVENT_TYPES,
-  DISPLAY_TYPES,
+  DeepPartial,
+  DisplayTypes,
+  MatchStatus,
   MatchSummary,
   SPORT,
 } from "@/types/misc";
@@ -26,10 +23,10 @@ import {
 } from "@/types/netball";
 import { SportsDB_Event } from "@/types/sportsdb";
 
-export async function netballMatches(tournamentId: number, seasonId: number) {
-  const seasonMatches = await fetchNetballSeasonMatches(tournamentId, seasonId);
-  const lastMatches = await fetchNetballLastMatches(tournamentId, seasonId);
-  const nextMatches = await fetchNetballNextMatches(tournamentId, seasonId);
+export async function netballMatches(leagueId: string, seasonId: string) {
+  const seasonMatches = await fetchNetballSeasonMatches(leagueId, seasonId);
+  const lastMatches = await fetchNetballLastMatches(leagueId, seasonId);
+  const nextMatches = await fetchNetballNextMatches(leagueId, seasonId);
 
   if (!lastMatches && !nextMatches && !seasonMatches) {
     return null;
@@ -44,12 +41,12 @@ export async function netballMatches(tournamentId: number, seasonId: number) {
     new Map(allMatches.map((match) => [match.idEvent, match])).values(),
   );
 
-  const leagueConfig = NETBALL_LEAGUES.find(
-    (l) => Number(l.slug) === tournamentId,
-  );
+  const leagueConfig = NETBALL_LEAGUES.find((l) => l.slug === leagueId);
 
   const sortedMatches = matches
-    .map((match) => mapNetballMatch(match, `Round ${match.intRound ?? 0}`))
+    .map((match) =>
+      mapNetballMatch(match, { roundLabel: `Round ${match.intRound ?? 0}` }),
+    )
     .sort(
       (a, b) =>
         new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
@@ -63,8 +60,8 @@ export async function netballMatches(tournamentId: number, seasonId: number) {
   } as NetballFixturesPage;
 }
 
-export async function netballStandings(tournamentId: number, seasonId: number) {
-  const standings = await fetchNetballStandings(tournamentId, seasonId);
+export async function netballStandings(leagueId: string, seasonId: string) {
+  const standings = await fetchNetballStandings(leagueId, seasonId);
 
   if (!standings) {
     return null;
@@ -93,12 +90,12 @@ export async function netballStandings(tournamentId: number, seasonId: number) {
   //     }),
   //   ),
   //   qualifyingPosition:
-  //     NETBALL_LEAGUES.find((l) => Number(l.slug) === tournamentId)
+  //     NETBALL_LEAGUES.find((l) => Number(l.slug) === leagueId)
   //       ?.qualifyingPosition ?? -1,
   // } as NetballLadderPage;
 }
 
-export async function netballMatchDetails(matchId: number) {
+export async function netballMatchDetails(matchId: string) {
   const match = await fetchNetballMatchDetails(matchId);
   // const incidents = await fetchNetballMatchIncidents(matchId);
 
@@ -169,22 +166,75 @@ export async function netballMatchesByDate(date: Date) {
   if (!matches.events || matches.events.length === 0) return null;
 
   const allMatches = matches.events.map((match) =>
-    mapNetballMatch(match, `Round ${match.intRound ?? 0}`),
+    mapNetballMatch(match, { roundLabel: `Round ${match.intRound ?? 0}` }),
   );
 
   const fixture = await mapFixtureRounds(allMatches, NETBALL_LEAGUES);
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(fixture, DISPLAY_TYPES.LEAGUE),
+    currentRound: getCurrentRound(fixture, DisplayTypes.LEAGUE),
   } as NetballTodayPage;
 }
 
 function mapNetballMatch(
-  match: SportsDB_Event,
-  roundLabel: string,
+  event: SportsDB_Event,
+  options?: DeepPartial<MatchSummary>,
 ): MatchSummary {
-  return mapMatchSummary(API_EVENT_TYPES.SPORTSDB, SPORT.NETBALL, match, {
-    roundLabel,
-  });
+  const timeStamp =
+    event.strTimestamp.length > 19
+      ? event.strTimestamp.slice(0, 19)
+      : event.strTimestamp;
+  const startDate = new Date(timeStamp + "Z");
+
+  const status: MatchStatus =
+    event.intHomeScore !== null && event.intAwayScore !== null
+      ? MatchStatus.COMPLETED
+      : MatchStatus.UPCOMING;
+
+  return {
+    id: options?.id ?? event.idEvent,
+    startDate: options?.startDate ?? startDate,
+    endDate: options?.endDate,
+    sport: SPORT.NETBALL,
+    status: options?.status ?? status,
+    roundLabel: options?.roundLabel ?? `Round ${event.intRound}`,
+    timer:
+      options?.timer ??
+      (status === MatchStatus.UPCOMING
+        ? (options?.startDate ?? startDate)
+        : "Ended"),
+    timerDisplayColour: options?.timerDisplayColour ?? "gray",
+    matchSlug:
+      options?.matchSlug ??
+      `${event.idLeague}/${event.strSeason}/match/${event.idEvent}`,
+    venue: options?.venue ?? event?.strVenue ?? "",
+    seriesName: options?.seriesName,
+    seriesSlug: options?.seriesSlug,
+    summaryText:
+      options?.summaryText ??
+      setMatchSummary(
+        status === MatchStatus.UPCOMING ? "notstarted" : "finished",
+        event.strHomeTeam,
+        event.intHomeScore ?? 0,
+        event.strAwayTeam,
+        event.intAwayScore ?? 0,
+      ),
+    homeDetails: {
+      name: options?.homeDetails?.name ?? shortenTeamNames(event.strHomeTeam),
+      score:
+        options?.homeDetails?.score ?? (event.intHomeScore ?? 0).toString(),
+      img: options?.homeDetails?.img ?? event.strHomeTeamBadge,
+      winDrawLoss: options?.homeDetails?.winDrawLoss,
+    },
+    awayDetails: {
+      name: options?.awayDetails?.name ?? shortenTeamNames(event.strAwayTeam),
+      score:
+        options?.awayDetails?.score ?? (event.intAwayScore ?? 0).toString(),
+      img: options?.awayDetails?.img ?? event.strAwayTeamBadge,
+      winDrawLoss: options?.awayDetails?.winDrawLoss,
+    },
+    seasonId: options?.seasonId ?? event.strSeason,
+    tournamentId: options?.tournamentId ?? event.idLeague,
+  };
 }

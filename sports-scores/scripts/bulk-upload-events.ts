@@ -42,11 +42,11 @@ import {
   fetchTennisTournamentLastMatches,
   fetchTennisTournamentNextMatches,
 } from "@/endpoints/tennis.api";
-import { mapMatchSummary } from "@/lib/eventMapping";
+import { americanFootballService } from "@/services/american-football.service";
 import { mapToDataverseMatchSummary } from "@/services/dataverse.service";
 import { AmericanFootball_Sofascore_Event } from "@/types/american-football";
 import { DataverseMatchSummary } from "@/types/dataverse";
-import { API_EVENT_TYPES, DISPLAY_TYPES, SPORT } from "@/types/misc";
+import { DisplayTypes, SPORT } from "@/types/misc";
 import { Sofascore_Event } from "@/types/sofascore";
 import { loadEnvConfig } from "@next/env";
 import { format } from "date-fns/format";
@@ -76,7 +76,7 @@ const useSportApi = useSportApiArg === "true";
 const tournamentId = tournamentIdArg;
 const seasonId = seasonIdArg;
 const sport = sportArg as SPORT;
-const displayType = (displayTypeArg as DISPLAY_TYPES) ?? DISPLAY_TYPES.ROUND;
+const displayType = (displayTypeArg as DisplayTypes) ?? DisplayTypes.ROUND;
 
 const sportFetchLastEventsMap: Partial<Record<SPORT, typeof fetchLastEvents>> =
   {
@@ -142,7 +142,7 @@ async function fetchAllPages(label: string, fn: typeof fetchLastEvents) {
   let page = 0;
   while (true) {
     console.log(`Fetching ${label} events page ${page}...`);
-    const data = await fn(Number(tournamentId), Number(seasonId), page);
+    const data = await fn(tournamentId, seasonId, page);
     if (!data || data.events.length === 0) break;
     events.push(...data.events);
     if (!data.hasNextPage) break;
@@ -172,7 +172,7 @@ async function fetchLatestEvents() {
   const events: Sofascore_Event[] = [];
   const fetchFn = sportFetchLastEventsMap[sport] ?? fetchLastEvents;
   console.log(`Fetching latest events `);
-  const data = await fetchFn(Number(tournamentId), Number(seasonId));
+  const data = await fetchFn(tournamentId, seasonId);
   if (!data || data.events.length === 0) return events;
   events.push(...data.events);
   console.log(`Fetched ${events.length} latest events.`);
@@ -188,11 +188,11 @@ function mapEventToRecord(
 ): Omit<DataverseMatchSummary, "ss_matchsummaryid"> {
   let roundLabel = "";
   switch (displayType) {
-    case DISPLAY_TYPES.ROUND:
+    case DisplayTypes.ROUND:
       roundLabel =
         event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? 0}`;
       break;
-    case DISPLAY_TYPES.DATE:
+    case DisplayTypes.DATE:
       var startDate = new Date(0);
       startDate.setUTCSeconds(event.startTimestamp);
       roundLabel = format(startDate, "eee d MMM");
@@ -209,24 +209,7 @@ function mapEventToRecord(
 
   const afEvent = event as AmericanFootball_Sofascore_Event;
 
-  const matchSummary = mapMatchSummary(
-    API_EVENT_TYPES.SOFASCORE,
-    sport,
-    event,
-    {
-      roundLabel,
-      homeDetails: {
-        winDrawLoss: afEvent.homeTeamSeasonHistoricalForm
-          ? `${afEvent.homeTeamSeasonHistoricalForm.wins ?? 0}-${afEvent.homeTeamSeasonHistoricalForm.losses ?? 0}${afEvent.homeTeamSeasonHistoricalForm.draws ? "-" + afEvent.homeTeamSeasonHistoricalForm.draws : ""}`
-          : undefined,
-      },
-      awayDetails: {
-        winDrawLoss: afEvent.awayTeamSeasonHistoricalForm
-          ? `${afEvent.awayTeamSeasonHistoricalForm.wins ?? 0}-${afEvent.awayTeamSeasonHistoricalForm.losses ?? 0}${afEvent.awayTeamSeasonHistoricalForm.draws ? "-" + afEvent.awayTeamSeasonHistoricalForm.draws : ""}`
-          : undefined,
-      },
-    },
-  );
+  const matchSummary = americanFootballService.eventMapper(afEvent);
 
   return mapToDataverseMatchSummary(matchSummary);
 }

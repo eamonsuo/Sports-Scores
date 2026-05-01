@@ -102,13 +102,13 @@ export async function fetchCricketMatchesByDateSofascore(date: Date) {
   return (await rawFixtures.json()) as Sofascore_Events_Response;
 }
 
-export async function fetchCricketMatchInnings(id: number) {
+export async function fetchCricketMatchInnings(id: string) {
   return (await fetchCricketApi(
     `/matches/v2/get-innings?Category=cricket&Eid=${id}`,
   )) as Cricket_LiveScoreAPI_MatchesGetInnings;
 }
 
-export async function fetchCricketMatchDetails(id: number) {
+export async function fetchCricketMatchDetails(id: string) {
   return (await fetchCricketApi(
     `/matches/v2/get-scoreboard?Category=cricket&Eid=${id}`,
   )) as Cricket_LiveScoreAPI_MatchesGetScoreBoard;

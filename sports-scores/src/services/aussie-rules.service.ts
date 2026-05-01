@@ -14,7 +14,6 @@ import {
   SCORE_BREAKDOWN_QUARTERS_CONFIG,
 } from "@/lib/constants";
 import { SPORT } from "@/types/misc";
-import { SofascoreSportURL } from "@/types/sofascore";
 import { SofascoreSport } from "./sofascore.service";
 
 class AussieRulesService extends SofascoreSport {
@@ -23,7 +22,7 @@ class AussieRulesService extends SofascoreSport {
       {
         fetchLastEvents: fetchTournamentLastMatches,
         fetchNextEvents: fetchTournamentNextMatches,
-        fetchEventsByDate: (date: Date) => fetchScheduledEvents(87, date),
+        fetchEventsByDate: (date: Date) => fetchScheduledEvents("87", date),
         fetchEventDetails: fetchMatchDetails,
         fetchEventIncidents: fetchMatchIncidents,
         fetchStandingsTotal: fetchTournamentStandings,
@@ -33,7 +32,6 @@ class AussieRulesService extends SofascoreSport {
         fetchTeamNextEvents: fetchTeamNextMatches,
       },
       SPORT.AUSSIE_RULES,
-      SofascoreSportURL.AUSSIE_RULES,
       AUSSIE_RULES_LEAGUES,
       AUSSIE_RULES_LADDER_HEADINGS,
       SCORE_BREAKDOWN_QUARTERS_CONFIG,

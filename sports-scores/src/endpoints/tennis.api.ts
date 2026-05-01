@@ -43,8 +43,8 @@ async function fetchTennisApi(endpoint: string) {
 }
 
 export async function fetchTennisTournamentRounds(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
 ) {
   return (await fetchTennisApi(
     `/tournament/${tournamentId}/season/${seasonId}/rounds`,
@@ -52,9 +52,9 @@ export async function fetchTennisTournamentRounds(
 }
 
 export async function fetchTennisTournamentRoundMatches(
-  tournamentId: number,
-  seasonId: number,
-  roundId: number,
+  tournamentId: string,
+  seasonId: string,
+  roundId: string,
   roundSlug: string,
 ) {
   return (await fetchTennisApi(
@@ -63,8 +63,8 @@ export async function fetchTennisTournamentRoundMatches(
 }
 
 export async function fetchTennisTournamentLastMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchTennisApi(
@@ -73,8 +73,8 @@ export async function fetchTennisTournamentLastMatches(
 }
 
 export async function fetchTennisTournamentNextMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchTennisApi(
@@ -83,8 +83,8 @@ export async function fetchTennisTournamentNextMatches(
 }
 
 export async function fetchTennisBracket(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
 ) {
   return (await fetchTennisApi(
     `/tournament/${tournamentId}/season/${seasonId}/cup-trees/old`,
@@ -92,21 +92,21 @@ export async function fetchTennisBracket(
 }
 
 export async function fetchTennisTournamentStandings(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
 ) {
   return (await fetchTennisApi(
     `/tournament/${tournamentId}/season/${seasonId}/standings/total`,
   )) as Tennis_TennisApi_TournamentStandings_Response;
 }
 
-export async function fetchTennisMatchDetails(matchId: number) {
+export async function fetchTennisMatchDetails(matchId: string) {
   return (await fetchTennisApi(
     `/event/${matchId}/`,
   )) as Tennis_TennisApi_MatchDetails_Response;
 }
 
-export async function fetchTennisMatchStatistics(matchId: number) {
+export async function fetchTennisMatchStatistics(matchId: string) {
   return (await fetchTennisApi(
     `/match/${matchId}/statistics`,
   )) as Tennis_TennisApi_MatchStatistics_Response;
@@ -119,7 +119,7 @@ export async function fetchTennisMatchesByDate(date: Date) {
 }
 
 export async function fetchTennisPlayerLastMatches(
-  teamId: number,
+  teamId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchTennisApi(
@@ -128,7 +128,7 @@ export async function fetchTennisPlayerLastMatches(
 }
 
 export async function fetchTennisPlayerNextMatches(
-  teamId: number,
+  teamId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchTennisApi(

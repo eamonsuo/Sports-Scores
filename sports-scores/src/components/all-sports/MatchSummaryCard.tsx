@@ -1,35 +1,35 @@
 import fallback from "@/../public/vercel.svg";
+import { formatTime } from "@/lib/projUtils";
 import { cn } from "@/lib/utils";
-import { TeamScoreDetails } from "@/types/misc";
+import { MatchSummary } from "@/types/misc";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function MatchSummaryCard({
-  id,
+  event,
   href,
-  matchSummary,
-  homeInfo,
-  awayInfo,
-  timer,
-  venue,
-  topInfo,
-  bottomInfo,
-  winner,
   className,
 }: {
-  id: string;
+  event: MatchSummary;
   href: string;
-  matchSummary: string;
-  homeInfo: TeamScoreDetails;
-  awayInfo: TeamScoreDetails;
-  timer: { display?: string; displayColour?: "green" | "yellow" | "gray" };
-  venue: string;
-  topInfo?: string;
-  bottomInfo?: string;
-  winner?: number;
   className?: string;
 }) {
+  const {
+    homeDetails: homeInfo,
+    awayDetails: awayInfo,
+    summaryText: matchSummary,
+    otherDetail: bottomInfo,
+    venue,
+    winner,
+  } = event;
+  const timer = {
+    display:
+      event.timer instanceof Date
+        ? formatTime(event.timer)
+        : (event.timer ?? ""),
+    displayColour: event.timerDisplayColour,
+  };
   return (
     <Link href={href}>
       <div
@@ -38,7 +38,6 @@ export default function MatchSummaryCard({
           className,
         )}
       >
-        <p className="text-xs text-gray-700 dark:text-neutral-500">{topInfo}</p>
         <p className="text-center text-gray-500 dark:text-neutral-500">
           {matchSummary}
         </p>

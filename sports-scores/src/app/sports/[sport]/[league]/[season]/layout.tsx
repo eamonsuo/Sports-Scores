@@ -22,7 +22,7 @@ export default async function SportsLayout({
 
   return (
     <>
-      <NavButtonGroup buttons={buttons} />
+      {season !== "wiki" && <NavButtonGroup buttons={buttons} />}
       {children}
     </>
   );

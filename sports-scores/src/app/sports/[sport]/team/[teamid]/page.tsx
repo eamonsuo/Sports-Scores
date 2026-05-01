@@ -12,7 +12,7 @@ export default async function Page(props: {
   const { teamid, sport } = await props.params;
   const config = SPORT_ROUTE_CONFIG[sport as SPORT];
 
-  const pageData = await config.service.matchesByTeam(Number(teamid));
+  const pageData = await config.service.matchesByTeam(teamid);
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;

@@ -2,8 +2,8 @@ name: Bulk Upload Events
 
 on:
   schedule:
-    # Runs weekly on Tuesday at 23:00 UTC
-    - cron: "0 23 * * 2"
+    # Runs daily at midnight AEST (14:00 UTC previous day)
+    - cron: "0 14 * * *"
   workflow_dispatch:
     inputs:
       mode:

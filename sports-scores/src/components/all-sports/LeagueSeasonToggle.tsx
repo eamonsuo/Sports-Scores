@@ -6,7 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/zzzshadcn/popover";
-import { DISPLAY_TYPES, LadderConfig, SPORT } from "@/types/misc";
+import { DisplayTypes, LadderConfig, SPORT } from "@/types/misc";
 import { format } from "date-fns/format";
 import { ChevronDownIcon, ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
@@ -23,8 +23,9 @@ import {
 export type LeagueSeasonConfig = {
   name: string;
   slug: string;
+  icon?: string;
   seasons: { name: string; slug: string; ladderConfig?: LadderConfig }[];
-  display?: DISPLAY_TYPES;
+  display?: DisplayTypes;
   externalURL?: string;
   byes?: {
     name: string;
@@ -43,29 +44,31 @@ export default function LeagueSeasonToggle({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Helper to parse league and season from URL
+  // Helper to parse league and season from URL by matching against known league slugs
   function getLeagueAndSeasonFromPath(path: string) {
-    // Example: /sports/football/epl/2024
-    // Team routes: /sports/football/team/4741//matches
     const parts = path.split("/");
     const sportIdx = parts.indexOf("sports");
-    if (sportIdx !== -1 && parts.length > sportIdx + 3) {
-      // Check if combining two segments matches a league slug (e.g. "team/4741")
-      const combinedSlug = `${parts[sportIdx + 2]}/${parts[sportIdx + 3]}`;
+    if (sportIdx === -1 || parts.length <= sportIdx + 2)
+      return { leagueSlug: null, seasonSlug: null };
+
+    // Everything after /sports/{sport}/
+    const remainder = parts.slice(sportIdx + 2).join("/");
+
+    // Match against known league slugs, longest first to prefer "team/4741" over "team"
+    const sorted = [...leagues].sort((a, b) => b.slug.length - a.slug.length);
+    for (const league of sorted) {
       if (
-        parts.length > sportIdx + 4 &&
-        leagues.some((l) => l.slug === combinedSlug)
+        remainder === league.slug ||
+        remainder.startsWith(league.slug + "/")
       ) {
+        const afterLeague = remainder.slice(league.slug.length + 1);
         return {
-          leagueSlug: combinedSlug,
-          seasonSlug: parts[sportIdx + 4],
+          leagueSlug: league.slug,
+          seasonSlug: afterLeague || null,
         };
       }
-      return {
-        leagueSlug: parts[sportIdx + 2],
-        seasonSlug: parts[sportIdx + 3],
-      };
     }
+
     return { leagueSlug: null, seasonSlug: null };
   }
 
@@ -169,6 +172,13 @@ export default function LeagueSeasonToggle({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="justify-between">
+            {!todayActive && selectedLeague.icon && (
+              <img
+                src={selectedLeague.icon}
+                alt=""
+                className="me-1 inline h-4 w-4"
+              />
+            )}
             {todayActive ? "League" : truncateName(selectedLeague.name)}
             <ChevronDownIcon className="ml-2 h-4 w-4" />
           </Button>
@@ -182,6 +192,9 @@ export default function LeagueSeasonToggle({
               key={`${league.slug}-${i}`}
               onClick={() => handleLeagueChange(league)}
             >
+              {league.icon && (
+                <img src={league.icon} alt="" className="inline h-4 w-4" />
+              )}
               {league.name}
               {league.externalURL && (
                 <Link

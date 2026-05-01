@@ -41,8 +41,8 @@ async function fetchAmericanFootballApi(endpoint: string) {
 }
 
 export async function fetchAmericanFootballLastMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchAmericanFootballApi(
@@ -51,8 +51,8 @@ export async function fetchAmericanFootballLastMatches(
 }
 
 export async function fetchAmericanFootballNextMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchAmericanFootballApi(
@@ -61,8 +61,8 @@ export async function fetchAmericanFootballNextMatches(
 }
 
 export async function fetchAmericanFootballStandings(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
 ) {
   return (await fetchAmericanFootballApi(
     `/american-football/tournament/${tournamentId}/season/${seasonId}/standings/total`,
@@ -70,7 +70,7 @@ export async function fetchAmericanFootballStandings(
 }
 
 export async function fetchAmericanFootballTeamLastMatches(
-  teamId: number,
+  teamId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchAmericanFootballApi(
@@ -79,7 +79,7 @@ export async function fetchAmericanFootballTeamLastMatches(
 }
 
 export async function fetchAmericanFootballTeamNextMatches(
-  teamId: number,
+  teamId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchAmericanFootballApi(
@@ -87,13 +87,13 @@ export async function fetchAmericanFootballTeamNextMatches(
   )) as AmericanFootball_AmericanFootballApi_FixturePage_Response;
 }
 
-export async function fetchAmericanFootballMatchDetails(matchId: number) {
+export async function fetchAmericanFootballMatchDetails(matchId: string) {
   return (await fetchAmericanFootballApi(
     `/american-football/match/${matchId}`,
   )) as AmericanFootball_AmericanFootballApi_Match_Response;
 }
 
-export async function fetchAmericanFootballMatchIncidents(matchId: number) {
+export async function fetchAmericanFootballMatchIncidents(matchId: string) {
   return (await fetchAmericanFootballApi(
     `/american-football/match/${matchId}/incidents`,
   )) as Sofascore_EventIncidents_Response;

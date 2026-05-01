@@ -6,7 +6,7 @@ export default async function Page(props: {
   params: Promise<{ league: string; season: string }>;
 }) {
   const { league, season } = await props.params;
-  const pageData = await netballMatches(Number(league), Number(season));
+  const pageData = await netballMatches(league, season);
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;

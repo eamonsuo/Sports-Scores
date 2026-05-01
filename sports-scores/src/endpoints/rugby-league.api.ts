@@ -39,8 +39,8 @@ async function fetchRugbyLeagueApi(endpoint: string) {
 }
 
 export async function fetchRugbyLeagueLastMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchRugbyLeagueApi(
@@ -49,8 +49,8 @@ export async function fetchRugbyLeagueLastMatches(
 }
 
 export async function fetchRugbyLeagueNextMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchRugbyLeagueApi(
@@ -59,7 +59,7 @@ export async function fetchRugbyLeagueNextMatches(
 }
 
 export async function fetchRugbyLeagueTeamLastMatches(
-  teamId: number,
+  teamId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchRugbyLeagueApi(
@@ -68,7 +68,7 @@ export async function fetchRugbyLeagueTeamLastMatches(
 }
 
 export async function fetchRugbyLeagueTeamNextMatches(
-  teamId: number,
+  teamId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchRugbyLeagueApi(
@@ -77,21 +77,21 @@ export async function fetchRugbyLeagueTeamNextMatches(
 }
 
 export async function fetchRugbyLeagueStandings(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
 ) {
   return (await fetchRugbyLeagueApi(
     `/rugby/tournament/${tournamentId}/season/${seasonId}/standings/total`,
   )) as Sofascore_TotalStandings_Response;
 }
 
-export async function fetchRugbyLeagueMatchDetails(matchId: number) {
+export async function fetchRugbyLeagueMatchDetails(matchId: string) {
   return (await fetchRugbyLeagueApi(
     `/rugby/match/${matchId}`,
   )) as Sofascore_Event_Response;
 }
 
-export async function fetchRugbyLeagueMatchIncidents(matchId: number) {
+export async function fetchRugbyLeagueMatchIncidents(matchId: string) {
   return (await fetchRugbyLeagueApi(
     `/rugby/match/${matchId}/incidents`,
   )) as Sofascore_EventIncidents_Response;

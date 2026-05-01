@@ -1,21 +1,14 @@
 import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
 import {
-  API_EVENT_TYPES,
   CardVariant,
-  DeepPartial,
-  DISPLAY_TYPES,
+  DisplayTypes,
   FixtureRound,
   MatchStatus,
   MatchSummary,
-  SPORT,
 } from "@/types/misc";
-import { PlayoffPictureStanding } from "@/types/playoff-picture";
-import { Sofascore_Event, Sofascore_StandingRow } from "@/types/sofascore";
-import { SportsDB_Event } from "@/types/sportsdb";
 import { TZDate } from "@date-fns/tz/date";
 import { format } from "date-fns/format";
-import { resolveSportImage } from "./imageMapping";
-import { setMatchSummary, shortenTeamNames } from "./projUtils";
+import { shortenTeamNames } from "./projUtils";
 import { getClientTimezone } from "./serverUtils";
 
 const DEFAULT_LEAGUE_SEASON_CONFIG: LeagueSeasonConfig = {
@@ -23,170 +16,7 @@ const DEFAULT_LEAGUE_SEASON_CONFIG: LeagueSeasonConfig = {
   slug: "",
   seasons: [],
 };
-const DEFAULT_DISPLAY_TYPE = DISPLAY_TYPES.ROUND;
-
-export function mapMatchSummary(
-  type: API_EVENT_TYPES,
-  sport: SPORT,
-  event: any,
-  options?: DeepPartial<MatchSummary>,
-) {
-  switch (type) {
-    case API_EVENT_TYPES.SOFASCORE:
-      return mapSofascoreEventToMatchSummary(sport, event, options);
-    case API_EVENT_TYPES.SPORTSDB:
-      return mapSportsDBEventToMatchSummary(sport, event, options);
-    case API_EVENT_TYPES.SPORTSMONKS_CRICKET:
-    default:
-      return {
-        id: Math.random().toString(),
-        sport: sport,
-        summaryText: "",
-        status: "UPCOMING",
-        startDate: new Date(),
-        awayDetails: {},
-        homeDetails: {},
-        ...options,
-      } as MatchSummary;
-  }
-}
-
-function mapSofascoreEventToMatchSummary(
-  sport: SPORT,
-  event: Sofascore_Event,
-  options?: DeepPartial<MatchSummary>,
-): MatchSummary {
-  var startDate = new Date(0);
-  startDate.setUTCSeconds(event.startTimestamp);
-
-  return {
-    id: options?.id ?? event.id.toString(),
-    startDate: options?.startDate ?? startDate,
-    endDate: options?.endDate,
-    sport: sport,
-    status:
-      options?.status ??
-      (event.status.type === "inprogress" || event.status.type === "interrupted"
-        ? MatchStatus.LIVE
-        : event.status.type === "notstarted"
-          ? MatchStatus.UPCOMING
-          : MatchStatus.COMPLETED),
-    roundLabel: options?.roundLabel ?? `Round ${event.roundInfo?.round}`,
-    timer:
-      options?.timer ??
-      (event.status.type === "notstarted"
-        ? (options?.startDate ?? startDate)
-        : event.status.description),
-    timerDisplayColour:
-      options?.timerDisplayColour ??
-      (event.status.type === "inprogress" || event.status.type === "interrupted"
-        ? "green"
-        : "gray"),
-    matchSlug:
-      options?.matchSlug ??
-      `${event.tournament.uniqueTournament.id}/${event.season.id}/match/${event.id}`,
-    venue:
-      options?.venue ??
-      (event?.venue?.name &&
-        `${event?.venue?.name}, ${event?.venue?.city.name}`),
-    seriesName: options?.seriesName,
-    seriesSlug: options?.seriesSlug,
-    summaryText:
-      options?.summaryText ??
-      setMatchSummary(
-        event.status.type,
-        event.homeTeam.name,
-        event.homeScore.current,
-        event.awayTeam.name,
-        event.awayScore.current,
-      ),
-    homeDetails: {
-      name: options?.homeDetails?.name ?? shortenTeamNames(event.homeTeam.name),
-      score:
-        options?.homeDetails?.score ??
-        event.homeScore.current?.toString() ??
-        "0",
-      img: options?.homeDetails?.img ?? resolveSportImage(event.homeTeam.name),
-      winDrawLoss: options?.homeDetails?.winDrawLoss,
-    },
-    awayDetails: {
-      name: options?.awayDetails?.name ?? shortenTeamNames(event.awayTeam.name),
-      score:
-        options?.awayDetails?.score ??
-        event.awayScore.current?.toString() ??
-        "0",
-      img: options?.awayDetails?.img ?? resolveSportImage(event.awayTeam.name),
-      winDrawLoss: options?.awayDetails?.winDrawLoss,
-    },
-    seasonId: options?.seasonId ?? event.season.id.toString(),
-    tournamentId:
-      options?.tournamentId ?? event.tournament.uniqueTournament.id.toString(),
-    winner: options?.winner ?? event.winnerCode,
-  };
-}
-
-function mapSportsDBEventToMatchSummary(
-  sport: SPORT,
-  event: SportsDB_Event,
-  options?: DeepPartial<MatchSummary>,
-): MatchSummary {
-  const timeStamp =
-    event.strTimestamp.length > 19
-      ? event.strTimestamp.slice(0, 19)
-      : event.strTimestamp;
-  const startDate = new Date(timeStamp + "Z");
-
-  const status: MatchStatus =
-    event.intHomeScore !== null && event.intAwayScore !== null
-      ? MatchStatus.COMPLETED
-      : MatchStatus.UPCOMING;
-
-  return {
-    id: options?.id ?? event.idEvent,
-    startDate: options?.startDate ?? startDate,
-    endDate: options?.endDate,
-    sport: sport,
-    status: options?.status ?? status,
-    roundLabel: options?.roundLabel ?? `Round ${event.intRound}`,
-    timer:
-      options?.timer ??
-      (status === MatchStatus.UPCOMING
-        ? (options?.startDate ?? startDate)
-        : "Ended"),
-    timerDisplayColour: options?.timerDisplayColour ?? "gray",
-    matchSlug:
-      options?.matchSlug ??
-      `${event.idLeague}/${event.strSeason}/match/${event.idEvent}`,
-    venue: options?.venue ?? event?.strVenue ?? "",
-    seriesName: options?.seriesName,
-    seriesSlug: options?.seriesSlug,
-    summaryText:
-      options?.summaryText ??
-      setMatchSummary(
-        status === MatchStatus.UPCOMING ? "notstarted" : "finished",
-        event.strHomeTeam,
-        event.intHomeScore ?? 0,
-        event.strAwayTeam,
-        event.intAwayScore ?? 0,
-      ),
-    homeDetails: {
-      name: options?.homeDetails?.name ?? shortenTeamNames(event.strHomeTeam),
-      score:
-        options?.homeDetails?.score ?? (event.intHomeScore ?? 0).toString(),
-      img: options?.homeDetails?.img ?? event.strHomeTeamBadge,
-      winDrawLoss: options?.homeDetails?.winDrawLoss,
-    },
-    awayDetails: {
-      name: options?.awayDetails?.name ?? shortenTeamNames(event.strAwayTeam),
-      score:
-        options?.awayDetails?.score ?? (event.intAwayScore ?? 0).toString(),
-      img: options?.awayDetails?.img ?? event.strAwayTeamBadge,
-      winDrawLoss: options?.awayDetails?.winDrawLoss,
-    },
-    seasonId: options?.seasonId ?? event.strSeason,
-    tournamentId: options?.tournamentId ?? event.idLeague,
-  };
-}
+const DEFAULT_DISPLAY_TYPE = DisplayTypes.ROUND;
 
 export async function mapFixtureRounds(
   matches: MatchSummary[],
@@ -196,9 +26,9 @@ export async function mapFixtureRounds(
   cardVariant?: CardVariant,
 ) {
   const isMultiLeague = Array.isArray(leagueConfig);
-  const displayType: DISPLAY_TYPES = isMultiLeague
-    ? DISPLAY_TYPES.LEAGUE
-    : (leagueConfig.display ?? DISPLAY_TYPES.ROUND);
+  const displayType: DisplayTypes = isMultiLeague
+    ? DisplayTypes.LEAGUE
+    : (leagueConfig.display ?? DisplayTypes.ROUND);
   const byes = isMultiLeague ? undefined : leagueConfig.byes;
   const showByes = byes !== undefined;
   const timezone = await getClientTimezone();
@@ -208,10 +38,10 @@ export async function mapFixtureRounds(
       (acc, match) => {
         let roundLabel = "";
         switch (displayType) {
-          case DISPLAY_TYPES.ROUND:
+          case DisplayTypes.ROUND:
             roundLabel = match.roundLabel ?? "Round 0";
             break;
-          case DISPLAY_TYPES.DATE:
+          case DisplayTypes.DATE:
             roundLabel =
               // match.roundLabel ??
               format(
@@ -219,10 +49,10 @@ export async function mapFixtureRounds(
                 "eee d MMM",
               );
             break;
-          case DISPLAY_TYPES.LEAGUE:
+          case DisplayTypes.LEAGUE:
             roundLabel = isMultiLeague
               ? (leagueConfig.find((l) => l.slug === match.tournamentId)
-                  ?.name ?? roundLabel)
+                  ?.name ?? "")
               : (match.roundLabel ?? "");
             break;
         }
@@ -238,7 +68,7 @@ export async function mapFixtureRounds(
 
         acc[roundLabel].matches.push(match);
         acc[roundLabel].roundSlug =
-          displayType === DISPLAY_TYPES.LEAGUE
+          displayType === DisplayTypes.LEAGUE
             ? `${match.sport}/${match.tournamentId}/${match.seasonId}`
             : undefined;
         if (showByes) {
@@ -258,11 +88,11 @@ export async function mapFixtureRounds(
 
 export function getCurrentRound(
   rounds: FixtureRound[],
-  leagueConfig: DISPLAY_TYPES = DEFAULT_DISPLAY_TYPE,
+  leagueConfig: DisplayTypes = DEFAULT_DISPLAY_TYPE,
 ) {
   switch (leagueConfig) {
-    case DISPLAY_TYPES.ROUND:
-    case DISPLAY_TYPES.DATE:
+    case DisplayTypes.ROUND:
+    case DisplayTypes.DATE:
       // Find first round with upcoming matches
       return (
         rounds.find((r) =>
@@ -276,31 +106,7 @@ export function getCurrentRound(
         "Round 0"
       );
 
-    case DISPLAY_TYPES.LEAGUE:
+    case DisplayTypes.LEAGUE:
       return rounds[0].roundLabel ?? "League";
   }
-}
-
-export function mapSofascoreToStanding(
-  row: Sofascore_StandingRow,
-  totalSeasonGames: number,
-): PlayoffPictureStanding {
-  return {
-    team: {
-      id: row.team.id,
-      name: shortenTeamNames(row.team.name),
-      logo: resolveSportImage(row.team.name),
-    },
-    position: row.position,
-    played: row.matches,
-    totalSeasonGames,
-    wins: row.wins,
-    losses: row.losses,
-    draws: row.overtimeLosses ?? row.draws ?? 0,
-    tiebreakers: {
-      pointsFor: row.scoresFor,
-      pointsAgainst: row.scoresAgainst,
-      pointsDiff: row.scoresFor - row.scoresAgainst,
-    },
-  };
 }

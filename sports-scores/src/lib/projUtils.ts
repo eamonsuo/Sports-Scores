@@ -110,6 +110,8 @@ export function shortenTeamNames(team: string) {
       return "South Sydney Rabbits";
     case "New Zealand Warriors":
       return "NZ Warriors";
+    case "New South Wales Sky Blues":
+      return "New South Wales Blues";
     default:
       return team;
   }
@@ -219,10 +221,10 @@ export function setTennisMatchSummary(
 
 export function getSportConfigurations(
   leagueConfigs: LeagueSeasonConfig[],
-  tournamentId: string,
+  leagueId: string,
   seasonId: string,
 ) {
-  const leagueConfig = leagueConfigs.find((l) => l.slug === tournamentId);
+  const leagueConfig = leagueConfigs.find((l) => l.slug === leagueId);
 
   const seasonConfig = leagueConfig?.seasons.find((s) => s.slug === seasonId);
 

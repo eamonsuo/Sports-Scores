@@ -1,6 +1,6 @@
 import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
 import DateNav from "@/components/misc-ui/DateNav";
-import { GOLF_TOURS, MOTORSPORT_CATEGORIES } from "@/lib/constants";
+import { GOLF_TOURS } from "@/lib/constants";
 import { getClientDate } from "@/lib/serverUtils";
 import { americanFootballService } from "@/services/american-football.service";
 import { aussieRulesService } from "@/services/aussie-rules.service";
@@ -10,7 +10,7 @@ import { cricketMatchesByDate } from "@/services/cricket.service";
 import { footballService } from "@/services/football.service";
 import { golfTournamentsByDate } from "@/services/golf.service";
 import { iceHockeyService } from "@/services/ice-hockey.service";
-import { motorsportCategoriesByDate } from "@/services/motorsport.service";
+import { motorsportService } from "@/services/motorsport.service";
 import { netballMatchesByDate } from "@/services/netball.service";
 import { rugbyLeagueService } from "@/services/rugby-league.service";
 import { rugbyUnionService } from "@/services/rugby-union.service";
@@ -55,7 +55,7 @@ export default async function Page({
     aussieRulesService.matchesByDate(parsedDate),
     iceHockeyService.matchesByDate(parsedDate),
     golfTournamentsByDate(parsedDate),
-    motorsportCategoriesByDate(parsedDate),
+    motorsportService.matchesByDate(parsedDate),
     rugbyUnionService.matchesByDate(parsedDate),
     netballMatchesByDate(parsedDate),
     null,
@@ -81,13 +81,7 @@ export default async function Page({
         roundSlug: `${SPORT.GOLF}/${GOLF_TOURS[0].slug}/${GOLF_TOURS[0].seasons[0].slug}`,
       },
     ])
-    .concat([
-      {
-        matches: motorsportToday ?? [],
-        roundLabel: "Motorsport",
-        roundSlug: `${SPORT.MOTORSPORT}/${MOTORSPORT_CATEGORIES[0].slug}/${MOTORSPORT_CATEGORIES[0].seasons[0].slug}`,
-      },
-    ])
+    .concat(motorsportToday?.fixtures ?? [])
     .concat(footballToday?.fixtures ?? [])
     .concat(basketballToday?.fixtures ?? [])
     .concat(baseballToday?.fixtures ?? [])

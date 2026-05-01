@@ -23,7 +23,7 @@ export default async function Page(props: {
   params: Promise<{ league: string; season: string; match: string }>;
 }) {
   const { league, season, match } = await props.params;
-  const rawDetails = await cricketMatchDetails(Number(match));
+  const rawDetails = await cricketMatchDetails(match);
 
   if (rawDetails === null) {
     return <Placeholder>An error has ocurred</Placeholder>;

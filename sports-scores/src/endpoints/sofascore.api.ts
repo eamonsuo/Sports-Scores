@@ -23,8 +23,8 @@ async function fetchSofascoreApi(endpoint: string) {
 }
 
 export async function fetchLastEvents(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchSofascoreApi(
@@ -33,8 +33,8 @@ export async function fetchLastEvents(
 }
 
 export async function fetchNextEvents(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchSofascoreApi(
@@ -43,21 +43,21 @@ export async function fetchNextEvents(
 }
 
 export async function fetchStandingsTotal(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
 ) {
   return (await fetchSofascoreApi(
     `/unique-tournament/${tournamentId}/season/${seasonId}/standings/total`,
   )) as Sofascore_TotalStandings_Response;
 }
 
-export async function fetchEventDetails(eventId: number) {
+export async function fetchEventDetails(eventId: string) {
   return (await fetchSofascoreApi(
     `/event/${eventId}`,
   )) as Sofascore_Event_Response;
 }
 
-export async function fetchEventIncidents(eventId: number) {
+export async function fetchEventIncidents(eventId: string) {
   return (await fetchSofascoreApi(
     `/event/${eventId}/incidents`,
   )) as Sofascore_EventIncidents_Response;
@@ -71,7 +71,7 @@ export async function fetchEventsByDate(sport: SofascoreSportURL, date: Date) {
 
 // Placeholder functions - to be implemented
 export async function fetchTeamLastEvents(
-  teamId: number,
+  teamId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchSofascoreApi(
@@ -80,7 +80,7 @@ export async function fetchTeamLastEvents(
 }
 
 export async function fetchTeamNextEvents(
-  teamId: number,
+  teamId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchSofascoreApi(
@@ -88,7 +88,7 @@ export async function fetchTeamNextEvents(
   )) as Sofascore_EventPage_Response;
 }
 
-export async function fetchCupTrees(tournamentId: number, seasonId: number) {
+export async function fetchCupTrees(tournamentId: string, seasonId: string) {
   return (await fetchSofascoreApi(
     `/unique-tournament/${tournamentId}/season/${seasonId}/cuptrees`,
   )) as Sofascore_TournamentCupTrees_Response;

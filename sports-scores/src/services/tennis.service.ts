@@ -1,6 +1,5 @@
 import { PeriodScore } from "@/components/all-sports/ScoreBreakdown";
-import { Match as BracketMatch } from "@/components/bracket/types";
-import { fetchCupTrees, fetchEventsByDate } from "@/endpoints/sofascore.api";
+import { fetchEventsByDate } from "@/endpoints/sofascore.api";
 import {
   fetchTennisATPRankings,
   fetchTennisBracket,
@@ -13,12 +12,11 @@ import {
   fetchTennisWTARankings,
 } from "@/endpoints/tennis.api";
 import { TENNIS_CATEGORIES, TENNIS_LEAGUES } from "@/lib/constants";
-import { mapMatchSummary } from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
 import { setTennisMatchSummary, shortenTeamNames } from "@/lib/projUtils";
 import {
-  API_EVENT_TYPES,
   CardVariant,
+  DeepPartial,
   FixtureRound,
   MatchSummary,
   SPORT,
@@ -27,7 +25,6 @@ import { Sofascore_Event, SofascoreSportURL } from "@/types/sofascore";
 import {
   RankingList,
   Tennis_Sofascore_Event,
-  TennisBracketPage,
   TennisRankingPage,
 } from "@/types/tennis";
 import { TZDate } from "@date-fns/tz";
@@ -50,7 +47,6 @@ class TennisService extends SofascoreSport {
         fetchTeamNextEvents: fetchTennisPlayerNextMatches,
       },
       SPORT.TENNIS,
-      SofascoreSportURL.TENNIS,
       TENNIS_LEAGUES,
       [] as const,
       undefined,
@@ -141,75 +137,7 @@ class TennisService extends SofascoreSport {
     };
   }
 
-  async tennisBrackets(tournamentId: number, seasonId: number) {
-    const trees = await (
-      process.env.DEV_MODE ? fetchCupTrees : fetchTennisBracket
-    )(tournamentId, seasonId);
-
-    if (!trees) {
-      return null;
-    }
-
-    const tempBrackets = trees.cupTrees.map((tree) => {
-      return {
-        id: tree.id,
-        name: tree.name,
-        currentRound: tree.currentRound,
-        matches: tree.rounds.flatMap((round, roundIndex) =>
-          round.blocks.map((match) => {
-            let startDate = new Date(0);
-            startDate.setUTCSeconds(match.seriesStartDateTimestamp ?? 0);
-            return {
-              id: match.blockId,
-              nextMatchId: null,
-              participants: match.participants.map((team, teamIndex) => ({
-                id: team.team.id,
-                isWinner: team.winner,
-                name: team.team.name,
-                resultText:
-                  teamIndex === 0 ? match.homeTeamScore : match.awayTeamScore,
-                status: match.finished ? "PLAYED" : "SCHEDULED",
-              })),
-              startTime: startDate,
-              tournamentRoundText: (roundIndex + 1).toString(),
-              state: match.finished ? "PLAYED" : "SCHEDULED",
-              name: "",
-              href: `./match/${match?.events?.[0] ?? ""}`,
-            } as BracketMatch;
-          }),
-        ),
-      };
-    });
-
-    // Build a lookup map first to avoid O(n²) complexity
-    const matchMap = new Map();
-    tempBrackets.forEach((bracket) => {
-      bracket.matches.forEach((match) => {
-        matchMap.set(match.id, match);
-      });
-    });
-
-    trees.cupTrees.forEach((tree) => {
-      tree.rounds.forEach((round) => {
-        round.blocks.forEach((match) => {
-          match.participants.forEach((team) => {
-            if (team.sourceBlockId) {
-              const matchToUpdate = matchMap.get(team.sourceBlockId);
-              if (matchToUpdate) {
-                matchToUpdate.nextMatchId = match.blockId;
-              }
-            }
-          });
-        });
-      });
-    });
-
-    return {
-      brackets: tempBrackets,
-    } as TennisBracketPage;
-  }
-
-  async TennisWorldRankings(rankingList: RankingList) {
+  async tennisRankings(rankingList: RankingList) {
     let rankings;
     if (process.env.DEV_MODE) {
       // rankings = await fetchPlayerRankings(rankingList);
@@ -243,10 +171,10 @@ class TennisService extends SofascoreSport {
 
   protected override eventMapper(
     match: Tennis_Sofascore_Event,
-    roundLabel: string,
+    options?: DeepPartial<MatchSummary>,
   ): MatchSummary {
-    return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, this.sport, match, {
-      roundLabel,
+    return super.eventMapper(match, {
+      ...options,
       otherDetail: match.roundInfo?.name ?? undefined,
       summaryText: setTennisMatchSummary(
         match.status.type,
@@ -327,7 +255,7 @@ class TennisService extends SofascoreSport {
     timezone: string = "UTC",
   ): MatchSummary[] {
     // Map to MatchSummary first
-    const mapped = matches.map((match) => this.eventMapper(match, ""));
+    const mapped = matches.map((match) => this.eventMapper(match));
 
     // Group by seriesName
     const groups = new Map<string, MatchSummary[]>();

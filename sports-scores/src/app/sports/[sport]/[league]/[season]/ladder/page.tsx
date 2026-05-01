@@ -10,10 +10,7 @@ export default async function Page(props: {
   const { league, season, sport } = await props.params;
   const config = SPORT_ROUTE_CONFIG[sport as SPORT];
 
-  const pageData = await config.service.standings(
-    Number(league),
-    Number(season),
-  );
+  const pageData = await config.service.standings(league, season);
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;

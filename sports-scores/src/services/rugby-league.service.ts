@@ -14,12 +14,11 @@ import {
   RUGBY_LEAGUE_LEAGUES,
   SCORE_BREAKDOWN_HALVES_CONFIG,
 } from "@/lib/constants";
-import { mapSofascoreToStanding } from "@/lib/eventMapping";
 import { resolvePlayoffPicture } from "@/lib/playoffPictureMapping";
 import { getSportConfigurations } from "@/lib/projUtils";
 import { SPORT, Standings } from "@/types/misc";
-import { Sofascore_Standing, SofascoreSportURL } from "@/types/sofascore";
-import { SofascoreSport } from "./sofascore.service";
+import { Sofascore_Standing } from "@/types/sofascore";
+import { mapSofascoreToStanding, SofascoreSport } from "./sofascore.service";
 
 class RugbyLeagueService extends SofascoreSport {
   constructor() {
@@ -37,19 +36,18 @@ class RugbyLeagueService extends SofascoreSport {
         fetchTeamNextEvents: fetchRugbyLeagueTeamNextMatches,
       },
       SPORT.RUGBY_LEAGUE,
-      SofascoreSportURL.RUGBY,
       RUGBY_LEAGUE_LEAGUES,
       RUGBY_LEAGUE_LADDER_HEADINGS,
       SCORE_BREAKDOWN_HALVES_CONFIG,
     );
   }
 
-  override async standings(tournamentId: number, seasonId: number) {
+  override async standings(leagueId: string, seasonId: string) {
     const standings = await (
       process.env.DEV_MODE
         ? fetchStandingsTotal
         : this.apiEndpoints.fetchStandingsTotal
-    )(tournamentId, seasonId);
+    )(leagueId, seasonId);
 
     if (!standings) {
       return null;
@@ -57,7 +55,7 @@ class RugbyLeagueService extends SofascoreSport {
 
     const { ladderConfig } = getSportConfigurations(
       this.leagues,
-      String(tournamentId),
+      String(leagueId),
       String(seasonId),
     );
 

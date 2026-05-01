@@ -1,3 +1,4 @@
+import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
 import { F1SessionResults } from "@/components/motorsport/f1/F1SessionStandings";
 import {
   fetchF1ConstructorStandings,
@@ -11,466 +12,645 @@ import {
   fetchF1Sessions,
   fetchF1SprintResult,
 } from "@/endpoints/f1.api";
+import { MOTORSPORT_CATEGORIES } from "@/lib/constants";
+import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
+import { getSportConfigurations } from "@/lib/projUtils";
 import {
   F1ConstructorStandingsPage,
   F1DriverStandingsPage,
-  F1RacesPage,
   F1SessionPage,
   F1SessionType,
-  SessionSummary,
+  Jolpica_Race,
 } from "@/types/f1";
-import { MatchStatus, MatchSummary, SPORT } from "@/types/misc";
-import { format, isSameDay } from "date-fns";
+import {
+  Brackets,
+  CardVariant,
+  DeepPartial,
+  DisplayTypes,
+  FixtureRound,
+  MatchDetail,
+  Matches,
+  MatchStatus,
+  MatchSummary,
+  SPORT,
+  SportService,
+  Standings,
+} from "@/types/misc";
+import { isSameDay } from "date-fns";
 import { addHours } from "date-fns/addHours";
 import { TZDate } from "react-day-picker";
 
-export async function f1EventSchedule(season: number) {
-  const rawEvents = await fetchF1Events(season);
+class MotorsportService implements SportService {
+  // protected apiEndpoints: SofascoreAPI;
+  protected sport: SPORT;
+  protected categories: LeagueSeasonConfig[];
+  // protected headings: readonly string[];
+  // protected periodConfig?: PeriodConfig;
+  protected cardVariant?: CardVariant;
 
-  if (!rawEvents) {
+  constructor(
+    // apiEndpoints: SofascoreAPI,
+    sport: SPORT,
+    categories: LeagueSeasonConfig[],
+    // headings: readonly string[],
+    // periodConfig?: PeriodConfig,
+    cardVariant?: CardVariant,
+  ) {
+    // this.apiEndpoints = apiEndpoints;
+    this.sport = sport;
+    this.categories = categories;
+    // this.headings = headings;
+    // this.periodConfig = periodConfig;
+    this.cardVariant = cardVariant;
+  }
+
+  async matchesByLeagueSeason(
+    leagueId: string,
+    seasonId: string,
+  ): Promise<Matches | null> {
+    console.log(leagueId, seasonId);
+    switch (leagueId) {
+      case "f1":
+        return await f1Service.matchesByLeagueSeason(leagueId, seasonId);
+
+      default:
+        return null;
+    }
+  }
+
+  async matchesByDate(date: Date): Promise<Matches | null> {
+    const f1Events = await f1Service.matchesByDate(date);
+
+    const motorsportFixtures: FixtureRound[] = [];
+
+    motorsportFixtures.push(...(f1Events?.fixtures ?? []));
+
+    switch (date.getDay()) {
+      case 1: // Monday
+      case 2: // Tuesday
+      case 3: // Wednesday
+        break;
+      case 4: // Thursday
+      case 5: // Friday
+      case 6: // Saturday
+      case 0: // Sunday
+        motorsportFixtures.push({
+          matches: [
+            {
+              id: "Supercars",
+              sport: SPORT.MOTORSPORT,
+              summaryText: "Supercars",
+              startDate: date,
+              status: MatchStatus.LIVE,
+              awayDetails: { score: "", name: "" },
+              homeDetails: { score: "", name: "" },
+              matchSlug: "supercars/external",
+              roundLabel: "Supercars",
+            },
+          ],
+          roundLabel: "Supercars",
+          cardVariant: this.cardVariant,
+          roundSlug: `${SPORT.MOTORSPORT}/supercars/external`,
+        });
+        break;
+    }
+
+    return motorsportFixtures.length > 0
+      ? {
+          fixtures: motorsportFixtures,
+          currentRound: getCurrentRound(
+            motorsportFixtures,
+            DisplayTypes.LEAGUE,
+          ),
+        }
+      : null;
+  }
+
+  async matchesByTeam(teamId: string): Promise<Matches | null> {
+    return null;
+  }
+  async matchDetails(matchId: string): Promise<MatchDetail | null> {
+    return null;
+  }
+  async standings(
+    leagueId: string,
+    seasonId: string,
+  ): Promise<Standings<readonly string[]> | null> {
     return null;
   }
 
-  return {
-    sessions: rawEvents.flatMap((item) => {
-      let gpSessions: SessionSummary[] = [];
+  async brackets(leagueId: string, seasonId: string): Promise<Brackets | null> {
+    return null;
+  }
+}
 
-      if (item.FirstPractice) {
-        gpSessions.push({
-          round: Number(item.round),
-          grandPrixName: item.raceName,
-          startDate: new Date(
-            item.FirstPractice.date + "T" + item.FirstPractice.time,
-          ),
-          sessionType: F1SessionType.Practice1,
-          sessionName: F1SessionType.Practice1.replace("-", " "),
-          sport: `${SPORT.MOTORSPORT}`,
-          status: setSessionStatus(
-            new Date(item.FirstPractice.date + "T" + item.FirstPractice.time),
-            F1SessionType.Practice1,
-          ),
-          logo: resolveSportImage(item.raceName),
-          sessionSlug: `f1/${season}/${item.round}/${F1SessionType.Practice1}`,
-        });
-      }
-      if (item.SecondPractice) {
-        gpSessions.push({
-          round: Number(item.round),
-          grandPrixName: item.raceName,
-          startDate: new Date(
-            item.SecondPractice.date + "T" + item.SecondPractice.time,
-          ),
-          sessionType: F1SessionType.Practice2,
-          sessionName: F1SessionType.Practice2.replace("-", " "),
-          sport: `${SPORT.MOTORSPORT}`,
-          status: setSessionStatus(
-            new Date(item.SecondPractice.date + "T" + item.SecondPractice.time),
-            F1SessionType.Practice2,
-          ),
-          sessionSlug: `f1/${season}/${item.round}/${F1SessionType.Practice2}`,
-        });
-      }
-      if (item.ThirdPractice) {
-        gpSessions.push({
-          round: Number(item.round),
-          grandPrixName: item.raceName,
-          startDate: new Date(
-            item.ThirdPractice.date + "T" + item.ThirdPractice.time,
-          ),
-          sessionType: F1SessionType.Practice3,
-          sessionName: F1SessionType.Practice3.replace("-", " "),
-          sport: `${SPORT.MOTORSPORT}`,
-          status: setSessionStatus(
-            new Date(item.ThirdPractice.date + "T" + item.ThirdPractice.time),
-            F1SessionType.Practice3,
-          ),
-          sessionSlug: `f1/${season}/${item.round}/${F1SessionType.Practice3}`,
-        });
-      }
-      if (item.SprintQualifying) {
-        gpSessions.push({
-          round: Number(item.round),
-          grandPrixName: item.raceName,
-          startDate: new Date(
-            item.SprintQualifying.date + "T" + item.SprintQualifying.time,
-          ),
-          sessionType: F1SessionType.SprintQualifying,
-          sessionName: F1SessionType.SprintQualifying.replace("-", " "),
-          sport: `${SPORT.MOTORSPORT}`,
-          status: setSessionStatus(
-            new Date(
-              item.SprintQualifying.date + "T" + item.SprintQualifying.time,
-            ),
-            F1SessionType.SprintQualifying,
-          ),
-          sessionSlug: `f1/${season}/${item.round}/${F1SessionType.SprintQualifying}`,
-        });
-      }
-      if (item.Sprint) {
-        gpSessions.push({
-          round: Number(item.round),
-          grandPrixName: item.raceName,
-          startDate: new Date(item.Sprint.date + "T" + item.Sprint.time),
-          sessionType: F1SessionType.Sprint,
-          sport: `${SPORT.MOTORSPORT}`,
-          status: setSessionStatus(
-            new Date(item.Sprint.date + "T" + item.Sprint.time),
-            F1SessionType.Sprint,
-          ),
-          sessionSlug: `f1/${season}/${item.round}/${F1SessionType.Sprint}`,
-        });
-      }
-      if (item.Qualifying) {
-        gpSessions.push({
-          round: Number(item.round),
-          grandPrixName: item.raceName,
-          startDate: new Date(
-            item.Qualifying.date + "T" + item.Qualifying.time,
-          ),
-          sessionType: F1SessionType.Qualifying,
-          sport: `${SPORT.MOTORSPORT}`,
-          status: setSessionStatus(
-            new Date(item.Qualifying.date + "T" + item.Qualifying.time),
-            F1SessionType.Qualifying,
-          ),
-          sessionSlug: `f1/${season}/${item.round}/${F1SessionType.Qualifying}`,
-        });
-      }
+class F1Service implements SportService {
+  // protected apiEndpoints: SofascoreAPI;
+  protected sport: SPORT;
+  protected categories: LeagueSeasonConfig[];
+  // protected headings: readonly string[];
+  // protected periodConfig?: PeriodConfig;
+  protected cardVariant?: CardVariant;
 
-      gpSessions.push({
-        round: Number(item.round),
-        grandPrixName: item.raceName,
-        startDate: new Date(item.date + "T" + item.time),
-        sessionType: F1SessionType.Race,
-        sessionName: F1SessionType.Race,
-        sport: `${SPORT.MOTORSPORT}`,
-        status: setSessionStatus(
-          new Date(item.date + "T" + item.time),
-          F1SessionType.Race,
-        ),
-        sessionSlug: `f1/${season}/${item.round}/${F1SessionType.Race}`,
+  constructor(
+    // apiEndpoints: SofascoreAPI,
+    sport: SPORT,
+    categories: LeagueSeasonConfig[],
+    // headings: readonly string[],
+    // periodConfig?: PeriodConfig,
+    cardVariant?: CardVariant,
+  ) {
+    // this.apiEndpoints = apiEndpoints;
+    this.sport = sport;
+    this.categories = categories;
+    // this.headings = headings;
+    // this.periodConfig = periodConfig;
+    this.cardVariant = cardVariant;
+  }
+
+  async matchesByLeagueSeason(
+    leagueId: string,
+    seasonId: string,
+  ): Promise<Matches | null> {
+    const rawEvents = await fetchF1Events(seasonId);
+
+    if (!rawEvents) {
+      return null;
+    }
+
+    const allEvents = rawEvents
+      ?.flatMap((race) => this.mapRaceToMatchSummaries(race))
+      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
+
+    const { leagueConfig } = getSportConfigurations(
+      this.categories,
+      leagueId,
+      seasonId,
+    );
+
+    const fixtures = await mapFixtureRounds(
+      allEvents,
+      leagueConfig,
+      this.cardVariant,
+    );
+
+    return {
+      fixtures,
+      currentRound: getCurrentRound(fixtures, leagueConfig?.display),
+    };
+  }
+
+  async matchesByDate(date: Date): Promise<Matches | null> {
+    const rawEvents = await fetchF1Events(date.getFullYear());
+
+    if (!rawEvents) {
+      return null;
+    }
+
+    const timezone = date instanceof TZDate ? date.timeZone : "UTC";
+
+    const filteredEvents = rawEvents
+      .flatMap((race) => this.mapRaceToMatchSummaries(race))
+      .filter((item) => {
+        const eventDate = new TZDate(item.startDate, timezone);
+        return isSameDay(eventDate, date);
       });
 
-      return gpSessions;
-    }),
-  } as F1RacesPage;
-}
+    if (!filteredEvents || filteredEvents.length === 0) return null;
 
-export async function f1SessionResults(
-  season: number,
-  round: number,
-  sessionType: F1SessionType,
-) {
-  let rawSession;
-  let raceLaps: string;
+    const fixtures = await mapFixtureRounds(
+      filteredEvents,
+      this.categories,
+      this.cardVariant,
+    );
 
-  switch (sessionType) {
-    case F1SessionType.Practice1:
-    case F1SessionType.Practice2:
-    case F1SessionType.Practice3:
-    case F1SessionType.SprintQualifying:
-      const meetings = await fetchF1Meetings(season);
+    return {
+      fixtures,
+      currentRound: getCurrentRound(fixtures, DisplayTypes.LEAGUE),
+    };
+  }
 
-      const curMeeting = meetings?.[round];
+  async matchesByTeam(teamId: string): Promise<Matches | null> {
+    return null;
+  }
+  async matchDetails(matchId: string): Promise<MatchDetail | null> {
+    return null;
+  }
+  async standings(
+    leagueId: string,
+    seasonId: string,
+  ): Promise<Standings<readonly string[]> | null> {
+    return null;
+  }
 
-      const curSession = await fetchF1Sessions(
-        season,
-        curMeeting?.meeting_key,
-        sessionType.replace("-", " "),
-      );
+  async brackets(leagueId: string, seasonId: string): Promise<Brackets | null> {
+    return null;
+  }
 
-      const rawPosition =
-        (await fetchF1Positions(
-          curSession?.[0]?.session_key,
+  async f1SessionResults(
+    season: string,
+    round: string,
+    sessionType: F1SessionType,
+  ) {
+    let rawSession;
+    let raceLaps: string;
+
+    switch (sessionType) {
+      case F1SessionType.Practice1:
+      case F1SessionType.Practice2:
+      case F1SessionType.Practice3:
+      case F1SessionType.SprintQualifying:
+        const meetings = await fetchF1Meetings(season);
+
+        const curMeeting = meetings?.[Number(round)];
+
+        const curSession = await fetchF1Sessions(
+          season,
+          curMeeting?.meeting_key != null
+            ? String(curMeeting.meeting_key)
+            : undefined,
+          sessionType.replace("-", " "),
+        );
+
+        const rawPosition =
+          (await fetchF1Positions(
+            curSession?.[0]?.session_key != null
+              ? String(curSession[0].session_key)
+              : undefined,
+            undefined,
+            undefined,
+            undefined,
+            curMeeting?.meeting_key != null
+              ? String(curMeeting.meeting_key)
+              : undefined,
+          )) ?? undefined;
+        const driver = await fetchF1DriverDetails(
+          rawPosition?.[0]?.session_key != null
+            ? String(rawPosition[0].session_key)
+            : undefined,
           undefined,
-          undefined,
-          undefined,
-          curMeeting?.meeting_key,
-        )) ?? undefined;
-      const driver = await fetchF1DriverDetails(
-        rawPosition?.[0]?.session_key,
-        undefined,
-      );
+        );
 
-      if (!rawPosition) {
+        if (!rawPosition) {
+          return null;
+        }
+
+        const distinctPositions = Array.from(
+          new Set(rawPosition.map((item) => item.position)),
+        );
+
+        const mostRecentPositions = distinctPositions
+          .map((position) => {
+            return rawPosition
+              .filter((item) => item.position === position)
+              .reduce((latest, current) => {
+                return new Date(latest.date) > new Date(current.date)
+                  ? latest
+                  : current;
+              });
+          })
+          .sort((a, b) => a.position - b.position);
+
+        return {
+          results: mostRecentPositions.map((item) => {
+            let driverDetails = driver?.find(
+              (x) => x.driver_number === item.driver_number,
+            );
+
+            return {
+              position: item.position,
+              driver: {
+                id: item.driver_number,
+                name:
+                  driverDetails?.first_name + " " + driverDetails?.last_name,
+              },
+              // laps: Number(item.laps),
+              time: "",
+              team: { name: driverDetails?.team_name ?? "Unknown" },
+            } as F1SessionResults;
+          }),
+          sessionName: sessionType,
+        } as F1SessionPage;
+      case "Sprint":
+        rawSession = await fetchF1SprintResult(season, round);
+
+        if (!rawSession) {
+          return null;
+        }
+
+        raceLaps = rawSession[0].SprintResults[0].laps;
+
+        return {
+          results: rawSession[0].SprintResults.map((item) => {
+            let lappedStatus = "";
+
+            if (raceLaps !== item.laps) {
+              let lappedlaps = Number(raceLaps) - Number(item.laps);
+              lappedStatus = lappedlaps == 1 ? "Lap" : lappedlaps + "Lap";
+            }
+
+            return {
+              position: Number(item.position),
+              driver: {
+                id: Number(item.number),
+                name: item.Driver.givenName + " " + item.Driver.familyName,
+              },
+              grid: item.grid,
+              laps: Number(item.laps),
+              time: item.Time ? lappedStatus + item.Time.time : item.status,
+              // pits: 0,
+              team: { name: item.Constructor.name },
+              points: Number(item.points),
+            };
+          }),
+          sessionName: sessionType,
+        } as F1SessionPage;
+      case "Qualifying":
+        rawSession = await fetchF1QualifyingResult(season, round);
+
+        if (!rawSession) {
+          return null;
+        }
+
+        let fastestQualifier = rawSession[0].QualifyingResults[0].Q3;
+
+        return {
+          results: rawSession[0].QualifyingResults.map((item) => {
+            let qualyGap = "";
+            if (item.Q3 && item.position !== "1") {
+              qualyGap =
+                "+" +
+                (
+                  Number(item.Q3.split(":")[1]) -
+                  Number(fastestQualifier?.split(":")[1])
+                ).toFixed(3);
+            }
+
+            return {
+              position: Number(item.position),
+              driver: {
+                id: Number(item.number),
+                name: item.Driver.givenName + " " + item.Driver.familyName,
+              },
+              time:
+                item.position === "1"
+                  ? item.Q3
+                  : item.Q3
+                    ? qualyGap
+                    : item.Q2
+                      ? item.Q2
+                      : item.Q1,
+              team: { name: item.Constructor.name },
+            };
+          }),
+          sessionName: sessionType,
+        } as F1SessionPage;
+      case "Race":
+        rawSession = await fetchF1RaceResult(season, round);
+
+        if (!rawSession) {
+          return null;
+        }
+
+        raceLaps = rawSession[0].Results[0].laps;
+
+        return {
+          results: rawSession[0].Results.map((item) => {
+            let lappedStatus = "";
+
+            if (raceLaps !== item.laps) {
+              let lappedlaps = Number(raceLaps) - Number(item.laps);
+              lappedStatus = lappedlaps == 1 ? "Lap" : lappedlaps + "Lap";
+            }
+
+            return {
+              position: Number(item.position),
+              driver: {
+                id: Number(item.number),
+                name: item.Driver.givenName + " " + item.Driver.familyName,
+              },
+              grid: item.grid,
+              laps: Number(item.laps),
+              time: item.Time ? lappedStatus + item.Time.time : item.status,
+              // pits: 0,
+              team: { name: item.Constructor.name },
+              points: Number(item.points),
+            };
+          }),
+          sessionName: sessionType,
+        } as F1SessionPage;
+      default:
         return null;
-      }
+    }
+  }
 
-      const distinctPositions = Array.from(
-        new Set(rawPosition.map((item) => item.position)),
-      );
+  async f1DriverStandings(season: string) {
+    const rawStandings = await fetchF1DriverStandings(season);
 
-      const mostRecentPositions = distinctPositions
-        .map((position) => {
-          return rawPosition
-            .filter((item) => item.position === position)
-            .reduce((latest, current) => {
-              return new Date(latest.date) > new Date(current.date)
-                ? latest
-                : current;
-            });
-        })
-        .sort((a, b) => a.position - b.position);
-
-      return {
-        results: mostRecentPositions.map((item) => {
-          let driverDetails = driver?.find(
-            (x) => x.driver_number === item.driver_number,
-          );
-
-          return {
-            position: item.position,
-            driver: {
-              id: item.driver_number,
-              name: driverDetails?.first_name + " " + driverDetails?.last_name,
-            },
-            // laps: Number(item.laps),
-            time: "",
-            team: { name: driverDetails?.team_name ?? "Unknown" },
-          } as F1SessionResults;
-        }),
-        sessionName: sessionType,
-      } as F1SessionPage;
-    case "Sprint":
-      rawSession = await fetchF1SprintResult(season, round);
-
-      if (!rawSession) {
-        return null;
-      }
-
-      raceLaps = rawSession[0].SprintResults[0].laps;
-
-      return {
-        results: rawSession[0].SprintResults.map((item) => {
-          let lappedStatus = "";
-
-          if (raceLaps !== item.laps) {
-            let lappedlaps = Number(raceLaps) - Number(item.laps);
-            lappedStatus = lappedlaps == 1 ? "Lap" : lappedlaps + "Lap";
-          }
-
-          return {
-            position: Number(item.position),
-            driver: {
-              id: Number(item.number),
-              name: item.Driver.givenName + " " + item.Driver.familyName,
-            },
-            grid: item.grid,
-            laps: Number(item.laps),
-            time: item.Time ? lappedStatus + item.Time.time : item.status,
-            // pits: 0,
-            team: { name: item.Constructor.name },
-            points: Number(item.points),
-          };
-        }),
-        sessionName: sessionType,
-      } as F1SessionPage;
-    case "Qualifying":
-      rawSession = await fetchF1QualifyingResult(season, round);
-
-      if (!rawSession) {
-        return null;
-      }
-
-      let fastestQualifier = rawSession[0].QualifyingResults[0].Q3;
-
-      return {
-        results: rawSession[0].QualifyingResults.map((item) => {
-          let qualyGap = "";
-          if (item.Q3 && item.position !== "1") {
-            qualyGap =
-              "+" +
-              (
-                Number(item.Q3.split(":")[1]) -
-                Number(fastestQualifier?.split(":")[1])
-              ).toFixed(3);
-          }
-
-          return {
-            position: Number(item.position),
-            driver: {
-              id: Number(item.number),
-              name: item.Driver.givenName + " " + item.Driver.familyName,
-            },
-            time:
-              item.position === "1"
-                ? item.Q3
-                : item.Q3
-                  ? qualyGap
-                  : item.Q2
-                    ? item.Q2
-                    : item.Q1,
-            team: { name: item.Constructor.name },
-          };
-        }),
-        sessionName: sessionType,
-      } as F1SessionPage;
-    case "Race":
-      rawSession = await fetchF1RaceResult(season, round);
-
-      if (!rawSession) {
-        return null;
-      }
-
-      raceLaps = rawSession[0].Results[0].laps;
-
-      return {
-        results: rawSession[0].Results.map((item) => {
-          let lappedStatus = "";
-
-          if (raceLaps !== item.laps) {
-            let lappedlaps = Number(raceLaps) - Number(item.laps);
-            lappedStatus = lappedlaps == 1 ? "Lap" : lappedlaps + "Lap";
-          }
-
-          return {
-            position: Number(item.position),
-            driver: {
-              id: Number(item.number),
-              name: item.Driver.givenName + " " + item.Driver.familyName,
-            },
-            grid: item.grid,
-            laps: Number(item.laps),
-            time: item.Time ? lappedStatus + item.Time.time : item.status,
-            // pits: 0,
-            team: { name: item.Constructor.name },
-            points: Number(item.points),
-          };
-        }),
-        sessionName: sessionType,
-      } as F1SessionPage;
-    default:
+    if (!rawStandings) {
       return null;
-  }
-}
+    }
 
-export async function f1DriverStandings(season: number) {
-  const rawStandings = await fetchF1DriverStandings(season);
-
-  if (!rawStandings) {
-    return null;
-  }
-
-  return {
-    standings: rawStandings.map((item, index) => {
-      return {
-        driver: {
-          id: Number(item.Driver.permanentNumber),
-          name: item.Driver.givenName + " " + item.Driver.familyName,
-          img: resolveSportImage(
-            item.Driver.givenName + " " + item.Driver.familyName,
-          ),
-          teamimg: resolveSportImage(item.Constructors[0].name),
-        },
-        position: Number(item.position) ?? index + 1,
-        points: Number(item.points),
-        wins: Number(item.wins),
-      };
-    }),
-  } as F1DriverStandingsPage;
-}
-
-export async function f1ConstructorStandings(season: number) {
-  const rawStandings = await fetchF1ConstructorStandings(season);
-
-  if (!rawStandings) {
-    return null;
+    return {
+      standings: rawStandings.map((item, index) => {
+        return {
+          driver: {
+            id: Number(item.Driver.permanentNumber),
+            name: item.Driver.givenName + " " + item.Driver.familyName,
+            img: resolveSportImage(
+              item.Driver.givenName + " " + item.Driver.familyName,
+            ),
+            teamimg: resolveSportImage(item.Constructors[0].name),
+          },
+          position: Number(item.position) ?? index + 1,
+          points: Number(item.points),
+          wins: Number(item.wins),
+        };
+      }),
+    } as F1DriverStandingsPage;
   }
 
-  return {
-    standings: rawStandings.map((item, index) => {
-      return {
-        team: {
-          id: item.Constructor.constructorId,
-          name: item.Constructor.name,
-          logo: resolveSportImage(item.Constructor.name),
-        },
-        position: Number(item.position) ?? index + 1,
-        points: Number(item.points),
-      };
-    }),
-  } as F1ConstructorStandingsPage;
+  async f1ConstructorStandings(season: string) {
+    const rawStandings = await fetchF1ConstructorStandings(season);
+
+    if (!rawStandings) {
+      return null;
+    }
+
+    return {
+      standings: rawStandings.map((item, index) => {
+        return {
+          team: {
+            id: item.Constructor.constructorId,
+            name: item.Constructor.name,
+            logo: resolveSportImage(item.Constructor.name),
+          },
+          position: Number(item.position) ?? index + 1,
+          points: Number(item.points),
+        };
+      }),
+    } as F1ConstructorStandingsPage;
+  }
+
+  mapRaceToMatchSummaries(session: Jolpica_Race) {
+    let startDate: Date;
+    let sessions: MatchSummary[] = [];
+
+    if (session.FirstPractice) {
+      startDate = new Date(
+        session.FirstPractice.date + "T" + session.FirstPractice.time,
+      );
+      sessions.push(
+        this.mapSessionToMatchSummary(
+          session,
+          F1SessionType.Practice1,
+          startDate,
+        ),
+      );
+    }
+    if (session.SecondPractice) {
+      startDate = new Date(
+        session.SecondPractice.date + "T" + session.SecondPractice.time,
+      );
+      sessions.push(
+        this.mapSessionToMatchSummary(
+          session,
+          F1SessionType.Practice2,
+          startDate,
+        ),
+      );
+    }
+    if (session.ThirdPractice) {
+      startDate = new Date(
+        session.ThirdPractice.date + "T" + session.ThirdPractice.time,
+      );
+      sessions.push(
+        this.mapSessionToMatchSummary(
+          session,
+          F1SessionType.Practice3,
+          startDate,
+        ),
+      );
+    }
+    if (session.Qualifying) {
+      startDate = new Date(
+        session.Qualifying.date + "T" + session.Qualifying.time,
+      );
+      sessions.push(
+        this.mapSessionToMatchSummary(
+          session,
+          F1SessionType.Qualifying,
+          startDate,
+        ),
+      );
+    }
+    if (session.Sprint) {
+      startDate = new Date(session.Sprint.date + "T" + session.Sprint.time);
+      sessions.push(
+        this.mapSessionToMatchSummary(session, F1SessionType.Sprint, startDate),
+      );
+    }
+    if (session.SprintQualifying) {
+      startDate = new Date(
+        session.SprintQualifying.date + "T" + session.SprintQualifying.time,
+      );
+      sessions.push(
+        this.mapSessionToMatchSummary(
+          session,
+          F1SessionType.SprintQualifying,
+          startDate,
+        ),
+      );
+    }
+    startDate = new Date(session.date + "T" + session.time);
+    sessions.push(
+      this.mapSessionToMatchSummary(session, F1SessionType.Race, startDate),
+    );
+
+    return sessions;
+  }
+
+  mapSessionToMatchSummary(
+    session: Jolpica_Race,
+    sessionType: F1SessionType,
+    startDate: Date,
+    options?: DeepPartial<MatchSummary>,
+  ) {
+    const status = setSessionStatus(startDate, sessionType);
+
+    return {
+      id: options?.id ?? session.season + session.round + sessionType,
+      sport: SPORT.MOTORSPORT,
+      summaryText: options?.summaryText ?? sessionType.replace("-", " "),
+      startDate: options?.startDate ?? startDate,
+      endDate: options?.endDate,
+      status: options?.status ?? status,
+      seriesName: options?.seriesName ?? session.raceName,
+      seriesImg: options?.seriesImg ?? resolveSportImage(session.raceName),
+      seriesSlug: options?.seriesSlug ?? `f1/${session.season}`,
+      matchSlug:
+        options?.matchSlug ??
+        `f1/${session.season}/${session.round}/${sessionType}`,
+      roundLabel: options?.roundLabel ?? `Round ${session.round}`,
+      timer:
+        options?.timer ??
+        (status === MatchStatus.UPCOMING
+          ? (options?.startDate ?? startDate)
+          : status.charAt(0) + status.slice(1).toLowerCase()),
+      timerDisplayColour:
+        options?.timerDisplayColour ??
+        (status === MatchStatus.LIVE ? "green" : "gray"),
+      awayDetails: { score: "", name: "" },
+      homeDetails: { score: "", name: "" },
+      venue:
+        options?.venue ??
+        session.Circuit.circuitName + ", " + session.Circuit.Location.locality,
+
+      seasonId: options?.seasonId ?? session.season,
+      tournamentId: options?.tournamentId ?? "f1",
+      winner: options?.winner,
+    };
+  }
 }
 
 function setSessionStatus(sessionDate: Date, sessionType: F1SessionType) {
   let currentDate = new Date();
 
   if (sessionDate > currentDate) {
-    return null;
+    return MatchStatus.UPCOMING;
   } else {
     switch (sessionType) {
       case F1SessionType.Practice1:
       case F1SessionType.Practice2:
       case F1SessionType.Practice3:
         return sessionDate > addHours(currentDate, -1)
-          ? "In Progress"
-          : "Completed";
+          ? MatchStatus.LIVE
+          : MatchStatus.COMPLETED;
       case F1SessionType.Qualifying:
       case F1SessionType.SprintQualifying:
       case F1SessionType.Sprint:
         return sessionDate > addHours(currentDate, -2)
-          ? "In Progress"
-          : "Completed";
+          ? MatchStatus.LIVE
+          : MatchStatus.COMPLETED;
       case F1SessionType.Race:
         return sessionDate > addHours(currentDate, -3)
-          ? "In Progress"
-          : "Completed";
+          ? MatchStatus.LIVE
+          : MatchStatus.COMPLETED;
       default:
-        return "Completed";
+        return MatchStatus.COMPLETED;
     }
   }
 }
 
-export async function motorsportCategoriesByDate(date: Date) {
-  const races = await f1EventSchedule(Number(format(date, "yyyy")));
-  const timezone = date instanceof TZDate ? date.timeZone : "UTC";
+export const f1Service = new F1Service(
+  SPORT.MOTORSPORT,
+  MOTORSPORT_CATEGORIES,
+  CardVariant.MOTORSPORT,
+);
 
-  const todaySessions = races?.sessions
-    .filter((item) => {
-      const eventDate = new TZDate(item.startDate, timezone);
-      return isSameDay(eventDate, date);
-    })
-    .map((session) => {
-      return {
-        id: session.grandPrixName + session.sessionType,
-        sport: SPORT.MOTORSPORT,
-        summaryText:
-          session.grandPrixName +
-          " - " +
-          (session.sessionName ?? session.sessionType),
-        startDate: date,
-        status: session.status,
-        awayDetails: { score: "", name: "" },
-        homeDetails: { score: "", name: "" },
-        matchSlug: session.sessionSlug,
-      } as MatchSummary;
-    });
-
-  const motorsportEvents: MatchSummary[] = [];
-  motorsportEvents.push(...(todaySessions ?? []));
-
-  // Basic check for tournaments
-  switch (date.getDay()) {
-    case 2: // Tuesday
-    case 3: // Wednesday
-      break;
-    case 4: // Thursday
-    case 5: // Friday
-    case 6: // Saturday
-    case 0: // Sunday
-    case 1: // Monday
-      motorsportEvents.push({
-        id: "Supercars",
-        sport: SPORT.MOTORSPORT,
-        summaryText: "Supercars",
-        startDate: date,
-        status: MatchStatus.UPCOMING,
-        awayDetails: { score: "", name: "" },
-        homeDetails: { score: "", name: "" },
-        matchSlug: "supercars/2026",
-      });
-      break;
-  }
-  return motorsportEvents;
-}
+export const motorsportService = new MotorsportService(
+  SPORT.MOTORSPORT,
+  MOTORSPORT_CATEGORIES,
+  CardVariant.MOTORSPORT,
+);

@@ -1,12 +1,12 @@
 "use client";
 
 import MatchSummaryCard from "@/components/all-sports/MatchSummaryCard";
-import TennisMatchCard from "@/components/tennis/TennisMatchCard";
-import { formatTime } from "@/lib/projUtils";
+import { cardVariantMap } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 import { CardVariant, MatchSummary } from "@/types/misc";
 import React, { useEffect } from "react";
 import Placeholder from "../misc-ui/Placeholder";
-import LeagueSeriesHeader from "./LeagueSeriesHeader";
+import LeagueHeader from "./LeagueHeader";
 import SectionDate from "./SectionDate";
 
 // Assumes data prop is already sorted in desired order
@@ -17,8 +17,7 @@ export default function FixtureList({
   data: MatchSummary[];
   cardVariant?: CardVariant;
 }) {
-  const CardComponent =
-    cardVariant === CardVariant.TENNIS ? TennisMatchCard : MatchSummaryCard;
+  const CardComponent = cardVariantMap[cardVariant] ?? MatchSummaryCard;
 
   useEffect(() => {
     const scrollToAnchor = () => {
@@ -64,7 +63,7 @@ export default function FixtureList({
 
   return (
     <div className="flex-1 overflow-y-auto px-4">
-      {data.map((item: MatchSummary) => {
+      {data.map((item: MatchSummary, index) => {
         let itemDate = new Date(item.startDate);
         displayDate = false;
         displaySeries = false;
@@ -101,29 +100,19 @@ export default function FixtureList({
               />
             )}
             {(displaySeries || displayDate) && item.seriesName && (
-              <LeagueSeriesHeader
+              <LeagueHeader
                 href={`/sports/${item.sport}/${item.seriesSlug}`}
-                seriesName={item.seriesName ?? ""}
+                seriesName={item.seriesName}
+                img={item.seriesImg}
               />
             )}
             <CardComponent
-              className={item.seriesName ? "mt-0 rounded-b-md" : "rounded-md"}
-              id={item.id}
+              className={cn(
+                item.seriesName ? "mt-0" : "rounded-md",
+                item.seriesName && index === data.length - 1 && "rounded-b-md",
+              )}
+              event={item}
               href={`/sports/${item.sport}/${item.matchSlug ?? item.id}`}
-              homeInfo={item.homeDetails}
-              awayInfo={item.awayDetails}
-              matchSummary={item.summaryText}
-              bottomInfo={item.otherDetail}
-              venue={item.venue ?? ""}
-              timer={{
-                display:
-                  item.timer instanceof Date
-                    ? formatTime(item.timer)
-                    : (item.timer ?? ""),
-                displayColour: item.timerDisplayColour,
-              }}
-              topInfo={undefined}
-              winner={item.winner}
             />
           </React.Fragment>
         );

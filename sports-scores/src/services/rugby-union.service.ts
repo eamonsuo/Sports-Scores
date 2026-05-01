@@ -14,7 +14,6 @@ import {
   SCORE_BREAKDOWN_HALVES_CONFIG,
 } from "@/lib/constants";
 import { SPORT } from "@/types/misc";
-import { SofascoreSportURL } from "@/types/sofascore";
 import { SofascoreSport } from "./sofascore.service";
 
 class RugbyUnionService extends SofascoreSport {
@@ -33,7 +32,6 @@ class RugbyUnionService extends SofascoreSport {
         fetchTeamNextEvents: fetchRugbyLeagueTeamNextMatches,
       },
       SPORT.RUGBY_UNION,
-      SofascoreSportURL.RUGBY,
       RUGBY_UNION_LEAGUES,
       RUGBY_UNION_LADDER_HEADINGS,
       SCORE_BREAKDOWN_HALVES_CONFIG,

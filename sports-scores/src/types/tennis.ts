@@ -1,8 +1,6 @@
-import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import { Match as BracketMatch } from "@/components/bracket/types";
 import { TennisRankingsPlayerRow } from "@/components/tennis/RankingsLeaderboard";
-import { TennisScoreBreakdown } from "@/components/tennis/TennisScoreBreakdown";
-import { FixtureRound, MatchSummary, TeamScoreDetails } from "./misc";
+import { FixtureRound, MatchSummary } from "./misc";
 import {
   Sofascore_CupTree,
   Sofascore_Event,
@@ -136,16 +134,6 @@ export interface TennisTeamFixturesPage {
 export interface TennisLadderPage {
   // standings: TennisStanding[];
   qualifyingPosition: number;
-}
-
-export interface TennisMatchPage {
-  matchDetails: {
-    homeTeam: TeamScoreDetails;
-    awayTeam: TeamScoreDetails;
-    status: string;
-    scoreBreakdown: TennisScoreBreakdown[];
-  };
-  scoreEvents: ScoreDifference[];
 }
 
 export interface TennisTodayPage {

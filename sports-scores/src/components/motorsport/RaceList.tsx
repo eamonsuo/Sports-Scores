@@ -1,13 +1,13 @@
 "use client";
 
-import { SessionSummary } from "@/types/f1";
-import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 import React, { useEffect } from "react";
+import { MatchSummary } from "../../types/misc";
+import LeagueHeader from "../all-sports/LeagueHeader";
 import SectionDate from "../all-sports/SectionDate";
 import SessionSummaryCard from "./SessionSummaryCard";
-import WeekendSummaryCard from "./WeekendSummaryCard";
 
-export default function RaceList({ data }: { data: SessionSummary[] }) {
+export default function RaceList({ data }: { data: MatchSummary[] }) {
   useEffect(() => {
     const scrollToAnchor = () => {
       const element = document.getElementById("current-date");
@@ -51,18 +51,16 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
 
   return (
     <div className="flex-1 overflow-y-auto px-4">
-      {data.map((item: SessionSummary) => {
+      {data.map((item: MatchSummary, index: number) => {
         let raceDate = new Date(
           data.find(
-            (s) =>
-              s.grandPrixName === item.grandPrixName &&
-              s.sessionType === "Race",
+            (s) => s.seriesName === item.seriesName && s.summaryText === "Race",
           )?.startDate ?? "",
         );
 
         displayDate = false;
-        if (curGrandPrix !== item.grandPrixName) {
-          curGrandPrix = item.grandPrixName;
+        if (curGrandPrix !== item.seriesName) {
+          curGrandPrix = item.seriesName ?? "";
           startDate = new Date(item.startDate); //Assumes data variable is sorted by date
           displayDate = true;
         }
@@ -77,7 +75,7 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
         }
 
         return (
-          <React.Fragment key={item.sessionType + item.grandPrixName}>
+          <React.Fragment key={item.id}>
             {displayDate && (
               <React.Fragment>
                 <SectionDate
@@ -85,18 +83,22 @@ export default function RaceList({ data }: { data: SessionSummary[] }) {
                   sectionDateEnd={raceDate}
                   currentDate={currentMatch}
                 />
-                <WeekendSummaryCard
-                  grandPrix={item.grandPrixName}
-                  img={item.logo}
-                  status={""}
+                <LeagueHeader
+                  href={`/sports/${item.sport}/${item.seriesSlug}`}
+                  seriesName={item.seriesName ?? ""}
+                  img={item.seriesImg}
+                  className="p-4 dark:text-neutral-400"
                 />
               </React.Fragment>
             )}
 
             <SessionSummaryCard
-              href={`/sports/${item.sport}/${item.sessionSlug}`}
-              sessionType={item.sessionName ?? item.sessionType}
-              status={item.status ?? format(item.startDate, "E h:mm a ")}
+              href={`/sports/${item.sport}/${item.matchSlug}`}
+              event={item}
+              className={cn(
+                "mt-0",
+                index === data.length - 1 && "rounded-b-md",
+              )}
             />
           </React.Fragment>
         );

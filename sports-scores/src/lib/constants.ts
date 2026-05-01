@@ -1,29 +1,38 @@
 ﻿import { LadderPlacingCategory } from "@/components/all-sports/Ladder";
 import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
-import { PeriodConfig } from "@/services/sofascore.service";
-import { DISPLAY_TYPES, LadderConfig } from "@/types/misc";
+import MatchSummaryCard from "@/components/all-sports/MatchSummaryCard";
+import SessionSummaryCard from "@/components/motorsport/SessionSummaryCard";
+import TennisMatchCard from "@/components/tennis/TennisMatchCard";
+import { ScoreBreakdownConfig } from "@/services/sofascore.service";
+import { CardVariant, DisplayTypes, LadderConfig } from "@/types/misc";
 import {
   PlayoffPictureStructure,
   type PlayoffPictureConfig,
 } from "@/types/playoff-picture";
 import { resolveSportImage } from "./imageMapping";
 
-export const SCORE_BREAKDOWN_HALVES_CONFIG: PeriodConfig = {
+export const cardVariantMap: Record<CardVariant, typeof MatchSummaryCard> = {
+  [CardVariant.TENNIS]: TennisMatchCard,
+  [CardVariant.MOTORSPORT]: SessionSummaryCard,
+  [CardVariant.DEFAULT]: MatchSummaryCard,
+};
+
+export const SCORE_BREAKDOWN_HALVES_CONFIG: ScoreBreakdownConfig = {
   periodNames: ["1st Half", "2nd Half"],
   overtimeName: "Extra Time",
 };
 
-export const SCORE_BREAKDOWN_QUARTERS_CONFIG: PeriodConfig = {
+export const SCORE_BREAKDOWN_QUARTERS_CONFIG: ScoreBreakdownConfig = {
   periodNames: ["Q1", "Q2", "Q3", "Q4"],
   overtimeName: "OT",
 };
 
-export const SCORE_BREAKDOWN_INNINGS_CONFIG: PeriodConfig = {
+export const SCORE_BREAKDOWN_INNINGS_CONFIG: ScoreBreakdownConfig = {
   periodNames: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
   overtimeName: "EI",
 };
 
-export const SCORE_BREAKDOWN_PERIODS_CONFIG: PeriodConfig = {
+export const SCORE_BREAKDOWN_PERIODS_CONFIG: ScoreBreakdownConfig = {
   periodNames: ["P1", "P2", "P3"],
   overtimeName: "OT",
 };
@@ -467,7 +476,8 @@ export const MOTORSPORT_CATEGORIES: LeagueSeasonConfig[] = [
   {
     name: "Supercars",
     slug: "supercars",
-    seasons: [{ name: "2026", slug: "2026" }],
+    seasons: [{ name: "2026", slug: "external" }],
+    externalURL: `https://www.supercars.com/calendar`,
   },
 ];
 
@@ -491,22 +501,27 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
   {
     name: "LPGA Tour",
     slug: "lpga",
-    seasons: [{ name: "2026", slug: "" }],
+    seasons: [{ name: "2026", slug: "external" }],
+    externalURL: "https://www.google.com/search?igu=1&gws_rd=ssl&q=lpga",
   },
   {
     name: "DP World Tour",
     slug: "dpworld",
-    seasons: [{ name: "2026", slug: "" }],
+    seasons: [{ name: "2026", slug: "external" }],
+    externalURL:
+      "https://www.google.com/search?igu=1&gws_rd=ssl&q=dp+world+tour",
   },
   {
     name: "PGA Tour Australasia",
     slug: "australasia",
-    seasons: [{ name: "25/26", slug: "" }],
+    seasons: [{ name: "25/26", slug: "external" }],
+    externalURL: "https://golf.com.au/leaderboard",
   },
   {
     name: "TGL",
     slug: "tgl",
-    seasons: [{ name: "2026", slug: "" }],
+    seasons: [{ name: "2026", slug: "external" }],
+    externalURL: "https://tglgolf.com/schedule",
   },
   {
     name: "OWGR",
@@ -562,7 +577,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "State of Origin",
+    name: "State of Origin - Men",
     slug: "791",
     seasons: [
       { name: "2026", slug: "87571" },
@@ -582,6 +597,16 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2012", slug: "4536" },
       { name: "2011", slug: "3321" },
       { name: "2010", slug: "2715" },
+    ],
+  },
+  {
+    name: "State of Origin - Women",
+    slug: "20374",
+    seasons: [
+      { name: "2026", slug: "87574" },
+      { name: "2025", slug: "69965" },
+      { name: "2024", slug: "56901" },
+      { name: "2023", slug: "51382" },
     ],
   },
   {
@@ -1291,7 +1316,7 @@ export const BASEBALL_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2025", slug: "68611", ladderConfig: MLB_2022_LADDER_CONFIG },
       { name: "2024", slug: "57577", ladderConfig: MLB_2022_LADDER_CONFIG },
     ],
-    display: DISPLAY_TYPES.DATE,
+    display: DisplayTypes.DATE,
   },
   {
     name: "ALB",
@@ -1348,7 +1373,7 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
       { name: "25/26", slug: "80229", ladderConfig: NBA_2021_LADDER_CONFIG },
       { name: "24/25", slug: "65360", ladderConfig: NBA_2021_LADDER_CONFIG },
     ],
-    display: DISPLAY_TYPES.DATE,
+    display: DisplayTypes.DATE,
   },
   // {
   //   name: "NBA Cup",
@@ -1366,7 +1391,7 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2025", slug: "69751" },
       { name: "2024", slug: "57477" },
     ],
-    display: DISPLAY_TYPES.DATE,
+    display: DisplayTypes.DATE,
   },
   {
     name: "March Madness",
@@ -1375,7 +1400,7 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2026", slug: "91315" },
       // { name: "2024", slug: "57477" },
     ],
-    display: DISPLAY_TYPES.DATE,
+    display: DisplayTypes.DATE,
     externalURL:
       "https://en.wikipedia.org/wiki/2026_NCAA_Division_I_men%27s_basketball_tournament",
   },
@@ -1417,7 +1442,8 @@ export const TENNIS_CATEGORIES: LeagueSeasonConfig[] = [
 
 export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
   {
-    name: "Australian Open - Mens Singles",
+    name: "Australian Open - Men's Singles",
+    icon: "https://upload.wikimedia.org/wikipedia/commons/b/b4/Australian_Open_Logo_2017.svg",
     slug: "2363",
     seasons: [
       { name: "2026", slug: "80012" },
@@ -1425,7 +1451,8 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "Australian Open - Womens Singles",
+    name: "Australian Open - Women's Singles",
+    icon: "https://upload.wikimedia.org/wikipedia/commons/b/b4/Australian_Open_Logo_2017.svg",
     slug: "2571",
     seasons: [
       { name: "2026", slug: "80013" },
@@ -1433,7 +1460,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "French Open - Mens Singles",
+    name: "French Open - Men's Singles",
     slug: "2480",
     seasons: [
       // { name: "2026", slug: "80012" },
@@ -1441,7 +1468,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "French Open - Womens Singles",
+    name: "French Open - Women's Singles",
     slug: "2577",
     seasons: [
       // { name: "2026", slug: "80013" },
@@ -1449,7 +1476,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "Wimbledon - Mens Singles",
+    name: "Wimbledon - Men's Singles",
     slug: "2361",
     seasons: [
       // { name: "2026", slug: "80012" },
@@ -1457,7 +1484,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "Wimbledon - Womens Singles",
+    name: "Wimbledon - Women's Singles",
     slug: "2600",
     seasons: [
       // { name: "2026", slug: "80013" },
@@ -1465,7 +1492,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "US Open - Mens Singles",
+    name: "US Open - Men's Singles",
     slug: "2449",
     seasons: [
       // { name: "2026", slug: "80012" },
@@ -1473,7 +1500,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "US Open - Womens Singles",
+    name: "US Open - Women's Singles",
     slug: "2601",
     seasons: [
       // { name: "2026", slug: "80013" },
@@ -1482,12 +1509,12 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
   },
 
   {
-    name: "Brisbane International - Men",
+    name: "Brisbane International - Men's Singles",
     slug: "2437",
     seasons: [{ name: "2026", slug: "80014" }],
   },
   {
-    name: "Brisbane International - Women",
+    name: "Brisbane International - Women's Singles",
     slug: "2644",
     seasons: [{ name: "2026", slug: "85608" }],
   },
@@ -1669,7 +1696,7 @@ export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
       { name: "25/26", slug: "78476", ladderConfig: NHL_2014_LADDER_CONFIG },
       { name: "24/25", slug: "63409", ladderConfig: NHL_2014_LADDER_CONFIG },
     ],
-    display: DISPLAY_TYPES.DATE,
+    display: DisplayTypes.DATE,
   },
   {
     name: "World Championship",
@@ -1683,7 +1710,7 @@ export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
   },
 
   {
-    name: "World Championship - Australia",
+    name: "World Championship - Australia Men",
     slug: "13446",
     seasons: [
       { name: "2026", slug: "wiki" },
@@ -1703,7 +1730,7 @@ export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
       "https://en.wikipedia.org/wiki/2026_Women%27s_Ice_Hockey_World_Championships",
   },
   {
-    name: "World Championship - Women - Australia",
+    name: "World Championship - Australia Women",
     slug: "wc-div2",
     seasons: [{ name: "2026", slug: "wiki" }],
     externalURL:

@@ -33,8 +33,8 @@ async function fetchNetballApi(endpoint: string) {
 }
 
 export async function fetchNetballLastMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchNetballApi(
@@ -43,8 +43,8 @@ export async function fetchNetballLastMatches(
 }
 
 export async function fetchNetballNextMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchNetballApi(
@@ -53,8 +53,8 @@ export async function fetchNetballNextMatches(
 }
 
 export async function fetchNetballSeasonMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
 ) {
   return (await fetchNetballApi(
     `/eventsseason.php?id=${tournamentId}&s=${seasonId}`,
@@ -62,20 +62,20 @@ export async function fetchNetballSeasonMatches(
 }
 
 export async function fetchNetballStandings(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
 ): Promise<Netball_SportsDB_LeagueTotalStandings_Response | null> {
   return null;
 }
 
-export async function fetchNetballMatchDetails(matchId: number) {
+export async function fetchNetballMatchDetails(matchId: string) {
   return (await fetchNetballApi(
     `/lookupevent.php?id=${matchId}`,
   )) as SportsDB_Events_Response;
 }
 
 export async function fetchNetballMatchIncidents(
-  matchId: number,
+  matchId: string,
 ): Promise<Netball_SportsDB_MatchIncidents_Response | null> {
   return null;
 }

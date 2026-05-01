@@ -93,6 +93,7 @@ export function resolveSportImage(teamName: string) {
     case "Queensland Maroons":
       return "https://r2.thesportsdb.com/images/media/team/badge/sec7911719410143.png";
     case "New South Wales Blues":
+    case "New South Wales Sky Blues":
       return "https://upload.wikimedia.org/wikipedia/en/8/80/NSW_Blues_Logo_2023.png";
 
     // QLD Cup

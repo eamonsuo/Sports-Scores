@@ -13,7 +13,6 @@ import {
   SCORE_BREAKDOWN_INNINGS_CONFIG,
 } from "@/lib/constants";
 import { SPORT } from "@/types/misc";
-import { SofascoreSportURL } from "@/types/sofascore";
 import { SofascoreSport } from "./sofascore.service";
 
 class BaseballService extends SofascoreSport {
@@ -32,7 +31,6 @@ class BaseballService extends SofascoreSport {
         fetchTeamNextEvents: fetchBaseballTeamNextMatches,
       },
       SPORT.BASEBALL,
-      SofascoreSportURL.BASEBALL,
       BASEBALL_LEAGUES,
       BASEBALL_LADDER_HEADINGS,
       SCORE_BREAKDOWN_INNINGS_CONFIG,

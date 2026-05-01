@@ -31,17 +31,17 @@ async function fetchCyclingApi(endpoint: string) {
   return res.json();
 }
 
-export async function fetchCyclingSeasonRaces(seasonId: number) {
+export async function fetchCyclingSeasonRaces(seasonId: string) {
   return (await fetchCyclingApi(`/cycling/stage/${seasonId}/extended`)) as any;
 }
 
-export async function fetchCyclingRaceStages(stageId: number) {
+export async function fetchCyclingRaceStages(stageId: string) {
   return (await fetchCyclingApi(`/cycling/stage/${stageId}/substages`)) as any;
 }
 
 export async function fetchCyclingRiderSeasonRaces(
-  riderId: number,
-  seasonId: number,
+  riderId: string,
+  seasonId: string,
 ) {
   return (await fetchCyclingApi(
     `/cycling/team/${riderId}/stage/season/${seasonId}/races`,

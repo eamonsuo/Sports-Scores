@@ -39,8 +39,8 @@ async function fetchBasketballApi(endpoint: string) {
 }
 
 export async function fetchBasketballLastMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchBasketballApi(
@@ -49,8 +49,8 @@ export async function fetchBasketballLastMatches(
 }
 
 export async function fetchBasketballNextMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchBasketballApi(
@@ -59,7 +59,7 @@ export async function fetchBasketballNextMatches(
 }
 
 export async function fetchBasketballTeamLastMatches(
-  teamId: number,
+  teamId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchBasketballApi(
@@ -68,7 +68,7 @@ export async function fetchBasketballTeamLastMatches(
 }
 
 export async function fetchBasketballTeamNextMatches(
-  teamId: number,
+  teamId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchBasketballApi(
@@ -77,21 +77,21 @@ export async function fetchBasketballTeamNextMatches(
 }
 
 export async function fetchBasketballStandings(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
 ) {
   return (await fetchBasketballApi(
     `/basketball/tournament/${tournamentId}/season/${seasonId}/standings/total`,
   )) as Sofascore_TotalStandings_Response;
 }
 
-export async function fetchBasketballMatchDetails(matchId: number) {
+export async function fetchBasketballMatchDetails(matchId: string) {
   return (await fetchBasketballApi(
     `/basketball/match/${matchId}`,
   )) as Sofascore_Event_Response;
 }
 
-export async function fetchBasketballMatchIncidents(matchId: number) {
+export async function fetchBasketballMatchIncidents(matchId: string) {
   return (await fetchBasketballApi(
     `/match/${matchId}/incidents`,
   )) as Sofascore_EventIncidents_Response;

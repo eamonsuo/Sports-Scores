@@ -40,8 +40,8 @@ async function fetchFootballApi(endpoint: string) {
 }
 
 export async function fetchFootballLastMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchFootballApi(
@@ -50,8 +50,8 @@ export async function fetchFootballLastMatches(
 }
 
 export async function fetchFootballNextMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchFootballApi(
@@ -60,21 +60,21 @@ export async function fetchFootballNextMatches(
 }
 
 export async function fetchFootballStandings(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
 ) {
   return (await fetchFootballApi(
     `/tournament/${tournamentId}/season/${seasonId}/standings/total`,
   )) as Sofascore_TotalStandings_Response;
 }
 
-export async function fetchFootballMatchDetails(matchId: number) {
+export async function fetchFootballMatchDetails(matchId: string) {
   return (await fetchFootballApi(
     `/match/${matchId}`,
   )) as Sofascore_Event_Response;
 }
 
-export async function fetchFootballMatchIncidents(matchId: number) {
+export async function fetchFootballMatchIncidents(matchId: string) {
   return (await fetchFootballApi(
     `/match/${matchId}/incidents`,
   )) as Sofascore_EventIncidents_Response;
@@ -87,7 +87,7 @@ export async function fetchFootballMatchesByDate(date: Date) {
 }
 
 export async function fetchFootballTeamLastMatches(
-  teamId: number,
+  teamId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchFootballApi(
@@ -96,7 +96,7 @@ export async function fetchFootballTeamLastMatches(
 }
 
 export async function fetchFootballTeamNextMatches(
-  teamId: number,
+  teamId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchFootballApi(
@@ -105,8 +105,8 @@ export async function fetchFootballTeamNextMatches(
 }
 
 export async function fetchFootballCupTrees(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
 ) {
   return (await fetchFootballApi(
     `/tournament/${tournamentId}/season/${seasonId}/cuptrees`,

@@ -5,6 +5,7 @@ import { baseballService } from "@/services/baseball.service";
 import { basketballService } from "@/services/basketball.service";
 import { footballService } from "@/services/football.service";
 import { iceHockeyService } from "@/services/ice-hockey.service";
+import { motorsportService } from "@/services/motorsport.service";
 import { rugbyLeagueService } from "@/services/rugby-league.service";
 import { rugbyUnionService } from "@/services/rugby-union.service";
 import { tennisService } from "@/services/tennis.service";
@@ -30,7 +31,6 @@ type SportRouteConfig = {
   leagues: LeagueSeasonConfig[];
   service: SportService;
   navButtons?: { href: string; label: string; page: string }[]; // override default
-  hasWikiPages?: boolean;
 };
 
 export const DEFAULT_NAV_BUTTONS = [
@@ -75,7 +75,6 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
       { href: "ladder", label: "Ladder", page: "ladder" },
       { href: "bracket", label: "Bracket", page: "bracket" },
     ],
-    hasWikiPages: true,
   },
   [SPORT.GOLF]: {
     leagues: GOLF_TOURS,
@@ -87,7 +86,12 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
   },
   [SPORT.MOTORSPORT]: {
     leagues: MOTORSPORT_CATEGORIES,
-    service: aussieRulesService,
+    service: motorsportService,
+    navButtons: [
+      { href: "#current-date", label: "Races", page: "races" },
+      { href: "drivers", label: "Drivers", page: "drivers" },
+      { href: "teams", label: "Teams", page: "teams" },
+    ],
   },
   [SPORT.NETBALL]: {
     leagues: NETBALL_LEAGUES,

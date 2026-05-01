@@ -14,7 +14,6 @@ import {
   SCORE_BREAKDOWN_PERIODS_CONFIG,
 } from "@/lib/constants";
 import { SPORT } from "@/types/misc";
-import { SofascoreSportURL } from "@/types/sofascore";
 import { SofascoreSport } from "./sofascore.service";
 
 class IceHockeyService extends SofascoreSport {
@@ -33,7 +32,6 @@ class IceHockeyService extends SofascoreSport {
         fetchTeamNextEvents: fetchIceHockeyTeamNextMatches,
       },
       SPORT.ICE_HOCKEY,
-      SofascoreSportURL.ICE_HOCKEY,
       ICE_HOCKEY_LEAGUES,
       ICE_HOCKEY_LADDER_HEADINGS,
       SCORE_BREAKDOWN_PERIODS_CONFIG,

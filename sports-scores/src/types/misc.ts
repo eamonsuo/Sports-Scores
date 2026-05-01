@@ -4,6 +4,7 @@ import {
 } from "@/components/all-sports/Ladder";
 import { PeriodScore } from "@/components/all-sports/ScoreBreakdown";
 import { ScoreDifference } from "@/components/all-sports/ScoreChart";
+import { Match as BracketMatch } from "@/components/bracket/types";
 import type {
   PlayoffPictureConfig,
   PlayoffPictureGroup,
@@ -39,6 +40,7 @@ export type MatchSummary = {
   timer?: string | Date;
   timerDisplayColour?: "green" | "yellow" | "gray" | undefined;
   seriesName?: string;
+  seriesImg?: string;
   matchSlug?: string;
   seriesSlug?: string; // Used to navigate to cricket series
   winner?: number;
@@ -55,6 +57,7 @@ export enum MatchStatus {
 
 export enum CardVariant {
   TENNIS = "tennis",
+  MOTORSPORT = "motorsport",
   DEFAULT = "default",
 }
 
@@ -74,20 +77,20 @@ export type LadderConfig = {
 
 export interface SportService {
   matchesByLeagueSeason(
-    tournamentId: number,
-    seasonId: number,
+    leagueId: string,
+    seasonId: string,
   ): Promise<Matches | null>;
 
   matchesByDate(date: Date): Promise<Matches | null>;
+  matchesByTeam(teamId: string): Promise<Matches | null>;
+  matchDetails(matchId: string): Promise<MatchDetail | null>;
 
   standings(
-    tournamentId: number,
-    seasonId: number,
+    leagueId: string,
+    seasonId: string,
   ): Promise<Standings<readonly string[]> | null>;
 
-  matchDetails(matchId: number): Promise<MatchDetail | null>;
-
-  matchesByTeam(teamId: number): Promise<Matches | null>;
+  brackets(leagueId: string, seasonId: string): Promise<Brackets | null>;
 }
 
 export interface Matches {
@@ -110,6 +113,15 @@ export interface Standings<T extends readonly string[]> {
   playoffPicture?: PlayoffPictureGroup[];
 }
 
+export interface Brackets {
+  brackets: {
+    id: number;
+    name: string;
+    currentRound: number;
+    matches: BracketMatch[];
+  }[];
+}
+
 export enum SPORT {
   AUSSIE_RULES = "aussie-rules",
   BASEBALL = "baseball",
@@ -130,13 +142,13 @@ export enum SPORT {
   DARTS = "darts",
 }
 
-export enum DISPLAY_TYPES {
+export enum DisplayTypes {
   ROUND = "round",
   DATE = "date",
   LEAGUE = "league",
 }
 
-export enum API_EVENT_TYPES {
+export enum APIEventTypes {
   SOFASCORE = "SOFASCORE",
   SPORTSMONKS_CRICKET = "SPORTSMONKS_CRICKET",
   SPORTSDB = "SPORTSDB",

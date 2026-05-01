@@ -13,10 +13,8 @@ import {
   AMERICAN_FOOTBALL_LEAGUES,
   SCORE_BREAKDOWN_QUARTERS_CONFIG,
 } from "@/lib/constants";
-import { mapMatchSummary } from "@/lib/eventMapping";
 import { AmericanFootball_Sofascore_Event } from "@/types/american-football";
-import { API_EVENT_TYPES, MatchSummary, SPORT } from "@/types/misc";
-import { SofascoreSportURL } from "@/types/sofascore";
+import { DeepPartial, MatchSummary, SPORT } from "@/types/misc";
 import { SofascoreSport } from "./sofascore.service";
 
 class AmericanFootballService extends SofascoreSport {
@@ -35,31 +33,32 @@ class AmericanFootballService extends SofascoreSport {
         fetchTeamNextEvents: fetchAmericanFootballTeamNextMatches,
       },
       SPORT.AMERICAN_FOOTBALL,
-      SofascoreSportURL.AMERICAN_FOOTBALL,
       AMERICAN_FOOTBALL_LEAGUES,
       AMERICAN_FOOTBALL_LADDER_HEADINGS,
       SCORE_BREAKDOWN_QUARTERS_CONFIG,
     );
   }
 
-  override matchesByLeagueSeason(tournamentId: number, seasonId: number) {
-    return super.matchesByLeagueSeason(tournamentId, seasonId, "Week");
+  override matchesByLeagueSeason(leagueId: string, seasonId: string) {
+    return super.matchesByLeagueSeason(leagueId, seasonId, "Week");
   }
 
-  override eventMapper(
-    match: AmericanFootball_Sofascore_Event,
-    roundLabel: string,
+  eventMapper(
+    event: AmericanFootball_Sofascore_Event,
+    options?: DeepPartial<MatchSummary>,
   ): MatchSummary {
-    return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, this.sport, match, {
-      roundLabel,
+    return super.eventMapper(event, {
+      ...options,
       homeDetails: {
-        winDrawLoss: match.homeTeamSeasonHistoricalForm
-          ? `${match.homeTeamSeasonHistoricalForm.wins ?? 0}-${match.homeTeamSeasonHistoricalForm.losses ?? 0}${match.homeTeamSeasonHistoricalForm.draws ? "-" + match.homeTeamSeasonHistoricalForm.draws : ""}`
+        ...options?.homeDetails,
+        winDrawLoss: event.homeTeamSeasonHistoricalForm
+          ? `${event.homeTeamSeasonHistoricalForm.wins ?? 0}-${event.homeTeamSeasonHistoricalForm.losses ?? 0}${event.homeTeamSeasonHistoricalForm.draws ? "-" + event.homeTeamSeasonHistoricalForm.draws : ""}`
           : undefined,
       },
       awayDetails: {
-        winDrawLoss: match.awayTeamSeasonHistoricalForm
-          ? `${match.awayTeamSeasonHistoricalForm.wins ?? 0}-${match.awayTeamSeasonHistoricalForm.losses ?? 0}${match.awayTeamSeasonHistoricalForm.draws ? "-" + match.awayTeamSeasonHistoricalForm.draws : ""}`
+        ...options?.awayDetails,
+        winDrawLoss: event.awayTeamSeasonHistoricalForm
+          ? `${event.awayTeamSeasonHistoricalForm.wins ?? 0}-${event.awayTeamSeasonHistoricalForm.losses ?? 0}${event.awayTeamSeasonHistoricalForm.draws ? "-" + event.awayTeamSeasonHistoricalForm.draws : ""}`
           : undefined,
       },
     });

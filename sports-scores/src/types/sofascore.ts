@@ -25,37 +25,37 @@ export interface Sofascore_TournamentCupTrees_Response {
 
 export interface SofascoreAPI {
   fetchLastEvents: (
-    tournamentId: number,
-    seasonId: number,
+    tournamentId: string,
+    seasonId: string,
     pageNumber: number,
   ) => Promise<Sofascore_EventPage_Response | null>;
   fetchNextEvents: (
-    tournamentId: number,
-    seasonId: number,
+    tournamentId: string,
+    seasonId: string,
     pageNumber: number,
   ) => Promise<Sofascore_EventPage_Response | null>;
   fetchStandingsTotal: (
-    tournamentId: number,
-    seasonId: number,
+    tournamentId: string,
+    seasonId: string,
   ) => Promise<Sofascore_TotalStandings_Response | null>;
   fetchEventDetails: (
-    eventId: number,
+    eventId: string,
   ) => Promise<Sofascore_Event_Response | null>;
   fetchEventIncidents: (
-    eventId: number,
+    eventId: string,
   ) => Promise<Sofascore_EventIncidents_Response | null>;
   fetchEventsByDate: (date: Date) => Promise<Sofascore_Events_Response | null>;
   fetchTeamLastEvents: (
-    teamId: number,
+    teamId: string,
     pageNumber?: number,
   ) => Promise<Sofascore_EventPage_Response | null>;
   fetchTeamNextEvents: (
-    teamId: number,
+    teamId: string,
     pageNumber?: number,
   ) => Promise<Sofascore_EventPage_Response | null>;
   fetchCupTrees: (
-    tournamentId: number,
-    seasonId: number,
+    tournamentId: string,
+    seasonId: string,
   ) => Promise<Sofascore_TournamentCupTrees_Response | null>;
   fetchPlayerRankings: (
     rankingId: string,

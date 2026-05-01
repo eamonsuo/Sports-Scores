@@ -7,30 +7,16 @@ import {
   fetchCricketAllSeries,
   fetchCricketMatchDetails,
   fetchCricketMatchesByDateLiveScore,
-  fetchCricketMatchesByDateSofascore,
   fetchCricketMatchInnings,
   fetchCricketMyTeams,
   fetchCricketSeriesMatches,
 } from "@/endpoints/cricket.api";
-import { fetchEventsByDate } from "@/endpoints/sofascore.api";
-import {
-  getCurrentRound,
-  mapFixtureRounds,
-  mapMatchSummary,
-} from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
 import {
   Cricket_LiveScoreAPI_MatchesGetInnings,
   Cricket_LiveScoreAPI_MatchesGetScoreBoard,
 } from "@/types/cricket";
-import {
-  API_EVENT_TYPES,
-  DISPLAY_TYPES,
-  MatchStatus,
-  MatchSummary,
-  SPORT,
-} from "@/types/misc";
-import { Sofascore_Event, SofascoreSportURL } from "@/types/sofascore";
+import { MatchStatus, MatchSummary, SPORT } from "@/types/misc";
 
 const excludedSeries = [
   "CSA",
@@ -155,7 +141,7 @@ export async function cricketAllSeries() {
   return rawTeamDetails;
 }
 
-export async function cricketMatchDetails(id: number): Promise<{
+export async function cricketMatchDetails(id: string): Promise<{
   matchDetails: MatchDetailsPage;
   matchScorecard: CricketScorecardPage;
   matchSeries: string;
@@ -406,74 +392,4 @@ export function convertNumbertoDate(dateNumber: number) {
   let second = dateString.substring(12, 14);
   // return new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`);
   return new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}+10:00`);
-}
-
-export async function cricketMatchesByDateSofascore(date: Date) {
-  const matches = await (process.env.DEV_MODE
-    ? fetchEventsByDate(SofascoreSportURL.CRICKET, date)
-    : fetchCricketMatchesByDateSofascore(date));
-
-  if (!matches) return null;
-
-  // const validLeagueIds = CRICKET_LEAGUES.map((l) => Number(l.slug));
-
-  matches.events = matches.events
-    .filter(
-      (item) => !excludedSeries.some((str) => item.season.name.includes(str)),
-      // validLeagueIds.includes(item.tournament.uniqueTournament.id),
-    )
-    .sort((a, b) => a.startTimestamp - b.startTimestamp);
-
-  if (!matches.events || matches.events.length === 0) return null;
-
-  const allMatches = matches.events.map((event) =>
-    mapCricketMatch(
-      event,
-      event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
-    ),
-  );
-
-  const fixture = await mapFixtureRounds(allMatches);
-
-  return {
-    fixtures: fixture,
-    currentRound: getCurrentRound(fixture, DISPLAY_TYPES.DATE),
-  };
-}
-
-function mapCricketMatch(
-  match: Sofascore_Event,
-  roundLabel: string,
-): MatchSummary {
-  let startDate = new Date(0);
-  startDate.setUTCSeconds(match.startTimestamp);
-  let endDate = new Date(0);
-  endDate.setUTCSeconds(match?.endTimestamp ?? 0);
-
-  return mapMatchSummary(API_EVENT_TYPES.SOFASCORE, SPORT.CRICKET, match, {
-    startDate: startDate,
-    endDate:
-      startDate.toDateString() !== endDate.toDateString() ? endDate : undefined,
-    // status: mapCricketStatus(match.status.code.toString()),
-    summaryText: match.note,
-    // otherDetail: match.tournament.name,
-    timer:
-      match.status.type === "finished"
-        ? ""
-        : match.status.type === "notstarted"
-          ? startDate
-          : match.status.description,
-    // timerDisplayColour: match.status === "L" ? "green" : "gray",
-    homeDetails: {
-      img: resolveSportImage(match.homeTeam.name),
-      score: `${match.homeScore.innings?.inning1?.wickets ?? 0}/${match.homeScore.innings?.inning1?.score ?? 0}${match.homeScore.innings?.inning2 ? `, ${match.homeScore.innings?.inning2?.wickets ?? 0}/${match.homeScore.innings?.inning2?.score ?? 0}` : ""}`,
-    },
-    awayDetails: {
-      img: resolveSportImage(match.awayTeam.name),
-      score: `${match.awayScore.innings?.inning1?.wickets ?? 0}/${match.awayScore.innings?.inning1?.score ?? 0}${match.awayScore.innings?.inning2 ? `, ${match.awayScore.innings?.inning2?.wickets ?? 0}/${match.awayScore.innings?.inning2?.score ?? 0}` : ""}`,
-    },
-    roundLabel: roundLabel,
-    seriesName: match.tournament.name,
-    seriesSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}`,
-  });
 }
