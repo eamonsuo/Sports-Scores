@@ -1,34 +1,37 @@
 import { LadderRow } from "@/components/all-sports/Ladder";
 import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
 import {
-    fetchF1ConstructorStandings,
-    fetchF1DriverDetails,
-    fetchF1DriverStandings,
-    fetchF1Events,
-    fetchF1Meetings,
-    fetchF1Positions,
-    fetchF1QualifyingResult,
-    fetchF1RaceResult,
-    fetchF1Sessions,
-    fetchF1SprintResult,
+  fetchF1ConstructorStandings,
+  fetchF1DriverDetails,
+  fetchF1DriverStandings,
+  fetchF1Events,
+  fetchF1Meetings,
+  fetchF1Positions,
+  fetchF1QualifyingResult,
+  fetchF1RaceResult,
+  fetchF1Sessions,
+  fetchF1SprintResult,
 } from "@/endpoints/f1.api";
-import { MOTORSPORT_CATEGORIES, MOTORSPORT_SESSION_STANDINGS_HEADINGS } from "@/lib/constants";
+import {
+  MOTORSPORT_CATEGORIES,
+  MOTORSPORT_SESSION_STANDINGS_HEADINGS,
+} from "@/lib/constants";
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
 import { getSportConfigurations } from "@/lib/projUtils";
 import { F1SessionType, Jolpica_Race } from "@/types/f1";
 import {
-    Brackets,
-    CardVariant,
-    DeepPartial,
-    DisplayTypes,
-    MatchDetail,
-    Matches,
-    MatchStatus,
-    MatchSummary,
-    SPORT,
-    SportService,
-    Standings,
+  Brackets,
+  CardVariant,
+  DeepPartial,
+  DisplayTypes,
+  MatchDetail,
+  Matches,
+  MatchStatus,
+  MatchSummary,
+  SPORT,
+  SportService,
+  Standings,
 } from "@/types/misc";
 import { isSameDay } from "date-fns";
 import { addHours } from "date-fns/addHours";
@@ -165,7 +168,9 @@ class F1Service implements SportService {
       case F1SessionType.Qualifying: {
         const rawSession = await fetchF1QualifyingResult(season, round);
         if (!rawSession) return null;
-        raceResult = mapJolpicaQualifyingResults(rawSession[0].QualifyingResults);
+        raceResult = mapJolpicaQualifyingResults(
+          rawSession[0].QualifyingResults,
+        );
         break;
       }
       case F1SessionType.Race: {
@@ -254,7 +259,6 @@ class F1Service implements SportService {
       ],
     };
   }
-
 }
 
 function mapRaceToMatchSummaries(session: Jolpica_Race) {

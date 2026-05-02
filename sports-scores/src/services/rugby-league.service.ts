@@ -8,12 +8,12 @@ import {
   fetchRugbyLeagueTeamLastMatches,
   fetchRugbyLeagueTeamNextMatches,
 } from "@/endpoints/rugby-league.api";
-import { fetchStandingsTotal } from "@/endpoints/sofascore.api";
 import {
   RUGBY_LEAGUE_LADDER_HEADINGS,
   RUGBY_LEAGUE_LEAGUES,
   SCORE_BREAKDOWN_HALVES_CONFIG,
 } from "@/lib/constants";
+import { withDevCache } from "@/lib/devCache";
 import { resolvePlayoffPicture } from "@/lib/playoffPictureMapping";
 import { getSportConfigurations } from "@/lib/projUtils";
 import { SPORT, Standings } from "@/types/misc";
@@ -24,16 +24,48 @@ class RugbyLeagueService extends SofascoreSport {
   constructor() {
     super(
       {
-        fetchNextEvents: fetchRugbyLeagueNextMatches,
-        fetchLastEvents: fetchRugbyLeagueLastMatches,
-        fetchEventsByDate: fetchRugbyLeagueMatchesByDate,
-        fetchEventDetails: fetchRugbyLeagueMatchDetails,
-        fetchEventIncidents: fetchRugbyLeagueMatchIncidents,
-        fetchStandingsTotal: fetchRugbyLeagueStandings,
+        fetchNextEvents: withDevCache(
+          "rugby-league",
+          "next-matches",
+          fetchRugbyLeagueNextMatches,
+        ),
+        fetchLastEvents: withDevCache(
+          "rugby-league",
+          "last-matches",
+          fetchRugbyLeagueLastMatches,
+        ),
+        fetchEventsByDate: withDevCache(
+          "rugby-league",
+          "matches-by-date",
+          fetchRugbyLeagueMatchesByDate,
+        ),
+        fetchEventDetails: withDevCache(
+          "rugby-league",
+          "match-details",
+          fetchRugbyLeagueMatchDetails,
+        ),
+        fetchEventIncidents: withDevCache(
+          "rugby-league",
+          "match-incidents",
+          fetchRugbyLeagueMatchIncidents,
+        ),
+        fetchStandingsTotal: withDevCache(
+          "rugby-league",
+          "standings",
+          fetchRugbyLeagueStandings,
+        ),
         fetchCupTrees: async () => null,
         fetchPlayerRankings: async () => null,
-        fetchTeamLastEvents: fetchRugbyLeagueTeamLastMatches,
-        fetchTeamNextEvents: fetchRugbyLeagueTeamNextMatches,
+        fetchTeamLastEvents: withDevCache(
+          "rugby-league",
+          "team-last-matches",
+          fetchRugbyLeagueTeamLastMatches,
+        ),
+        fetchTeamNextEvents: withDevCache(
+          "rugby-league",
+          "team-next-matches",
+          fetchRugbyLeagueTeamNextMatches,
+        ),
       },
       SPORT.RUGBY_LEAGUE,
       RUGBY_LEAGUE_LEAGUES,
@@ -43,11 +75,10 @@ class RugbyLeagueService extends SofascoreSport {
   }
 
   override async standings(leagueId: string, seasonId: string) {
-    const standings = await (
-      process.env.DEV_MODE
-        ? fetchStandingsTotal
-        : this.apiEndpoints.fetchStandingsTotal
-    )(leagueId, seasonId);
+    const standings = await this.apiEndpoints.fetchStandingsTotal(
+      leagueId,
+      seasonId,
+    );
 
     if (!standings) {
       return null;

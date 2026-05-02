@@ -14,6 +14,7 @@ import {
   FOOTBALL_LEAGUES,
   SCORE_BREAKDOWN_HALVES_CONFIG,
 } from "@/lib/constants";
+import { withDevCache } from "@/lib/devCache";
 import { SPORT } from "@/types/misc";
 import { SofascoreSport } from "./sofascore.service";
 
@@ -21,16 +22,52 @@ class FootballService extends SofascoreSport {
   constructor() {
     super(
       {
-        fetchLastEvents: fetchFootballLastMatches,
-        fetchNextEvents: fetchFootballNextMatches,
-        fetchEventsByDate: fetchFootballMatchesByDate,
-        fetchEventDetails: fetchFootballMatchDetails,
-        fetchEventIncidents: fetchFootballMatchIncidents,
-        fetchStandingsTotal: fetchFootballStandings,
-        fetchCupTrees: fetchFootballCupTrees,
+        fetchLastEvents: withDevCache(
+          "football",
+          "last-matches",
+          fetchFootballLastMatches,
+        ),
+        fetchNextEvents: withDevCache(
+          "football",
+          "next-matches",
+          fetchFootballNextMatches,
+        ),
+        fetchEventsByDate: withDevCache(
+          "football",
+          "matches-by-date",
+          fetchFootballMatchesByDate,
+        ),
+        fetchEventDetails: withDevCache(
+          "football",
+          "match-details",
+          fetchFootballMatchDetails,
+        ),
+        fetchEventIncidents: withDevCache(
+          "football",
+          "match-incidents",
+          fetchFootballMatchIncidents,
+        ),
+        fetchStandingsTotal: withDevCache(
+          "football",
+          "standings",
+          fetchFootballStandings,
+        ),
+        fetchCupTrees: withDevCache(
+          "football",
+          "cup-trees",
+          fetchFootballCupTrees,
+        ),
         fetchPlayerRankings: async () => null,
-        fetchTeamLastEvents: fetchFootballTeamLastMatches,
-        fetchTeamNextEvents: fetchFootballTeamNextMatches,
+        fetchTeamLastEvents: withDevCache(
+          "football",
+          "team-last-matches",
+          fetchFootballTeamLastMatches,
+        ),
+        fetchTeamNextEvents: withDevCache(
+          "football",
+          "team-next-matches",
+          fetchFootballTeamNextMatches,
+        ),
       },
       SPORT.FOOTBALL,
       FOOTBALL_LEAGUES,

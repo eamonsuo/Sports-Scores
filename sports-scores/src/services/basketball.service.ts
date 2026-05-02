@@ -13,6 +13,7 @@ import {
   BASKETBALL_LEAGUES,
   SCORE_BREAKDOWN_QUARTERS_CONFIG,
 } from "@/lib/constants";
+import { withDevCache } from "@/lib/devCache";
 import { SPORT } from "@/types/misc";
 import { SofascoreSport } from "./sofascore.service";
 
@@ -20,16 +21,48 @@ class BasketballService extends SofascoreSport {
   constructor() {
     super(
       {
-        fetchLastEvents: fetchBasketballLastMatches,
-        fetchNextEvents: fetchBasketballNextMatches,
-        fetchEventsByDate: fetchBasketballMatchesByDate,
-        fetchEventDetails: fetchBasketballMatchDetails,
-        fetchEventIncidents: fetchBasketballMatchIncidents,
-        fetchStandingsTotal: fetchBasketballStandings,
+        fetchLastEvents: withDevCache(
+          "basketball",
+          "last-matches",
+          fetchBasketballLastMatches,
+        ),
+        fetchNextEvents: withDevCache(
+          "basketball",
+          "next-matches",
+          fetchBasketballNextMatches,
+        ),
+        fetchEventsByDate: withDevCache(
+          "basketball",
+          "matches-by-date",
+          fetchBasketballMatchesByDate,
+        ),
+        fetchEventDetails: withDevCache(
+          "basketball",
+          "match-details",
+          fetchBasketballMatchDetails,
+        ),
+        fetchEventIncidents: withDevCache(
+          "basketball",
+          "match-incidents",
+          fetchBasketballMatchIncidents,
+        ),
+        fetchStandingsTotal: withDevCache(
+          "basketball",
+          "standings",
+          fetchBasketballStandings,
+        ),
         fetchCupTrees: async () => null,
         fetchPlayerRankings: async () => null,
-        fetchTeamLastEvents: fetchBasketballTeamLastMatches,
-        fetchTeamNextEvents: fetchBasketballTeamNextMatches,
+        fetchTeamLastEvents: withDevCache(
+          "basketball",
+          "team-last-matches",
+          fetchBasketballTeamLastMatches,
+        ),
+        fetchTeamNextEvents: withDevCache(
+          "basketball",
+          "team-next-matches",
+          fetchBasketballTeamNextMatches,
+        ),
       },
       SPORT.BASKETBALL,
       BASKETBALL_LEAGUES,

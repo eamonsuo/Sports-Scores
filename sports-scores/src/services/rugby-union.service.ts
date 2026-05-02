@@ -13,6 +13,7 @@ import {
   RUGBY_UNION_LEAGUES,
   SCORE_BREAKDOWN_HALVES_CONFIG,
 } from "@/lib/constants";
+import { withDevCache } from "@/lib/devCache";
 import { SPORT } from "@/types/misc";
 import { SofascoreSport } from "./sofascore.service";
 
@@ -20,16 +21,48 @@ class RugbyUnionService extends SofascoreSport {
   constructor() {
     super(
       {
-        fetchNextEvents: fetchRugbyLeagueNextMatches,
-        fetchLastEvents: fetchRugbyLeagueLastMatches,
-        fetchEventsByDate: fetchRugbyLeagueMatchesByDate,
-        fetchEventDetails: fetchRugbyLeagueMatchDetails,
-        fetchEventIncidents: fetchRugbyLeagueMatchIncidents,
-        fetchStandingsTotal: fetchRugbyLeagueStandings,
+        fetchNextEvents: withDevCache(
+          "rugby-union",
+          "next-matches",
+          fetchRugbyLeagueNextMatches,
+        ),
+        fetchLastEvents: withDevCache(
+          "rugby-union",
+          "last-matches",
+          fetchRugbyLeagueLastMatches,
+        ),
+        fetchEventsByDate: withDevCache(
+          "rugby-union",
+          "matches-by-date",
+          fetchRugbyLeagueMatchesByDate,
+        ),
+        fetchEventDetails: withDevCache(
+          "rugby-union",
+          "match-details",
+          fetchRugbyLeagueMatchDetails,
+        ),
+        fetchEventIncidents: withDevCache(
+          "rugby-union",
+          "match-incidents",
+          fetchRugbyLeagueMatchIncidents,
+        ),
+        fetchStandingsTotal: withDevCache(
+          "rugby-union",
+          "standings",
+          fetchRugbyLeagueStandings,
+        ),
         fetchCupTrees: async () => null,
         fetchPlayerRankings: async () => null,
-        fetchTeamLastEvents: fetchRugbyLeagueTeamLastMatches,
-        fetchTeamNextEvents: fetchRugbyLeagueTeamNextMatches,
+        fetchTeamLastEvents: withDevCache(
+          "rugby-union",
+          "team-last-matches",
+          fetchRugbyLeagueTeamLastMatches,
+        ),
+        fetchTeamNextEvents: withDevCache(
+          "rugby-union",
+          "team-next-matches",
+          fetchRugbyLeagueTeamNextMatches,
+        ),
       },
       SPORT.RUGBY_UNION,
       RUGBY_UNION_LEAGUES,

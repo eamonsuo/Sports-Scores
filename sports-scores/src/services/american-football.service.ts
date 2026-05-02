@@ -13,6 +13,7 @@ import {
   AMERICAN_FOOTBALL_LEAGUES,
   SCORE_BREAKDOWN_QUARTERS_CONFIG,
 } from "@/lib/constants";
+import { withDevCache } from "@/lib/devCache";
 import { AmericanFootball_Sofascore_Event } from "@/types/american-football";
 import { DeepPartial, MatchSummary, SPORT } from "@/types/misc";
 import { SofascoreSport } from "./sofascore.service";
@@ -21,16 +22,48 @@ class AmericanFootballService extends SofascoreSport {
   constructor() {
     super(
       {
-        fetchLastEvents: fetchAmericanFootballLastMatches,
-        fetchNextEvents: fetchAmericanFootballNextMatches,
-        fetchEventsByDate: fetchAmericanFootballMatchesByDate,
-        fetchEventDetails: fetchAmericanFootballMatchDetails,
-        fetchEventIncidents: fetchAmericanFootballMatchIncidents,
-        fetchStandingsTotal: fetchAmericanFootballStandings,
+        fetchLastEvents: withDevCache(
+          "american-football",
+          "last-matches",
+          fetchAmericanFootballLastMatches,
+        ),
+        fetchNextEvents: withDevCache(
+          "american-football",
+          "next-matches",
+          fetchAmericanFootballNextMatches,
+        ),
+        fetchEventsByDate: withDevCache(
+          "american-football",
+          "matches-by-date",
+          fetchAmericanFootballMatchesByDate,
+        ),
+        fetchEventDetails: withDevCache(
+          "american-football",
+          "match-details",
+          fetchAmericanFootballMatchDetails,
+        ),
+        fetchEventIncidents: withDevCache(
+          "american-football",
+          "match-incidents",
+          fetchAmericanFootballMatchIncidents,
+        ),
+        fetchStandingsTotal: withDevCache(
+          "american-football",
+          "standings",
+          fetchAmericanFootballStandings,
+        ),
         fetchCupTrees: async () => null,
         fetchPlayerRankings: async () => null,
-        fetchTeamLastEvents: fetchAmericanFootballTeamLastMatches,
-        fetchTeamNextEvents: fetchAmericanFootballTeamNextMatches,
+        fetchTeamLastEvents: withDevCache(
+          "american-football",
+          "team-last-matches",
+          fetchAmericanFootballTeamLastMatches,
+        ),
+        fetchTeamNextEvents: withDevCache(
+          "american-football",
+          "team-next-matches",
+          fetchAmericanFootballTeamNextMatches,
+        ),
       },
       SPORT.AMERICAN_FOOTBALL,
       AMERICAN_FOOTBALL_LEAGUES,

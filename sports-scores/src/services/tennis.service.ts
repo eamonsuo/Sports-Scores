@@ -1,5 +1,4 @@
 import { PeriodScore } from "@/components/all-sports/ScoreBreakdown";
-import { fetchEventsByDate } from "@/endpoints/sofascore.api";
 import {
   fetchTennisATPRankings,
   fetchTennisBracket,
@@ -12,6 +11,7 @@ import {
   fetchTennisWTARankings,
 } from "@/endpoints/tennis.api";
 import { TENNIS_CATEGORIES, TENNIS_LEAGUES } from "@/lib/constants";
+import { withDevCache } from "@/lib/devCache";
 import { resolveSportImage } from "@/lib/imageMapping";
 import { setTennisMatchSummary, shortenTeamNames } from "@/lib/projUtils";
 import {
@@ -21,8 +21,9 @@ import {
   MatchSummary,
   SPORT,
   Standings,
+  TeamScoreDetails,
 } from "@/types/misc";
-import { Sofascore_Event, SofascoreSportURL } from "@/types/sofascore";
+import { Sofascore_Event } from "@/types/sofascore";
 import {
   RankingList,
   Tennis_Sofascore_Event,
@@ -38,16 +39,40 @@ class TennisService extends SofascoreSport {
   constructor() {
     super(
       {
-        fetchLastEvents: fetchTennisTournamentLastMatches,
-        fetchNextEvents: fetchTennisTournamentNextMatches,
-        fetchEventsByDate: fetchTennisMatchesByDate,
-        fetchEventDetails: fetchTennisMatchDetails,
+        fetchLastEvents: withDevCache(
+          "tennis",
+          "tournament-last-matches",
+          fetchTennisTournamentLastMatches,
+        ),
+        fetchNextEvents: withDevCache(
+          "tennis",
+          "tournament-next-matches",
+          fetchTennisTournamentNextMatches,
+        ),
+        fetchEventsByDate: withDevCache(
+          "tennis",
+          "matches-by-date",
+          fetchTennisMatchesByDate,
+        ),
+        fetchEventDetails: withDevCache(
+          "tennis",
+          "match-details",
+          fetchTennisMatchDetails,
+        ),
         fetchEventIncidents: async () => null,
         fetchStandingsTotal: async () => null,
-        fetchCupTrees: fetchTennisBracket,
+        fetchCupTrees: withDevCache("tennis", "bracket", fetchTennisBracket),
         fetchPlayerRankings: async () => null,
-        fetchTeamLastEvents: fetchTennisPlayerLastMatches,
-        fetchTeamNextEvents: fetchTennisPlayerNextMatches,
+        fetchTeamLastEvents: withDevCache(
+          "tennis",
+          "player-last-matches",
+          fetchTennisPlayerLastMatches,
+        ),
+        fetchTeamNextEvents: withDevCache(
+          "tennis",
+          "player-next-matches",
+          fetchTennisPlayerNextMatches,
+        ),
       },
       SPORT.TENNIS,
       TENNIS_LEAGUES,
@@ -59,9 +84,7 @@ class TennisService extends SofascoreSport {
 
   override async matchesByDate(date: Date) {
     const timezone = date instanceof TZDate ? date.timeZone : "UTC";
-    const matches = await (process.env.DEV_MODE
-      ? fetchEventsByDate(SofascoreSportURL.TENNIS, date)
-      : fetchTennisMatchesByDate(date));
+    const matches = await this.apiEndpoints.fetchEventsByDate(date);
 
     if (!matches) {
       return null;
@@ -257,6 +280,46 @@ class TennisService extends SofascoreSport {
               ),
       },
     });
+  }
+
+  protected override matchDetailsMapper(matchDetails: Sofascore_Event): {
+    homeTeam: TeamScoreDetails;
+    awayTeam: TeamScoreDetails;
+    status: string;
+  } {
+    return {
+      status: `${matchDetails?.status.description}`,
+      homeTeam: {
+        name: shortenTeamNames(matchDetails?.homeTeam.name ?? ""),
+        score: matchDetails?.homeScore?.current?.toString() ?? "0",
+        img:
+          matchDetails?.homeTeam.subTeams &&
+          matchDetails?.homeTeam.subTeams.length > 0
+            ? matchDetails.homeTeam.subTeams.map((subTeam) =>
+                resolveSportImage(subTeam.country.name ?? subTeam.name),
+              )
+            : resolveSportImage(
+                matchDetails?.homeTeam.country?.name ??
+                  matchDetails?.homeTeam.name ??
+                  "",
+              ),
+      },
+      awayTeam: {
+        name: shortenTeamNames(matchDetails?.awayTeam.name ?? ""),
+        score: matchDetails?.awayScore?.current?.toString() ?? "0",
+        img:
+          matchDetails?.awayTeam.subTeams &&
+          matchDetails?.awayTeam.subTeams.length > 0
+            ? matchDetails?.awayTeam.subTeams.map((subTeam) =>
+                resolveSportImage(subTeam.country.name ?? subTeam.name),
+              )
+            : resolveSportImage(
+                matchDetails?.awayTeam.country?.name ??
+                  matchDetails?.awayTeam.name ??
+                  "",
+              ),
+      },
+    };
   }
 
   // AI Generated Helper

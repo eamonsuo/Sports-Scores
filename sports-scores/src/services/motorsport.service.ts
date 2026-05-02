@@ -16,26 +16,17 @@ import {
 import { f1Service } from "./f1.service";
 
 class MotorsportService implements SportService {
-  // protected apiEndpoints: SofascoreAPI;
   protected sport: SPORT;
   protected categories: LeagueSeasonConfig[];
-  // protected headings: readonly string[];
-  // protected periodConfig?: PeriodConfig;
   protected cardVariant?: CardVariant;
 
   constructor(
-    // apiEndpoints: SofascoreAPI,
     sport: SPORT,
     categories: LeagueSeasonConfig[],
-    // headings: readonly string[],
-    // periodConfig?: PeriodConfig,
     cardVariant?: CardVariant,
   ) {
-    // this.apiEndpoints = apiEndpoints;
     this.sport = sport;
     this.categories = categories;
-    // this.headings = headings;
-    // this.periodConfig = periodConfig;
     this.cardVariant = cardVariant;
   }
 
