@@ -1,7 +1,7 @@
 import { updateGlobalApiQuota } from "@/lib/apiCounter";
 import { SPORT } from "@/types/misc";
+import { Sofascore_TournamentCupTrees_Response } from "@/types/sofascore";
 import {
-  Tennis_TennisApi_CupTrees_Response,
   Tennis_TennisApi_EventsByDate_Response,
   Tennis_TennisApi_FixturePage_Response,
   Tennis_TennisApi_MatchDetails_Response,
@@ -88,7 +88,7 @@ export async function fetchTennisBracket(
 ) {
   return (await fetchTennisApi(
     `/tournament/${tournamentId}/season/${seasonId}/cup-trees/old`,
-  )) as Tennis_TennisApi_CupTrees_Response;
+  )) as Sofascore_TournamentCupTrees_Response;
 }
 
 export async function fetchTennisTournamentStandings(

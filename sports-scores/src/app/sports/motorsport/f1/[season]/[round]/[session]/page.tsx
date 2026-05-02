@@ -1,21 +1,32 @@
+import Ladder from "@/components/all-sports/Ladder";
 import Placeholder from "@/components/misc-ui/Placeholder";
-import F1SessionStandings from "@/components/motorsport/f1/F1SessionStandings";
-import { f1Service } from "@/services/motorsport.service";
+import { f1Service } from "@/services/f1.service";
 import { F1SessionType } from "@/types/f1";
 
 export default async function Page(props: {
   params: Promise<{ season: string; round: string; session: F1SessionType }>;
 }) {
   const params = await props.params;
-  const sessionResults = await f1Service.f1SessionResults(
+  const pageData = await f1Service.sessionResults(
     params.season,
     params.round,
     params.session,
   );
 
-  if (sessionResults === null) {
+  if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>;
   }
 
-  return <F1SessionStandings data={sessionResults.results} />;
+  return (
+    <div className="flex-1 overflow-y-auto px-4">
+      {pageData.standings.map((table, index) => (
+        <Ladder
+          key={index}
+          data={table.data}
+          headings={table.headings}
+          placingCategories={table.placingCategories}
+        />
+      ))}
+    </div>
+  );
 }

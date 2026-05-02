@@ -20,16 +20,19 @@ import {
   FixtureRound,
   MatchSummary,
   SPORT,
+  Standings,
 } from "@/types/misc";
 import { Sofascore_Event, SofascoreSportURL } from "@/types/sofascore";
 import {
   RankingList,
   Tennis_Sofascore_Event,
-  TennisRankingPage,
+  Tennis_TennisApi_Rankings_Response,
 } from "@/types/tennis";
 import { TZDate } from "@date-fns/tz";
 import { isSameDay } from "date-fns";
 import { SofascoreSport } from "./sofascore.service";
+
+const TENNIS_RANKING_HEADINGS = ["Player", "Total", "Prev"] as const;
 
 class TennisService extends SofascoreSport {
   constructor() {
@@ -137,21 +140,20 @@ class TennisService extends SofascoreSport {
     };
   }
 
-  async tennisRankings(rankingList: RankingList) {
-    let rankings;
-    if (process.env.DEV_MODE) {
-      // rankings = await fetchPlayerRankings(rankingList);
-    } else {
-      switch (rankingList) {
-        case RankingList.WTA:
-          rankings = await fetchTennisWTARankings();
-          break;
-        case RankingList.ATP:
-          rankings = await fetchTennisATPRankings();
-          break;
-        default:
-          return null;
-      }
+  async tennisRankings(
+    rankingList: RankingList,
+  ): Promise<Standings<readonly string[]> | null> {
+    let rankings: Tennis_TennisApi_Rankings_Response;
+
+    switch (rankingList) {
+      case RankingList.WTA:
+        rankings = await fetchTennisWTARankings();
+        break;
+      case RankingList.ATP:
+        rankings = await fetchTennisATPRankings();
+        break;
+      default:
+        return null;
     }
 
     if (!rankings) {
@@ -159,14 +161,22 @@ class TennisService extends SofascoreSport {
     }
 
     return {
-      players: rankings.rankings.map((rank) => ({
-        name: rank.rowName,
-        position: rank.ranking,
-        img: resolveSportImage(rank.team.country.name ?? rank.team.name),
-        totalPoints: rank.points,
-        previousRank: rank.previousRanking,
-      })),
-    } as TennisRankingPage;
+      standings: [
+        {
+          headings: TENNIS_RANKING_HEADINGS,
+          data: rankings.rankings.map((rank) => ({
+            position: rank.ranking,
+            team: {
+              id: rank.id,
+              name: rank.rowName,
+              logo: resolveSportImage(rank.team.country.name ?? rank.team.name),
+            },
+            Total: rank.points,
+            Prev: rank.previousRanking,
+          })),
+        },
+      ],
+    };
   }
 
   protected override eventMapper(

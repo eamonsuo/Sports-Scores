@@ -11,11 +11,13 @@ import type {
 } from "@/types/playoff-picture";
 
 export type DeepPartial<T> = {
-  [P in keyof T]?: T[P] extends Date
+  [P in keyof T]?: T[P] extends Date | undefined
     ? T[P]
-    : T[P] extends object
-      ? DeepPartial<T[P]>
-      : T[P];
+    : NonNullable<T[P]> extends (infer U)[]
+      ? DeepPartial<U>[]
+      : T[P] extends object | undefined
+        ? DeepPartial<NonNullable<T[P]>>
+        : T[P];
 };
 
 export type TeamScoreDetails = {
@@ -34,15 +36,16 @@ export type MatchSummary = {
   status: MatchStatus;
   summaryText: string;
   otherDetail?: string;
-  homeDetails: TeamScoreDetails;
-  awayDetails: TeamScoreDetails;
+  homeDetails?: TeamScoreDetails;
+  awayDetails?: TeamScoreDetails;
+  competitorDetails?: TeamScoreDetails[]; // For motorsport, etc.
   roundLabel?: string;
   timer?: string | Date;
   timerDisplayColour?: "green" | "yellow" | "gray" | undefined;
+  matchSlug?: string;
   seriesName?: string;
   seriesImg?: string;
-  matchSlug?: string;
-  seriesSlug?: string; // Used to navigate to cricket series
+  seriesSlug?: string;
   winner?: number;
   tournamentId?: string;
   seasonId?: string;

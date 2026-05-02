@@ -1,5 +1,4 @@
 import { updateGlobalApiQuota } from "@/lib/apiCounter";
-import { Football_FootApi_LeagueCupTrees_Response } from "@/types/football";
 import { SPORT } from "@/types/misc";
 import {
   Sofascore_Event_Response,
@@ -7,6 +6,7 @@ import {
   Sofascore_EventPage_Response,
   Sofascore_Events_Response,
   Sofascore_TotalStandings_Response,
+  Sofascore_TournamentCupTrees_Response,
 } from "@/types/sofascore";
 
 function updateQuota(response: Response) {
@@ -110,5 +110,5 @@ export async function fetchFootballCupTrees(
 ) {
   return (await fetchFootballApi(
     `/tournament/${tournamentId}/season/${seasonId}/cuptrees`,
-  )) as Football_FootApi_LeagueCupTrees_Response;
+  )) as Sofascore_TournamentCupTrees_Response;
 }

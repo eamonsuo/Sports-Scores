@@ -51,15 +51,11 @@ class AmericanFootballService extends SofascoreSport {
       ...options,
       homeDetails: {
         ...options?.homeDetails,
-        winDrawLoss: event.homeTeamSeasonHistoricalForm
-          ? `${event.homeTeamSeasonHistoricalForm.wins ?? 0}-${event.homeTeamSeasonHistoricalForm.losses ?? 0}${event.homeTeamSeasonHistoricalForm.draws ? "-" + event.homeTeamSeasonHistoricalForm.draws : ""}`
-          : undefined,
+        winDrawLoss: `${event.homeTeamSeasonHistoricalForm.wins ?? 0}-${event.homeTeamSeasonHistoricalForm.losses ?? 0}${event.homeTeamSeasonHistoricalForm.draws ? "-" + event.homeTeamSeasonHistoricalForm.draws : ""}`,
       },
       awayDetails: {
         ...options?.awayDetails,
-        winDrawLoss: event.awayTeamSeasonHistoricalForm
-          ? `${event.awayTeamSeasonHistoricalForm.wins ?? 0}-${event.awayTeamSeasonHistoricalForm.losses ?? 0}${event.awayTeamSeasonHistoricalForm.draws ? "-" + event.awayTeamSeasonHistoricalForm.draws : ""}`
-          : undefined,
+        winDrawLoss: `${event.awayTeamSeasonHistoricalForm.wins ?? 0}-${event.awayTeamSeasonHistoricalForm.losses ?? 0}${event.awayTeamSeasonHistoricalForm.draws ? "-" + event.awayTeamSeasonHistoricalForm.draws : ""}`,
       },
     });
   }

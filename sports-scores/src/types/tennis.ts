@@ -1,8 +1,4 @@
-import { Match as BracketMatch } from "@/components/bracket/types";
-import { TennisRankingsPlayerRow } from "@/components/tennis/RankingsLeaderboard";
-import { FixtureRound, MatchSummary } from "./misc";
 import {
-  Sofascore_CupTree,
   Sofascore_Event,
   Sofascore_Event_Response,
   Sofascore_EventPage_Response,
@@ -28,9 +24,9 @@ export interface Tennis_TennisApi_FixturePage_Response
   events: Tennis_Sofascore_Event[];
 }
 
-export interface Tennis_TennisApi_Match_Response
-  extends Sofascore_Event_Response {
-  event: Tennis_Sofascore_Event;
+export interface Tennis_TennisApi_MatchSchedules_Response
+  extends Sofascore_Events_Response {
+  events: Tennis_Sofascore_Event[];
 }
 
 export interface Tennis_TennisApi_TournamentStandings_Response
@@ -70,15 +66,6 @@ export interface Tennis_TennisApi_MatchStatistics_Response {
   statistics: Tennis_Statistics[];
 }
 
-export interface Tennis_TennisApi_MatchSchedules_Response
-  extends Sofascore_Events_Response {
-  events: Tennis_Sofascore_Event[];
-}
-
-export interface Tennis_TennisApi_CupTrees_Response {
-  cupTrees: Sofascore_CupTree[];
-}
-
 export interface Tennis_TennisApi_TournamentRounds_Response {
   currentRound: {
     round: number;
@@ -96,11 +83,13 @@ export interface Tennis_TennisApi_TournamentRoundMatch_Response {
   events: Tennis_Sofascore_Event[];
 }
 
-export interface Tennis_TennisApi_MatchDetails_Response {
+export interface Tennis_TennisApi_MatchDetails_Response
+  extends Sofascore_Event_Response {
   event: Tennis_Sofascore_Event;
 }
 
-export interface Tennis_TennisApi_EventsByDate_Response {
+export interface Tennis_TennisApi_EventsByDate_Response
+  extends Sofascore_Events_Response {
   events: Tennis_Sofascore_Event[];
 }
 
@@ -120,42 +109,4 @@ export interface Tennis_Ranking {
 export interface Tennis_TennisApi_Rankings_Response {
   rankings: Tennis_Ranking[];
   updatedAtTimestamp: number;
-}
-
-export interface TennisFixturesPage {
-  fixtures: FixtureRound[];
-  currentRound: string;
-}
-
-export interface TennisTeamFixturesPage {
-  fixtures: MatchSummary[];
-}
-
-export interface TennisLadderPage {
-  // standings: TennisStanding[];
-  qualifyingPosition: number;
-}
-
-export interface TennisTodayPage {
-  fixtures: FixtureRound[];
-  currentRound: string;
-}
-
-export interface TennisBracketPage {
-  brackets: {
-    id: number;
-    name: string;
-    currentRound: number;
-    matches: BracketMatch[];
-  }[];
-}
-
-export interface BracketRounds {
-  id: number;
-  name: string;
-  matches: MatchSummary[];
-}
-
-export interface TennisRankingPage {
-  players: TennisRankingsPlayerRow[];
 }

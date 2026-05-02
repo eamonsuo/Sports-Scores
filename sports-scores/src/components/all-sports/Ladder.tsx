@@ -14,7 +14,7 @@ const defaultColours = [
 type LadderTeamDetail = {
   id: string | number;
   name: string;
-  logo?: string;
+  logo?: string | string[];
 };
 
 type LadderTeam = {
@@ -54,7 +54,7 @@ export default function Ladder<const H extends readonly string[]>({
           <tr>
             <th></th>
             <th className="pe-2"></th>
-            <th className="px-2">Team</th>
+            {/* <th className="px-2">Team</th> - MUST BE SPECIFIED AS PART OF HEADINGS CONST*/}
             {headings.map((heading) => (
               <th key={heading} className="px-2">
                 {heading}
@@ -82,19 +82,34 @@ export default function Ladder<const H extends readonly string[]>({
                 <td className="py-2 pe-2 ps-1">{item.position}</td>
                 <td className="text-left text-sm">
                   <div className="flex items-center">
-                    <Image
-                      src={item.team.logo ?? fallback}
-                      height={40}
-                      width={40}
-                      style={{ width: "auto", height: "15px" }}
-                      alt={"Logo"}
-                      className="me-2"
-                    />
+                    <div className="me-2 flex gap-2">
+                      {Array.isArray(item.team.logo) ? (
+                        item.team.logo.map((img, idx) => (
+                          <Image
+                            key={idx + "-logo"}
+                            src={img || fallback}
+                            width={100}
+                            height={100}
+                            style={{ width: "20px", height: "auto" }}
+                            alt={`${item.team.name} player ${idx + 1}`}
+                          />
+                        ))
+                      ) : (
+                        <Image
+                          src={item.team.logo || fallback}
+                          width={80}
+                          height={80}
+                          style={{ width: "20px", height: "auto" }}
+                          alt={item.team.name}
+                        />
+                      )}
+                    </div>
+
                     {item.team.name}
                   </div>
                 </td>
 
-                {headings.map((heading) => (
+                {headings.slice(1).map((heading) => (
                   <td key={heading}>
                     {item[heading] as string | number | undefined}
                   </td>

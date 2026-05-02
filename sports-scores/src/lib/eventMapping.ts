@@ -74,8 +74,8 @@ export async function mapFixtureRounds(
         if (showByes) {
           acc[roundLabel].byes = acc[roundLabel]?.byes?.filter(
             (team) =>
-              shortenTeamNames(team.name ?? "") !== match.homeDetails.name &&
-              shortenTeamNames(team.name ?? "") !== match.awayDetails.name,
+              shortenTeamNames(team.name ?? "") !== match.homeDetails?.name &&
+              shortenTeamNames(team.name ?? "") !== match.awayDetails?.name,
           );
         }
 

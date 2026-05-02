@@ -304,23 +304,39 @@ export const NRL_TEAMS_NAME_LOGO = [
 }));
 
 export const RUGBY_LEAGUE_LADDER_HEADINGS = [
+  "Team",
   "P",
   "W",
   "D",
   "Diff",
   "Pts",
 ] as const;
-export const FOOTBALL_LADDER_HEADINGS = ["P", "W", "D", "L", "Pts"] as const;
+export const FOOTBALL_LADDER_HEADINGS = [
+  "Team",
+  "P",
+  "W",
+  "D",
+  "L",
+  "Pts",
+] as const;
 export const AUSSIE_RULES_LADDER_HEADINGS = [
+  "Team",
   "P",
   "W",
   "D",
   "%",
   "Pts",
 ] as const;
-export const BASKETBALL_LADDER_HEADINGS = ["P", "W", "L", "PCT"] as const;
-export const BASEBALL_LADDER_HEADINGS = ["P", "W", "L", "PCT"] as const;
+export const BASKETBALL_LADDER_HEADINGS = [
+  "Team",
+  "P",
+  "W",
+  "L",
+  "PCT",
+] as const;
+export const BASEBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "PCT"] as const;
 export const ICE_HOCKEY_LADDER_HEADINGS = [
+  "Team",
   "P",
   "W",
   "OTL",
@@ -329,15 +345,26 @@ export const ICE_HOCKEY_LADDER_HEADINGS = [
   "Pts",
 ] as const;
 export const RUGBY_UNION_LADDER_HEADINGS = [
+  "Team",
   "P",
   "W",
-  "L",
+  "D",
   "Diff",
   "BP",
   "Pts",
 ] as const;
-export const AMERICAN_FOOTBALL_LADDER_HEADINGS = ["P", "W", "L", "D"] as const;
-export const GOLF_FEDEXCUP_LADDER_HEADINGS = ["Total", "Behind"] as const;
+export const AMERICAN_FOOTBALL_LADDER_HEADINGS = [
+  "Team",
+  "P",
+  "W",
+  "L",
+  "D",
+] as const;
+export const GOLF_FEDEXCUP_LADDER_HEADINGS = [
+  "Player",
+  "Total",
+  "Behind",
+] as const;
 
 export const AFL_TEAM_NAME_LOGO = [
   "Adelaide Crows",
@@ -461,6 +488,13 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
     seasons: [{ name: "2026", slug: "icc-mens-t20-world-cup" }],
   },
 ];
+
+export const MOTORSPORT_SESSION_STANDINGS_HEADINGS = [
+  "Driver",
+  "Gap",
+  "Pts",
+  "Grid",
+] as const;
 
 export const MOTORSPORT_CATEGORIES: LeagueSeasonConfig[] = [
   {

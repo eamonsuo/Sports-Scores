@@ -16,13 +16,14 @@ export default function MatchSummaryCard({
   className?: string;
 }) {
   const {
-    homeDetails: homeInfo,
-    awayDetails: awayInfo,
+    homeDetails,
+    awayDetails,
     summaryText: matchSummary,
-    otherDetail: bottomInfo,
+    otherDetail,
     venue,
     winner,
   } = event;
+
   const timer = {
     display:
       event.timer instanceof Date
@@ -30,6 +31,7 @@ export default function MatchSummaryCard({
         : (event.timer ?? ""),
     displayColour: event.timerDisplayColour,
   };
+
   return (
     <Link href={href}>
       <div
@@ -45,7 +47,7 @@ export default function MatchSummaryCard({
         <div className="m-2 grid w-full grid-cols-5 gap-2">
           <div className="content-center justify-self-start">
             <Image
-              src={homeInfo.img ?? fallback}
+              src={homeDetails?.img ?? fallback}
               width={100}
               height={100}
               style={{ width: "40px", height: "auto" }}
@@ -58,7 +60,7 @@ export default function MatchSummaryCard({
               winner === 1 && "font-bold",
             )}
           >
-            {homeInfo.score}
+            {homeDetails?.score}
           </p>
           <div className="flex items-center justify-center overflow-visible">
             {timer.display && (
@@ -86,11 +88,11 @@ export default function MatchSummaryCard({
               winner !== 1 && winner !== undefined && "font-bold",
             )}
           >
-            {awayInfo.score}
+            {awayDetails?.score}
           </p>
           <div className="content-center justify-self-end">
             <Image
-              src={awayInfo.img ?? fallback}
+              src={awayDetails?.img ?? fallback}
               width={100}
               height={100}
               style={{ width: "40px", height: "auto" }}
@@ -103,7 +105,7 @@ export default function MatchSummaryCard({
               winner === 1 && "font-bold",
             )}
           >
-            {homeInfo.name} <br /> {homeInfo.winDrawLoss}
+            {homeDetails?.name} <br /> {homeDetails?.winDrawLoss}
           </p>
           <div></div>
           <p
@@ -112,12 +114,12 @@ export default function MatchSummaryCard({
               winner !== 1 && winner !== undefined && "font-bold",
             )}
           >
-            {awayInfo.name} <br /> {awayInfo.winDrawLoss}
+            {awayDetails?.name} <br /> {awayDetails?.winDrawLoss}
           </p>
         </div>
 
         <p className="text-center text-xs text-gray-500 dark:text-neutral-500">
-          {bottomInfo}
+          {otherDetail}
         </p>
         <p className="text-center text-xs text-gray-500 dark:text-neutral-500">
           {venue}

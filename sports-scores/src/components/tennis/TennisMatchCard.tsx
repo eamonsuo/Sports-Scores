@@ -16,10 +16,10 @@ export default function TennisMatchCard({
   className?: string;
 }) {
   const {
-    homeDetails: homeInfo,
-    awayDetails: awayInfo,
+    homeDetails,
+    awayDetails,
     summaryText: matchSummary,
-    otherDetail: bottomInfo,
+    otherDetail,
     venue,
     winner,
   } = event;
@@ -62,27 +62,27 @@ export default function TennisMatchCard({
         <div className="grid grid-cols-[1fr_auto] gap-2 border-gray-300 dark:border-neutral-600">
           {/* Home Player */}
           <div className="flex items-center gap-2">
-            {Array.isArray(homeInfo.img) ? (
+            {Array.isArray(homeDetails?.img) ? (
               <div className="flex">
-                {homeInfo.img.map((img, idx) => (
+                {homeDetails.img.map((img, idx) => (
                   <Image
                     key={idx}
                     src={img || fallback}
                     width={100}
                     height={100}
                     style={{ width: "32px", height: "auto" }}
-                    alt={`${homeInfo.name} player ${idx + 1}`}
+                    alt={`${homeDetails.name} player ${idx + 1}`}
                     className="me-0.5"
                   />
                 ))}
               </div>
             ) : (
               <Image
-                src={homeInfo.img || fallback}
+                src={homeDetails?.img || fallback}
                 width={80}
                 height={80}
                 style={{ width: "32px", height: "auto" }}
-                alt={homeInfo.name}
+                alt={homeDetails?.name ?? "Home player"}
               />
             )}
             <p
@@ -91,12 +91,12 @@ export default function TennisMatchCard({
                 winner === 1 && "font-bold",
               )}
             >
-              {homeInfo.name}
+              {homeDetails?.name}
             </p>
           </div>
           <div className="flex divide-x divide-gray-300 dark:divide-neutral-600">
-            {Array.isArray(homeInfo.score) &&
-              homeInfo.score.map((set, idx) => (
+            {Array.isArray(homeDetails?.score) &&
+              homeDetails.score.map((set, idx) => (
                 <span
                   key={idx}
                   className="px-1 text-center dark:text-neutral-400"
@@ -115,27 +115,27 @@ export default function TennisMatchCard({
 
           {/* Away Player */}
           <div className="flex items-center gap-2">
-            {Array.isArray(awayInfo.img) ? (
+            {Array.isArray(awayDetails?.img) ? (
               <div className="flex">
-                {awayInfo.img.map((img, idx) => (
+                {awayDetails.img.map((img, idx) => (
                   <Image
                     key={idx}
                     src={img || fallback}
                     width={80}
                     height={80}
                     style={{ width: "32px", height: "auto" }}
-                    alt={`${awayInfo.name} player ${idx + 1}`}
+                    alt={`${awayDetails.name} player ${idx + 1}`}
                     className="me-0.5"
                   />
                 ))}
               </div>
             ) : (
               <Image
-                src={awayInfo.img || fallback}
+                src={awayDetails?.img || fallback}
                 width={80}
                 height={80}
                 style={{ width: "32px", height: "auto" }}
-                alt={awayInfo.name}
+                alt={awayDetails?.name ?? "Away player"}
               />
             )}
             <p
@@ -144,12 +144,12 @@ export default function TennisMatchCard({
                 winner !== 1 && winner !== undefined && "font-bold",
               )}
             >
-              {awayInfo.name}
+              {awayDetails?.name}
             </p>
           </div>
           <div className="flex divide-x divide-gray-300 dark:divide-neutral-600">
-            {Array.isArray(awayInfo.score) &&
-              awayInfo.score.map((set, idx) => (
+            {Array.isArray(awayDetails?.score) &&
+              awayDetails.score.map((set, idx) => (
                 <span
                   key={idx}
                   className="px-1 text-center dark:text-neutral-400"
@@ -167,10 +167,10 @@ export default function TennisMatchCard({
           </div>
         </div>
 
-        {/* Footer info */}
-        {bottomInfo && (
+        {/* Footer Details */}
+        {otherDetail && (
           <p className="mt-3 text-xs text-gray-500 dark:text-neutral-500">
-            {bottomInfo}
+            {otherDetail}
           </p>
         )}
         {venue && (

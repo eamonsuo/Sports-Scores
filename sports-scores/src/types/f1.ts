@@ -1,25 +1,3 @@
-import { F1DriverStandings } from "@/components/motorsport/f1/F1DriverStandings";
-import { F1SessionResults } from "@/components/motorsport/f1/F1SessionStandings";
-import { F1TeamStandings } from "@/components/motorsport/f1/F1TeamStandings";
-
-// Page Types
-export interface F1RacesPage {
-  sessions: SessionSummary[];
-}
-
-export interface F1SessionPage {
-  results: F1SessionResults[];
-  sessionName: string;
-}
-
-export interface F1DriverStandingsPage {
-  standings: F1DriverStandings[];
-}
-
-export interface F1ConstructorStandingsPage {
-  standings: F1TeamStandings[];
-}
-
 // Jolpica API Types
 export interface F1_Jolpica_Races_Response {
   MRData: Jolpica_MRData_Races;
