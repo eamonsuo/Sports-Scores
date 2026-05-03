@@ -1,10 +1,6 @@
 import fallback from "@/../public/vercel.svg";
+import { PeriodScore } from "@/types/misc";
 import Image from "next/image";
-
-export type PeriodScore = {
-  teams: { home: { score: number | string }; away: { score: number | string } };
-  periodName: string;
-};
 
 export default function ScoreBreakdown({
   scoreData,

@@ -1,9 +1,3 @@
-import {
-  LadderPlacingCategory,
-  SportsLadder,
-} from "@/components/all-sports/Ladder";
-import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
-import { PeriodScore } from "@/components/all-sports/ScoreBreakdown";
 import { Match as BracketMatch } from "@/components/bracket/types";
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping";
 import { resolveSportImage } from "@/lib/imageMapping";
@@ -18,12 +12,16 @@ import {
   CardVariant,
   DeepPartial,
   DisplayTypes,
+  LadderPlacingCategory,
+  LeagueSeasonConfig,
   MatchDetail,
   Matches,
   MatchStatus,
   MatchSummary,
+  PeriodScore,
   SPORT,
   SportService,
+  SportsLadder,
   Standings,
   TeamScoreDetails,
 } from "@/types/misc";
@@ -71,7 +69,6 @@ export abstract class SofascoreSport implements SportService {
   async matchesByLeagueSeason(
     leagueId: string,
     seasonId: string,
-    defaultRoundLabel: string = "Round",
   ): Promise<Matches | null> {
     const [lastMatches, nextMatches, dataverseMatches] = await Promise.all([
       this.apiEndpoints.fetchLastEvents(leagueId, seasonId, 0),
@@ -92,8 +89,7 @@ export abstract class SofascoreSport implements SportService {
       .map((event) =>
         this.eventMapper(event, {
           roundLabel:
-            event.roundInfo?.name ??
-            `${defaultRoundLabel} ${event.roundInfo?.round}`,
+            event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
         }),
       );
 
@@ -109,8 +105,8 @@ export abstract class SofascoreSport implements SportService {
 
     const { leagueConfig } = getSportConfigurations(
       this.leagues,
-      String(leagueId),
-      String(seasonId),
+      leagueId,
+      seasonId,
     );
 
     const fixtures = await mapFixtureRounds(
@@ -126,7 +122,6 @@ export abstract class SofascoreSport implements SportService {
   }
 
   async matchesByDate(date: Date): Promise<Matches | null> {
-    //TODO: No dev mode
     const matches = await this.apiEndpoints.fetchEventsByDate(date);
 
     if (!matches) return null;
@@ -143,7 +138,6 @@ export abstract class SofascoreSport implements SportService {
         validLeagueIds.includes(item.tournament.uniqueTournament.id),
       )
       .sort(
-        // TODO: How do I want to sort this??
         (a, b) =>
           validLeagueIds.indexOf(a.tournament.uniqueTournament.id) -
           validLeagueIds.indexOf(b.tournament.uniqueTournament.id),
@@ -248,16 +242,14 @@ export abstract class SofascoreSport implements SportService {
 
     const { ladderConfig } = getSportConfigurations(
       this.leagues,
-      String(leagueId),
-      String(seasonId),
+      leagueId,
+      seasonId,
     );
 
     return {
       standings: standings?.standings
         // TODO: How do I want to sort tables??
-        .sort((a, b) => {
-          return 0;
-        })
+        .sort(this.standingsSorter)
         .map((table) =>
           this.standingsMapper(table, ladderConfig?.placingCategories),
         ),
@@ -457,6 +449,10 @@ export abstract class SofascoreSport implements SportService {
     } as SportsLadder<typeof this.headings>;
   }
 
+  standingsSorter(a: Sofascore_Standing, b: Sofascore_Standing): number {
+    return 0;
+  }
+
   protected matchDetailsMapper(matchDetails: Sofascore_Event): {
     homeTeam: TeamScoreDetails;
     awayTeam: TeamScoreDetails;
@@ -467,24 +463,12 @@ export abstract class SofascoreSport implements SportService {
       homeTeam: {
         name: shortenTeamNames(matchDetails?.homeTeam.name ?? ""),
         score: matchDetails?.homeScore?.current?.toString() ?? "0",
-        img:
-          matchDetails?.homeTeam.subTeams &&
-          matchDetails?.homeTeam.subTeams.length > 0
-            ? matchDetails.homeTeam.subTeams.map((subTeam) =>
-                resolveSportImage(subTeam.name),
-              )
-            : resolveSportImage(matchDetails?.homeTeam.name ?? ""),
+        img: resolveSportImage(matchDetails?.homeTeam.name ?? ""),
       },
       awayTeam: {
         name: shortenTeamNames(matchDetails?.awayTeam.name ?? ""),
         score: matchDetails?.awayScore?.current?.toString() ?? "0",
-        img:
-          matchDetails?.awayTeam.subTeams &&
-          matchDetails?.awayTeam.subTeams.length > 0
-            ? matchDetails?.awayTeam.subTeams.map((subTeam) =>
-                resolveSportImage(subTeam.name),
-              )
-            : resolveSportImage(matchDetails?.awayTeam.name ?? ""),
+        img: resolveSportImage(matchDetails?.awayTeam.name ?? ""),
       },
     };
   }

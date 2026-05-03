@@ -6,15 +6,15 @@ import {
 } from "./sofascore";
 
 export interface AmericanFootball_Sofascore_Event extends Sofascore_Event {
-  homeTeamSeasonHistoricalForm: {
+  homeTeamSeasonHistoricalForm?: {
     wins: number;
     losses: number;
-    draws: number;
+    draws?: number;
   };
-  awayTeamSeasonHistoricalForm: {
+  awayTeamSeasonHistoricalForm?: {
     wins: number;
     losses: number;
-    draws: number;
+    draws?: number;
   };
 }
 

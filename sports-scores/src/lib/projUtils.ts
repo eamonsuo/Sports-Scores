@@ -1,5 +1,4 @@
-import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
-import { CountryFlagCode } from "@/types/misc";
+import { CountryFlagCode, LeagueSeasonConfig } from "@/types/misc";
 import { Sofascore_Score } from "@/types/sofascore";
 import { format } from "date-fns/format";
 

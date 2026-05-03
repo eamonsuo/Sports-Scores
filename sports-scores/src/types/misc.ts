@@ -1,14 +1,60 @@
-import {
-  LadderPlacingCategory,
-  SportsLadder,
-} from "@/components/all-sports/Ladder";
-import { PeriodScore } from "@/components/all-sports/ScoreBreakdown";
-import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import { Match as BracketMatch } from "@/components/bracket/types";
 import type {
   PlayoffPictureConfig,
   PlayoffPictureGroup,
 } from "@/types/playoff-picture";
+
+// ── Types extracted from all-sports components ───────────────────────────────
+
+export type LadderTeamDetail = {
+  id: string | number;
+  name: string;
+  logo?: string | string[];
+};
+
+export type LadderTeam = {
+  team: LadderTeamDetail;
+  position: number;
+};
+
+export type LadderPlacingCategory = {
+  position: number[];
+  label: string;
+  colour?: string;
+};
+
+export type LadderRow = LadderTeam & {
+  [key: string]: string | number | LadderTeamDetail | undefined;
+};
+
+export interface SportsLadder<H extends readonly string[]> {
+  tableName?: string;
+  headings: H;
+  data: LadderRow[];
+  placingCategories?: LadderPlacingCategory[];
+}
+
+export type LeagueSeasonConfig = {
+  name: string;
+  slug: string;
+  icon?: string;
+  seasons: { name: string; slug: string; ladderConfig?: LadderConfig }[];
+  display?: DisplayTypes;
+  externalURL?: string;
+  byes?: {
+    name: string;
+    img: string;
+  }[];
+};
+
+export type PeriodScore = {
+  teams: { home: { score: number | string }; away: { score: number | string } };
+  periodName: string;
+};
+
+export type ScoreDifference = { event: string; difference: number };
+
+// ── General types ────────────────────────────────────────────────────────────
 
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends Date | undefined

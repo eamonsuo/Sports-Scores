@@ -1,14 +1,19 @@
-﻿import { LadderPlacingCategory } from "@/components/all-sports/Ladder";
-import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
-import MatchSummaryCard from "@/components/all-sports/MatchSummaryCard";
+﻿import MatchSummaryCard from "@/components/all-sports/MatchSummaryCard";
 import SessionSummaryCard from "@/components/motorsport/SessionSummaryCard";
 import TennisMatchCard from "@/components/tennis/TennisMatchCard";
 import { ScoreBreakdownConfig } from "@/services/sofascore.service";
-import { CardVariant, DisplayTypes, LadderConfig } from "@/types/misc";
+import {
+  CardVariant,
+  DisplayTypes,
+  LadderConfig,
+  LadderPlacingCategory,
+  LeagueSeasonConfig,
+} from "@/types/misc";
 import {
   PlayoffPictureStructure,
   type PlayoffPictureConfig,
 } from "@/types/playoff-picture";
+import { RankingList } from "@/types/tennis";
 import { resolveSportImage } from "./imageMapping";
 
 export const cardVariantMap: Record<CardVariant, typeof MatchSummaryCard> = {
@@ -510,7 +515,7 @@ export const MOTORSPORT_CATEGORIES: LeagueSeasonConfig[] = [
   {
     name: "Supercars",
     slug: "supercars",
-    seasons: [{ name: "2026", slug: "external" }],
+    seasons: [{ name: "2026", slug: "2026" }],
     externalURL: `https://www.supercars.com/calendar`,
   },
 ];
@@ -1559,13 +1564,13 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
   },
   {
     name: "ATP Rankings",
-    slug: "atpRank",
-    seasons: [{ name: "Current", slug: "" }],
+    slug: RankingList.ATP,
+    seasons: [{ name: "Current", slug: "current/ladder" }],
   },
   {
     name: "WTA Rankings",
-    slug: "wtaRank",
-    seasons: [{ name: "Current", slug: "" }],
+    slug: RankingList.WTA,
+    seasons: [{ name: "Current", slug: "current/ladder" }],
   },
 ];
 

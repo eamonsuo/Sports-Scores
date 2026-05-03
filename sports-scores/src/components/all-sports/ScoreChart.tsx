@@ -1,10 +1,9 @@
 "use client";
 import fallback from "@/../public/vercel.svg";
+import { ScoreDifference } from "@/types/misc";
 import Image from "next/image";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import { ChartConfig, ChartContainer } from "../zzzshadcn/chart";
-
-export type ScoreDifference = { event: string; difference: number };
 
 export default function ScoreChart({
   scoreDifference,

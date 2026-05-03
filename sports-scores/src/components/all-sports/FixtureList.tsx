@@ -56,6 +56,7 @@ export default function FixtureList({
   let displaySeries = false;
   let currentMatch = false;
   let currentDateFlag = false;
+  let roundedCardBorder = false;
 
   if (data.length === 0) {
     return <Placeholder>NO DATA</Placeholder>;
@@ -109,7 +110,18 @@ export default function FixtureList({
             <CardComponent
               className={cn(
                 item.seriesName ? "mt-0" : "rounded-md",
-                item.seriesName && index === data.length - 1 && "rounded-b-md",
+                item.seriesName &&
+                  (() => {
+                    // If next item is a different series or date, round the bottom corners
+                    const nextItem = data[index + 1];
+                    if (!nextItem) return true;
+                    const nextDate = new Date(nextItem.startDate);
+                    return (
+                      nextDate.toDateString() !== itemDate.toDateString() ||
+                      nextItem.seriesName !== item.seriesName
+                    );
+                  })() &&
+                  "rounded-b-md",
               )}
               event={item}
               href={`/sports/${item.sport}/${item.matchSlug ?? item.id}`}

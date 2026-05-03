@@ -1,18 +1,25 @@
-import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
 import { MOTORSPORT_CATEGORIES } from "@/lib/constants";
-import { getCurrentRound } from "@/lib/eventMapping";
+import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping";
+import { resolveSportImage } from "@/lib/imageMapping";
+import { getSportConfigurations } from "@/lib/projUtils";
 import {
   Brackets,
   CardVariant,
   DisplayTypes,
-  FixtureRound,
+  LeagueSeasonConfig,
   MatchDetail,
   Matches,
   MatchStatus,
+  MatchSummary,
   SPORT,
   SportService,
   Standings,
 } from "@/types/misc";
+import { addHours } from "date-fns";
+import {
+  matchSummariesBySportAndDay,
+  matchSummariesByTournament,
+} from "./dataverse.service";
 import { f1Service } from "./f1.service";
 
 class MotorsportService implements SportService {
@@ -20,76 +27,80 @@ class MotorsportService implements SportService {
   protected categories: LeagueSeasonConfig[];
   protected cardVariant?: CardVariant;
 
-  constructor(
-    sport: SPORT,
-    categories: LeagueSeasonConfig[],
-    cardVariant?: CardVariant,
-  ) {
-    this.sport = sport;
-    this.categories = categories;
-    this.cardVariant = cardVariant;
+  constructor() {
+    this.sport = SPORT.MOTORSPORT;
+    this.categories = MOTORSPORT_CATEGORIES;
+    this.cardVariant = CardVariant.MOTORSPORT;
   }
 
   async matchesByLeagueSeason(
     leagueId: string,
     seasonId: string,
   ): Promise<Matches | null> {
-    console.log(leagueId, seasonId);
     switch (leagueId) {
       case "f1":
         return await f1Service.matchesByLeagueSeason(leagueId, seasonId);
 
       default:
-        return null;
+        const dataverseMatches = await matchSummariesByTournament(
+          leagueId,
+          seasonId,
+          this.sport,
+        );
+        if (!dataverseMatches || dataverseMatches.length === 0) {
+          return null;
+        }
+
+        dataverseMatches.sort(
+          (a, b) =>
+            new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+        );
+
+        const { leagueConfig } = getSportConfigurations(
+          this.categories,
+          String(leagueId),
+          String(seasonId),
+        );
+
+        const fixtures = await mapFixtureRounds(
+          dataverseMatches,
+          leagueConfig,
+          this.cardVariant,
+        );
+
+        return {
+          fixtures,
+          currentRound: getCurrentRound(fixtures, leagueConfig?.display),
+        } as Matches;
     }
   }
 
   async matchesByDate(date: Date): Promise<Matches | null> {
-    const f1Events = await f1Service.matchesByDate(date);
+    const [dataverseMatches] = await Promise.all([
+      matchSummariesBySportAndDay(this.sport, date),
+    ]);
 
-    const motorsportFixtures: FixtureRound[] = [];
-
-    motorsportFixtures.push(...(f1Events?.fixtures ?? []));
-
-    switch (date.getDay()) {
-      case 1: // Monday
-      case 2: // Tuesday
-      case 3: // Wednesday
-        break;
-      case 4: // Thursday
-      case 5: // Friday
-      case 6: // Saturday
-      case 0: // Sunday
-        motorsportFixtures.push({
-          matches: [
-            {
-              id: "Supercars",
-              sport: SPORT.MOTORSPORT,
-              summaryText: "Supercars",
-              startDate: date,
-              status: MatchStatus.LIVE,
-              awayDetails: { score: "", name: "" },
-              homeDetails: { score: "", name: "" },
-              matchSlug: "supercars/external",
-              roundLabel: "Supercars",
-            },
-          ],
-          roundLabel: "Supercars",
-          cardVariant: this.cardVariant,
-          roundSlug: `${SPORT.MOTORSPORT}/supercars/external`,
-        });
-        break;
+    if (!dataverseMatches || dataverseMatches.length === 0) {
+      return null;
     }
 
-    return motorsportFixtures.length > 0
-      ? {
-          fixtures: motorsportFixtures,
-          currentRound: getCurrentRound(
-            motorsportFixtures,
-            DisplayTypes.LEAGUE,
-          ),
-        }
-      : null;
+    const allMatches = (dataverseMatches ?? [])
+      .sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+      )
+      .map(this.eventMapper);
+
+    const fixtures = await mapFixtureRounds(
+      allMatches,
+      this.categories,
+      this.cardVariant,
+    );
+
+    return {
+      fixtures: fixtures,
+      currentRound: getCurrentRound(fixtures, DisplayTypes.LEAGUE),
+    };
   }
 
   async matchesByTeam(teamId: string): Promise<Matches | null> {
@@ -108,12 +119,28 @@ class MotorsportService implements SportService {
   async brackets(leagueId: string, seasonId: string): Promise<Brackets | null> {
     return null;
   }
+
+  eventMapper(event: MatchSummary): MatchSummary {
+    let currentDate = new Date();
+
+    const status =
+      event.startDate > currentDate
+        ? MatchStatus.UPCOMING
+        : event.startDate > addHours(currentDate, -2)
+          ? MatchStatus.LIVE
+          : MatchStatus.COMPLETED;
+    return {
+      ...event,
+      status,
+      seriesImg: resolveSportImage(event.seriesName ?? ""),
+      timer:
+        status === MatchStatus.UPCOMING
+          ? event.startDate
+          : status.charAt(0) + status.slice(1).toLowerCase(),
+    };
+  }
 }
 
 export { f1Service };
 
-export const motorsportService = new MotorsportService(
-  SPORT.MOTORSPORT,
-  MOTORSPORT_CATEGORIES,
-  CardVariant.MOTORSPORT,
-);
+export const motorsportService = new MotorsportService();

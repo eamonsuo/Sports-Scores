@@ -1,4 +1,5 @@
 import fallback from "@/../public/vercel.svg";
+import { SportsLadder } from "@/types/misc";
 import { clsx } from "clsx";
 import Image from "next/image";
 
@@ -10,34 +11,6 @@ const defaultColours = [
   "bg-yellow-500",
   "bg-yellow-300",
 ];
-
-type LadderTeamDetail = {
-  id: string | number;
-  name: string;
-  logo?: string | string[];
-};
-
-type LadderTeam = {
-  team: LadderTeamDetail;
-  position: number;
-};
-
-export type LadderPlacingCategory = {
-  position: number[];
-  label: string;
-  colour?: string;
-};
-
-export type LadderRow = LadderTeam & {
-  [key: string]: string | number | LadderTeamDetail | undefined;
-};
-
-export interface SportsLadder<H extends readonly string[]> {
-  tableName?: string;
-  headings: H;
-  data: LadderRow[];
-  placingCategories?: LadderPlacingCategory[];
-}
 
 export default function Ladder<const H extends readonly string[]>({
   tableName,

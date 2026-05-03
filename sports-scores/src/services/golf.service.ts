@@ -1,4 +1,3 @@
-import { SportsLadder } from "@/components/all-sports/Ladder";
 import { GolfLeaderboardPlayerRow } from "@/components/golf/TournamentLeaderboard";
 import {
   fetchGolfLeaderboard,
@@ -16,8 +15,79 @@ import {
   SlashGolf_PlayerRanking_FedExCup,
   SlashGolf_PlayerRanking_OWGR,
 } from "@/types/golf";
-import { CountryFlagCode, MatchSummary, SPORT } from "@/types/misc";
+import {
+  Brackets,
+  CardVariant,
+  CountryFlagCode,
+  LeagueSeasonConfig,
+  MatchDetail,
+  Matches,
+  MatchSummary,
+  SPORT,
+  SportService,
+  SportsLadder,
+  Standings,
+} from "@/types/misc";
 import { addDays } from "date-fns";
+
+class GolfService implements SportService {
+  protected sport: SPORT;
+  protected categories: LeagueSeasonConfig[];
+  protected cardVariant?: CardVariant;
+
+  constructor() {
+    this.sport = SPORT.GOLF;
+    this.categories = GOLF_TOURS;
+    // this.cardVariant = CardVariant.GOLF;
+  }
+  async matchesByLeagueSeason(
+    leagueId: string,
+    seasonId: string,
+  ): Promise<Matches | null> {
+    switch (leagueId) {
+      case "pga":
+      // return await golfPGASchedule(seasonId);
+      case "liv":
+      // return await golfLIVSchedule(seasonId);
+      default:
+        return null;
+    }
+
+    throw new Error("Method not implemented.");
+  }
+  matchesByDate(date: Date): Promise<Matches | null> {
+    throw new Error("Method not implemented.");
+  }
+  matchesByTeam(teamId: string): Promise<Matches | null> {
+    throw new Error("Method not implemented.");
+  }
+  matchDetails(matchId: string): Promise<MatchDetail | null> {
+    throw new Error("Method not implemented.");
+  }
+
+  async standings(
+    leagueId: string,
+    seasonId: string,
+  ): Promise<Standings<readonly string[]> | null> {
+    switch (leagueId) {
+      case "pga":
+      // return await golfFedExRankings(seasonId);
+      case "liv":
+        return null;
+      case "owgr":
+      // return await golfOWGRankings(seasonId);
+      default:
+        return null;
+    }
+    throw new Error("Method not implemented.");
+  }
+
+  brackets(leagueId: string, seasonId: string): Promise<Brackets | null> {
+    throw new Error("Method not implemented.");
+  }
+}
+
+export const golfService = new GolfService();
 
 export async function golfPGASchedule(year: string) {
   var rawSchedule = await fetchGolfSchedule(1, year);

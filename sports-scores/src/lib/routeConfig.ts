@@ -1,4 +1,3 @@
-import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
 import { americanFootballService } from "@/services/american-football.service";
 import { aussieRulesService } from "@/services/aussie-rules.service";
 import { baseballService } from "@/services/baseball.service";
@@ -9,7 +8,7 @@ import { motorsportService } from "@/services/motorsport.service";
 import { rugbyLeagueService } from "@/services/rugby-league.service";
 import { rugbyUnionService } from "@/services/rugby-union.service";
 import { tennisService } from "@/services/tennis.service";
-import { SPORT, SportService } from "@/types/misc";
+import { LeagueSeasonConfig, SPORT, SportService } from "@/types/misc";
 import {
   AMERICAN_FOOTBALL_LEAGUES,
   AUSSIE_RULES_LEAGUES,

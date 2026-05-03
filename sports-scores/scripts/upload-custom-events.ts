@@ -11,6 +11,7 @@
  */
 
 import { fetchF1Events } from "@/endpoints/f1.api";
+import { resolveSportImage } from "@/lib/imageMapping";
 import { mapToDataverseMatchSummary } from "@/services/dataverse.service";
 import { DataverseMatchSummary } from "@/types/dataverse";
 import { F1SessionType, Jolpica_Race } from "@/types/f1";
@@ -54,7 +55,7 @@ type SubAdapterMap = Record<string, EventAdapter>;
 // ---------------------------------------------------------------------------
 
 function setSessionStatus(sessionDate: Date, sessionType: F1SessionType) {
-  const currentDate = new Date();
+  let currentDate = new Date();
 
   if (sessionDate > currentDate) {
     return MatchStatus.UPCOMING;
@@ -82,75 +83,95 @@ function setSessionStatus(sessionDate: Date, sessionType: F1SessionType) {
   }
 }
 
-function mapF1RaceToMatchSummaries(
-  race: Jolpica_Race,
-  season: string,
-): MatchSummary[] {
+function mapSessionToMatchSummary(
+  session: Jolpica_Race,
+  sessionType: F1SessionType,
+  startDate: Date,
+): MatchSummary {
+  const status = setSessionStatus(startDate, sessionType);
+
+  return {
+    id: session.season + session.round + sessionType,
+    sport: SPORT.MOTORSPORT,
+    summaryText: sessionType.replace("-", " "),
+    startDate,
+    status,
+    seriesName: session.raceName,
+    seriesImg: resolveSportImage(session.raceName),
+    seriesSlug: `f1/${session.season}`,
+    matchSlug: `f1/${session.season}/${session.round}/${sessionType}`,
+    roundLabel: `Round ${session.round}`,
+    timer:
+      status === MatchStatus.UPCOMING
+        ? startDate
+        : status.charAt(0) + status.slice(1).toLowerCase(),
+    timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
+    awayDetails: { score: "", name: "" },
+    homeDetails: { score: "", name: "" },
+    venue:
+      session.Circuit.circuitName + ", " + session.Circuit.Location.locality,
+    seasonId: session.season,
+    tournamentId: "f1",
+  };
+}
+
+function mapRaceToMatchSummaries(session: Jolpica_Race): MatchSummary[] {
   const sessions: MatchSummary[] = [];
 
-  const mapSession = (
-    sessionType: F1SessionType,
-    dateStr: string,
-    timeStr: string,
-  ) => {
-    const startDate = new Date(`${dateStr}T${timeStr}`);
-    const status = setSessionStatus(startDate, sessionType);
-    sessions.push({
-      id: season + race.round + sessionType,
-      sport: SPORT.MOTORSPORT,
-      summaryText: sessionType.replace("-", " "),
-      startDate,
-      status,
-      seriesName: race.raceName,
-      seriesSlug: `f1/${season}`,
-      matchSlug: `f1/${season}/${race.round}/${sessionType}`,
-      roundLabel: `Round ${race.round}`,
-      timer:
-        status === MatchStatus.UPCOMING
-          ? startDate
-          : status.charAt(0) + status.slice(1).toLowerCase(),
-      timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
-      awayDetails: { score: "", name: "" },
-      homeDetails: { score: "", name: "" },
-      venue: race.Circuit.circuitName + ", " + race.Circuit.Location.locality,
-      seasonId: season,
-      tournamentId: "f1",
-    });
-  };
-
-  if (race.FirstPractice)
-    mapSession(
-      F1SessionType.Practice1,
-      race.FirstPractice.date,
-      race.FirstPractice.time,
+  if (session.FirstPractice) {
+    const startDate = new Date(
+      session.FirstPractice.date + "T" + session.FirstPractice.time,
     );
-  if (race.SecondPractice)
-    mapSession(
-      F1SessionType.Practice2,
-      race.SecondPractice.date,
-      race.SecondPractice.time,
+    sessions.push(
+      mapSessionToMatchSummary(session, F1SessionType.Practice1, startDate),
     );
-  if (race.ThirdPractice)
-    mapSession(
-      F1SessionType.Practice3,
-      race.ThirdPractice.date,
-      race.ThirdPractice.time,
+  }
+  if (session.SecondPractice) {
+    const startDate = new Date(
+      session.SecondPractice.date + "T" + session.SecondPractice.time,
     );
-  if (race.SprintQualifying)
-    mapSession(
-      F1SessionType.SprintQualifying,
-      race.SprintQualifying.date,
-      race.SprintQualifying.time,
+    sessions.push(
+      mapSessionToMatchSummary(session, F1SessionType.Practice2, startDate),
     );
-  if (race.Sprint)
-    mapSession(F1SessionType.Sprint, race.Sprint.date, race.Sprint.time);
-  if (race.Qualifying)
-    mapSession(
-      F1SessionType.Qualifying,
-      race.Qualifying.date,
-      race.Qualifying.time,
+  }
+  if (session.ThirdPractice) {
+    const startDate = new Date(
+      session.ThirdPractice.date + "T" + session.ThirdPractice.time,
     );
-  mapSession(F1SessionType.Race, race.date, race.time);
+    sessions.push(
+      mapSessionToMatchSummary(session, F1SessionType.Practice3, startDate),
+    );
+  }
+  if (session.Qualifying) {
+    const startDate = new Date(
+      session.Qualifying.date + "T" + session.Qualifying.time,
+    );
+    sessions.push(
+      mapSessionToMatchSummary(session, F1SessionType.Qualifying, startDate),
+    );
+  }
+  if (session.Sprint) {
+    const startDate = new Date(session.Sprint.date + "T" + session.Sprint.time);
+    sessions.push(
+      mapSessionToMatchSummary(session, F1SessionType.Sprint, startDate),
+    );
+  }
+  if (session.SprintQualifying) {
+    const startDate = new Date(
+      session.SprintQualifying.date + "T" + session.SprintQualifying.time,
+    );
+    sessions.push(
+      mapSessionToMatchSummary(
+        session,
+        F1SessionType.SprintQualifying,
+        startDate,
+      ),
+    );
+  }
+  const raceStart = new Date(session.date + "T" + session.time);
+  sessions.push(
+    mapSessionToMatchSummary(session, F1SessionType.Race, raceStart),
+  );
 
   return sessions;
 }
@@ -161,23 +182,68 @@ async function fetchF1Adapter(args: string[]): Promise<MatchSummary[]> {
     throw new Error("F1 adapter requires: <season> (e.g., 2025)");
   }
 
-  const races = await fetchF1Events(season);
-  if (!races) {
+  const rawEvents = await fetchF1Events(season);
+  if (!rawEvents) {
     console.log("No F1 races found.");
     return [];
   }
 
-  return races.flatMap((race) => mapF1RaceToMatchSummaries(race, season));
+  return rawEvents.flatMap((race) => mapRaceToMatchSummaries(race));
 }
 
 async function fetchSupercarsAdapter(args: string[]): Promise<MatchSummary[]> {
-  const [_season] = args;
-  // TODO: Implement supercars scraping/fetching logic
-  // For now, placeholder that returns empty
-  console.log(
-    "Supercars adapter not yet implemented. Add scraping logic here.",
-  );
-  return [];
+  const [season] = args;
+  if (!season) {
+    throw new Error("Supercars adapter requires: <season> (e.g., 2026)");
+  }
+
+  const fs = await import("fs");
+  const path = await import("path");
+  const filePath = path.resolve(__dirname, `supercars-${season}-events.json`);
+
+  if (!fs.existsSync(filePath)) {
+    throw new Error(`Events file not found: ${filePath}`);
+  }
+
+  const raw = JSON.parse(fs.readFileSync(filePath, "utf-8")) as Array<{
+    id: string;
+    sport: string;
+    summaryText: string;
+    startDate: string;
+    endDate?: string;
+    status: string;
+    seriesName: string;
+    seriesSlug: string;
+    matchSlug: string;
+    roundLabel: string;
+    timer: string;
+    timerDisplayColour: string;
+    venue: string;
+    seasonId: string;
+    tournamentId: string;
+    homeDetails: { score: string; name: string };
+    awayDetails: { score: string; name: string };
+  }>;
+
+  return raw.map((item) => ({
+    id: item.id,
+    sport: item.sport as SPORT,
+    summaryText: item.summaryText,
+    startDate: new Date(item.startDate),
+    endDate: item.endDate ? new Date(item.endDate) : undefined,
+    status: item.status as MatchStatus,
+    seriesName: item.seriesName,
+    seriesSlug: item.seriesSlug,
+    matchSlug: item.matchSlug,
+    roundLabel: item.roundLabel,
+    timer: item.status === "UPCOMING" ? new Date(item.timer) : item.timer,
+    timerDisplayColour: item.timerDisplayColour as "green" | "yellow" | "gray",
+    venue: item.venue,
+    seasonId: item.seasonId,
+    tournamentId: item.tournamentId,
+    homeDetails: item.homeDetails,
+    awayDetails: item.awayDetails,
+  }));
 }
 
 const motorsportAdapters: SubAdapterMap = {

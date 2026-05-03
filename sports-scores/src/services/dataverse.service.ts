@@ -11,6 +11,8 @@ import {
   SPORT,
   TeamScoreDetails,
 } from "@/types/misc";
+import { TZDate } from "@date-fns/tz";
+import { endOfDay, startOfDay } from "date-fns";
 
 // --- MatchSummary Utilities ---
 
@@ -152,6 +154,22 @@ export async function matchSummariesByTournament(
     `ss_tournamentid eq '${leagueId}'`,
     `ss_seasonid eq '${seasonId}'`,
     `ss_sport eq '${sport}'`,
+  ];
+  const response = await fetchDataverseMatchSummaries(filters.join(" and "));
+  if (!response) return null;
+  return response.value.map(mapToMatchSummary);
+}
+
+export async function matchSummariesBySportAndDay(
+  sport: SPORT,
+  date: Date | TZDate,
+): Promise<MatchSummary[] | null> {
+  const dayStart = new Date(startOfDay(date).getTime()).toISOString();
+  const dayEnd = new Date(endOfDay(date).getTime()).toISOString();
+
+  const filters = [
+    `ss_sport eq '${sport}'`,
+    `Microsoft.Dynamics.CRM.Between(PropertyName='ss_startdate',PropertyValues=["${dayStart}","${dayEnd}"])`,
   ];
   const response = await fetchDataverseMatchSummaries(filters.join(" and "));
   if (!response) return null;

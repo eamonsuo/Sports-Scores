@@ -1,5 +1,3 @@
-import { LadderRow } from "@/components/all-sports/Ladder";
-import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
 import {
   fetchF1ConstructorStandings,
   fetchF1DriverDetails,
@@ -25,6 +23,8 @@ import {
   CardVariant,
   DeepPartial,
   DisplayTypes,
+  LadderRow,
+  LeagueSeasonConfig,
   MatchDetail,
   Matches,
   MatchStatus,
@@ -45,14 +45,10 @@ class F1Service implements SportService {
   protected categories: LeagueSeasonConfig[];
   protected cardVariant?: CardVariant;
 
-  constructor(
-    sport: SPORT,
-    categories: LeagueSeasonConfig[],
-    cardVariant?: CardVariant,
-  ) {
-    this.sport = sport;
-    this.categories = categories;
-    this.cardVariant = cardVariant;
+  constructor() {
+    this.sport = SPORT.MOTORSPORT;
+    this.categories = MOTORSPORT_CATEGORIES;
+    this.cardVariant = CardVariant.MOTORSPORT;
   }
 
   async matchesByLeagueSeason(
@@ -525,7 +521,10 @@ function mapJolpicaQualifyingResults(
   });
 }
 
-function setSessionStatus(sessionDate: Date, sessionType: F1SessionType) {
+export function setSessionStatus(
+  sessionDate: Date,
+  sessionType: F1SessionType,
+) {
   let currentDate = new Date();
 
   if (sessionDate > currentDate) {
@@ -554,8 +553,4 @@ function setSessionStatus(sessionDate: Date, sessionType: F1SessionType) {
   }
 }
 
-export const f1Service = new F1Service(
-  SPORT.MOTORSPORT,
-  MOTORSPORT_CATEGORIES,
-  CardVariant.MOTORSPORT,
-);
+export const f1Service = new F1Service();

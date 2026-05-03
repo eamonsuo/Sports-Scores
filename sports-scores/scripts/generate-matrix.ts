@@ -8,7 +8,6 @@
  * array below.
  */
 
-import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
 import {
   AMERICAN_FOOTBALL_LEAGUES,
   AUSSIE_RULES_LEAGUES,
@@ -27,7 +26,7 @@ import {
   TENNIS_CATEGORIES,
   TENNIS_LEAGUES,
 } from "@/lib/constants";
-import { DisplayTypes } from "@/types/misc";
+import { DisplayTypes, LeagueSeasonConfig } from "@/types/misc";
 
 // ---------------------------------------------------------------------------
 // Configure which leagues to sync. Each entry maps a sport key + display type

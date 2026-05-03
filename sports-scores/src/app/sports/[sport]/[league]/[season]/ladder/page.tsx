@@ -30,6 +30,7 @@ export default async function Page(props: {
           data={table.data}
           headings={table.headings}
           placingCategories={table.placingCategories}
+          tableName={table.tableName}
         />
       ))}
     </div>

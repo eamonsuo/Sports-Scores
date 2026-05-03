@@ -5,6 +5,7 @@ import { MatchSummary } from "@/types/misc";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
+import Timer from "../misc-ui/Timer";
 
 export default function TennisMatchCard({
   event,
@@ -43,18 +44,11 @@ export default function TennisMatchCard({
           <p className="text-sm text-gray-500 dark:text-neutral-500">
             {matchSummary}
           </p>
-          <span
-            className={clsx(
-              "rounded px-2 py-0.5 text-xs",
-              timer.displayColour === "green" &&
-                "bg-green-500 text-neutral-200 dark:bg-green-700",
-              timer.displayColour === "yellow" &&
-                "bg-yellow-500 text-black dark:bg-yellow-600",
-              timer.displayColour === "gray" &&
-                "bg-gray-200 text-gray-700 dark:bg-neutral-700 dark:text-neutral-400",
-            )}
-          >
-            {timer.display}
+          <span>
+            <Timer
+              display={timer.display}
+              displayColour={timer.displayColour}
+            />
           </span>
         </div>
 

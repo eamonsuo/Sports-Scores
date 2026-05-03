@@ -1,4 +1,3 @@
-import { PeriodScore } from "@/components/all-sports/ScoreBreakdown";
 import {
   fetchTennisATPRankings,
   fetchTennisBracket,
@@ -19,6 +18,7 @@ import {
   DeepPartial,
   FixtureRound,
   MatchSummary,
+  PeriodScore,
   SPORT,
   Standings,
   TeamScoreDetails,
@@ -163,17 +163,26 @@ class TennisService extends SofascoreSport {
     };
   }
 
-  async tennisRankings(
-    rankingList: RankingList,
+  override async standings(
+    leagueId: string,
+    seasonId: string,
   ): Promise<Standings<readonly string[]> | null> {
     let rankings: Tennis_TennisApi_Rankings_Response;
 
-    switch (rankingList) {
+    switch (leagueId) {
       case RankingList.WTA:
-        rankings = await fetchTennisWTARankings();
+        rankings = await withDevCache(
+          "tennis",
+          "wta-rankings",
+          fetchTennisWTARankings,
+        )();
         break;
       case RankingList.ATP:
-        rankings = await fetchTennisATPRankings();
+        rankings = await withDevCache(
+          "tennis",
+          "atp-rankings",
+          fetchTennisATPRankings,
+        )();
         break;
       default:
         return null;
@@ -202,6 +211,12 @@ class TennisService extends SofascoreSport {
     };
   }
 
+  async tennisRankings(
+    rankingList: RankingList,
+  ): Promise<Standings<readonly string[]> | null> {
+    return null;
+  }
+
   protected override eventMapper(
     match: Tennis_Sofascore_Event,
     options?: DeepPartial<MatchSummary>,
@@ -218,7 +233,7 @@ class TennisService extends SofascoreSport {
         match.awayScore.current ?? 0,
       ),
       seriesName: `${match.tournament.category.name} ${match.tournament.uniqueTournament?.tennisPoints ?? ""} - ${match.tournament.category.name === "ATP" || match.tournament.category.name === "WTA" || match.tournament.category.name === "Challenger" ? match.tournament.name : match.tournament.uniqueTournament.name}`,
-      seriesSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}/matches`,
+      seriesSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}`,
       homeDetails: {
         name:
           `${match.homeTeamSeed ? match.homeTeamSeed + " " : ""}` +
@@ -287,11 +302,11 @@ class TennisService extends SofascoreSport {
     awayTeam: TeamScoreDetails;
     status: string;
   } {
+    const parentMatchDetails = super.matchDetailsMapper(matchDetails);
     return {
-      status: `${matchDetails?.status.description}`,
+      ...parentMatchDetails,
       homeTeam: {
-        name: shortenTeamNames(matchDetails?.homeTeam.name ?? ""),
-        score: matchDetails?.homeScore?.current?.toString() ?? "0",
+        ...parentMatchDetails.homeTeam,
         img:
           matchDetails?.homeTeam.subTeams &&
           matchDetails?.homeTeam.subTeams.length > 0
@@ -305,8 +320,7 @@ class TennisService extends SofascoreSport {
               ),
       },
       awayTeam: {
-        name: shortenTeamNames(matchDetails?.awayTeam.name ?? ""),
-        score: matchDetails?.awayScore?.current?.toString() ?? "0",
+        ...parentMatchDetails.awayTeam,
         img:
           matchDetails?.awayTeam.subTeams &&
           matchDetails?.awayTeam.subTeams.length > 0

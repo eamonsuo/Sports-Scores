@@ -1,8 +1,8 @@
-import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
 import {
   CardVariant,
   DisplayTypes,
   FixtureRound,
+  LeagueSeasonConfig,
   MatchStatus,
   MatchSummary,
 } from "@/types/misc";

@@ -5,6 +5,7 @@ import { MatchSummary } from "@/types/misc";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
+import Timer from "../misc-ui/Timer";
 
 export default function MatchSummaryCard({
   event,
@@ -64,21 +65,10 @@ export default function MatchSummaryCard({
           </p>
           <div className="flex items-center justify-center overflow-visible">
             {timer.display && (
-              <p
-                suppressHydrationWarning
-                className={clsx(
-                  "whitespace-nowrap rounded-sm px-2 py-1 text-center text-xs",
-
-                  timer.displayColour === "green" &&
-                    "bg-green-500 text-neutral-200 dark:bg-green-700",
-                  timer.displayColour === "yellow" &&
-                    "bg-yellow-500 text-black dark:bg-yellow-600",
-                  timer.displayColour === "gray" &&
-                    "bg-gray-200 text-gray-700 dark:bg-neutral-700 dark:text-neutral-400",
-                )}
-              >
-                {timer.display}
-              </p>
+              <Timer
+                display={timer.display}
+                displayColour={timer.displayColour}
+              />
             )}
           </div>
 

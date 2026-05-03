@@ -2,6 +2,7 @@ import { formatTime } from "@/lib/projUtils";
 import { cn } from "@/lib/utils";
 import { MatchSummary } from "@/types/misc";
 import Link from "next/link";
+import Timer from "../misc-ui/Timer";
 
 export default function SessionSummaryCard({
   event,
@@ -29,7 +30,7 @@ export default function SessionSummaryCard({
         )}
       >
         <p className="flex-1">{event.summaryText}</p>
-        <p suppressHydrationWarning>{timer.display}</p>
+        <Timer display={timer.display} displayColour={timer.displayColour} />
         <p>&gt;</p>
       </div>
     </Link>

@@ -33,8 +33,8 @@ export interface Tennis_TennisApi_TournamentStandings_Response
   extends Sofascore_TotalStandings_Response {}
 
 export enum RankingList {
-  WTA = "wta",
-  ATP = "atp",
+  WTA = "wtaRankings",
+  ATP = "atpRankings",
 }
 
 export interface Tennis_StatisticsItem {

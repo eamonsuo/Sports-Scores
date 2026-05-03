@@ -6,7 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/zzzshadcn/popover";
-import { DisplayTypes, LadderConfig, SPORT } from "@/types/misc";
+import { LeagueSeasonConfig, SPORT } from "@/types/misc";
 import { format } from "date-fns/format";
 import { ChevronDownIcon, ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
@@ -19,19 +19,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../zzzshadcn/dropdown-menu";
-
-export type LeagueSeasonConfig = {
-  name: string;
-  slug: string;
-  icon?: string;
-  seasons: { name: string; slug: string; ladderConfig?: LadderConfig }[];
-  display?: DisplayTypes;
-  externalURL?: string;
-  byes?: {
-    name: string;
-    img: string;
-  }[];
-};
 
 export default function LeagueSeasonToggle({
   sport,
@@ -72,14 +59,20 @@ export default function LeagueSeasonToggle({
     return { leagueSlug: null, seasonSlug: null };
   }
 
+  const DEFAULT_LEAGUE: LeagueSeasonConfig = {
+    name: "League",
+    slug: "",
+    seasons: [{ name: "Season", slug: "" }],
+  };
+
   // Helper to find league and season objects
   function findLeagueAndSeason(
     leagueSlug: string | null,
     seasonSlug: string | null,
   ) {
-    const league = leagues.find((l) => l.slug === leagueSlug) || leagues[0];
+    const league = leagues.find((l) => l.slug === leagueSlug) ?? DEFAULT_LEAGUE;
     const season =
-      league.seasons.find((s) => s.slug === seasonSlug) || league.seasons[0];
+      league.seasons.find((s) => s.slug === seasonSlug) ?? league.seasons[0];
     return { league, season };
   }
 

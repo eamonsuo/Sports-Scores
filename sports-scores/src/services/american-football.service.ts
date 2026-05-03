@@ -16,6 +16,7 @@ import {
 import { withDevCache } from "@/lib/devCache";
 import { AmericanFootball_Sofascore_Event } from "@/types/american-football";
 import { DeepPartial, MatchSummary, SPORT } from "@/types/misc";
+import { Sofascore_Standing } from "@/types/sofascore";
 import { SofascoreSport } from "./sofascore.service";
 
 class AmericanFootballService extends SofascoreSport {
@@ -73,24 +74,37 @@ class AmericanFootballService extends SofascoreSport {
   }
 
   override matchesByLeagueSeason(leagueId: string, seasonId: string) {
-    return super.matchesByLeagueSeason(leagueId, seasonId, "Week");
+    return super.matchesByLeagueSeason(leagueId, seasonId);
   }
 
-  eventMapper(
+  override eventMapper(
     event: AmericanFootball_Sofascore_Event,
     options?: DeepPartial<MatchSummary>,
   ): MatchSummary {
     return super.eventMapper(event, {
       ...options,
+      roundLabel: event.roundInfo?.name ?? `Week ${event.roundInfo?.round}`,
       homeDetails: {
         ...options?.homeDetails,
-        winDrawLoss: `${event.homeTeamSeasonHistoricalForm.wins ?? 0}-${event.homeTeamSeasonHistoricalForm.losses ?? 0}${event.homeTeamSeasonHistoricalForm.draws ? "-" + event.homeTeamSeasonHistoricalForm.draws : ""}`,
+        winDrawLoss:
+          event.homeTeamSeasonHistoricalForm &&
+          `${event.homeTeamSeasonHistoricalForm.wins ?? 0}-${event.homeTeamSeasonHistoricalForm.losses ?? 0}${event.homeTeamSeasonHistoricalForm.draws ? "-" + event.homeTeamSeasonHistoricalForm.draws : ""}`,
       },
       awayDetails: {
         ...options?.awayDetails,
-        winDrawLoss: `${event.awayTeamSeasonHistoricalForm.wins ?? 0}-${event.awayTeamSeasonHistoricalForm.losses ?? 0}${event.awayTeamSeasonHistoricalForm.draws ? "-" + event.awayTeamSeasonHistoricalForm.draws : ""}`,
+        winDrawLoss:
+          event.awayTeamSeasonHistoricalForm &&
+          `${event.awayTeamSeasonHistoricalForm.wins ?? 0}-${event.awayTeamSeasonHistoricalForm.losses ?? 0}${event.awayTeamSeasonHistoricalForm.draws ? "-" + event.awayTeamSeasonHistoricalForm.draws : ""}`,
       },
     });
+  }
+
+  //TODO: How to organise standings?
+  override standingsSorter(
+    a: Sofascore_Standing,
+    b: Sofascore_Standing,
+  ): number {
+    return 0;
   }
 }
 

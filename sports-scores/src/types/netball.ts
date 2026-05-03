@@ -1,6 +1,5 @@
-import { ScoreDifference } from "@/components/all-sports/ScoreChart";
 import { NetballScoreBreakdown } from "@/components/netball/NetballScoreBreakdown";
-import { FixtureRound, TeamScoreDetails } from "./misc";
+import { FixtureRound, ScoreDifference, TeamScoreDetails } from "./misc";
 
 export interface Netball_SportsDB_LeagueTotalStandings_Response {}
 

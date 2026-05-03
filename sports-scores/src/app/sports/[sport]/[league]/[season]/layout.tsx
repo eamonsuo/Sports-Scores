@@ -1,6 +1,7 @@
 import NavButtonGroup from "@/components/misc-ui/NavButtonGroup";
 import { DEFAULT_NAV_BUTTONS, SPORT_ROUTE_CONFIG } from "@/lib/routeConfig";
 import { SPORT } from "@/types/misc";
+import { RankingList } from "@/types/tennis";
 
 export default async function SportsLayout({
   children,
@@ -22,7 +23,10 @@ export default async function SportsLayout({
 
   return (
     <>
-      {season !== "wiki" && <NavButtonGroup buttons={buttons} />}
+      {season !== "wiki" &&
+        !Object.values(RankingList).includes(league as RankingList) && (
+          <NavButtonGroup buttons={buttons} />
+        )}
       {children}
     </>
   );
