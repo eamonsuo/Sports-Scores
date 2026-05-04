@@ -207,7 +207,7 @@ function mapNetballMatch(
     timerDisplayColour: options?.timerDisplayColour ?? "gray",
     matchSlug:
       options?.matchSlug ??
-      `${event.idLeague}/${event.strSeason}/match/${event.idEvent}`,
+      `/sports/${SPORT.NETBALL}/${event.idLeague}/${event.strSeason}/match/${event.idEvent}`,
     venue: options?.venue ?? event?.strVenue ?? "",
     seriesName: options?.seriesName,
     seriesSlug: options?.seriesSlug,

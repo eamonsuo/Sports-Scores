@@ -225,7 +225,9 @@ export function getSportConfigurations(
 ) {
   const leagueConfig = leagueConfigs.find((l) => l.slug === leagueId);
 
-  const seasonConfig = leagueConfig?.seasons.find((s) => s.slug === seasonId);
+  const seasonConfig = leagueConfig?.seasons.find(
+    (s) => s.slug.split("/")[0] === seasonId,
+  );
 
   const ladderConfig = seasonConfig?.ladderConfig;
 

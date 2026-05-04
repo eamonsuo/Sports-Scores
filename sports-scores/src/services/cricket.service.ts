@@ -73,8 +73,8 @@ export async function cricketMatchesByDate(date: Date) {
           name: event.T2[0].Nm,
         },
         seriesName: item.Snm,
-        matchSlug: `${item.Ccd}/${item.Scd}/match/${event.Eid}`,
-        seriesSlug: `${item.Ccd}/${item.Scd}`,
+        matchSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/match/${event.Eid}`,
+        seriesSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}`,
       } as MatchSummary;
     });
   });
@@ -123,8 +123,8 @@ export async function cricketMyTeamsMatches() {
             name: event.T2[0].Nm,
           },
           seriesName: item.Snm,
-          matchSlug: item.Sid,
-          seriesSlug: ``,
+          matchSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/match/${event.Eid}`,
+          seriesSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}`,
         } as MatchSummary;
       });
     });
@@ -159,7 +159,7 @@ export async function cricketMatchDetails(id: string): Promise<{
   return {
     matchDetails: detailsPage,
     matchScorecard: scorecardPage,
-    matchSeries: `${rawDetails.Stg.Ccd}/${rawDetails.Stg.Scd}`,
+    matchSeries: `/sports/${SPORT.CRICKET}/${rawDetails.Stg.Ccd}/${rawDetails.Stg.Scd}`,
   };
 }
 
@@ -237,8 +237,8 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
           name: event.T2[0].Nm,
         },
         seriesName: item.Snm,
-        matchSlug: `${item.Ccd}/${item.Scd}/match/${event.Eid}`,
-        seriesSlug: `${item.Ccd}/${item.Scd}`,
+        matchSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/match/${event.Eid}`,
+        seriesSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}`,
       } as MatchSummary;
     });
   });

@@ -367,7 +367,7 @@ export abstract class SofascoreSport implements SportService {
           : "gray"),
       matchSlug:
         options?.matchSlug ??
-        `${event.tournament.uniqueTournament.id}/${event.season.id}/match/${event.id}`,
+        `/sports/${this.sport}/${event.tournament.uniqueTournament.id}/${event.season.id}/match/${event.id}`,
       venue:
         options?.venue ??
         (event?.venue?.name &&

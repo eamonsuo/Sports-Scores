@@ -1,6 +1,5 @@
 import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
 import DateNav from "@/components/misc-ui/DateNav";
-import { GOLF_TOURS } from "@/lib/constants";
 import { getClientDate } from "@/lib/serverUtils";
 import { americanFootballService } from "@/services/american-football.service";
 import { aussieRulesService } from "@/services/aussie-rules.service";
@@ -8,7 +7,7 @@ import { baseballService } from "@/services/baseball.service";
 import { basketballService } from "@/services/basketball.service";
 import { cricketMatchesByDate } from "@/services/cricket.service";
 import { footballService } from "@/services/football.service";
-import { golfTournamentsByDate } from "@/services/golf.service";
+import { golfService } from "@/services/golf.service";
 import { iceHockeyService } from "@/services/ice-hockey.service";
 import { motorsportService } from "@/services/motorsport.service";
 import { netballMatchesByDate } from "@/services/netball.service";
@@ -54,7 +53,7 @@ export default async function Page({
     rugbyLeagueService.matchesByDate(parsedDate),
     aussieRulesService.matchesByDate(parsedDate),
     iceHockeyService.matchesByDate(parsedDate),
-    golfTournamentsByDate(parsedDate),
+    golfService.matchesByDate(parsedDate),
     motorsportService.matchesByDate(parsedDate),
     rugbyUnionService.matchesByDate(parsedDate),
     netballMatchesByDate(parsedDate),
@@ -74,13 +73,7 @@ export default async function Page({
     .concat(rugbyLeagueToday?.fixtures ?? [])
     .concat(aussieRulesToday?.fixtures ?? [])
     .concat(americanFootballToday?.fixtures ?? [])
-    .concat([
-      {
-        matches: golfToday ?? [],
-        roundLabel: "Golf",
-        roundSlug: `${SPORT.GOLF}/${GOLF_TOURS[0].slug}/${GOLF_TOURS[0].seasons[0].slug}`,
-      },
-    ])
+    .concat(golfToday?.fixtures ?? [])
     .concat(motorsportToday?.fixtures ?? [])
     .concat(footballToday?.fixtures ?? [])
     .concat(basketballToday?.fixtures ?? [])

@@ -102,7 +102,7 @@ export default function FixtureList({
             )}
             {(displaySeries || displayDate) && item.seriesName && (
               <LeagueHeader
-                href={`/sports/${item.sport}/${item.seriesSlug}`}
+                href={item.seriesSlug ?? ""}
                 seriesName={item.seriesName}
                 img={item.seriesImg}
               />
@@ -124,7 +124,7 @@ export default function FixtureList({
                   "rounded-b-md",
               )}
               event={item}
-              href={`/sports/${item.sport}/${item.matchSlug ?? item.id}`}
+              href={item.matchSlug ?? ""}
             />
           </React.Fragment>
         );

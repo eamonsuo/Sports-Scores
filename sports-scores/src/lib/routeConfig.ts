@@ -3,6 +3,7 @@ import { aussieRulesService } from "@/services/aussie-rules.service";
 import { baseballService } from "@/services/baseball.service";
 import { basketballService } from "@/services/basketball.service";
 import { footballService } from "@/services/football.service";
+import { golfService } from "@/services/golf.service";
 import { iceHockeyService } from "@/services/ice-hockey.service";
 import { motorsportService } from "@/services/motorsport.service";
 import { rugbyLeagueService } from "@/services/rugby-league.service";
@@ -26,10 +27,13 @@ import {
   TENNIS_LEAGUES,
 } from "./constants";
 
+type NavButton = { href: string; label: string; page: string };
+
 type SportRouteConfig = {
   leagues: LeagueSeasonConfig[];
   service: SportService;
-  navButtons?: { href: string; label: string; page: string }[]; // override default
+  navButtons?: NavButton[]; // override default for all leagues
+  navButtonsByLeague?: Record<string, NavButton[]>; // override per league slug
 };
 
 export const DEFAULT_NAV_BUTTONS = [
@@ -77,7 +81,21 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
   },
   [SPORT.GOLF]: {
     leagues: GOLF_TOURS,
-    service: aussieRulesService,
+    service: golfService,
+    navButtons: [
+      { href: "#current-date", label: "Tournaments", page: "matches" },
+      { href: "ladder", label: "OOM", page: "ladder" },
+    ],
+    navButtonsByLeague: {
+      pga: [
+        { href: "#current-date", label: "Tournaments", page: "matches" },
+        { href: "ladder", label: "FedExCup", page: "ladder" },
+      ],
+      liv: [
+        { href: "#current-date", label: "Tournaments", page: "matches" },
+        { href: "", label: "Standings", page: "ladder" },
+      ],
+    },
   },
   [SPORT.ICE_HOCKEY]: {
     leagues: ICE_HOCKEY_LEAGUES,

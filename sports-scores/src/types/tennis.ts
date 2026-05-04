@@ -35,6 +35,7 @@ export interface Tennis_TennisApi_TournamentStandings_Response
 export enum RankingList {
   WTA = "wtaRankings",
   ATP = "atpRankings",
+  OWGR = "owgr",
 }
 
 export interface Tennis_StatisticsItem {

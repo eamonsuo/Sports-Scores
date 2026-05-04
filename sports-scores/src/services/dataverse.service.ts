@@ -169,7 +169,7 @@ export async function matchSummariesBySportAndDay(
 
   const filters = [
     `ss_sport eq '${sport}'`,
-    `Microsoft.Dynamics.CRM.Between(PropertyName='ss_startdate',PropertyValues=["${dayStart}","${dayEnd}"])`,
+    `((ss_startdate le '${dayEnd}' and ss_enddate ge '${dayStart}') or (ss_enddate eq null and ss_startdate ge '${dayStart}' and ss_startdate le '${dayEnd}'))`,
   ];
   const response = await fetchDataverseMatchSummaries(filters.join(" and "));
   if (!response) return null;

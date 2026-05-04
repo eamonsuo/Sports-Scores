@@ -48,7 +48,7 @@ class F1Service implements SportService {
   constructor() {
     this.sport = SPORT.MOTORSPORT;
     this.categories = MOTORSPORT_CATEGORIES;
-    this.cardVariant = CardVariant.MOTORSPORT;
+    this.cardVariant = CardVariant.SESSION;
   }
 
   async matchesByLeagueSeason(
@@ -336,10 +336,11 @@ function mapSessionToMatchSummary(
     status: options?.status ?? status,
     seriesName: options?.seriesName ?? session.raceName,
     seriesImg: options?.seriesImg ?? resolveSportImage(session.raceName),
-    seriesSlug: options?.seriesSlug ?? `f1/${session.season}`,
+    seriesSlug:
+      options?.seriesSlug ?? `/sports/${SPORT.MOTORSPORT}/f1/${session.season}`,
     matchSlug:
       options?.matchSlug ??
-      `f1/${session.season}/${session.round}/${sessionType}`,
+      `/sports/${SPORT.MOTORSPORT}/f1/${session.season}/${session.round}/${sessionType}`,
     roundLabel: options?.roundLabel ?? `Round ${session.round}`,
     timer:
       options?.timer ??
@@ -525,7 +526,7 @@ export function setSessionStatus(
   sessionDate: Date,
   sessionType: F1SessionType,
 ) {
-  let currentDate = new Date();
+  const currentDate = new Date();
 
   if (sessionDate > currentDate) {
     return MatchStatus.UPCOMING;

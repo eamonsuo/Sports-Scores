@@ -84,7 +84,7 @@ export default function RaceList({ data }: { data: MatchSummary[] }) {
                   currentDate={currentMatch}
                 />
                 <LeagueHeader
-                  href={`/sports/${item.sport}/${item.seriesSlug}`}
+                  href={`${item.seriesSlug}`}
                   seriesName={item.seriesName ?? ""}
                   img={item.seriesImg}
                   className="p-4 dark:text-neutral-400"
@@ -93,7 +93,7 @@ export default function RaceList({ data }: { data: MatchSummary[] }) {
             )}
 
             <SessionSummaryCard
-              href={`/sports/${item.sport}/${item.matchSlug}`}
+              href={`${item.matchSlug}`}
               event={item}
               className={cn(
                 "mt-0",

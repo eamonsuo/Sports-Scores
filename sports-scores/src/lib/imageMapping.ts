@@ -1151,6 +1151,7 @@ export function resolveSportImage(teamName: string) {
     case "Tyrrell Hatton":
     case "Aaron Rai":
     case "Matt Fitzpatrick":
+    case "Alex Fitzpatrick":
     case "Paul Casey":
     case "Lee Westwood":
     case "Ian Poulter":

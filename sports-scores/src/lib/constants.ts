@@ -18,9 +18,69 @@ import { resolveSportImage } from "./imageMapping";
 
 export const cardVariantMap: Record<CardVariant, typeof MatchSummaryCard> = {
   [CardVariant.TENNIS]: TennisMatchCard,
-  [CardVariant.MOTORSPORT]: SessionSummaryCard,
+  [CardVariant.SESSION]: SessionSummaryCard,
   [CardVariant.DEFAULT]: MatchSummaryCard,
 };
+
+export const RUGBY_LEAGUE_LADDER_HEADINGS = [
+  "Team",
+  "P",
+  "W",
+  "D",
+  "Diff",
+  "Pts",
+] as const;
+export const FOOTBALL_LADDER_HEADINGS = [
+  "Team",
+  "P",
+  "W",
+  "D",
+  "L",
+  "Pts",
+] as const;
+export const AUSSIE_RULES_LADDER_HEADINGS = [
+  "Team",
+  "P",
+  "W",
+  "D",
+  "%",
+  "Pts",
+] as const;
+export const BASKETBALL_LADDER_HEADINGS = [
+  "Team",
+  "P",
+  "W",
+  "L",
+  "PCT",
+] as const;
+export const BASEBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "PCT"] as const;
+export const ICE_HOCKEY_LADDER_HEADINGS = [
+  "Team",
+  "P",
+  "W",
+  "OTL",
+  "L",
+  "Diff",
+  "Pts",
+] as const;
+export const RUGBY_UNION_LADDER_HEADINGS = [
+  "Team",
+  "P",
+  "W",
+  "D",
+  "Diff",
+  "BP",
+  "Pts",
+] as const;
+export const AMERICAN_FOOTBALL_LADDER_HEADINGS = [
+  "Team",
+  "P",
+  "W",
+  "L",
+  "D",
+] as const;
+export const GOLF_FEDEX_HEADINGS = ["Player", "Total", "Behind"] as const;
+export const GOLF_OWGR_HEADINGS = ["Player", "Total", "Prev"] as const;
 
 export const SCORE_BREAKDOWN_HALVES_CONFIG: ScoreBreakdownConfig = {
   periodNames: ["1st Half", "2nd Half"],
@@ -283,6 +343,7 @@ const PGA_2013_LADDER_CONFIG: LadderConfig = {
       position: Array.from({ length: 30 }, (_, i) => i + 71),
     },
   ],
+  headings: GOLF_FEDEX_HEADINGS,
 };
 
 export const NRL_TEAMS_NAME_LOGO = [
@@ -307,69 +368,6 @@ export const NRL_TEAMS_NAME_LOGO = [
   name: team,
   img: resolveSportImage(team),
 }));
-
-export const RUGBY_LEAGUE_LADDER_HEADINGS = [
-  "Team",
-  "P",
-  "W",
-  "D",
-  "Diff",
-  "Pts",
-] as const;
-export const FOOTBALL_LADDER_HEADINGS = [
-  "Team",
-  "P",
-  "W",
-  "D",
-  "L",
-  "Pts",
-] as const;
-export const AUSSIE_RULES_LADDER_HEADINGS = [
-  "Team",
-  "P",
-  "W",
-  "D",
-  "%",
-  "Pts",
-] as const;
-export const BASKETBALL_LADDER_HEADINGS = [
-  "Team",
-  "P",
-  "W",
-  "L",
-  "PCT",
-] as const;
-export const BASEBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "PCT"] as const;
-export const ICE_HOCKEY_LADDER_HEADINGS = [
-  "Team",
-  "P",
-  "W",
-  "OTL",
-  "L",
-  "Diff",
-  "Pts",
-] as const;
-export const RUGBY_UNION_LADDER_HEADINGS = [
-  "Team",
-  "P",
-  "W",
-  "D",
-  "Diff",
-  "BP",
-  "Pts",
-] as const;
-export const AMERICAN_FOOTBALL_LADDER_HEADINGS = [
-  "Team",
-  "P",
-  "W",
-  "L",
-  "D",
-] as const;
-export const GOLF_FEDEXCUP_LADDER_HEADINGS = [
-  "Player",
-  "Total",
-  "Behind",
-] as const;
 
 export const AFL_TEAM_NAME_LOGO = [
   "Adelaide Crows",
@@ -564,10 +562,14 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
   },
   {
     name: "OWGR",
-    slug: "owgr",
+    slug: RankingList.OWGR,
     seasons: [
-      { name: "Current", slug: "2026" },
-      { name: "2025", slug: "2025" },
+      {
+        name: "Current",
+        slug: "2026/ladder",
+        ladderConfig: { headings: GOLF_OWGR_HEADINGS },
+      },
+      { name: "2025", slug: "2025/ladder" },
     ],
   },
 ];

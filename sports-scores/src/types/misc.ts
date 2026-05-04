@@ -106,7 +106,7 @@ export enum MatchStatus {
 
 export enum CardVariant {
   TENNIS = "tennis",
-  MOTORSPORT = "motorsport",
+  SESSION = "session",
   DEFAULT = "default",
 }
 
@@ -122,6 +122,7 @@ export type LadderConfig = {
   // headings: string[];
   placingCategories?: LadderPlacingCategory[];
   playoffPictureConfig?: PlayoffPictureConfig;
+  headings?: readonly string[];
 };
 
 export interface SportService {

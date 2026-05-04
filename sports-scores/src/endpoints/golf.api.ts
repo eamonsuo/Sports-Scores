@@ -37,7 +37,7 @@ async function fetchGolfApi(endpoint: string) {
   return res.json();
 }
 
-export async function fetchGolfSchedule(orgId: 1 | 2, year: string) {
+export async function fetchGolfSchedule(orgId: string, year: string) {
   return (await fetchGolfApi(
     `/schedule?orgId=${orgId}&year=${year}`,
   )) as Golf_SlashGolfAPI_Schedule;
@@ -50,7 +50,7 @@ export async function fetchGolfRankings(statId: string, year: string) {
 }
 
 export async function fetchGolfLeaderboard(
-  orgId: 1 | 2,
+  orgId: string,
   tournId: string,
   year: string,
   roundId?: number,

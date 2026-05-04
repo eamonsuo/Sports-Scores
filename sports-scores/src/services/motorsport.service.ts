@@ -30,7 +30,7 @@ class MotorsportService implements SportService {
   constructor() {
     this.sport = SPORT.MOTORSPORT;
     this.categories = MOTORSPORT_CATEGORIES;
-    this.cardVariant = CardVariant.MOTORSPORT;
+    this.cardVariant = CardVariant.SESSION;
   }
 
   async matchesByLeagueSeason(
@@ -39,7 +39,7 @@ class MotorsportService implements SportService {
   ): Promise<Matches | null> {
     switch (leagueId) {
       case "f1":
-        return await f1Service.matchesByLeagueSeason(leagueId, seasonId);
+      // return await f1Service.matchesByLeagueSeason(leagueId, seasonId);
 
       default:
         const dataverseMatches = await matchSummariesByTournament(
@@ -51,19 +51,21 @@ class MotorsportService implements SportService {
           return null;
         }
 
-        dataverseMatches.sort(
-          (a, b) =>
-            new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-        );
+        const allMatches = dataverseMatches
+          .sort(
+            (a, b) =>
+              new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+          )
+          .map(this.eventMapper);
 
         const { leagueConfig } = getSportConfigurations(
           this.categories,
-          String(leagueId),
-          String(seasonId),
+          leagueId,
+          seasonId,
         );
 
         const fixtures = await mapFixtureRounds(
-          dataverseMatches,
+          allMatches,
           leagueConfig,
           this.cardVariant,
         );

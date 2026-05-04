@@ -61,7 +61,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.GOLF,
-    link: `/sports/${SPORT.GOLF}/${GOLF_TOURS[0].slug}/${GOLF_TOURS[0].seasons[0].slug}/schedule`,
+    link: `/sports/${SPORT.GOLF}/${GOLF_TOURS[0].slug}/${GOLF_TOURS[0].seasons[0].slug}`,
     img: "/footer/golf-ball.svg",
     altText: "Golf",
   },

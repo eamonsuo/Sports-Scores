@@ -11,12 +11,21 @@
  */
 
 import { fetchF1Events } from "@/endpoints/f1.api";
+import { fetchGolfSchedule } from "@/endpoints/golf.api";
 import { resolveSportImage } from "@/lib/imageMapping";
+import { getCountryImageUrl } from "@/lib/projUtils";
 import { mapToDataverseMatchSummary } from "@/services/dataverse.service";
 import { DataverseMatchSummary } from "@/types/dataverse";
 import { F1SessionType, Jolpica_Race } from "@/types/f1";
-import { MatchStatus, MatchSummary, SPORT } from "@/types/misc";
+import { SlashGolf_Tournament } from "@/types/golf";
+import {
+  CountryFlagCode,
+  MatchStatus,
+  MatchSummary,
+  SPORT,
+} from "@/types/misc";
 import { loadEnvConfig } from "@next/env";
+import { addDays } from "date-fns/addDays";
 import { addHours } from "date-fns/addHours";
 
 loadEnvConfig(process.cwd());
@@ -252,11 +261,144 @@ const motorsportAdapters: SubAdapterMap = {
 };
 
 // ---------------------------------------------------------------------------
+// Golf adapters
+// ---------------------------------------------------------------------------
+
+/** Tournaments that do NOT award FedExCup points */
+const PGA_OTHER_EVENTS = new Set([
+  "Presidents Cup",
+  "Hero World Challenge",
+  "Grant Thornton Invitational",
+]);
+
+/** FedExCup Fall events (post-TOUR Championship, award points toward next season) */
+const PGA_FALL_EVENTS = new Set([
+  "Biltmore Championship Asheville",
+  "Bank of Utah Championship",
+  "Baycurrent Classic",
+  "Butterfield Bermuda Championship",
+  "VidantaWorld Mexico Open",
+  "World Wide Technology Championship",
+  "Good Good Championship",
+  "The RSM Classic",
+]);
+
+function getPGARoundLabel(tournamentName: string): string {
+  if (PGA_OTHER_EVENTS.has(tournamentName)) {
+    return "Other";
+  }
+  if (PGA_FALL_EVENTS.has(tournamentName)) {
+    return "FedexCup Fall";
+  }
+  return "FedexCup";
+}
+
+function mapGolfTournamentToMatchSummary(
+  event: SlashGolf_Tournament,
+  leagueId: string,
+  seasonId: string,
+): MatchSummary {
+  let startDate = new Date(event.date.start + "Z");
+  let endDate = new Date(event.date.end + "Z");
+  const currentDate = new Date();
+
+  // Some tournaments need a day offset (matching golf.service.ts logic)
+  const noOffsetEvents = [
+    "Genesis Scottish Open",
+    "The Open Championship",
+    "Baycurrent Classic",
+    "LIV Golf Riyadh",
+    "LIV Golf Adelaide",
+    "LIV Golf Singapore",
+    "LIV Golf Hong Kong",
+    "LIV Golf South Africa",
+    "LIV Golf Korea",
+    "LIV Golf Andalucia",
+    "LIV Golf UK",
+  ];
+  if (!noOffsetEvents.includes(event.name)) {
+    startDate = addDays(startDate, 1);
+    endDate = addDays(endDate, 1);
+  }
+
+  const tournamentImage = resolveSportImage(event.name);
+
+  const status =
+    startDate > currentDate
+      ? MatchStatus.UPCOMING
+      : endDate > currentDate
+        ? MatchStatus.LIVE
+        : MatchStatus.COMPLETED;
+
+  return {
+    id: event.tournId,
+    startDate,
+    endDate,
+    sport: SPORT.GOLF,
+    status,
+    summaryText: "Details",
+    roundLabel: leagueId === "pga" ? getPGARoundLabel(event.name) : "Schedule",
+    timer: status.charAt(0) + status.slice(1).toLowerCase(),
+    timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
+    matchSlug: `/sports/golf/${leagueId}/${seasonId}/match/${event.tournId}`,
+    seriesName: event.name,
+    seriesImg:
+      tournamentImage === "/vercel.svg"
+        ? getCountryImageUrl(CountryFlagCode.UnitedStates)
+        : tournamentImage,
+    homeDetails: { score: "", name: "" },
+    awayDetails: { score: "", name: "" },
+    seasonId,
+    tournamentId: leagueId,
+  };
+}
+
+async function fetchPGAAdapter(args: string[]): Promise<MatchSummary[]> {
+  const [season] = args;
+  if (!season) {
+    throw new Error("PGA adapter requires: <season> (e.g., 2026)");
+  }
+
+  const rawSchedule = await fetchGolfSchedule("1", season);
+  if (!rawSchedule || !rawSchedule.schedule) {
+    console.log("No PGA schedule found.");
+    return [];
+  }
+
+  return rawSchedule.schedule.map((t) =>
+    mapGolfTournamentToMatchSummary(t, "pga", season),
+  );
+}
+
+async function fetchLIVAdapter(args: string[]): Promise<MatchSummary[]> {
+  const [season] = args;
+  if (!season) {
+    throw new Error("LIV adapter requires: <season> (e.g., 2026)");
+  }
+
+  const rawSchedule = await fetchGolfSchedule("2", season);
+  if (!rawSchedule || !rawSchedule.schedule) {
+    console.log("No LIV schedule found.");
+    return [];
+  }
+
+  return rawSchedule.schedule.map((t) =>
+    mapGolfTournamentToMatchSummary(t, "liv", season),
+  );
+}
+
+const golfAdapters: SubAdapterMap = {
+  pga: fetchPGAAdapter,
+  liv: fetchLIVAdapter,
+};
+
+// ---------------------------------------------------------------------------
 // Adapter registry
 // ---------------------------------------------------------------------------
 
 const adapterRegistry: Partial<Record<SPORT, SubAdapterMap>> = {
   [SPORT.MOTORSPORT]: motorsportAdapters,
+  [SPORT.GOLF]: golfAdapters,
 };
 
 // ---------------------------------------------------------------------------
