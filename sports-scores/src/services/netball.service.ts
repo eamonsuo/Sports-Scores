@@ -209,8 +209,8 @@ function mapNetballMatch(
       options?.matchSlug ??
       `/sports/${SPORT.NETBALL}/${event.idLeague}/${event.strSeason}/match/${event.idEvent}`,
     venue: options?.venue ?? event?.strVenue ?? "",
-    seriesName: options?.seriesName,
-    seriesSlug: options?.seriesSlug,
+    leagueName: options?.leagueName,
+    leagueSlug: options?.leagueSlug,
     summaryText:
       options?.summaryText ??
       setMatchSummary(
@@ -220,21 +220,31 @@ function mapNetballMatch(
         event.strAwayTeam,
         event.intAwayScore ?? 0,
       ),
-    homeDetails: {
-      name: options?.homeDetails?.name ?? shortenTeamNames(event.strHomeTeam),
-      score:
-        options?.homeDetails?.score ?? (event.intHomeScore ?? 0).toString(),
-      img: options?.homeDetails?.img ?? event.strHomeTeamBadge,
-      winDrawLoss: options?.homeDetails?.winDrawLoss,
-    },
-    awayDetails: {
-      name: options?.awayDetails?.name ?? shortenTeamNames(event.strAwayTeam),
-      score:
-        options?.awayDetails?.score ?? (event.intAwayScore ?? 0).toString(),
-      img: options?.awayDetails?.img ?? event.strAwayTeamBadge,
-      winDrawLoss: options?.awayDetails?.winDrawLoss,
-    },
+    competitorDetails: [
+      {
+        id: options?.competitorDetails?.[0]?.id ?? event.idHomeTeam ?? "",
+        name:
+          options?.competitorDetails?.[0]?.name ??
+          shortenTeamNames(event.strHomeTeam),
+        score:
+          options?.competitorDetails?.[0]?.score ??
+          (event.intHomeScore ?? 0).toString(),
+        img: options?.competitorDetails?.[0]?.img ?? event.strHomeTeamBadge,
+        winDrawLoss: options?.competitorDetails?.[0]?.winDrawLoss,
+      },
+      {
+        id: options?.competitorDetails?.[1]?.id ?? event.idAwayTeam ?? "",
+        name:
+          options?.competitorDetails?.[1]?.name ??
+          shortenTeamNames(event.strAwayTeam),
+        score:
+          options?.competitorDetails?.[1]?.score ??
+          (event.intAwayScore ?? 0).toString(),
+        img: options?.competitorDetails?.[1]?.img ?? event.strAwayTeamBadge,
+        winDrawLoss: options?.competitorDetails?.[1]?.winDrawLoss,
+      },
+    ],
     seasonId: options?.seasonId ?? event.strSeason,
-    tournamentId: options?.tournamentId ?? event.idLeague,
+    leagueId: options?.leagueId ?? event.idLeague,
   }
 }

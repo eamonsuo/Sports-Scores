@@ -158,17 +158,8 @@ const ATTRIBUTES = [
   ]),
   str(`${PREFIX}_otherdetail`, "Other Detail", 1000),
 
-  // Home team (TeamScoreDetails)
-  str(`${PREFIX}_homename`, "Home Team Name", 200),
-  str(`${PREFIX}_homescore`, "Home Score", 500), // JSON — supports string | string[]
-  str(`${PREFIX}_homeimg`, "Home Team Image", 1000), // JSON — supports string | string[]
-  str(`${PREFIX}_homewdl`, "Home Win/Draw/Loss", 20),
-
-  // Away team (TeamScoreDetails)
-  str(`${PREFIX}_awayname`, "Away Team Name", 200),
-  str(`${PREFIX}_awayscore`, "Away Score", 500),
-  str(`${PREFIX}_awayimg`, "Away Team Image", 1000),
-  str(`${PREFIX}_awaywdl`, "Away Win/Draw/Loss", 20),
+  // Competitor details (JSON — TeamScoreDetails[])
+  memo(`${PREFIX}_competitordetails`, "Competitor Details"),
 
   // Additional match details
   str(`${PREFIX}_roundlabel`, "Round Label", 200),
@@ -178,12 +169,13 @@ const ATTRIBUTES = [
     { label: "Yellow", value: 1 },
     { label: "Gray", value: 2 },
   ]),
-  str(`${PREFIX}_seriesname`, "Series Name", 200),
+  str(`${PREFIX}_leaguename`, "League Name", 200),
+  str(`${PREFIX}_leagueimg`, "League Image", 1000),
+  str(`${PREFIX}_leagueslug`, "League Slug", 500),
   str(`${PREFIX}_matchslug`, "Match Slug", 500),
-  str(`${PREFIX}_seriesslug`, "Series Slug", 500),
   integer(`${PREFIX}_winner`, "Winner"),
-  integer(`${PREFIX}_tournamentid`, "Tournament ID"),
-  integer(`${PREFIX}_seasonid`, "Season ID"),
+  str(`${PREFIX}_leagueid`, "League ID", 200),
+  str(`${PREFIX}_seasonid`, "Season ID", 200),
 ]
 
 // ---------------------------------------------------------------------------

@@ -67,10 +67,12 @@ export type DeepPartial<T> = {
 }
 
 export type TeamScoreDetails = {
+  id: string
   img?: string | string[]
   score: string | string[]
   name: string
   winDrawLoss?: string
+  slug?: string
 }
 
 export type MatchSummary = {
@@ -82,18 +84,16 @@ export type MatchSummary = {
   status: MatchStatus
   summaryText: string
   otherDetail?: string
-  homeDetails?: TeamScoreDetails
-  awayDetails?: TeamScoreDetails
-  competitorDetails?: TeamScoreDetails[] // For motorsport, etc.
+  competitorDetails: TeamScoreDetails[]
   roundLabel?: string
   timer?: string | Date
   timerDisplayColour?: "green" | "yellow" | "gray" | undefined
   matchSlug?: string
-  seriesName?: string
-  seriesImg?: string
-  seriesSlug?: string
+  leagueName?: string
+  leagueImg?: string
+  leagueSlug?: string
   winner?: number
-  tournamentId?: string
+  leagueId?: string
   seasonId?: string
   dataverseGUID?: string
 }

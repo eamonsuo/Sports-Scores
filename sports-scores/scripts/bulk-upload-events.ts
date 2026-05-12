@@ -3,7 +3,7 @@
  * and bulk-uploads them to the Dataverse ss_matchsummary table.
  *
  * Run from the sports-scores directory:
- *   npx tsx scripts/bulk-upload-events.ts <tournamentId> <seasonId> <sport> [displayType] [allEventsMode]
+ *   npx tsx scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> [displayType] [allEventsMode]
  *
  * Example (NRL 2025):
  *   npx tsx scripts/bulk-upload-events.ts 294 69277 rugby-league round false
@@ -64,7 +64,7 @@ const CHUNK_SIZE = 100
 const [
   ,
   ,
-  tournamentIdArg,
+  leagueIdArg,
   seasonIdArg,
   sportArg,
   displayTypeArg,
@@ -73,7 +73,7 @@ const [
 ] = process.argv
 const allEventsMode = allEventsArg === "false" ? false : true
 const useSportApi = useSportApiArg === "true"
-const tournamentId = tournamentIdArg
+const leagueId = leagueIdArg
 const seasonId = seasonIdArg
 const sport = sportArg as SPORT
 const displayType = (displayTypeArg as DisplayTypes) ?? DisplayTypes.ROUND
@@ -102,9 +102,9 @@ const sportFetchNextEventsMap: Partial<Record<SPORT, typeof fetchNextEvents>> =
     [SPORT.TENNIS]: fetchTennisTournamentNextMatches,
   }
 
-if (!tournamentId || !seasonId || !sport) {
+if (!leagueId || !seasonId || !sport) {
   console.error(
-    "Usage: npx tsx scripts/bulk-upload-events.ts <tournamentId> <seasonId> <sport> <displayType?> <allEventsMode?> <useSportApi?>",
+    "Usage: npx tsx scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> <displayType?> <allEventsMode?> <useSportApi?>",
   )
   process.exit(1)
 }
@@ -142,7 +142,7 @@ async function fetchAllPages(label: string, fn: typeof fetchLastEvents) {
   let page = 0
   while (true) {
     console.log(`Fetching ${label} events page ${page}...`)
-    const data = await fn(tournamentId, seasonId, page)
+    const data = await fn(leagueId, seasonId, page)
     if (!data || data.events.length === 0) break
     events.push(...data.events)
     if (!data.hasNextPage) break
@@ -172,7 +172,7 @@ async function fetchLatestEvents() {
   const events: Sofascore_Event[] = []
   const fetchFn = sportFetchLastEventsMap[sport] ?? fetchLastEvents
   console.log(`Fetching latest events `)
-  const data = await fetchFn(tournamentId, seasonId)
+  const data = await fetchFn(leagueId, seasonId)
   if (!data || data.events.length === 0) return events
   events.push(...data.events)
   console.log(`Fetched ${events.length} latest events.`)
@@ -292,7 +292,7 @@ async function fetchExistingRecords(
   let url: string | null =
     `${ENVIRONMENT_URL}/api/data/v9.2/${TABLE}` +
     `?$select=ss_matchid,ss_matchsummaryid` +
-    `&$filter=ss_tournamentid eq '${tournamentId}' and ss_seasonid eq '${seasonId}' and ss_sport eq '${sport}'` +
+    `&$filter=ss_leagueid eq '${leagueId}' and ss_seasonid eq '${seasonId}' and ss_sport eq '${sport}'` +
     `&$top=5000`
 
   while (url) {
@@ -329,7 +329,7 @@ async function fetchExistingRecords(
 
 async function main() {
   console.log(
-    `\nBulk uploading ${sport} matches — tournament ${tournamentId}, season ${seasonId}`,
+    `\nBulk uploading ${sport} matches — league ${leagueId}, season ${seasonId}`,
   )
 
   const token = await getAccessToken()

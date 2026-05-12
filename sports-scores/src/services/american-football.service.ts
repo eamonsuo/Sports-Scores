@@ -84,18 +84,20 @@ class AmericanFootballService extends SofascoreSport {
     return super.eventMapper(event, {
       ...options,
       roundLabel: event.roundInfo?.name ?? `Week ${event.roundInfo?.round}`,
-      homeDetails: {
-        ...options?.homeDetails,
-        winDrawLoss:
-          event.homeTeamSeasonHistoricalForm &&
-          `${event.homeTeamSeasonHistoricalForm.wins ?? 0}-${event.homeTeamSeasonHistoricalForm.losses ?? 0}${event.homeTeamSeasonHistoricalForm.draws ? "-" + event.homeTeamSeasonHistoricalForm.draws : ""}`,
-      },
-      awayDetails: {
-        ...options?.awayDetails,
-        winDrawLoss:
-          event.awayTeamSeasonHistoricalForm &&
-          `${event.awayTeamSeasonHistoricalForm.wins ?? 0}-${event.awayTeamSeasonHistoricalForm.losses ?? 0}${event.awayTeamSeasonHistoricalForm.draws ? "-" + event.awayTeamSeasonHistoricalForm.draws : ""}`,
-      },
+      competitorDetails: [
+        {
+          ...options?.competitorDetails?.[0],
+          winDrawLoss:
+            event.homeTeamSeasonHistoricalForm &&
+            `${event.homeTeamSeasonHistoricalForm.wins ?? 0}-${event.homeTeamSeasonHistoricalForm.losses ?? 0}${event.homeTeamSeasonHistoricalForm.draws ? "-" + event.homeTeamSeasonHistoricalForm.draws : ""}`,
+        },
+        {
+          ...options?.competitorDetails?.[1],
+          winDrawLoss:
+            event.awayTeamSeasonHistoricalForm &&
+            `${event.awayTeamSeasonHistoricalForm.wins ?? 0}-${event.awayTeamSeasonHistoricalForm.losses ?? 0}${event.awayTeamSeasonHistoricalForm.draws ? "-" + event.awayTeamSeasonHistoricalForm.draws : ""}`,
+        },
+      ],
     })
   }
 

@@ -62,19 +62,23 @@ export async function cricketMatchesByDate(date: Date) {
         timer: event.Eps === "L" ? "Live" : event.Eps === "NS" ? sDate : null,
         timerDisplayColour: event.Eps === "L" ? "green" : "gray",
         otherDetail: event.ErnInf,
-        homeDetails: {
-          img: resolveSportImage(event.T1[0].Nm),
-          score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
-          name: event.T1[0].Nm,
-        },
-        awayDetails: {
-          img: resolveSportImage(event.T2[0].Nm),
-          score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
-          name: event.T2[0].Nm,
-        },
-        seriesName: item.Snm,
+        competitorDetails: [
+          {
+            id: event.Eid + "-home",
+            img: resolveSportImage(event.T1[0].Nm),
+            score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
+            name: event.T1[0].Nm,
+          },
+          {
+            id: event.Eid + "-away",
+            img: resolveSportImage(event.T2[0].Nm),
+            score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
+            name: event.T2[0].Nm,
+          },
+        ],
+        leagueName: item.Snm,
         matchSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/match/${event.Eid}`,
-        seriesSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}`,
+        leagueSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}`,
       } as MatchSummary
     })
   })
@@ -114,17 +118,21 @@ export async function cricketMyTeamsMatches() {
           timerDisplayColour: event.Eps === "L" ? "green" : "gray",
           status: mapCricketStatus(event.Eps),
           otherDetail: "",
-          homeDetails: {
-            score: "", //`${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""} ${home2Ing}`,
-            name: event.T1[0].Nm,
-          },
-          awayDetails: {
-            score: "", //`${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""} ${away2Ing}`,
-            name: event.T2[0].Nm,
-          },
-          seriesName: item.Snm,
+          competitorDetails: [
+            {
+              id: event.Eid + "-home",
+              score: "",
+              name: event.T1[0].Nm,
+            },
+            {
+              id: event.Eid + "-away",
+              score: "",
+              name: event.T2[0].Nm,
+            },
+          ],
+          leagueName: item.Snm,
           matchSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/match/${event.Eid}`,
-          seriesSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}`,
+          leagueSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}`,
         } as MatchSummary
       })
     })
@@ -226,19 +234,23 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
         timer: event.Eps === "L" ? "Live" : event.Eps === "NS" ? sDate : null,
         timerDisplayColour: event.Eps === "L" ? "green" : "gray",
         otherDetail: event.ErnInf,
-        homeDetails: {
-          img: resolveSportImage(event.T1[0].Nm),
-          score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
-          name: event.T1[0].Nm,
-        },
-        awayDetails: {
-          img: resolveSportImage(event.T2[0].Nm),
-          score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
-          name: event.T2[0].Nm,
-        },
-        seriesName: item.Snm,
+        competitorDetails: [
+          {
+            id: event.Eid + "-home",
+            img: resolveSportImage(event.T1[0].Nm),
+            score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
+            name: event.T1[0].Nm,
+          },
+          {
+            id: event.Eid + "-away",
+            img: resolveSportImage(event.T2[0].Nm),
+            score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
+            name: event.T2[0].Nm,
+          },
+        ],
+        leagueName: item.Snm,
         matchSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/match/${event.Eid}`,
-        seriesSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}`,
+        leagueSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}`,
       } as MatchSummary
     })
   })

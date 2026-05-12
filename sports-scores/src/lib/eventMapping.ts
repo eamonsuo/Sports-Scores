@@ -51,8 +51,8 @@ export async function mapFixtureRounds(
             break
           case DisplayTypes.LEAGUE:
             roundLabel = isMultiLeague
-              ? (leagueConfig.find((l) => l.slug === match.tournamentId)
-                  ?.name ?? "")
+              ? (leagueConfig.find((l) => l.slug === match.leagueId)?.name ??
+                "")
               : (match.roundLabel ?? "")
             break
         }
@@ -69,13 +69,15 @@ export async function mapFixtureRounds(
         acc[roundLabel].matches.push(match)
         acc[roundLabel].roundSlug =
           displayType === DisplayTypes.LEAGUE
-            ? `${match.sport}/${match.tournamentId}/${match.seasonId}`
+            ? `${match.sport}/${match.leagueId}/${match.seasonId}`
             : undefined
         if (showByes) {
           acc[roundLabel].byes = acc[roundLabel]?.byes?.filter(
             (team) =>
-              shortenTeamNames(team.name ?? "") !== match.homeDetails?.name &&
-              shortenTeamNames(team.name ?? "") !== match.awayDetails?.name,
+              shortenTeamNames(team.name ?? "") !==
+                match.competitorDetails[0]?.name &&
+              shortenTeamNames(team.name ?? "") !==
+                match.competitorDetails[1]?.name,
           )
         }
 

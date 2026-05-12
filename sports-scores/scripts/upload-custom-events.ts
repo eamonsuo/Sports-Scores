@@ -100,9 +100,9 @@ function mapSessionToMatchSummary(
     summaryText: sessionType.replace("-", " "),
     startDate,
     status,
-    seriesName: session.raceName,
-    seriesImg: resolveSportImage(session.raceName),
-    seriesSlug: `f1/${session.season}`,
+    leagueName: session.raceName,
+    leagueImg: resolveSportImage(session.raceName),
+    leagueSlug: `f1/${session.season}`,
     matchSlug: `f1/${session.season}/${session.round}/${sessionType}`,
     roundLabel: `Round ${session.round}`,
     timer:
@@ -110,12 +110,11 @@ function mapSessionToMatchSummary(
         ? startDate
         : status.charAt(0) + status.slice(1).toLowerCase(),
     timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
-    awayDetails: { score: "", name: "" },
-    homeDetails: { score: "", name: "" },
+    competitorDetails: [],
     venue:
       session.Circuit.circuitName + ", " + session.Circuit.Location.locality,
     seasonId: session.season,
-    tournamentId: "f1",
+    leagueId: "f1",
   }
 }
 
@@ -216,17 +215,16 @@ async function fetchSupercarsAdapter(args: string[]): Promise<MatchSummary[]> {
     startDate: string
     endDate?: string
     status: string
-    seriesName: string
-    seriesSlug: string
+    leagueName: string
+    leagueSlug: string
     matchSlug: string
     roundLabel: string
     timer: string
     timerDisplayColour: string
     venue: string
     seasonId: string
-    tournamentId: string
-    homeDetails: { score: string; name: string }
-    awayDetails: { score: string; name: string }
+    leagueId: string
+    competitorDetails: { id: string; score: string; name: string }[]
   }>
 
   return raw.map((item) => ({
@@ -236,17 +234,16 @@ async function fetchSupercarsAdapter(args: string[]): Promise<MatchSummary[]> {
     startDate: new Date(item.startDate),
     endDate: item.endDate ? new Date(item.endDate) : undefined,
     status: item.status as MatchStatus,
-    seriesName: item.seriesName,
-    seriesSlug: item.seriesSlug,
+    leagueName: item.leagueName,
+    leagueSlug: item.leagueSlug,
     matchSlug: item.matchSlug,
     roundLabel: item.roundLabel,
     timer: item.status === "UPCOMING" ? new Date(item.timer) : item.timer,
     timerDisplayColour: item.timerDisplayColour as "green" | "yellow" | "gray",
     venue: item.venue,
     seasonId: item.seasonId,
-    tournamentId: item.tournamentId,
-    homeDetails: item.homeDetails,
-    awayDetails: item.awayDetails,
+    leagueId: item.leagueId,
+    competitorDetails: item.competitorDetails ?? [],
   }))
 }
 
@@ -336,15 +333,14 @@ function mapGolfTournamentToMatchSummary(
     timer: status.charAt(0) + status.slice(1).toLowerCase(),
     timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
     matchSlug: `/sports/golf/${leagueId}/${seasonId}/match/${event.tournId}`,
-    seriesName: event.name,
-    seriesImg:
+    leagueName: event.name,
+    leagueImg:
       tournamentImage === "/vercel.svg"
         ? getCountryImageUrl(CountryFlagCode.UnitedStates)
         : tournamentImage,
-    homeDetails: { score: "", name: "" },
-    awayDetails: { score: "", name: "" },
+    competitorDetails: [],
     seasonId,
-    tournamentId: leagueId,
+    leagueId,
   }
 }
 
@@ -426,14 +422,14 @@ async function getAccessToken() {
 
 async function fetchExistingRecords(
   token: string,
-  tournamentId: string,
+  leagueId: string,
   seasonId: string,
 ): Promise<Map<string, string>> {
   const map = new Map<string, string>()
   let url: string | null =
     `${ENVIRONMENT_URL}/api/data/v9.2/${TABLE}` +
     `?$select=ss_matchid,ss_matchsummaryid` +
-    `&$filter=ss_tournamentid eq '${tournamentId}' and ss_seasonid eq '${seasonId}' and ss_sport eq '${sport}'` +
+    `&$filter=ss_leagueid eq '${leagueId}' and ss_seasonid eq '${seasonId}' and ss_sport eq '${sport}'` +
     `&$top=5000`
 
   while (url) {
@@ -559,18 +555,14 @@ async function main() {
     return
   }
 
-  // Determine tournamentId/seasonId from first match for dedup query
-  const tournamentId = matches[0].tournamentId ?? subSportArg
+  // Determine leagueId/seasonId from first match for dedup query
+  const leagueId = matches[0].leagueId ?? subSportArg
   const seasonId = matches[0].seasonId ?? restArgs[0] ?? "unknown"
 
   const token = await getAccessToken()
 
   console.log("Checking for existing records in Dataverse...")
-  const existingRecords = await fetchExistingRecords(
-    token,
-    tournamentId,
-    seasonId,
-  )
+  const existingRecords = await fetchExistingRecords(token, leagueId, seasonId)
   console.log(`Found ${existingRecords.size} existing matches in Dataverse.`)
 
   const operations: BatchOperation[] = matches.map((m) => {

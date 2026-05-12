@@ -152,7 +152,7 @@ const SYNC_CONFIG: SyncEntry[] = [
 
 type MatrixEntry = {
   name: string
-  tournamentId: string
+  leagueId: string
   seasonId: string
   sport: string
   displayType: string
@@ -172,7 +172,7 @@ for (const config of SYNC_CONFIG) {
 
     matrix.push({
       name: `${league.name} ${latestSeason.name}`,
-      tournamentId: league.slug,
+      leagueId: league.slug,
       seasonId: latestSeason.slug,
       sport: config.sport,
       displayType: league.display ?? config.displayType,
@@ -268,7 +268,7 @@ for (const config of ALL_LEAGUES_CONFIG) {
 
     allMatrix.push({
       name: `${league.name} ${latestSeason.name}`,
-      tournamentId: league.slug,
+      leagueId: league.slug,
       seasonId: latestSeason.slug,
       sport: config.sport,
       displayType: league.display ?? config.displayType,

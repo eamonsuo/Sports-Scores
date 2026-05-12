@@ -1306,6 +1306,7 @@ export function resolveSportImage(teamName: string) {
     case "Monaco Grand Prix":
       return getCountryImageUrl(CountryFlagCode.Monaco)
     case "Spanish Grand Prix":
+    case "Barcelona Grand Prix":
       return getCountryImageUrl(CountryFlagCode.Spain)
     case "Canadian Grand Prix":
       return getCountryImageUrl(CountryFlagCode.Canada)
@@ -1332,6 +1333,7 @@ export function resolveSportImage(teamName: string) {
     case "Mexico City Grand Prix":
       return getCountryImageUrl(CountryFlagCode.Mexico)
     case "São Paulo Grand Prix":
+    case "Brazilian Grand Prix":
       return getCountryImageUrl(CountryFlagCode.Brazil)
     case "Saudi Arabian Grand Prix":
       return getCountryImageUrl(CountryFlagCode.SaudiArabia)

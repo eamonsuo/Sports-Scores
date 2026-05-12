@@ -20,6 +20,8 @@ export default function FixtureList({
   const CardComponent = cardVariantMap[cardVariant] ?? MatchSummaryCard
 
   useEffect(() => {
+    let retryInterval: ReturnType<typeof setInterval> | null = null
+
     const scrollToAnchor = () => {
       const element = document.getElementById("current-date")
       if (element) {
@@ -36,16 +38,20 @@ export default function FixtureList({
         const maxRetries = 10
         let retryCount = 0
 
-        const retryInterval = setInterval(() => {
+        retryInterval = setInterval(() => {
           if (scrollToAnchor() || retryCount >= maxRetries) {
-            clearInterval(retryInterval)
+            clearInterval(retryInterval!)
+            retryInterval = null
           }
           retryCount++
         }, 100)
       }
     }, 200)
 
-    return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(timer)
+      if (retryInterval) clearInterval(retryInterval)
+    }
   }, [])
 
   const currentDate: Date = new Date()
@@ -74,8 +80,8 @@ export default function FixtureList({
           displayDate = true
         }
 
-        if (sectionSeries !== item.seriesName) {
-          sectionSeries = item.seriesName ?? ""
+        if (sectionSeries !== item.leagueName) {
+          sectionSeries = item.leagueName ?? ""
           displaySeries = true
         }
 
@@ -100,17 +106,17 @@ export default function FixtureList({
                 currentDate={currentMatch}
               />
             )}
-            {(displaySeries || displayDate) && item.seriesName && (
+            {(displaySeries || displayDate) && item.leagueName && (
               <LeagueHeader
-                href={item.seriesSlug ?? ""}
-                seriesName={item.seriesName}
-                img={item.seriesImg}
+                href={item.leagueSlug ?? ""}
+                seriesName={item.leagueName}
+                img={item.leagueImg}
               />
             )}
             <CardComponent
               className={cn(
-                item.seriesName ? "mt-0" : "rounded-md",
-                item.seriesName &&
+                item.leagueName ? "mt-0" : "rounded-md",
+                item.leagueName &&
                   (() => {
                     // If next item is a different series or date, round the bottom corners
                     const nextItem = data[index + 1]
@@ -118,7 +124,7 @@ export default function FixtureList({
                     const nextDate = new Date(nextItem.startDate)
                     return (
                       nextDate.toDateString() !== itemDate.toDateString() ||
-                      nextItem.seriesName !== item.seriesName
+                      nextItem.leagueName !== item.leagueName
                     )
                   })() &&
                   "rounded-b-md",

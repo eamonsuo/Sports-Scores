@@ -9,6 +9,8 @@ import SessionSummaryCard from "./SessionSummaryCard"
 
 export default function RaceList({ data }: { data: MatchSummary[] }) {
   useEffect(() => {
+    let retryInterval: ReturnType<typeof setInterval> | null = null
+
     const scrollToAnchor = () => {
       const element = document.getElementById("current-date")
       if (element) {
@@ -25,16 +27,20 @@ export default function RaceList({ data }: { data: MatchSummary[] }) {
         const maxRetries = 10
         let retryCount = 0
 
-        const retryInterval = setInterval(() => {
+        retryInterval = setInterval(() => {
           if (scrollToAnchor() || retryCount >= maxRetries) {
-            clearInterval(retryInterval)
+            clearInterval(retryInterval!)
+            retryInterval = null
           }
           retryCount++
         }, 100)
       }
     }, 200)
 
-    return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(timer)
+      if (retryInterval) clearInterval(retryInterval)
+    }
   }, [])
 
   const current_date: Date = new Date(Date.now())
@@ -54,13 +60,13 @@ export default function RaceList({ data }: { data: MatchSummary[] }) {
       {data.map((item: MatchSummary, index: number) => {
         let raceDate = new Date(
           data.find(
-            (s) => s.seriesName === item.seriesName && s.summaryText === "Race",
+            (s) => s.leagueName === item.leagueName && s.summaryText === "Race",
           )?.startDate ?? "",
         )
 
         displayDate = false
-        if (curGrandPrix !== item.seriesName) {
-          curGrandPrix = item.seriesName ?? ""
+        if (curGrandPrix !== item.leagueName) {
+          curGrandPrix = item.leagueName ?? ""
           startDate = new Date(item.startDate) //Assumes data variable is sorted by date
           displayDate = true
         }
@@ -84,9 +90,9 @@ export default function RaceList({ data }: { data: MatchSummary[] }) {
                   currentDate={currentMatch}
                 />
                 <LeagueHeader
-                  href={`${item.seriesSlug}`}
-                  seriesName={item.seriesName ?? ""}
-                  img={item.seriesImg}
+                  href={`${item.leagueSlug}`}
+                  seriesName={item.leagueName ?? ""}
+                  img={item.leagueImg}
                   className="p-4 dark:text-neutral-400"
                 />
               </React.Fragment>

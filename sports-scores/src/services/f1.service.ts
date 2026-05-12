@@ -334,10 +334,11 @@ function mapSessionToMatchSummary(
     startDate: options?.startDate ?? startDate,
     endDate: options?.endDate,
     status: options?.status ?? status,
-    seriesName: options?.seriesName ?? session.raceName,
-    seriesImg: options?.seriesImg ?? resolveSportImage(session.raceName),
-    seriesSlug:
-      options?.seriesSlug ?? `/sports/${SPORT.MOTORSPORT}/f1/${session.season}`,
+    leagueName: options?.leagueName ?? session.raceName,
+    leagueImg:
+      options?.leagueImg ?? resolveSportImage(session.Circuit.Location.country),
+    leagueSlug:
+      options?.leagueSlug ?? `/sports/${SPORT.MOTORSPORT}/f1/${session.season}`,
     matchSlug:
       options?.matchSlug ??
       `/sports/${SPORT.MOTORSPORT}/f1/${session.season}/${session.round}/${sessionType}`,
@@ -350,14 +351,13 @@ function mapSessionToMatchSummary(
     timerDisplayColour:
       options?.timerDisplayColour ??
       (status === MatchStatus.LIVE ? "green" : "gray"),
-    awayDetails: { score: "", name: "" },
-    homeDetails: { score: "", name: "" },
+    competitorDetails: [],
     venue:
       options?.venue ??
       session.Circuit.circuitName + ", " + session.Circuit.Location.locality,
 
     seasonId: options?.seasonId ?? session.season,
-    tournamentId: options?.tournamentId ?? "f1",
+    leagueId: options?.leagueId ?? "f1",
     winner: options?.winner,
   }
 }

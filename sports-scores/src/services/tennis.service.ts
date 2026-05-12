@@ -232,66 +232,70 @@ class TennisService extends SofascoreSport {
         match.homeScore.current ?? 0,
         match.awayScore.current ?? 0,
       ),
-      seriesName: `${match.tournament.category.name} ${match.tournament.uniqueTournament?.tennisPoints ?? ""} - ${match.tournament.category.name === "ATP" || match.tournament.category.name === "WTA" || match.tournament.category.name === "Challenger" ? match.tournament.name : match.tournament.uniqueTournament.name}`,
-      seriesSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}`,
-      homeDetails: {
-        name: `${match.homeTeamSeed ? match.homeTeamSeed + " " : ""}${shortenTeamNames(match.homeTeam.name)}`,
-        score: [
-          match.homeScore.period1 !== undefined
-            ? `${match.homeScore.period1}${match.homeScore.period1TieBreak !== undefined ? ` ${match.homeScore.period1TieBreak}` : ""}`
-            : null,
-          match.homeScore.period2 !== undefined
-            ? `${match.homeScore.period2}${match.homeScore.period2TieBreak !== undefined ? ` ${match.homeScore.period2TieBreak}` : ""}`
-            : null,
-          match.homeScore.period3 !== undefined
-            ? `${match.homeScore.period3}${match.homeScore.period3TieBreak !== undefined ? ` ${match.homeScore.period3TieBreak}` : ""}`
-            : null,
-          match.homeScore.period4 !== undefined
-            ? `${match.homeScore.period4}${match.homeScore.period4TieBreak !== undefined ? ` ${match.homeScore.period4TieBreak}` : ""}`
-            : null,
-          match.homeScore.period5 !== undefined
-            ? `${match.homeScore.period5}${match.homeScore.period5TieBreak !== undefined ? ` ${match.homeScore.period5TieBreak}` : ""}`
-            : null,
-        ].filter((s): s is string => s !== null),
-        img:
-          match.homeTeam.subTeams && match.homeTeam.subTeams.length > 0
-            ? match.homeTeam.subTeams.map((subTeam) =>
-                resolveSportImage(subTeam.country.name ?? subTeam.name),
-              )
-            : resolveSportImage(
-                match.homeTeam.country.name ?? match.homeTeam.name,
-              ),
-      },
-      awayDetails: {
-        name:
-          `${match.awayTeamSeed ? match.awayTeamSeed + " " : ""}` +
-          shortenTeamNames(match.awayTeam.name),
-        score: [
-          match.awayScore.period1 !== undefined
-            ? `${match.awayScore.period1}${match.awayScore.period1TieBreak !== undefined ? ` ${match.awayScore.period1TieBreak}` : ""}`
-            : null,
-          match.awayScore.period2 !== undefined
-            ? `${match.awayScore.period2}${match.awayScore.period2TieBreak !== undefined ? ` ${match.awayScore.period2TieBreak}` : ""}`
-            : null,
-          match.awayScore.period3 !== undefined
-            ? `${match.awayScore.period3}${match.awayScore.period3TieBreak !== undefined ? ` ${match.awayScore.period3TieBreak}` : ""}`
-            : null,
-          match.awayScore.period4 !== undefined
-            ? `${match.awayScore.period4}${match.awayScore.period4TieBreak !== undefined ? ` ${match.awayScore.period4TieBreak}` : ""}`
-            : null,
-          match.awayScore.period5 !== undefined
-            ? `${match.awayScore.period5}${match.awayScore.period5TieBreak !== undefined ? ` ${match.awayScore.period5TieBreak}` : ""}`
-            : null,
-        ].filter((s): s is string => s !== null),
-        img:
-          match.awayTeam.subTeams && match.awayTeam.subTeams.length > 0
-            ? match.awayTeam.subTeams.map((subTeam) =>
-                resolveSportImage(subTeam.country.name ?? subTeam.name),
-              )
-            : resolveSportImage(
-                match.awayTeam.country.name ?? match.awayTeam.name,
-              ),
-      },
+      leagueName: `${match.tournament.category.name} ${match.tournament.uniqueTournament?.tennisPoints ?? ""} - ${match.tournament.category.name === "ATP" || match.tournament.category.name === "WTA" || match.tournament.category.name === "Challenger" ? match.tournament.name : match.tournament.uniqueTournament.name}`,
+      leagueSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}`,
+      competitorDetails: [
+        {
+          id: match.homeTeam.id.toString(),
+          name: `${match.homeTeamSeed ? match.homeTeamSeed + " " : ""}${shortenTeamNames(match.homeTeam.name)}`,
+          score: [
+            match.homeScore.period1 !== undefined
+              ? `${match.homeScore.period1}${match.homeScore.period1TieBreak !== undefined ? ` ${match.homeScore.period1TieBreak}` : ""}`
+              : null,
+            match.homeScore.period2 !== undefined
+              ? `${match.homeScore.period2}${match.homeScore.period2TieBreak !== undefined ? ` ${match.homeScore.period2TieBreak}` : ""}`
+              : null,
+            match.homeScore.period3 !== undefined
+              ? `${match.homeScore.period3}${match.homeScore.period3TieBreak !== undefined ? ` ${match.homeScore.period3TieBreak}` : ""}`
+              : null,
+            match.homeScore.period4 !== undefined
+              ? `${match.homeScore.period4}${match.homeScore.period4TieBreak !== undefined ? ` ${match.homeScore.period4TieBreak}` : ""}`
+              : null,
+            match.homeScore.period5 !== undefined
+              ? `${match.homeScore.period5}${match.homeScore.period5TieBreak !== undefined ? ` ${match.homeScore.period5TieBreak}` : ""}`
+              : null,
+          ].filter((s): s is string => s !== null),
+          img:
+            match.homeTeam.subTeams && match.homeTeam.subTeams.length > 0
+              ? match.homeTeam.subTeams.map((subTeam) =>
+                  resolveSportImage(subTeam.country.name ?? subTeam.name),
+                )
+              : resolveSportImage(
+                  match.homeTeam.country.name ?? match.homeTeam.name,
+                ),
+        },
+        {
+          id: match.awayTeam.id.toString(),
+          name:
+            `${match.awayTeamSeed ? match.awayTeamSeed + " " : ""}` +
+            shortenTeamNames(match.awayTeam.name),
+          score: [
+            match.awayScore.period1 !== undefined
+              ? `${match.awayScore.period1}${match.awayScore.period1TieBreak !== undefined ? ` ${match.awayScore.period1TieBreak}` : ""}`
+              : null,
+            match.awayScore.period2 !== undefined
+              ? `${match.awayScore.period2}${match.awayScore.period2TieBreak !== undefined ? ` ${match.awayScore.period2TieBreak}` : ""}`
+              : null,
+            match.awayScore.period3 !== undefined
+              ? `${match.awayScore.period3}${match.awayScore.period3TieBreak !== undefined ? ` ${match.awayScore.period3TieBreak}` : ""}`
+              : null,
+            match.awayScore.period4 !== undefined
+              ? `${match.awayScore.period4}${match.awayScore.period4TieBreak !== undefined ? ` ${match.awayScore.period4TieBreak}` : ""}`
+              : null,
+            match.awayScore.period5 !== undefined
+              ? `${match.awayScore.period5}${match.awayScore.period5TieBreak !== undefined ? ` ${match.awayScore.period5TieBreak}` : ""}`
+              : null,
+          ].filter((s): s is string => s !== null),
+          img:
+            match.awayTeam.subTeams && match.awayTeam.subTeams.length > 0
+              ? match.awayTeam.subTeams.map((subTeam) =>
+                  resolveSportImage(subTeam.country.name ?? subTeam.name),
+                )
+              : resolveSportImage(
+                  match.awayTeam.country.name ?? match.awayTeam.name,
+                ),
+        },
+      ],
     })
   }
 
@@ -342,10 +346,10 @@ class TennisService extends SofascoreSport {
     // Map to MatchSummary first
     const mapped = matches.map((match) => this.eventMapper(match))
 
-    // Group by seriesName
+    // Group by leagueName
     const groups = new Map<string, MatchSummary[]>()
     mapped.forEach((match) => {
-      const key = match.seriesName ?? ""
+      const key = match.leagueName ?? ""
       if (!groups.has(key)) {
         groups.set(key, [])
       }

@@ -196,12 +196,12 @@ class GolfService implements SportService {
           : MatchStatus.COMPLETED
 
     const tournamentImage =
-      event.seriesImg ?? resolveSportImage(event.seriesName ?? "")
+      event.leagueImg ?? resolveSportImage(event.leagueName ?? "")
 
     return {
       ...event,
       status,
-      seriesImg:
+      leagueImg:
         tournamentImage === "/vercel.svg"
           ? getCountryImageUrl(CountryFlagCode.UnitedStates)
           : tournamentImage,
@@ -353,16 +353,15 @@ function mapTournamentToMatchSummary(
       (status === MatchStatus.LIVE ? "green" : "gray"),
     matchSlug: options?.matchSlug,
     venue: options?.venue,
-    seriesName: options?.seriesName ?? event.name,
-    seriesSlug: options?.seriesSlug,
-    seriesImg:
-      (options?.seriesImg ?? tournamentImage === "/vercel.svg")
+    leagueName: options?.leagueName ?? event.name,
+    leagueSlug: options?.leagueSlug,
+    leagueImg:
+      (options?.leagueImg ?? tournamentImage === "/vercel.svg")
         ? getCountryImageUrl(CountryFlagCode.UnitedStates)
         : tournamentImage,
-    homeDetails: { score: "", name: "" },
-    awayDetails: { score: "", name: "" },
+    competitorDetails: [],
     seasonId: options?.seasonId,
-    tournamentId: options?.tournamentId,
+    leagueId: options?.leagueId,
     winner: options?.winner,
   }
 }
@@ -382,12 +381,11 @@ export function golfTournamentsByDate(date: Date) {
       summaryText: "Details",
       startDate: date,
       status: MatchStatus.LIVE,
-      awayDetails: { score: "", name: "" },
-      homeDetails: { score: "", name: "" },
+      competitorDetails: [],
       matchSlug: `/sports/${SPORT.GOLF}/${slug}/external`,
-      seriesName: name,
-      seriesImg: img,
-      tournamentId: slug,
+      leagueName: name,
+      leagueImg: img,
+      leagueId: slug,
       seasonId: "external",
     } as MatchSummary
   }

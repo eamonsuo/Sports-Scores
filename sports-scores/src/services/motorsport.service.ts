@@ -134,7 +134,7 @@ class MotorsportService implements SportService {
     return {
       ...event,
       status,
-      seriesImg: resolveSportImage(event.seriesName ?? ""),
+      leagueImg: resolveSportImage(event.leagueName ?? ""),
       timer:
         status === MatchStatus.UPCOMING
           ? event.startDate

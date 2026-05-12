@@ -36,16 +36,18 @@ export async function scrapeSitePuppeteer(url: string, scrapeLogic: Function) {
     // args: ["--start-maximized"],
   })
 
-  const page = await browser.newPage()
+  try {
+    const page = await browser.newPage()
 
-  await page.setViewport({ width: 1300, height: 820 })
-  await page.goto(url, {
-    waitUntil: "networkidle2",
-  })
+    await page.setViewport({ width: 1300, height: 820 })
+    await page.goto(url, {
+      waitUntil: "networkidle2",
+    })
 
-  let result = await scrapeLogic(page)
+    let result = await scrapeLogic(page)
 
-  await browser.close()
-
-  return result
+    return result
+  } finally {
+    await browser.close()
+  }
 }

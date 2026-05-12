@@ -16,14 +16,10 @@ export default function MatchSummaryCard({
   href: string
   className?: string
 }) {
-  const {
-    homeDetails,
-    awayDetails,
-    summaryText: matchSummary,
-    otherDetail,
-    venue,
-    winner,
-  } = event
+  const { competitorDetails, summaryText, otherDetail, venue, winner } = event
+
+  const homeDetails = competitorDetails[0]
+  const awayDetails = competitorDetails[1]
 
   const timer = {
     display:
@@ -42,7 +38,7 @@ export default function MatchSummaryCard({
         )}
       >
         <p className="text-center text-gray-500 dark:text-neutral-500">
-          {matchSummary}
+          {summaryText}
         </p>
 
         <div className="m-2 grid w-full grid-cols-5 gap-2">

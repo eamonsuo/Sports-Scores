@@ -16,14 +16,10 @@ export default function TennisMatchCard({
   href: string
   className?: string
 }) {
-  const {
-    homeDetails,
-    awayDetails,
-    summaryText: matchSummary,
-    otherDetail,
-    venue,
-    winner,
-  } = event
+  const { competitorDetails, summaryText, otherDetail, venue, winner } = event
+
+  const homeDetails = competitorDetails[0]
+  const awayDetails = competitorDetails[1]
   const timer = {
     display:
       event.timer instanceof Date
@@ -42,7 +38,7 @@ export default function TennisMatchCard({
         {/* Match status/timer */}
         <div className="mb-3 flex items-center justify-between">
           <p className="text-sm text-gray-500 dark:text-neutral-500">
-            {matchSummary}
+            {summaryText}
           </p>
           <span>
             <Timer

@@ -55,21 +55,17 @@ function parseJsonField(value: string | null): string | string[] {
   }
 }
 
+function parseCompetitorDetails(value: string | null): TeamScoreDetails[] {
+  if (!value) return []
+  try {
+    const parsed = JSON.parse(value)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
+}
+
 function mapToMatchSummary(r: DataverseMatchSummary): MatchSummary {
-  const homeDetails: TeamScoreDetails = {
-    name: r.ss_homename ?? "",
-    score: parseJsonField(r.ss_homescore),
-    img: r.ss_homeimg ? parseJsonField(r.ss_homeimg) : undefined,
-    winDrawLoss: r.ss_homewdl ?? undefined,
-  }
-
-  const awayDetails: TeamScoreDetails = {
-    name: r.ss_awayname ?? "",
-    score: parseJsonField(r.ss_awayscore),
-    img: r.ss_awayimg ? parseJsonField(r.ss_awayimg) : undefined,
-    winDrawLoss: r.ss_awaywdl ?? undefined,
-  }
-
   return {
     id: r.ss_matchid ?? "",
     startDate: new Date(r.ss_startdate ?? ""),
@@ -80,8 +76,7 @@ function mapToMatchSummary(r: DataverseMatchSummary): MatchSummary {
       r.ss_status != null ? STATUS_MAP[r.ss_status] : MatchStatus.UPCOMING,
     summaryText: r.ss_summarytext,
     otherDetail: r.ss_otherdetail ?? undefined,
-    homeDetails,
-    awayDetails,
+    competitorDetails: parseCompetitorDetails(r.ss_competitordetails),
     roundLabel: r.ss_roundlabel ?? undefined,
     timer:
       r.ss_status === 1
@@ -91,11 +86,12 @@ function mapToMatchSummary(r: DataverseMatchSummary): MatchSummary {
       r.ss_timerdisplaycolour != null
         ? COLOUR_MAP[r.ss_timerdisplaycolour]
         : undefined,
-    seriesName: r.ss_seriesname ?? undefined,
+    leagueName: r.ss_leaguename ?? undefined,
+    leagueImg: r.ss_leagueimg ?? undefined,
+    leagueSlug: r.ss_leagueslug ?? undefined,
     matchSlug: r.ss_matchslug ?? undefined,
-    seriesSlug: r.ss_seriesslug ?? undefined,
     winner: r.ss_winner ?? undefined,
-    tournamentId: r.ss_tournamentid ?? undefined,
+    leagueId: r.ss_leagueid ?? undefined,
     seasonId: r.ss_seasonid ?? undefined,
     dataverseGUID: r.ss_matchsummaryid,
   }
@@ -113,14 +109,10 @@ export function mapToDataverseMatchSummary(
     ss_venue: m.venue ?? null,
     ss_status: STATUS_REVERSE[m.status],
     ss_otherdetail: m.otherDetail ?? null,
-    ss_homename: m.homeDetails?.name ?? null,
-    ss_homescore: stringifyField(m.homeDetails?.score),
-    ss_homeimg: stringifyField(m.homeDetails?.img),
-    ss_homewdl: m.homeDetails?.winDrawLoss ?? null,
-    ss_awayname: m.awayDetails?.name ?? null,
-    ss_awayscore: stringifyField(m.awayDetails?.score),
-    ss_awayimg: stringifyField(m.awayDetails?.img),
-    ss_awaywdl: m.awayDetails?.winDrawLoss ?? null,
+    ss_competitordetails:
+      m.competitorDetails.length > 0
+        ? JSON.stringify(m.competitorDetails)
+        : null,
     ss_roundlabel: m.roundLabel ?? null,
     ss_timer:
       m.timer instanceof Date ? m.timer.toISOString() : (m.timer ?? null),
@@ -128,11 +120,12 @@ export function mapToDataverseMatchSummary(
       m.timerDisplayColour != null
         ? COLOUR_REVERSE[m.timerDisplayColour]
         : null,
-    ss_seriesname: m.seriesName ?? null,
+    ss_leaguename: m.leagueName ?? null,
+    ss_leagueimg: m.leagueImg ?? null,
+    ss_leagueslug: m.leagueSlug ?? null,
     ss_matchslug: m.matchSlug ?? null,
-    ss_seriesslug: m.seriesSlug ?? null,
     ss_winner: m.winner ?? null,
-    ss_tournamentid: m.tournamentId ?? null,
+    ss_leagueid: m.leagueId ?? null,
     ss_seasonid: m.seasonId ?? null,
   }
 }
@@ -151,7 +144,7 @@ export async function matchSummariesByTournament(
   sport: SPORT,
 ): Promise<MatchSummary[] | null> {
   const filters = [
-    `ss_tournamentid eq '${leagueId}'`,
+    `ss_leagueid eq '${leagueId}'`,
     `ss_seasonid eq '${seasonId}'`,
     `ss_sport eq '${sport}'`,
   ]
