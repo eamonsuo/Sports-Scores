@@ -30,7 +30,9 @@ export default async function Page(props: {
           data={table.data}
           headings={table.headings}
           placingCategories={table.placingCategories}
-          tableName={table.tableName}
+          tableName={
+            pageData.standings.length > 1 ? table.tableName : undefined
+          }
         />
       ))}
     </div>

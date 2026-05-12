@@ -76,6 +76,48 @@ export function setMatchSummary(
   }
 }
 
+export function setTimer(
+  statusType: string,
+  statusDescription: string,
+  startDate: Date,
+  timePlayed: number,
+  periodLength: number,
+) {
+  switch (statusType) {
+    case "notstarted":
+      return startDate;
+    case "inprogress":
+      const currentPeriod = Math.floor(timePlayed / periodLength) + 1;
+      const remainingTime = periodLength - (timePlayed % periodLength);
+      const remainingminutes = Math.floor(remainingTime / 60);
+      const remainingSeconds = remainingTime % 60;
+      // return statusDescription;
+      return `${statusDescription.split(" ")[0]} ${remainingminutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+    case "postponed":
+    case "finished":
+    default:
+      return statusDescription;
+  }
+}
+
+export function setSeriesInfo(
+  homeName: string,
+  homeGamesWon: number | undefined,
+  awayName: string,
+  awayGamesWon: number | undefined,
+) {
+  if (homeGamesWon !== undefined && awayGamesWon !== undefined) {
+    if (homeGamesWon > awayGamesWon) {
+      return `${homeName} leads series ${homeGamesWon}-${awayGamesWon}`;
+    } else if (awayGamesWon > homeGamesWon) {
+      return `${awayName} leads series ${awayGamesWon}-${homeGamesWon}`;
+    } else {
+      return `Series tied at ${homeGamesWon}-${awayGamesWon}`;
+    }
+  }
+  return undefined;
+}
+
 export function getCountryImageUrl(countryCode?: CountryFlagCode) {
   if (countryCode === null || countryCode === undefined) {
     return fallback;

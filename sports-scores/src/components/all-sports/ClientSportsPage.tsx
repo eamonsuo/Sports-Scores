@@ -4,11 +4,9 @@ import { Fragment, ReactNode, useState } from "react";
 
 export default function ClientSportsPage({
   options,
-  apiStatus,
   defaultState,
 }: {
   options: { btnLabel: string; component: ReactNode; state: string }[];
-  apiStatus: ReactNode;
   defaultState: string;
 }) {
   const [view, setView] = useState<string>(defaultState);
@@ -36,7 +34,6 @@ export default function ClientSportsPage({
           {view === item.state && item.component}
         </Fragment>
       ))}
-      {apiStatus}
     </div>
   );
 }

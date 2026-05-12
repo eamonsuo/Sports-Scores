@@ -2,6 +2,7 @@ import fallback from "@/../public/vercel.svg";
 import { SportsLadder } from "@/types/misc";
 import { clsx } from "clsx";
 import Image from "next/image";
+import Link from "next/link";
 
 const defaultColours = [
   "bg-green-500",
@@ -54,32 +55,39 @@ export default function Ladder<const H extends readonly string[]>({
                 <td className={clsx("w-1 p-0", colour)} />
                 <td className="py-2 pe-2 ps-1">{item.position}</td>
                 <td className="text-left text-sm">
-                  <div className="flex items-center">
-                    <div className="me-2 flex gap-2">
-                      {Array.isArray(item.team.logo) ? (
-                        item.team.logo.map((img, idx) => (
+                  <Link
+                    href={
+                      item.sport
+                        ? `/sports/${item.sport}/team/${item.team.id}`
+                        : ""
+                    }
+                  >
+                    <div className="flex items-center">
+                      <div className="me-2 flex gap-2">
+                        {Array.isArray(item.team.logo) ? (
+                          item.team.logo.map((img, idx) => (
+                            <Image
+                              key={idx + "-logo"}
+                              src={img || fallback}
+                              width={100}
+                              height={100}
+                              style={{ width: "20px", height: "auto" }}
+                              alt={`${item.team.name} player ${idx + 1}`}
+                            />
+                          ))
+                        ) : (
                           <Image
-                            key={idx + "-logo"}
-                            src={img || fallback}
-                            width={100}
-                            height={100}
+                            src={item.team.logo || fallback}
+                            width={80}
+                            height={80}
                             style={{ width: "20px", height: "auto" }}
-                            alt={`${item.team.name} player ${idx + 1}`}
+                            alt={item.team.name}
                           />
-                        ))
-                      ) : (
-                        <Image
-                          src={item.team.logo || fallback}
-                          width={80}
-                          height={80}
-                          style={{ width: "20px", height: "auto" }}
-                          alt={item.team.name}
-                        />
-                      )}
+                        )}
+                      </div>
+                      {item.team.name}
                     </div>
-
-                    {item.team.name}
-                  </div>
+                  </Link>
                 </td>
 
                 {headings.slice(1).map((heading) => (

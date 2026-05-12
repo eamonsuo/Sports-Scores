@@ -28,7 +28,6 @@ export default function CricketMatchScorecardPage({
   return (
     <div className="flex-1 overflow-y-auto">
       <ClientSportsPage
-        apiStatus={<></>}
         options={scorecards}
         defaultState={
           matchState === "LIVE"

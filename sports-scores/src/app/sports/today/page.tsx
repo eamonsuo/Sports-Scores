@@ -1,4 +1,7 @@
+import ClientSportsPage from "@/components/all-sports/ClientSportsPage";
+import FixtureList from "@/components/all-sports/FixtureList";
 import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
+import LeagueSeasonToggle from "@/components/all-sports/LeagueSeasonToggle";
 import DateNav from "@/components/misc-ui/DateNav";
 import { getClientDate } from "@/lib/serverUtils";
 import { americanFootballService } from "@/services/american-football.service";
@@ -16,6 +19,7 @@ import { rugbyUnionService } from "@/services/rugby-union.service";
 import { tennisService } from "@/services/tennis.service";
 import { FixtureRound, SPORT } from "@/types/misc";
 import { TZDate } from "@date-fns/tz/date";
+import { ReactNode } from "react";
 
 export default async function Page({
   searchParams,
@@ -85,14 +89,47 @@ export default async function Page({
 
   return (
     <div className="flex h-full flex-col">
-      <h1 className="mx-2 my-4 text-3xl font-bold text-gray-600 dark:text-neutral-200">
-        Today&apos;s Matches
-      </h1>
-      <FixtureRoundList
-        data={allSports}
-        curRound={allSports[0]?.roundLabel ?? ""}
-      />
+      <LeagueSeasonToggle sport={SPORT.RUGBY_LEAGUE} leagues={[]} />
+      <div className="overflow-y-auto">
+        <ClientSportsPage
+          options={pageSettings(allSports)}
+          defaultState="league"
+        />
+      </div>
+
       <DateNav date={parsedDate} />
     </div>
   );
+}
+
+function pageSettings(data: FixtureRound[]): {
+  btnLabel: string;
+  component: ReactNode;
+  state: string;
+}[] {
+  const fixtureList = data
+    .flatMap((item) => item.matches)
+    .filter(
+      (match) => match.sport !== SPORT.TENNIS && match.sport !== SPORT.BASEBALL,
+    )
+    .sort((a, b) => {
+      return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+    });
+
+  return [
+    {
+      btnLabel: `Leagues`,
+      component: (
+        <FixtureRoundList data={data} curRound={data[0]?.roundLabel ?? ""} />
+      ),
+      state: "league",
+    },
+    {
+      btnLabel: `TV Guide`,
+      component: (
+        <FixtureList data={fixtureList} cardVariant={data[0]?.cardVariant} />
+      ),
+      state: "list",
+    },
+  ];
 }

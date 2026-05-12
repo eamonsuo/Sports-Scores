@@ -8,8 +8,6 @@ import {
 } from "./sofascore";
 
 export interface Tennis_Sofascore_Event extends Sofascore_Event {
-  homeTeamSeed?: string;
-  awayTeamSeed?: string;
   firstToServe?: number;
   eventFilters?: {
     category: string[];
@@ -19,18 +17,15 @@ export interface Tennis_Sofascore_Event extends Sofascore_Event {
   };
 }
 
-export interface Tennis_TennisApi_FixturePage_Response
-  extends Sofascore_EventPage_Response {
+export interface Tennis_TennisApi_FixturePage_Response extends Sofascore_EventPage_Response {
   events: Tennis_Sofascore_Event[];
 }
 
-export interface Tennis_TennisApi_MatchSchedules_Response
-  extends Sofascore_Events_Response {
+export interface Tennis_TennisApi_MatchSchedules_Response extends Sofascore_Events_Response {
   events: Tennis_Sofascore_Event[];
 }
 
-export interface Tennis_TennisApi_TournamentStandings_Response
-  extends Sofascore_TotalStandings_Response {}
+export interface Tennis_TennisApi_TournamentStandings_Response extends Sofascore_TotalStandings_Response {}
 
 export enum RankingList {
   WTA = "wtaRankings",
@@ -84,13 +79,11 @@ export interface Tennis_TennisApi_TournamentRoundMatch_Response {
   events: Tennis_Sofascore_Event[];
 }
 
-export interface Tennis_TennisApi_MatchDetails_Response
-  extends Sofascore_Event_Response {
+export interface Tennis_TennisApi_MatchDetails_Response extends Sofascore_Event_Response {
   event: Tennis_Sofascore_Event;
 }
 
-export interface Tennis_TennisApi_EventsByDate_Response
-  extends Sofascore_Events_Response {
+export interface Tennis_TennisApi_EventsByDate_Response extends Sofascore_Events_Response {
   events: Tennis_Sofascore_Event[];
 }
 

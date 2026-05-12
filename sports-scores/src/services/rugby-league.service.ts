@@ -29,6 +29,7 @@ class RugbyLeagueService extends SofascoreSport {
           "next-matches",
           fetchRugbyLeagueNextMatches,
         ),
+        // fetchNextEvents: async () => null,
         fetchLastEvents: withDevCache(
           "rugby-league",
           "last-matches",
@@ -114,7 +115,6 @@ class RugbyLeagueService extends SofascoreSport {
       playoffPicture: resolvePlayoffPicture(
         ladderConfig?.playoffPictureConfig,
         remappedStandings.map((table) => ({
-          name: table.name,
           standings: table.rows.map((row) =>
             mapSofascoreToStanding(
               row,

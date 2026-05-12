@@ -38,11 +38,7 @@ export default async function Page(props: {
 
   return (
     <div className="overflow-y-auto">
-      <ClientSportsPage
-        apiStatus={<></>}
-        options={pageSettings}
-        defaultState="players"
-      />
+      <ClientSportsPage options={pageSettings} defaultState="players" />
     </div>
   );
 }

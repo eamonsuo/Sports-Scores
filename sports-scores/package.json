@@ -53,6 +53,7 @@
     "typescript": "^5"
   },
   "prettier": {
+    "semi": false,
     "plugins": [
       "prettier-plugin-tailwindcss"
     ]

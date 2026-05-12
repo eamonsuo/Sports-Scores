@@ -235,9 +235,7 @@ class TennisService extends SofascoreSport {
       seriesName: `${match.tournament.category.name} ${match.tournament.uniqueTournament?.tennisPoints ?? ""} - ${match.tournament.category.name === "ATP" || match.tournament.category.name === "WTA" || match.tournament.category.name === "Challenger" ? match.tournament.name : match.tournament.uniqueTournament.name}`,
       seriesSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}`,
       homeDetails: {
-        name:
-          `${match.homeTeamSeed ? match.homeTeamSeed + " " : ""}` +
-          shortenTeamNames(match.homeTeam.name),
+        name: `${match.homeTeamSeed ? match.homeTeamSeed + " " : ""}${shortenTeamNames(match.homeTeam.name)}`,
         score: [
           match.homeScore.period1 !== undefined
             ? `${match.homeScore.period1}${match.homeScore.period1TieBreak !== undefined ? ` ${match.homeScore.period1TieBreak}` : ""}`

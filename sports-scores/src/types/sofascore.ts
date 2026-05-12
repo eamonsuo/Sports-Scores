@@ -6,8 +6,7 @@ export interface Sofascore_Events_Response {
   events: Sofascore_Event[];
 }
 
-export interface Sofascore_EventPage_Response
-  extends Sofascore_Events_Response {
+export interface Sofascore_EventPage_Response extends Sofascore_Events_Response {
   hasNextPage: boolean;
 }
 
@@ -103,6 +102,8 @@ export enum SofascoreSportURL {
 }
 
 export interface Sofascore_Event {
+  homeTeamSeed?: string;
+  awayTeamSeed?: string;
   tournament: Sofascore_Tournament;
   season: Sofascore_Season;
   roundInfo?: Sofascore_RoundInfo;
@@ -271,6 +272,7 @@ export interface Sofascore_Score {
     inning1?: Sofascore_Score_Inning;
     inning2?: Sofascore_Score_Inning;
   };
+  series?: number;
 }
 
 interface Sofascore_Score_Inning {

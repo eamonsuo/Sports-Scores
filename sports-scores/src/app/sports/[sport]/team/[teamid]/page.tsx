@@ -20,11 +20,7 @@ export default async function Page(props: {
 
   return (
     <div className="flex-1 overflow-y-auto">
-      <ClientSportsPage
-        apiStatus={<></>}
-        options={pageSettings(pageData)}
-        defaultState="list"
-      />
+      <ClientSportsPage options={pageSettings(pageData)} defaultState="list" />
     </div>
   );
 }

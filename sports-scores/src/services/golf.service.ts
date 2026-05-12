@@ -195,7 +195,8 @@ class GolfService implements SportService {
           ? MatchStatus.LIVE
           : MatchStatus.COMPLETED;
 
-    const tournamentImage = resolveSportImage(event.seriesName ?? "");
+    const tournamentImage =
+      event.seriesImg ?? resolveSportImage(event.seriesName ?? "");
 
     return {
       ...event,
@@ -205,6 +206,7 @@ class GolfService implements SportService {
           ? getCountryImageUrl(CountryFlagCode.UnitedStates)
           : tournamentImage,
       timer: status.charAt(0) + status.slice(1).toLowerCase(),
+      timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
     };
   }
 }
@@ -368,7 +370,12 @@ function mapTournamentToMatchSummary(
 export function golfTournamentsByDate(date: Date) {
   // Placeholder for golf matches fetching logic
 
-  function createGolfMatchSummary(id: number, name: string, slug: string) {
+  function createGolfMatchSummary(
+    id: number,
+    name: string,
+    slug: string,
+    img: string,
+  ) {
     return {
       id: id.toString(),
       sport: SPORT.GOLF,
@@ -379,6 +386,7 @@ export function golfTournamentsByDate(date: Date) {
       homeDetails: { score: "", name: "" },
       matchSlug: `/sports/${SPORT.GOLF}/${slug}/external`,
       seriesName: name,
+      seriesImg: img,
       tournamentId: slug,
       seasonId: "external",
     } as MatchSummary;
@@ -393,24 +401,42 @@ export function golfTournamentsByDate(date: Date) {
       // golfTours.push(createGolfMatchSummary(0, "TGL", "tgl"));
       break;
     case 4: // Thursday
-      golfTours.push(
-        createGolfMatchSummary(1, "PGA Tour of Australasia", "australasia"),
-      );
+      // golfTours.push(createGolfMatchSummary(1,"PGA Tour of Australasia","australasia",resolveSportImage("Australia"),), );
       break;
     case 5: // Friday
     case 6: // Saturday
     case 0: // Sunday
+      // golfTours.push(createGolfMatchSummary(1,"PGA Tour of Australasia","australasia",resolveSportImage("Australia"),), );
       golfTours.push(
-        createGolfMatchSummary(1, "PGA Tour of Australasia", "australasia"),
-        createGolfMatchSummary(4, "DP World Tour", "dpworld"),
-        createGolfMatchSummary(5, "LPGA Tour", "lpga"),
+        createGolfMatchSummary(
+          4,
+          "DP World Tour",
+          "dpworld",
+          "https://r2.thesportsdb.com/images/media/league/badge/mt8ajv1666867699.png",
+        ),
+        createGolfMatchSummary(
+          5,
+          "LPGA Tour",
+          "lpga",
+          resolveSportImage("USA"),
+        ),
       );
       break;
     case 1: // Monday
       golfTours.push(
         // createGolfMatchSummary(1, "PGA Tour of Australasia", "australasia"),
-        createGolfMatchSummary(4, "DP World Tour", "dpworld"),
-        createGolfMatchSummary(5, "LPGA Tour", "lpga"),
+        createGolfMatchSummary(
+          4,
+          "DP World Tour",
+          "dpworld",
+          "https://r2.thesportsdb.com/images/media/league/badge/mt8ajv1666867699.png",
+        ),
+        createGolfMatchSummary(
+          5,
+          "LPGA Tour",
+          "lpga",
+          resolveSportImage("USA"),
+        ),
       );
       break;
   }
