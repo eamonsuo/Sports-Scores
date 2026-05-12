@@ -7,18 +7,18 @@ import {
   fetchRugbyLeagueStandings,
   fetchRugbyLeagueTeamLastMatches,
   fetchRugbyLeagueTeamNextMatches,
-} from "@/endpoints/rugby-league.api";
+} from "@/endpoints/rugby-league.api"
 import {
   RUGBY_LEAGUE_LADDER_HEADINGS,
   RUGBY_LEAGUE_LEAGUES,
   SCORE_BREAKDOWN_HALVES_CONFIG,
-} from "@/lib/constants";
-import { withDevCache } from "@/lib/devCache";
-import { resolvePlayoffPicture } from "@/lib/playoffPictureMapping";
-import { getSportConfigurations } from "@/lib/projUtils";
-import { SPORT, Standings } from "@/types/misc";
-import { Sofascore_Standing } from "@/types/sofascore";
-import { mapSofascoreToStanding, SofascoreSport } from "./sofascore.service";
+} from "@/lib/constants"
+import { withDevCache } from "@/lib/devCache"
+import { resolvePlayoffPicture } from "@/lib/playoffPictureMapping"
+import { getSportConfigurations } from "@/lib/projUtils"
+import { SPORT, Standings } from "@/types/misc"
+import { Sofascore_Standing } from "@/types/sofascore"
+import { mapSofascoreToStanding, SofascoreSport } from "./sofascore.service"
 
 class RugbyLeagueService extends SofascoreSport {
   constructor() {
@@ -72,24 +72,24 @@ class RugbyLeagueService extends SofascoreSport {
       RUGBY_LEAGUE_LEAGUES,
       RUGBY_LEAGUE_LADDER_HEADINGS,
       SCORE_BREAKDOWN_HALVES_CONFIG,
-    );
+    )
   }
 
   override async standings(leagueId: string, seasonId: string) {
     const standings = await this.apiEndpoints.fetchStandingsTotal(
       leagueId,
       seasonId,
-    );
+    )
 
     if (!standings) {
-      return null;
+      return null
     }
 
     const { ladderConfig } = getSportConfigurations(
       this.leagues,
       String(leagueId),
       String(seasonId),
-    );
+    )
 
     const remappedStandings: Sofascore_Standing[] = standings.standings.map(
       (table) => ({
@@ -106,7 +106,7 @@ class RugbyLeagueService extends SofascoreSport {
           )
           .map((row, index) => ({ ...row, position: index + 1 })),
       }),
-    );
+    )
 
     return {
       standings: remappedStandings.map((table) =>
@@ -123,8 +123,8 @@ class RugbyLeagueService extends SofascoreSport {
           ),
         })),
       ),
-    } as Standings<typeof RUGBY_LEAGUE_LADDER_HEADINGS>;
+    } as Standings<typeof RUGBY_LEAGUE_LADDER_HEADINGS>
   }
 }
 
-export const rugbyLeagueService = new RugbyLeagueService();
+export const rugbyLeagueService = new RugbyLeagueService()

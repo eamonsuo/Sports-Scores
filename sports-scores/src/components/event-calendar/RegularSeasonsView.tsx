@@ -1,19 +1,19 @@
-"use client";
+"use client"
 
-import { SportEvent } from "@/types/event-calendar";
-import { useState } from "react";
-import EventCard from "./EventCard";
+import { SportEvent } from "@/types/event-calendar"
+import { useState } from "react"
+import EventCard from "./EventCard"
 
 interface RegularSeasonsViewProps {
-  events: SportEvent[];
+  events: SportEvent[]
 }
 
-type SeasonViewMode = "by-sport" | "active-upcoming";
+type SeasonViewMode = "by-sport" | "active-upcoming"
 
 export default function RegularSeasonsView({
   events,
 }: RegularSeasonsViewProps) {
-  const [viewMode, setViewMode] = useState<SeasonViewMode>("active-upcoming");
+  const [viewMode, setViewMode] = useState<SeasonViewMode>("active-upcoming")
 
   return (
     <>
@@ -49,23 +49,23 @@ export default function RegularSeasonsView({
         {viewMode === "by-sport" && <BySportView events={events} />}
       </div>
     </>
-  );
+  )
 }
 
 function ActiveUpcomingView({ events }: { events: SportEvent[] }) {
-  const now = new Date();
+  const now = new Date()
 
   // Separate active and upcoming
   const activeSeasons = events.filter((event) => {
-    const start = new Date(event.startDate);
-    const end = event.endDate ? new Date(event.endDate) : start;
-    return now >= start && now <= end;
-  });
+    const start = new Date(event.startDate)
+    const end = event.endDate ? new Date(event.endDate) : start
+    return now >= start && now <= end
+  })
 
   const upcomingSeasons = events.filter((event) => {
-    const start = new Date(event.startDate);
-    return now < start;
-  });
+    const start = new Date(event.startDate)
+    return now < start
+  })
 
   return (
     <div className="space-y-8">
@@ -108,7 +108,7 @@ function ActiveUpcomingView({ events }: { events: SportEvent[] }) {
         </div>
       )}
     </div>
-  );
+  )
 }
 
 function BySportView({ events }: { events: SportEvent[] }) {
@@ -116,23 +116,23 @@ function BySportView({ events }: { events: SportEvent[] }) {
   const eventsBySport = events.reduce(
     (acc, event) => {
       if (!acc[event.sport]) {
-        acc[event.sport] = [];
+        acc[event.sport] = []
       }
-      acc[event.sport].push(event);
-      return acc;
+      acc[event.sport].push(event)
+      return acc
     },
     {} as Record<string, SportEvent[]>,
-  );
+  )
 
   // Sort events within each sport by start date
   Object.keys(eventsBySport).forEach((sport) => {
     eventsBySport[sport].sort(
       (a, b) =>
         new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-    );
-  });
+    )
+  })
 
-  const sortedSports = Object.keys(eventsBySport).sort();
+  const sortedSports = Object.keys(eventsBySport).sort()
 
   return (
     <div className="space-y-8">
@@ -157,5 +157,5 @@ function BySportView({ events }: { events: SportEvent[] }) {
         </div>
       )}
     </div>
-  );
+  )
 }

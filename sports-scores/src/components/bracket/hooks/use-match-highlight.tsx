@@ -1,16 +1,16 @@
-import { useContext } from "react";
-import { matchContext } from "../core/match-context";
-import { Match } from "../types";
+import { useContext } from "react"
+import { matchContext } from "../core/match-context"
+import { Match } from "../types"
 
 type BracketSnippet = {
-  previousTopMatch?: Match;
-  previousBottomMatch?: Match;
-  currentMatch?: Match;
-};
+  previousTopMatch?: Match
+  previousBottomMatch?: Match
+  currentMatch?: Match
+}
 
 type UseMatchHighlightContextProps = {
-  bracketSnippet?: BracketSnippet | null;
-};
+  bracketSnippet?: BracketSnippet | null
+}
 
 const useMatchHighlightContext = ({
   bracketSnippet = null,
@@ -18,11 +18,11 @@ const useMatchHighlightContext = ({
   const {
     state: { hoveredPartyId },
   } = useContext(matchContext) as unknown as {
-    state: { hoveredPartyId: string | number | null };
-  };
-  const previousTopMatch = bracketSnippet?.previousTopMatch;
-  const previousBottomMatch = bracketSnippet?.previousBottomMatch;
-  const currentMatch = bracketSnippet?.currentMatch;
+    state: { hoveredPartyId: string | number | null }
+  }
+  const previousTopMatch = bracketSnippet?.previousTopMatch
+  const previousBottomMatch = bracketSnippet?.previousBottomMatch
+  const currentMatch = bracketSnippet?.currentMatch
 
   const topHighlighted =
     currentMatch?.participants?.some(
@@ -30,7 +30,7 @@ const useMatchHighlightContext = ({
     ) &&
     previousTopMatch?.participants?.some(
       (p: { id: string | number }) => p.id === hoveredPartyId,
-    );
+    )
 
   const bottomHighlighted =
     currentMatch?.participants?.some(
@@ -38,8 +38,8 @@ const useMatchHighlightContext = ({
     ) &&
     previousBottomMatch?.participants?.some(
       (p: { id: string | number }) => p.id === hoveredPartyId,
-    );
-  return { topHighlighted, bottomHighlighted };
-};
+    )
+  return { topHighlighted, bottomHighlighted }
+}
 
-export default useMatchHighlightContext;
+export default useMatchHighlightContext

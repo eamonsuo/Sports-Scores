@@ -7,15 +7,15 @@ import {
   fetchTournamentLastMatches,
   fetchTournamentNextMatches,
   fetchTournamentStandings,
-} from "@/endpoints/sofascore-rapid-api.api";
+} from "@/endpoints/sofascore-rapid-api.api"
 import {
   AUSSIE_RULES_LADDER_HEADINGS,
   AUSSIE_RULES_LEAGUES,
   SCORE_BREAKDOWN_QUARTERS_CONFIG,
-} from "@/lib/constants";
-import { withDevCache } from "@/lib/devCache";
-import { SPORT } from "@/types/misc";
-import { SofascoreSport } from "./sofascore.service";
+} from "@/lib/constants"
+import { withDevCache } from "@/lib/devCache"
+import { SPORT } from "@/types/misc"
+import { SofascoreSport } from "./sofascore.service"
 
 class AussieRulesService extends SofascoreSport {
   constructor() {
@@ -68,8 +68,8 @@ class AussieRulesService extends SofascoreSport {
       AUSSIE_RULES_LEAGUES,
       AUSSIE_RULES_LADDER_HEADINGS,
       SCORE_BREAKDOWN_QUARTERS_CONFIG,
-    );
+    )
   }
 }
 
-export const aussieRulesService = new AussieRulesService();
+export const aussieRulesService = new AussieRulesService()

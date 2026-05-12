@@ -1,32 +1,32 @@
-import ClientSportsPage from "@/components/all-sports/ClientSportsPage";
+import ClientSportsPage from "@/components/all-sports/ClientSportsPage"
 import CricketMatchDetailsPage, {
   MatchDetailsPage,
-} from "@/components/cricket/CricketMatchDetailsPage";
-import CricketMatchScorecardPage from "@/components/cricket/CricketMatchScorecardPage";
-import { CricketScorecardBatProps } from "@/components/cricket/CricketScorecardBat";
-import { CricketScorecardBowlProps } from "@/components/cricket/CricketScorecardBowl";
-import Placeholder from "@/components/misc-ui/Placeholder";
-import { cricketMatchDetails } from "@/services/cricket.service";
-import Link from "next/link";
-import { ReactNode } from "react";
+} from "@/components/cricket/CricketMatchDetailsPage"
+import CricketMatchScorecardPage from "@/components/cricket/CricketMatchScorecardPage"
+import { CricketScorecardBatProps } from "@/components/cricket/CricketScorecardBat"
+import { CricketScorecardBowlProps } from "@/components/cricket/CricketScorecardBowl"
+import Placeholder from "@/components/misc-ui/Placeholder"
+import { cricketMatchDetails } from "@/services/cricket.service"
+import Link from "next/link"
+import { ReactNode } from "react"
 
 export type CricketScorecardPage = {
   data: {
-    inningLabel: string;
-    inningBatters: CricketScorecardBatProps;
-    inningBowlers: CricketScorecardBowlProps;
-  }[];
-  matchState: "LIVE" | "COMPLETED";
-};
+    inningLabel: string
+    inningBatters: CricketScorecardBatProps
+    inningBowlers: CricketScorecardBowlProps
+  }[]
+  matchState: "LIVE" | "COMPLETED"
+}
 
 export default async function Page(props: {
-  params: Promise<{ league: string; season: string; match: string }>;
+  params: Promise<{ league: string; season: string; match: string }>
 }) {
-  const { league, season, match } = await props.params;
-  const rawDetails = await cricketMatchDetails(match);
+  const { league, season, match } = await props.params
+  const rawDetails = await cricketMatchDetails(match)
 
   if (rawDetails === null) {
-    return <Placeholder>An error has ocurred</Placeholder>;
+    return <Placeholder>An error has ocurred</Placeholder>
   }
 
   return (
@@ -40,7 +40,7 @@ export default async function Page(props: {
         defaultState="scorecard"
       />
     </div>
-  );
+  )
 }
 
 function pageSettings(
@@ -48,9 +48,9 @@ function pageSettings(
   matchScorecard: CricketScorecardPage,
   matchSeries: string,
 ): {
-  btnLabel: string;
-  component: ReactNode;
-  state: string;
+  btnLabel: string
+  component: ReactNode
+  state: string
 }[] {
   return [
     {
@@ -78,7 +78,7 @@ function pageSettings(
       component: seriesComponents(matchSeries),
       state: "series",
     },
-  ];
+  ]
 }
 
 function seriesComponents(series: string) {
@@ -88,5 +88,5 @@ function seriesComponents(series: string) {
         Go to Series Details - {series}
       </p>
     </Link>
-  );
+  )
 }

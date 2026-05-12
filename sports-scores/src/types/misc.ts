@@ -1,58 +1,58 @@
-import { Match as BracketMatch } from "@/components/bracket/types";
+import { Match as BracketMatch } from "@/components/bracket/types"
 import type {
   PlayoffPictureConfig,
   PlayoffPictureGroup,
-} from "@/types/playoff-picture";
+} from "@/types/playoff-picture"
 
 // ── Types extracted from all-sports components ───────────────────────────────
 
 export type LadderTeamDetail = {
-  id: string | number;
-  name: string;
-  logo?: string | string[];
-};
+  id: string | number
+  name: string
+  logo?: string | string[]
+}
 
 export type LadderTeam = {
-  team: LadderTeamDetail;
-  position: number;
-};
+  team: LadderTeamDetail
+  position: number
+}
 
 export type LadderPlacingCategory = {
-  position: number[];
-  label: string;
-  colour?: string;
-};
+  position: number[]
+  label: string
+  colour?: string
+}
 
 export type LadderRow = LadderTeam & {
-  [key: string]: string | number | LadderTeamDetail | undefined;
-};
+  [key: string]: string | number | LadderTeamDetail | undefined
+}
 
 export interface SportsLadder<H extends readonly string[]> {
-  tableName?: string;
-  headings: H;
-  data: LadderRow[];
-  placingCategories?: LadderPlacingCategory[];
+  tableName?: string
+  headings: H
+  data: LadderRow[]
+  placingCategories?: LadderPlacingCategory[]
 }
 
 export type LeagueSeasonConfig = {
-  name: string;
-  slug: string;
-  icon?: string;
-  seasons: { name: string; slug: string; ladderConfig?: LadderConfig }[];
-  display?: DisplayTypes;
-  externalURL?: string;
+  name: string
+  slug: string
+  icon?: string
+  seasons: { name: string; slug: string; ladderConfig?: LadderConfig }[]
+  display?: DisplayTypes
+  externalURL?: string
   byes?: {
-    name: string;
-    img: string;
-  }[];
-};
+    name: string
+    img: string
+  }[]
+}
 
 export type PeriodScore = {
-  teams: { home: { score: number | string }; away: { score: number | string } };
-  periodName: string;
-};
+  teams: { home: { score: number | string }; away: { score: number | string } }
+  periodName: string
+}
 
-export type ScoreDifference = { event: string; difference: number };
+export type ScoreDifference = { event: string; difference: number }
 
 // ── General types ────────────────────────────────────────────────────────────
 
@@ -63,40 +63,40 @@ export type DeepPartial<T> = {
       ? DeepPartial<U>[]
       : T[P] extends object | undefined
         ? DeepPartial<NonNullable<T[P]>>
-        : T[P];
-};
+        : T[P]
+}
 
 export type TeamScoreDetails = {
-  img?: string | string[];
-  score: string | string[];
-  name: string;
-  winDrawLoss?: string;
-};
+  img?: string | string[]
+  score: string | string[]
+  name: string
+  winDrawLoss?: string
+}
 
 export type MatchSummary = {
-  id: string;
-  startDate: Date;
-  endDate?: Date;
-  sport: string;
-  venue?: string;
-  status: MatchStatus;
-  summaryText: string;
-  otherDetail?: string;
-  homeDetails?: TeamScoreDetails;
-  awayDetails?: TeamScoreDetails;
-  competitorDetails?: TeamScoreDetails[]; // For motorsport, etc.
-  roundLabel?: string;
-  timer?: string | Date;
-  timerDisplayColour?: "green" | "yellow" | "gray" | undefined;
-  matchSlug?: string;
-  seriesName?: string;
-  seriesImg?: string;
-  seriesSlug?: string;
-  winner?: number;
-  tournamentId?: string;
-  seasonId?: string;
-  dataverseGUID?: string;
-};
+  id: string
+  startDate: Date
+  endDate?: Date
+  sport: string
+  venue?: string
+  status: MatchStatus
+  summaryText: string
+  otherDetail?: string
+  homeDetails?: TeamScoreDetails
+  awayDetails?: TeamScoreDetails
+  competitorDetails?: TeamScoreDetails[] // For motorsport, etc.
+  roundLabel?: string
+  timer?: string | Date
+  timerDisplayColour?: "green" | "yellow" | "gray" | undefined
+  matchSlug?: string
+  seriesName?: string
+  seriesImg?: string
+  seriesSlug?: string
+  winner?: number
+  tournamentId?: string
+  seasonId?: string
+  dataverseGUID?: string
+}
 
 export enum MatchStatus {
   LIVE = "LIVE",
@@ -111,65 +111,65 @@ export enum CardVariant {
 }
 
 export interface FixtureRound {
-  matches: MatchSummary[];
-  roundLabel: string;
-  byes?: { name?: string; img?: string }[];
-  cardVariant?: CardVariant;
-  roundSlug?: string;
+  matches: MatchSummary[]
+  roundLabel: string
+  byes?: { name?: string; img?: string }[]
+  cardVariant?: CardVariant
+  roundSlug?: string
 }
 
 export type LadderConfig = {
   // headings: string[];
-  placingCategories?: LadderPlacingCategory[];
-  playoffPictureConfig?: PlayoffPictureConfig;
-  headings?: readonly string[];
-};
+  placingCategories?: LadderPlacingCategory[]
+  playoffPictureConfig?: PlayoffPictureConfig
+  headings?: readonly string[]
+}
 
 export interface SportService {
   matchesByLeagueSeason(
     leagueId: string,
     seasonId: string,
-  ): Promise<Matches | null>;
+  ): Promise<Matches | null>
 
-  matchesByDate(date: Date): Promise<Matches | null>;
-  matchesByTeam(teamId: string): Promise<Matches | null>;
-  matchDetails(matchId: string): Promise<MatchDetail | null>;
+  matchesByDate(date: Date): Promise<Matches | null>
+  matchesByTeam(teamId: string): Promise<Matches | null>
+  matchDetails(matchId: string): Promise<MatchDetail | null>
 
   standings(
     leagueId: string,
     seasonId: string,
-  ): Promise<Standings<readonly string[]> | null>;
+  ): Promise<Standings<readonly string[]> | null>
 
-  brackets(leagueId: string, seasonId: string): Promise<Brackets | null>;
+  brackets(leagueId: string, seasonId: string): Promise<Brackets | null>
 }
 
 export interface Matches {
-  fixtures: FixtureRound[];
-  currentRound: string;
+  fixtures: FixtureRound[]
+  currentRound: string
 }
 
 export interface MatchDetail {
   matchDetails: {
-    homeTeam: TeamScoreDetails;
-    awayTeam: TeamScoreDetails;
-    status: string;
-  };
-  scoreBreakdown: PeriodScore[];
-  scoreEvents?: ScoreDifference[];
+    homeTeam: TeamScoreDetails
+    awayTeam: TeamScoreDetails
+    status: string
+  }
+  scoreBreakdown: PeriodScore[]
+  scoreEvents?: ScoreDifference[]
 }
 
 export interface Standings<T extends readonly string[]> {
-  standings: SportsLadder<T>[];
-  playoffPicture?: PlayoffPictureGroup[];
+  standings: SportsLadder<T>[]
+  playoffPicture?: PlayoffPictureGroup[]
 }
 
 export interface Brackets {
   brackets: {
-    id: number;
-    name: string;
-    currentRound: number;
-    matches: BracketMatch[];
-  }[];
+    id: number
+    name: string
+    currentRound: number
+    matches: BracketMatch[]
+  }[]
 }
 
 export enum SPORT {

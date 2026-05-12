@@ -1,15 +1,15 @@
-import Ladder from "@/components/all-sports/Ladder";
-import Placeholder from "@/components/misc-ui/Placeholder";
-import { f1Service } from "@/services/f1.service";
+import Ladder from "@/components/all-sports/Ladder"
+import Placeholder from "@/components/misc-ui/Placeholder"
+import { f1Service } from "@/services/f1.service"
 
 export default async function Page(props: {
-  params: Promise<{ season: string }>;
+  params: Promise<{ season: string }>
 }) {
-  const { season } = await props.params;
-  const pageData = await f1Service.standingsConstructor(season);
+  const { season } = await props.params
+  const pageData = await f1Service.standingsConstructor(season)
 
   if (pageData === null) {
-    return <Placeholder>NO DATA</Placeholder>;
+    return <Placeholder>NO DATA</Placeholder>
   }
 
   return (
@@ -23,5 +23,5 @@ export default async function Page(props: {
         />
       ))}
     </div>
-  );
+  )
 }

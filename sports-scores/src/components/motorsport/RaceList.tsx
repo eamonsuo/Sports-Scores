@@ -1,52 +1,52 @@
-"use client";
+"use client"
 
-import { cn } from "@/lib/utils";
-import React, { useEffect } from "react";
-import { MatchSummary } from "../../types/misc";
-import LeagueHeader from "../all-sports/LeagueHeader";
-import SectionDate from "../all-sports/SectionDate";
-import SessionSummaryCard from "./SessionSummaryCard";
+import { cn } from "@/lib/utils"
+import React, { useEffect } from "react"
+import { MatchSummary } from "../../types/misc"
+import LeagueHeader from "../all-sports/LeagueHeader"
+import SectionDate from "../all-sports/SectionDate"
+import SessionSummaryCard from "./SessionSummaryCard"
 
 export default function RaceList({ data }: { data: MatchSummary[] }) {
   useEffect(() => {
     const scrollToAnchor = () => {
-      const element = document.getElementById("current-date");
+      const element = document.getElementById("current-date")
       if (element) {
-        element.scrollIntoView(true);
-        return true;
+        element.scrollIntoView(true)
+        return true
       }
-      return false;
-    };
+      return false
+    }
 
     // Wait a bit longer for layout to complete before scrolling
     const timer = setTimeout(() => {
       if (!scrollToAnchor()) {
         // If not found, retry with intervals
-        const maxRetries = 10;
-        let retryCount = 0;
+        const maxRetries = 10
+        let retryCount = 0
 
         const retryInterval = setInterval(() => {
           if (scrollToAnchor() || retryCount >= maxRetries) {
-            clearInterval(retryInterval);
+            clearInterval(retryInterval)
           }
-          retryCount++;
-        }, 100);
+          retryCount++
+        }, 100)
       }
-    }, 200);
+    }, 200)
 
-    return () => clearTimeout(timer);
-  }, []);
+    return () => clearTimeout(timer)
+  }, [])
 
-  const current_date: Date = new Date(Date.now());
+  const current_date: Date = new Date(Date.now())
 
-  let startDate: Date = new Date("2000-01-01");
-  let displayDate: boolean = false;
-  let currentMatch: boolean = false;
-  let currentDateFlag: boolean = false;
-  let curGrandPrix = "";
+  let startDate: Date = new Date("2000-01-01")
+  let displayDate: boolean = false
+  let currentMatch: boolean = false
+  let currentDateFlag: boolean = false
+  let curGrandPrix = ""
 
   if (data.length === 0) {
-    return <>NO DATA</>;
+    return <>NO DATA</>
   }
 
   return (
@@ -56,22 +56,22 @@ export default function RaceList({ data }: { data: MatchSummary[] }) {
           data.find(
             (s) => s.seriesName === item.seriesName && s.summaryText === "Race",
           )?.startDate ?? "",
-        );
+        )
 
-        displayDate = false;
+        displayDate = false
         if (curGrandPrix !== item.seriesName) {
-          curGrandPrix = item.seriesName ?? "";
-          startDate = new Date(item.startDate); //Assumes data variable is sorted by date
-          displayDate = true;
+          curGrandPrix = item.seriesName ?? ""
+          startDate = new Date(item.startDate) //Assumes data variable is sorted by date
+          displayDate = true
         }
 
         if (currentMatch) {
-          currentMatch = false;
+          currentMatch = false
         }
 
         if (!currentDateFlag && current_date.getTime() <= raceDate.getTime()) {
-          currentMatch = true;
-          currentDateFlag = true;
+          currentMatch = true
+          currentDateFlag = true
         }
 
         return (
@@ -101,8 +101,8 @@ export default function RaceList({ data }: { data: MatchSummary[] }) {
               )}
             />
           </React.Fragment>
-        );
+        )
       })}
     </div>
-  );
+  )
 }

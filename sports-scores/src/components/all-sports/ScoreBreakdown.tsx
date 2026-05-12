@@ -1,15 +1,15 @@
-import fallback from "@/../public/vercel.svg";
-import { PeriodScore } from "@/types/misc";
-import Image from "next/image";
+import fallback from "@/../public/vercel.svg"
+import { PeriodScore } from "@/types/misc"
+import Image from "next/image"
 
 export default function ScoreBreakdown({
   scoreData,
   homeLogo,
   awayLogo,
 }: {
-  scoreData: PeriodScore[];
-  homeLogo?: string | string[];
-  awayLogo?: string | string[];
+  scoreData: PeriodScore[]
+  homeLogo?: string | string[]
+  awayLogo?: string | string[]
 }) {
   return (
     <table className="m-4 text-center dark:text-neutral-400">
@@ -84,5 +84,5 @@ export default function ScoreBreakdown({
         </tr>
       </tbody>
     </table>
-  );
+  )
 }

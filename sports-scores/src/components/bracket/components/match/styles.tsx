@@ -1,5 +1,5 @@
-import styled, { css } from "styled-components";
-import { Theme } from "../../types";
+import styled, { css } from "styled-components"
+import { Theme } from "../../types"
 
 export const Wrapper = styled.div<{ theme: Theme }>`
   display: flex;
@@ -8,12 +8,12 @@ export const Wrapper = styled.div<{ theme: Theme }>`
   align-items: stretch;
   height: 100%;
   font-family: ${({ theme }) => theme.fontFamily};
-`;
+`
 export const TopText = styled.p<{ theme: Theme }>`
   color: ${({ theme }) => theme.textColor.dark};
   margin-bottom: 0.2rem;
   min-height: 1.25rem;
-`;
+`
 export const BottomText = styled.p<{ theme: Theme }>`
   color: ${({ theme }) => theme.textColor.dark};
 
@@ -21,13 +21,13 @@ export const BottomText = styled.p<{ theme: Theme }>`
   text-align: center;
   margin-top: 0.2rem;
   min-height: 1.25rem;
-`;
+`
 export const StyledMatch = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
   justify-content: space-between;
-`;
+`
 
 export const Team = styled.div`
   flex: 1 1 auto;
@@ -39,10 +39,10 @@ export const Team = styled.div`
   -webkit-text-stroke: 0;
   border: none;
   outline: none;
-`;
+`
 
 interface ScoreProps {
-  $won?: boolean;
+  $won?: boolean
 }
 export const Score = styled.div<ScoreProps>`
   display: flex;
@@ -60,10 +60,10 @@ export const Score = styled.div<ScoreProps>`
   -webkit-text-stroke: 0;
   border: none;
   outline: none;
-`;
+`
 interface SideProps {
-  $won?: boolean;
-  $hovered?: boolean;
+  $won?: boolean
+  $hovered?: boolean
 }
 export const Side = styled.div<SideProps>`
   display: flex;
@@ -111,9 +111,9 @@ export const Side = styled.div<SideProps>`
           : theme.score.text.highlightedLostColor};
       }
     `}
-`;
+`
 interface LineProps {
-  $highlighted?: boolean;
+  $highlighted?: boolean
 }
 export const Line = styled.div<LineProps>`
   height: 1px;
@@ -123,7 +123,7 @@ export const Line = styled.div<LineProps>`
   border-style: solid;
   border-color: ${({ $highlighted, theme }) =>
     $highlighted ? theme.border.highlightedColor : theme.border.color};
-`;
+`
 
 export const Anchor = styled.a`
   font-family: ${(props: any) =>
@@ -137,4 +137,4 @@ export const Anchor = styled.a`
   &:hover {
     text-decoration: underline;
   }
-`;
+`

@@ -1,8 +1,8 @@
-import fallback from "@/../public/vercel.svg";
-import { SportsLadder } from "@/types/misc";
-import { clsx } from "clsx";
-import Image from "next/image";
-import Link from "next/link";
+import fallback from "@/../public/vercel.svg"
+import { SportsLadder } from "@/types/misc"
+import { clsx } from "clsx"
+import Image from "next/image"
+import Link from "next/link"
 
 const defaultColours = [
   "bg-green-500",
@@ -11,7 +11,7 @@ const defaultColours = [
   "bg-blue-300",
   "bg-yellow-500",
   "bg-yellow-300",
-];
+]
 
 export default function Ladder<const H extends readonly string[]>({
   tableName,
@@ -42,14 +42,14 @@ export default function Ladder<const H extends readonly string[]>({
             const categoryIdx =
               placingCategories?.findIndex((c) =>
                 c.position.includes(item.position),
-              ) ?? -1;
+              ) ?? -1
             const category =
-              categoryIdx >= 0 ? placingCategories?.[categoryIdx] : undefined;
+              categoryIdx >= 0 ? placingCategories?.[categoryIdx] : undefined
             const colour =
               category?.colour ??
               (categoryIdx >= 0
                 ? defaultColours[categoryIdx % defaultColours.length]
-                : undefined);
+                : undefined)
             return (
               <tr key={item.team.id} className="border-b border-t">
                 <td className={clsx("w-1 p-0", colour)} />
@@ -96,7 +96,7 @@ export default function Ladder<const H extends readonly string[]>({
                   </td>
                 ))}
               </tr>
-            );
+            )
           })}
         </tbody>
       </table>
@@ -118,5 +118,5 @@ export default function Ladder<const H extends readonly string[]>({
         </div>
       )}
     </div>
-  );
+  )
 }

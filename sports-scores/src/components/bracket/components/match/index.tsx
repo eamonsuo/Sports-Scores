@@ -1,6 +1,6 @@
-"use client";
-import React from "react";
-import { MatchComponentProps } from "../../types";
+"use client"
+import React from "react"
+import { MatchComponentProps } from "../../types"
 import {
   Anchor,
   BottomText,
@@ -11,7 +11,7 @@ import {
   Team,
   TopText,
   Wrapper,
-} from "./styles";
+} from "./styles"
 
 const LateEntryArrow = () => (
   <svg
@@ -40,7 +40,7 @@ const LateEntryArrow = () => (
       }}
     />
   </svg>
-);
+)
 
 function Match({
   bottomHovered,
@@ -59,8 +59,8 @@ function Match({
   isTopPartyLateEntry = false,
   isBottomPartyLateEntry = false,
 }: MatchComponentProps & {
-  isTopPartyLateEntry?: boolean;
-  isBottomPartyLateEntry?: boolean;
+  isTopPartyLateEntry?: boolean
+  isBottomPartyLateEntry?: boolean
 }) {
   return (
     <Wrapper>
@@ -108,7 +108,7 @@ function Match({
       </StyledMatch>
       <BottomText>{bottomText ?? " "}</BottomText>
     </Wrapper>
-  );
+  )
 }
 
-export default React.memo(Match);
+export default React.memo(Match)

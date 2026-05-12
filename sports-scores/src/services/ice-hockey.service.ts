@@ -7,15 +7,15 @@ import {
   fetchIceHockeyStandings,
   fetchIceHockeyTeamLastMatches,
   fetchIceHockeyTeamNextMatches,
-} from "@/endpoints/ice-hockey.api";
+} from "@/endpoints/ice-hockey.api"
 import {
   ICE_HOCKEY_LADDER_HEADINGS,
   ICE_HOCKEY_LEAGUES,
   SCORE_BREAKDOWN_PERIODS_CONFIG,
-} from "@/lib/constants";
-import { withDevCache } from "@/lib/devCache";
-import { SPORT } from "@/types/misc";
-import { SofascoreSport } from "./sofascore.service";
+} from "@/lib/constants"
+import { withDevCache } from "@/lib/devCache"
+import { SPORT } from "@/types/misc"
+import { SofascoreSport } from "./sofascore.service"
 
 class IceHockeyService extends SofascoreSport {
   constructor() {
@@ -68,8 +68,8 @@ class IceHockeyService extends SofascoreSport {
       ICE_HOCKEY_LEAGUES,
       ICE_HOCKEY_LADDER_HEADINGS,
       SCORE_BREAKDOWN_PERIODS_CONFIG,
-    );
+    )
   }
 }
 
-export const iceHockeyService = new IceHockeyService();
+export const iceHockeyService = new IceHockeyService()

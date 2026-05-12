@@ -7,17 +7,17 @@ import {
   fetchAmericanFootballStandings,
   fetchAmericanFootballTeamLastMatches,
   fetchAmericanFootballTeamNextMatches,
-} from "@/endpoints/american-football.api";
+} from "@/endpoints/american-football.api"
 import {
   AMERICAN_FOOTBALL_LADDER_HEADINGS,
   AMERICAN_FOOTBALL_LEAGUES,
   SCORE_BREAKDOWN_QUARTERS_CONFIG,
-} from "@/lib/constants";
-import { withDevCache } from "@/lib/devCache";
-import { AmericanFootball_Sofascore_Event } from "@/types/american-football";
-import { DeepPartial, MatchSummary, SPORT } from "@/types/misc";
-import { Sofascore_Standing } from "@/types/sofascore";
-import { SofascoreSport } from "./sofascore.service";
+} from "@/lib/constants"
+import { withDevCache } from "@/lib/devCache"
+import { AmericanFootball_Sofascore_Event } from "@/types/american-football"
+import { DeepPartial, MatchSummary, SPORT } from "@/types/misc"
+import { Sofascore_Standing } from "@/types/sofascore"
+import { SofascoreSport } from "./sofascore.service"
 
 class AmericanFootballService extends SofascoreSport {
   constructor() {
@@ -70,11 +70,11 @@ class AmericanFootballService extends SofascoreSport {
       AMERICAN_FOOTBALL_LEAGUES,
       AMERICAN_FOOTBALL_LADDER_HEADINGS,
       SCORE_BREAKDOWN_QUARTERS_CONFIG,
-    );
+    )
   }
 
   override matchesByLeagueSeason(leagueId: string, seasonId: string) {
-    return super.matchesByLeagueSeason(leagueId, seasonId);
+    return super.matchesByLeagueSeason(leagueId, seasonId)
   }
 
   override eventMapper(
@@ -96,7 +96,7 @@ class AmericanFootballService extends SofascoreSport {
           event.awayTeamSeasonHistoricalForm &&
           `${event.awayTeamSeasonHistoricalForm.wins ?? 0}-${event.awayTeamSeasonHistoricalForm.losses ?? 0}${event.awayTeamSeasonHistoricalForm.draws ? "-" + event.awayTeamSeasonHistoricalForm.draws : ""}`,
       },
-    });
+    })
   }
 
   //TODO: How to organise standings?
@@ -104,8 +104,8 @@ class AmericanFootballService extends SofascoreSport {
     a: Sofascore_Standing,
     b: Sofascore_Standing,
   ): number {
-    return 0;
+    return 0
   }
 }
 
-export const americanFootballService = new AmericanFootballService();
+export const americanFootballService = new AmericanFootballService()

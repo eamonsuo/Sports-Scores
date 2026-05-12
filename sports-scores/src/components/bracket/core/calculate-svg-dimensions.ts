@@ -7,8 +7,8 @@ export function calculateSVGDimensions(
   roundHeader: any,
   currentRound: string = "",
 ) {
-  const bracketHeight = numOfRows * rowHeight;
-  const bracketWidth = numOfColumns * columnWidth;
+  const bracketHeight = numOfRows * rowHeight
+  const bracketWidth = numOfColumns * columnWidth
 
   // console.log(
   //   "Calculated bracket height dimensions:",
@@ -28,13 +28,13 @@ export function calculateSVGDimensions(
   const gameHeight =
     bracketHeight * 1.25 +
     canvasPadding * 2 +
-    (roundHeader.isShown ? roundHeader.height + roundHeader.marginBottom : 0);
-  const gameWidth = bracketWidth + canvasPadding * 2;
+    (roundHeader.isShown ? roundHeader.height + roundHeader.marginBottom : 0)
+  const gameWidth = bracketWidth + canvasPadding * 2
   const startPosition = [
     currentRound
       ? -(parseInt(currentRound, 10) * columnWidth - canvasPadding * 2)
       : 0,
     0,
-  ];
-  return { gameWidth, gameHeight, startPosition };
+  ]
+  return { gameWidth, gameHeight, startPosition }
 }

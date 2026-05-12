@@ -7,17 +7,17 @@
  * Change PREFIX below if your Dataverse publisher prefix is not "new".
  */
 
-import { loadEnvConfig } from "@next/env";
+import { loadEnvConfig } from "@next/env"
 
-loadEnvConfig(process.cwd());
+loadEnvConfig(process.cwd())
 
-const ENVIRONMENT_URL = process.env.DATAVERSE_ENVIRONMENT_URL ?? "";
-const TENANT_ID = process.env.DATAVERSE_TENANT_ID ?? "";
-const CLIENT_ID = process.env.DATAVERSE_CLIENT_ID ?? "";
-const CLIENT_SECRET = process.env.DATAVERSE_CLIENT_SECRET ?? "";
+const ENVIRONMENT_URL = process.env.DATAVERSE_ENVIRONMENT_URL ?? ""
+const TENANT_ID = process.env.DATAVERSE_TENANT_ID ?? ""
+const CLIENT_ID = process.env.DATAVERSE_CLIENT_ID ?? ""
+const CLIENT_SECRET = process.env.DATAVERSE_CLIENT_SECRET ?? ""
 
-const PREFIX = "ss"; // ← Change to your publisher prefix if needed
-const TABLE_SCHEMA = `${PREFIX}_matchsummary`;
+const PREFIX = "ss" // ← Change to your publisher prefix if needed
+const TABLE_SCHEMA = `${PREFIX}_matchsummary`
 
 // ---------------------------------------------------------------------------
 // Auth
@@ -35,11 +35,11 @@ async function getAccessToken() {
         scope: `${ENVIRONMENT_URL}/.default`,
       }),
     },
-  );
+  )
   if (!res.ok)
-    throw new Error(`Token request failed: ${res.status} ${await res.text()}`);
-  const data = await res.json();
-  return data.access_token as string;
+    throw new Error(`Token request failed: ${res.status} ${await res.text()}`)
+  const data = await res.json()
+  return data.access_token as string
 }
 
 // ---------------------------------------------------------------------------
@@ -57,7 +57,7 @@ async function dvPost(token: string, path: string, body: unknown) {
       "OData-Version": "4.0",
     },
     body: JSON.stringify(body),
-  });
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -65,7 +65,7 @@ async function dvPost(token: string, path: string, body: unknown) {
 // ---------------------------------------------------------------------------
 
 function label(text: string) {
-  return { LocalizedLabels: [{ Label: text, LanguageCode: 1033 }] };
+  return { LocalizedLabels: [{ Label: text, LanguageCode: 1033 }] }
 }
 
 function str(
@@ -81,7 +81,7 @@ function str(
     RequiredLevel: { Value: required ? "ApplicationRequired" : "None" },
     MaxLength: maxLength,
     FormatName: { Value: "Text" },
-  };
+  }
 }
 
 function memo(schemaName: string, displayName: string) {
@@ -92,7 +92,7 @@ function memo(schemaName: string, displayName: string) {
     RequiredLevel: { Value: "None" },
     MaxLength: 2000,
     Format: "TextArea",
-  };
+  }
 }
 
 function integer(schemaName: string, displayName: string, required = false) {
@@ -104,7 +104,7 @@ function integer(schemaName: string, displayName: string, required = false) {
     Format: "None",
     MinValue: -2147483648,
     MaxValue: 2147483647,
-  };
+  }
 }
 
 function dateTime(schemaName: string, displayName: string, required = false) {
@@ -115,7 +115,7 @@ function dateTime(schemaName: string, displayName: string, required = false) {
     RequiredLevel: { Value: required ? "ApplicationRequired" : "None" },
     Format: "DateAndTime",
     DateTimeBehavior: { Value: "UserLocal" },
-  };
+  }
 }
 
 function picklist(
@@ -134,7 +134,7 @@ function picklist(
       OptionSetType: "Picklist",
       Options: options.map((o) => ({ Value: o.value, Label: label(o.label) })),
     },
-  };
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -184,7 +184,7 @@ const ATTRIBUTES = [
   integer(`${PREFIX}_winner`, "Winner"),
   integer(`${PREFIX}_tournamentid`, "Tournament ID"),
   integer(`${PREFIX}_seasonid`, "Season ID"),
-];
+]
 
 // ---------------------------------------------------------------------------
 // Main
@@ -194,16 +194,16 @@ async function main() {
   if (!ENVIRONMENT_URL || !TENANT_ID || !CLIENT_ID || !CLIENT_SECRET) {
     console.error(
       "Missing Dataverse environment variables. Check your .env.local file.",
-    );
-    process.exit(1);
+    )
+    process.exit(1)
   }
 
-  console.log("Acquiring access token...");
-  const token = await getAccessToken();
-  console.log("Token acquired.\n");
+  console.log("Acquiring access token...")
+  const token = await getAccessToken()
+  console.log("Token acquired.\n")
 
   // 1. Create the entity with its primary name attribute
-  console.log(`Creating table: ${TABLE_SCHEMA}...`);
+  console.log(`Creating table: ${TABLE_SCHEMA}...`)
   const entityRes = await dvPost(token, "EntityDefinitions", {
     "@odata.type": "Microsoft.Dynamics.CRM.EntityMetadata",
     SchemaName: TABLE_SCHEMA,
@@ -225,52 +225,52 @@ async function main() {
         IsPrimaryName: true,
       },
     ],
-  });
+  })
 
   if (!entityRes.ok) {
-    const text = await entityRes.text();
-    console.error(`✗ Failed to create table: ${entityRes.status}\n${text}`);
-    process.exit(1);
+    const text = await entityRes.text()
+    console.error(`✗ Failed to create table: ${entityRes.status}\n${text}`)
+    process.exit(1)
   }
-  console.log(`✓ Table created: ${TABLE_SCHEMA}\n`);
+  console.log(`✓ Table created: ${TABLE_SCHEMA}\n`)
 
   // 2. Add remaining columns
-  console.log("Adding columns...");
-  let failures = 0;
+  console.log("Adding columns...")
+  let failures = 0
   for (const attribute of ATTRIBUTES) {
     const res = await dvPost(
       token,
       `EntityDefinitions(LogicalName='${TABLE_SCHEMA}')/Attributes`,
       attribute,
-    );
+    )
     if (!res.ok) {
-      const text = await res.text();
-      console.error(`  ✗ ${attribute.SchemaName}: ${res.status} — ${text}`);
-      failures++;
+      const text = await res.text()
+      console.error(`  ✗ ${attribute.SchemaName}: ${res.status} — ${text}`)
+      failures++
     } else {
-      console.log(`  ✓ ${attribute.SchemaName}`);
+      console.log(`  ✓ ${attribute.SchemaName}`)
     }
   }
 
   // 3. Publish customizations
-  console.log("\nPublishing customizations...");
-  const publishRes = await dvPost(token, "PublishAllXml", {});
+  console.log("\nPublishing customizations...")
+  const publishRes = await dvPost(token, "PublishAllXml", {})
   if (!publishRes.ok) {
-    console.warn(`⚠ Publish step failed: ${publishRes.status}`);
+    console.warn(`⚠ Publish step failed: ${publishRes.status}`)
   } else {
-    console.log("✓ Published.");
+    console.log("✓ Published.")
   }
 
   if (failures > 0) {
     console.warn(
       `\nDone with ${failures} column failure(s). Review errors above.`,
-    );
+    )
   } else {
-    console.log(`\nAll done! Table '${TABLE_SCHEMA}' is ready.`);
+    console.log(`\nAll done! Table '${TABLE_SCHEMA}' is ready.`)
   }
 }
 
 main().catch((err) => {
-  console.error("Unexpected error:", err);
-  process.exit(1);
-});
+  console.error("Unexpected error:", err)
+  process.exit(1)
+})

@@ -1,15 +1,15 @@
-import { americanFootballService } from "@/services/american-football.service";
-import { aussieRulesService } from "@/services/aussie-rules.service";
-import { baseballService } from "@/services/baseball.service";
-import { basketballService } from "@/services/basketball.service";
-import { footballService } from "@/services/football.service";
-import { golfService } from "@/services/golf.service";
-import { iceHockeyService } from "@/services/ice-hockey.service";
-import { motorsportService } from "@/services/motorsport.service";
-import { rugbyLeagueService } from "@/services/rugby-league.service";
-import { rugbyUnionService } from "@/services/rugby-union.service";
-import { tennisService } from "@/services/tennis.service";
-import { LeagueSeasonConfig, SPORT, SportService } from "@/types/misc";
+import { americanFootballService } from "@/services/american-football.service"
+import { aussieRulesService } from "@/services/aussie-rules.service"
+import { baseballService } from "@/services/baseball.service"
+import { basketballService } from "@/services/basketball.service"
+import { footballService } from "@/services/football.service"
+import { golfService } from "@/services/golf.service"
+import { iceHockeyService } from "@/services/ice-hockey.service"
+import { motorsportService } from "@/services/motorsport.service"
+import { rugbyLeagueService } from "@/services/rugby-league.service"
+import { rugbyUnionService } from "@/services/rugby-union.service"
+import { tennisService } from "@/services/tennis.service"
+import { LeagueSeasonConfig, SPORT, SportService } from "@/types/misc"
 import {
   AMERICAN_FOOTBALL_LEAGUES,
   AUSSIE_RULES_LEAGUES,
@@ -25,21 +25,21 @@ import {
   RUGBY_LEAGUE_LEAGUES,
   RUGBY_UNION_LEAGUES,
   TENNIS_LEAGUES,
-} from "./constants";
+} from "./constants"
 
-type NavButton = { href: string; label: string; page: string };
+type NavButton = { href: string; label: string; page: string }
 
 type SportRouteConfig = {
-  leagues: LeagueSeasonConfig[];
-  service: SportService;
-  navButtons?: NavButton[]; // override default for all leagues
-  navButtonsByLeague?: Record<string, NavButton[]>; // override per league slug
-};
+  leagues: LeagueSeasonConfig[]
+  service: SportService
+  navButtons?: NavButton[] // override default for all leagues
+  navButtonsByLeague?: Record<string, NavButton[]> // override per league slug
+}
 
 export const DEFAULT_NAV_BUTTONS = [
   { href: "#current-date", label: "Matches", page: "matches" },
   { href: "ladder", label: "Standings", page: "ladder" },
-];
+]
 
 export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
   [SPORT.AMERICAN_FOOTBALL]: {
@@ -138,4 +138,4 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
       { href: "bracket", label: "Bracket", page: "bracket" },
     ],
   },
-};
+}

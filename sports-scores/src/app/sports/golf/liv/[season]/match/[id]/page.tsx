@@ -1,16 +1,16 @@
-import ClientSportsPage from "@/components/all-sports/ClientSportsPage";
-import TournamentLeaderboard from "@/components/golf/TournamentLeaderboard";
-import Placeholder from "@/components/misc-ui/Placeholder";
-import { golfLIVTournamentLeaderboard } from "@/services/golf.service";
+import ClientSportsPage from "@/components/all-sports/ClientSportsPage"
+import TournamentLeaderboard from "@/components/golf/TournamentLeaderboard"
+import Placeholder from "@/components/misc-ui/Placeholder"
+import { golfLIVTournamentLeaderboard } from "@/services/golf.service"
 
 export default async function Page(props: {
-  params: Promise<{ season: string; id: string }>;
+  params: Promise<{ season: string; id: string }>
 }) {
-  const { season, id } = await props.params;
-  const leaderboard = await golfLIVTournamentLeaderboard(id, season);
+  const { season, id } = await props.params
+  const leaderboard = await golfLIVTournamentLeaderboard(id, season)
 
   if (!leaderboard) {
-    return <Placeholder>No Data</Placeholder>;
+    return <Placeholder>No Data</Placeholder>
   }
 
   const pageSettings = [
@@ -34,11 +34,11 @@ export default async function Page(props: {
       ),
       state: "teams",
     },
-  ];
+  ]
 
   return (
     <div className="overflow-y-auto">
       <ClientSportsPage options={pageSettings} defaultState="players" />
     </div>
-  );
+  )
 }

@@ -1,20 +1,20 @@
-import fallback from "@/../public/vercel.svg";
-import Image from "next/image";
+import fallback from "@/../public/vercel.svg"
+import Image from "next/image"
 
 export type CricketLadder = {
-  name: string;
+  name: string
   teams: {
-    name: string;
-    logo?: string;
-    rank: number;
-    played: number;
-    won: number;
-    drawn: number;
-    lost: number;
-    nrr: number;
-    points: number;
-  }[];
-};
+    name: string
+    logo?: string
+    rank: number
+    played: number
+    won: number
+    drawn: number
+    lost: number
+    nrr: number
+    points: number
+  }[]
+}
 
 export default function CricketSeriesLadder({ data }: { data: CricketLadder }) {
   return (
@@ -62,5 +62,5 @@ export default function CricketSeriesLadder({ data }: { data: CricketLadder }) {
         </tbody>
       </table>
     </div>
-  );
+  )
 }

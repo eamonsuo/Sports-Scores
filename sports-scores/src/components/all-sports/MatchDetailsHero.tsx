@@ -1,17 +1,17 @@
-import fallback from "@/../public/vercel.svg";
-import Image from "next/image";
+import fallback from "@/../public/vercel.svg"
+import Image from "next/image"
 
 export default function MatchDetailsHero({
   homeInfo,
   awayInfo,
   status,
 }: {
-  homeInfo: { img?: string | string[]; name: string; score: string | string[] };
-  awayInfo: { img?: string | string[]; name: string; score: string | string[] };
-  status: string;
+  homeInfo: { img?: string | string[]; name: string; score: string | string[] }
+  awayInfo: { img?: string | string[]; name: string; score: string | string[] }
+  status: string
 }) {
-  const homeImg = Array.isArray(homeInfo.img) ? homeInfo.img[0] : homeInfo.img;
-  const awayImg = Array.isArray(awayInfo.img) ? awayInfo.img[0] : awayInfo.img;
+  const homeImg = Array.isArray(homeInfo.img) ? homeInfo.img[0] : homeInfo.img
+  const awayImg = Array.isArray(awayInfo.img) ? awayInfo.img[0] : awayInfo.img
 
   return (
     <div className="m-4 grid grid-cols-3 gap-2">
@@ -85,5 +85,5 @@ export default function MatchDetailsHero({
         {awayInfo.score}
       </p>
     </div>
-  );
+  )
 }

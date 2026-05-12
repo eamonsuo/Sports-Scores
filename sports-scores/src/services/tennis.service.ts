@@ -8,11 +8,11 @@ import {
   fetchTennisTournamentLastMatches,
   fetchTennisTournamentNextMatches,
   fetchTennisWTARankings,
-} from "@/endpoints/tennis.api";
-import { TENNIS_CATEGORIES, TENNIS_LEAGUES } from "@/lib/constants";
-import { withDevCache } from "@/lib/devCache";
-import { resolveSportImage } from "@/lib/imageMapping";
-import { setTennisMatchSummary, shortenTeamNames } from "@/lib/projUtils";
+} from "@/endpoints/tennis.api"
+import { TENNIS_CATEGORIES, TENNIS_LEAGUES } from "@/lib/constants"
+import { withDevCache } from "@/lib/devCache"
+import { resolveSportImage } from "@/lib/imageMapping"
+import { setTennisMatchSummary, shortenTeamNames } from "@/lib/projUtils"
 import {
   CardVariant,
   DeepPartial,
@@ -22,18 +22,18 @@ import {
   SPORT,
   Standings,
   TeamScoreDetails,
-} from "@/types/misc";
-import { Sofascore_Event } from "@/types/sofascore";
+} from "@/types/misc"
+import { Sofascore_Event } from "@/types/sofascore"
 import {
   RankingList,
   Tennis_Sofascore_Event,
   Tennis_TennisApi_Rankings_Response,
-} from "@/types/tennis";
-import { TZDate } from "@date-fns/tz";
-import { isSameDay } from "date-fns";
-import { SofascoreSport } from "./sofascore.service";
+} from "@/types/tennis"
+import { TZDate } from "@date-fns/tz"
+import { isSameDay } from "date-fns"
+import { SofascoreSport } from "./sofascore.service"
 
-const TENNIS_RANKING_HEADINGS = ["Player", "Total", "Prev"] as const;
+const TENNIS_RANKING_HEADINGS = ["Player", "Total", "Prev"] as const
 
 class TennisService extends SofascoreSport {
   constructor() {
@@ -79,68 +79,68 @@ class TennisService extends SofascoreSport {
       [] as const,
       undefined,
       CardVariant.TENNIS,
-    );
+    )
   }
 
   override async matchesByDate(date: Date) {
-    const timezone = date instanceof TZDate ? date.timeZone : "UTC";
-    const matches = await this.apiEndpoints.fetchEventsByDate(date);
+    const timezone = date instanceof TZDate ? date.timeZone : "UTC"
+    const matches = await this.apiEndpoints.fetchEventsByDate(date)
 
     if (!matches) {
-      return null;
+      return null
     }
 
     const validLeagueIds = TENNIS_CATEGORIES.concat(TENNIS_LEAGUES).map((l) =>
       Number(l.slug),
-    );
+    )
     const leagueIdToName = Object.fromEntries(
       TENNIS_CATEGORIES.concat(TENNIS_LEAGUES).map((l) => [
         Number(l.slug),
         l.name,
       ]),
-    );
+    )
 
     const filteredMatches = matches.events
       .filter((item) => {
-        const eventDate = new TZDate(item.startTimestamp * 1000, timezone);
-        return isSameDay(eventDate, date);
+        const eventDate = new TZDate(item.startTimestamp * 1000, timezone)
+        return isSameDay(eventDate, date)
       })
       .filter(
         (item) =>
           (validLeagueIds.includes(item.tournament.category.id) ||
             validLeagueIds.includes(item.tournament.uniqueTournament.id)) &&
           item.status.type !== "canceled",
-      );
+      )
 
     const aussieMatches = matches.events
       .filter((item) => {
-        const eventDate = new TZDate(item.startTimestamp * 1000, timezone);
-        return isSameDay(eventDate, date);
+        const eventDate = new TZDate(item.startTimestamp * 1000, timezone)
+        return isSameDay(eventDate, date)
       })
       .filter(
         (item) =>
           (item.homeTeam.country.name === "Australia" ||
             item.awayTeam.country.name === "Australia") &&
           item.status.type !== "canceled",
-      );
+      )
 
     // Get unique league ids in order
     const rounds = [
       ...new Set(filteredMatches.map((item) => item.tournament.category.id)),
-    ];
+    ]
 
     const firstTournament =
-      rounds.length > 0 ? (leagueIdToName[rounds[0]] ?? "Other") : "";
+      rounds.length > 0 ? (leagueIdToName[rounds[0]] ?? "Other") : ""
 
     return {
       fixtures: rounds
         .map((leagueId) => {
-          const roundLabel = leagueIdToName[leagueId] ?? "Other";
+          const roundLabel = leagueIdToName[leagueId] ?? "Other"
 
           // Filter matches for this league
           const leagueMatches = filteredMatches.filter(
             (item) => item.tournament.category.id === leagueId,
-          );
+          )
 
           return {
             matches: this.sortMatchesByDateAndTournament(
@@ -150,7 +150,7 @@ class TennisService extends SofascoreSport {
             roundLabel: roundLabel,
             cardVariant: "tennis",
             roundSlug: `${SPORT.TENNIS}/today`,
-          } as FixtureRound;
+          } as FixtureRound
         })
         .concat({
           matches: this.sortMatchesByDateAndTournament(aussieMatches, timezone),
@@ -160,14 +160,14 @@ class TennisService extends SofascoreSport {
         } as FixtureRound),
 
       currentRound: firstTournament,
-    };
+    }
   }
 
   override async standings(
     leagueId: string,
     seasonId: string,
   ): Promise<Standings<readonly string[]> | null> {
-    let rankings: Tennis_TennisApi_Rankings_Response;
+    let rankings: Tennis_TennisApi_Rankings_Response
 
     switch (leagueId) {
       case RankingList.WTA:
@@ -175,21 +175,21 @@ class TennisService extends SofascoreSport {
           "tennis",
           "wta-rankings",
           fetchTennisWTARankings,
-        )();
-        break;
+        )()
+        break
       case RankingList.ATP:
         rankings = await withDevCache(
           "tennis",
           "atp-rankings",
           fetchTennisATPRankings,
-        )();
-        break;
+        )()
+        break
       default:
-        return null;
+        return null
     }
 
     if (!rankings) {
-      return null;
+      return null
     }
 
     return {
@@ -208,13 +208,13 @@ class TennisService extends SofascoreSport {
           })),
         },
       ],
-    };
+    }
   }
 
   async tennisRankings(
     rankingList: RankingList,
   ): Promise<Standings<readonly string[]> | null> {
-    return null;
+    return null
   }
 
   protected override eventMapper(
@@ -292,15 +292,15 @@ class TennisService extends SofascoreSport {
                 match.awayTeam.country.name ?? match.awayTeam.name,
               ),
       },
-    });
+    })
   }
 
   protected override matchDetailsMapper(matchDetails: Sofascore_Event): {
-    homeTeam: TeamScoreDetails;
-    awayTeam: TeamScoreDetails;
-    status: string;
+    homeTeam: TeamScoreDetails
+    awayTeam: TeamScoreDetails
+    status: string
   } {
-    const parentMatchDetails = super.matchDetailsMapper(matchDetails);
+    const parentMatchDetails = super.matchDetailsMapper(matchDetails)
     return {
       ...parentMatchDetails,
       homeTeam: {
@@ -331,7 +331,7 @@ class TennisService extends SofascoreSport {
                   "",
               ),
       },
-    };
+    }
   }
 
   // AI Generated Helper
@@ -340,47 +340,47 @@ class TennisService extends SofascoreSport {
     timezone: string = "UTC",
   ): MatchSummary[] {
     // Map to MatchSummary first
-    const mapped = matches.map((match) => this.eventMapper(match));
+    const mapped = matches.map((match) => this.eventMapper(match))
 
     // Group by seriesName
-    const groups = new Map<string, MatchSummary[]>();
+    const groups = new Map<string, MatchSummary[]>()
     mapped.forEach((match) => {
-      const key = match.seriesName ?? "";
+      const key = match.seriesName ?? ""
       if (!groups.has(key)) {
-        groups.set(key, []);
+        groups.set(key, [])
       }
-      groups.get(key)!.push(match);
-    });
+      groups.get(key)!.push(match)
+    })
 
     // Sort each group internally by start time
     groups.forEach((group) => {
       group.sort(
         (a, b) =>
           (a.startDate as Date).getTime() - (b.startDate as Date).getTime(),
-      );
-    });
+      )
+    })
 
     // Sort groups alphabetically by seriesName, with WTA directly after ATP
     const getSortKey = (name: string) => {
-      if (name.startsWith("ATP")) return 0;
-      if (name.startsWith("WTA")) return 1;
-      return 2;
-    };
+      if (name.startsWith("ATP")) return 0
+      if (name.startsWith("WTA")) return 1
+      return 2
+    }
 
     const getPoints = (name: string) => {
-      const num = Number(name.split(" ")[1]);
-      return isNaN(num) ? 0 : num;
-    };
+      const num = Number(name.split(" ")[1])
+      return isNaN(num) ? 0 : num
+    }
 
     return Array.from(groups.entries())
       .sort(([nameA], [nameB]) => {
-        const groupDiff = getSortKey(nameA) - getSortKey(nameB);
-        if (groupDiff !== 0) return groupDiff;
-        const pointsDiff = getPoints(nameB) - getPoints(nameA);
-        if (pointsDiff !== 0) return pointsDiff;
-        return nameA.localeCompare(nameB);
+        const groupDiff = getSortKey(nameA) - getSortKey(nameB)
+        if (groupDiff !== 0) return groupDiff
+        const pointsDiff = getPoints(nameB) - getPoints(nameA)
+        if (pointsDiff !== 0) return pointsDiff
+        return nameA.localeCompare(nameB)
       })
-      .flatMap(([, group]) => group);
+      .flatMap(([, group]) => group)
   }
 
   protected override scoreBreakdownMapper(
@@ -428,8 +428,8 @@ class TennisService extends SofascoreSport {
             },
           }
         : null,
-    ].filter((set) => set !== null);
+    ].filter((set) => set !== null)
   }
 }
 
-export const tennisService = new TennisService();
+export const tennisService = new TennisService()

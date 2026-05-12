@@ -6,15 +6,15 @@ import {
   fetchBaseballStandings,
   fetchBaseballTeamLastMatches,
   fetchBaseballTeamNextMatches,
-} from "@/endpoints/baseball.api";
+} from "@/endpoints/baseball.api"
 import {
   BASEBALL_LADDER_HEADINGS,
   BASEBALL_LEAGUES,
   SCORE_BREAKDOWN_INNINGS_CONFIG,
-} from "@/lib/constants";
-import { withDevCache } from "@/lib/devCache";
-import { SPORT } from "@/types/misc";
-import { SofascoreSport } from "./sofascore.service";
+} from "@/lib/constants"
+import { withDevCache } from "@/lib/devCache"
+import { SPORT } from "@/types/misc"
+import { SofascoreSport } from "./sofascore.service"
 
 class BaseballService extends SofascoreSport {
   constructor() {
@@ -63,15 +63,15 @@ class BaseballService extends SofascoreSport {
       BASEBALL_LEAGUES,
       BASEBALL_LADDER_HEADINGS,
       SCORE_BREAKDOWN_INNINGS_CONFIG,
-    );
+    )
   }
 }
 
 // Custom sort: division < conference < MLB
 function tableOrder(name: string): number {
-  if (name === "MLB") return 2;
-  if (name.split(" ").length == 2) return 1;
-  return 0; // Division tables
+  if (name === "MLB") return 2
+  if (name.split(" ").length == 2) return 1
+  return 0 // Division tables
 }
 
-export const baseballService = new BaseballService();
+export const baseballService = new BaseballService()

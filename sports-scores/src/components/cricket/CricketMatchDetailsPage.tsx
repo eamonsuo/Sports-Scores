@@ -1,32 +1,32 @@
-import MatchDetailsHero from "../all-sports/MatchDetailsHero";
-import CricketMatchSummary from "./CricketMatchSummary";
+import MatchDetailsHero from "../all-sports/MatchDetailsHero"
+import CricketMatchSummary from "./CricketMatchSummary"
 
 export type MatchDetailsPage = {
-  matchSummaryText: string;
-  status: string;
-  date: string | Date;
-  venue: string;
-  tossResult: string;
-  umpires: string[];
-  pom: string;
+  matchSummaryText: string
+  status: string
+  date: string | Date
+  venue: string
+  tossResult: string
+  umpires: string[]
+  pom: string
   homeInfo: {
-    img?: string;
-    name: string;
-    score: string;
-  };
+    img?: string
+    name: string
+    score: string
+  }
   awayInfo: {
-    img?: string;
-    name: string;
-    score: string;
-  };
-  homePlayers: string[];
-  awayPlayers: string[];
-};
+    img?: string
+    name: string
+    score: string
+  }
+  homePlayers: string[]
+  awayPlayers: string[]
+}
 
 export default function CricketMatchDetailsPage({
   matchDetails,
 }: {
-  matchDetails: MatchDetailsPage;
+  matchDetails: MatchDetailsPage
 }) {
   return (
     <>
@@ -49,5 +49,5 @@ export default function CricketMatchDetailsPage({
         pom={matchDetails.pom}
       />
     </>
-  );
+  )
 }

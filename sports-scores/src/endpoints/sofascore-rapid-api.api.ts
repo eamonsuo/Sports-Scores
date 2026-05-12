@@ -1,42 +1,42 @@
-import { updateGlobalApiQuota } from "@/lib/apiCounter";
-import { SPORT } from "@/types/misc";
+import { updateGlobalApiQuota } from "@/lib/apiCounter"
+import { SPORT } from "@/types/misc"
 import {
   Sofascore_Event_Response,
   Sofascore_EventIncidents_Response,
   Sofascore_EventPage_Response,
   Sofascore_Events_Response,
   Sofascore_TotalStandings_Response,
-} from "@/types/sofascore";
-import { format } from "date-fns/format";
+} from "@/types/sofascore"
+import { format } from "date-fns/format"
 
 function updateQuota(response: Response) {
-  const limit = response.headers.get("x-ratelimit-requests-limit");
-  const remaining = response.headers.get("x-ratelimit-requests-remaining");
+  const limit = response.headers.get("x-ratelimit-requests-limit")
+  const remaining = response.headers.get("x-ratelimit-requests-remaining")
   if (remaining && limit) {
     updateGlobalApiQuota(
       parseInt(remaining, 10),
       parseInt(limit, 10),
       SPORT.AUSSIE_RULES,
-    );
+    )
   }
 }
 
 async function fetchSofascoreRapidApi(endpoint: string) {
-  const url = process.env.SOFASCORE_API_BASEURL + endpoint;
+  const url = process.env.SOFASCORE_API_BASEURL + endpoint
   const res = await fetch(url, {
     method: "GET",
     headers: {
       "X-RapidAPI-Key": process.env.RapidAPIKey ?? "",
     },
-  });
+  })
 
   if (!res.ok || res.status === 204) {
-    return null;
+    return null
   }
 
-  updateQuota(res);
+  updateQuota(res)
 
-  return res.json();
+  return res.json()
 }
 
 export async function fetchTournamentLastMatches(
@@ -46,7 +46,7 @@ export async function fetchTournamentLastMatches(
 ) {
   return (await fetchSofascoreRapidApi(
     `/tournaments/get-last-matches?tournamentId=${tournamentId}&seasonId=${seasonId}&pageIndex=${pageNumber}`,
-  )) as Sofascore_EventPage_Response;
+  )) as Sofascore_EventPage_Response
 }
 
 export async function fetchTournamentNextMatches(
@@ -56,7 +56,7 @@ export async function fetchTournamentNextMatches(
 ) {
   return (await fetchSofascoreRapidApi(
     `/tournaments/get-next-matches?tournamentId=${tournamentId}&seasonId=${seasonId}&pageIndex=${pageNumber}`,
-  )) as Sofascore_EventPage_Response;
+  )) as Sofascore_EventPage_Response
 }
 
 export async function fetchTeamLastMatches(
@@ -65,7 +65,7 @@ export async function fetchTeamLastMatches(
 ) {
   return (await fetchSofascoreRapidApi(
     `/teams/get-last-matches?teamId=${teamId}&pageIndex=${pageNumber}`,
-  )) as Sofascore_EventPage_Response;
+  )) as Sofascore_EventPage_Response
 }
 
 export async function fetchTeamNextMatches(
@@ -74,7 +74,7 @@ export async function fetchTeamNextMatches(
 ) {
   return (await fetchSofascoreRapidApi(
     `/teams/get-next-matches?teamId=${teamId}&pageIndex=${pageNumber}`,
-  )) as Sofascore_EventPage_Response;
+  )) as Sofascore_EventPage_Response
 }
 
 export async function fetchTournamentStandings(
@@ -83,23 +83,23 @@ export async function fetchTournamentStandings(
 ) {
   return (await fetchSofascoreRapidApi(
     `/tournaments/get-standings?tournamentId=${tournamentId}&seasonId=${seasonId}&type=total`,
-  )) as Sofascore_TotalStandings_Response;
+  )) as Sofascore_TotalStandings_Response
 }
 
 export async function fetchMatchDetails(matchId: string) {
   return (await fetchSofascoreRapidApi(
     `/matches/detail?matchId=${matchId}`,
-  )) as Sofascore_Event_Response;
+  )) as Sofascore_Event_Response
 }
 
 export async function fetchMatchIncidents(matchId: string) {
   return (await fetchSofascoreRapidApi(
     `/matches/get-incidents?matchId=${matchId}`,
-  )) as Sofascore_EventIncidents_Response;
+  )) as Sofascore_EventIncidents_Response
 }
 
 export async function fetchScheduledEvents(categoryId: string, date?: Date) {
   return (await fetchSofascoreRapidApi(
     `/tournaments/get-scheduled-events?categoryId=${categoryId}${date ? `&date=${format(date, "yyyy-MM-dd")}` : ""}`,
-  )) as Sofascore_Events_Response;
+  )) as Sofascore_Events_Response
 }

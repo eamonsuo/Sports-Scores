@@ -1,19 +1,19 @@
-import fallback from "@/../public/vercel.svg";
-import Image from "next/image";
+import fallback from "@/../public/vercel.svg"
+import Image from "next/image"
 
 export type GolfLeaderboardPlayerRow = {
-  name: string;
-  position: string;
-  img?: string;
-  totalScore: string;
-  thru: string;
-  curRound: string;
-};
+  name: string
+  position: string
+  img?: string
+  totalScore: string
+  thru: string
+  curRound: string
+}
 
 export default function TournamentLeaderboard({
   players,
 }: {
-  players: GolfLeaderboardPlayerRow[];
+  players: GolfLeaderboardPlayerRow[]
 }) {
   return (
     <table className="mb-2 w-full dark:text-neutral-400">
@@ -51,5 +51,5 @@ export default function TournamentLeaderboard({
         ))}
       </tbody>
     </table>
-  );
+  )
 }

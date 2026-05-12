@@ -6,7 +6,7 @@ import type {
   PlayoffPictureStandingTables,
   PlayoffPictureStructure,
   PlayoffPictureTeam,
-} from "@/types/playoff-picture";
+} from "@/types/playoff-picture"
 
 // ── Public API ──
 
@@ -14,12 +14,12 @@ export function resolvePlayoffPicture(
   config: PlayoffPictureConfig | undefined,
   standingsGroups: PlayoffPictureStandingTables[] | undefined,
 ): PlayoffPictureGroup[] | undefined {
-  if (!config || !standingsGroups?.length) return undefined;
+  if (!config || !standingsGroups?.length) return undefined
 
-  const buildStructure = STRUCTURE_MAP[config.structure];
-  if (!buildStructure) return undefined;
+  const buildStructure = STRUCTURE_MAP[config.structure]
+  if (!buildStructure) return undefined
 
-  return buildStructure(standingsGroups, config);
+  return buildStructure(standingsGroups, config)
 }
 
 // ── Ranking helpers (exported for reuse) ──
@@ -28,15 +28,15 @@ export function getRankingValue(
   team: PlayoffPictureStanding,
   config: PlayoffPictureConfig,
 ): number {
-  if (config.customRankingValue) return config.customRankingValue(team);
+  if (config.customRankingValue) return config.customRankingValue(team)
   if (config.rankingSystem === "percentage") {
-    if (team.played === 0) return 0;
-    return (team.wins + team.draws * 0.5) / team.played;
+    if (team.played === 0) return 0
+    return (team.wins + team.draws * 0.5) / team.played
   }
   return (
     team.wins * (config.pointsPerWin ?? 2) +
     team.draws * (config.pointsPerDraw ?? 1)
-  );
+  )
 }
 
 export function getMaxRankingValue(
@@ -48,17 +48,17 @@ export function getMaxRankingValue(
       ...team,
       wins: team.wins + (team.totalSeasonGames - team.played),
       played: team.totalSeasonGames,
-    };
-    return config.customRankingValue(projected);
+    }
+    return config.customRankingValue(projected)
   }
-  const remaining = team.totalSeasonGames - team.played;
+  const remaining = team.totalSeasonGames - team.played
   if (config.rankingSystem === "percentage") {
-    return (team.wins + remaining + team.draws * 0.5) / team.totalSeasonGames;
+    return (team.wins + remaining + team.draws * 0.5) / team.totalSeasonGames
   }
   return (
     (team.wins + remaining) * (config.pointsPerWin ?? 2) +
     team.draws * (config.pointsPerDraw ?? 1)
-  );
+  )
 }
 
 // ── Internal helpers ──
@@ -73,7 +73,7 @@ function toTeam(
     logo: standing.team.logo,
     position: standing.position,
     positionDisplay: positionDisplay ?? standing.position,
-  };
+  }
 }
 
 function classifyNonQualifiers(
@@ -84,54 +84,54 @@ function classifyNonQualifiers(
 ) {
   const minQualifyingValue = Math.min(
     ...qualifiers.map((t) => getRankingValue(t, config)),
-  );
+  )
 
-  const inTheHunt: PlayoffPictureStanding[] = [];
-  const eliminated: PlayoffPictureStanding[] = [];
+  const inTheHunt: PlayoffPictureStanding[] = []
+  const eliminated: PlayoffPictureStanding[] = []
 
   rest.forEach((team) => {
-    const remainingMatches = team.totalSeasonGames - team.played;
+    const remainingMatches = team.totalSeasonGames - team.played
 
     const canCatchQualifier =
       remainingMatches === 0
         ? getMaxRankingValue(team, config) > minQualifyingValue
-        : getMaxRankingValue(team, config) >= minQualifyingValue;
+        : getMaxRankingValue(team, config) >= minQualifyingValue
 
-    let canWinDivision = false;
+    let canWinDivision = false
     if (divisionTables) {
       const division = divisionTables.find((div) =>
         div.standings.some((s) => s.team.id === team.team.id),
-      );
+      )
 
       if (division) {
-        const leader = division.standings[0];
+        const leader = division.standings[0]
         if (leader.team.id !== team.team.id) {
-          const leaderMinValue = getRankingValue(leader, config);
+          const leaderMinValue = getRankingValue(leader, config)
           canWinDivision =
             remainingMatches === 0
               ? getMaxRankingValue(team, config) > leaderMinValue
-              : getMaxRankingValue(team, config) >= leaderMinValue;
+              : getMaxRankingValue(team, config) >= leaderMinValue
         }
       }
     }
 
     canCatchQualifier || canWinDivision
       ? inTheHunt.push(team)
-      : eliminated.push(team);
-  });
+      : eliminated.push(team)
+  })
 
-  return { inTheHunt, eliminated };
+  return { inTheHunt, eliminated }
 }
 
 // ── Shared structure helpers ──
 
-type NonQualifiers = ReturnType<typeof classifyNonQualifiers>;
+type NonQualifiers = ReturnType<typeof classifyNonQualifiers>
 
 function findStandings(
   tables: PlayoffPictureStandingTables[],
   name: string,
 ): PlayoffPictureStanding[] {
-  return tables.find((t) => t.name === name)?.standings ?? [];
+  return tables.find((t) => t.name === name)?.standings ?? []
 }
 
 function filterDivisionTables(
@@ -141,14 +141,14 @@ function filterDivisionTables(
 ): PlayoffPictureStandingTables[] {
   return tables.filter(
     (t) => t.name?.includes(includes) && t.name !== excludeName,
-  );
+  )
 }
 
 function getWildCards(
   conferenceStandings: PlayoffPictureStanding[],
   qualifiedIds: Set<string | number>,
 ): PlayoffPictureStanding[] {
-  return conferenceStandings.filter((t) => !qualifiedIds.has(t.team.id));
+  return conferenceStandings.filter((t) => !qualifiedIds.has(t.team.id))
 }
 
 function huntAndEliminatedSections(
@@ -163,17 +163,17 @@ function huntAndEliminatedSections(
       title: "Eliminated",
       teams: nonQualifiers.eliminated.map((team) => toTeam(team)),
     },
-  ];
+  ]
 }
 
 function sliceAndClassify(
   standings: PlayoffPictureStanding[],
   config: PlayoffPictureConfig,
 ) {
-  const qualifiers = standings.slice(0, config.qualifyingPositions);
-  const rest = standings.slice(config.qualifyingPositions);
-  const nonQualifiers = classifyNonQualifiers(qualifiers, rest, config);
-  return { qualifiers, nonQualifiers };
+  const qualifiers = standings.slice(0, config.qualifyingPositions)
+  const rest = standings.slice(config.qualifyingPositions)
+  const nonQualifiers = classifyNonQualifiers(qualifiers, rest, config)
+  return { qualifiers, nonQualifiers }
 }
 
 // ── Per-structure builders ──
@@ -182,8 +182,8 @@ function buildTop8(
   tables: PlayoffPictureStandingTables[],
   config: PlayoffPictureConfig,
 ): PlayoffPictureGroup[] {
-  const standings = tables[0]?.standings ?? [];
-  const { qualifiers, nonQualifiers } = sliceAndClassify(standings, config);
+  const standings = tables[0]?.standings ?? []
+  const { qualifiers, nonQualifiers } = sliceAndClassify(standings, config)
 
   return [
     {
@@ -205,15 +205,15 @@ function buildTop8(
         ...huntAndEliminatedSections(nonQualifiers),
       ],
     },
-  ];
+  ]
 }
 
 function buildTop10(
   tables: PlayoffPictureStandingTables[],
   config: PlayoffPictureConfig,
 ): PlayoffPictureGroup[] {
-  const standings = tables[0]?.standings ?? [];
-  const { qualifiers, nonQualifiers } = sliceAndClassify(standings, config);
+  const standings = tables[0]?.standings ?? []
+  const { qualifiers, nonQualifiers } = sliceAndClassify(standings, config)
 
   return [
     {
@@ -256,7 +256,7 @@ function buildTop10(
         ...huntAndEliminatedSections(nonQualifiers),
       ],
     },
-  ];
+  ]
 }
 
 function buildNflConference(
@@ -267,16 +267,16 @@ function buildNflConference(
   displayName: string,
   colour: string,
 ): PlayoffPictureGroup {
-  const standings = findStandings(tables, fullTableName);
-  const wildCard = standings.slice(4, 7);
-  const inHunt = standings.slice(7);
-  const divisionTables = filterDivisionTables(tables, shortName, fullTableName);
+  const standings = findStandings(tables, fullTableName)
+  const wildCard = standings.slice(4, 7)
+  const inHunt = standings.slice(7)
+  const divisionTables = filterDivisionTables(tables, shortName, fullTableName)
   const nonQualifiers = classifyNonQualifiers(
     wildCard,
     inHunt,
     config,
     divisionTables,
-  );
+  )
 
   return {
     name: displayName,
@@ -293,7 +293,7 @@ function buildNflConference(
       },
       ...huntAndEliminatedSections(nonQualifiers),
     ],
-  };
+  }
 }
 
 function buildNfl(
@@ -317,7 +317,7 @@ function buildNfl(
       "NFC",
       "text-blue-700 dark:text-blue-400",
     ),
-  ];
+  ]
 }
 
 function buildNbaConference(
@@ -328,8 +328,8 @@ function buildNbaConference(
   colour: string,
   tag: string,
 ): PlayoffPictureGroup {
-  const standings = findStandings(tables, tableName);
-  const { nonQualifiers } = sliceAndClassify(standings, config);
+  const standings = findStandings(tables, tableName)
+  const { nonQualifiers } = sliceAndClassify(standings, config)
 
   return {
     name: displayName,
@@ -375,7 +375,7 @@ function buildNbaConference(
       },
       ...huntAndEliminatedSections(nonQualifiers),
     ],
-  };
+  }
 }
 
 function buildNba(
@@ -399,7 +399,7 @@ function buildNba(
       "text-blue-700 dark:text-blue-400",
       "East",
     ),
-  ];
+  ]
 }
 
 function buildNhlConference(
@@ -411,15 +411,15 @@ function buildNhlConference(
   displayName: string,
   colour: string,
 ): PlayoffPictureGroup {
-  const confStandings = findStandings(tables, conferenceName);
-  const div1Standings = findStandings(tables, div1Name);
-  const div2Standings = findStandings(tables, div2Name);
+  const confStandings = findStandings(tables, conferenceName)
+  const div1Standings = findStandings(tables, div1Name)
+  const div2Standings = findStandings(tables, div2Name)
 
   // Conference leader + the other division's leader
   const otherDivLeader =
     confStandings[0]?.team.id === div1Standings[0]?.team.id
       ? div2Standings[0]
-      : div1Standings[0];
+      : div1Standings[0]
 
   const qualified = [
     confStandings[0],
@@ -428,21 +428,21 @@ function buildNhlConference(
     div2Standings[1],
     div1Standings[2],
     div2Standings[2],
-  ];
+  ]
 
   // Wild cards: top 2 conference teams not already qualified
-  const qualifiedIds = new Set(qualified.map((t) => t.team.id));
-  const wildCards = getWildCards(confStandings, qualifiedIds);
+  const qualifiedIds = new Set(qualified.map((t) => t.team.id))
+  const wildCards = getWildCards(confStandings, qualifiedIds)
 
-  qualified.push(wildCards[0], wildCards[1]);
-  qualifiedIds.add(wildCards[0].team.id);
-  qualifiedIds.add(wildCards[1].team.id);
+  qualified.push(wildCards[0], wildCards[1])
+  qualifiedIds.add(wildCards[0].team.id)
+  qualifiedIds.add(wildCards[1].team.id)
 
-  const inTheHunt = confStandings.filter((t) => !qualifiedIds.has(t.team.id));
+  const inTheHunt = confStandings.filter((t) => !qualifiedIds.has(t.team.id))
   const nonQualifiers = classifyNonQualifiers(qualified, inTheHunt, config, [
     { standings: div1Standings.slice(2) },
     { standings: div2Standings.slice(2) },
-  ]);
+  ])
 
   return {
     name: displayName,
@@ -459,7 +459,7 @@ function buildNhlConference(
       },
       ...huntAndEliminatedSections(nonQualifiers),
     ],
-  };
+  }
 }
 
 function buildNhl(
@@ -485,7 +485,7 @@ function buildNhl(
       "Western Conf.",
       "text-blue-700 dark:text-blue-400",
     ),
-  ];
+  ]
 }
 
 function buildMlbLeague(
@@ -496,29 +496,29 @@ function buildMlbLeague(
   colour: string,
   firstRoundTitle: string,
 ): PlayoffPictureGroup {
-  const standings = findStandings(tables, leagueName);
-  const divisionTables = filterDivisionTables(tables, leagueName, leagueName);
+  const standings = findStandings(tables, leagueName)
+  const divisionTables = filterDivisionTables(tables, leagueName, leagueName)
 
   const qualified = divisionTables
     .map((table) => table.standings[0])
-    .sort((a, b) => getRankingValue(b, config) - getRankingValue(a, config));
+    .sort((a, b) => getRankingValue(b, config) - getRankingValue(a, config))
 
   // Wild cards: top 3 league teams not already qualified
-  const qualifiedIds = new Set(qualified.map((t) => t.team.id));
-  const wildCards = getWildCards(standings, qualifiedIds);
+  const qualifiedIds = new Set(qualified.map((t) => t.team.id))
+  const wildCards = getWildCards(standings, qualifiedIds)
 
-  qualified.push(wildCards[0], wildCards[1], wildCards[2]);
-  qualifiedIds.add(wildCards[0].team.id);
-  qualifiedIds.add(wildCards[1].team.id);
-  qualifiedIds.add(wildCards[2].team.id);
+  qualified.push(wildCards[0], wildCards[1], wildCards[2])
+  qualifiedIds.add(wildCards[0].team.id)
+  qualifiedIds.add(wildCards[1].team.id)
+  qualifiedIds.add(wildCards[2].team.id)
 
-  const inTheHunt = standings.filter((t) => !qualifiedIds.has(t.team.id));
+  const inTheHunt = standings.filter((t) => !qualifiedIds.has(t.team.id))
   const nonQualifiers = classifyNonQualifiers(
     qualified,
     inTheHunt,
     config,
     divisionTables,
-  );
+  )
 
   return {
     name: displayName,
@@ -537,7 +537,7 @@ function buildMlbLeague(
       },
       ...huntAndEliminatedSections(nonQualifiers),
     ],
-  };
+  }
 }
 
 function buildMlb(
@@ -561,7 +561,7 @@ function buildMlb(
       "text-blue-700 dark:text-blue-400",
       "Divisional Round",
     ),
-  ];
+  ]
 }
 
 // ── Structure map: layout + classification per structure ──
@@ -579,4 +579,4 @@ const STRUCTURE_MAP: Record<
   nba: buildNba,
   nhl: buildNhl,
   mlb: buildMlb,
-};
+}

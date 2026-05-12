@@ -1,6 +1,6 @@
-import Link from "next/link";
-import Placeholder from "./Placeholder";
-import { Button } from "./Button";
+import Link from "next/link"
+import Placeholder from "./Placeholder"
+import { Button } from "./Button"
 
 export default function NoData({ href }: { href?: string }) {
   return (
@@ -10,5 +10,5 @@ export default function NoData({ href }: { href?: string }) {
         <Button variant={"secondary"}>Link to Web Scores</Button>
       </Link>
     </>
-  );
+  )
 }

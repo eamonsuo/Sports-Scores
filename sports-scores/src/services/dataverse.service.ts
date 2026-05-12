@@ -2,17 +2,17 @@ import {
   createDataverseMatchSummary,
   fetchDataverseMatchSummaries,
   updateDataverseMatchSummary,
-} from "@/endpoints/dataverse.api";
-import { DataverseMatchSummary } from "@/types/dataverse";
+} from "@/endpoints/dataverse.api"
+import { DataverseMatchSummary } from "@/types/dataverse"
 import {
   DeepPartial,
   MatchStatus,
   MatchSummary,
   SPORT,
   TeamScoreDetails,
-} from "@/types/misc";
-import { TZDate } from "@date-fns/tz";
-import { endOfDay, startOfDay } from "date-fns";
+} from "@/types/misc"
+import { TZDate } from "@date-fns/tz"
+import { endOfDay, startOfDay } from "date-fns"
 
 // --- MatchSummary Utilities ---
 
@@ -20,38 +20,38 @@ const STATUS_MAP: Record<0 | 1 | 2, MatchStatus> = {
   0: MatchStatus.LIVE,
   1: MatchStatus.UPCOMING,
   2: MatchStatus.COMPLETED,
-};
+}
 
 const COLOUR_MAP: Record<0 | 1 | 2, "green" | "yellow" | "gray"> = {
   0: "green",
   1: "yellow",
   2: "gray",
-};
+}
 
 const STATUS_REVERSE: Record<MatchStatus, 0 | 1 | 2> = {
   [MatchStatus.LIVE]: 0,
   [MatchStatus.UPCOMING]: 1,
   [MatchStatus.COMPLETED]: 2,
-};
+}
 
 const COLOUR_REVERSE: Record<"green" | "yellow" | "gray", 0 | 1 | 2> = {
   green: 0,
   yellow: 1,
   gray: 2,
-};
+}
 
 function stringifyField(value: string | string[] | undefined): string | null {
-  if (value === undefined || value === null) return null;
-  return Array.isArray(value) ? JSON.stringify(value) : value;
+  if (value === undefined || value === null) return null
+  return Array.isArray(value) ? JSON.stringify(value) : value
 }
 
 function parseJsonField(value: string | null): string | string[] {
-  if (!value) return "";
+  if (!value) return ""
   try {
-    const parsed = JSON.parse(value);
-    return Array.isArray(parsed) ? parsed : String(parsed);
+    const parsed = JSON.parse(value)
+    return Array.isArray(parsed) ? parsed : String(parsed)
   } catch {
-    return value;
+    return value
   }
 }
 
@@ -61,14 +61,14 @@ function mapToMatchSummary(r: DataverseMatchSummary): MatchSummary {
     score: parseJsonField(r.ss_homescore),
     img: r.ss_homeimg ? parseJsonField(r.ss_homeimg) : undefined,
     winDrawLoss: r.ss_homewdl ?? undefined,
-  };
+  }
 
   const awayDetails: TeamScoreDetails = {
     name: r.ss_awayname ?? "",
     score: parseJsonField(r.ss_awayscore),
     img: r.ss_awayimg ? parseJsonField(r.ss_awayimg) : undefined,
     winDrawLoss: r.ss_awaywdl ?? undefined,
-  };
+  }
 
   return {
     id: r.ss_matchid ?? "",
@@ -98,7 +98,7 @@ function mapToMatchSummary(r: DataverseMatchSummary): MatchSummary {
     tournamentId: r.ss_tournamentid ?? undefined,
     seasonId: r.ss_seasonid ?? undefined,
     dataverseGUID: r.ss_matchsummaryid,
-  };
+  }
 }
 
 export function mapToDataverseMatchSummary(
@@ -134,15 +134,15 @@ export function mapToDataverseMatchSummary(
     ss_winner: m.winner ?? null,
     ss_tournamentid: m.tournamentId ?? null,
     ss_seasonid: m.seasonId ?? null,
-  };
+  }
 }
 
 // --- MatchSummary Services ---
 
 export async function matchSummariesAll(): Promise<MatchSummary[] | null> {
-  const response = await fetchDataverseMatchSummaries();
-  if (!response) return null;
-  return response.value.map(mapToMatchSummary);
+  const response = await fetchDataverseMatchSummaries()
+  if (!response) return null
+  return response.value.map(mapToMatchSummary)
 }
 
 export async function matchSummariesByTournament(
@@ -154,39 +154,39 @@ export async function matchSummariesByTournament(
     `ss_tournamentid eq '${leagueId}'`,
     `ss_seasonid eq '${seasonId}'`,
     `ss_sport eq '${sport}'`,
-  ];
-  const response = await fetchDataverseMatchSummaries(filters.join(" and "));
-  if (!response) return null;
-  return response.value.map(mapToMatchSummary);
+  ]
+  const response = await fetchDataverseMatchSummaries(filters.join(" and "))
+  if (!response) return null
+  return response.value.map(mapToMatchSummary)
 }
 
 export async function matchSummariesBySportAndDay(
   sport: SPORT,
   date: Date | TZDate,
 ): Promise<MatchSummary[] | null> {
-  const dayStart = new Date(startOfDay(date).getTime()).toISOString();
-  const dayEnd = new Date(endOfDay(date).getTime()).toISOString();
+  const dayStart = new Date(startOfDay(date).getTime()).toISOString()
+  const dayEnd = new Date(endOfDay(date).getTime()).toISOString()
 
   const filters = [
     `ss_sport eq '${sport}'`,
     `((ss_startdate le '${dayEnd}' and ss_enddate ge '${dayStart}') or (ss_enddate eq null and ss_startdate ge '${dayStart}' and ss_startdate le '${dayEnd}'))`,
-  ];
-  const response = await fetchDataverseMatchSummaries(filters.join(" and "));
-  if (!response) return null;
-  return response.value.map(mapToMatchSummary);
+  ]
+  const response = await fetchDataverseMatchSummaries(filters.join(" and "))
+  if (!response) return null
+  return response.value.map(mapToMatchSummary)
 }
 
 export async function matchSummaryCreate(record: MatchSummary) {
-  return createDataverseMatchSummary(mapToDataverseMatchSummary(record));
+  return createDataverseMatchSummary(mapToDataverseMatchSummary(record))
 }
 
 export async function matchSummaryUpdate(
   id: string,
   record: DeepPartial<MatchSummary>,
 ) {
-  const mapped = mapToDataverseMatchSummary(record as MatchSummary);
+  const mapped = mapToDataverseMatchSummary(record as MatchSummary)
   const partial = Object.fromEntries(
     Object.entries(mapped).filter(([, v]) => v !== null),
-  ) as Partial<Omit<DataverseMatchSummary, "ss_matchsummaryid">>;
-  return updateDataverseMatchSummary(id, partial);
+  ) as Partial<Omit<DataverseMatchSummary, "ss_matchsummaryid">>
+  return updateDataverseMatchSummary(id, partial)
 }

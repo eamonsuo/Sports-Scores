@@ -1,27 +1,27 @@
-import fallback from "@/../public/vercel.svg";
-import Image from "next/image";
+import fallback from "@/../public/vercel.svg"
+import Image from "next/image"
 
 export type NetballScoreBreakdown = {
-  teams: { home: { score: number }; away: { score: number } };
-  periodName: string;
-};
+  teams: { home: { score: number }; away: { score: number } }
+  periodName: string
+}
 
 export default function NetballScoreBreakdown({
   scoreData,
   homeLogo,
   awayLogo,
 }: {
-  scoreData: NetballScoreBreakdown[];
-  homeLogo?: string | string[];
-  awayLogo?: string | string[];
+  scoreData: NetballScoreBreakdown[]
+  homeLogo?: string | string[]
+  awayLogo?: string | string[]
 }) {
   // Use first image if array (for doubles), and handle empty strings
   const homeLogoSrc = Array.isArray(homeLogo)
     ? homeLogo[0] || undefined
-    : homeLogo || undefined;
+    : homeLogo || undefined
   const awayLogoSrc = Array.isArray(awayLogo)
     ? awayLogo[0] || undefined
-    : awayLogo || undefined;
+    : awayLogo || undefined
 
   return (
     <table className="m-4 text-center dark:text-neutral-400">
@@ -63,5 +63,5 @@ export default function NetballScoreBreakdown({
         </tr>
       </tbody>
     </table>
-  );
+  )
 }

@@ -1,17 +1,17 @@
-import { formatTime } from "@/lib/projUtils";
-import { cn } from "@/lib/utils";
-import { MatchSummary } from "@/types/misc";
-import Link from "next/link";
-import Timer from "../misc-ui/Timer";
+import { formatTime } from "@/lib/projUtils"
+import { cn } from "@/lib/utils"
+import { MatchSummary } from "@/types/misc"
+import Link from "next/link"
+import Timer from "../misc-ui/Timer"
 
 export default function SessionSummaryCard({
   event,
   href,
   className,
 }: {
-  event: MatchSummary;
-  href: string;
-  className?: string;
+  event: MatchSummary
+  href: string
+  className?: string
 }) {
   const timer = {
     display:
@@ -19,7 +19,7 @@ export default function SessionSummaryCard({
         ? formatTime(event.timer)
         : (event.timer ?? ""),
     displayColour: event.timerDisplayColour,
-  };
+  }
 
   return (
     <Link href={href}>
@@ -34,5 +34,5 @@ export default function SessionSummaryCard({
         <p>&gt;</p>
       </div>
     </Link>
-  );
+  )
 }

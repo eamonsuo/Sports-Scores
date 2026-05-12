@@ -1,15 +1,15 @@
-import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
-import Placeholder from "@/components/misc-ui/Placeholder";
-import { netballMatches } from "@/services/netball.service";
+import FixtureRoundList from "@/components/all-sports/FixtureRoundList"
+import Placeholder from "@/components/misc-ui/Placeholder"
+import { netballMatches } from "@/services/netball.service"
 
 export default async function Page(props: {
-  params: Promise<{ league: string; season: string }>;
+  params: Promise<{ league: string; season: string }>
 }) {
-  const { league, season } = await props.params;
-  const pageData = await netballMatches(league, season);
+  const { league, season } = await props.params
+  const pageData = await netballMatches(league, season)
 
   if (pageData === null) {
-    return <Placeholder>NO DATA</Placeholder>;
+    return <Placeholder>NO DATA</Placeholder>
   }
 
   return (
@@ -17,5 +17,5 @@ export default async function Page(props: {
       data={pageData.fixtures}
       curRound={pageData.currentRound}
     />
-  );
+  )
 }

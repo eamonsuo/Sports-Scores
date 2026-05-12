@@ -1,6 +1,6 @@
-import { cn } from "@/lib/utils";
-import Image from "next/image";
-import Link from "next/link";
+import { cn } from "@/lib/utils"
+import Image from "next/image"
+import Link from "next/link"
 
 export default function LeagueHeader({
   href,
@@ -8,10 +8,10 @@ export default function LeagueHeader({
   img,
   className,
 }: {
-  href: string;
-  seriesName: string;
-  img?: string;
-  className?: string;
+  href: string
+  seriesName: string
+  img?: string
+  className?: string
 }) {
   return (
     <Link href={href}>
@@ -35,5 +35,5 @@ export default function LeagueHeader({
         <p>{">"}</p>
       </div>
     </Link>
-  );
+  )
 }

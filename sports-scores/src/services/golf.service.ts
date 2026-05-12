@@ -1,19 +1,19 @@
-import { GolfLeaderboardPlayerRow } from "@/components/golf/TournamentLeaderboard";
+import { GolfLeaderboardPlayerRow } from "@/components/golf/TournamentLeaderboard"
 import {
   fetchGolfLeaderboard,
   fetchGolfRankings,
   fetchGolfSchedule,
-} from "@/endpoints/golf.api";
-import { GOLF_FEDEX_HEADINGS, GOLF_TOURS } from "@/lib/constants";
-import { withDevCache } from "@/lib/devCache";
-import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping";
-import { resolveSportImage } from "@/lib/imageMapping";
-import { getCountryImageUrl, getSportConfigurations } from "@/lib/projUtils";
+} from "@/endpoints/golf.api"
+import { GOLF_FEDEX_HEADINGS, GOLF_TOURS } from "@/lib/constants"
+import { withDevCache } from "@/lib/devCache"
+import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
+import { resolveSportImage } from "@/lib/imageMapping"
+import { getCountryImageUrl, getSportConfigurations } from "@/lib/projUtils"
 import {
   Golf_SlashGolfAPI_Leaderboard,
   SlashGolf_PlayerRanking,
   SlashGolf_Tournament,
-} from "@/types/golf";
+} from "@/types/golf"
 import {
   Brackets,
   CardVariant,
@@ -28,22 +28,22 @@ import {
   SPORT,
   SportService,
   Standings,
-} from "@/types/misc";
-import { addDays } from "date-fns";
+} from "@/types/misc"
+import { addDays } from "date-fns"
 import {
   matchSummariesBySportAndDay,
   matchSummariesByTournament,
-} from "./dataverse.service";
+} from "./dataverse.service"
 
 class GolfService implements SportService {
-  protected sport: SPORT;
-  protected tours: LeagueSeasonConfig[];
-  protected cardVariant?: CardVariant;
+  protected sport: SPORT
+  protected tours: LeagueSeasonConfig[]
+  protected cardVariant?: CardVariant
 
   constructor() {
-    this.sport = SPORT.GOLF;
-    this.tours = GOLF_TOURS;
-    this.cardVariant = CardVariant.SESSION;
+    this.sport = SPORT.GOLF
+    this.tours = GOLF_TOURS
+    this.cardVariant = CardVariant.SESSION
   }
   async matchesByLeagueSeason(
     leagueId: string,
@@ -59,14 +59,14 @@ class GolfService implements SportService {
       leagueId,
       seasonId,
       this.sport,
-    );
+    )
 
     // if (!rawSchedule) {
     //   return null;
     // }
 
     if (!dataverseMatches || dataverseMatches.length === 0) {
-      return null;
+      return null
     }
 
     // const allMatches = rawSchedule.schedule.map((item) =>
@@ -81,33 +81,33 @@ class GolfService implements SportService {
         (a, b) =>
           new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
       )
-      .map(this.eventMapper);
+      .map(this.eventMapper)
 
     const { leagueConfig } = getSportConfigurations(
       this.tours,
       leagueId,
       seasonId,
-    );
+    )
 
     const fixtures = await mapFixtureRounds(
       allMatches,
       leagueConfig,
       this.cardVariant,
-    );
+    )
 
     return {
       fixtures,
       currentRound: getCurrentRound(fixtures, leagueConfig?.display),
-    } as Matches;
+    } as Matches
   }
 
   async matchesByDate(date: Date): Promise<Matches | null> {
     const [dataverseMatches] = await Promise.all([
       matchSummariesBySportAndDay(this.sport, date),
-    ]);
+    ])
 
     if (!dataverseMatches || dataverseMatches.length === 0) {
-      return null;
+      return null
     }
 
     const allMatches = (dataverseMatches ?? [])
@@ -116,24 +116,24 @@ class GolfService implements SportService {
           new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
       )
       .concat(golfTournamentsByDate(date))
-      .map((event) => this.eventMapper(event));
+      .map((event) => this.eventMapper(event))
 
     const fixtures = await mapFixtureRounds(
       allMatches,
       this.tours,
       this.cardVariant,
-    );
+    )
 
     return {
       fixtures: fixtures,
       currentRound: getCurrentRound(fixtures, DisplayTypes.LEAGUE),
-    };
+    }
   }
   matchesByTeam(teamId: string): Promise<Matches | null> {
-    throw new Error("Method not implemented.");
+    throw new Error("Method not implemented.")
   }
   matchDetails(matchId: string): Promise<MatchDetail | null> {
-    throw new Error("Method not implemented.");
+    throw new Error("Method not implemented.")
   }
 
   async standings(
@@ -143,17 +143,17 @@ class GolfService implements SportService {
     const rawRanking = await cachedFetchRankings(
       leagueId === "pga" ? "02671" : "186",
       seasonId,
-    );
+    )
 
     if (!rawRanking) {
-      return null;
+      return null
     }
 
     const { ladderConfig } = getSportConfigurations(
       GOLF_TOURS,
       leagueId,
       seasonId,
-    );
+    )
 
     return {
       standings: [
@@ -161,7 +161,7 @@ class GolfService implements SportService {
           headings: ladderConfig?.headings ?? GOLF_FEDEX_HEADINGS,
           data: (rawRanking.rankings as SlashGolf_PlayerRanking[]).map(
             (item) => {
-              let playerName = item.firstName + " " + item.lastName;
+              let playerName = item.firstName + " " + item.lastName
               return {
                 position: item.rank,
                 team: {
@@ -172,31 +172,31 @@ class GolfService implements SportService {
                 Total: item.totalPoints?.toString() ?? "",
                 Behind: item.pointsBehind?.toString() ?? "",
                 Prev: item.previousRank?.toString() ?? "",
-              };
+              }
             },
           ),
           placingCategories: ladderConfig?.placingCategories,
         },
       ],
-    };
+    }
   }
 
   brackets(leagueId: string, seasonId: string): Promise<Brackets | null> {
-    throw new Error("Method not implemented.");
+    throw new Error("Method not implemented.")
   }
 
   eventMapper(event: MatchSummary): MatchSummary {
-    let currentDate = new Date();
+    let currentDate = new Date()
 
     const status =
       event.startDate > currentDate
         ? MatchStatus.UPCOMING
         : event.endDate && event?.endDate > currentDate
           ? MatchStatus.LIVE
-          : MatchStatus.COMPLETED;
+          : MatchStatus.COMPLETED
 
     const tournamentImage =
-      event.seriesImg ?? resolveSportImage(event.seriesName ?? "");
+      event.seriesImg ?? resolveSportImage(event.seriesName ?? "")
 
     return {
       ...event,
@@ -207,24 +207,24 @@ class GolfService implements SportService {
           : tournamentImage,
       timer: status.charAt(0) + status.slice(1).toLowerCase(),
       timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
-    };
+    }
   }
 }
 
-export const golfService = new GolfService();
+export const golfService = new GolfService()
 
-const cachedFetchSchedule = withDevCache("golf", "schedule", fetchGolfSchedule);
-const cachedFetchRankings = withDevCache("golf", "rankings", fetchGolfRankings);
+const cachedFetchSchedule = withDevCache("golf", "schedule", fetchGolfSchedule)
+const cachedFetchRankings = withDevCache("golf", "rankings", fetchGolfRankings)
 const cachedFetchPGALeaderboard = withDevCache(
   "golf",
   "pga-leaderboard",
   fetchGolfLeaderboard,
-);
+)
 const cachedFetchLIVLeaderboard = withDevCache(
   "golf",
   "liv-leaderboard",
   fetchGolfLeaderboard,
-);
+)
 
 export async function golfPGATournamentLeaderboard(
   tournId: string,
@@ -236,12 +236,12 @@ export async function golfPGATournamentLeaderboard(
     tournId,
     year,
     roundId,
-  );
+  )
   if (!rawLeaderboard) {
-    return null;
+    return null
   }
 
-  return mapGolfLeaderboard(rawLeaderboard);
+  return mapGolfLeaderboard(rawLeaderboard)
 }
 
 export async function golfLIVTournamentLeaderboard(
@@ -254,9 +254,9 @@ export async function golfLIVTournamentLeaderboard(
     tournId,
     year,
     roundId,
-  );
+  )
   if (!rawLeaderboard) {
-    return null;
+    return null
   }
 
   return {
@@ -270,9 +270,9 @@ export async function golfLIVTournamentLeaderboard(
           thru: "",
           curRound: "",
           img: resolveSportImage(item.name),
-        } as GolfLeaderboardPlayerRow;
+        } as GolfLeaderboardPlayerRow
       }) ?? [],
-  };
+  }
 }
 
 export function mapGolfLeaderboard(data: Golf_SlashGolfAPI_Leaderboard) {
@@ -286,7 +286,7 @@ export function mapGolfLeaderboard(data: Golf_SlashGolfAPI_Leaderboard) {
                 (item) =>
                   `${item.firstName} ${item.lastName}${item.isAmateur ? " (A)" : ""}`,
               )
-              .join(", ");
+              .join(", ")
       return {
         name: playerName,
         position: item.position,
@@ -298,9 +298,9 @@ export function mapGolfLeaderboard(data: Golf_SlashGolfAPI_Leaderboard) {
             ? "+" + item.currentRoundScore
             : item.currentRoundScore,
         img: resolveSportImage(playerName),
-      } as GolfLeaderboardPlayerRow;
+      } as GolfLeaderboardPlayerRow
     }),
-  };
+  }
 }
 
 // Hidden in leagueseasonmatches for now
@@ -308,9 +308,9 @@ function mapTournamentToMatchSummary(
   event: SlashGolf_Tournament,
   options?: DeepPartial<MatchSummary>,
 ): MatchSummary {
-  let startDate = new Date(event.date.start + "Z");
-  let endDate = new Date(event.date.end + "Z");
-  const currentDate = new Date();
+  let startDate = new Date(event.date.start + "Z")
+  let endDate = new Date(event.date.end + "Z")
+  const currentDate = new Date()
 
   switch (event.name) {
     case "Genesis Scottish Open":
@@ -324,20 +324,20 @@ function mapTournamentToMatchSummary(
     case "LIV Golf Korea":
     case "LIV Golf Andalucia":
     case "LIV Golf UK":
-      break;
+      break
     default:
-      startDate = addDays(startDate, 1);
-      endDate = addDays(endDate, 1);
+      startDate = addDays(startDate, 1)
+      endDate = addDays(endDate, 1)
   }
 
-  const tournamentImage = resolveSportImage(event.name);
+  const tournamentImage = resolveSportImage(event.name)
 
   const status =
     startDate > currentDate
       ? MatchStatus.UPCOMING
       : endDate > currentDate
         ? MatchStatus.LIVE
-        : MatchStatus.COMPLETED;
+        : MatchStatus.COMPLETED
 
   return {
     id: options?.id ?? event.tournId,
@@ -364,7 +364,7 @@ function mapTournamentToMatchSummary(
     seasonId: options?.seasonId,
     tournamentId: options?.tournamentId,
     winner: options?.winner,
-  };
+  }
 }
 
 export function golfTournamentsByDate(date: Date) {
@@ -389,20 +389,20 @@ export function golfTournamentsByDate(date: Date) {
       seriesImg: img,
       tournamentId: slug,
       seasonId: "external",
-    } as MatchSummary;
+    } as MatchSummary
   }
 
-  const golfTours: MatchSummary[] = [];
+  const golfTours: MatchSummary[] = []
 
   // Basic check for tournaments
   switch (date.getDay()) {
     case 2: // Tuesday
     case 3: // Wednesday
       // golfTours.push(createGolfMatchSummary(0, "TGL", "tgl"));
-      break;
+      break
     case 4: // Thursday
       // golfTours.push(createGolfMatchSummary(1,"PGA Tour of Australasia","australasia",resolveSportImage("Australia"),), );
-      break;
+      break
     case 5: // Friday
     case 6: // Saturday
     case 0: // Sunday
@@ -420,8 +420,8 @@ export function golfTournamentsByDate(date: Date) {
           "lpga",
           resolveSportImage("USA"),
         ),
-      );
-      break;
+      )
+      break
     case 1: // Monday
       golfTours.push(
         // createGolfMatchSummary(1, "PGA Tour of Australasia", "australasia"),
@@ -437,8 +437,8 @@ export function golfTournamentsByDate(date: Date) {
           "lpga",
           resolveSportImage("USA"),
         ),
-      );
-      break;
+      )
+      break
   }
-  return golfTours;
+  return golfTours
 }

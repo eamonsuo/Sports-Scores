@@ -5,43 +5,43 @@ import {
   fetchNetballNextMatches,
   fetchNetballSeasonMatches,
   fetchNetballStandings,
-} from "@/endpoints/netball.api";
-import { NETBALL_LEAGUES } from "@/lib/constants";
-import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping";
-import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils";
+} from "@/endpoints/netball.api"
+import { NETBALL_LEAGUES } from "@/lib/constants"
+import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
+import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils"
 import {
   DeepPartial,
   DisplayTypes,
   MatchStatus,
   MatchSummary,
   SPORT,
-} from "@/types/misc";
+} from "@/types/misc"
 import {
   NetballFixturesPage,
   NetballMatchPage,
   NetballTodayPage,
-} from "@/types/netball";
-import { SportsDB_Event } from "@/types/sportsdb";
+} from "@/types/netball"
+import { SportsDB_Event } from "@/types/sportsdb"
 
 export async function netballMatches(leagueId: string, seasonId: string) {
-  const seasonMatches = await fetchNetballSeasonMatches(leagueId, seasonId);
-  const lastMatches = await fetchNetballLastMatches(leagueId, seasonId);
-  const nextMatches = await fetchNetballNextMatches(leagueId, seasonId);
+  const seasonMatches = await fetchNetballSeasonMatches(leagueId, seasonId)
+  const lastMatches = await fetchNetballLastMatches(leagueId, seasonId)
+  const nextMatches = await fetchNetballNextMatches(leagueId, seasonId)
 
   if (!lastMatches && !nextMatches && !seasonMatches) {
-    return null;
+    return null
   }
 
   const allMatches = (lastMatches?.events ?? [])
     .concat(nextMatches?.events ?? [])
-    .concat(seasonMatches?.events ?? []);
+    .concat(seasonMatches?.events ?? [])
 
   // Remove duplicates based on idEvent
   const matches = Array.from(
     new Map(allMatches.map((match) => [match.idEvent, match])).values(),
-  );
+  )
 
-  const leagueConfig = NETBALL_LEAGUES.find((l) => l.slug === leagueId);
+  const leagueConfig = NETBALL_LEAGUES.find((l) => l.slug === leagueId)
 
   const sortedMatches = matches
     .map((match) =>
@@ -50,24 +50,24 @@ export async function netballMatches(leagueId: string, seasonId: string) {
     .sort(
       (a, b) =>
         new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-    );
+    )
 
-  const fixture = await mapFixtureRounds(sortedMatches, leagueConfig);
+  const fixture = await mapFixtureRounds(sortedMatches, leagueConfig)
 
   return {
     fixtures: fixture,
     currentRound: getCurrentRound(fixture, leagueConfig?.display),
-  } as NetballFixturesPage;
+  } as NetballFixturesPage
 }
 
 export async function netballStandings(leagueId: string, seasonId: string) {
-  const standings = await fetchNetballStandings(leagueId, seasonId);
+  const standings = await fetchNetballStandings(leagueId, seasonId)
 
   if (!standings) {
-    return null;
+    return null
   }
 
-  return null;
+  return null
   // return {
   //   standings: standings?.standings.map((table) =>
   //     table.rows.map((item) => {
@@ -96,10 +96,10 @@ export async function netballStandings(leagueId: string, seasonId: string) {
 }
 
 export async function netballMatchDetails(matchId: string) {
-  const match = await fetchNetballMatchDetails(matchId);
+  const match = await fetchNetballMatchDetails(matchId)
   // const incidents = await fetchNetballMatchIncidents(matchId);
 
-  const matchDetails = match?.events[0];
+  const matchDetails = match?.events[0]
   // const scoreIncidents = incidents?.incidents
   //   ? incidents?.incidents
   //       .filter((item) => item.incidentType === "goal")
@@ -143,15 +143,15 @@ export async function netballMatchDetails(matchId: string) {
           //   },
           // ],
         },
-  } as NetballMatchPage;
+  } as NetballMatchPage
 }
 
 export async function netballMatchesByDate(date: Date) {
-  const matches = await fetchNetballMatchesByDate(date);
+  const matches = await fetchNetballMatchesByDate(date)
 
-  if (!matches || !matches.events) return null;
+  if (!matches || !matches.events) return null
 
-  const validLeagueIds = NETBALL_LEAGUES.map((l) => Number(l.slug));
+  const validLeagueIds = NETBALL_LEAGUES.map((l) => Number(l.slug))
 
   matches.events = matches.events
     // .filter((item) =>
@@ -161,20 +161,20 @@ export async function netballMatchesByDate(date: Date) {
       (a, b) =>
         validLeagueIds.indexOf(Number(a.idLeague)) -
         validLeagueIds.indexOf(Number(b.idLeague)),
-    );
+    )
 
-  if (!matches.events || matches.events.length === 0) return null;
+  if (!matches.events || matches.events.length === 0) return null
 
   const allMatches = matches.events.map((match) =>
     mapNetballMatch(match, { roundLabel: `Round ${match.intRound ?? 0}` }),
-  );
+  )
 
-  const fixture = await mapFixtureRounds(allMatches, NETBALL_LEAGUES);
+  const fixture = await mapFixtureRounds(allMatches, NETBALL_LEAGUES)
 
   return {
     fixtures: fixture,
     currentRound: getCurrentRound(fixture, DisplayTypes.LEAGUE),
-  } as NetballTodayPage;
+  } as NetballTodayPage
 }
 
 function mapNetballMatch(
@@ -184,13 +184,13 @@ function mapNetballMatch(
   const timeStamp =
     event.strTimestamp.length > 19
       ? event.strTimestamp.slice(0, 19)
-      : event.strTimestamp;
-  const startDate = new Date(timeStamp + "Z");
+      : event.strTimestamp
+  const startDate = new Date(timeStamp + "Z")
 
   const status: MatchStatus =
     event.intHomeScore !== null && event.intAwayScore !== null
       ? MatchStatus.COMPLETED
-      : MatchStatus.UPCOMING;
+      : MatchStatus.UPCOMING
 
   return {
     id: options?.id ?? event.idEvent,
@@ -236,5 +236,5 @@ function mapNetballMatch(
     },
     seasonId: options?.seasonId ?? event.strSeason,
     tournamentId: options?.tournamentId ?? event.idLeague,
-  };
+  }
 }

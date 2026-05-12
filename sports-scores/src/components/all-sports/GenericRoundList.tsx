@@ -1,95 +1,95 @@
-"use client";
+"use client"
 
-import { clsx } from "clsx";
-import { useEffect, useRef, useState } from "react";
+import { clsx } from "clsx"
+import { useEffect, useRef, useState } from "react"
 
 export default function GenericRoundList({
   data,
   curRound,
   children,
 }: {
-  data: { roundLabel: string; component: React.ReactNode }[];
-  curRound: string;
-  children?: React.ReactNode;
+  data: { roundLabel: string; component: React.ReactNode }[]
+  curRound: string
+  children?: React.ReactNode
 }) {
-  const [round, setRound] = useState(curRound);
-  const btnListRef = useRef<HTMLDivElement>(null);
-  const initialBtn = useRef<HTMLButtonElement>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [round, setRound] = useState(curRound)
+  const btnListRef = useRef<HTMLDivElement>(null)
+  const initialBtn = useRef<HTMLButtonElement>(null)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-  const roundLabels = data.map((item) => item.roundLabel);
+  const roundLabels = data.map((item) => item.roundLabel)
 
   useEffect(() => {
     //Ensure the curRound is scrolled into the centre of view on page load
     initialBtn.current?.scrollIntoView({
       inline: "center",
       behavior: "smooth",
-    });
+    })
 
     // Scroll to current round on mount
-    const index = roundLabels.indexOf(curRound);
+    const index = roundLabels.indexOf(curRound)
     if (scrollContainerRef.current && index !== -1) {
-      const container = scrollContainerRef.current;
-      container.scrollLeft = index * container.offsetWidth;
+      const container = scrollContainerRef.current
+      container.scrollLeft = index * container.offsetWidth
     }
-  }, []); // Intentionally run only once on mount; curRound and roundLabels are read for initial positioning and are not expected to change
+  }, []) // Intentionally run only once on mount; curRound and roundLabels are read for initial positioning and are not expected to change
 
   //When called ensures the new round state is set and the related button is visible in view
   function handleRoundClick(roundLabel: string) {
-    setRound(roundLabel);
+    setRound(roundLabel)
 
-    const divNode = btnListRef.current;
+    const divNode = btnListRef.current
     const btnNode =
-      divNode?.querySelectorAll("button")[roundLabels.indexOf(roundLabel)];
+      divNode?.querySelectorAll("button")[roundLabels.indexOf(roundLabel)]
     btnNode?.scrollIntoView({
       behavior: "smooth",
-    });
+    })
 
     // Scroll to the round
-    const index = roundLabels.indexOf(roundLabel);
+    const index = roundLabels.indexOf(roundLabel)
     if (scrollContainerRef.current && index !== -1) {
-      const container = scrollContainerRef.current;
+      const container = scrollContainerRef.current
       container.scrollTo({
         left: index * container.offsetWidth,
         behavior: "smooth",
-      });
+      })
     }
   }
 
   // Handle scroll to update active round
   function handleScroll() {
     if (scrollContainerRef.current) {
-      const container = scrollContainerRef.current;
-      const scrollLeft = container.scrollLeft;
-      const width = container.offsetWidth;
-      const index = Math.round(scrollLeft / width);
+      const container = scrollContainerRef.current
+      const scrollLeft = container.scrollLeft
+      const width = container.offsetWidth
+      const index = Math.round(scrollLeft / width)
 
       if (roundLabels[index] && roundLabels[index] !== round) {
-        setRound(roundLabels[index]);
+        setRound(roundLabels[index])
 
         // Scroll button into view only if it's not already visible
         // Use setTimeout to allow React to update the button styling first
         setTimeout(() => {
-          const divNode = btnListRef.current;
-          const btnNode = divNode?.querySelectorAll("button")[index];
+          const divNode = btnListRef.current
+          const btnNode = divNode?.querySelectorAll("button")[index]
 
           if (btnNode && divNode) {
-            const btnRect = btnNode.getBoundingClientRect();
-            const containerRect = divNode.getBoundingClientRect();
+            const btnRect = btnNode.getBoundingClientRect()
+            const containerRect = divNode.getBoundingClientRect()
 
             // Check if button is fully visible within the container
             const isVisible =
               btnRect.left >= containerRect.left &&
-              btnRect.right <= containerRect.right;
+              btnRect.right <= containerRect.right
 
             if (!isVisible) {
               btnNode.scrollIntoView({
                 behavior: "smooth",
                 inline: "nearest",
-              });
+              })
             }
           }
-        }, 0);
+        }, 0)
       }
     }
   }
@@ -134,5 +134,5 @@ export default function GenericRoundList({
         ))}
       </div>
     </>
-  );
+  )
 }

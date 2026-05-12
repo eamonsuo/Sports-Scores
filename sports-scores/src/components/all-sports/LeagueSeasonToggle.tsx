@@ -1,158 +1,158 @@
-"use client";
+"use client"
 
-import { Calendar } from "@/components/zzzshadcn/calendar";
+import { Calendar } from "@/components/zzzshadcn/calendar"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/zzzshadcn/popover";
-import { LeagueSeasonConfig, SPORT } from "@/types/misc";
-import { format } from "date-fns/format";
-import { ChevronDownIcon, ExternalLinkIcon } from "lucide-react";
-import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Button } from "../misc-ui/Button";
+} from "@/components/zzzshadcn/popover"
+import { LeagueSeasonConfig, SPORT } from "@/types/misc"
+import { format } from "date-fns/format"
+import { ChevronDownIcon, ExternalLinkIcon } from "lucide-react"
+import Link from "next/link"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useEffect, useState } from "react"
+import { Button } from "../misc-ui/Button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../zzzshadcn/dropdown-menu";
+} from "../zzzshadcn/dropdown-menu"
 
 export default function LeagueSeasonToggle({
   sport,
   leagues,
 }: {
-  sport: SPORT;
-  leagues: LeagueSeasonConfig[];
+  sport: SPORT
+  leagues: LeagueSeasonConfig[]
 }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   // Helper to parse league and season from URL by matching against known league slugs
   function getLeagueAndSeasonFromPath(path: string) {
-    const parts = path.split("/");
-    const sportIdx = parts.indexOf("sports");
+    const parts = path.split("/")
+    const sportIdx = parts.indexOf("sports")
     if (sportIdx === -1 || parts.length <= sportIdx + 2)
-      return { leagueSlug: null, seasonSlug: null };
+      return { leagueSlug: null, seasonSlug: null }
 
     // Everything after /sports/{sport}/
-    const remainder = parts.slice(sportIdx + 2).join("/");
+    const remainder = parts.slice(sportIdx + 2).join("/")
 
     // Match against known league slugs, longest first to prefer "team/4741" over "team"
-    const sorted = [...leagues].sort((a, b) => b.slug.length - a.slug.length);
+    const sorted = [...leagues].sort((a, b) => b.slug.length - a.slug.length)
     for (const league of sorted) {
       if (
         remainder === league.slug ||
         remainder.startsWith(league.slug + "/")
       ) {
-        const afterLeague = remainder.slice(league.slug.length + 1);
+        const afterLeague = remainder.slice(league.slug.length + 1)
         return {
           leagueSlug: league.slug,
           seasonSlug: afterLeague || null,
-        };
+        }
       }
     }
 
-    return { leagueSlug: null, seasonSlug: null };
+    return { leagueSlug: null, seasonSlug: null }
   }
 
   const DEFAULT_LEAGUE: LeagueSeasonConfig = {
     name: "League",
     slug: "",
     seasons: [{ name: "Season", slug: "" }],
-  };
+  }
 
   // Helper to find league and season objects
   function findLeagueAndSeason(
     leagueSlug: string | null,
     seasonSlug: string | null,
   ) {
-    const league = leagues.find((l) => l.slug === leagueSlug) ?? DEFAULT_LEAGUE;
-    const foundSeason = league.seasons.find((s) => s.slug === seasonSlug);
+    const league = leagues.find((l) => l.slug === leagueSlug) ?? DEFAULT_LEAGUE
+    const foundSeason = league.seasons.find((s) => s.slug === seasonSlug)
     const season =
       foundSeason ??
-      (seasonSlug !== null ? { name: "Season", slug: "" } : league.seasons[0]);
-    return { league, season };
+      (seasonSlug !== null ? { name: "Season", slug: "" } : league.seasons[0])
+    return { league, season }
   }
 
   // State initialization
   const [{ league: initialLeague, season: initialSeason }] = useState(() => {
     const { leagueSlug, seasonSlug } = getLeagueAndSeasonFromPath(
       pathname || "",
-    );
-    return findLeagueAndSeason(leagueSlug, seasonSlug);
-  });
-  const [selectedLeague, setSelectedLeague] = useState(initialLeague);
-  const [selectedSeason, setSelectedSeason] = useState(initialSeason);
+    )
+    return findLeagueAndSeason(leagueSlug, seasonSlug)
+  })
+  const [selectedLeague, setSelectedLeague] = useState(initialLeague)
+  const [selectedSeason, setSelectedSeason] = useState(initialSeason)
   const [todayActive, setTodayActive] = useState(
     pathname?.includes("/today") ?? false,
-  );
+  )
   const [selectedDate, setSelectedDate] = useState<Date>(() => {
-    const dateParam = searchParams?.get("date");
-    return dateParam ? new Date(dateParam) : new Date();
-  });
-  const [calendarOpen, setCalendarOpen] = useState(false);
+    const dateParam = searchParams?.get("date")
+    return dateParam ? new Date(dateParam) : new Date()
+  })
+  const [calendarOpen, setCalendarOpen] = useState(false)
 
   // Update state if URL changes (e.g., via navigation)
   useEffect(() => {
     if (pathname?.includes("/today")) {
-      setTodayActive(true);
-      const dateParam = searchParams?.get("date");
+      setTodayActive(true)
+      const dateParam = searchParams?.get("date")
       if (dateParam) {
-        setSelectedDate(new Date(dateParam));
+        setSelectedDate(new Date(dateParam))
       }
     } else {
-      setTodayActive(false);
+      setTodayActive(false)
       const { leagueSlug, seasonSlug } = getLeagueAndSeasonFromPath(
         pathname || "",
-      );
-      const { league, season } = findLeagueAndSeason(leagueSlug, seasonSlug);
-      setSelectedLeague(league);
-      setSelectedSeason(season);
+      )
+      const { league, season } = findLeagueAndSeason(leagueSlug, seasonSlug)
+      setSelectedLeague(league)
+      setSelectedSeason(season)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname, searchParams, leagues]);
+  }, [pathname, searchParams, leagues])
 
   // Helper to redirect to the correct route
   const redirectToRoute = (league: string, season: string) => {
-    router.push(`/sports/${sport}/${league}/${season}`);
-  };
+    router.push(`/sports/${sport}/${league}/${season}`)
+  }
 
   // When league changes, reset season to first available for that league
   const handleLeagueChange = (league: (typeof leagues)[0]) => {
-    setSelectedLeague(league);
-    setSelectedSeason(league.seasons[0]);
-    setTodayActive(false);
-    redirectToRoute(league.slug, league.seasons[0].slug);
-  };
+    setSelectedLeague(league)
+    setSelectedSeason(league.seasons[0])
+    setTodayActive(false)
+    redirectToRoute(league.slug, league.seasons[0].slug)
+  }
 
   // When "Today" is clicked, reset to first league and its first season
   const handleTodayClick = () => {
     if (!todayActive) {
-      setTodayActive(true);
-      setSelectedDate(new Date());
-      router.push(`/sports/${sport}/today`);
+      setTodayActive(true)
+      setSelectedDate(new Date())
+      router.push(`/sports/${sport}/today`)
     } else {
-      setTodayActive(false);
-      redirectToRoute(selectedLeague.slug, selectedSeason.slug);
+      setTodayActive(false)
+      redirectToRoute(selectedLeague.slug, selectedSeason.slug)
     }
-  };
+  }
 
   // When a date is selected from the calendar
   const handleDateSelect = (date: Date | undefined) => {
-    if (!date) return;
-    setSelectedDate(date);
-    setCalendarOpen(false);
-    const dateStr = format(date, "yyyy-MM-dd");
-    router.push(`/sports/${sport}/today?date=${dateStr}`);
-  };
+    if (!date) return
+    setSelectedDate(date)
+    setCalendarOpen(false)
+    const dateStr = format(date, "yyyy-MM-dd")
+    router.push(`/sports/${sport}/today?date=${dateStr}`)
+  }
 
   // Helper to truncate long names
   const truncateName = (name: string, maxLength = 14) =>
-    name.length > maxLength ? name.slice(0, maxLength - 3) + "..." : name;
+    name.length > maxLength ? name.slice(0, maxLength - 3) + "..." : name
 
   return (
     <div className="flex items-center justify-center gap-4 bg-neutral-100 py-4 dark:bg-neutral-900">
@@ -237,8 +237,8 @@ export default function LeagueSeasonToggle({
               <DropdownMenuItem
                 key={`${season.slug}-${i}`}
                 onClick={() => {
-                  setSelectedSeason(season);
-                  redirectToRoute(selectedLeague.slug, season.slug);
+                  setSelectedSeason(season)
+                  redirectToRoute(selectedLeague.slug, season.slug)
                 }}
                 className="flex items-center justify-between"
               >
@@ -249,5 +249,5 @@ export default function LeagueSeasonToggle({
         </DropdownMenu>
       )}
     </div>
-  );
+  )
 }

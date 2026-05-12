@@ -1,31 +1,31 @@
-import fallback from "@/../public/vercel.svg";
-import Image from "next/image";
+import fallback from "@/../public/vercel.svg"
+import Image from "next/image"
 
 export type CricketScorecardBatProps = {
   batters: {
-    name: string;
-    image?: string;
-    runs: number;
-    balls: number;
-    strikeRate: number;
-    dismissalText?: string;
-  }[];
-  total: number;
-  overs: number;
-  wickets: number;
+    name: string
+    image?: string
+    runs: number
+    balls: number
+    strikeRate: number
+    dismissalText?: string
+  }[]
+  total: number
+  overs: number
+  wickets: number
   extras: {
-    total: number;
-    byes: number;
-    legbyes: number;
-    wides: number;
-    noballs: number;
-  };
-};
+    total: number
+    byes: number
+    legbyes: number
+    wides: number
+    noballs: number
+  }
+}
 
 export default async function CricketScorecardBat({
   data,
 }: {
-  data: CricketScorecardBatProps;
+  data: CricketScorecardBatProps
 }) {
   return (
     <table className="w-full flex-1 dark:text-neutral-400">
@@ -75,5 +75,5 @@ export default async function CricketScorecardBat({
         </tr>
       </tbody>
     </table>
-  );
+  )
 }

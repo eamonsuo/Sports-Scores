@@ -1,16 +1,16 @@
-import MatchDetailsHero from "@/components/all-sports/MatchDetailsHero";
-import ScoreChart from "@/components/all-sports/ScoreChart";
-import Placeholder from "@/components/misc-ui/Placeholder";
-import { netballMatchDetails } from "@/services/netball.service";
+import MatchDetailsHero from "@/components/all-sports/MatchDetailsHero"
+import ScoreChart from "@/components/all-sports/ScoreChart"
+import Placeholder from "@/components/misc-ui/Placeholder"
+import { netballMatchDetails } from "@/services/netball.service"
 
 export default async function Page(props: {
-  params: Promise<{ league: string; season: string; id: string }>;
+  params: Promise<{ league: string; season: string; id: string }>
 }) {
-  const { league, season, id } = await props.params;
-  const pageData = await netballMatchDetails(id);
+  const { league, season, id } = await props.params
+  const pageData = await netballMatchDetails(id)
 
   if (pageData === null || pageData.matchDetails === null) {
-    return <Placeholder>NO DATA</Placeholder>;
+    return <Placeholder>NO DATA</Placeholder>
   }
 
   return (
@@ -33,5 +33,5 @@ export default async function Page(props: {
         />
       )}
     </div>
-  );
+  )
 }

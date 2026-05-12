@@ -7,15 +7,15 @@ import {
   fetchRugbyLeagueStandings,
   fetchRugbyLeagueTeamLastMatches,
   fetchRugbyLeagueTeamNextMatches,
-} from "@/endpoints/rugby-league.api";
+} from "@/endpoints/rugby-league.api"
 import {
   RUGBY_UNION_LADDER_HEADINGS,
   RUGBY_UNION_LEAGUES,
   SCORE_BREAKDOWN_HALVES_CONFIG,
-} from "@/lib/constants";
-import { withDevCache } from "@/lib/devCache";
-import { SPORT } from "@/types/misc";
-import { SofascoreSport } from "./sofascore.service";
+} from "@/lib/constants"
+import { withDevCache } from "@/lib/devCache"
+import { SPORT } from "@/types/misc"
+import { SofascoreSport } from "./sofascore.service"
 
 class RugbyUnionService extends SofascoreSport {
   constructor() {
@@ -68,8 +68,8 @@ class RugbyUnionService extends SofascoreSport {
       RUGBY_UNION_LEAGUES,
       RUGBY_UNION_LADDER_HEADINGS,
       SCORE_BREAKDOWN_HALVES_CONFIG,
-    );
+    )
   }
 }
 
-export const rugbyUnionService = new RugbyUnionService();
+export const rugbyUnionService = new RugbyUnionService()

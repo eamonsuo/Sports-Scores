@@ -1,13 +1,13 @@
-import Image from "next/image";
+import Image from "next/image"
 
 export default function CricketSeriesResult({
   homeInfo,
   awayInfo,
   seriesName,
 }: {
-  homeInfo: { img: string; name: string; matchesWon: string | number };
-  awayInfo: { img: string; name: string; matchesWon: string | number };
-  seriesName: string;
+  homeInfo: { img: string; name: string; matchesWon: string | number }
+  awayInfo: { img: string; name: string; matchesWon: string | number }
+  seriesName: string
 }) {
   return (
     <>
@@ -50,5 +50,5 @@ export default function CricketSeriesResult({
         </p>
       </div>
     </>
-  );
+  )
 }

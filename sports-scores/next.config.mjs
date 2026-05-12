@@ -59,6 +59,6 @@ const nextConfig = {
       hmrRefreshes: true,
     },
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig

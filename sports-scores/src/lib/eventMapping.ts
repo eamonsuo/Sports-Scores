@@ -5,18 +5,18 @@ import {
   LeagueSeasonConfig,
   MatchStatus,
   MatchSummary,
-} from "@/types/misc";
-import { TZDate } from "@date-fns/tz/date";
-import { format } from "date-fns/format";
-import { shortenTeamNames } from "./projUtils";
-import { getClientTimezone } from "./serverUtils";
+} from "@/types/misc"
+import { TZDate } from "@date-fns/tz/date"
+import { format } from "date-fns/format"
+import { shortenTeamNames } from "./projUtils"
+import { getClientTimezone } from "./serverUtils"
 
 const DEFAULT_LEAGUE_SEASON_CONFIG: LeagueSeasonConfig = {
   name: "",
   slug: "",
   seasons: [],
-};
-const DEFAULT_DISPLAY_TYPE = DisplayTypes.ROUND;
+}
+const DEFAULT_DISPLAY_TYPE = DisplayTypes.ROUND
 
 export async function mapFixtureRounds(
   matches: MatchSummary[],
@@ -25,36 +25,36 @@ export async function mapFixtureRounds(
     | LeagueSeasonConfig[] = DEFAULT_LEAGUE_SEASON_CONFIG,
   cardVariant?: CardVariant,
 ) {
-  const isMultiLeague = Array.isArray(leagueConfig);
+  const isMultiLeague = Array.isArray(leagueConfig)
   const displayType: DisplayTypes = isMultiLeague
     ? DisplayTypes.LEAGUE
-    : (leagueConfig.display ?? DisplayTypes.ROUND);
-  const byes = isMultiLeague ? undefined : leagueConfig.byes;
-  const showByes = byes !== undefined;
-  const timezone = await getClientTimezone();
+    : (leagueConfig.display ?? DisplayTypes.ROUND)
+  const byes = isMultiLeague ? undefined : leagueConfig.byes
+  const showByes = byes !== undefined
+  const timezone = await getClientTimezone()
 
   return Object.values(
     matches.reduce(
       (acc, match) => {
-        let roundLabel = "";
+        let roundLabel = ""
         switch (displayType) {
           case DisplayTypes.ROUND:
-            roundLabel = match.roundLabel ?? "Round 0";
-            break;
+            roundLabel = match.roundLabel ?? "Round 0"
+            break
           case DisplayTypes.DATE:
             roundLabel =
               // match.roundLabel ??
               format(
                 new TZDate(match.startDate, timezone ?? "UTC"),
                 "eee d MMM",
-              );
-            break;
+              )
+            break
           case DisplayTypes.LEAGUE:
             roundLabel = isMultiLeague
               ? (leagueConfig.find((l) => l.slug === match.tournamentId)
                   ?.name ?? "")
-              : (match.roundLabel ?? "");
-            break;
+              : (match.roundLabel ?? "")
+            break
         }
 
         if (!acc[roundLabel]) {
@@ -63,27 +63,27 @@ export async function mapFixtureRounds(
             matches: [],
             byes: byes,
             cardVariant,
-          };
+          }
         }
 
-        acc[roundLabel].matches.push(match);
+        acc[roundLabel].matches.push(match)
         acc[roundLabel].roundSlug =
           displayType === DisplayTypes.LEAGUE
             ? `${match.sport}/${match.tournamentId}/${match.seasonId}`
-            : undefined;
+            : undefined
         if (showByes) {
           acc[roundLabel].byes = acc[roundLabel]?.byes?.filter(
             (team) =>
               shortenTeamNames(team.name ?? "") !== match.homeDetails?.name &&
               shortenTeamNames(team.name ?? "") !== match.awayDetails?.name,
-          );
+          )
         }
 
-        return acc;
+        return acc
       },
       {} as Record<string, FixtureRound>,
     ),
-  );
+  )
 }
 
 export function getCurrentRound(
@@ -104,9 +104,9 @@ export function getCurrentRound(
         )?.roundLabel ??
         rounds[rounds.length - 1]?.roundLabel ??
         "Round 0"
-      );
+      )
 
     case DisplayTypes.LEAGUE:
-      return rounds[0].roundLabel ?? "League";
+      return rounds[0].roundLabel ?? "League"
   }
 }

@@ -1,20 +1,20 @@
-import fallback from "@/../public/vercel.svg";
-import { formatTime } from "@/lib/projUtils";
-import { cn } from "@/lib/utils";
-import { MatchSummary } from "@/types/misc";
-import clsx from "clsx";
-import Image from "next/image";
-import Link from "next/link";
-import Timer from "../misc-ui/Timer";
+import fallback from "@/../public/vercel.svg"
+import { formatTime } from "@/lib/projUtils"
+import { cn } from "@/lib/utils"
+import { MatchSummary } from "@/types/misc"
+import clsx from "clsx"
+import Image from "next/image"
+import Link from "next/link"
+import Timer from "../misc-ui/Timer"
 
 export default function TennisMatchCard({
   event,
   href,
   className,
 }: {
-  event: MatchSummary;
-  href: string;
-  className?: string;
+  event: MatchSummary
+  href: string
+  className?: string
 }) {
   const {
     homeDetails,
@@ -23,14 +23,14 @@ export default function TennisMatchCard({
     otherDetail,
     venue,
     winner,
-  } = event;
+  } = event
   const timer = {
     display:
       event.timer instanceof Date
         ? formatTime(event.timer)
         : (event.timer ?? ""),
     displayColour: event.timerDisplayColour,
-  };
+  }
   return (
     <Link href={href}>
       <div
@@ -174,5 +174,5 @@ export default function TennisMatchCard({
         )}
       </div>
     </Link>
-  );
+  )
 }

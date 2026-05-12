@@ -1,41 +1,41 @@
-"use client";
-import fallback from "@/../public/vercel.svg";
-import { ScoreDifference } from "@/types/misc";
-import Image from "next/image";
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
-import { ChartConfig, ChartContainer } from "../zzzshadcn/chart";
+"use client"
+import fallback from "@/../public/vercel.svg"
+import { ScoreDifference } from "@/types/misc"
+import Image from "next/image"
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
+import { ChartConfig, ChartContainer } from "../zzzshadcn/chart"
 
 export default function ScoreChart({
   scoreDifference,
   homeLogo,
   awayLogo,
 }: {
-  scoreDifference: ScoreDifference[]; // Array of numbers representing the score difference between the home team (+) and away team (-) after each score
-  homeLogo?: string | string[];
-  awayLogo?: string | string[];
+  scoreDifference: ScoreDifference[] // Array of numbers representing the score difference between the home team (+) and away team (-) after each score
+  homeLogo?: string | string[]
+  awayLogo?: string | string[]
 }) {
-  console.log("ScoreChart rendered with scoreDifference:", scoreDifference);
+  console.log("ScoreChart rendered with scoreDifference:", scoreDifference)
   // Use first image if array (for doubles tennis), and handle empty strings
   const homeLogoSrc = Array.isArray(homeLogo)
     ? homeLogo[0] || undefined
-    : homeLogo || undefined;
+    : homeLogo || undefined
   const awayLogoSrc = Array.isArray(awayLogo)
     ? awayLogo[0] || undefined
-    : awayLogo || undefined;
+    : awayLogo || undefined
   const chartConfig = {
     desktop: {
       label: "Score Difference",
       color: "#2563eb",
     },
-  } satisfies ChartConfig;
+  } satisfies ChartConfig
 
-  let values = scoreDifference;
-  values = [{ event: "Start", difference: 0 }].concat(values);
-  values.push(values.at(-1) ?? { event: "End", difference: 0 });
+  let values = scoreDifference
+  values = [{ event: "Start", difference: 0 }].concat(values)
+  values.push(values.at(-1) ?? { event: "End", difference: 0 })
 
-  let ymax = values.reduce((a, b) => Math.max(a, b.difference), -Infinity);
-  let ymin = -values.reduce((a, b) => Math.min(a, b.difference), Infinity);
-  let yrange = ymax >= ymin ? ymax : ymin;
+  let ymax = values.reduce((a, b) => Math.max(a, b.difference), -Infinity)
+  let ymin = -values.reduce((a, b) => Math.min(a, b.difference), Infinity)
+  let yrange = ymax >= ymin ? ymax : ymin
 
   return (
     <>
@@ -78,5 +78,5 @@ export default function ScoreChart({
         </ChartContainer>
       </div>
     </>
-  );
+  )
 }

@@ -1,20 +1,20 @@
-import React from "react";
-import useMatchHighlightContext from "../hooks/use-match-highlight";
-import { getCalculatedStyles } from "../settings";
-import { Match } from "../types";
-import { calculateFlexibleMatchPosition } from "./flexible-calculate-match-position";
+import React from "react"
+import useMatchHighlightContext from "../hooks/use-match-highlight"
+import { getCalculatedStyles } from "../settings"
+import { Match } from "../types"
+import { calculateFlexibleMatchPosition } from "./flexible-calculate-match-position"
 
 interface FlexibleConnectorsProps {
   bracketSnippet: {
-    currentMatch: Match;
-    previousMatches: Match[];
-  };
-  rowIndex: number;
-  columnIndex: number;
-  style: any;
-  offsetY?: number;
-  columns: Match[][];
-  allMatches: Match[];
+    currentMatch: Match
+    previousMatches: Match[]
+  }
+  rowIndex: number
+  columnIndex: number
+  style: any
+  offsetY?: number
+  columns: Match[][]
+  allMatches: Match[]
 }
 
 /**
@@ -44,9 +44,9 @@ const FlexibleConnectors: React.FC<FlexibleConnectorsProps> = ({
     columnWidth,
     rowHeight,
     canvasPadding,
-  } = getCalculatedStyles(style);
+  } = getCalculatedStyles(style)
 
-  const { currentMatch, previousMatches } = bracketSnippet;
+  const { currentMatch, previousMatches } = bracketSnippet
 
   // Calculate current match position
   const currentMatchPosition = calculateFlexibleMatchPosition(
@@ -61,7 +61,7 @@ const FlexibleConnectors: React.FC<FlexibleConnectorsProps> = ({
       columnWidth,
       offsetY,
     },
-  );
+  )
 
   const { topHighlighted, bottomHighlighted } = useMatchHighlightContext({
     bracketSnippet: {
@@ -69,19 +69,19 @@ const FlexibleConnectors: React.FC<FlexibleConnectorsProps> = ({
       previousTopMatch: previousMatches[0] || null,
       previousBottomMatch: previousMatches[1] || null,
     } as any,
-  });
+  })
 
-  const middlePointOfMatchComponent = boxHeight / 2;
+  const middlePointOfMatchComponent = boxHeight / 2
 
   // No previous matches - render nothing
   if (previousMatches.length === 0) {
-    return null;
+    return null
   }
 
   // Calculate positions for previous matches
   const previousMatchPositions = previousMatches.map((prevMatch, index) => {
-    const prevColumn = columns[columnIndex - 1];
-    const prevRowIndex = prevColumn.findIndex((m) => m.id === prevMatch.id);
+    const prevColumn = columns[columnIndex - 1]
+    const prevRowIndex = prevColumn.findIndex((m) => m.id === prevMatch.id)
     return calculateFlexibleMatchPosition(
       prevMatch,
       prevRowIndex,
@@ -94,45 +94,45 @@ const FlexibleConnectors: React.FC<FlexibleConnectorsProps> = ({
         columnWidth,
         offsetY,
       },
-    );
-  });
+    )
+  })
 
   // Single previous match - draw a single line from center to center
   if (previousMatches.length === 1) {
-    const previousMatchPosition = previousMatchPositions[0];
+    const previousMatchPosition = previousMatchPositions[0]
 
     const startX =
-      currentMatchPosition.x - horizontalOffset - (lineInfo.separation ?? 0);
+      currentMatchPosition.x - horizontalOffset - (lineInfo.separation ?? 0)
     const startY =
       currentMatchPosition.y +
       middlePointOfMatchComponent +
       (roundHeader.isShown
         ? (roundHeader.height ?? 0) + (roundHeader.marginBottom ?? 0)
-        : 0);
+        : 0)
 
     const horizontalWidthLeft =
-      currentMatchPosition.x - roundSeparatorWidth / 2 - horizontalOffset;
+      currentMatchPosition.x - roundSeparatorWidth / 2 - horizontalOffset
     const verticalHeight =
       previousMatchPosition.y +
       middlePointOfMatchComponent +
       (roundHeader.isShown
         ? (roundHeader.height ?? 0) + (roundHeader.marginBottom ?? 0)
-        : 0);
-    const horizontalWidthRight = previousMatchPosition.x + width;
+        : 0)
+    const horizontalWidthRight = previousMatchPosition.x + width
 
     const isPreviousMatchOnSameYLevel =
-      Math.abs(currentMatchPosition.y - previousMatchPosition.y) < 1;
+      Math.abs(currentMatchPosition.y - previousMatchPosition.y) < 1
 
-    let pathData: string[];
+    let pathData: string[]
     if (isPreviousMatchOnSameYLevel) {
-      pathData = [`M${startX} ${startY}`, `H${horizontalWidthRight}`];
+      pathData = [`M${startX} ${startY}`, `H${horizontalWidthRight}`]
     } else {
       pathData = [
         `M${startX} ${startY}`,
         `H${horizontalWidthLeft}`,
         `V${verticalHeight}`,
         `H${horizontalWidthRight}`,
-      ];
+      ]
     }
 
     return (
@@ -145,7 +145,7 @@ const FlexibleConnectors: React.FC<FlexibleConnectorsProps> = ({
             : connectorColor
         }
       />
-    );
+    )
   }
 
   // Two previous matches - draw dual lines (standard bracket connectors)
@@ -159,24 +159,24 @@ const FlexibleConnectors: React.FC<FlexibleConnectorsProps> = ({
       (roundHeader.isShown
         ? (roundHeader.height ?? 0) + (roundHeader.marginBottom ?? 0)
         : 0)
-    }`;
+    }`
 
     const horizontalWidthLeft =
-      currentMatchPosition.x - roundSeparatorWidth / 2 - horizontalOffset;
+      currentMatchPosition.x - roundSeparatorWidth / 2 - horizontalOffset
 
     const isPreviousMatchOnSameYLevel =
-      Math.abs(currentMatchPosition.y - previousMatchPosition.y) < 1;
+      Math.abs(currentMatchPosition.y - previousMatchPosition.y) < 1
 
     const verticalHeight =
       previousMatchPosition.y +
       middlePointOfMatchComponent +
       (roundHeader.isShown
         ? (roundHeader.height ?? 0) + (roundHeader.marginBottom ?? 0)
-        : 0);
-    const horizontalWidthRight = previousMatchPosition.x + width;
+        : 0)
+    const horizontalWidthRight = previousMatchPosition.x + width
 
     if (isPreviousMatchOnSameYLevel) {
-      return [`M${startPoint}`, `H${horizontalWidthRight}`];
+      return [`M${startPoint}`, `H${horizontalWidthRight}`]
     }
 
     return [
@@ -184,10 +184,10 @@ const FlexibleConnectors: React.FC<FlexibleConnectorsProps> = ({
       `H${horizontalWidthLeft}`,
       `V${verticalHeight}`,
       `H${horizontalWidthRight}`,
-    ];
-  };
+    ]
+  }
 
-  const { x, y } = currentMatchPosition;
+  const { x, y } = currentMatchPosition
 
   return (
     <>
@@ -206,7 +206,7 @@ const FlexibleConnectors: React.FC<FlexibleConnectorsProps> = ({
       {topHighlighted && <use href={`#connector-${x}-${y}-${-1}`} />}
       {bottomHighlighted && <use href={`#connector-${x}-${y}-${1}`} />}
     </>
-  );
-};
+  )
+}
 
-export default React.memo(FlexibleConnectors);
+export default React.memo(FlexibleConnectors)

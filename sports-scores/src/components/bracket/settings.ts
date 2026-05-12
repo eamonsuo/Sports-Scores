@@ -1,4 +1,4 @@
-import { ComputedOptions, Options } from "./types";
+import { ComputedOptions, Options } from "./types"
 
 export const defaultStyle: Options = {
   width: 300,
@@ -26,20 +26,20 @@ export const defaultStyle: Options = {
   horizontalOffset: 13,
   wonBywalkOverText: "WO",
   lostByNoShowText: "NS",
-};
+}
 
 export const getCalculatedStyles = (
   style = defaultStyle,
 ): Required<ComputedOptions> => {
-  const mergedStyle = { ...defaultStyle, ...style };
+  const mergedStyle = { ...defaultStyle, ...style }
   const {
     boxHeight = defaultStyle.boxHeight!,
     width = defaultStyle.width!,
     spaceBetweenColumns = defaultStyle.spaceBetweenColumns!,
     spaceBetweenRows = defaultStyle.spaceBetweenRows!,
-  } = mergedStyle;
-  const columnWidth = width + spaceBetweenColumns;
-  const rowHeight = boxHeight + spaceBetweenRows;
+  } = mergedStyle
+  const columnWidth = width + spaceBetweenColumns
+  const rowHeight = boxHeight + spaceBetweenRows
   return {
     ...mergedStyle,
     rowHeight,
@@ -52,5 +52,5 @@ export const getCalculatedStyles = (
       ...defaultStyle.lineInfo!,
       ...mergedStyle.lineInfo,
     },
-  } as Required<ComputedOptions>;
-};
+  } as Required<ComputedOptions>
+}

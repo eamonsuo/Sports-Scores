@@ -25,8 +25,8 @@ import {
   RUGBY_UNION_LEAGUES,
   TENNIS_CATEGORIES,
   TENNIS_LEAGUES,
-} from "@/lib/constants";
-import { DisplayTypes, LeagueSeasonConfig } from "@/types/misc";
+} from "@/lib/constants"
+import { DisplayTypes, LeagueSeasonConfig } from "@/types/misc"
 
 // ---------------------------------------------------------------------------
 // Configure which leagues to sync. Each entry maps a sport key + display type
@@ -34,12 +34,12 @@ import { DisplayTypes, LeagueSeasonConfig } from "@/types/misc";
 // ---------------------------------------------------------------------------
 
 type SyncEntry = {
-  sport: string;
-  displayType: DisplayTypes;
-  leagues: LeagueSeasonConfig[];
+  sport: string
+  displayType: DisplayTypes
+  leagues: LeagueSeasonConfig[]
   /** Slugs to include. Omit or use ["*"] for all. */
-  slugs?: string[];
-};
+  slugs?: string[]
+}
 
 const SYNC_CONFIG: SyncEntry[] = [
   {
@@ -144,31 +144,31 @@ const SYNC_CONFIG: SyncEntry[] = [
   //   leagues: CYCLING_TOURS,
   //   slugs: ["*"],
   // },
-];
+]
 
 // ---------------------------------------------------------------------------
 // Build the matrix
 // ---------------------------------------------------------------------------
 
 type MatrixEntry = {
-  name: string;
-  tournamentId: string;
-  seasonId: string;
-  sport: string;
-  displayType: string;
-};
+  name: string
+  tournamentId: string
+  seasonId: string
+  sport: string
+  displayType: string
+}
 
-const matrix: MatrixEntry[] = [];
+const matrix: MatrixEntry[] = []
 
 for (const config of SYNC_CONFIG) {
   const filtered =
     !config.slugs || config.slugs.includes("*")
       ? config.leagues
-      : config.leagues.filter((l) => config.slugs!.includes(l.slug));
+      : config.leagues.filter((l) => config.slugs!.includes(l.slug))
 
   for (const league of filtered) {
-    const latestSeason = league.seasons[0];
-    if (!latestSeason || !latestSeason.slug) continue;
+    const latestSeason = league.seasons[0]
+    if (!latestSeason || !latestSeason.slug) continue
 
     matrix.push({
       name: `${league.name} ${latestSeason.name}`,
@@ -176,7 +176,7 @@ for (const config of SYNC_CONFIG) {
       seasonId: latestSeason.slug,
       sport: config.sport,
       displayType: league.display ?? config.displayType,
-    });
+    })
   }
 }
 
@@ -257,14 +257,14 @@ const ALL_LEAGUES_CONFIG: SyncEntry[] = [
     displayType: DisplayTypes.ROUND,
     leagues: CYCLING_TOURS,
   },
-];
+]
 
-const allMatrix: MatrixEntry[] = [];
+const allMatrix: MatrixEntry[] = []
 
 for (const config of ALL_LEAGUES_CONFIG) {
   for (const league of config.leagues) {
-    const latestSeason = league.seasons[0];
-    if (!latestSeason || !latestSeason.slug) continue;
+    const latestSeason = league.seasons[0]
+    if (!latestSeason || !latestSeason.slug) continue
 
     allMatrix.push({
       name: `${league.name} ${latestSeason.name}`,
@@ -272,7 +272,7 @@ for (const config of ALL_LEAGUES_CONFIG) {
       seasonId: latestSeason.slug,
       sport: config.sport,
       displayType: league.display ?? config.displayType,
-    });
+    })
   }
 }
 
@@ -280,13 +280,13 @@ for (const config of ALL_LEAGUES_CONFIG) {
 // Write both matrix files
 // ---------------------------------------------------------------------------
 
-import { writeFileSync } from "fs";
-import { resolve } from "path";
+import { writeFileSync } from "fs"
+import { resolve } from "path"
 
-const weeklyPath = resolve(__dirname, "eventUploadMatrix.json");
-writeFileSync(weeklyPath, JSON.stringify(matrix, null, 2));
-console.log(`Wrote ${matrix.length} entries to ${weeklyPath}`);
+const weeklyPath = resolve(__dirname, "eventUploadMatrix.json")
+writeFileSync(weeklyPath, JSON.stringify(matrix, null, 2))
+console.log(`Wrote ${matrix.length} entries to ${weeklyPath}`)
 
-const allPath = resolve(__dirname, "eventUploadMatrixAll.json");
-writeFileSync(allPath, JSON.stringify(allMatrix, null, 2));
-console.log(`Wrote ${allMatrix.length} entries to ${allPath}`);
+const allPath = resolve(__dirname, "eventUploadMatrixAll.json")
+writeFileSync(allPath, JSON.stringify(allMatrix, null, 2))
+console.log(`Wrote ${allMatrix.length} entries to ${allPath}`)

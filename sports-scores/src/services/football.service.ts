@@ -8,15 +8,15 @@ import {
   fetchFootballStandings,
   fetchFootballTeamLastMatches,
   fetchFootballTeamNextMatches,
-} from "@/endpoints/football.api";
+} from "@/endpoints/football.api"
 import {
   FOOTBALL_LADDER_HEADINGS,
   FOOTBALL_LEAGUES,
   SCORE_BREAKDOWN_HALVES_CONFIG,
-} from "@/lib/constants";
-import { withDevCache } from "@/lib/devCache";
-import { SPORT } from "@/types/misc";
-import { SofascoreSport } from "./sofascore.service";
+} from "@/lib/constants"
+import { withDevCache } from "@/lib/devCache"
+import { SPORT } from "@/types/misc"
+import { SofascoreSport } from "./sofascore.service"
 
 class FootballService extends SofascoreSport {
   constructor() {
@@ -73,8 +73,8 @@ class FootballService extends SofascoreSport {
       FOOTBALL_LEAGUES,
       FOOTBALL_LADDER_HEADINGS,
       SCORE_BREAKDOWN_HALVES_CONFIG,
-    );
+    )
   }
 }
 
-export const footballService = new FootballService();
+export const footballService = new FootballService()

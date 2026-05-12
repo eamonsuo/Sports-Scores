@@ -1,20 +1,20 @@
-import fallback from "@/../public/vercel.svg";
-import { formatTime } from "@/lib/projUtils";
-import { cn } from "@/lib/utils";
-import { MatchSummary } from "@/types/misc";
-import clsx from "clsx";
-import Image from "next/image";
-import Link from "next/link";
-import Timer from "../misc-ui/Timer";
+import fallback from "@/../public/vercel.svg"
+import { formatTime } from "@/lib/projUtils"
+import { cn } from "@/lib/utils"
+import { MatchSummary } from "@/types/misc"
+import clsx from "clsx"
+import Image from "next/image"
+import Link from "next/link"
+import Timer from "../misc-ui/Timer"
 
 export default function MatchSummaryCard({
   event,
   href,
   className,
 }: {
-  event: MatchSummary;
-  href: string;
-  className?: string;
+  event: MatchSummary
+  href: string
+  className?: string
 }) {
   const {
     homeDetails,
@@ -23,7 +23,7 @@ export default function MatchSummaryCard({
     otherDetail,
     venue,
     winner,
-  } = event;
+  } = event
 
   const timer = {
     display:
@@ -31,7 +31,7 @@ export default function MatchSummaryCard({
         ? formatTime(event.timer)
         : (event.timer ?? ""),
     displayColour: event.timerDisplayColour,
-  };
+  }
 
   return (
     <Link href={href}>
@@ -116,5 +116,5 @@ export default function MatchSummaryCard({
         </p>
       </div>
     </Link>
-  );
+  )
 }

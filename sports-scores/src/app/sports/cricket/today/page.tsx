@@ -1,24 +1,24 @@
-import FixtureList from "@/components/all-sports/FixtureList";
-import DateNav from "@/components/misc-ui/DateNav";
-import Placeholder from "@/components/misc-ui/Placeholder";
-import { getClientDate } from "@/lib/serverUtils";
-import { cricketMatchesByDate } from "@/services/cricket.service";
-import { TZDate } from "@date-fns/tz/date";
+import FixtureList from "@/components/all-sports/FixtureList"
+import DateNav from "@/components/misc-ui/DateNav"
+import Placeholder from "@/components/misc-ui/Placeholder"
+import { getClientDate } from "@/lib/serverUtils"
+import { cricketMatchesByDate } from "@/services/cricket.service"
+import { TZDate } from "@date-fns/tz/date"
 
 export default async function Page({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  const date = (await searchParams)?.date; //Gets ?date= query string
-  const curDate = await getClientDate();
+  const date = (await searchParams)?.date //Gets ?date= query string
+  const curDate = await getClientDate()
   const parsedDate =
-    date === undefined ? curDate : new TZDate(date as string, curDate.timeZone);
+    date === undefined ? curDate : new TZDate(date as string, curDate.timeZone)
 
-  const matches = await cricketMatchesByDate(parsedDate);
+  const matches = await cricketMatchesByDate(parsedDate)
 
   if (matches === null) {
-    return <Placeholder>NO DATA</Placeholder>;
+    return <Placeholder>NO DATA</Placeholder>
   }
 
   return (
@@ -28,7 +28,7 @@ export default async function Page({
       <FixtureList data={matches} />
       <DateNav date={parsedDate} />
     </>
-  );
+  )
 }
 
 /**

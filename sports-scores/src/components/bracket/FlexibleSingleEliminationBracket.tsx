@@ -1,26 +1,26 @@
-"use client";
-import { formatDateLong } from "@/lib/projUtils";
-import React, { useEffect, useMemo } from "react";
-import { ThemeProvider } from "styled-components";
+"use client"
+import { formatDateLong } from "@/lib/projUtils"
+import React, { useEffect, useMemo } from "react"
+import { ThemeProvider } from "styled-components"
 import {
   calculateFlexibleMatchPosition,
   clearPositionCache,
-} from "./bracket-single/flexible-calculate-match-position";
-import FlexibleConnectors from "./bracket-single/flexible-connectors";
-import RoundHeader from "./components/round-header";
-import { calculateSVGDimensions } from "./core/calculate-svg-dimensions";
-import { MatchContextProvider } from "./core/match-context";
-import MatchWrapper from "./core/match-wrapper";
-import { defaultStyle, getCalculatedStyles } from "./settings";
-import defaultTheme from "./themes/themes";
-import { FlexibleSingleElimLeaderboardProps } from "./types";
+} from "./bracket-single/flexible-calculate-match-position"
+import FlexibleConnectors from "./bracket-single/flexible-connectors"
+import RoundHeader from "./components/round-header"
+import { calculateSVGDimensions } from "./core/calculate-svg-dimensions"
+import { MatchContextProvider } from "./core/match-context"
+import MatchWrapper from "./core/match-wrapper"
+import { defaultStyle, getCalculatedStyles } from "./settings"
+import defaultTheme from "./themes/themes"
+import { FlexibleSingleElimLeaderboardProps } from "./types"
 import {
   clearPreviousMatchesCache,
   getEffectiveByeRenderMode,
   getPreviousMatchesFlexible,
   isByeMatch,
-} from "./utils/bracket-analysis";
-import { buildFlexibleColumnStructureMultiFinal } from "./utils/flexible-bracket-helpers";
+} from "./utils/bracket-analysis"
+import { buildFlexibleColumnStructureMultiFinal } from "./utils/flexible-bracket-helpers"
 
 /**
  * FlexibleSingleEliminationBracket - A bracket component that supports dynamic match counts per round.
@@ -71,72 +71,72 @@ const FlexibleSingleEliminationBracket = ({
       },
     }),
     [inputStyle],
-  );
+  )
 
   const { roundHeader, columnWidth, canvasPadding, rowHeight, width } =
-    getCalculatedStyles(style);
+    getCalculatedStyles(style)
 
   // Clear position cache when matches change
   useEffect(() => {
-    clearPositionCache();
-    clearPreviousMatchesCache();
-  }, [matches]);
+    clearPositionCache()
+    clearPreviousMatchesCache()
+  }, [matches])
 
   // Memoize expensive column structure calculation
   const columns = useMemo(
     () => buildFlexibleColumnStructureMultiFinal(matches),
     [matches],
-  );
+  )
 
   // Memoize first round participant IDs calculation
   const firstRoundParticipantIds = useMemo(() => {
     const roundNumbers = matches
       .map((m) => parseInt(m.tournamentRoundText || "0", 10))
-      .filter((n) => !isNaN(n) && n > 0);
+      .filter((n) => !isNaN(n) && n > 0)
     const firstRoundNumber =
-      roundNumbers.length > 0 ? Math.min(...roundNumbers) : 1;
+      roundNumbers.length > 0 ? Math.min(...roundNumbers) : 1
 
-    const participantIds = new Set<string | number>();
+    const participantIds = new Set<string | number>()
     matches.forEach((match) => {
-      const roundNum = parseInt(match.tournamentRoundText || "0", 10);
+      const roundNum = parseInt(match.tournamentRoundText || "0", 10)
       if (roundNum === firstRoundNumber) {
         match.participants.forEach((participant) => {
           if (participant?.id) {
-            participantIds.add(participant.id);
+            participantIds.add(participant.id)
           }
-        });
+        })
       }
-    });
-    return participantIds;
-  }, [matches]);
+    })
+    return participantIds
+  }, [matches])
 
   // Early return with proper error handling
   if (!matches || matches.length === 0) {
     if (process.env.NODE_ENV === "development") {
-      console.warn("[FlexibleSingleEliminationBracket] No matches provided");
+      console.warn("[FlexibleSingleEliminationBracket] No matches provided")
     }
-    return null;
+    return null
   }
 
   if (columns.length === 0) {
     if (process.env.NODE_ENV === "development") {
       console.warn(
         "[FlexibleSingleEliminationBracket] No columns generated for bracket",
-      );
+      )
     }
-    return null;
+    return null
   }
 
   // Build a filtered version of columns for rendering and positioning
   // Show ALL matches, including those with no participants
   // This allows empty matches to render like the final match does
-  const visibleColumns = columns.map((column) => column);
+  const visibleColumns = columns.map((column) => column)
 
   // Calculate SVG dimensions based on the maximum number of visible matches
   // Account for spacing between matches (spacing = rowHeight * 2.5)
   const maxVisibleMatchesInColumn = Math.max(
     ...visibleColumns.map((col) => col.length),
-  );
+  )
 
   const { gameWidth, gameHeight, startPosition } = calculateSVGDimensions(
     maxVisibleMatchesInColumn,
@@ -146,7 +146,7 @@ const FlexibleSingleEliminationBracket = ({
     canvasPadding,
     roundHeader,
     currentRound,
-  );
+  )
 
   return (
     <ThemeProvider theme={theme}>
@@ -165,10 +165,10 @@ const FlexibleSingleEliminationBracket = ({
               {/* Render round headers once per column at the top */}
               {roundHeader.isShown &&
                 visibleColumns.map((matchesColumn, columnIndex) => {
-                  const firstMatchInColumn = matchesColumn[0];
-                  if (!firstMatchInColumn) return null;
+                  const firstMatchInColumn = matchesColumn[0]
+                  if (!firstMatchInColumn) return null
 
-                  const x = canvasPadding + columnIndex * columnWidth;
+                  const x = canvasPadding + columnIndex * columnWidth
 
                   return (
                     <RoundHeader
@@ -187,7 +187,7 @@ const FlexibleSingleEliminationBracket = ({
                       customRoundTitle={firstMatchInColumn.roundTitle}
                       columnIndex={columnIndex}
                     />
-                  );
+                  )
                 })}
 
               {/* Render matches */}
@@ -204,39 +204,39 @@ const FlexibleSingleEliminationBracket = ({
                       columnWidth,
                       rowHeight,
                     },
-                  );
+                  )
 
                   const previousMatches = getPreviousMatchesFlexible(
                     match,
                     matches,
-                  );
+                  )
 
                   // Include ALL previous matches for connector drawing
-                  const visiblePreviousMatches = previousMatches;
+                  const visiblePreviousMatches = previousMatches
 
                   // Determine if this is a bye match and how to render it
-                  const isBye = isByeMatch(match);
-                  const byeMode = getEffectiveByeRenderMode(match);
+                  const isBye = isByeMatch(match)
+                  const byeMode = getEffectiveByeRenderMode(match)
 
                   // Determine which participants are late entries
                   // A participant is a late entry if they're NOT in the first round
-                  const lateEntryParticipantIds = new Set<string | number>();
+                  const lateEntryParticipantIds = new Set<string | number>()
                   match.participants.forEach((participant) => {
                     if (
                       participant?.id &&
                       !firstRoundParticipantIds.has(participant.id)
                     ) {
-                      lateEntryParticipantIds.add(participant.id);
+                      lateEntryParticipantIds.add(participant.id)
                     }
-                  });
+                  })
 
                   // Get match name - add bye indicator if needed
-                  let displayName = match.name;
+                  let displayName = match.name
                   if (isBye && byeMode === "show-with-indicator") {
                     const nextRound = match.tournamentRoundText
                       ? parseInt(match.tournamentRoundText, 10) + 1
-                      : columnIndex + 2;
-                    displayName = `Bye to Round ${nextRound}`;
+                      : columnIndex + 2
+                    displayName = `Bye to Round ${nextRound}`
                   }
 
                   return (
@@ -286,7 +286,7 @@ const FlexibleSingleEliminationBracket = ({
                         />
                       </g>
                     </g>
-                  );
+                  )
                 }),
               )}
             </g>
@@ -294,11 +294,11 @@ const FlexibleSingleEliminationBracket = ({
         </svg>
       </SvgWrapper>
     </ThemeProvider>
-  );
-};
+  )
+}
 
 // Add display name for better debugging in Next.js dev tools
 FlexibleSingleEliminationBracket.displayName =
-  "FlexibleSingleEliminationBracket";
+  "FlexibleSingleEliminationBracket"
 
-export default React.memo(FlexibleSingleEliminationBracket);
+export default React.memo(FlexibleSingleEliminationBracket)

@@ -1,18 +1,18 @@
-"use client";
+"use client"
 
-import clsx from "clsx";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import clsx from "clsx"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 export default function NavButtonGroup({
   buttons,
 }: {
-  buttons: { href: string; label: string; page: string }[];
+  buttons: { href: string; label: string; page: string }[]
 }) {
-  const pathname: string = usePathname();
+  const pathname: string = usePathname()
 
-  const activeIndex = buttons.findIndex((item) => pathname.includes(item.page));
-  const resolvedIndex = activeIndex === -1 ? 0 : activeIndex;
+  const activeIndex = buttons.findIndex((item) => pathname.includes(item.page))
+  const resolvedIndex = activeIndex === -1 ? 0 : activeIndex
 
   return (
     <div className="m-4 flex rounded-lg bg-gray-200 p-1 dark:bg-neutral-800">
@@ -31,5 +31,5 @@ export default function NavButtonGroup({
         </Link>
       ))}
     </div>
-  );
+  )
 }

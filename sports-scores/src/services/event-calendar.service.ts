@@ -1,15 +1,15 @@
-import { fetchSportEvents } from "@/endpoints/dataverse.api";
-import { SportEvent } from "@/types/event-calendar";
+import { fetchSportEvents } from "@/endpoints/dataverse.api"
+import { SportEvent } from "@/types/event-calendar"
 
 function mapToSportEvent(
   raw: import("@/types/dataverse").DataverseSportEvent,
 ): SportEvent {
-  let tags: string[] | undefined;
+  let tags: string[] | undefined
   if (raw.ss_tags) {
     try {
-      tags = JSON.parse(raw.ss_tags);
+      tags = JSON.parse(raw.ss_tags)
     } catch {
-      tags = undefined;
+      tags = undefined
     }
   }
 
@@ -26,19 +26,19 @@ function mapToSportEvent(
     location: raw.ss_location ?? undefined,
     tags,
     notes: raw.ss_notes ?? undefined,
-  };
+  }
 }
 
 // Fetches all sport events from Dataverse and filters to upcoming/current
 export async function getUpcomingEvents(
   fromDate: Date = new Date(),
 ): Promise<SportEvent[]> {
-  const raw = await fetchSportEvents();
+  const raw = await fetchSportEvents()
   if (!raw) {
     console.error(
       "[event-calendar] Failed to fetch sport events from Dataverse",
-    );
-    return [];
+    )
+    return []
   }
 
   return raw
@@ -46,11 +46,11 @@ export async function getUpcomingEvents(
     .filter((event) => {
       const endDate = event.endDate
         ? new Date(event.endDate)
-        : new Date(event.startDate);
-      return endDate >= fromDate;
+        : new Date(event.startDate)
+      return endDate >= fromDate
     })
     .sort(
       (a, b) =>
         new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-    );
+    )
 }

@@ -7,15 +7,15 @@ import {
   fetchBasketballStandings,
   fetchBasketballTeamLastMatches,
   fetchBasketballTeamNextMatches,
-} from "@/endpoints/basketball.api";
+} from "@/endpoints/basketball.api"
 import {
   BASKETBALL_LADDER_HEADINGS,
   BASKETBALL_LEAGUES,
   SCORE_BREAKDOWN_QUARTERS_CONFIG,
-} from "@/lib/constants";
-import { withDevCache } from "@/lib/devCache";
-import { SPORT } from "@/types/misc";
-import { SofascoreSport } from "./sofascore.service";
+} from "@/lib/constants"
+import { withDevCache } from "@/lib/devCache"
+import { SPORT } from "@/types/misc"
+import { SofascoreSport } from "./sofascore.service"
 
 class BasketballService extends SofascoreSport {
   constructor() {
@@ -68,8 +68,8 @@ class BasketballService extends SofascoreSport {
       BASKETBALL_LEAGUES,
       BASKETBALL_LADDER_HEADINGS,
       SCORE_BREAKDOWN_QUARTERS_CONFIG,
-    );
+    )
   }
 }
 
-export const basketballService = new BasketballService();
+export const basketballService = new BasketballService()
