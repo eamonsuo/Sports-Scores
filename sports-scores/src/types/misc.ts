@@ -45,6 +45,7 @@ export type LeagueSeasonConfig = {
     name: string
     img: string
   }[]
+  excludeFromToday?: boolean
 }
 
 export type PeriodScore = {

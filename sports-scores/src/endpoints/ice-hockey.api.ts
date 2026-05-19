@@ -1,4 +1,4 @@
-import { updateGlobalApiQuota } from "@/lib/apiCounter"
+import { updateQuota } from "@/lib/projUtils"
 import { SPORT } from "@/types/misc"
 import {
   Sofascore_Event_Response,
@@ -7,18 +7,6 @@ import {
   Sofascore_Events_Response,
   Sofascore_TotalStandings_Response,
 } from "@/types/sofascore"
-
-function updateQuota(response: Response) {
-  const limit = response.headers.get("x-ratelimit-requests-limit")
-  const remaining = response.headers.get("x-ratelimit-requests-remaining")
-  if (remaining && limit) {
-    updateGlobalApiQuota(
-      parseInt(remaining, 10),
-      parseInt(limit, 10),
-      SPORT.ICE_HOCKEY,
-    )
-  }
-}
 
 async function fetchIceHockeyApi(endpoint: string) {
   const url = process.env.ICE_HOCKEY_BASEURL + endpoint
@@ -33,7 +21,7 @@ async function fetchIceHockeyApi(endpoint: string) {
     return null
   }
 
-  updateQuota(res)
+  updateQuota(res, SPORT.ICE_HOCKEY)
 
   return res.json()
 }

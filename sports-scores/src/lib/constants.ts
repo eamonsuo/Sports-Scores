@@ -526,6 +526,7 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
       { name: "2026", slug: "2026", ladderConfig: PGA_2013_LADDER_CONFIG },
       { name: "2025", slug: "2025", ladderConfig: PGA_2013_LADDER_CONFIG },
     ],
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/quvqqr1423564787.png",
   },
   {
     name: "LIV Golf",
@@ -534,31 +535,57 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
       { name: "2026", slug: "2026" },
       { name: "2025", slug: "2025" },
     ],
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/x8p62j1659513228.png",
   },
   {
     name: "LPGA Tour",
     slug: "lpga",
-    seasons: [{ name: "2026", slug: "external" }],
+    seasons: [{ name: "2026", slug: "2026" }],
     externalURL: "https://www.google.com/search?igu=1&gws_rd=ssl&q=lpga",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/hdnc211555580691.png",
   },
   {
     name: "DP World Tour",
     slug: "dpworld",
-    seasons: [{ name: "2026", slug: "external" }],
+    seasons: [{ name: "2026", slug: "2026" }],
     externalURL:
       "https://www.google.com/search?igu=1&gws_rd=ssl&q=dp+world+tour",
+    icon: "https://www.thesportsdb.com/images/media/league/badge/3cj95h1778512316.png",
   },
   {
     name: "PGA Tour Australasia",
     slug: "australasia",
-    seasons: [{ name: "25/26", slug: "external" }],
+    seasons: [{ name: "25/26", slug: "25-26" }],
     externalURL: "https://golf.com.au/leaderboard",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/ce5bzs1751484107.png",
   },
   {
     name: "TGL",
     slug: "tgl",
-    seasons: [{ name: "2026", slug: "external" }],
+    seasons: [{ name: "2026", slug: "2026" }],
     externalURL: "https://tglgolf.com/schedule",
+    icon: "https://upload.wikimedia.org/wikipedia/en/f/f7/TGL_logo.png",
+  },
+  {
+    name: "Asian Tour",
+    slug: "asian-tour",
+    seasons: [{ name: "2026", slug: "2026" }],
+    externalURL: "https://www.asiantour.com/schedule",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/durtwn1582545153.png",
+  },
+  {
+    name: "PGA Champions Tour",
+    slug: "pga-champions-tour",
+    seasons: [{ name: "2026", slug: "2026" }],
+    externalURL: "https://www.pgatour.com/pgatour-champions/schedule",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/s4xljf1600855962.png",
+  },
+  {
+    name: "Korn Ferry Tour",
+    slug: "korn-ferry-tour",
+    seasons: [{ name: "2026", slug: "2026" }],
+    externalURL: "https://www.pgatour.com/korn-ferry-tour/schedule",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/7bagvc1591956878.png",
   },
   {
     name: "OWGR",
@@ -667,6 +694,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2016", slug: "11366", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
       { name: "2015", slug: "10176", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
     ],
+    excludeFromToday: true,
   },
   {
     name: "New South Wales Cup",
@@ -676,6 +704,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2025", slug: "69962", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
       { name: "2024", slug: "57568", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
     ],
+    excludeFromToday: true,
   },
   {
     name: "World Cup",
@@ -1265,6 +1294,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     ],
     externalURL:
       "https://en.wikipedia.org/wiki/2026_Major_League_Soccer_season",
+    excludeFromToday: true,
   },
   {
     name: "🇺🇸 NWSL",
@@ -1274,6 +1304,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     ],
     externalURL:
       "https://en.wikipedia.org/wiki/2026_National_Women%27s_Soccer_League_season",
+    excludeFromToday: true,
   },
   // France - category 7
   {
@@ -1283,6 +1314,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       { name: "25/26", slug: "77356", ladderConfig: LIGUE_1_LADDER_CONFIG },
     ],
     externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Ligue_1",
+    excludeFromToday: true,
   },
   // Germany - category 30
   {
@@ -1292,6 +1324,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       { name: "25/26", slug: "77333", ladderConfig: BUNDESLIGA_LADDER_CONFIG },
     ],
     externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Bundesliga",
+    excludeFromToday: true,
   },
   // Italy - category 31
   {
@@ -1305,6 +1338,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       },
     ],
     externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Serie_A",
+    excludeFromToday: true,
   },
   // Spain - category 32
   {
@@ -1318,6 +1352,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       },
     ],
     externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_La_Liga",
+    excludeFromToday: true,
   },
 
   // North & Central America - category 1469
@@ -1646,6 +1681,7 @@ export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2026", slug: "87649", ladderConfig: FINALS_TOP_4_LADDER_CONFIG },
       { name: "2025", slug: "69968", ladderConfig: FINALS_TOP_4_LADDER_CONFIG },
     ],
+    excludeFromToday: true,
   },
   {
     name: "Int. Friendly Games",

@@ -151,7 +151,9 @@ export async function netballMatchesByDate(date: Date) {
 
   if (!matches || !matches.events) return null
 
-  const validLeagueIds = NETBALL_LEAGUES.map((l) => Number(l.slug))
+  const validLeagueIds = NETBALL_LEAGUES.filter((l) => !l.excludeFromToday).map(
+    (l) => Number(l.slug),
+  )
 
   matches.events = matches.events
     // .filter((item) =>

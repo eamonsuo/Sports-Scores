@@ -1,22 +1,10 @@
-import { updateGlobalApiQuota } from "@/lib/apiCounter"
+import { updateQuota } from "@/lib/projUtils"
 import {
   Golf_SlashGolfAPI_Leaderboard,
   Golf_SlashGolfAPI_Schedule,
   Golf_SlashGolfAPI_Stats,
 } from "@/types/golf"
 import { SPORT } from "@/types/misc"
-
-function updateQuota(response: Response) {
-  const limit = response.headers.get("x-ratelimit-requests-limit")
-  const remaining = response.headers.get("x-ratelimit-requests-remaining")
-  if (remaining && limit) {
-    updateGlobalApiQuota(
-      parseInt(remaining, 10),
-      parseInt(limit, 10),
-      SPORT.GOLF,
-    )
-  }
-}
 
 async function fetchGolfApi(endpoint: string) {
   const url = process.env.GOLF_BASEURL + endpoint
@@ -32,7 +20,7 @@ async function fetchGolfApi(endpoint: string) {
     return null
   }
 
-  updateQuota(res)
+  updateQuota(res, SPORT.GOLF)
 
   return res.json()
 }

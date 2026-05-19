@@ -1,4 +1,4 @@
-import { updateGlobalApiQuota } from "@/lib/apiCounter"
+import { updateQuota } from "@/lib/projUtils"
 import {
   Cricket_LiveScoreAPI_LeaguesListPopular,
   Cricket_LiveScoreAPI_MatchesGetInnings,
@@ -26,18 +26,6 @@ const MY_TEAMS_IDs = [
   86295, // QLD men
 ]
 
-function updateQuota(response: Response) {
-  const limit = response.headers.get("x-ratelimit-requests-limit")
-  const remaining = response.headers.get("x-ratelimit-requests-remaining")
-  if (remaining && limit) {
-    updateGlobalApiQuota(
-      parseInt(remaining, 10),
-      parseInt(limit, 10),
-      SPORT.CRICKET,
-    )
-  }
-}
-
 async function fetchCricketApi(endpoint: string) {
   const url = process.env.CRICKET_BASEURL + endpoint
   const res = await fetch(url, {
@@ -51,7 +39,7 @@ async function fetchCricketApi(endpoint: string) {
     return null
   }
 
-  updateQuota(res)
+  updateQuota(res, SPORT.CRICKET)
 
   return res.json()
 }
@@ -98,7 +86,7 @@ export async function fetchCricketMatchesByDateSofascore(date: Date) {
   if (!rawFixtures.ok) {
     return null
   }
-  updateQuota(rawFixtures)
+  updateQuota(rawFixtures, SPORT.CRICKET)
   return (await rawFixtures.json()) as Sofascore_Events_Response
 }
 

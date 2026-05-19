@@ -128,7 +128,9 @@ export abstract class SofascoreSport implements SportService {
 
     if (!matches) return null
 
-    const validLeagueIds = this.leagues.map((l) => Number(l.slug))
+    const validLeagueIds = this.leagues
+      .filter((l) => !l.excludeFromToday)
+      .map((l) => Number(l.slug))
     const timezone = date instanceof TZDate ? date.timeZone : "UTC"
 
     matches.events = matches.events
@@ -370,8 +372,8 @@ export abstract class SofascoreSport implements SportService {
           event.status.type,
           event.status.description,
           options?.startDate ?? startDate,
-          event.time.played,
-          event.time.periodLength,
+          event.time?.played ?? 0,
+          event.time?.periodLength ?? 0,
         ),
       timerDisplayColour:
         options?.timerDisplayColour ??

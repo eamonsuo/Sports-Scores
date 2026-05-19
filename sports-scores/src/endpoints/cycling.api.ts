@@ -1,17 +1,5 @@
-import { updateGlobalApiQuota } from "@/lib/apiCounter"
+import { updateQuota } from "@/lib/projUtils"
 import { SPORT } from "@/types/misc"
-
-function updateQuota(response: Response) {
-  const limit = response.headers.get("x-ratelimit-requests-limit")
-  const remaining = response.headers.get("x-ratelimit-requests-remaining")
-  if (remaining && limit) {
-    updateGlobalApiQuota(
-      parseInt(remaining, 10),
-      parseInt(limit, 10),
-      SPORT.CYCLING,
-    )
-  }
-}
 
 async function fetchCyclingApi(endpoint: string) {
   const url = process.env.CYCLING_BASEURL + endpoint
@@ -26,7 +14,7 @@ async function fetchCyclingApi(endpoint: string) {
     return null
   }
 
-  updateQuota(res)
+  updateQuota(res, SPORT.CYCLING)
 
   return res.json()
 }

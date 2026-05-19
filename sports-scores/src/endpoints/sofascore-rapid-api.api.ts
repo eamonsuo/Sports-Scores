@@ -1,4 +1,4 @@
-import { updateGlobalApiQuota } from "@/lib/apiCounter"
+import { updateQuota } from "@/lib/projUtils"
 import { SPORT } from "@/types/misc"
 import {
   Sofascore_Event_Response,
@@ -8,18 +8,6 @@ import {
   Sofascore_TotalStandings_Response,
 } from "@/types/sofascore"
 import { format } from "date-fns/format"
-
-function updateQuota(response: Response) {
-  const limit = response.headers.get("x-ratelimit-requests-limit")
-  const remaining = response.headers.get("x-ratelimit-requests-remaining")
-  if (remaining && limit) {
-    updateGlobalApiQuota(
-      parseInt(remaining, 10),
-      parseInt(limit, 10),
-      SPORT.AUSSIE_RULES,
-    )
-  }
-}
 
 async function fetchSofascoreRapidApi(endpoint: string) {
   const url = process.env.SOFASCORE_API_BASEURL + endpoint
@@ -34,7 +22,7 @@ async function fetchSofascoreRapidApi(endpoint: string) {
     return null
   }
 
-  updateQuota(res)
+  updateQuota(res, SPORT.AUSSIE_RULES)
 
   return res.json()
 }

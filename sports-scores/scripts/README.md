@@ -33,12 +33,6 @@ npx tsx scripts/bulk-upload-events.ts 294 86317 rugby-league round false
 
 # AFL 2026
 npx tsx scripts/bulk-upload-events.ts 656 86748 aussie-rules round false
-
-# NBA 25/26
-npx tsx scripts/bulk-upload-events.ts 132 80229 basketball date
-
-# MLB 2026
-npx tsx scripts/bulk-upload-events.ts 11205 84695 baseball date
 ```
 
 ---
@@ -57,15 +51,21 @@ npx tsx scripts/upload-custom-events.ts <sport> <sub-sport> [...args]
 | ------------ | ----------- | ---------- | ---------------------------------------- |
 | `motorsport` | `f1`        | `<season>` | Jolpica F1 API                           |
 | `motorsport` | `supercars` | `<season>` | `scripts/supercars-{season}-events.json` |
+| `golf`       | `pga`       | `<season>` | SlashGolf API                            |
+| `golf`       | `liv`       | `<season>` | SlashGolf API                            |
+| `golf`       | `dpworld`   | `<season>` | `scripts/dpwt-{season}-events.json`      |
 
 **Examples:**
 
 ```bash
-# F1 2026 (fetches from Jolpica API)
+# F1 2026
 npx tsx scripts/upload-custom-events.ts motorsport f1 2026
 
-# Supercars 2026 (reads from JSON file)
+# Supercars 2026
 npx tsx scripts/upload-custom-events.ts motorsport supercars 2026
+
+# DP World Tour 2026
+npx tsx scripts/upload-custom-events.ts golf dpworld 2026
 ```
 
 ---
@@ -102,6 +102,14 @@ Scrapes Supercars track schedules from supercars.com using Playwright, builds Ma
 
 ---
 
+### `/scrape-schedule`
+
+Generic schedule scraper for any sport/tour. Uses MCP browser tools to scrape a URL, maps events to MatchSummary records, creates a staged JSON file, checks in with the user, then uploads via `upload-custom-events.ts`.
+
+**Location:** `.github/prompts/scrape-schedule.prompt.md`
+
+---
+
 ## Current Upload Matrix
 
 Leagues configured for scheduled sync (from `eventUploadMatrix.json`):
@@ -131,8 +139,9 @@ Leagues configured for scheduled sync (from `eventUploadMatrix.json`):
 
 ## Data Files
 
-| File                         | Description                                                         |
-| ---------------------------- | ------------------------------------------------------------------- |
-| `supercars-2026-events.json` | 55 Supercars 2026 MatchSummary entries (scraped from supercars.com) |
-| `eventUploadMatrix.json`     | Active leagues for scheduled GitHub Actions sync                    |
-| `eventUploadMatrixAll.json`  | All configured leagues (full matrix)                                |
+| File                         | Description                                                                |
+| ---------------------------- | -------------------------------------------------------------------------- |
+| `supercars-2026-events.json` | 55 Supercars 2026 MatchSummary entries (scraped from supercars.com)        |
+| `dpwt-2026-events.json`      | 42 DP World Tour 2026 MatchSummary entries (scraped from europeantour.com) |
+| `eventUploadMatrix.json`     | Active leagues for scheduled GitHub Actions sync                           |
+| `eventUploadMatrixAll.json`  | All configured leagues (full matrix)                                       |

@@ -1,4 +1,4 @@
-import { updateGlobalApiQuota } from "@/lib/apiCounter"
+import { updateQuota } from "@/lib/projUtils"
 import { SPORT } from "@/types/misc"
 import { Sofascore_TournamentCupTrees_Response } from "@/types/sofascore"
 import {
@@ -11,18 +11,6 @@ import {
   Tennis_TennisApi_TournamentRounds_Response,
   Tennis_TennisApi_TournamentStandings_Response,
 } from "@/types/tennis"
-
-function updateQuota(response: Response) {
-  const limit = response.headers.get("x-ratelimit-requests-limit")
-  const remaining = response.headers.get("x-ratelimit-requests-remaining")
-  if (remaining && limit) {
-    updateGlobalApiQuota(
-      parseInt(remaining, 10),
-      parseInt(limit, 10),
-      SPORT.TENNIS,
-    )
-  }
-}
 
 async function fetchTennisApi(endpoint: string) {
   const url = process.env.TENNIS_BASEURL + endpoint
@@ -37,7 +25,7 @@ async function fetchTennisApi(endpoint: string) {
     return null
   }
 
-  updateQuota(res)
+  updateQuota(res, SPORT.TENNIS)
 
   return res.json()
 }

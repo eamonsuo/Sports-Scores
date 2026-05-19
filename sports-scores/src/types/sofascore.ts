@@ -283,10 +283,19 @@ interface Sofascore_Score_Inning {
 }
 
 interface Sofascore_Time {
-  played: number
-  periodLength: number
-  overtimeLength: number
-  totalPeriodCount: number
+  played?: number
+  periodLength?: number
+  overtimeLength?: number
+  totalPeriodCount?: number
+  period1?: number
+  period2?: number
+  period3?: number
+  period4?: number
+  period5?: number
+  injuryTime1?: number
+  injuryTime2?: number
+  injuryTime3?: number
+  injuryTime4?: number
   currentPeriodStartTimestamp: number
 }
 

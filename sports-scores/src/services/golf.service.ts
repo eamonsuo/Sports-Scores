@@ -92,7 +92,7 @@ class GolfService implements SportService {
     const fixtures = await mapFixtureRounds(
       allMatches,
       leagueConfig,
-      this.cardVariant,
+      leagueId === "tgl" ? CardVariant.DEFAULT : this.cardVariant,
     )
 
     return {
@@ -115,7 +115,6 @@ class GolfService implements SportService {
         (a, b) =>
           new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
       )
-      .concat(golfTournamentsByDate(date))
       .map((event) => this.eventMapper(event))
 
     const fixtures = await mapFixtureRounds(
@@ -364,79 +363,4 @@ function mapTournamentToMatchSummary(
     leagueId: options?.leagueId,
     winner: options?.winner,
   }
-}
-
-export function golfTournamentsByDate(date: Date) {
-  // Placeholder for golf matches fetching logic
-
-  function createGolfMatchSummary(
-    id: number,
-    name: string,
-    slug: string,
-    img: string,
-  ) {
-    return {
-      id: id.toString(),
-      sport: SPORT.GOLF,
-      summaryText: "Details",
-      startDate: date,
-      status: MatchStatus.LIVE,
-      competitorDetails: [],
-      matchSlug: `/sports/${SPORT.GOLF}/${slug}/external`,
-      leagueName: name,
-      leagueImg: img,
-      leagueId: slug,
-      seasonId: "external",
-    } as MatchSummary
-  }
-
-  const golfTours: MatchSummary[] = []
-
-  // Basic check for tournaments
-  switch (date.getDay()) {
-    case 2: // Tuesday
-    case 3: // Wednesday
-      // golfTours.push(createGolfMatchSummary(0, "TGL", "tgl"));
-      break
-    case 4: // Thursday
-      // golfTours.push(createGolfMatchSummary(1,"PGA Tour of Australasia","australasia",resolveSportImage("Australia"),), );
-      break
-    case 5: // Friday
-    case 6: // Saturday
-    case 0: // Sunday
-      // golfTours.push(createGolfMatchSummary(1,"PGA Tour of Australasia","australasia",resolveSportImage("Australia"),), );
-      golfTours.push(
-        createGolfMatchSummary(
-          4,
-          "DP World Tour",
-          "dpworld",
-          "https://r2.thesportsdb.com/images/media/league/badge/mt8ajv1666867699.png",
-        ),
-        createGolfMatchSummary(
-          5,
-          "LPGA Tour",
-          "lpga",
-          resolveSportImage("USA"),
-        ),
-      )
-      break
-    case 1: // Monday
-      golfTours.push(
-        // createGolfMatchSummary(1, "PGA Tour of Australasia", "australasia"),
-        createGolfMatchSummary(
-          4,
-          "DP World Tour",
-          "dpworld",
-          "https://r2.thesportsdb.com/images/media/league/badge/mt8ajv1666867699.png",
-        ),
-        createGolfMatchSummary(
-          5,
-          "LPGA Tour",
-          "lpga",
-          resolveSportImage("USA"),
-        ),
-      )
-      break
-  }
-  return golfTours
 }

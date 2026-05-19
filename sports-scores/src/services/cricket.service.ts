@@ -11,12 +11,44 @@ import {
   fetchCricketMyTeams,
   fetchCricketSeriesMatches,
 } from "@/endpoints/cricket.api"
+import { withDevCache } from "@/lib/devCache"
 import { resolveSportImage } from "@/lib/imageMapping"
 import {
   Cricket_LiveScoreAPI_MatchesGetInnings,
   Cricket_LiveScoreAPI_MatchesGetScoreBoard,
 } from "@/types/cricket"
 import { MatchStatus, MatchSummary, SPORT } from "@/types/misc"
+
+const cachedFetchCricketMatchesByDateLiveScore = withDevCache(
+  "cricket",
+  "matches-by-date",
+  fetchCricketMatchesByDateLiveScore,
+)
+const cachedFetchCricketMyTeams = withDevCache(
+  "cricket",
+  "my-teams",
+  fetchCricketMyTeams,
+)
+const cachedFetchCricketAllSeries = withDevCache(
+  "cricket",
+  "all-series",
+  fetchCricketAllSeries,
+)
+const cachedFetchCricketMatchInnings = withDevCache(
+  "cricket",
+  "match-innings",
+  fetchCricketMatchInnings,
+)
+const cachedFetchCricketMatchDetails = withDevCache(
+  "cricket",
+  "match-details",
+  fetchCricketMatchDetails,
+)
+const cachedFetchCricketSeriesMatches = withDevCache(
+  "cricket",
+  "series-matches",
+  fetchCricketSeriesMatches,
+)
 
 const excludedSeries = [
   "CSA",
@@ -32,7 +64,7 @@ const excludedSeries = [
 ]
 
 export async function cricketMatchesByDate(date: Date) {
-  const rawMatches = await fetchCricketMatchesByDateLiveScore(date)
+  const rawMatches = await cachedFetchCricketMatchesByDateLiveScore(date)
   if (!rawMatches || !rawMatches.Stages) return null
 
   const matches = rawMatches.Stages.filter(
@@ -78,7 +110,7 @@ export async function cricketMatchesByDate(date: Date) {
         ],
         leagueName: item.Snm,
         matchSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/match/${event.Eid}`,
-        leagueSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}`,
+        leagueSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/matches`,
       } as MatchSummary
     })
   })
@@ -90,7 +122,7 @@ export async function cricketMatchesByDate(date: Date) {
 }
 
 export async function cricketMyTeamsMatches() {
-  const rawTeamDetails = await fetchCricketMyTeams()
+  const rawTeamDetails = await cachedFetchCricketMyTeams()
 
   if (rawTeamDetails === null) {
     return null
@@ -132,7 +164,7 @@ export async function cricketMyTeamsMatches() {
           ],
           leagueName: item.Snm,
           matchSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/match/${event.Eid}`,
-          leagueSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}`,
+          leagueSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/matches`,
         } as MatchSummary
       })
     })
@@ -140,7 +172,7 @@ export async function cricketMyTeamsMatches() {
 }
 
 export async function cricketAllSeries() {
-  const rawTeamDetails = await fetchCricketAllSeries()
+  const rawTeamDetails = await cachedFetchCricketAllSeries()
 
   if (rawTeamDetails === null) {
     return null
@@ -154,8 +186,8 @@ export async function cricketMatchDetails(id: string): Promise<{
   matchScorecard: CricketScorecardPage
   matchSeries: string
 } | null> {
-  const rawInnings = await fetchCricketMatchInnings(id)
-  const rawDetails = await fetchCricketMatchDetails(id)
+  const rawInnings = await cachedFetchCricketMatchInnings(id)
+  const rawDetails = await cachedFetchCricketMatchDetails(id)
 
   if (rawInnings === null || rawDetails === null) {
     return null
@@ -172,7 +204,7 @@ export async function cricketMatchDetails(id: string): Promise<{
 }
 
 export async function cricketSeriesResults(ccd: string, scd: string) {
-  let rawSeries = await fetchCricketSeriesMatches(ccd, scd)
+  let rawSeries = await cachedFetchCricketSeriesMatches(ccd, scd)
 
   if (
     rawSeries?.Stages[0].LeagueTable === undefined ||
@@ -203,7 +235,7 @@ export async function cricketSeriesResults(ccd: string, scd: string) {
 }
 
 export async function cricketSeriesDetails(ccd: string, scd: string) {
-  let rawMatches = await fetchCricketSeriesMatches(ccd, scd)
+  let rawMatches = await cachedFetchCricketSeriesMatches(ccd, scd)
 
   if (rawMatches == undefined || rawMatches.Stages == undefined) {
     return null
@@ -250,7 +282,7 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
         ],
         leagueName: item.Snm,
         matchSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/match/${event.Eid}`,
-        leagueSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}`,
+        leagueSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/matches`,
       } as MatchSummary
     })
   })

@@ -62,7 +62,6 @@ export default function FixtureList({
   let displaySeries = false
   let currentMatch = false
   let currentDateFlag = false
-  let roundedCardBorder = false
 
   if (data.length === 0) {
     return <Placeholder>NO DATA</Placeholder>
@@ -72,8 +71,7 @@ export default function FixtureList({
     <div className="flex-1 overflow-y-auto px-4">
       {data.map((item: MatchSummary, index) => {
         let itemDate = new Date(item.startDate)
-        displayDate = false
-        displaySeries = false
+        displayDate = displaySeries = false
 
         if (sectionDate.toDateString() !== itemDate.toDateString()) {
           sectionDate = itemDate
@@ -88,14 +86,17 @@ export default function FixtureList({
         if (currentMatch) {
           currentMatch = false
         }
-        if (
+
+        const now = currentDate.getTime()
+        const isCurrentDate =
           !currentDateFlag &&
           (currentDate.toDateString() === sectionDate.toDateString() ||
-            currentDate.getTime() <= sectionDate.getTime())
-        ) {
-          currentMatch = true
-          currentDateFlag = true
-        }
+            now <= sectionDate.getTime() ||
+            (item.endDate !== undefined &&
+              now >= new Date(item.startDate).getTime() &&
+              now <= item.endDate.getTime()))
+
+        if (isCurrentDate) currentMatch = currentDateFlag = true
 
         return (
           <React.Fragment key={item.id}>

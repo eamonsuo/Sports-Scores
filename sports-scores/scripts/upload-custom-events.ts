@@ -378,9 +378,72 @@ async function fetchLIVAdapter(args: string[]): Promise<MatchSummary[]> {
   )
 }
 
+function createFileAdapter(leagueId: string): EventAdapter {
+  return async (args: string[]) => {
+    const [season] = args
+    if (!season) {
+      throw new Error(`${leagueId} adapter requires: <season> (e.g., 2026)`)
+    }
+
+    const fs = await import("fs")
+    const path = await import("path")
+    const filePath = path.resolve(__dirname, `${leagueId}-${season}-events.json`)
+
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`Events file not found: ${filePath}`)
+    }
+
+    const raw = JSON.parse(fs.readFileSync(filePath, "utf-8")) as Array<{
+      id: string
+      sport: string
+      summaryText: string
+      startDate: string
+      endDate?: string
+      status: string
+      leagueName: string
+      leagueImg?: string
+      leagueSlug: string
+      matchSlug: string
+      roundLabel: string
+      timer: string
+      timerDisplayColour: string
+      venue: string
+      seasonId: string
+      leagueId: string
+      competitorDetails: { id: string; score: string; name: string }[]
+    }>
+
+    return raw.map((item) => ({
+      id: item.id,
+      sport: item.sport as SPORT,
+      summaryText: item.summaryText,
+      startDate: new Date(item.startDate),
+      endDate: item.endDate ? new Date(item.endDate) : undefined,
+      status: item.status as MatchStatus,
+      leagueName: item.leagueName,
+      leagueImg: item.leagueImg,
+      leagueSlug: item.leagueSlug,
+      matchSlug: item.matchSlug,
+      roundLabel: item.roundLabel,
+      timer: item.status === "UPCOMING" ? new Date(item.timer) : item.timer,
+      timerDisplayColour: item.timerDisplayColour as "green" | "yellow" | "gray",
+      venue: item.venue,
+      seasonId: item.seasonId,
+      leagueId: item.leagueId,
+      competitorDetails: item.competitorDetails ?? [],
+    }))
+  }
+}
+
+const fetchAustralasiaAdapter = createFileAdapter("australasia")
+
+const fetchTGLAdapter = createFileAdapter("tgl")
+
 const golfAdapters: SubAdapterMap = {
   pga: fetchPGAAdapter,
   liv: fetchLIVAdapter,
+  australasia: fetchAustralasiaAdapter,
+  tgl: fetchTGLAdapter,
 }
 
 // ---------------------------------------------------------------------------

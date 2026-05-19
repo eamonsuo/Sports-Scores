@@ -70,7 +70,8 @@ export default function LeagueSeasonToggle({
     leagueSlug: string | null,
     seasonSlug: string | null,
   ) {
-    const league = leagues.find((l) => l.slug === leagueSlug) ?? DEFAULT_LEAGUE
+    const league =
+      leagues.find((l) => l.slug === leagueSlug) ?? leagues[0] ?? DEFAULT_LEAGUE
     const foundSeason = league.seasons.find((s) => s.slug === seasonSlug)
     const season =
       foundSeason ??

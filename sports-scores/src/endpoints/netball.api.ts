@@ -1,4 +1,4 @@
-import { updateGlobalApiQuota } from "@/lib/apiCounter"
+import { updateQuota } from "@/lib/projUtils"
 import { SPORT } from "@/types/misc"
 import {
   Netball_SportsDB_LeagueTotalStandings_Response,
@@ -6,18 +6,6 @@ import {
 } from "@/types/netball"
 import { SportsDB_Events_Response } from "@/types/sportsdb"
 import { format } from "date-fns"
-
-function updateQuota(response: Response) {
-  const limit = response.headers.get("x-ratelimit-requests-limit")
-  const remaining = response.headers.get("x-ratelimit-requests-remaining")
-  if (remaining && limit) {
-    updateGlobalApiQuota(
-      parseInt(remaining, 10),
-      parseInt(limit, 10),
-      SPORT.NETBALL,
-    )
-  }
-}
 
 async function fetchNetballApi(endpoint: string) {
   const url = process.env.NETBALL_BASEURL + endpoint
@@ -27,7 +15,7 @@ async function fetchNetballApi(endpoint: string) {
     return null
   }
 
-  updateQuota(res)
+  updateQuota(res, SPORT.NETBALL)
 
   return res.json()
 }

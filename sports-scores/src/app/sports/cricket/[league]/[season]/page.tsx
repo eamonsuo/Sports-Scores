@@ -6,5 +6,5 @@ export default async function Page(props: {
 }) {
   const { league, season } = await props.params
 
-  redirect(`/sports/${SPORT.CRICKET}/${league}/${season}/matches#current-date`)
+  redirect(`/sports/${SPORT.CRICKET}/${league}/${season}/matches`)
 }

@@ -1,8 +1,17 @@
-import { CountryFlagCode, LeagueSeasonConfig } from "@/types/misc"
+import { updateGlobalApiQuota } from "@/lib/apiCounter"
+import { CountryFlagCode, LeagueSeasonConfig, SPORT } from "@/types/misc"
 import { Sofascore_Score } from "@/types/sofascore"
 import { format } from "date-fns/format"
 
 const fallback = "/vercel.svg"
+
+export function updateQuota(response: Response, sport: SPORT) {
+  const limit = response.headers.get("x-ratelimit-requests-limit")
+  const remaining = response.headers.get("x-ratelimit-requests-remaining")
+  if (remaining && limit) {
+    updateGlobalApiQuota(parseInt(remaining, 10), parseInt(limit, 10), sport)
+  }
+}
 
 export function setMatchStatusCricket(status: string) {
   switch (status) {
@@ -87,12 +96,13 @@ export function setTimer(
     case "notstarted":
       return startDate
     case "inprogress":
-      const currentPeriod = Math.floor(timePlayed / periodLength) + 1
       const remainingTime = periodLength - (timePlayed % periodLength)
+      if (!remainingTime || timePlayed % periodLength === 0)
+        return statusDescription
+
       const remainingminutes = Math.floor(remainingTime / 60)
       const remainingSeconds = remainingTime % 60
-      // return statusDescription;
-      return `${statusDescription.split(" ")[0]} ${remainingminutes}:${remainingSeconds.toString().padStart(2, "0")}`
+      return `${statusDescription} ${remainingminutes}:${remainingSeconds.toString().padStart(2, "0")}`
     case "postponed":
     case "finished":
     default:

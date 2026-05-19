@@ -90,9 +90,9 @@ class TennisService extends SofascoreSport {
       return null
     }
 
-    const validLeagueIds = TENNIS_CATEGORIES.concat(TENNIS_LEAGUES).map((l) =>
-      Number(l.slug),
-    )
+    const validLeagueIds = TENNIS_CATEGORIES.concat(TENNIS_LEAGUES)
+      .filter((l) => !l.excludeFromToday)
+      .map((l) => Number(l.slug))
     const leagueIdToName = Object.fromEntries(
       TENNIS_CATEGORIES.concat(TENNIS_LEAGUES).map((l) => [
         Number(l.slug),
