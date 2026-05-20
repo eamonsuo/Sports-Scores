@@ -1,86 +1,92 @@
-import { updateGlobalApiQuota } from "@/lib/apiCounter";
+import { updateQuota } from "@/lib/projUtils"
+import { SPORT } from "@/types/misc"
 import {
-  Basketball_BasketApi_FixturePage_Response,
-  Basketball_BasketApi_LeagueTotalStandings_Response,
-  Basketball_BasketApi_Match_Response,
-  Basketball_BasketApi_MatchIncidents_Response,
-  Basketball_BasketApi_MatchSchedules_Response,
-} from "@/types/basketball";
-import { SPORT } from "@/types/misc";
-
-function updateQuota(response: Response) {
-  const limit = response.headers.get("x-ratelimit-requests-limit");
-  const remaining = response.headers.get("x-ratelimit-requests-remaining");
-  if (remaining && limit) {
-    updateGlobalApiQuota(
-      parseInt(remaining, 10),
-      parseInt(limit, 10),
-      SPORT.BASKETBALL,
-    );
-  }
-}
+  Sofascore_Event_Response,
+  Sofascore_EventIncidents_Response,
+  Sofascore_EventPage_Response,
+  Sofascore_Events_Response,
+  Sofascore_TotalStandings_Response,
+} from "@/types/sofascore"
 
 async function fetchBasketballApi(endpoint: string) {
-  const url = process.env.BASKETBALL_BASEURL + endpoint;
+  const url = process.env.BASKETBALL_BASEURL + endpoint
   const res = await fetch(url, {
     method: "GET",
     headers: {
       "X-RapidAPI-Key": process.env.RapidAPIKey ?? "",
     },
-  });
+  })
 
   if (!res.ok || res.status === 204) {
-    return null;
+    return null
   }
 
-  updateQuota(res);
+  updateQuota(res, SPORT.BASKETBALL)
 
-  return res.json();
+  return res.json()
 }
 
 export async function fetchBasketballLastMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchBasketballApi(
     `/basketball/tournament/${tournamentId}/season/${seasonId}/matches/last/${pageNumber}`,
-  )) as Basketball_BasketApi_FixturePage_Response;
+  )) as Sofascore_EventPage_Response
 }
 
 export async function fetchBasketballNextMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchBasketballApi(
     `/basketball/tournament/${tournamentId}/season/${seasonId}/matches/next/${pageNumber}`,
-  )) as Basketball_BasketApi_FixturePage_Response;
+  )) as Sofascore_EventPage_Response
+}
+
+export async function fetchBasketballTeamLastMatches(
+  teamId: string,
+  pageNumber: number = 0,
+) {
+  return (await fetchBasketballApi(
+    `/basketball/team/${teamId}/matches/previous/${pageNumber}`,
+  )) as Sofascore_EventPage_Response
+}
+
+export async function fetchBasketballTeamNextMatches(
+  teamId: string,
+  pageNumber: number = 0,
+) {
+  return (await fetchBasketballApi(
+    `/basketball/team/${teamId}/matches/next/${pageNumber}`,
+  )) as Sofascore_EventPage_Response
 }
 
 export async function fetchBasketballStandings(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
 ) {
   return (await fetchBasketballApi(
     `/basketball/tournament/${tournamentId}/season/${seasonId}/standings/total`,
-  )) as Basketball_BasketApi_LeagueTotalStandings_Response;
+  )) as Sofascore_TotalStandings_Response
 }
 
-export async function fetchBasketballMatchDetails(matchId: number) {
+export async function fetchBasketballMatchDetails(matchId: string) {
   return (await fetchBasketballApi(
     `/basketball/match/${matchId}`,
-  )) as Basketball_BasketApi_Match_Response;
+  )) as Sofascore_Event_Response
 }
 
-export async function fetchBasketballMatchIncidents(matchId: number) {
+export async function fetchBasketballMatchIncidents(matchId: string) {
   return (await fetchBasketballApi(
     `/match/${matchId}/incidents`,
-  )) as Basketball_BasketApi_MatchIncidents_Response;
+  )) as Sofascore_EventIncidents_Response
 }
 
 export async function fetchBasketballMatchesByDate(date: Date) {
   return (await fetchBasketballApi(
     `/basketball/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-  )) as Basketball_BasketApi_MatchSchedules_Response;
+  )) as Sofascore_Events_Response
 }

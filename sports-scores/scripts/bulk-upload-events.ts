@@ -3,80 +3,80 @@
  * and bulk-uploads them to the Dataverse ss_matchsummary table.
  *
  * Run from the sports-scores directory:
- *   npx tsx scripts/bulk-upload-events.ts <tournamentId> <seasonId> <sport> [displayType] [allEventsMode]
+ *   npx tsx scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> [displayType] [allEventsMode]
  *
  * Example (NRL 2025):
- *   npx tsx scripts/bulk-upload-events.ts 294 63614 rugby-league round false
+ *   npx tsx scripts/bulk-upload-events.ts 294 69277 rugby-league round false
  */
 
 import {
   fetchAmericanFootballLastMatches,
   fetchAmericanFootballNextMatches,
-} from "@/endpoints/american-football.api";
+} from "@/endpoints/american-football.api"
 import {
   fetchBaseballLastMatches,
   fetchBaseballNextMatches,
-} from "@/endpoints/baseball.api";
+} from "@/endpoints/baseball.api"
 import {
   fetchBasketballLastMatches,
   fetchBasketballNextMatches,
-} from "@/endpoints/basketball.api";
+} from "@/endpoints/basketball.api"
 import {
   fetchFootballLastMatches,
   fetchFootballNextMatches,
-} from "@/endpoints/football.api";
+} from "@/endpoints/football.api"
 import {
   fetchIceHockeyLastMatches,
   fetchIceHockeyNextMatches,
-} from "@/endpoints/ice-hockey.api";
+} from "@/endpoints/ice-hockey.api"
 import {
   fetchRugbyLeagueLastMatches,
   fetchRugbyLeagueNextMatches,
-} from "@/endpoints/rugby-league.api";
+} from "@/endpoints/rugby-league.api"
 import {
   fetchTournamentLastMatches,
   fetchTournamentNextMatches,
-} from "@/endpoints/sofascore-rapid-api.api";
-import { fetchLastEvents, fetchNextEvents } from "@/endpoints/sofascore.api";
+} from "@/endpoints/sofascore-rapid-api.api"
+import { fetchLastEvents, fetchNextEvents } from "@/endpoints/sofascore.api"
 import {
   fetchTennisTournamentLastMatches,
   fetchTennisTournamentNextMatches,
-} from "@/endpoints/tennis.api";
-import { mapMatchSummary } from "@/lib/eventMapping";
-import { mapToDataverseMatchSummary } from "@/services/dataverse.service";
-import { AmericanFootball_Sofascore_Event } from "@/types/american-football";
-import { DataverseMatchSummary } from "@/types/dataverse";
-import { API_EVENT_TYPES, DISPLAY_TYPES, SPORT } from "@/types/misc";
-import { Sofascore_Event } from "@/types/sofascore";
-import { loadEnvConfig } from "@next/env";
-import { format } from "date-fns/format";
+} from "@/endpoints/tennis.api"
+import { americanFootballService } from "@/services/american-football.service"
+import { mapToDataverseMatchSummary } from "@/services/dataverse.service"
+import { AmericanFootball_Sofascore_Event } from "@/types/american-football"
+import { DataverseMatchSummary } from "@/types/dataverse"
+import { DisplayTypes, SPORT } from "@/types/misc"
+import { Sofascore_Event } from "@/types/sofascore"
+import { loadEnvConfig } from "@next/env"
+import { format } from "date-fns/format"
 
-loadEnvConfig(process.cwd());
+loadEnvConfig(process.cwd())
 
-const ENVIRONMENT_URL = process.env.DATAVERSE_ENVIRONMENT_URL ?? "";
-const TENANT_ID = process.env.DATAVERSE_TENANT_ID ?? "";
-const CLIENT_ID = process.env.DATAVERSE_CLIENT_ID ?? "";
-const CLIENT_SECRET = process.env.DATAVERSE_CLIENT_SECRET ?? "";
+const ENVIRONMENT_URL = process.env.DATAVERSE_ENVIRONMENT_URL ?? ""
+const TENANT_ID = process.env.DATAVERSE_TENANT_ID ?? ""
+const CLIENT_ID = process.env.DATAVERSE_CLIENT_ID ?? ""
+const CLIENT_SECRET = process.env.DATAVERSE_CLIENT_SECRET ?? ""
 
-const TABLE = "ss_matchsummaries";
-const CHUNK_SIZE = 100;
+const TABLE = "ss_matchsummaries"
+const CHUNK_SIZE = 100
 
 const [
   ,
   ,
-  tournamentIdArg,
+  leagueIdArg,
   seasonIdArg,
   sportArg,
   displayTypeArg,
   allEventsArg,
   useSportApiArg,
-] = process.argv;
-const allEventsMode = allEventsArg === "false" ? false : true;
-const useSportApi = useSportApiArg === "true";
-const tournamentId = tournamentIdArg;
-const seasonId = seasonIdArg;
-const sport = sportArg as SPORT;
-const displayType = (displayTypeArg as DISPLAY_TYPES) ?? DISPLAY_TYPES.ROUND;
+] = process.argv
+const allEventsMode = allEventsArg === "false" ? false : true
+const useSportApi = useSportApiArg === "true"
+const leagueId = leagueIdArg
+const seasonId = seasonIdArg
+const sport = sportArg as SPORT
+const displayType = (displayTypeArg as DisplayTypes) ?? DisplayTypes.ROUND
 
 const sportFetchLastEventsMap: Partial<Record<SPORT, typeof fetchLastEvents>> =
   {
@@ -88,7 +88,7 @@ const sportFetchLastEventsMap: Partial<Record<SPORT, typeof fetchLastEvents>> =
     [SPORT.ICE_HOCKEY]: fetchIceHockeyLastMatches,
     [SPORT.RUGBY_LEAGUE]: fetchRugbyLeagueLastMatches,
     [SPORT.TENNIS]: fetchTennisTournamentLastMatches,
-  };
+  }
 
 const sportFetchNextEventsMap: Partial<Record<SPORT, typeof fetchNextEvents>> =
   {
@@ -100,13 +100,13 @@ const sportFetchNextEventsMap: Partial<Record<SPORT, typeof fetchNextEvents>> =
     [SPORT.ICE_HOCKEY]: fetchIceHockeyNextMatches,
     [SPORT.RUGBY_LEAGUE]: fetchRugbyLeagueNextMatches,
     [SPORT.TENNIS]: fetchTennisTournamentNextMatches,
-  };
+  }
 
-if (!tournamentId || !seasonId || !sport) {
+if (!leagueId || !seasonId || !sport) {
   console.error(
-    "Usage: npx tsx scripts/bulk-upload-events.ts <tournamentId> <seasonId> <sport> <displayType?> <allEventsMode?> <useSportApi?>",
-  );
-  process.exit(1);
+    "Usage: npx tsx scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> <displayType?> <allEventsMode?> <useSportApi?>",
+  )
+  process.exit(1)
 }
 
 // ---------------------------------------------------------------------------
@@ -125,12 +125,12 @@ async function getAccessToken() {
         scope: `${ENVIRONMENT_URL}/.default`,
       }),
     },
-  );
+  )
   if (!res.ok) {
-    throw new Error(`Token request failed: ${res.status} ${await res.text()}`);
+    throw new Error(`Token request failed: ${res.status} ${await res.text()}`)
   }
-  const data = await res.json();
-  return data.access_token as string;
+  const data = await res.json()
+  return data.access_token as string
 }
 
 // ---------------------------------------------------------------------------
@@ -138,45 +138,45 @@ async function getAccessToken() {
 // ---------------------------------------------------------------------------
 
 async function fetchAllPages(label: string, fn: typeof fetchLastEvents) {
-  const events: Sofascore_Event[] = [];
-  let page = 0;
+  const events: Sofascore_Event[] = []
+  let page = 0
   while (true) {
-    console.log(`Fetching ${label} events page ${page}...`);
-    const data = await fn(Number(tournamentId), Number(seasonId), page);
-    if (!data || data.events.length === 0) break;
-    events.push(...data.events);
-    if (!data.hasNextPage) break;
-    page++;
+    console.log(`Fetching ${label} events page ${page}...`)
+    const data = await fn(leagueId, seasonId, page)
+    if (!data || data.events.length === 0) break
+    events.push(...data.events)
+    if (!data.hasNextPage) break
+    page++
   }
-  console.log(`Fetched ${events.length} ${label} events in ${page + 1} pages.`);
-  return events;
+  console.log(`Fetched ${events.length} ${label} events in ${page + 1} pages.`)
+  return events
 }
 
 async function fetchAllRecords() {
   const lastFn = useSportApi
     ? (sportFetchLastEventsMap[sport] ?? fetchLastEvents)
-    : fetchLastEvents;
+    : fetchLastEvents
   const nextFn = useSportApi
     ? (sportFetchNextEventsMap[sport] ?? fetchNextEvents)
-    : fetchNextEvents;
+    : fetchNextEvents
 
   const [lastEvents, nextEvents] = await Promise.all([
     fetchAllPages("last", lastFn),
     fetchAllPages("next", nextFn),
-  ]);
+  ])
 
-  return [...lastEvents, ...nextEvents];
+  return [...lastEvents, ...nextEvents]
 }
 
 async function fetchLatestEvents() {
-  const events: Sofascore_Event[] = [];
-  const fetchFn = sportFetchLastEventsMap[sport] ?? fetchLastEvents;
-  console.log(`Fetching latest events `);
-  const data = await fetchFn(Number(tournamentId), Number(seasonId));
-  if (!data || data.events.length === 0) return events;
-  events.push(...data.events);
-  console.log(`Fetched ${events.length} latest events.`);
-  return events;
+  const events: Sofascore_Event[] = []
+  const fetchFn = sportFetchLastEventsMap[sport] ?? fetchLastEvents
+  console.log(`Fetching latest events `)
+  const data = await fetchFn(leagueId, seasonId)
+  if (!data || data.events.length === 0) return events
+  events.push(...data.events)
+  console.log(`Fetched ${events.length} latest events.`)
+  return events
 }
 
 // ---------------------------------------------------------------------------
@@ -186,17 +186,17 @@ async function fetchLatestEvents() {
 function mapEventToRecord(
   event: Sofascore_Event,
 ): Omit<DataverseMatchSummary, "ss_matchsummaryid"> {
-  let roundLabel = "";
+  let roundLabel = ""
   switch (displayType) {
-    case DISPLAY_TYPES.ROUND:
+    case DisplayTypes.ROUND:
       roundLabel =
-        event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? 0}`;
-      break;
-    case DISPLAY_TYPES.DATE:
-      var startDate = new Date(0);
-      startDate.setUTCSeconds(event.startTimestamp);
-      roundLabel = format(startDate, "eee d MMM");
-      break;
+        event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? 0}`
+      break
+    case DisplayTypes.DATE:
+      var startDate = new Date(0)
+      startDate.setUTCSeconds(event.startTimestamp)
+      roundLabel = format(startDate, "eee d MMM")
+      break
     // case DISPLAY_TYPES.LEAGUE:
     //   roundLabel = isMultiLeague
     //     ? (leagueConfig.find(
@@ -207,28 +207,11 @@ function mapEventToRecord(
     //   break;
   }
 
-  const afEvent = event as AmericanFootball_Sofascore_Event;
+  const afEvent = event as AmericanFootball_Sofascore_Event
 
-  const matchSummary = mapMatchSummary(
-    API_EVENT_TYPES.SOFASCORE,
-    sport,
-    event,
-    {
-      roundLabel,
-      homeDetails: {
-        winDrawLoss: afEvent.homeTeamSeasonHistoricalForm
-          ? `${afEvent.homeTeamSeasonHistoricalForm.wins ?? 0}-${afEvent.homeTeamSeasonHistoricalForm.losses ?? 0}${afEvent.homeTeamSeasonHistoricalForm.draws ? "-" + afEvent.homeTeamSeasonHistoricalForm.draws : ""}`
-          : undefined,
-      },
-      awayDetails: {
-        winDrawLoss: afEvent.awayTeamSeasonHistoricalForm
-          ? `${afEvent.awayTeamSeasonHistoricalForm.wins ?? 0}-${afEvent.awayTeamSeasonHistoricalForm.losses ?? 0}${afEvent.awayTeamSeasonHistoricalForm.draws ? "-" + afEvent.awayTeamSeasonHistoricalForm.draws : ""}`
-          : undefined,
-      },
-    },
-  );
+  const matchSummary = americanFootballService.eventMapper(afEvent)
 
-  return mapToDataverseMatchSummary(matchSummary);
+  return mapToDataverseMatchSummary(matchSummary)
 }
 
 // ---------------------------------------------------------------------------
@@ -238,20 +221,20 @@ function mapEventToRecord(
 type BatchOperation =
   | { method: "POST"; record: Omit<DataverseMatchSummary, "ss_matchsummaryid"> }
   | {
-      method: "PATCH";
-      dvId: string;
-      record: Omit<DataverseMatchSummary, "ss_matchsummaryid">;
-    };
+      method: "PATCH"
+      dvId: string
+      record: Omit<DataverseMatchSummary, "ss_matchsummaryid">
+    }
 
 function buildBatchBody(operations: BatchOperation[], boundary: string) {
-  const baseUrl = `${ENVIRONMENT_URL}/api/data/v9.2/${TABLE}`;
+  const baseUrl = `${ENVIRONMENT_URL}/api/data/v9.2/${TABLE}`
   const parts = operations.map((op) => {
-    const body = JSON.stringify(op.record);
-    const contentLength = Buffer.byteLength(body, "utf8");
+    const body = JSON.stringify(op.record)
+    const contentLength = Buffer.byteLength(body, "utf8")
     const requestLine =
       op.method === "POST"
         ? `POST ${baseUrl} HTTP/1.1`
-        : `PATCH ${baseUrl}(${op.dvId}) HTTP/1.1`;
+        : `PATCH ${baseUrl}(${op.dvId}) HTTP/1.1`
     return [
       `--${boundary}`,
       "Content-Type: application/http",
@@ -267,14 +250,14 @@ function buildBatchBody(operations: BatchOperation[], boundary: string) {
       ...(op.method === "PATCH" ? ["If-Match: *"] : []),
       "",
       body,
-    ].join("\r\n");
-  });
-  return parts.join("\r\n") + `\r\n--${boundary}--`;
+    ].join("\r\n")
+  })
+  return parts.join("\r\n") + `\r\n--${boundary}--`
 }
 
 async function uploadBatch(token: string, operations: BatchOperation[]) {
-  const boundary = `batch_${Date.now()}`;
-  const body = buildBatchBody(operations, boundary);
+  const boundary = `batch_${Date.now()}`
+  const body = buildBatchBody(operations, boundary)
 
   const res = await fetch(`${ENVIRONMENT_URL}/api/data/v9.2/$batch`, {
     method: "POST",
@@ -286,15 +269,15 @@ async function uploadBatch(token: string, operations: BatchOperation[]) {
       "OData-Version": "4.0",
     },
     body,
-  });
+  })
 
-  const text = await res.text();
+  const text = await res.text()
   if (!res.ok) {
-    console.error(`Batch request failed: ${res.status}`, text);
-    return 0;
+    console.error(`Batch request failed: ${res.status}`, text)
+    return 0
   }
 
-  return (text.match(/HTTP\/1\.1 204 No Content/g) ?? []).length;
+  return (text.match(/HTTP\/1\.1 204 No Content/g) ?? []).length
 }
 
 // ---------------------------------------------------------------------------
@@ -305,12 +288,12 @@ async function uploadBatch(token: string, operations: BatchOperation[]) {
 async function fetchExistingRecords(
   token: string,
 ): Promise<Map<string, string>> {
-  const map = new Map<string, string>();
+  const map = new Map<string, string>()
   let url: string | null =
     `${ENVIRONMENT_URL}/api/data/v9.2/${TABLE}` +
     `?$select=ss_matchid,ss_matchsummaryid` +
-    `&$filter=ss_tournamentid eq '${tournamentId}' and ss_seasonid eq '${seasonId}' and ss_sport eq '${sport}'` +
-    `&$top=5000`;
+    `&$filter=ss_leagueid eq '${leagueId}' and ss_seasonid eq '${seasonId}' and ss_sport eq '${sport}'` +
+    `&$top=5000`
 
   while (url) {
     const res = await fetch(url, {
@@ -321,23 +304,23 @@ async function fetchExistingRecords(
         "OData-Version": "4.0",
         Prefer: "odata.maxpagesize=5000",
       },
-    });
+    })
     if (!res.ok) {
       throw new Error(
         `Failed to fetch existing records: ${res.status} ${await res.text()}`,
-      );
+      )
     }
     const data = (await res.json()) as {
-      value: { ss_matchid: string; ss_matchsummaryid: string }[];
-      "@odata.nextLink"?: string;
-    };
-    for (const row of data.value) {
-      map.set(row.ss_matchid, row.ss_matchsummaryid);
+      value: { ss_matchid: string; ss_matchsummaryid: string }[]
+      "@odata.nextLink"?: string
     }
-    url = data["@odata.nextLink"] ?? null;
+    for (const row of data.value) {
+      map.set(row.ss_matchid, row.ss_matchsummaryid)
+    }
+    url = data["@odata.nextLink"] ?? null
   }
 
-  return map;
+  return map
 }
 
 // ---------------------------------------------------------------------------
@@ -346,66 +329,62 @@ async function fetchExistingRecords(
 
 async function main() {
   console.log(
-    `\nBulk uploading ${sport} matches — tournament ${tournamentId}, season ${seasonId}`,
-  );
+    `\nBulk uploading ${sport} matches — league ${leagueId}, season ${seasonId}`,
+  )
 
-  const token = await getAccessToken();
+  const token = await getAccessToken()
 
-  console.log("Checking for existing records in Dataverse...");
-  const existingRecords = await fetchExistingRecords(token);
-  console.log(`Found ${existingRecords.size} existing matches in Dataverse.`);
+  console.log("Checking for existing records in Dataverse...")
+  const existingRecords = await fetchExistingRecords(token)
+  console.log(`Found ${existingRecords.size} existing matches in Dataverse.`)
 
-  const events = await (allEventsMode
-    ? fetchAllRecords()
-    : fetchLatestEvents());
-  console.log(`Fetched ${events.length} matches from API.`);
+  const events = await (allEventsMode ? fetchAllRecords() : fetchLatestEvents())
+  console.log(`Fetched ${events.length} matches from API.`)
 
   const operations: BatchOperation[] = events.map((e) => {
-    const record = mapEventToRecord(e);
-    const dvId = existingRecords.get(e.id.toString());
-    return dvId
-      ? { method: "PATCH", dvId, record }
-      : { method: "POST", record };
-  });
+    const record = mapEventToRecord(e)
+    const dvId = existingRecords.get(e.id.toString())
+    return dvId ? { method: "PATCH", dvId, record } : { method: "POST", record }
+  })
 
-  const createCount = operations.filter((o) => o.method === "POST").length;
-  const updateCount = operations.filter((o) => o.method === "PATCH").length;
-  console.log(`${createCount} to create, ${updateCount} to update.`);
+  const createCount = operations.filter((o) => o.method === "POST").length
+  const updateCount = operations.filter((o) => o.method === "PATCH").length
+  console.log(`${createCount} to create, ${updateCount} to update.`)
 
   if (operations.length === 0) {
-    console.log("Nothing to upload.");
-    return;
+    console.log("Nothing to upload.")
+    return
   }
 
-  const totalChunks = Math.ceil(operations.length / CHUNK_SIZE);
-  let totalSuccess = 0;
-  let totalFailed = 0;
+  const totalChunks = Math.ceil(operations.length / CHUNK_SIZE)
+  let totalSuccess = 0
+  let totalFailed = 0
 
   for (let i = 0; i < operations.length; i += CHUNK_SIZE) {
-    const chunk = operations.slice(i, i + CHUNK_SIZE);
-    const chunkNum = Math.floor(i / CHUNK_SIZE) + 1;
+    const chunk = operations.slice(i, i + CHUNK_SIZE)
+    const chunkNum = Math.floor(i / CHUNK_SIZE) + 1
     console.log(
       `\nUploading chunk ${chunkNum}/${totalChunks} (${chunk.length} operations)...`,
-    );
+    )
 
-    const successes = await uploadBatch(token, chunk);
-    const failures = chunk.length - successes;
-    console.log(`  ✓ ${successes} succeeded, ✗ ${failures} failed`);
+    const successes = await uploadBatch(token, chunk)
+    const failures = chunk.length - successes
+    console.log(`  ✓ ${successes} succeeded, ✗ ${failures} failed`)
 
-    totalSuccess += successes;
-    totalFailed += failures;
+    totalSuccess += successes
+    totalFailed += failures
   }
 
   console.log(
     `\nDone. Total: ${totalSuccess} succeeded, ${totalFailed} failed.`,
-  );
+  )
 
   if (totalFailed > 0) {
-    process.exit(1);
+    process.exit(1)
   }
 }
 
 main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+  console.error(err)
+  process.exit(1)
+})

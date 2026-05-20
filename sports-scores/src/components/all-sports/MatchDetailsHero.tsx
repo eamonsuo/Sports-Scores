@@ -1,17 +1,17 @@
-import fallback from "@/../public/vercel.svg";
-import Image from "next/image";
+import fallback from "@/../public/vercel.svg"
+import Image from "next/image"
 
 export default function MatchDetailsHero({
   homeInfo,
   awayInfo,
   status,
 }: {
-  homeInfo: { img?: string | string[]; name: string; score: string | string[] };
-  awayInfo: { img?: string | string[]; name: string; score: string | string[] };
-  status: string;
+  homeInfo: { img?: string | string[]; name: string; score: string | string[] }
+  awayInfo: { img?: string | string[]; name: string; score: string | string[] }
+  status: string
 }) {
-  const homeImg = Array.isArray(homeInfo.img) ? homeInfo.img[0] : homeInfo.img;
-  const awayImg = Array.isArray(awayInfo.img) ? awayInfo.img[0] : awayInfo.img;
+  const homeImg = Array.isArray(homeInfo.img) ? homeInfo.img[0] : homeInfo.img
+  const awayImg = Array.isArray(awayInfo.img) ? awayInfo.img[0] : awayInfo.img
 
   return (
     <div className="m-4 grid grid-cols-3 gap-2">
@@ -22,8 +22,9 @@ export default function MatchDetailsHero({
               <Image
                 key={idx}
                 src={img || fallback}
-                width={60}
-                height={60}
+                width={150}
+                height={150}
+                style={{ width: "60px", height: "auto" }}
                 alt={`Home team player ${idx + 1}`}
                 className="rounded-full border-2 border-white dark:border-neutral-800"
               />
@@ -32,8 +33,9 @@ export default function MatchDetailsHero({
         ) : (
           <Image
             src={homeImg || fallback}
-            width={60}
-            height={60}
+            width={150}
+            height={150}
+            style={{ width: "60px", height: "auto" }}
             alt="Home team image"
           />
         )}
@@ -47,8 +49,9 @@ export default function MatchDetailsHero({
               <Image
                 key={idx}
                 src={img || fallback}
-                width={60}
-                height={60}
+                width={150}
+                height={150}
+                style={{ width: "60px", height: "auto" }}
                 alt={`Away team player ${idx + 1}`}
                 className="rounded-full border-2 border-white dark:border-neutral-800"
               />
@@ -57,8 +60,9 @@ export default function MatchDetailsHero({
         ) : (
           <Image
             src={awayImg || fallback}
-            width={60}
-            height={60}
+            width={150}
+            height={150}
+            style={{ width: "60px", height: "auto" }}
             alt="Away team image"
           />
         )}
@@ -81,5 +85,5 @@ export default function MatchDetailsHero({
         {awayInfo.score}
       </p>
     </div>
-  );
+  )
 }

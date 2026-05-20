@@ -1,5 +1,5 @@
-import { Button } from "@/components/misc-ui/Button";
-import Link from "next/link";
+import { Button } from "@/components/misc-ui/Button"
+import Link from "next/link"
 
 export default async function Page() {
   return (
@@ -17,5 +17,5 @@ export default async function Page() {
         <Button variant={"secondary"}>Full Schedule</Button>
       </Link>
     </div>
-  );
+  )
 }

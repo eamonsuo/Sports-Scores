@@ -1,6 +1,6 @@
-"use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+"use client"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 import {
   AMERICAN_FOOTBALL_LEAGUES,
@@ -10,17 +10,17 @@ import {
   NETBALL_LEAGUES,
   RUGBY_LEAGUE_LEAGUES,
   RUGBY_UNION_LEAGUES,
-} from "@/lib/constants";
-import { cn } from "@/lib/utils";
-import { SPORT } from "@/types/misc";
-import Image from "next/image";
-import { Avatar, AvatarFallback, AvatarImage } from "./Avatar";
+} from "@/lib/constants"
+import { cn } from "@/lib/utils"
+import { SPORT } from "@/types/misc"
+import Image from "next/image"
+import { Avatar, AvatarFallback, AvatarImage } from "./Avatar"
 
 const footerLinks: {
-  sport: string;
-  link: string;
-  img: string;
-  altText: string;
+  sport: string
+  link: string
+  img: string
+  altText: string
 }[] = [
   {
     sport: "abc news",
@@ -43,25 +43,25 @@ const footerLinks: {
   },
   {
     sport: SPORT.RUGBY_LEAGUE,
-    link: `/sports/${SPORT.RUGBY_LEAGUE}/${RUGBY_LEAGUE_LEAGUES[0].slug}/${RUGBY_LEAGUE_LEAGUES[0].seasons[0].slug}/matches`,
+    link: `/sports/${SPORT.RUGBY_LEAGUE}/${RUGBY_LEAGUE_LEAGUES[0].slug}/${RUGBY_LEAGUE_LEAGUES[0].seasons[0].slug}`,
     img: "/footer/nrl-ball.svg",
     altText: "RUGBY LEAGUE",
   },
   {
     sport: SPORT.AUSSIE_RULES,
-    link: `/sports/${SPORT.AUSSIE_RULES}/${AUSSIE_RULES_LEAGUES[0].slug}/${AUSSIE_RULES_LEAGUES[0].seasons[0].slug}/matches`,
+    link: `/sports/${SPORT.AUSSIE_RULES}/${AUSSIE_RULES_LEAGUES[0].slug}/${AUSSIE_RULES_LEAGUES[0].seasons[0].slug}`,
     img: "/footer/afl-ball.svg",
     altText: "AUSSIE RULES",
   },
   {
     sport: SPORT.MOTORSPORT,
-    link: `/sports/${SPORT.MOTORSPORT}/${MOTORSPORT_CATEGORIES[0].slug}/${MOTORSPORT_CATEGORIES[0].seasons[0].slug}/races`,
+    link: `/sports/${SPORT.MOTORSPORT}/${MOTORSPORT_CATEGORIES[0].slug}/${MOTORSPORT_CATEGORIES[0].seasons[0].slug}`,
     img: "/footer/f1-helmet.svg",
     altText: "MOTORSPORT",
   },
   {
     sport: SPORT.GOLF,
-    link: `/sports/${SPORT.GOLF}/${GOLF_TOURS[0].slug}/${GOLF_TOURS[0].seasons[0].slug}/schedule`,
+    link: `/sports/${SPORT.GOLF}/${GOLF_TOURS[0].slug}/${GOLF_TOURS[0].seasons[0].slug}`,
     img: "/footer/golf-ball.svg",
     altText: "Golf",
   },
@@ -92,7 +92,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.RUGBY_UNION,
-    link: `/sports/${SPORT.RUGBY_UNION}/${RUGBY_UNION_LEAGUES[0].slug}/${RUGBY_UNION_LEAGUES[0].seasons[0].slug}/matches`,
+    link: `/sports/${SPORT.RUGBY_UNION}/${RUGBY_UNION_LEAGUES[0].slug}/${RUGBY_UNION_LEAGUES[0].seasons[0].slug}`,
     img: "/footer/union.png",
     altText: "Rugby Union",
   },
@@ -130,7 +130,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.AMERICAN_FOOTBALL,
-    link: `/sports/${SPORT.AMERICAN_FOOTBALL}/${AMERICAN_FOOTBALL_LEAGUES[0].slug}/${AMERICAN_FOOTBALL_LEAGUES[0].seasons[0].slug}/matches#current-date`,
+    link: `/sports/${SPORT.AMERICAN_FOOTBALL}/${AMERICAN_FOOTBALL_LEAGUES[0].slug}/${AMERICAN_FOOTBALL_LEAGUES[0].seasons[0].slug}`,
     img: "/footer/american-football.svg",
     altText: "AMERICAN FOOTBALL",
   },
@@ -141,16 +141,16 @@ const footerLinks: {
     img: "/olympic-rings.svg",
     altText: "Olympics",
   },
-];
+]
 
 export default function Footer() {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   const isActive = (link: string) => {
-    if (link === "/") return pathname === "/";
-    if (link.startsWith("http")) return false;
-    return pathname.startsWith(link.split("/").slice(0, 3).join("/"));
-  };
+    if (link === "/") return pathname === "/"
+    if (link.startsWith("http")) return false
+    return pathname.startsWith(link.split("/").slice(0, 3).join("/"))
+  }
 
   return (
     <footer className="bg-gray-200 dark:bg-neutral-900">
@@ -167,7 +167,13 @@ export default function Footer() {
             >
               <AvatarImage src={item.img} alt={item.sport} />
               <AvatarFallback>
-                <Image src={"/vercel.svg"} width={30} height={10} alt="" />
+                <Image
+                  src={"/vercel.svg"}
+                  width={60}
+                  height={20}
+                  style={{ width: "30px", height: "auto" }}
+                  alt=""
+                />
               </AvatarFallback>
             </Avatar>
           </Link>
@@ -177,5 +183,5 @@ export default function Footer() {
         <hr></hr>
       </div>
     </footer>
-  );
+  )
 }

@@ -1,7 +1,5 @@
-import { redirect } from "next/navigation";
-
-// export const dynamic = "force-dynamic";
+import { redirect } from "next/navigation"
 
 export default async function Page() {
-  return redirect("https://www.flashscore.com.au/darts/");
+  return redirect("https://www.flashscore.com.au/darts/")
 }

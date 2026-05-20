@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { formatDateLong } from "@/lib/projUtils";
+import { formatDateLong } from "@/lib/projUtils"
 
 export default function CricketMatchSummary({
   date,
@@ -11,15 +11,15 @@ export default function CricketMatchSummary({
   umpires,
   pom,
 }: {
-  date: string | Date;
-  venue: string;
-  toss: string;
-  homePlayers: string[];
-  awayPlayers: string[];
-  umpires: string[];
-  pom: string;
+  date: string | Date
+  venue: string
+  toss: string
+  homePlayers: string[]
+  awayPlayers: string[]
+  umpires: string[]
+  pom: string
 }) {
-  const dateStr = date instanceof Date ? formatDateLong(date) : date;
+  const dateStr = date instanceof Date ? formatDateLong(date) : date
 
   return (
     <table className="m-4 dark:text-neutral-500">
@@ -54,5 +54,5 @@ export default function CricketMatchSummary({
         </tr>
       </tbody>
     </table>
-  );
+  )
 }

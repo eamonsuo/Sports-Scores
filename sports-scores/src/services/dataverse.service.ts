@@ -2,83 +2,81 @@ import {
   createDataverseMatchSummary,
   fetchDataverseMatchSummaries,
   updateDataverseMatchSummary,
-} from "@/endpoints/dataverse.api";
-import { DataverseMatchSummary } from "@/types/dataverse";
+} from "@/endpoints/dataverse.api"
+import { DataverseMatchSummary } from "@/types/dataverse"
 import {
   DeepPartial,
   MatchStatus,
   MatchSummary,
   SPORT,
   TeamScoreDetails,
-} from "@/types/misc";
+} from "@/types/misc"
+import { TZDate } from "@date-fns/tz"
+import { endOfDay, startOfDay } from "date-fns"
 
 // --- MatchSummary Utilities ---
 
 const STATUS_MAP: Record<0 | 1 | 2, MatchStatus> = {
-  0: "LIVE",
-  1: "UPCOMING",
-  2: "COMPLETED",
-};
+  0: MatchStatus.LIVE,
+  1: MatchStatus.UPCOMING,
+  2: MatchStatus.COMPLETED,
+}
 
 const COLOUR_MAP: Record<0 | 1 | 2, "green" | "yellow" | "gray"> = {
   0: "green",
   1: "yellow",
   2: "gray",
-};
+}
 
 const STATUS_REVERSE: Record<MatchStatus, 0 | 1 | 2> = {
-  LIVE: 0,
-  UPCOMING: 1,
-  COMPLETED: 2,
-};
+  [MatchStatus.LIVE]: 0,
+  [MatchStatus.UPCOMING]: 1,
+  [MatchStatus.COMPLETED]: 2,
+}
 
 const COLOUR_REVERSE: Record<"green" | "yellow" | "gray", 0 | 1 | 2> = {
   green: 0,
   yellow: 1,
   gray: 2,
-};
+}
 
 function stringifyField(value: string | string[] | undefined): string | null {
-  if (value === undefined || value === null) return null;
-  return Array.isArray(value) ? JSON.stringify(value) : value;
+  if (value === undefined || value === null) return null
+  return Array.isArray(value) ? JSON.stringify(value) : value
 }
 
 function parseJsonField(value: string | null): string | string[] {
-  if (!value) return "";
+  if (!value) return ""
   try {
-    const parsed = JSON.parse(value);
-    return Array.isArray(parsed) ? parsed : String(parsed);
+    const parsed = JSON.parse(value)
+    return Array.isArray(parsed) ? parsed : String(parsed)
   } catch {
-    return value;
+    return value
+  }
+}
+
+function parseCompetitorDetails(value: string | null): TeamScoreDetails[] {
+  if (!value) return []
+  try {
+    const parsed = JSON.parse(value)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
   }
 }
 
 function mapToMatchSummary(r: DataverseMatchSummary): MatchSummary {
-  const homeDetails: TeamScoreDetails = {
-    name: r.ss_homename ?? "",
-    score: parseJsonField(r.ss_homescore),
-    img: r.ss_homeimg ? parseJsonField(r.ss_homeimg) : undefined,
-    winDrawLoss: r.ss_homewdl ?? undefined,
-  };
-
-  const awayDetails: TeamScoreDetails = {
-    name: r.ss_awayname ?? "",
-    score: parseJsonField(r.ss_awayscore),
-    img: r.ss_awayimg ? parseJsonField(r.ss_awayimg) : undefined,
-    winDrawLoss: r.ss_awaywdl ?? undefined,
-  };
-
   return {
     id: r.ss_matchid ?? "",
     startDate: new Date(r.ss_startdate ?? ""),
     endDate: r.ss_enddate ? new Date(r.ss_enddate) : undefined,
     sport: r.ss_sport ?? "",
     venue: r.ss_venue ?? undefined,
-    status: r.ss_status != null ? STATUS_MAP[r.ss_status] : "UPCOMING",
+    status:
+      r.ss_status != null ? STATUS_MAP[r.ss_status] : MatchStatus.UPCOMING,
     summaryText: r.ss_summarytext,
     otherDetail: r.ss_otherdetail ?? undefined,
-    homeDetails,
-    awayDetails,
+    competitorDetails: parseCompetitorDetails(r.ss_competitordetails),
     roundLabel: r.ss_roundlabel ?? undefined,
     timer:
       r.ss_status === 1
@@ -88,14 +86,15 @@ function mapToMatchSummary(r: DataverseMatchSummary): MatchSummary {
       r.ss_timerdisplaycolour != null
         ? COLOUR_MAP[r.ss_timerdisplaycolour]
         : undefined,
-    seriesName: r.ss_seriesname ?? undefined,
+    leagueName: r.ss_leaguename ?? undefined,
+    leagueImg: r.ss_leagueimg ?? undefined,
+    leagueSlug: r.ss_leagueslug ?? undefined,
     matchSlug: r.ss_matchslug ?? undefined,
-    seriesSlug: r.ss_seriesslug ?? undefined,
     winner: r.ss_winner ?? undefined,
-    tournamentId: r.ss_tournamentid ?? undefined,
+    leagueId: r.ss_leagueid ?? undefined,
     seasonId: r.ss_seasonid ?? undefined,
     dataverseGUID: r.ss_matchsummaryid,
-  };
+  }
 }
 
 export function mapToDataverseMatchSummary(
@@ -110,14 +109,10 @@ export function mapToDataverseMatchSummary(
     ss_venue: m.venue ?? null,
     ss_status: STATUS_REVERSE[m.status],
     ss_otherdetail: m.otherDetail ?? null,
-    ss_homename: m.homeDetails.name,
-    ss_homescore: stringifyField(m.homeDetails.score),
-    ss_homeimg: stringifyField(m.homeDetails.img),
-    ss_homewdl: m.homeDetails.winDrawLoss ?? null,
-    ss_awayname: m.awayDetails.name,
-    ss_awayscore: stringifyField(m.awayDetails.score),
-    ss_awayimg: stringifyField(m.awayDetails.img),
-    ss_awaywdl: m.awayDetails.winDrawLoss ?? null,
+    ss_competitordetails:
+      m.competitorDetails.length > 0
+        ? JSON.stringify(m.competitorDetails)
+        : null,
     ss_roundlabel: m.roundLabel ?? null,
     ss_timer:
       m.timer instanceof Date ? m.timer.toISOString() : (m.timer ?? null),
@@ -125,49 +120,66 @@ export function mapToDataverseMatchSummary(
       m.timerDisplayColour != null
         ? COLOUR_REVERSE[m.timerDisplayColour]
         : null,
-    ss_seriesname: m.seriesName ?? null,
+    ss_leaguename: m.leagueName ?? null,
+    ss_leagueimg: m.leagueImg ?? null,
+    ss_leagueslug: m.leagueSlug ?? null,
     ss_matchslug: m.matchSlug ?? null,
-    ss_seriesslug: m.seriesSlug ?? null,
     ss_winner: m.winner ?? null,
-    ss_tournamentid: m.tournamentId ?? null,
+    ss_leagueid: m.leagueId ?? null,
     ss_seasonid: m.seasonId ?? null,
-  };
+  }
 }
 
 // --- MatchSummary Services ---
 
 export async function matchSummariesAll(): Promise<MatchSummary[] | null> {
-  const response = await fetchDataverseMatchSummaries();
-  if (!response) return null;
-  return response.value.map(mapToMatchSummary);
+  const response = await fetchDataverseMatchSummaries()
+  if (!response) return null
+  return response.value.map(mapToMatchSummary)
 }
 
 export async function matchSummariesByTournament(
-  tournamentId: number,
-  seasonId: number,
+  leagueId: string,
+  seasonId: string,
   sport: SPORT,
 ): Promise<MatchSummary[] | null> {
   const filters = [
-    `ss_tournamentid eq '${tournamentId}'`,
+    `ss_leagueid eq '${leagueId}'`,
     `ss_seasonid eq '${seasonId}'`,
     `ss_sport eq '${sport}'`,
-  ];
-  const response = await fetchDataverseMatchSummaries(filters.join(" and "));
-  if (!response) return null;
-  return response.value.map(mapToMatchSummary);
+  ]
+  const response = await fetchDataverseMatchSummaries(filters.join(" and "))
+  if (!response) return null
+  return response.value.map(mapToMatchSummary)
+}
+
+export async function matchSummariesBySportAndDay(
+  sport: SPORT,
+  date: Date | TZDate,
+): Promise<MatchSummary[] | null> {
+  const dayStart = new Date(startOfDay(date).getTime()).toISOString()
+  const dayEnd = new Date(endOfDay(date).getTime()).toISOString()
+
+  const filters = [
+    `ss_sport eq '${sport}'`,
+    `((ss_startdate le '${dayEnd}' and ss_enddate ge '${dayStart}') or (ss_enddate eq null and ss_startdate ge '${dayStart}' and ss_startdate le '${dayEnd}'))`,
+  ]
+  const response = await fetchDataverseMatchSummaries(filters.join(" and "))
+  if (!response) return null
+  return response.value.map(mapToMatchSummary)
 }
 
 export async function matchSummaryCreate(record: MatchSummary) {
-  return createDataverseMatchSummary(mapToDataverseMatchSummary(record));
+  return createDataverseMatchSummary(mapToDataverseMatchSummary(record))
 }
 
 export async function matchSummaryUpdate(
   id: string,
   record: DeepPartial<MatchSummary>,
 ) {
-  const mapped = mapToDataverseMatchSummary(record as MatchSummary);
+  const mapped = mapToDataverseMatchSummary(record as MatchSummary)
   const partial = Object.fromEntries(
     Object.entries(mapped).filter(([, v]) => v !== null),
-  ) as Partial<Omit<DataverseMatchSummary, "ss_matchsummaryid">>;
-  return updateDataverseMatchSummary(id, partial);
+  ) as Partial<Omit<DataverseMatchSummary, "ss_matchsummaryid">>
+  return updateDataverseMatchSummary(id, partial)
 }

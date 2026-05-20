@@ -1,29 +1,17 @@
-import NavButtonGroup from "@/components/misc-ui/NavButtonGroup";
+import LeagueLayout from "@/components/all-sports/LeagueLayout"
+import { SPORT } from "@/types/misc"
 
 export default async function SportsLayout({
   children,
+  params,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
+  params: Promise<{ season: string }>
 }) {
+  const { season } = await params
   return (
-    <div className="flex-1 overflow-y-auto">
-      <div className="flex h-full flex-col">
-        <NavButtonGroup
-          buttons={[
-            {
-              href: "./schedule#current-date",
-              label: "Schedule",
-              page: "schedule",
-            },
-            {
-              href: "./fedexcup",
-              label: "FedEx Cup",
-              page: "fedexcup",
-            },
-          ]}
-        />
-        {children}
-      </div>
-    </div>
-  );
+    <LeagueLayout sport={SPORT.GOLF} league="pga" season={season}>
+      {children}
+    </LeagueLayout>
+  )
 }

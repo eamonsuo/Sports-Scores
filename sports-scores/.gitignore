@@ -20,6 +20,9 @@
 .DS_Store
 *.pem
 
+# dev cache
+.dev-cache/
+
 # debug
 npm-debug.log*
 yarn-debug.log*

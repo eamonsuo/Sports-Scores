@@ -1,26 +1,26 @@
-"use client";
-import fallback from "@/../public/vercel.svg";
+"use client"
+import fallback from "@/../public/vercel.svg"
 import type {
   PlayoffPictureGroup,
   PlayoffPictureTeam,
-} from "@/types/playoff-picture";
-import Image from "next/image";
-import { useState } from "react";
-import { Button } from "../misc-ui/Button";
+} from "@/types/playoff-picture"
+import Image from "next/image"
+import { useState } from "react"
+import { Button } from "../misc-ui/Button"
 
 const gridCols: Record<number, string> = {
   1: "grid-cols-1",
   2: "grid-cols-2",
   3: "grid-cols-3",
   4: "grid-cols-4",
-};
+}
 
 function Matchup({
   home,
   away,
 }: {
-  home: PlayoffPictureTeam;
-  away: PlayoffPictureTeam;
+  home: PlayoffPictureTeam
+  away: PlayoffPictureTeam
 }) {
   return (
     <div className="flex items-center justify-center gap-2 py-1">
@@ -29,8 +29,9 @@ function Matchup({
         <Image
           src={home.logo ?? fallback}
           alt={"Team Logo"}
-          width={32}
-          height={32}
+          width={80}
+          height={80}
+          style={{ width: "32px", height: "auto" }}
         />
       )}
       <span className="mx-2 text-xs text-gray-400">vs</span>
@@ -38,23 +39,24 @@ function Matchup({
         <Image
           src={away.logo ?? fallback}
           alt={"Team Logo"}
-          width={32}
-          height={32}
+          width={80}
+          height={80}
+          style={{ width: "32px", height: "auto" }}
         />
       )}
       <span className="w-4 text-left">{away.positionDisplay}</span>
     </div>
-  );
+  )
 }
 
 export default function PlayoffPicture({
   data,
   buttonLabel,
 }: {
-  data: PlayoffPictureGroup[];
-  buttonLabel?: string;
+  data: PlayoffPictureGroup[]
+  buttonLabel?: string
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   return (
     <div className="my-4 w-full">
@@ -104,8 +106,9 @@ export default function PlayoffPicture({
                                 <Image
                                   src={team.logo ?? fallback}
                                   alt={"Team Logo"}
-                                  width={32}
-                                  height={32}
+                                  width={80}
+                                  height={80}
+                                  style={{ width: "32px", height: "auto" }}
                                 />
                               </span>
                             ))}
@@ -123,5 +126,5 @@ export default function PlayoffPicture({
         </div>
       )}
     </div>
-  );
+  )
 }

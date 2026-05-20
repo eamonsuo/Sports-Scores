@@ -1,168 +1,106 @@
-import { ScoreDifference } from "@/components/all-sports/ScoreChart";
-import { Match as BracketMatch } from "@/components/bracket/types";
-import { TennisRankingsPlayerRow } from "@/components/tennis/RankingsLeaderboard";
-import { TennisScoreBreakdown } from "@/components/tennis/TennisScoreBreakdown";
-import { FixtureRound, MatchSummary, TeamScoreDetails } from "./misc";
 import {
-  Sofascore_CupTree,
   Sofascore_Event,
   Sofascore_Event_Response,
   Sofascore_EventPage_Response,
   Sofascore_Events_Response,
   Sofascore_Team,
   Sofascore_TotalStandings_Response,
-} from "./sofascore";
+} from "./sofascore"
 
 export interface Tennis_Sofascore_Event extends Sofascore_Event {
-  homeTeamSeed?: string;
-  awayTeamSeed?: string;
-  firstToServe?: number;
+  firstToServe?: number
   eventFilters?: {
-    category: string[];
-    level: string[];
-    tournament: string[];
-    gender: string[];
-  };
+    category: string[]
+    level: string[]
+    tournament: string[]
+    gender: string[]
+  }
 }
 
-export interface Tennis_TennisApi_FixturePage_Response
-  extends Sofascore_EventPage_Response {
-  events: Tennis_Sofascore_Event[];
+export interface Tennis_TennisApi_FixturePage_Response extends Sofascore_EventPage_Response {
+  events: Tennis_Sofascore_Event[]
 }
 
-export interface Tennis_TennisApi_Match_Response
-  extends Sofascore_Event_Response {
-  event: Tennis_Sofascore_Event;
+export interface Tennis_TennisApi_MatchSchedules_Response extends Sofascore_Events_Response {
+  events: Tennis_Sofascore_Event[]
 }
 
-export interface Tennis_TennisApi_TournamentStandings_Response
-  extends Sofascore_TotalStandings_Response {}
+export interface Tennis_TennisApi_TournamentStandings_Response extends Sofascore_TotalStandings_Response {}
+
+export enum RankingList {
+  WTA = "wtaRankings",
+  ATP = "atpRankings",
+  OWGR = "owgr",
+}
 
 export interface Tennis_StatisticsItem {
-  name: string;
-  home: string;
-  away: string;
-  compareCode: number;
-  statisticsType: string;
-  valueType: string;
-  homeValue: number;
-  awayValue: number;
-  renderType: number;
-  key: string;
-  homeTotal?: number;
-  awayTotal?: number;
+  name: string
+  home: string
+  away: string
+  compareCode: number
+  statisticsType: string
+  valueType: string
+  homeValue: number
+  awayValue: number
+  renderType: number
+  key: string
+  homeTotal?: number
+  awayTotal?: number
 }
 
 export interface Tennis_StatisticsGroup {
-  groupName: string;
-  statisticsItems: Tennis_StatisticsItem[];
+  groupName: string
+  statisticsItems: Tennis_StatisticsItem[]
 }
 
 export interface Tennis_Statistics {
-  period: string;
-  groups: Tennis_StatisticsGroup[];
+  period: string
+  groups: Tennis_StatisticsGroup[]
 }
 
 export interface Tennis_TennisApi_MatchStatistics_Response {
-  statistics: Tennis_Statistics[];
-}
-
-export interface Tennis_TennisApi_MatchSchedules_Response
-  extends Sofascore_Events_Response {
-  events: Tennis_Sofascore_Event[];
-}
-
-export interface Tennis_TennisApi_CupTrees_Response {
-  cupTrees: Sofascore_CupTree[];
+  statistics: Tennis_Statistics[]
 }
 
 export interface Tennis_TennisApi_TournamentRounds_Response {
   currentRound: {
-    round: number;
-    name: string;
-    slug: string;
-  };
+    round: number
+    name: string
+    slug: string
+  }
   rounds: {
-    round: number;
-    name: string;
-    slug: string;
-  }[];
+    round: number
+    name: string
+    slug: string
+  }[]
 }
 
 export interface Tennis_TennisApi_TournamentRoundMatch_Response {
-  events: Tennis_Sofascore_Event[];
+  events: Tennis_Sofascore_Event[]
 }
 
-export interface Tennis_TennisApi_MatchDetails_Response {
-  event: Tennis_Sofascore_Event;
+export interface Tennis_TennisApi_MatchDetails_Response extends Sofascore_Event_Response {
+  event: Tennis_Sofascore_Event
 }
 
-export interface Tennis_TennisApi_EventsByDate_Response {
-  events: Tennis_Sofascore_Event[];
+export interface Tennis_TennisApi_EventsByDate_Response extends Sofascore_Events_Response {
+  events: Tennis_Sofascore_Event[]
 }
 
 export interface Tennis_Ranking {
-  team: Sofascore_Team;
-  type: number;
-  rowName: string;
-  ranking: number;
-  points: number;
-  previousRanking: number;
-  bestRanking: number;
-  id: number;
-  country: any;
-  rankingClass: string;
+  team: Sofascore_Team
+  type: number
+  rowName: string
+  ranking: number
+  points: number
+  previousRanking: number
+  bestRanking: number
+  id: number
+  country: any
+  rankingClass: string
 }
 
 export interface Tennis_TennisApi_Rankings_Response {
-  rankings: Tennis_Ranking[];
-  updatedAtTimestamp: number;
-}
-
-export interface TennisFixturesPage {
-  fixtures: FixtureRound[];
-  currentRound: string;
-}
-
-export interface TennisTeamFixturesPage {
-  fixtures: MatchSummary[];
-}
-
-export interface TennisLadderPage {
-  // standings: TennisStanding[];
-  qualifyingPosition: number;
-}
-
-export interface TennisMatchPage {
-  matchDetails: {
-    homeTeam: TeamScoreDetails;
-    awayTeam: TeamScoreDetails;
-    status: string;
-    scoreBreakdown: TennisScoreBreakdown[];
-  };
-  scoreEvents: ScoreDifference[];
-}
-
-export interface TennisTodayPage {
-  fixtures: FixtureRound[];
-  currentRound: string;
-}
-
-export interface TennisBracketPage {
-  brackets: {
-    id: number;
-    name: string;
-    currentRound: number;
-    matches: BracketMatch[];
-  }[];
-}
-
-export interface BracketRounds {
-  id: number;
-  name: string;
-  matches: MatchSummary[];
-}
-
-export interface TennisRankingPage {
-  players: TennisRankingsPlayerRow[];
+  rankings: Tennis_Ranking[]
+  updatedAtTimestamp: number
 }

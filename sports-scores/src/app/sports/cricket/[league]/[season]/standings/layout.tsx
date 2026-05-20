@@ -1,9 +1,9 @@
-import NavButtonGroup from "@/components/misc-ui/NavButtonGroup";
+import NavButtonGroup from "@/components/misc-ui/NavButtonGroup"
 
 export default async function SportsLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <>
@@ -23,5 +23,5 @@ export default async function SportsLayout({
       />
       {children}
     </>
-  );
+  )
 }

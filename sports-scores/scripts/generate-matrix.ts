@@ -8,7 +8,6 @@
  * array below.
  */
 
-import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
 import {
   AMERICAN_FOOTBALL_LEAGUES,
   AUSSIE_RULES_LEAGUES,
@@ -26,8 +25,8 @@ import {
   RUGBY_UNION_LEAGUES,
   TENNIS_CATEGORIES,
   TENNIS_LEAGUES,
-} from "@/lib/constants";
-import { DISPLAY_TYPES } from "@/types/misc";
+} from "@/lib/constants"
+import { DisplayTypes, LeagueSeasonConfig } from "@/types/misc"
 
 // ---------------------------------------------------------------------------
 // Configure which leagues to sync. Each entry maps a sport key + display type
@@ -35,17 +34,17 @@ import { DISPLAY_TYPES } from "@/types/misc";
 // ---------------------------------------------------------------------------
 
 type SyncEntry = {
-  sport: string;
-  displayType: DISPLAY_TYPES;
-  leagues: LeagueSeasonConfig[];
+  sport: string
+  displayType: DisplayTypes
+  leagues: LeagueSeasonConfig[]
   /** Slugs to include. Omit or use ["*"] for all. */
-  slugs?: string[];
-};
+  slugs?: string[]
+}
 
 const SYNC_CONFIG: SyncEntry[] = [
   {
     sport: "rugby-league",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: RUGBY_LEAGUE_LEAGUES,
     slugs: ["294", "19120", "2135", "2134"],
   },
@@ -63,31 +62,31 @@ const SYNC_CONFIG: SyncEntry[] = [
   // },
   {
     sport: "aussie-rules",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: AUSSIE_RULES_LEAGUES,
     slugs: ["656", "10159", "25506", "20126", "20160"],
   },
   {
     sport: "american-football",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: AMERICAN_FOOTBALL_LEAGUES,
     slugs: ["9464"],
   },
   {
     sport: "basketball",
-    displayType: DISPLAY_TYPES.DATE,
+    displayType: DisplayTypes.DATE,
     leagues: BASKETBALL_LEAGUES,
     slugs: ["1524", "1506", "132", "486"],
   },
   {
     sport: "baseball",
-    displayType: DISPLAY_TYPES.DATE,
+    displayType: DisplayTypes.DATE,
     leagues: BASEBALL_LEAGUES,
     slugs: ["11205", "19445"],
   },
   {
     sport: "ice-hockey",
-    displayType: DISPLAY_TYPES.DATE,
+    displayType: DisplayTypes.DATE,
     leagues: ICE_HOCKEY_LEAGUES,
     slugs: ["11059", "234"],
   },
@@ -145,39 +144,39 @@ const SYNC_CONFIG: SyncEntry[] = [
   //   leagues: CYCLING_TOURS,
   //   slugs: ["*"],
   // },
-];
+]
 
 // ---------------------------------------------------------------------------
 // Build the matrix
 // ---------------------------------------------------------------------------
 
 type MatrixEntry = {
-  name: string;
-  tournamentId: string;
-  seasonId: string;
-  sport: string;
-  displayType: string;
-};
+  name: string
+  leagueId: string
+  seasonId: string
+  sport: string
+  displayType: string
+}
 
-const matrix: MatrixEntry[] = [];
+const matrix: MatrixEntry[] = []
 
 for (const config of SYNC_CONFIG) {
   const filtered =
     !config.slugs || config.slugs.includes("*")
       ? config.leagues
-      : config.leagues.filter((l) => config.slugs!.includes(l.slug));
+      : config.leagues.filter((l) => config.slugs!.includes(l.slug))
 
   for (const league of filtered) {
-    const latestSeason = league.seasons[0];
-    if (!latestSeason || !latestSeason.slug) continue;
+    const latestSeason = league.seasons[0]
+    if (!latestSeason || !latestSeason.slug) continue
 
     matrix.push({
       name: `${league.name} ${latestSeason.name}`,
-      tournamentId: league.slug,
+      leagueId: league.slug,
       seasonId: latestSeason.slug,
       sport: config.sport,
       displayType: league.display ?? config.displayType,
-    });
+    })
   }
 }
 
@@ -188,92 +187,92 @@ for (const config of SYNC_CONFIG) {
 const ALL_LEAGUES_CONFIG: SyncEntry[] = [
   {
     sport: "rugby-league",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: RUGBY_LEAGUE_LEAGUES,
   },
   {
     sport: "football",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: FOOTBALL_LEAGUES,
   },
   {
     sport: "aussie-rules",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: AUSSIE_RULES_LEAGUES,
   },
   {
     sport: "american-football",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: AMERICAN_FOOTBALL_LEAGUES,
   },
   {
     sport: "basketball",
-    displayType: DISPLAY_TYPES.DATE,
+    displayType: DisplayTypes.DATE,
     leagues: BASKETBALL_LEAGUES,
   },
   {
     sport: "baseball",
-    displayType: DISPLAY_TYPES.DATE,
+    displayType: DisplayTypes.DATE,
     leagues: BASEBALL_LEAGUES,
   },
   {
     sport: "ice-hockey",
-    displayType: DISPLAY_TYPES.DATE,
+    displayType: DisplayTypes.DATE,
     leagues: ICE_HOCKEY_LEAGUES,
   },
   {
     sport: "rugby-union",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: RUGBY_UNION_LEAGUES,
   },
   {
     sport: "cricket",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: CRICKET_LEAGUES,
   },
   {
     sport: "netball",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: NETBALL_LEAGUES,
   },
   {
     sport: "tennis",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: TENNIS_LEAGUES,
   },
   {
     sport: "tennis",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: TENNIS_CATEGORIES,
   },
-  { sport: "darts", displayType: DISPLAY_TYPES.ROUND, leagues: DARTS_LEAGUES },
+  { sport: "darts", displayType: DisplayTypes.ROUND, leagues: DARTS_LEAGUES },
   {
     sport: "motorsport",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: MOTORSPORT_CATEGORIES,
   },
-  { sport: "golf", displayType: DISPLAY_TYPES.ROUND, leagues: GOLF_TOURS },
+  { sport: "golf", displayType: DisplayTypes.ROUND, leagues: GOLF_TOURS },
   {
     sport: "cycling",
-    displayType: DISPLAY_TYPES.ROUND,
+    displayType: DisplayTypes.ROUND,
     leagues: CYCLING_TOURS,
   },
-];
+]
 
-const allMatrix: MatrixEntry[] = [];
+const allMatrix: MatrixEntry[] = []
 
 for (const config of ALL_LEAGUES_CONFIG) {
   for (const league of config.leagues) {
-    const latestSeason = league.seasons[0];
-    if (!latestSeason || !latestSeason.slug) continue;
+    const latestSeason = league.seasons[0]
+    if (!latestSeason || !latestSeason.slug) continue
 
     allMatrix.push({
       name: `${league.name} ${latestSeason.name}`,
-      tournamentId: league.slug,
+      leagueId: league.slug,
       seasonId: latestSeason.slug,
       sport: config.sport,
       displayType: league.display ?? config.displayType,
-    });
+    })
   }
 }
 
@@ -281,13 +280,13 @@ for (const config of ALL_LEAGUES_CONFIG) {
 // Write both matrix files
 // ---------------------------------------------------------------------------
 
-import { writeFileSync } from "fs";
-import { resolve } from "path";
+import { writeFileSync } from "fs"
+import { resolve } from "path"
 
-const weeklyPath = resolve(__dirname, "eventUploadMatrix.json");
-writeFileSync(weeklyPath, JSON.stringify(matrix, null, 2));
-console.log(`Wrote ${matrix.length} entries to ${weeklyPath}`);
+const weeklyPath = resolve(__dirname, "eventUploadMatrix.json")
+writeFileSync(weeklyPath, JSON.stringify(matrix, null, 2))
+console.log(`Wrote ${matrix.length} entries to ${weeklyPath}`)
 
-const allPath = resolve(__dirname, "eventUploadMatrixAll.json");
-writeFileSync(allPath, JSON.stringify(allMatrix, null, 2));
-console.log(`Wrote ${allMatrix.length} entries to ${allPath}`);
+const allPath = resolve(__dirname, "eventUploadMatrixAll.json")
+writeFileSync(allPath, JSON.stringify(allMatrix, null, 2))
+console.log(`Wrote ${allMatrix.length} entries to ${allPath}`)

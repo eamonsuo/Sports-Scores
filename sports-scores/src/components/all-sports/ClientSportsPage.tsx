@@ -1,17 +1,15 @@
-"use client";
-import { clsx } from "clsx";
-import { Fragment, ReactNode, useState } from "react";
+"use client"
+import { clsx } from "clsx"
+import { Fragment, ReactNode, useState } from "react"
 
 export default function ClientSportsPage({
   options,
-  apiStatus,
   defaultState,
 }: {
-  options: { btnLabel: string; component: ReactNode; state: string }[];
-  apiStatus: ReactNode;
-  defaultState: string;
+  options: { btnLabel: string; component: ReactNode; state: string }[]
+  defaultState: string
 }) {
-  const [view, setView] = useState<string>(defaultState);
+  const [view, setView] = useState<string>(defaultState)
 
   return (
     <div className="flex h-full flex-col">
@@ -36,7 +34,6 @@ export default function ClientSportsPage({
           {view === item.state && item.component}
         </Fragment>
       ))}
-      {apiStatus}
     </div>
-  );
+  )
 }

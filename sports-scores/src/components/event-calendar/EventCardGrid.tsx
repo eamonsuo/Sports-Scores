@@ -1,47 +1,47 @@
-"use client";
+"use client"
 
-import { SportEvent } from "@/types/event-calendar";
-import { format } from "date-fns";
-import EventCard from "./EventCard";
+import { SportEvent } from "@/types/event-calendar"
+import { format } from "date-fns"
+import EventCard from "./EventCard"
 
 interface EventCardGridProps {
-  events: SportEvent[];
+  events: SportEvent[]
 }
 
 export default function EventCardGrid({ events }: EventCardGridProps) {
   // Group events by month - events only appear in their starting month
   const eventsByMonth = events.reduce(
     (acc, event) => {
-      const monthKey = format(event.startDate, "MMMM yyyy");
+      const monthKey = format(event.startDate, "MMMM yyyy")
 
       if (!acc[monthKey]) {
-        acc[monthKey] = [];
+        acc[monthKey] = []
       }
-      acc[monthKey].push(event);
+      acc[monthKey].push(event)
 
-      return acc;
+      return acc
     },
     {} as Record<string, SportEvent[]>,
-  );
+  )
 
   // Get current/upcoming events (ongoing or starting soon)
-  const now = new Date();
+  const now = new Date()
   const currentEvents = events.filter((event) => {
-    const startDate = new Date(event.startDate);
-    const endDate = event.endDate ? new Date(event.endDate) : startDate;
+    const startDate = new Date(event.startDate)
+    const endDate = event.endDate ? new Date(event.endDate) : startDate
     // Only include ongoing events in the top section
-    return now >= startDate && now <= endDate;
-  });
+    return now >= startDate && now <= endDate
+  })
 
-  const monthKeys = Object.keys(eventsByMonth);
+  const monthKeys = Object.keys(eventsByMonth)
 
   // Scroll to month when clicked
   const scrollToMonth = (monthKey: string) => {
-    const element = document.getElementById(`month-${monthKey}`);
+    const element = document.getElementById(`month-${monthKey}`)
     if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
+      element.scrollIntoView({ behavior: "smooth", block: "start" })
     }
-  };
+  }
 
   return (
     <div className="flex flex-1 flex-col overflow-y-auto px-6">
@@ -105,5 +105,5 @@ export default function EventCardGrid({ events }: EventCardGridProps) {
         </div>
       )}
     </div>
-  );
+  )
 }

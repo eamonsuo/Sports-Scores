@@ -1,34 +1,34 @@
-import React, { useContext } from "react";
-import { defaultStyle, getCalculatedStyles } from "../settings";
+import React, { useContext } from "react"
+import { defaultStyle, getCalculatedStyles } from "../settings"
 import {
   ComputedOptions,
   MatchComponentProps,
   Match as MatchType,
   Participant,
-} from "../types";
-import { matchContext } from "./match-context";
-import { sortTeamsSeedOrder } from "./match-functions";
-import { MATCH_STATES } from "./match-states";
+} from "../types"
+import { matchContext } from "./match-context"
+import { sortTeamsSeedOrder } from "./match-functions"
+import { MATCH_STATES } from "./match-states"
 
 type MatchProps = {
-  rowIndex: number;
-  columnIndex: number;
-  match: MatchType;
-  previousBottomMatch?: MatchType | null;
-  teams: Participant[];
-  topText: string;
-  bottomText: string;
-  style?: ComputedOptions;
-  matchComponent: React.ComponentType<MatchComponentProps>;
+  rowIndex: number
+  columnIndex: number
+  match: MatchType
+  previousBottomMatch?: MatchType | null
+  teams: Participant[]
+  topText: string
+  bottomText: string
+  style?: ComputedOptions
+  matchComponent: React.ComponentType<MatchComponentProps>
   onMatchClick?: (args: {
-    match: MatchType;
-    topWon: boolean;
-    bottomWon: boolean;
-  }) => void;
-  onPartyClick?: (party: Participant, partyWon: boolean) => void;
-  lateEntryParticipantIds?: Set<string | number>;
-  [key: string]: any;
-};
+    match: MatchType
+    topWon: boolean
+    bottomWon: boolean
+  }) => void
+  onPartyClick?: (party: Participant, partyWon: boolean) => void
+  lateEntryParticipantIds?: Set<string | number>
+  [key: string]: any
+}
 
 function Match({
   rowIndex,
@@ -49,45 +49,45 @@ function Match({
     state: { hoveredPartyId },
     dispatch,
   } = useContext(matchContext) as unknown as {
-    state: { hoveredPartyId: string | number | null };
-    dispatch: (action: any) => void;
-  };
-  const computedStyles = getCalculatedStyles(style);
-  const { width = 300, boxHeight = 70, connectorColor } = computedStyles;
-  const sortedTeams = teams.sort(sortTeamsSeedOrder(previousBottomMatch));
+    state: { hoveredPartyId: string | number | null }
+    dispatch: (action: any) => void
+  }
+  const computedStyles = getCalculatedStyles(style)
+  const { width = 300, boxHeight = 70, connectorColor } = computedStyles
+  const sortedTeams = teams.sort(sortTeamsSeedOrder(previousBottomMatch))
 
   const topParty: Participant = sortedTeams?.[0]
     ? sortedTeams[0]
-    : { id: "", name: "" };
+    : { id: "", name: "" }
   const bottomParty: Participant = sortedTeams?.[1]
     ? sortedTeams[1]
-    : { id: "", name: "" };
+    : { id: "", name: "" }
 
   const topHovered =
     !Number.isNaN(hoveredPartyId) &&
     topParty?.id !== undefined &&
-    hoveredPartyId === topParty.id;
+    hoveredPartyId === topParty.id
   const bottomHovered =
     !Number.isNaN(hoveredPartyId) &&
     bottomParty?.id !== undefined &&
-    hoveredPartyId === bottomParty.id;
+    hoveredPartyId === bottomParty.id
 
   const participantWalkedOver = (participant: Participant) =>
     match.state === MATCH_STATES.WALK_OVER &&
     teams.filter((team: Participant) => !!team.id).length < 2 &&
-    !!participant.id;
+    !!participant.id
 
   // Lower placement is better
   const topWon =
     topParty.status === MATCH_STATES.WALK_OVER ||
     participantWalkedOver(topParty) ||
-    !!topParty.isWinner;
+    !!topParty.isWinner
   const bottomWon =
     bottomParty.status === MATCH_STATES.WALK_OVER ||
     participantWalkedOver(bottomParty) ||
-    !!bottomParty.isWinner;
+    !!bottomParty.isWinner
 
-  const matchState = MATCH_STATES[match.state as keyof typeof MATCH_STATES];
+  const matchState = MATCH_STATES[match.state as keyof typeof MATCH_STATES]
 
   const teamNameFallback =
     {
@@ -96,7 +96,7 @@ function Match({
       [MATCH_STATES.DONE]: "",
       [MATCH_STATES.SCORE_DONE]: "",
       [MATCH_STATES.NO_PARTY]: "",
-    }[matchState] ?? "TBD";
+    }[matchState] ?? "TBD"
 
   const resultFallback = (participant: Participant) => {
     if (participant.status) {
@@ -107,14 +107,14 @@ function Match({
           [MATCH_STATES.NO_SHOW]: computedStyles.lostByNoShowText,
           [MATCH_STATES.NO_PARTY]: "",
         }[participant.status] ?? ""
-      );
+      )
     }
 
     if (participantWalkedOver(participant)) {
-      return computedStyles.wonBywalkOverText;
+      return computedStyles.wonBywalkOverText
     }
-    return "";
-  };
+    return ""
+  }
 
   const onMouseEnter = (partyId: string | number) => {
     dispatch({
@@ -125,39 +125,38 @@ function Match({
         rowIndex,
         columnIndex,
       },
-    });
-  };
+    })
+  }
   const onMouseLeave = () => {
-    dispatch({ type: "SET_HOVERED_PARTYID", payload: null });
-  };
+    dispatch({ type: "SET_HOVERED_PARTYID", payload: null })
+  }
 
-  bottomParty.name = bottomParty.name || teamNameFallback;
-  bottomParty.resultText =
-    bottomParty.resultText || resultFallback(bottomParty);
-  topParty.name = topParty.name || teamNameFallback;
-  topParty.resultText = topParty.resultText || resultFallback(topParty);
+  bottomParty.name = bottomParty.name || teamNameFallback
+  bottomParty.resultText = bottomParty.resultText || resultFallback(bottomParty)
+  topParty.name = topParty.name || teamNameFallback
+  topParty.resultText = topParty.resultText || resultFallback(topParty)
 
   // Wrapper to match MatchComponentProps signature
   const handleMatchClick = (args: {
-    match: MatchType;
-    topWon: boolean;
-    bottomWon: boolean;
-    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>;
+    match: MatchType
+    topWon: boolean
+    bottomWon: boolean
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
   }) => {
     if (onMatchClick) {
       onMatchClick({
         match: args.match,
         topWon: args.topWon,
         bottomWon: args.bottomWon,
-      });
+      })
     }
-  };
+  }
 
   const handlePartyClick = (party: Participant, partyWon: boolean) => {
     if (onPartyClick) {
-      onPartyClick(party, partyWon);
+      onPartyClick(party, partyWon)
     }
-  };
+  }
 
   return (
     <svg
@@ -197,7 +196,7 @@ function Match({
         )}
       </foreignObject>
     </svg>
-  );
+  )
 }
 
-export default Match;
+export default Match

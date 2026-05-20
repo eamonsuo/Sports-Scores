@@ -1,35 +1,34 @@
-"use client";
-import { createContext, useReducer } from "react";
+"use client"
+import { createContext, useReducer } from "react"
 
 const initialState = {
   hoveredMatchId: null,
   hoveredPartyId: null,
   hoveredColumnIndex: null,
   hoveredRowIndex: null,
-};
-const store = createContext(initialState);
-const { Provider } = store;
+}
+const store = createContext(initialState)
+const { Provider } = store
 
 const MatchContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer((previousState, action) => {
     switch (action.type) {
       case "SET_HOVERED_PARTYID": {
-        const { partyId, columnIndex, rowIndex, matchId } =
-          action.payload ?? {};
+        const { partyId, columnIndex, rowIndex, matchId } = action.payload ?? {}
         return {
           ...previousState,
           hoveredPartyId: partyId,
           hoveredColumnIndex: columnIndex,
           hoveredRowIndex: rowIndex,
           hoveredMatchId: matchId,
-        };
+        }
       }
       default:
-        throw new Error();
+        throw new Error()
     }
-  }, initialState);
+  }, initialState)
 
-  return <Provider value={{ state, dispatch }}>{children}</Provider>;
-};
+  return <Provider value={{ state, dispatch }}>{children}</Provider>
+}
 
-export { store as matchContext, MatchContextProvider };
+export { store as matchContext, MatchContextProvider }

@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { Button } from "./Button";
+import Link from "next/link"
+import { Button } from "./Button"
 
 export default function ErrorPage({ externalUrl }: { externalUrl?: string }) {
   const handleReload = () => {
-    window.location.reload();
-  };
+    window.location.reload()
+  }
 
   return (
     <div className="flex h-full w-full flex-1 flex-col items-center overflow-y-auto bg-neutral-950">
@@ -23,5 +23,5 @@ export default function ErrorPage({ externalUrl }: { externalUrl?: string }) {
         </Link>
       )}
     </div>
-  );
+  )
 }

@@ -1,26 +1,24 @@
-import FixtureRoundList from "@/components/all-sports/FixtureRoundList";
-import DateNav from "@/components/misc-ui/DateNav";
-import Placeholder from "@/components/misc-ui/Placeholder";
-import { getClientDate } from "@/lib/serverUtils";
-import { netballMatchesByDate } from "@/services/netball.service";
-import { TZDate } from "@date-fns/tz/date";
-
-// export const dynamic = "force-dynamic";
+import FixtureRoundList from "@/components/all-sports/FixtureRoundList"
+import DateNav from "@/components/misc-ui/DateNav"
+import Placeholder from "@/components/misc-ui/Placeholder"
+import { getClientDate } from "@/lib/serverUtils"
+import { netballMatchesByDate } from "@/services/netball.service"
+import { TZDate } from "@date-fns/tz/date"
 
 export default async function Page({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  const date = (await searchParams)?.date; //Gets ?date= query string
-  const curDate = await getClientDate();
+  const date = (await searchParams)?.date //Gets ?date= query string
+  const curDate = await getClientDate()
   const parsedDate =
-    date === undefined ? curDate : new TZDate(date as string, curDate.timeZone);
+    date === undefined ? curDate : new TZDate(date as string, curDate.timeZone)
 
-  const pageData = await netballMatchesByDate(parsedDate);
+  const pageData = await netballMatchesByDate(parsedDate)
 
   if (pageData === null) {
-    return <Placeholder>NO DATA</Placeholder>;
+    return <Placeholder>NO DATA</Placeholder>
   }
 
   return (
@@ -32,5 +30,5 @@ export default async function Page({
       />
       <DateNav date={parsedDate} />
     </>
-  );
+  )
 }

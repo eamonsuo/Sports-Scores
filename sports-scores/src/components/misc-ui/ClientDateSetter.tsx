@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
-import { useEffect } from "react";
+import { useEffect } from "react"
 
 export default function ClientDateSetter() {
   useEffect(() => {
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    document.cookie = `clientTimezone=${encodeURIComponent(timezone)}; path=/; max-age=86400`;
-  }, []);
-  return null;
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    document.cookie = `clientTimezone=${encodeURIComponent(timezone)}; path=/; max-age=86400`
+  }, [])
+  return null
 }

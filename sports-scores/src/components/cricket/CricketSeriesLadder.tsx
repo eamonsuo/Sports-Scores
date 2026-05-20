@@ -1,20 +1,20 @@
-import fallback from "@/../public/vercel.svg";
-import Image from "next/image";
+import fallback from "@/../public/vercel.svg"
+import Image from "next/image"
 
 export type CricketLadder = {
-  name: string;
+  name: string
   teams: {
-    name: string;
-    logo?: string;
-    rank: number;
-    played: number;
-    won: number;
-    drawn: number;
-    lost: number;
-    nrr: number;
-    points: number;
-  }[];
-};
+    name: string
+    logo?: string
+    rank: number
+    played: number
+    won: number
+    drawn: number
+    lost: number
+    nrr: number
+    points: number
+  }[]
+}
 
 export default function CricketSeriesLadder({ data }: { data: CricketLadder }) {
   return (
@@ -39,11 +39,12 @@ export default function CricketSeriesLadder({ data }: { data: CricketLadder }) {
             <tr key={item.rank} className="border">
               <td className="py-2 pe-2">{item.rank}</td>
               <td className="text-left text-sm">
-                <div className="flex">
+                <div className="flex items-center">
                   <Image
                     src={item.logo ?? fallback}
-                    height={15}
-                    width={15}
+                    height={40}
+                    width={40}
+                    style={{ width: "auto", height: "15px" }}
                     alt={"Logo"}
                     className="me-2"
                   />
@@ -61,5 +62,5 @@ export default function CricketSeriesLadder({ data }: { data: CricketLadder }) {
         </tbody>
       </table>
     </div>
-  );
+  )
 }

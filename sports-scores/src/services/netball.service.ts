@@ -5,72 +5,69 @@ import {
   fetchNetballNextMatches,
   fetchNetballSeasonMatches,
   fetchNetballStandings,
-} from "@/endpoints/netball.api";
-import { NETBALL_LEAGUES } from "@/lib/constants";
+} from "@/endpoints/netball.api"
+import { NETBALL_LEAGUES } from "@/lib/constants"
+import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
+import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils"
 import {
-  getCurrentRound,
-  mapFixtureRounds,
-  mapMatchSummary,
-} from "@/lib/eventMapping";
-import { shortenTeamNames } from "@/lib/projUtils";
-import {
-  API_EVENT_TYPES,
-  DISPLAY_TYPES,
+  DeepPartial,
+  DisplayTypes,
+  MatchStatus,
   MatchSummary,
   SPORT,
-} from "@/types/misc";
+} from "@/types/misc"
 import {
   NetballFixturesPage,
   NetballMatchPage,
   NetballTodayPage,
-} from "@/types/netball";
-import { SportsDB_Event } from "@/types/sportsdb";
+} from "@/types/netball"
+import { SportsDB_Event } from "@/types/sportsdb"
 
-export async function netballMatches(tournamentId: number, seasonId: number) {
-  const seasonMatches = await fetchNetballSeasonMatches(tournamentId, seasonId);
-  const lastMatches = await fetchNetballLastMatches(tournamentId, seasonId);
-  const nextMatches = await fetchNetballNextMatches(tournamentId, seasonId);
+export async function netballMatches(leagueId: string, seasonId: string) {
+  const seasonMatches = await fetchNetballSeasonMatches(leagueId, seasonId)
+  const lastMatches = await fetchNetballLastMatches(leagueId, seasonId)
+  const nextMatches = await fetchNetballNextMatches(leagueId, seasonId)
 
   if (!lastMatches && !nextMatches && !seasonMatches) {
-    return null;
+    return null
   }
 
   const allMatches = (lastMatches?.events ?? [])
     .concat(nextMatches?.events ?? [])
-    .concat(seasonMatches?.events ?? []);
+    .concat(seasonMatches?.events ?? [])
 
   // Remove duplicates based on idEvent
   const matches = Array.from(
     new Map(allMatches.map((match) => [match.idEvent, match])).values(),
-  );
+  )
 
-  const leagueConfig = NETBALL_LEAGUES.find(
-    (l) => Number(l.slug) === tournamentId,
-  );
+  const leagueConfig = NETBALL_LEAGUES.find((l) => l.slug === leagueId)
 
   const sortedMatches = matches
-    .map((match) => mapNetballMatch(match, `Round ${match.intRound ?? 0}`))
+    .map((match) =>
+      mapNetballMatch(match, { roundLabel: `Round ${match.intRound ?? 0}` }),
+    )
     .sort(
       (a, b) =>
         new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-    );
+    )
 
-  const fixture = await mapFixtureRounds(sortedMatches, leagueConfig);
+  const fixture = await mapFixtureRounds(sortedMatches, leagueConfig)
 
   return {
     fixtures: fixture,
     currentRound: getCurrentRound(fixture, leagueConfig?.display),
-  } as NetballFixturesPage;
+  } as NetballFixturesPage
 }
 
-export async function netballStandings(tournamentId: number, seasonId: number) {
-  const standings = await fetchNetballStandings(tournamentId, seasonId);
+export async function netballStandings(leagueId: string, seasonId: string) {
+  const standings = await fetchNetballStandings(leagueId, seasonId)
 
   if (!standings) {
-    return null;
+    return null
   }
 
-  return null;
+  return null
   // return {
   //   standings: standings?.standings.map((table) =>
   //     table.rows.map((item) => {
@@ -93,16 +90,16 @@ export async function netballStandings(tournamentId: number, seasonId: number) {
   //     }),
   //   ),
   //   qualifyingPosition:
-  //     NETBALL_LEAGUES.find((l) => Number(l.slug) === tournamentId)
+  //     NETBALL_LEAGUES.find((l) => Number(l.slug) === leagueId)
   //       ?.qualifyingPosition ?? -1,
   // } as NetballLadderPage;
 }
 
-export async function netballMatchDetails(matchId: number) {
-  const match = await fetchNetballMatchDetails(matchId);
+export async function netballMatchDetails(matchId: string) {
+  const match = await fetchNetballMatchDetails(matchId)
   // const incidents = await fetchNetballMatchIncidents(matchId);
 
-  const matchDetails = match?.events[0];
+  const matchDetails = match?.events[0]
   // const scoreIncidents = incidents?.incidents
   //   ? incidents?.incidents
   //       .filter((item) => item.incidentType === "goal")
@@ -146,15 +143,17 @@ export async function netballMatchDetails(matchId: number) {
           //   },
           // ],
         },
-  } as NetballMatchPage;
+  } as NetballMatchPage
 }
 
 export async function netballMatchesByDate(date: Date) {
-  const matches = await fetchNetballMatchesByDate(date);
+  const matches = await fetchNetballMatchesByDate(date)
 
-  if (!matches || !matches.events) return null;
+  if (!matches || !matches.events) return null
 
-  const validLeagueIds = NETBALL_LEAGUES.map((l) => Number(l.slug));
+  const validLeagueIds = NETBALL_LEAGUES.filter((l) => !l.excludeFromToday).map(
+    (l) => Number(l.slug),
+  )
 
   matches.events = matches.events
     // .filter((item) =>
@@ -164,27 +163,90 @@ export async function netballMatchesByDate(date: Date) {
       (a, b) =>
         validLeagueIds.indexOf(Number(a.idLeague)) -
         validLeagueIds.indexOf(Number(b.idLeague)),
-    );
+    )
 
-  if (!matches.events || matches.events.length === 0) return null;
+  if (!matches.events || matches.events.length === 0) return null
 
   const allMatches = matches.events.map((match) =>
-    mapNetballMatch(match, `Round ${match.intRound ?? 0}`),
-  );
+    mapNetballMatch(match, { roundLabel: `Round ${match.intRound ?? 0}` }),
+  )
 
-  const fixture = await mapFixtureRounds(allMatches, NETBALL_LEAGUES);
+  const fixture = await mapFixtureRounds(allMatches, NETBALL_LEAGUES)
 
   return {
     fixtures: fixture,
-    currentRound: getCurrentRound(fixture, DISPLAY_TYPES.LEAGUE),
-  } as NetballTodayPage;
+    currentRound: getCurrentRound(fixture, DisplayTypes.LEAGUE),
+  } as NetballTodayPage
 }
 
 function mapNetballMatch(
-  match: SportsDB_Event,
-  roundLabel: string,
+  event: SportsDB_Event,
+  options?: DeepPartial<MatchSummary>,
 ): MatchSummary {
-  return mapMatchSummary(API_EVENT_TYPES.SPORTSDB, SPORT.NETBALL, match, {
-    roundLabel,
-  });
+  const timeStamp =
+    event.strTimestamp.length > 19
+      ? event.strTimestamp.slice(0, 19)
+      : event.strTimestamp
+  const startDate = new Date(timeStamp + "Z")
+
+  const status: MatchStatus =
+    event.intHomeScore !== null && event.intAwayScore !== null
+      ? MatchStatus.COMPLETED
+      : MatchStatus.UPCOMING
+
+  return {
+    id: options?.id ?? event.idEvent,
+    startDate: options?.startDate ?? startDate,
+    endDate: options?.endDate,
+    sport: SPORT.NETBALL,
+    status: options?.status ?? status,
+    roundLabel: options?.roundLabel ?? `Round ${event.intRound}`,
+    timer:
+      options?.timer ??
+      (status === MatchStatus.UPCOMING
+        ? (options?.startDate ?? startDate)
+        : "Ended"),
+    timerDisplayColour: options?.timerDisplayColour ?? "gray",
+    matchSlug:
+      options?.matchSlug ??
+      `/sports/${SPORT.NETBALL}/${event.idLeague}/${event.strSeason}/match/${event.idEvent}`,
+    venue: options?.venue ?? event?.strVenue ?? "",
+    leagueName: options?.leagueName,
+    leagueSlug: options?.leagueSlug,
+    summaryText:
+      options?.summaryText ??
+      setMatchSummary(
+        status === MatchStatus.UPCOMING ? "notstarted" : "finished",
+        event.strHomeTeam,
+        event.intHomeScore ?? 0,
+        event.strAwayTeam,
+        event.intAwayScore ?? 0,
+      ),
+    competitorDetails: [
+      {
+        id: options?.competitorDetails?.[0]?.id ?? event.idHomeTeam ?? "",
+        name:
+          options?.competitorDetails?.[0]?.name ??
+          shortenTeamNames(event.strHomeTeam),
+        score:
+          options?.competitorDetails?.[0]?.score ??
+          (event.intHomeScore ?? 0).toString(),
+        img: options?.competitorDetails?.[0]?.img ?? event.strHomeTeamBadge,
+        winDrawLoss: options?.competitorDetails?.[0]?.winDrawLoss,
+      },
+      {
+        id: options?.competitorDetails?.[1]?.id ?? event.idAwayTeam ?? "",
+        name:
+          options?.competitorDetails?.[1]?.name ??
+          shortenTeamNames(event.strAwayTeam),
+        score:
+          options?.competitorDetails?.[1]?.score ??
+          (event.intAwayScore ?? 0).toString(),
+        img: options?.competitorDetails?.[1]?.img ?? event.strAwayTeamBadge,
+        winDrawLoss: options?.competitorDetails?.[1]?.winDrawLoss,
+      },
+    ],
+    seasonId: options?.seasonId ?? event.strSeason,
+    leagueId: options?.leagueId ?? event.idLeague,
+  }
 }

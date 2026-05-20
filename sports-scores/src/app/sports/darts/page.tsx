@@ -1,6 +1,4 @@
-import Link from "next/link";
-
-export const dynamic = "force-dynamic";
+import Link from "next/link"
 
 export default async function Page() {
   return (
@@ -41,5 +39,5 @@ export default async function Page() {
       {children} */}
       </div>
     </div>
-  );
+  )
 }

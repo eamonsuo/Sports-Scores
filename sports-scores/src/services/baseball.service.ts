@@ -1,160 +1,77 @@
-import { BaseballScoreBreakdown } from "@/components/baseball/BaseballScoreBreakdown";
 import {
   fetchBaseballLastMatches,
   fetchBaseballMatchDetails,
   fetchBaseballMatchesByDate,
   fetchBaseballNextMatches,
   fetchBaseballStandings,
-} from "@/endpoints/baseball.api";
-import { fetchEventDetails } from "@/endpoints/sofascore.api";
-import { BASEBALL_LADDER_HEADINGS, BASEBALL_LEAGUES } from "@/lib/constants";
-import { resolveSportImage } from "@/lib/imageMapping";
-import { shortenTeamNames } from "@/lib/projUtils";
-import { BaseballMatchPage } from "@/types/baseball";
-import { SPORT } from "@/types/misc";
-import { SofascoreSportURL } from "@/types/sofascore";
-import { SofascoreSport } from "./sofascore.service";
+  fetchBaseballTeamLastMatches,
+  fetchBaseballTeamNextMatches,
+} from "@/endpoints/baseball.api"
+import {
+  BASEBALL_LADDER_HEADINGS,
+  BASEBALL_LEAGUES,
+  SCORE_BREAKDOWN_INNINGS_CONFIG,
+} from "@/lib/constants"
+import { withDevCache } from "@/lib/devCache"
+import { SPORT } from "@/types/misc"
+import { SofascoreSport } from "./sofascore.service"
 
 class BaseballService extends SofascoreSport {
   constructor() {
     super(
       {
-        fetchLastEvents: fetchBaseballLastMatches,
-        fetchNextEvents: fetchBaseballNextMatches,
-        fetchEventsByDate: fetchBaseballMatchesByDate,
-        fetchEventDetails: fetchBaseballMatchDetails,
+        fetchLastEvents: withDevCache(
+          "baseball",
+          "last-matches",
+          fetchBaseballLastMatches,
+        ),
+        fetchNextEvents: withDevCache(
+          "baseball",
+          "next-matches",
+          fetchBaseballNextMatches,
+        ),
+        fetchEventsByDate: withDevCache(
+          "baseball",
+          "matches-by-date",
+          fetchBaseballMatchesByDate,
+        ),
+        fetchEventDetails: withDevCache(
+          "baseball",
+          "match-details",
+          fetchBaseballMatchDetails,
+        ),
         fetchEventIncidents: async () => null,
-        fetchStandingsTotal: fetchBaseballStandings,
+        fetchStandingsTotal: withDevCache(
+          "baseball",
+          "standings",
+          fetchBaseballStandings,
+        ),
         fetchCupTrees: async () => null,
         fetchPlayerRankings: async () => null,
-        fetchTeamLastEvents: async () => null,
-        fetchTeamNextEvents: async () => null,
+        fetchTeamLastEvents: withDevCache(
+          "baseball",
+          "team-last-matches",
+          fetchBaseballTeamLastMatches,
+        ),
+        fetchTeamNextEvents: withDevCache(
+          "baseball",
+          "team-next-matches",
+          fetchBaseballTeamNextMatches,
+        ),
       },
       SPORT.BASEBALL,
-      SofascoreSportURL.BASEBALL,
       BASEBALL_LEAGUES,
       BASEBALL_LADDER_HEADINGS,
-    );
-  }
-
-  async baseballMatchDetails(matchId: number) {
-    const match = await (
-      process.env.DEV_MODE ? fetchEventDetails : fetchBaseballMatchDetails
-    )(matchId);
-
-    const matchDetails = match?.event;
-
-    let scoreDetails = !matchDetails
-      ? null
-      : {
-          status: matchDetails?.status.description,
-          homeTeam: {
-            name: shortenTeamNames(matchDetails.homeTeam.name),
-            score: matchDetails?.homeScore?.current?.toString() ?? "0",
-            img: resolveSportImage(matchDetails.homeTeam.name),
-          },
-          awayTeam: {
-            name: shortenTeamNames(matchDetails?.awayTeam.name),
-            score: matchDetails?.awayScore?.current?.toString() ?? "0",
-            img: resolveSportImage(matchDetails.awayTeam.name),
-          },
-
-          scoreBreakdown: [
-            {
-              inning: "1",
-              teams: {
-                home: { score: matchDetails.homeScore?.period1 ?? "0" },
-                away: { score: matchDetails.awayScore?.period1 ?? "0" },
-              },
-            },
-            {
-              inning: "2",
-              teams: {
-                home: { score: matchDetails.homeScore?.period2 ?? "0" },
-                away: { score: matchDetails.awayScore?.period2 ?? "0" },
-              },
-            },
-            {
-              inning: "3",
-              teams: {
-                home: { score: matchDetails.homeScore?.period3 ?? "0" },
-                away: { score: matchDetails.awayScore?.period3 ?? "0" },
-              },
-            },
-            {
-              inning: "4",
-              teams: {
-                home: { score: matchDetails.homeScore?.period4 ?? "0" },
-                away: { score: matchDetails.awayScore?.period4 ?? "0" },
-              },
-            },
-            {
-              inning: "5",
-              teams: {
-                home: { score: matchDetails.homeScore?.period5 ?? "0" },
-                away: { score: matchDetails.awayScore?.period5 ?? "0" },
-              },
-            },
-            {
-              inning: "6",
-              teams: {
-                home: { score: matchDetails.homeScore?.period6 ?? "0" },
-                away: { score: matchDetails.awayScore?.period6 ?? "0" },
-              },
-            },
-            {
-              inning: "7",
-              teams: {
-                home: { score: matchDetails.homeScore?.period7 ?? "0" },
-                away: { score: matchDetails.awayScore?.period7 ?? "0" },
-              },
-            },
-            {
-              inning: "8",
-              teams: {
-                home: { score: matchDetails.homeScore?.period8 ?? "0" },
-                away: { score: matchDetails.awayScore?.period8 ?? "0" },
-              },
-            },
-            {
-              inning: "9",
-              teams: {
-                home: { score: matchDetails.homeScore?.period9 ?? "0" },
-                away: { score: matchDetails.awayScore?.period9 ?? "0" },
-              },
-            },
-          ] as BaseballScoreBreakdown[],
-        };
-
-    if (scoreDetails && matchDetails?.status.description === "AET") {
-      scoreDetails.scoreBreakdown.push({
-        inning: "Extra",
-        teams: {
-          home: {
-            score:
-              (matchDetails.homeScore?.current ?? 0) -
-              (matchDetails.homeScore?.normaltime ?? 0),
-          },
-          away: {
-            score:
-              (matchDetails.awayScore?.current ?? 0) -
-              (matchDetails.awayScore?.normaltime ?? 0),
-          },
-        },
-      });
-    }
-
-    return {
-      matchDetails: scoreDetails,
-    } as BaseballMatchPage;
+      SCORE_BREAKDOWN_INNINGS_CONFIG,
+    )
   }
 }
 
 // Custom sort: division < conference < MLB
 function tableOrder(name: string): number {
-  if (name === "MLB") return 2;
-  if (name.split(" ").length == 2) return 1;
-  return 0; // Division tables
+  if (name === "MLB") return 2
+  if (name.split(" ").length == 2) return 1
+  return 0 // Division tables
 }
 
-export const baseballService = new BaseballService();
+export const baseballService = new BaseballService()

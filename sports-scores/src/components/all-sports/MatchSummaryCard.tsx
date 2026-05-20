@@ -1,33 +1,34 @@
-import fallback from "@/../public/vercel.svg";
-import { cn } from "@/lib/utils";
-import { TeamScoreDetails } from "@/types/misc";
-import clsx from "clsx";
-import Image from "next/image";
-import Link from "next/link";
+import fallback from "@/../public/vercel.svg"
+import { formatTime } from "@/lib/projUtils"
+import { cn } from "@/lib/utils"
+import { MatchSummary } from "@/types/misc"
+import clsx from "clsx"
+import Image from "next/image"
+import Link from "next/link"
+import Timer from "../misc-ui/Timer"
 
 export default function MatchSummaryCard({
-  id,
+  event,
   href,
-  matchSummary,
-  homeInfo,
-  awayInfo,
-  timer,
-  venue,
-  topInfo,
-  bottomInfo,
   className,
 }: {
-  id: string;
-  href: string;
-  matchSummary: string;
-  homeInfo: TeamScoreDetails;
-  awayInfo: TeamScoreDetails;
-  timer: { display?: string; displayColour?: "green" | "yellow" | "gray" };
-  venue: string;
-  topInfo?: string;
-  bottomInfo?: string;
-  className?: string;
+  event: MatchSummary
+  href: string
+  className?: string
 }) {
+  const { competitorDetails, summaryText, otherDetail, venue, winner } = event
+
+  const homeDetails = competitorDetails[0]
+  const awayDetails = competitorDetails[1]
+
+  const timer = {
+    display:
+      event.timer instanceof Date
+        ? formatTime(event.timer)
+        : (event.timer ?? ""),
+    displayColour: event.timerDisplayColour,
+  }
+
   return (
     <Link href={href}>
       <div
@@ -36,70 +37,80 @@ export default function MatchSummaryCard({
           className,
         )}
       >
-        <p className="text-xs text-gray-700 dark:text-neutral-500">{topInfo}</p>
         <p className="text-center text-gray-500 dark:text-neutral-500">
-          {matchSummary}
+          {summaryText}
         </p>
 
         <div className="m-2 grid w-full grid-cols-5 gap-2">
           <div className="content-center justify-self-start">
             <Image
-              src={homeInfo.img ?? fallback}
-              width={40}
-              height={40}
+              src={homeDetails?.img ?? fallback}
+              width={100}
+              height={100}
+              style={{ width: "40px", height: "auto" }}
               alt="Home team image"
             />
           </div>
-          <p className="content-center dark:text-neutral-400">
-            {homeInfo.score}
+          <p
+            className={clsx(
+              "content-center dark:text-neutral-400",
+              winner === 1 && "font-bold",
+            )}
+          >
+            {homeDetails?.score}
           </p>
           <div className="flex items-center justify-center overflow-visible">
             {timer.display && (
-              <p
-                suppressHydrationWarning
-                className={clsx(
-                  "whitespace-nowrap rounded-sm px-2 py-1 text-center text-xs",
-
-                  timer.displayColour === "green" &&
-                    "bg-green-500 text-neutral-200 dark:bg-green-700",
-                  timer.displayColour === "yellow" &&
-                    "bg-yellow-500 text-black dark:bg-yellow-600",
-                  timer.displayColour === "gray" &&
-                    "bg-gray-200 text-gray-700 dark:bg-neutral-700 dark:text-neutral-400",
-                )}
-              >
-                {timer.display}
-              </p>
+              <Timer
+                display={timer.display}
+                displayColour={timer.displayColour}
+              />
             )}
           </div>
 
-          <p className="content-center text-right dark:text-neutral-400">
-            {awayInfo.score}
+          <p
+            className={clsx(
+              "content-center text-right dark:text-neutral-400",
+              winner !== 1 && winner !== undefined && "font-bold",
+            )}
+          >
+            {awayDetails?.score}
           </p>
           <div className="content-center justify-self-end">
             <Image
-              src={awayInfo.img ?? fallback}
-              width={40}
-              height={40}
+              src={awayDetails?.img ?? fallback}
+              width={100}
+              height={100}
+              style={{ width: "40px", height: "auto" }}
               alt="Away team image"
             />
           </div>
-          <p className="col-span-2 text-left text-xs text-gray-700 dark:text-neutral-500">
-            {homeInfo.name} <br /> {homeInfo.winDrawLoss}
+          <p
+            className={clsx(
+              "col-span-2 text-left text-xs text-gray-700 dark:text-neutral-500",
+              winner === 1 && "font-bold",
+            )}
+          >
+            {homeDetails?.name} <br /> {homeDetails?.winDrawLoss}
           </p>
           <div></div>
-          <p className="col-span-2 text-right text-xs text-gray-700 dark:text-neutral-500">
-            {awayInfo.name} <br /> {awayInfo.winDrawLoss}
+          <p
+            className={clsx(
+              "col-span-2 text-right text-xs text-gray-700 dark:text-neutral-500",
+              winner !== 1 && winner !== undefined && "font-bold",
+            )}
+          >
+            {awayDetails?.name} <br /> {awayDetails?.winDrawLoss}
           </p>
         </div>
 
         <p className="text-center text-xs text-gray-500 dark:text-neutral-500">
-          {bottomInfo}
+          {otherDetail}
         </p>
         <p className="text-center text-xs text-gray-500 dark:text-neutral-500">
           {venue}
         </p>
       </div>
     </Link>
-  );
+  )
 }

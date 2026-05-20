@@ -1,55 +1,55 @@
-"use client";
+"use client"
 
-import { SportEvent } from "@/types/event-calendar";
-import { format, isSameDay } from "date-fns";
-import Image from "next/image";
-import Link from "next/link";
+import { SportEvent } from "@/types/event-calendar"
+import { format, isSameDay } from "date-fns"
+import Image from "next/image"
+import Link from "next/link"
 
 interface EventCardProps {
-  event: SportEvent;
+  event: SportEvent
 }
 
 export default function EventCard({ event }: EventCardProps) {
   const isOngoing = event.endDate
     ? new Date() >= new Date(event.startDate) &&
       new Date() <= new Date(event.endDate)
-    : false;
+    : false
 
   // Calculate days until event starts
-  const now = new Date();
-  const startDate = new Date(event.startDate);
+  const now = new Date()
+  const startDate = new Date(event.startDate)
   const daysUntilStart = Math.ceil(
     (startDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
-  );
-  const showCountdown = daysUntilStart > 0 && daysUntilStart < 10;
+  )
+  const showCountdown = daysUntilStart > 0 && daysUntilStart < 10
 
   // Determine date display
   const getDateDisplay = () => {
     // If custom dateDisplay is provided, use it
     if (event.dateDisplay) {
-      return event.dateDisplay;
+      return event.dateDisplay
     }
 
-    const start = new Date(event.startDate);
-    const end = event.endDate ? new Date(event.endDate) : null;
+    const start = new Date(event.startDate)
+    const end = event.endDate ? new Date(event.endDate) : null
 
     // If no end date or same day, show single date
     if (!end || isSameDay(start, end)) {
-      return format(start, "d MMM yyyy");
+      return format(start, "d MMM yyyy")
     }
 
     // Check if start and end are in different years
-    const startYear = start.getFullYear();
-    const endYear = end.getFullYear();
+    const startYear = start.getFullYear()
+    const endYear = end.getFullYear()
 
     if (startYear !== endYear) {
       // Different years - show year on both dates
-      return `${format(start, "d MMM yyyy")} - ${format(end, "d MMM yyyy")}`;
+      return `${format(start, "d MMM yyyy")} - ${format(end, "d MMM yyyy")}`
     } else {
       // Same year - show year only on end date
-      return `${format(start, "d MMM")} - ${format(end, "d MMM yyyy")}`;
+      return `${format(start, "d MMM")} - ${format(end, "d MMM yyyy")}`
     }
-  };
+  }
 
   return (
     <Link href={event.link ?? ""}>
@@ -60,8 +60,9 @@ export default function EventCard({ event }: EventCardProps) {
             <Image
               src={event.imageUrl}
               alt={event.name}
-              width={60}
-              height={60}
+              width={150}
+              height={150}
+              style={{ width: "60px", height: "auto" }}
               className="object-contain"
             />
           </div>
@@ -99,11 +100,8 @@ export default function EventCard({ event }: EventCardProps) {
           </h3>
 
           {/* Date */}
-          <div
-            className="mb-2 text-sm text-gray-700 dark:text-neutral-300"
-            suppressHydrationWarning
-          >
-            <p>{getDateDisplay()}</p>
+          <div className="mb-2 text-sm text-gray-700 dark:text-neutral-300">
+            <p suppressHydrationWarning>{getDateDisplay()}</p>
           </div>
 
           {/* Notes Section */}
@@ -133,5 +131,5 @@ export default function EventCard({ event }: EventCardProps) {
         </div>
       </div>
     </Link>
-  );
+  )
 }

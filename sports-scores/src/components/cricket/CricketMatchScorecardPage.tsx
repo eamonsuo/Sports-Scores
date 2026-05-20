@@ -1,11 +1,11 @@
-import ClientSportsPage from "../all-sports/ClientSportsPage";
-import Placeholder from "../misc-ui/Placeholder";
+import ClientSportsPage from "../all-sports/ClientSportsPage"
+import Placeholder from "../misc-ui/Placeholder"
 import CricketScorecardBat, {
   CricketScorecardBatProps,
-} from "./CricketScorecardBat";
+} from "./CricketScorecardBat"
 import CricketScorecardBowl, {
   CricketScorecardBowlProps,
-} from "./CricketScorecardBowl";
+} from "./CricketScorecardBowl"
 
 //TODO: Add fall of wickets
 
@@ -14,21 +14,20 @@ export default function CricketMatchScorecardPage({
   matchState,
 }: {
   data: {
-    inningLabel: string;
-    inningBatters: CricketScorecardBatProps;
-    inningBowlers: CricketScorecardBowlProps;
-  }[];
-  matchState: "LIVE" | "COMPLETED";
+    inningLabel: string
+    inningBatters: CricketScorecardBatProps
+    inningBowlers: CricketScorecardBowlProps
+  }[]
+  matchState: "LIVE" | "COMPLETED"
 }) {
   if (data.length === 0) {
-    return <Placeholder>No Scorecard Details</Placeholder>;
+    return <Placeholder>No Scorecard Details</Placeholder>
   }
 
-  let scorecards = createScorecardComponents(data);
+  let scorecards = createScorecardComponents(data)
   return (
     <div className="flex-1 overflow-y-auto">
       <ClientSportsPage
-        apiStatus={<></>}
         options={scorecards}
         defaultState={
           matchState === "LIVE"
@@ -37,14 +36,14 @@ export default function CricketMatchScorecardPage({
         }
       />
     </div>
-  );
+  )
 }
 
 function createScorecardComponents(
   inningsData: {
-    inningLabel: string;
-    inningBatters: CricketScorecardBatProps;
-    inningBowlers: CricketScorecardBowlProps;
+    inningLabel: string
+    inningBatters: CricketScorecardBatProps
+    inningBowlers: CricketScorecardBowlProps
   }[],
 ) {
   return inningsData.map((item) => {
@@ -58,6 +57,6 @@ function createScorecardComponents(
         </div>
       ),
       state: item.inningLabel.toString(),
-    };
-  });
+    }
+  })
 }

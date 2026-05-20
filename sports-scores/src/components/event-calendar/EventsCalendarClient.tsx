@@ -1,25 +1,25 @@
-"use client";
+"use client"
 
-import EventCardGrid from "@/components/event-calendar/EventCardGrid";
-import RegularSeasonsView from "@/components/event-calendar/RegularSeasonsView";
-import { SportEvent } from "@/types/event-calendar";
-import { clsx } from "clsx";
-import Link from "next/link";
-import { useState } from "react";
-import { Button } from "../misc-ui/Button";
+import EventCardGrid from "@/components/event-calendar/EventCardGrid"
+import RegularSeasonsView from "@/components/event-calendar/RegularSeasonsView"
+import { SportEvent } from "@/types/event-calendar"
+import { clsx } from "clsx"
+import Link from "next/link"
+import { useState } from "react"
+import { Button } from "../misc-ui/Button"
 
-type ViewMode = "major" | "regular";
+type ViewMode = "major" | "regular"
 
 interface EventsCalendarClientProps {
-  majorEvents: SportEvent[];
-  regularSeasons: SportEvent[];
+  majorEvents: SportEvent[]
+  regularSeasons: SportEvent[]
 }
 
 export default function EventsCalendarClient({
   majorEvents,
   regularSeasons,
 }: EventsCalendarClientProps) {
-  const [viewMode, setViewMode] = useState<ViewMode>("major");
+  const [viewMode, setViewMode] = useState<ViewMode>("major")
 
   return (
     <div className="flex h-full flex-col">
@@ -71,5 +71,5 @@ export default function EventsCalendarClient({
       {viewMode === "major" && <EventCardGrid events={majorEvents} />}
       {viewMode === "regular" && <RegularSeasonsView events={regularSeasons} />}
     </div>
-  );
+  )
 }

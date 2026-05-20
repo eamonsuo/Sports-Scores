@@ -1,35 +1,32 @@
-import fallback from "@/../public/vercel.svg";
-import { cn } from "@/lib/utils";
-import { TeamScoreDetails } from "@/types/misc";
-import clsx from "clsx";
-import Image from "next/image";
-import Link from "next/link";
+import fallback from "@/../public/vercel.svg"
+import { formatTime } from "@/lib/projUtils"
+import { cn } from "@/lib/utils"
+import { MatchSummary } from "@/types/misc"
+import clsx from "clsx"
+import Image from "next/image"
+import Link from "next/link"
+import Timer from "../misc-ui/Timer"
 
 export default function TennisMatchCard({
-  id,
+  event,
   href,
-  matchSummary,
-  homeInfo,
-  awayInfo,
-  timer,
-  venue,
-  topInfo,
-  bottomInfo,
-  winner,
   className,
 }: {
-  id: string;
-  href: string;
-  matchSummary: string;
-  homeInfo: TeamScoreDetails;
-  awayInfo: TeamScoreDetails;
-  timer: { display: string; displayColour?: "green" | "yellow" | "gray" };
-  venue: string;
-  topInfo?: string;
-  bottomInfo?: string;
-  winner?: number;
-  className?: string;
+  event: MatchSummary
+  href: string
+  className?: string
 }) {
+  const { competitorDetails, summaryText, otherDetail, venue, winner } = event
+
+  const homeDetails = competitorDetails[0]
+  const awayDetails = competitorDetails[1]
+  const timer = {
+    display:
+      event.timer instanceof Date
+        ? formatTime(event.timer)
+        : (event.timer ?? ""),
+    displayColour: event.timerDisplayColour,
+  }
   return (
     <Link href={href}>
       <div
@@ -38,30 +35,16 @@ export default function TennisMatchCard({
           className,
         )}
       >
-        {/* Header with tournament/round info */}
-        {topInfo && (
-          <p className="mb-2 text-xs text-gray-700 dark:text-neutral-500">
-            {topInfo}
-          </p>
-        )}
-
         {/* Match status/timer */}
         <div className="mb-3 flex items-center justify-between">
           <p className="text-sm text-gray-500 dark:text-neutral-500">
-            {matchSummary}
+            {summaryText}
           </p>
-          <span
-            className={clsx(
-              "rounded px-2 py-0.5 text-xs",
-              timer.displayColour === "green" &&
-                "bg-green-500 text-neutral-200 dark:bg-green-700",
-              timer.displayColour === "yellow" &&
-                "bg-yellow-500 text-black dark:bg-yellow-600",
-              timer.displayColour === "gray" &&
-                "bg-gray-200 text-gray-700 dark:bg-neutral-700 dark:text-neutral-400",
-            )}
-          >
-            {timer.display}
+          <span>
+            <Timer
+              display={timer.display}
+              displayColour={timer.displayColour}
+            />
           </span>
         </div>
 
@@ -69,25 +52,27 @@ export default function TennisMatchCard({
         <div className="grid grid-cols-[1fr_auto] gap-2 border-gray-300 dark:border-neutral-600">
           {/* Home Player */}
           <div className="flex items-center gap-2">
-            {Array.isArray(homeInfo.img) ? (
+            {Array.isArray(homeDetails?.img) ? (
               <div className="flex">
-                {homeInfo.img.map((img, idx) => (
+                {homeDetails.img.map((img, idx) => (
                   <Image
                     key={idx}
                     src={img || fallback}
-                    width={32}
-                    height={32}
-                    alt={`${homeInfo.name} player ${idx + 1}`}
+                    width={100}
+                    height={100}
+                    style={{ width: "32px", height: "auto" }}
+                    alt={`${homeDetails.name} player ${idx + 1}`}
                     className="me-0.5"
                   />
                 ))}
               </div>
             ) : (
               <Image
-                src={homeInfo.img || fallback}
-                width={32}
-                height={32}
-                alt={homeInfo.name}
+                src={homeDetails?.img || fallback}
+                width={80}
+                height={80}
+                style={{ width: "32px", height: "auto" }}
+                alt={homeDetails?.name ?? "Home player"}
               />
             )}
             <p
@@ -96,42 +81,51 @@ export default function TennisMatchCard({
                 winner === 1 && "font-bold",
               )}
             >
-              {homeInfo.name}
+              {homeDetails?.name}
             </p>
           </div>
           <div className="flex divide-x divide-gray-300 dark:divide-neutral-600">
-            {Array.isArray(homeInfo.score) &&
-              homeInfo.score.map((set, idx) => (
+            {Array.isArray(homeDetails?.score) &&
+              homeDetails.score.map((set, idx) => (
                 <span
                   key={idx}
                   className="px-1 text-center dark:text-neutral-400"
                 >
-                  {set}
+                  {set.split(" ").length > 1 ? (
+                    <>
+                      {set.split(" ")[0]}
+                      <sup>{set.split(" ")[1]}</sup>
+                    </>
+                  ) : (
+                    set
+                  )}
                 </span>
               ))}
           </div>
 
           {/* Away Player */}
           <div className="flex items-center gap-2">
-            {Array.isArray(awayInfo.img) ? (
+            {Array.isArray(awayDetails?.img) ? (
               <div className="flex">
-                {awayInfo.img.map((img, idx) => (
+                {awayDetails.img.map((img, idx) => (
                   <Image
                     key={idx}
                     src={img || fallback}
-                    width={32}
-                    height={32}
-                    alt={`${awayInfo.name} player ${idx + 1}`}
+                    width={80}
+                    height={80}
+                    style={{ width: "32px", height: "auto" }}
+                    alt={`${awayDetails.name} player ${idx + 1}`}
                     className="me-0.5"
                   />
                 ))}
               </div>
             ) : (
               <Image
-                src={awayInfo.img || fallback}
-                width={32}
-                height={32}
-                alt={awayInfo.name}
+                src={awayDetails?.img || fallback}
+                width={80}
+                height={80}
+                style={{ width: "32px", height: "auto" }}
+                alt={awayDetails?.name ?? "Away player"}
               />
             )}
             <p
@@ -140,26 +134,33 @@ export default function TennisMatchCard({
                 winner !== 1 && winner !== undefined && "font-bold",
               )}
             >
-              {awayInfo.name}
+              {awayDetails?.name}
             </p>
           </div>
           <div className="flex divide-x divide-gray-300 dark:divide-neutral-600">
-            {Array.isArray(awayInfo.score) &&
-              awayInfo.score.map((set, idx) => (
+            {Array.isArray(awayDetails?.score) &&
+              awayDetails.score.map((set, idx) => (
                 <span
                   key={idx}
                   className="px-1 text-center dark:text-neutral-400"
                 >
-                  {set}
+                  {set.split(" ").length > 1 ? (
+                    <>
+                      {set.split(" ")[0]}
+                      <sup>{set.split(" ")[1]}</sup>
+                    </>
+                  ) : (
+                    set
+                  )}
                 </span>
               ))}
           </div>
         </div>
 
-        {/* Footer info */}
-        {bottomInfo && (
+        {/* Footer Details */}
+        {otherDetail && (
           <p className="mt-3 text-xs text-gray-500 dark:text-neutral-500">
-            {bottomInfo}
+            {otherDetail}
           </p>
         )}
         {venue && (
@@ -169,5 +170,5 @@ export default function TennisMatchCard({
         )}
       </div>
     </Link>
-  );
+  )
 }

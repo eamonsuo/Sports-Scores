@@ -1,19 +1,19 @@
-import fallback from "@/../public/vercel.svg";
-import Image from "next/image";
+import fallback from "@/../public/vercel.svg"
+import Image from "next/image"
 
 export type CricketScorecardBowlProps = {
-  overs: number;
-  runs: number;
-  wickets: number;
-  economy: number;
-  image?: string;
-  name: string;
-}[];
+  overs: number
+  runs: number
+  wickets: number
+  economy: number
+  image?: string
+  name: string
+}[]
 
 export default async function CricketScorecardBowl({
   data,
 }: {
-  data: CricketScorecardBowlProps;
+  data: CricketScorecardBowlProps
 }) {
   return (
     <table className="w-full flex-1 dark:text-neutral-400">
@@ -35,8 +35,9 @@ export default async function CricketScorecardBowl({
               <Image
                 src={item.image ?? fallback}
                 alt=""
-                width={10}
-                height={10}
+                width={30}
+                height={30}
+                style={{ width: "10px", height: "auto" }}
               ></Image>{" "}
               {item.name}
             </td>
@@ -48,5 +49,5 @@ export default async function CricketScorecardBowl({
         ))}
       </tbody>
     </table>
-  );
+  )
 }

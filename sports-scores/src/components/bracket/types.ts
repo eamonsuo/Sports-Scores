@@ -1,205 +1,205 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement } from "react"
 
 export type Participant = {
-  id: string | number;
+  id: string | number
 
-  isWinner?: boolean;
+  isWinner?: boolean
 
-  name?: string;
+  name?: string
 
-  status?: "PLAYED" | "NO_SHOW" | "WALK_OVER" | "NO_PARTY" | string | null;
+  status?: "PLAYED" | "NO_SHOW" | "WALK_OVER" | "NO_PARTY" | string | null
 
-  resultText?: string | null;
+  resultText?: string | null
 
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 export type Match = {
-  id: number | string;
+  id: number | string
 
   /** Link to this match. While onClick() can be used, providing an href
       better supports opening a new tab, or copying a link. * */
-  href?: string;
+  href?: string
 
-  name?: string;
+  name?: string
 
-  nextMatchId: number | string | null;
+  nextMatchId: number | string | null
 
-  nextLooserMatchId?: number | string;
+  nextLooserMatchId?: number | string
 
-  tournamentRoundText?: string;
+  tournamentRoundText?: string
 
   /** Custom title for the round header. Takes precedence over auto-generated titles. */
-  roundTitle?: string;
+  roundTitle?: string
 
-  startTime: string | Date;
+  startTime: string | Date
 
-  state: "PLAYED" | "NO_SHOW" | "WALK_OVER" | "NO_PARTY" | string;
+  state: "PLAYED" | "NO_SHOW" | "WALK_OVER" | "NO_PARTY" | string
 
-  participants: Participant[];
+  participants: Participant[]
 
-  [key: string]: any;
-};
+  [key: string]: any
+}
 
 export type Options = {
-  width?: number;
+  width?: number
 
-  boxHeight?: number;
+  boxHeight?: number
 
-  canvasPadding?: number;
+  canvasPadding?: number
 
-  spaceBetweenColumns?: number;
+  spaceBetweenColumns?: number
 
-  spaceBetweenRows?: number;
+  spaceBetweenRows?: number
 
-  connectorColor?: string;
+  connectorColor?: string
 
-  connectorColorHighlight?: string;
+  connectorColorHighlight?: string
 
   roundHeader?: {
-    isShown?: boolean;
-    height?: number;
-    marginBottom?: number;
-    fontSize?: number;
-    fontColor?: string;
-    backgroundColor?: string;
-    fontFamily?: string;
+    isShown?: boolean
+    height?: number
+    marginBottom?: number
+    fontSize?: number
+    fontColor?: string
+    backgroundColor?: string
+    fontFamily?: string
     roundTextGenerator?: (
       currentRoundNumber: number,
       roundsTotalNumber: number,
-    ) => string | undefined;
-  };
+    ) => string | undefined
+  }
 
-  roundSeparatorWidth?: number;
+  roundSeparatorWidth?: number
 
   lineInfo?: {
-    separation?: number;
-    homeVisitorSpread?: number;
-  };
+    separation?: number
+    homeVisitorSpread?: number
+  }
 
-  horizontalOffset?: number;
+  horizontalOffset?: number
 
-  wonBywalkOverText?: string;
+  wonBywalkOverText?: string
 
-  lostByNoShowText?: string;
-};
+  lostByNoShowText?: string
+}
 
 export type ComputedOptions = Options & {
-  rowHeight?: number;
+  rowHeight?: number
 
-  columnWidth?: number;
-};
+  columnWidth?: number
+}
 
 export type MatchComponentProps = {
-  match: Match;
+  match: Match
 
   onMatchClick: (args: {
-    match: Match;
-    topWon: boolean;
-    bottomWon: boolean;
-    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>;
-  }) => void;
+    match: Match
+    topWon: boolean
+    bottomWon: boolean
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  }) => void
 
-  onPartyClick: (party: Participant, partyWon: boolean) => void;
+  onPartyClick: (party: Participant, partyWon: boolean) => void
 
-  onMouseEnter: (partyId: string | number) => void;
+  onMouseEnter: (partyId: string | number) => void
 
-  onMouseLeave: () => void;
+  onMouseLeave: () => void
 
-  topParty: Participant;
+  topParty: Participant
 
-  bottomParty: Participant;
+  bottomParty: Participant
 
-  topWon: boolean;
+  topWon: boolean
 
-  bottomWon: boolean;
+  bottomWon: boolean
 
-  topHovered: boolean;
+  topHovered: boolean
 
-  bottomHovered: boolean;
+  bottomHovered: boolean
 
-  topText: string;
+  topText: string
 
-  bottomText: string;
+  bottomText: string
 
-  connectorColor?: string;
+  connectorColor?: string
 
-  computedStyles?: ComputedOptions;
+  computedStyles?: ComputedOptions
 
-  teamNameFallback: string;
+  teamNameFallback: string
 
-  resultFallback: (participant: Participant) => string;
-};
+  resultFallback: (participant: Participant) => string
+}
 
 export type Theme = {
-  fontFamily: string;
+  fontFamily: string
 
-  transitionTimingFunction: string;
+  transitionTimingFunction: string
 
-  disabledColor: string;
+  disabledColor: string
 
   roundHeaders: {
-    background: string;
-  };
+    background: string
+  }
 
   matchBackground: {
-    wonColor: string;
-    lostColor: string;
-  };
+    wonColor: string
+    lostColor: string
+  }
 
   border: {
-    color: string;
-    highlightedColor: string;
-  };
+    color: string
+    highlightedColor: string
+  }
 
   textColor: {
-    highlighted: string;
-    main: string;
-    dark: string;
-    disabled: string;
-  };
+    highlighted: string
+    main: string
+    dark: string
+    disabled: string
+  }
 
   score: {
     text: {
-      highlightedWonColor: string;
-      highlightedLostColor: string;
-    };
+      highlightedWonColor: string
+      highlightedLostColor: string
+    }
     background: {
-      wonColor: string;
-      lostColor: string;
-    };
-  };
+      wonColor: string
+      lostColor: string
+    }
+  }
 
-  canvasBackground: string;
-};
+  canvasBackground: string
+}
 
 export type CommonTreeProps = {
   svgWrapper?: (props: {
-    bracketWidth: number;
-    bracketHeight: number;
-    startAt: number[];
-    children: ReactElement;
-  }) => React.ReactElement;
+    bracketWidth: number
+    bracketHeight: number
+    startAt: number[]
+    children: ReactElement
+  }) => React.ReactElement
 
-  theme?: Theme;
+  theme?: Theme
 
-  options?: { style: Options };
-};
+  options?: { style: Options }
+}
 
 export type BracketLeaderboardProps = CommonTreeProps & {
-  matchComponent: React.ComponentType<MatchComponentProps>;
+  matchComponent: React.ComponentType<MatchComponentProps>
 
-  currentRound?: string;
+  currentRound?: string
 
   onMatchClick?: (args: {
-    match: Match;
-    topWon: boolean;
-    bottomWon: boolean;
-  }) => void;
+    match: Match
+    topWon: boolean
+    bottomWon: boolean
+  }) => void
 
-  onPartyClick?: (party: Participant, partyWon: boolean) => void;
-};
+  onPartyClick?: (party: Participant, partyWon: boolean) => void
+}
 
 export type FlexibleSingleElimLeaderboardProps = BracketLeaderboardProps & {
-  matches: Match[];
-};
+  matches: Match[]
+}

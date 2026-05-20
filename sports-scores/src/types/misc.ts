@@ -1,222 +1,176 @@
-import {
-  LadderPlacingCategory,
-  SportsLadder,
-} from "@/components/all-sports/Ladder";
+import { Match as BracketMatch } from "@/components/bracket/types"
 import type {
   PlayoffPictureConfig,
   PlayoffPictureGroup,
-} from "@/types/playoff-picture";
+} from "@/types/playoff-picture"
+
+// ── Types extracted from all-sports components ───────────────────────────────
+
+export type LadderTeamDetail = {
+  id: string | number
+  name: string
+  logo?: string | string[]
+}
+
+export type LadderTeam = {
+  team: LadderTeamDetail
+  position: number
+}
+
+export type LadderPlacingCategory = {
+  position: number[]
+  label: string
+  colour?: string
+}
+
+export type LadderRow = LadderTeam & {
+  [key: string]: string | number | LadderTeamDetail | undefined
+}
+
+export interface SportsLadder<H extends readonly string[]> {
+  tableName?: string
+  headings: H
+  data: LadderRow[]
+  placingCategories?: LadderPlacingCategory[]
+}
+
+export type LeagueSeasonConfig = {
+  name: string
+  slug: string
+  icon?: string
+  seasons: { name: string; slug: string; ladderConfig?: LadderConfig }[]
+  display?: DisplayTypes
+  externalURL?: string
+  byes?: {
+    name: string
+    img: string
+  }[]
+  excludeFromToday?: boolean
+}
+
+export type PeriodScore = {
+  teams: { home: { score: number | string }; away: { score: number | string } }
+  periodName: string
+}
+
+export type ScoreDifference = { event: string; difference: number }
+
+// ── General types ────────────────────────────────────────────────────────────
 
 export type DeepPartial<T> = {
-  [P in keyof T]?: T[P] extends Date
+  [P in keyof T]?: T[P] extends Date | undefined
     ? T[P]
-    : T[P] extends object
-      ? DeepPartial<T[P]>
-      : T[P];
-};
-
-export interface APISportsResponse {
-  get: string;
-  parameters: {
-    season: string;
-    league: string;
-  };
-  errors: any[] | APISportsErrors;
-  results: number;
+    : NonNullable<T[P]> extends (infer U)[]
+      ? DeepPartial<U>[]
+      : T[P] extends object | undefined
+        ? DeepPartial<NonNullable<T[P]>>
+        : T[P]
 }
-
-export interface APISportsErrors {
-  rateLimit?: string;
-  requests?: string;
-  token?: string;
-}
-
-export interface APISportsStatus extends APISportsResponse {
-  paging: {
-    current: number;
-    total: number;
-  };
-  response: APISportsStatusDetails;
-}
-
-export type APISportsStatusDetails = {
-  account?: {
-    firstname: string;
-    lastname: string;
-    email: string;
-  };
-  subscription?: {
-    plan: string;
-    end: string;
-    active: boolean;
-  };
-  requests?: {
-    current: number;
-    limit_day: number;
-  };
-};
-
-type NavButtonGroupProps = {
-  label: string;
-  link: any;
-}[];
 
 export type TeamScoreDetails = {
-  img?: string | string[];
-  score: string | string[];
-  name: string;
-  winDrawLoss?: string;
-};
+  id: string
+  img?: string | string[]
+  score: string | string[]
+  name: string
+  winDrawLoss?: string
+  slug?: string
+}
 
 export type MatchSummary = {
-  id: string;
-  startDate: Date;
-  endDate?: Date;
-  sport: string;
-  venue?: string;
-  status: MatchStatus;
-  summaryText: string;
-  otherDetail?: string;
-  homeDetails: TeamScoreDetails;
-  awayDetails: TeamScoreDetails;
-  roundLabel?: string;
-  timer?: string | Date;
-  timerDisplayColour?: "green" | "yellow" | "gray" | undefined;
-  seriesName?: string;
-  matchSlug?: string;
-  seriesSlug?: string; // Used to navigate to cricket series
-  winner?: number;
-  tournamentId?: string;
-  seasonId?: string;
-  dataverseGUID?: string;
-};
+  id: string
+  startDate: Date
+  endDate?: Date
+  sport: string
+  venue?: string
+  status: MatchStatus
+  summaryText: string
+  otherDetail?: string
+  competitorDetails: TeamScoreDetails[]
+  roundLabel?: string
+  timer?: string | Date
+  timerDisplayColour?: "green" | "yellow" | "gray" | undefined
+  matchSlug?: string
+  leagueName?: string
+  leagueImg?: string
+  leagueSlug?: string
+  winner?: number
+  leagueId?: string
+  seasonId?: string
+  dataverseGUID?: string
+}
 
-export type MatchStatus = "LIVE" | "UPCOMING" | "COMPLETED";
+export enum MatchStatus {
+  LIVE = "LIVE",
+  UPCOMING = "UPCOMING",
+  COMPLETED = "COMPLETED",
+}
 
-export type CardVariant = "tennis" | "default";
+export enum CardVariant {
+  TENNIS = "tennis",
+  SESSION = "session",
+  DEFAULT = "default",
+}
 
 export interface FixtureRound {
-  matches: MatchSummary[];
-  roundLabel: string;
-  byes?: { name?: string; img?: string }[];
-  cardVariant?: CardVariant;
-  roundSlug?: string;
+  matches: MatchSummary[]
+  roundLabel: string
+  byes?: { name?: string; img?: string }[]
+  cardVariant?: CardVariant
+  roundSlug?: string
 }
 
 export type LadderConfig = {
   // headings: string[];
-  placingCategories?: LadderPlacingCategory[];
-  playoffPictureConfig?: PlayoffPictureConfig;
-};
-
-export interface SportsmonksCricket {
-  data: SportsmonksMatchCricket[];
-  links: any;
-  meta: any;
+  placingCategories?: LadderPlacingCategory[]
+  playoffPictureConfig?: PlayoffPictureConfig
+  headings?: readonly string[]
 }
 
-type SportsmonksMatchCricket = {
-  resource: string;
-  id: number;
-  league_id: number;
-  season_id: number;
-  stage_id: number;
-  round: string;
-  localteam_id: number;
-  visitorteam_id: number;
-  starting_at: string;
-  type: string;
-  live: boolean;
-  status: string;
-  last_period: null | string;
-  note: string;
-  venue_id: number;
-  toss_won_team_id: number;
-  winner_team_id: number;
-  draw_noresult: null | string;
-  first_umpire_id: number;
-  second_umpire_id: number;
-  tv_umpire_id: number;
-  referee_id: number;
-  man_of_match_id: number;
-  man_of_series_id: null | number;
-  total_overs_played: number;
-  elected: string;
-  super_over: boolean;
-  follow_on: boolean;
-  localteam_dl_data: {
-    score: null | number;
-    overs: null | number;
-    wickets_out: null | number;
-  };
-  visitorteam_dl_data: {
-    score: null | number;
-    overs: null | number;
-    wickets_out: null | number;
-  };
-  rpc_overs: null | number;
-  rpc_target: null | number;
-  weather_report: any[];
-  localteam: {
-    resource: string;
-    id: number;
-    name: string;
-    code: string;
-    image_path: string;
-    country_id: number;
-    national_team: boolean;
-    updated_at: string;
-  };
-  visitorteam: {
-    resource: string;
-    id: number;
-    name: string;
-    code: string;
-    image_path: string;
-    country_id: number;
-    national_team: boolean;
-    updated_at: string;
-  };
-  runs: Array<{
-    resource: string;
-    id: number;
-    fixture_id: number;
-    team_id: number;
-    inning: number;
-    score: number;
-    wickets: number;
-    overs: number;
-    pp1: null | string;
-    pp2: null | string;
-    pp3: null | string;
-    updated_at: string;
-  }>;
-  venue: {
-    resource: string;
-    id: number;
-    country_id: number;
-    name: string;
-    city: string;
-    image_path: string;
-    capacity: number;
-    floodlight: boolean;
-    updated_at: string;
-  };
-};
+export interface SportService {
+  matchesByLeagueSeason(
+    leagueId: string,
+    seasonId: string,
+  ): Promise<Matches | null>
+
+  matchesByDate(date: Date): Promise<Matches | null>
+  matchesByTeam(teamId: string): Promise<Matches | null>
+  matchDetails(matchId: string): Promise<MatchDetail | null>
+
+  standings(
+    leagueId: string,
+    seasonId: string,
+  ): Promise<Standings<readonly string[]> | null>
+
+  brackets(leagueId: string, seasonId: string): Promise<Brackets | null>
+}
 
 export interface Matches {
-  fixtures: FixtureRound[];
-  currentRound: string;
+  fixtures: FixtureRound[]
+  currentRound: string
 }
 
 export interface MatchDetail {
-  fixtures: FixtureRound[];
-  currentRound: string;
+  matchDetails: {
+    homeTeam: TeamScoreDetails
+    awayTeam: TeamScoreDetails
+    status: string
+  }
+  scoreBreakdown: PeriodScore[]
+  scoreEvents?: ScoreDifference[]
 }
 
 export interface Standings<T extends readonly string[]> {
-  standings: SportsLadder<T>[];
-  playoffPicture?: PlayoffPictureGroup[];
+  standings: SportsLadder<T>[]
+  playoffPicture?: PlayoffPictureGroup[]
+}
+
+export interface Brackets {
+  brackets: {
+    id: number
+    name: string
+    currentRound: number
+    matches: BracketMatch[]
+  }[]
 }
 
 export enum SPORT {
@@ -239,13 +193,13 @@ export enum SPORT {
   DARTS = "darts",
 }
 
-export enum DISPLAY_TYPES {
+export enum DisplayTypes {
   ROUND = "round",
   DATE = "date",
   LEAGUE = "league",
 }
 
-export enum API_EVENT_TYPES {
+export enum APIEventTypes {
   SOFASCORE = "SOFASCORE",
   SPORTSMONKS_CRICKET = "SPORTSMONKS_CRICKET",
   SPORTSDB = "SPORTSDB",
@@ -431,6 +385,7 @@ export enum CountryFlagCode {
   Oman = "om",
   Pakistan = "pk",
   Palau = "pw",
+  Palestine = "ps",
   Panama = "pa",
   PapuaNewGuinea = "pg",
   Paraguay = "py",

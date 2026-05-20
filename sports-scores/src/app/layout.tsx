@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import "./globals.css"
 
-import ClientDateSetter from "@/components/misc-ui/ClientDateSetter";
-import Footer from "@/components/misc-ui/Footer";
-import { Analytics } from "@vercel/analytics/next";
+import ClientDateSetter from "@/components/misc-ui/ClientDateSetter"
+import Footer from "@/components/misc-ui/Footer"
+import { Analytics } from "@vercel/analytics/next"
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Sports Scores App",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     },
   ],
   manifest: "/web.manifest",
-};
+}
 
 export default function RootLayout({
   children,
@@ -41,6 +41,7 @@ export default function RootLayout({
         type="image/png"
         sizes="180x180"
       />
+      <link rel="apple-touch-startup-image" href="/ios-splash.png" />
 
       <body className={inter.className}>
         <ClientDateSetter />
@@ -55,5 +56,5 @@ export default function RootLayout({
         </div>
       </body>
     </html>
-  );
+  )
 }

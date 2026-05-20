@@ -1,17 +1,17 @@
-"use client";
-import ErrorPage from "@/components/misc-ui/ErrorPage";
-import Footer from "@/components/misc-ui/Footer";
-import { Inter } from "next/font/google";
+"use client"
+import ErrorPage from "@/components/misc-ui/ErrorPage"
+import Footer from "@/components/misc-ui/Footer"
+import { Inter } from "next/font/google"
 
 // Error boundaries must be Client Components
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"] })
 
 export default function GlobalError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string };
-  reset: () => void;
+  error: Error & { digest?: string }
+  reset: () => void
 }) {
   return (
     // global-error must include html and body tags
@@ -25,5 +25,5 @@ export default function GlobalError({
         </div>
       </body>
     </html>
-  );
+  )
 }

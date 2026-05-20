@@ -1,21 +1,21 @@
 import CricketSeriesLadder, {
   CricketLadder,
-} from "@/components/cricket/CricketSeriesLadder";
-import CricketSeriesResult from "@/components/cricket/CricketSeriesResult";
-import Placeholder from "@/components/misc-ui/Placeholder";
-import { cricketSeriesResults } from "@/services/cricket.service";
-import Image from "next/image";
+} from "@/components/cricket/CricketSeriesLadder"
+import CricketSeriesResult from "@/components/cricket/CricketSeriesResult"
+import Placeholder from "@/components/misc-ui/Placeholder"
+import { cricketSeriesResults } from "@/services/cricket.service"
+import Image from "next/image"
 
 export default async function Page(props: {
-  params: Promise<{ league: string; season: string }>;
+  params: Promise<{ league: string; season: string }>
 }) {
-  const { league, season } = await props.params;
+  const { league, season } = await props.params
 
-  let seriesHeadToHead: any = null;
-  let seriesLadders: CricketLadder[] | null = null;
-  let tournamentWinner: any = null;
+  let seriesHeadToHead: any = null
+  let seriesLadders: CricketLadder[] | null = null
+  let tournamentWinner: any = null
 
-  seriesLadders = await cricketSeriesResults(league, season);
+  seriesLadders = await cricketSeriesResults(league, season)
 
   return (
     <div className="flex-1 overflow-y-auto px-4">
@@ -42,8 +42,9 @@ export default async function Page(props: {
           <p className="pt-6 dark:text-neutral-400">TOURNAMENT WINNER </p>
           <Image
             src={tournamentWinner.img}
-            height={150}
-            width={150}
+            height={300}
+            width={300}
+            style={{ width: "150px", height: "auto" }}
             alt={"Winning Team"}
             className="m-4"
           />
@@ -61,5 +62,5 @@ export default async function Page(props: {
 
       {seriesLadders === null && <Placeholder>No Results</Placeholder>}
     </div>
-  );
+  )
 }

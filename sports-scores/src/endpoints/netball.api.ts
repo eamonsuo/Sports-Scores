@@ -1,90 +1,75 @@
-import { updateGlobalApiQuota } from "@/lib/apiCounter";
-import { SPORT } from "@/types/misc";
+import { updateQuota } from "@/lib/projUtils"
+import { SPORT } from "@/types/misc"
 import {
-  Netball_SportsDB_DayEvents_Response,
   Netball_SportsDB_LeagueTotalStandings_Response,
-  Netball_SportsDB_Match_Response,
   Netball_SportsDB_MatchIncidents_Response,
-  Netball_SportsDB_SeasonEvent_Response,
-} from "@/types/netball";
-import { SportsDB_Events_Response } from "@/types/sportsdb";
-import { format } from "date-fns";
-
-function updateQuota(response: Response) {
-  const limit = response.headers.get("x-ratelimit-requests-limit");
-  const remaining = response.headers.get("x-ratelimit-requests-remaining");
-  if (remaining && limit) {
-    updateGlobalApiQuota(
-      parseInt(remaining, 10),
-      parseInt(limit, 10),
-      SPORT.NETBALL,
-    );
-  }
-}
+} from "@/types/netball"
+import { SportsDB_Events_Response } from "@/types/sportsdb"
+import { format } from "date-fns"
 
 async function fetchNetballApi(endpoint: string) {
-  const url = process.env.NETBALL_BASEURL + endpoint;
-  const res = await fetch(url);
+  const url = process.env.NETBALL_BASEURL + endpoint
+  const res = await fetch(url)
 
   if (!res.ok || res.status === 204) {
-    return null;
+    return null
   }
 
-  updateQuota(res);
+  updateQuota(res, SPORT.NETBALL)
 
-  return res.json();
+  return res.json()
 }
 
 export async function fetchNetballLastMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchNetballApi(
     `/eventspastleague.php?id=${tournamentId}`,
-  )) as Netball_SportsDB_SeasonEvent_Response;
+  )) as SportsDB_Events_Response
 }
 
 export async function fetchNetballNextMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
   pageNumber: number = 0,
 ) {
   return (await fetchNetballApi(
     `/eventsnextleague.php?id=${tournamentId}`,
-  )) as Netball_SportsDB_SeasonEvent_Response;
+  )) as SportsDB_Events_Response
 }
 
 export async function fetchNetballSeasonMatches(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
 ) {
   return (await fetchNetballApi(
     `/eventsseason.php?id=${tournamentId}&s=${seasonId}`,
-  )) as SportsDB_Events_Response;
+  )) as SportsDB_Events_Response
 }
 
 export async function fetchNetballStandings(
-  tournamentId: number,
-  seasonId: number,
+  tournamentId: string,
+  seasonId: string,
 ): Promise<Netball_SportsDB_LeagueTotalStandings_Response | null> {
-  return null;
+  return null
 }
 
-export async function fetchNetballMatchDetails(matchId: number) {
+export async function fetchNetballMatchDetails(matchId: string) {
   return (await fetchNetballApi(
     `/lookupevent.php?id=${matchId}`,
-  )) as Netball_SportsDB_Match_Response;
+  )) as SportsDB_Events_Response
 }
 
 export async function fetchNetballMatchIncidents(
-  matchId: number,
+  matchId: string,
 ): Promise<Netball_SportsDB_MatchIncidents_Response | null> {
-  return null;
+  return null
 }
 
 export async function fetchNetballMatchesByDate(date: Date) {
   return (await fetchNetballApi(
     `/eventsday.php?d=${format(date, "yyyy-MM-dd")}&s=Netball${date.getMonth() > 1 && date.getMonth() < 7 ? "&l=Australian Super Netball League" : ""}`,
-  )) as Netball_SportsDB_DayEvents_Response;
+  )) as SportsDB_Events_Response
 }

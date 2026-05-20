@@ -1,3 +1,5 @@
 .vscode/*
 .vs/*
 .playwright-mcp
+.vercel
+.env*.local

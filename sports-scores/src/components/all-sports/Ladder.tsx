@@ -1,6 +1,8 @@
-import fallback from "@/../public/vercel.svg";
-import { clsx } from "clsx";
-import Image from "next/image";
+import fallback from "@/../public/vercel.svg"
+import { SportsLadder } from "@/types/misc"
+import { clsx } from "clsx"
+import Image from "next/image"
+import Link from "next/link"
 
 const defaultColours = [
   "bg-green-500",
@@ -9,35 +11,7 @@ const defaultColours = [
   "bg-blue-300",
   "bg-yellow-500",
   "bg-yellow-300",
-];
-
-type LadderTeamDetail = {
-  id: string | number;
-  name: string;
-  logo?: string;
-};
-
-type LadderTeam = {
-  team: LadderTeamDetail;
-  position: number;
-};
-
-export type LadderPlacingCategory = {
-  position: number[];
-  label: string;
-  colour?: string;
-};
-
-export type LadderRow = LadderTeam & {
-  [key: string]: string | number | LadderTeamDetail | undefined;
-};
-
-export interface SportsLadder<H extends readonly string[]> {
-  tableName?: string;
-  headings: H;
-  data: LadderRow[];
-  placingCategories?: LadderPlacingCategory[];
-}
+]
 
 export default function Ladder<const H extends readonly string[]>({
   tableName,
@@ -54,7 +28,7 @@ export default function Ladder<const H extends readonly string[]>({
           <tr>
             <th></th>
             <th className="pe-2"></th>
-            <th className="px-2">Team</th>
+            {/* <th className="px-2">Team</th> - MUST BE SPECIFIED AS PART OF HEADINGS CONST*/}
             {headings.map((heading) => (
               <th key={heading} className="px-2">
                 {heading}
@@ -68,38 +42,61 @@ export default function Ladder<const H extends readonly string[]>({
             const categoryIdx =
               placingCategories?.findIndex((c) =>
                 c.position.includes(item.position),
-              ) ?? -1;
+              ) ?? -1
             const category =
-              categoryIdx >= 0 ? placingCategories?.[categoryIdx] : undefined;
+              categoryIdx >= 0 ? placingCategories?.[categoryIdx] : undefined
             const colour =
               category?.colour ??
               (categoryIdx >= 0
                 ? defaultColours[categoryIdx % defaultColours.length]
-                : undefined);
+                : undefined)
             return (
               <tr key={item.team.id} className="border-b border-t">
                 <td className={clsx("w-1 p-0", colour)} />
                 <td className="py-2 pe-2 ps-1">{item.position}</td>
                 <td className="text-left text-sm">
-                  <div className="flex">
-                    <Image
-                      src={item.team.logo ?? fallback}
-                      height={10}
-                      width={15}
-                      alt={"Logo"}
-                      className="me-2"
-                    />
-                    {item.team.name}
-                  </div>
+                  <Link
+                    href={
+                      item.sport
+                        ? `/sports/${item.sport}/team/${item.team.id}`
+                        : ""
+                    }
+                  >
+                    <div className="flex items-center">
+                      <div className="me-2 flex gap-2">
+                        {Array.isArray(item.team.logo) ? (
+                          item.team.logo.map((img, idx) => (
+                            <Image
+                              key={idx + "-logo"}
+                              src={img || fallback}
+                              width={100}
+                              height={100}
+                              style={{ width: "20px", height: "auto" }}
+                              alt={`${item.team.name} player ${idx + 1}`}
+                            />
+                          ))
+                        ) : (
+                          <Image
+                            src={item.team.logo || fallback}
+                            width={80}
+                            height={80}
+                            style={{ width: "20px", height: "auto" }}
+                            alt={item.team.name}
+                          />
+                        )}
+                      </div>
+                      {item.team.name}
+                    </div>
+                  </Link>
                 </td>
 
-                {headings.map((heading) => (
+                {headings.slice(1).map((heading) => (
                   <td key={heading}>
                     {item[heading] as string | number | undefined}
                   </td>
                 ))}
               </tr>
-            );
+            )
           })}
         </tbody>
       </table>
@@ -121,5 +118,5 @@ export default function Ladder<const H extends readonly string[]>({
         </div>
       )}
     </div>
-  );
+  )
 }

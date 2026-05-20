@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { formatDateLong } from "@/lib/projUtils";
-import { cn } from "@/lib/utils";
+import { formatDateLong } from "@/lib/projUtils"
+import { cn } from "@/lib/utils"
 
 export default function SectionDate({
   sectionDate,
@@ -9,10 +9,10 @@ export default function SectionDate({
   currentDate,
   className,
 }: {
-  sectionDate: Date;
-  sectionDateEnd?: Date;
-  currentDate: boolean; // Sets the current date id for auto-scrolling
-  className?: string;
+  sectionDate: Date
+  sectionDateEnd?: Date
+  currentDate: boolean // Sets the current date id for auto-scrolling
+  className?: string
 }) {
   return (
     <div
@@ -23,5 +23,5 @@ export default function SectionDate({
       {formatDateLong(sectionDate)}
       {sectionDateEnd ? ` - ${formatDateLong(sectionDateEnd)}` : ""}
     </div>
-  );
+  )
 }

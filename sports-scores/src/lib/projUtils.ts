@@ -1,18 +1,26 @@
-import { LeagueSeasonConfig } from "@/components/all-sports/LeagueSeasonToggle";
-import { CountryFlagCode } from "@/types/misc";
-import { Sofascore_Score } from "@/types/sofascore";
-import { format } from "date-fns/format";
+import { updateGlobalApiQuota } from "@/lib/apiCounter"
+import { CountryFlagCode, LeagueSeasonConfig, SPORT } from "@/types/misc"
+import { Sofascore_Score } from "@/types/sofascore"
+import { format } from "date-fns/format"
 
-const fallback = "/vercel.svg";
+const fallback = "/vercel.svg"
+
+export function updateQuota(response: Response, sport: SPORT) {
+  const limit = response.headers.get("x-ratelimit-requests-limit")
+  const remaining = response.headers.get("x-ratelimit-requests-remaining")
+  if (remaining && limit) {
+    updateGlobalApiQuota(parseInt(remaining, 10), parseInt(limit, 10), sport)
+  }
+}
 
 export function setMatchStatusCricket(status: string) {
   switch (status) {
     case "Aban.":
-      return "Abandoned";
+      return "Abandoned"
     case "NS":
-      return "Upcoming";
+      return "Upcoming"
     default:
-      return status;
+      return status
   }
 }
 
@@ -23,27 +31,27 @@ export function calculateMatchResult(
   awayScore: number,
   finished: boolean,
 ) {
-  let winningTeam: string = "";
-  let winningMargin: number;
-  let description: string = "";
+  let winningTeam: string = ""
+  let winningMargin: number
+  let description: string = ""
 
-  finished ? (description = "won by") : (description = "lead by");
+  finished ? (description = "won by") : (description = "lead by")
 
   if (homeScore > awayScore) {
-    winningMargin = homeScore - awayScore;
-    winningTeam = homeName;
+    winningMargin = homeScore - awayScore
+    winningTeam = homeName
   } else if (homeScore < awayScore) {
-    winningMargin = awayScore - homeScore;
-    winningTeam = awayName;
+    winningMargin = awayScore - homeScore
+    winningTeam = awayName
   } else {
-    winningMargin = 0;
+    winningMargin = 0
   }
 
   return winningMargin == 0
     ? finished
       ? "Match Drawn"
       : `${homeName} ${description} ${0}`
-    : `${winningTeam} ${description} ${winningMargin}`;
+    : `${winningTeam} ${description} ${winningMargin}`
 }
 
 export function setMatchSummary(
@@ -55,9 +63,9 @@ export function setMatchSummary(
 ) {
   switch (status) {
     case "notstarted":
-      return ``;
+      return ``
     case "postponed":
-      return "Match Postponed";
+      return "Match Postponed"
     case "finished":
       return calculateMatchResult(
         homeName,
@@ -65,7 +73,7 @@ export function setMatchSummary(
         awayName,
         awayScore,
         true,
-      );
+      )
     default:
       return calculateMatchResult(
         homeName,
@@ -73,45 +81,90 @@ export function setMatchSummary(
         awayName,
         awayScore,
         false,
-      );
+      )
   }
+}
+
+export function setTimer(
+  statusType: string,
+  statusDescription: string,
+  startDate: Date,
+  timePlayed: number,
+  periodLength: number,
+) {
+  switch (statusType) {
+    case "notstarted":
+      return startDate
+    case "inprogress":
+      const remainingTime = periodLength - (timePlayed % periodLength)
+      if (!remainingTime || timePlayed % periodLength === 0)
+        return statusDescription
+
+      const remainingminutes = Math.floor(remainingTime / 60)
+      const remainingSeconds = remainingTime % 60
+      return `${statusDescription} ${remainingminutes}:${remainingSeconds.toString().padStart(2, "0")}`
+    case "postponed":
+    case "finished":
+    default:
+      return statusDescription
+  }
+}
+
+export function setSeriesInfo(
+  homeName: string,
+  homeGamesWon: number | undefined,
+  awayName: string,
+  awayGamesWon: number | undefined,
+) {
+  if (homeGamesWon !== undefined && awayGamesWon !== undefined) {
+    if (homeGamesWon > awayGamesWon) {
+      return `${homeName} leads series ${homeGamesWon}-${awayGamesWon}`
+    } else if (awayGamesWon > homeGamesWon) {
+      return `${awayName} leads series ${awayGamesWon}-${homeGamesWon}`
+    } else {
+      return `Series tied at ${homeGamesWon}-${awayGamesWon}`
+    }
+  }
+  return undefined
 }
 
 export function getCountryImageUrl(countryCode?: CountryFlagCode) {
   if (countryCode === null || countryCode === undefined) {
-    return fallback;
+    return fallback
   }
 
-  return `https://flagcdn.com/${countryCode}.svg`;
+  return `https://flagcdn.com/${countryCode}.svg`
 }
 
 export function shortenTeamNames(team: string) {
   switch (team) {
     //AFL
     case "Greater Western Sydney Giants":
-      return "GWS Giants";
+      return "GWS Giants"
     case "North Melbourne Kangaroos":
-      return "North Melbourne";
+      return "North Melbourne"
     case "North Melbourne Kangaroos II":
-      return "North Melbourne II";
+      return "North Melbourne II"
     //NFL
     case "Washington Commanders":
-      return "Washington Comm.";
+      return "Washington Comm."
     case "Tampa Bay Buccaneers":
-      return "Tampa Bay Buccs";
+      return "Tampa Bay Buccs"
     case "Los Angeles Chargers":
-      return "LA Chargers";
+      return "LA Chargers"
     //NRL
     case "North Queensland Cowboys":
-      return "North QLD Cowboys";
+      return "North QLD Cowboys"
     case "St. George Illawarra Dragons":
-      return "St George Illawarra";
+      return "St George Illawarra"
     case "South Sydney Rabbitohs":
-      return "South Sydney Rabbits";
+      return "South Sydney Rabbits"
     case "New Zealand Warriors":
-      return "NZ Warriors";
+      return "NZ Warriors"
+    case "New South Wales Sky Blues":
+      return "New South Wales Blues"
     default:
-      return team;
+      return team
   }
 }
 
@@ -122,12 +175,12 @@ export function shortenTeamNames(team: string) {
  * Server-side: formats in server's timezone (UTC)
  */
 export function formatTime(date: Date | number | null | undefined): string {
-  if (!date) return "";
+  if (!date) return ""
 
-  const dateObj = typeof date === "number" ? new Date(date) : date;
+  const dateObj = typeof date === "number" ? new Date(date) : date
 
   // Format in execution environment's timezone
-  return format(dateObj, "h:mm a");
+  return format(dateObj, "h:mm a")
 }
 
 /**
@@ -137,16 +190,16 @@ export function formatTime(date: Date | number | null | undefined): string {
  * Server-side: formats in server's timezone (UTC)
  */
 export function formatDateLong(date: Date | number | null | undefined): string {
-  if (!date) return "";
+  if (!date) return ""
 
-  const dateObj = typeof date === "number" ? new Date(date) : date;
+  const dateObj = typeof date === "number" ? new Date(date) : date
 
   // Format in execution environment's timezone
-  return format(dateObj, "EEE d MMM yyyy");
+  return format(dateObj, "EEE d MMM yyyy")
 }
 
-export const formatDate = (date: Date) => format(date, "d MMM");
-export const formatDateYear = (date: Date) => format(date, "d MMM yyyy");
+export const formatDate = (date: Date) => format(date, "d MMM")
+export const formatDateYear = (date: Date) => format(date, "d MMM yyyy")
 
 export function formatPeriodScores(
   homeScore: Sofascore_Score,
@@ -156,36 +209,36 @@ export function formatPeriodScores(
 ) {
   const periodKeys = Object.keys(homeScore).filter(
     (key) => key.includes("period") && !key.includes("TieBreak"),
-  );
+  )
 
   // Determine if we should reverse scores (show away/home instead of home/away)
-  const shouldReverse = showWinnerFirst && winner === 2;
+  const shouldReverse = showWinnerFirst && winner === 2
 
   const periodScores = periodKeys.map((periodKey) => {
-    const tieBreakKey = `${periodKey}TieBreak` as keyof Sofascore_Score;
-    const homeVal = homeScore[periodKey as keyof Sofascore_Score];
-    const awayVal = awayScore[periodKey as keyof Sofascore_Score];
+    const tieBreakKey = `${periodKey}TieBreak` as keyof Sofascore_Score
+    const homeVal = homeScore[periodKey as keyof Sofascore_Score]
+    const awayVal = awayScore[periodKey as keyof Sofascore_Score]
 
     let scoreStr = shouldReverse
       ? `${awayVal}-${homeVal}`
-      : `${homeVal}-${awayVal}`;
+      : `${homeVal}-${awayVal}`
 
     // Check if there's a tie break for this period
     if (
       homeScore[tieBreakKey] !== undefined &&
       awayScore[tieBreakKey] !== undefined
     ) {
-      const homeTB = homeScore[tieBreakKey];
-      const awayTB = awayScore[tieBreakKey];
+      const homeTB = homeScore[tieBreakKey]
+      const awayTB = awayScore[tieBreakKey]
       scoreStr += shouldReverse
         ? ` (${awayTB}-${homeTB})`
-        : ` (${homeTB}-${awayTB})`;
+        : ` (${homeTB}-${awayTB})`
     }
 
-    return scoreStr;
-  });
+    return scoreStr
+  })
 
-  return periodScores.join(", ");
+  return periodScores.join(", ")
 }
 
 export function setTennisMatchSummary(
@@ -198,39 +251,37 @@ export function setTennisMatchSummary(
 ) {
   switch (status) {
     case "notstarted":
-      return ``;
+      return ``
     case "postponed":
-      return "Match Postponed";
+      return "Match Postponed"
     case "finished":
       return winner !== undefined
         ? `${winner === 1 ? homeName : awayName} wins`
-        : "";
+        : ""
     case "inprogress":
       if (homeScore > awayScore) {
-        return `${homeName} leading ${homeScore}-${awayScore}`;
+        return `${homeName} leading ${homeScore}-${awayScore}`
       } else if (awayScore > homeScore) {
-        return `${awayName} leading ${awayScore}-${homeScore}`;
+        return `${awayName} leading ${awayScore}-${homeScore}`
       }
-      return `Match tied at ${homeScore}-${awayScore}`;
+      return `Match tied at ${homeScore}-${awayScore}`
     default:
-      return "";
+      return ""
   }
 }
 
 export function getSportConfigurations(
   leagueConfigs: LeagueSeasonConfig[],
-  tournamentId: number,
-  seasonId: number,
+  leagueId: string,
+  seasonId: string,
 ) {
-  const leagueConfig = leagueConfigs.find(
-    (l) => Number(l.slug) === tournamentId,
-  );
+  const leagueConfig = leagueConfigs.find((l) => l.slug === leagueId)
 
   const seasonConfig = leagueConfig?.seasons.find(
-    (s) => Number(s.slug) === seasonId,
-  );
+    (s) => s.slug.split("/")[0] === seasonId,
+  )
 
-  const ladderConfig = seasonConfig?.ladderConfig;
+  const ladderConfig = seasonConfig?.ladderConfig
 
-  return { leagueConfig, seasonConfig, ladderConfig };
+  return { leagueConfig, seasonConfig, ladderConfig }
 }
