@@ -12,16 +12,14 @@
 
 import { fetchF1Events } from "@/endpoints/f1.api"
 import { fetchGolfSchedule } from "@/endpoints/golf.api"
-import { resolveSportImage } from "@/lib/imageMapping"
-import { getCountryImageUrl } from "@/lib/projUtils"
+import { fetchMotorsportSubstages } from "@/endpoints/motorsport.api"
 import { mapToDataverseMatchSummary } from "@/services/dataverse.service"
+import { mapRaceToMatchSummaries } from "@/services/f1.service"
+import { mapTournamentToMatchSummary } from "@/services/golf.service"
+import { motorsportSofascoreService } from "@/services/motorsport-sofascore.service"
 import { DataverseMatchSummary } from "@/types/dataverse"
-import { F1SessionType, Jolpica_Race } from "@/types/f1"
-import { SlashGolf_Tournament } from "@/types/golf"
-import { CountryFlagCode, MatchStatus, MatchSummary, SPORT } from "@/types/misc"
+import { MatchStatus, MatchSummary, SPORT } from "@/types/misc"
 import { loadEnvConfig } from "@next/env"
-import { addDays } from "date-fns/addDays"
-import { addHours } from "date-fns/addHours"
 
 loadEnvConfig(process.cwd())
 
@@ -54,131 +52,6 @@ if (!sportArg || !subSportArg) {
 type EventAdapter = (args: string[]) => Promise<MatchSummary[]>
 type SubAdapterMap = Record<string, EventAdapter>
 
-// ---------------------------------------------------------------------------
-// Motorsport adapters
-// ---------------------------------------------------------------------------
-
-function setSessionStatus(sessionDate: Date, sessionType: F1SessionType) {
-  let currentDate = new Date()
-
-  if (sessionDate > currentDate) {
-    return MatchStatus.UPCOMING
-  } else {
-    switch (sessionType) {
-      case F1SessionType.Practice1:
-      case F1SessionType.Practice2:
-      case F1SessionType.Practice3:
-        return sessionDate > addHours(currentDate, -1)
-          ? MatchStatus.LIVE
-          : MatchStatus.COMPLETED
-      case F1SessionType.Qualifying:
-      case F1SessionType.SprintQualifying:
-      case F1SessionType.Sprint:
-        return sessionDate > addHours(currentDate, -2)
-          ? MatchStatus.LIVE
-          : MatchStatus.COMPLETED
-      case F1SessionType.Race:
-        return sessionDate > addHours(currentDate, -3)
-          ? MatchStatus.LIVE
-          : MatchStatus.COMPLETED
-      default:
-        return MatchStatus.COMPLETED
-    }
-  }
-}
-
-function mapSessionToMatchSummary(
-  session: Jolpica_Race,
-  sessionType: F1SessionType,
-  startDate: Date,
-): MatchSummary {
-  const status = setSessionStatus(startDate, sessionType)
-
-  return {
-    id: session.season + session.round + sessionType,
-    sport: SPORT.MOTORSPORT,
-    summaryText: sessionType.replace("-", " "),
-    startDate,
-    status,
-    leagueName: session.raceName,
-    leagueImg: resolveSportImage(session.raceName),
-    leagueSlug: `f1/${session.season}`,
-    matchSlug: `f1/${session.season}/${session.round}/${sessionType}`,
-    roundLabel: `Round ${session.round}`,
-    timer:
-      status === MatchStatus.UPCOMING
-        ? startDate
-        : status.charAt(0) + status.slice(1).toLowerCase(),
-    timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
-    competitorDetails: [],
-    venue:
-      session.Circuit.circuitName + ", " + session.Circuit.Location.locality,
-    seasonId: session.season,
-    leagueId: "f1",
-  }
-}
-
-function mapRaceToMatchSummaries(session: Jolpica_Race): MatchSummary[] {
-  const sessions: MatchSummary[] = []
-
-  if (session.FirstPractice) {
-    const startDate = new Date(
-      session.FirstPractice.date + "T" + session.FirstPractice.time,
-    )
-    sessions.push(
-      mapSessionToMatchSummary(session, F1SessionType.Practice1, startDate),
-    )
-  }
-  if (session.SecondPractice) {
-    const startDate = new Date(
-      session.SecondPractice.date + "T" + session.SecondPractice.time,
-    )
-    sessions.push(
-      mapSessionToMatchSummary(session, F1SessionType.Practice2, startDate),
-    )
-  }
-  if (session.ThirdPractice) {
-    const startDate = new Date(
-      session.ThirdPractice.date + "T" + session.ThirdPractice.time,
-    )
-    sessions.push(
-      mapSessionToMatchSummary(session, F1SessionType.Practice3, startDate),
-    )
-  }
-  if (session.Qualifying) {
-    const startDate = new Date(
-      session.Qualifying.date + "T" + session.Qualifying.time,
-    )
-    sessions.push(
-      mapSessionToMatchSummary(session, F1SessionType.Qualifying, startDate),
-    )
-  }
-  if (session.Sprint) {
-    const startDate = new Date(session.Sprint.date + "T" + session.Sprint.time)
-    sessions.push(
-      mapSessionToMatchSummary(session, F1SessionType.Sprint, startDate),
-    )
-  }
-  if (session.SprintQualifying) {
-    const startDate = new Date(
-      session.SprintQualifying.date + "T" + session.SprintQualifying.time,
-    )
-    sessions.push(
-      mapSessionToMatchSummary(
-        session,
-        F1SessionType.SprintQualifying,
-        startDate,
-      ),
-    )
-  }
-  const raceStart = new Date(session.date + "T" + session.time)
-  sessions.push(
-    mapSessionToMatchSummary(session, F1SessionType.Race, raceStart),
-  )
-
-  return sessions
-}
-
 async function fetchF1Adapter(args: string[]): Promise<MatchSummary[]> {
   const [season] = args
   if (!season) {
@@ -194,62 +67,60 @@ async function fetchF1Adapter(args: string[]): Promise<MatchSummary[]> {
   return rawEvents.flatMap((race) => mapRaceToMatchSummaries(race))
 }
 
-async function fetchSupercarsAdapter(args: string[]): Promise<MatchSummary[]> {
+const fetchSupercarsAdapter = createFileAdapter("supercars")
+
+async function fetchSofascoreMotorsportAdapter(
+  args: string[],
+): Promise<MatchSummary[]> {
   const [season] = args
   if (!season) {
-    throw new Error("Supercars adapter requires: <season> (e.g., 2026)")
+    throw new Error(
+      "Sofascore Motorsport adapter requires: <season> (e.g., 2025)",
+    )
   }
 
-  const fs = await import("fs")
-  const path = await import("path")
-  const filePath = path.resolve(__dirname, `supercars-${season}-events.json`)
-
-  if (!fs.existsSync(filePath)) {
-    throw new Error(`Events file not found: ${filePath}`)
+  const rawEvents = await fetchMotorsportSubstages(season)
+  if (!rawEvents) {
+    console.log("No Sofascore Motorsport races found.")
+    return []
   }
 
-  const raw = JSON.parse(fs.readFileSync(filePath, "utf-8")) as Array<{
-    id: string
-    sport: string
-    summaryText: string
-    startDate: string
-    endDate?: string
-    status: string
-    leagueName: string
-    leagueSlug: string
-    matchSlug: string
-    roundLabel: string
-    timer: string
-    timerDisplayColour: string
-    venue: string
-    seasonId: string
-    leagueId: string
-    competitorDetails: { id: string; score: string; name: string }[]
-  }>
+  console.log(`season ${season} - found ${rawEvents.stages.length} races`)
 
-  return raw.map((item) => ({
-    id: item.id,
-    sport: item.sport as SPORT,
-    summaryText: item.summaryText,
-    startDate: new Date(item.startDate),
-    endDate: item.endDate ? new Date(item.endDate) : undefined,
-    status: item.status as MatchStatus,
-    leagueName: item.leagueName,
-    leagueSlug: item.leagueSlug,
-    matchSlug: item.matchSlug,
-    roundLabel: item.roundLabel,
-    timer: item.status === "UPCOMING" ? new Date(item.timer) : item.timer,
-    timerDisplayColour: item.timerDisplayColour as "green" | "yellow" | "gray",
-    venue: item.venue,
-    seasonId: item.seasonId,
-    leagueId: item.leagueId,
-    competitorDetails: item.competitorDetails ?? [],
-  }))
+  const allSessions: MatchSummary[] = []
+  let i = 1
+  for (const { id, name } of rawEvents.stages) {
+    if (name.includes("Test")) {
+      continue
+    }
+
+    const gpSessions = await fetchMotorsportSubstages(id.toString())
+
+    console.log(
+      `stage ${id} - found ${gpSessions?.stages.length ?? 0} sessions`,
+    )
+
+    allSessions.push(
+      ...(gpSessions?.stages ?? []).flatMap((stage) =>
+        motorsportSofascoreService.eventMapper(stage, {
+          seasonId: season,
+          roundLabel: `Round ${i}`,
+        }),
+      ),
+    )
+
+    i++
+  }
+
+  console.log(`season ${season} - total mapped sessions: ${allSessions.length}`)
+
+  return allSessions
 }
 
 const motorsportAdapters: SubAdapterMap = {
   f1: fetchF1Adapter,
   supercars: fetchSupercarsAdapter,
+  motogp: fetchSofascoreMotorsportAdapter,
 }
 
 // ---------------------------------------------------------------------------
@@ -257,92 +128,6 @@ const motorsportAdapters: SubAdapterMap = {
 // ---------------------------------------------------------------------------
 
 /** Tournaments that do NOT award FedExCup points */
-const PGA_OTHER_EVENTS = new Set([
-  "Presidents Cup",
-  "Hero World Challenge",
-  "Grant Thornton Invitational",
-])
-
-/** FedExCup Fall events (post-TOUR Championship, award points toward next season) */
-const PGA_FALL_EVENTS = new Set([
-  "Biltmore Championship Asheville",
-  "Bank of Utah Championship",
-  "Baycurrent Classic",
-  "Butterfield Bermuda Championship",
-  "VidantaWorld Mexico Open",
-  "World Wide Technology Championship",
-  "Good Good Championship",
-  "The RSM Classic",
-])
-
-function getPGARoundLabel(tournamentName: string): string {
-  if (PGA_OTHER_EVENTS.has(tournamentName)) {
-    return "Other"
-  }
-  if (PGA_FALL_EVENTS.has(tournamentName)) {
-    return "FedexCup Fall"
-  }
-  return "FedexCup"
-}
-
-function mapGolfTournamentToMatchSummary(
-  event: SlashGolf_Tournament,
-  leagueId: string,
-  seasonId: string,
-): MatchSummary {
-  let startDate = new Date(event.date.start + "Z")
-  let endDate = new Date(event.date.end + "Z")
-  const currentDate = new Date()
-
-  // Some tournaments need a day offset (matching golf.service.ts logic)
-  const noOffsetEvents = [
-    "Genesis Scottish Open",
-    "The Open Championship",
-    "Baycurrent Classic",
-    "LIV Golf Riyadh",
-    "LIV Golf Adelaide",
-    "LIV Golf Singapore",
-    "LIV Golf Hong Kong",
-    "LIV Golf South Africa",
-    "LIV Golf Korea",
-    "LIV Golf Andalucia",
-    "LIV Golf UK",
-  ]
-  if (!noOffsetEvents.includes(event.name)) {
-    startDate = addDays(startDate, 1)
-    endDate = addDays(endDate, 1)
-  }
-
-  const tournamentImage = resolveSportImage(event.name)
-
-  const status =
-    startDate > currentDate
-      ? MatchStatus.UPCOMING
-      : endDate > currentDate
-        ? MatchStatus.LIVE
-        : MatchStatus.COMPLETED
-
-  return {
-    id: event.tournId,
-    startDate,
-    endDate,
-    sport: SPORT.GOLF,
-    status,
-    summaryText: "Details",
-    roundLabel: leagueId === "pga" ? getPGARoundLabel(event.name) : "Schedule",
-    timer: status.charAt(0) + status.slice(1).toLowerCase(),
-    timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
-    matchSlug: `/sports/golf/${leagueId}/${seasonId}/match/${event.tournId}`,
-    leagueName: event.name,
-    leagueImg:
-      tournamentImage === "/vercel.svg"
-        ? getCountryImageUrl(CountryFlagCode.UnitedStates)
-        : tournamentImage,
-    competitorDetails: [],
-    seasonId,
-    leagueId,
-  }
-}
 
 async function fetchPGAAdapter(args: string[]): Promise<MatchSummary[]> {
   const [season] = args
@@ -357,7 +142,11 @@ async function fetchPGAAdapter(args: string[]): Promise<MatchSummary[]> {
   }
 
   return rawSchedule.schedule.map((t) =>
-    mapGolfTournamentToMatchSummary(t, "pga", season),
+    mapTournamentToMatchSummary(t, {
+      matchSlug: `/sports/golf/pga/${season}/match/${t.tournId}`,
+      seasonId: season,
+      leagueId: "pga",
+    }),
   )
 }
 
@@ -374,7 +163,11 @@ async function fetchLIVAdapter(args: string[]): Promise<MatchSummary[]> {
   }
 
   return rawSchedule.schedule.map((t) =>
-    mapGolfTournamentToMatchSummary(t, "liv", season),
+    mapTournamentToMatchSummary(t, {
+      matchSlug: `/sports/golf/liv/${season}/match/${t.tournId}`,
+      seasonId: season,
+      leagueId: "liv",
+    }),
   )
 }
 
@@ -387,7 +180,10 @@ function createFileAdapter(leagueId: string): EventAdapter {
 
     const fs = await import("fs")
     const path = await import("path")
-    const filePath = path.resolve(__dirname, `${leagueId}-${season}-events.json`)
+    const filePath = path.resolve(
+      __dirname,
+      `${leagueId}-${season}-events.json`,
+    )
 
     if (!fs.existsSync(filePath)) {
       throw new Error(`Events file not found: ${filePath}`)
@@ -426,7 +222,10 @@ function createFileAdapter(leagueId: string): EventAdapter {
       matchSlug: item.matchSlug,
       roundLabel: item.roundLabel,
       timer: item.status === "UPCOMING" ? new Date(item.timer) : item.timer,
-      timerDisplayColour: item.timerDisplayColour as "green" | "yellow" | "gray",
+      timerDisplayColour: item.timerDisplayColour as
+        | "green"
+        | "yellow"
+        | "gray",
       venue: item.venue,
       seasonId: item.seasonId,
       leagueId: item.leagueId,

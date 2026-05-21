@@ -1,13 +1,20 @@
 "use client"
 
 import MatchSummaryCard from "@/components/all-sports/MatchSummaryCard"
-import { cardVariantMap } from "@/lib/constants"
+import SessionSummaryCard from "@/components/motorsport/SessionSummaryCard"
+import TennisMatchCard from "@/components/tennis/TennisMatchCard"
 import { cn } from "@/lib/utils"
 import { CardVariant, MatchSummary } from "@/types/misc"
 import React, { useEffect } from "react"
 import Placeholder from "../misc-ui/Placeholder"
 import LeagueHeader from "./LeagueHeader"
 import SectionDate from "./SectionDate"
+
+const cardVariantMap: Record<CardVariant, typeof MatchSummaryCard> = {
+  [CardVariant.TENNIS]: TennisMatchCard,
+  [CardVariant.SESSION]: SessionSummaryCard,
+  [CardVariant.DEFAULT]: MatchSummaryCard,
+}
 
 // Assumes data prop is already sorted in desired order
 export default function FixtureList({

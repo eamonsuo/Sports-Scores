@@ -7,53 +7,170 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "Run latest matrix entries, all leagues, or a single tournament"
+        description: "Run all configured leagues or a single tournament"
         required: true
         type: choice
-        default: "single"
+        default: "singleLeague"
         options:
-          - latest
-          - all
-          - single
+          - allLeagues
+          - singleLeague
       useSportApi:
         description: "Use sport-specific API instead of generic Sofascore API"
         required: true
         default: true
         type: boolean
-      leagueId:
-        description: "Sofascore tournament ID (single mode only)"
-        required: false
-        type: string
-      seasonId:
-        description: "Sofascore season ID (single mode only)"
-        required: false
-        type: string
-      sport:
-        description: "Sport key (single mode only)"
+      league:
+        description: "League to upload (single mode only)"
         required: false
         type: choice
         options:
-          - aussie-rules
-          - baseball
-          - cricket
-          - american-football
-          - motorsport
-          - rugby-league
-          - golf
-          - olympics
-          - football
-          - surfing
-          - tennis
-          - basketball
-          - ice-hockey
-          - netball
-          - rugby-union
-          - cycling
-          - darts
-      displayType:
-        description: "Display type e.g. round, date (single mode only)"
+          # --- LEAGUE_CHOICES_START ---
+          - "american-football — NCAA Division I, FBS Post Season"
+          - "american-football — NCAA Division I, FCS National Championship"
+          - "american-football — NCAA, Regular Season"
+          - "american-football — NFL"
+          - "american-football — NFL Preseason"
+          - "aussie-rules — AFL"
+          - "aussie-rules — AFL All Stars"
+          - "aussie-rules — AFL Preseason"
+          - "aussie-rules — AFLW"
+          - "aussie-rules — SANFL"
+          - "aussie-rules — VFL"
+          - "aussie-rules — WAFL"
+          - "baseball — ALB"
+          - "baseball — MLB"
+          - "baseball — WBSC Premier12"
+          - "baseball — World Baseball Classic"
+          - "basketball — March Madness"
+          - "basketball — NBA"
+          - "basketball — NBL"
+          - "basketball — WNBA"
+          - "basketball — WNBL"
+          - "cricket — BBL"
+          - "cricket — ICC Mens T20 World Cup"
+          - "cricket — IPL"
+          - "cricket — The Hundred - Men"
+          - "cricket — The Hundred - Women"
+          - "cricket — WBBL"
+          - "cycling — Men"
+          - "cycling — Women"
+          - "football — 🇦🇺 A-League Men"
+          - "football — 🇦🇺 A-League Women"
+          - "football — 🇦🇺 Australia Cup"
+          - "football — 🇦🇺 Australian Championship"
+          - "football — 🇩🇪 Bundesliga"
+          - "football — 🇪🇸 La Liga"
+          - "football — 🇪🇺 UEFA Champions League"
+          - "football — 🇪🇺 UEFA Conference League"
+          - "football — 🇪🇺 UEFA Europa League"
+          - "football — 🇪🇺 UEFA European Championship"
+          - "football — 🇪🇺 UEFA European Women's Championship"
+          - "football — 🇪🇺 UEFA Women's Champions League"
+          - "football — 🇫🇷 Ligue 1"
+          - "football — 🇮🇹 Serie A"
+          - "football — 🇺🇸 MLS"
+          - "football — 🇺🇸 NWSL"
+          - "football — 🌍 FIFA Club World Cup"
+          - "football — 🌍 FIFA Intercontinental Cup"
+          - "football — 🌍 FIFA Series - Men"
+          - "football — 🌍 FIFA Series - Women"
+          - "football — 🌍 FIFA Women's World Cup"
+          - "football — 🌍 FIFA Women's World Cup Qualifiers"
+          - "football — 🌍 FIFA World Cup"
+          - "football — 🌍 FIFA World Cup Qualifiers"
+          - "football — 🌍 FIFA World Cup Qualifiers - Inter-Confed..."
+          - "football — 🌍 International Friendlies - Men"
+          - "football — 🌍 International Friendlies - Women"
+          - "football — 🌏 AFC Asian Cup"
+          - "football — 🌏 AFC Asian Cup - Women"
+          - "football — 🌏 AFC Champions League Elite"
+          - "football — 🌏 AFC Women's Champions League"
+          - "football — 🌏 AFC Women's World Cup Qualifiers"
+          - "football — 🌏 AFC World Cup Qualifiers"
+          - "football — 🏴󠁧󠁢󠁥󠁮󠁧󠁿 Championship"
+          - "football — 🏴󠁧󠁢󠁥󠁮󠁧󠁿 EFL Cup"
+          - "football — 🏴󠁧󠁢󠁥󠁮󠁧󠁿 FA Cup"
+          - "football — 🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League"
+          - "football — 🏴󠁧󠁢󠁥󠁮󠁧󠁿 WSL"
+          - "football — 🏴󠁧󠁢󠁥󠁮󠁧󠁿 Women's FA Cup"
+          - "golf — Asian Tour"
+          - "golf — DP World Tour"
+          - "golf — Korn Ferry Tour"
+          - "golf — LIV Golf"
+          - "golf — LPGA Tour"
+          - "golf — OWGR"
+          - "golf — PGA Champions Tour"
+          - "golf — PGA Tour"
+          - "golf — PGA Tour Australasia"
+          - "golf — TGL"
+          - "ice-hockey — AIHL"
+          - "ice-hockey — Int. Friendly Games"
+          - "ice-hockey — NHL"
+          - "ice-hockey — World Championship"
+          - "ice-hockey — World Championship - Australia Men"
+          - "ice-hockey — World Championship - Australia Women"
+          - "ice-hockey — World Championship - Women"
+          - "motorsport — Formula 1"
+          - "motorsport — MotoGP"
+          - "motorsport — Supercars"
+          - "netball — Constellation Cup"
+          - "netball — Quad Series"
+          - "netball — Super Netball"
+          - "netball — World Cup"
+          - "rugby-league — Int. Friendly Games"
+          - "rugby-league — NRL"
+          - "rugby-league — NRLW"
+          - "rugby-league — New South Wales Cup"
+          - "rugby-league — Pacific Champs"
+          - "rugby-league — Pacific Champs W"
+          - "rugby-league — Queensland Cup"
+          - "rugby-league — State of Origin - Men"
+          - "rugby-league — State of Origin - Women"
+          - "rugby-league — Super League"
+          - "rugby-league — World Club Challenge"
+          - "rugby-league — World Cup"
+          - "rugby-league — World Cup - Women"
+          - "rugby-union — British and Irish Lions Tour"
+          - "rugby-union — Int. Friendly Games"
+          - "rugby-union — Queensland Premier Rugby"
+          - "rugby-union — Rugby Championship"
+          - "rugby-union — Rugby Sevens World Series"
+          - "rugby-union — Rugby Sevens World Series - Women"
+          - "rugby-union — Six Nations"
+          - "rugby-union — Super Rugby"
+          - "rugby-union — Super Rugby AUS"
+          - "rugby-union — World Cup"
+          - "rugby-union — World Cup - Women"
+          - "rugby-union — World Cup Sevens"
+          - "rugby-union — World Cup Sevens - Women"
+          - "tennis — ATP Rankings"
+          - "tennis — Australian Open - Men's Singles"
+          - "tennis — Australian Open - Women's Singles"
+          - "tennis — Brisbane International - Men's Singles"
+          - "tennis — Brisbane International - Women's Singles"
+          - "tennis — French Open - Men's Singles"
+          - "tennis — French Open - Women's Singles"
+          - "tennis — US Open - Men's Singles"
+          - "tennis — US Open - Women's Singles"
+          - "tennis — WTA Rankings"
+          - "tennis — Wimbledon - Men's Singles"
+          - "tennis — Wimbledon - Women's Singles"
+          # --- LEAGUE_CHOICES_END ---
+      seasonId:
+        description: "Season ID override — leave blank to use latest season (single mode only)"
         required: false
-        default: "round"
+        type: string
+      fetchMatches:
+        description: "Fetch latest results only or all results for the season"
+        required: false
+        type: choice
+        default: "all"
+        options:
+          - all
+          - latest
+      displayType:
+        description: "Display type override e.g. round, date (single mode only)"
+        required: false
         type: string
 
 env:
@@ -75,7 +192,7 @@ env:
 jobs:
   # ---- Read the committed matrix JSON ----
   read-matrix:
-    if: ${{ github.event_name == 'schedule' || inputs.mode == 'latest' || inputs.mode == 'all' }}
+    if: ${{ github.event_name == 'schedule' || inputs.mode == 'allLeagues' }}
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -83,14 +200,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - id: set-matrix
-        run: |
-          if [ "${{ inputs.mode }}" = "all" ]; then
-            echo "matrix=$(jq -c . sports-scores/scripts/eventUploadMatrixAll.json)" >> $GITHUB_OUTPUT
-          else
-            echo "matrix=$(jq -c . sports-scores/scripts/eventUploadMatrix.json)" >> $GITHUB_OUTPUT
-          fi
+        run: echo "matrix=$(jq -c . sports-scores/scripts/eventUploadMatrix.json)" >> $GITHUB_OUTPUT
 
-  # ---- Runs matrix entries (scheduled/manual "matrix"/manual "all") ----
+  # ---- Runs all configured matrix entries ----
   upload-matrix:
     needs: read-matrix
     runs-on: ubuntu-latest
@@ -120,14 +232,14 @@ jobs:
             "${{ matrix.seasonId }}" \
             "${{ matrix.sport }}" \
             "${{ matrix.displayType }}" \
-            ${{ inputs.mode == 'all' && 'true' || 'false' }} \
+            ${{ inputs.fetchMatches == 'all' && 'true' || 'false' }} \
             ${{ inputs.useSportApi }}
 
   # ---- Runs a single tournament (manual only) ----
   upload-single:
-    if: ${{ inputs.mode == 'single' }}
+    if: ${{ inputs.mode == 'singleLeague' }}
     runs-on: ubuntu-latest
-    name: Upload All ${{ inputs.sport }} ${{ inputs.leagueId }} Matches
+    name: Upload ${{ inputs.league }}
     defaults:
       run:
         working-directory: sports-scores
@@ -142,12 +254,16 @@ jobs:
 
       - run: npm ci
 
-      - name: Run bulk upload - ${{ inputs.sport }} ${{ inputs.leagueId }}
+      - name: Resolve league details
+        id: resolve
+        run: npx tsx scripts/resolve-league.ts "${{ inputs.league }}" "${{ inputs.seasonId }}"
+
+      - name: Run bulk upload - ${{ inputs.league }}
         run: |
           npx tsx scripts/bulk-upload-events.ts \
-            "${{ inputs.leagueId }}" \
-            "${{ inputs.seasonId }}" \
-            "${{ inputs.sport }}" \
-            "${{ inputs.displayType }}" \
-            true \
+            "${{ steps.resolve.outputs.leagueId }}" \
+            "${{ steps.resolve.outputs.seasonId }}" \
+            "${{ steps.resolve.outputs.sport }}" \
+            "${{ inputs.displayType || steps.resolve.outputs.displayType }}" \
+            ${{ inputs.fetchMatches == 'all' && 'true' || 'false' }} \
             ${{ inputs.useSportApi }}

@@ -42,23 +42,17 @@ import {
   fetchTennisTournamentLastMatches,
   fetchTennisTournamentNextMatches,
 } from "@/endpoints/tennis.api"
-import { resolveSportImage } from "@/lib/imageMapping"
-import {
-  setMatchSummary,
-  setSeriesInfo,
-  setTimer,
-  shortenTeamNames,
-} from "@/lib/projUtils"
+import { americanFootballService } from "@/services/american-football.service"
+import { aussieRulesService } from "@/services/aussie-rules.service"
+import { baseballService } from "@/services/baseball.service"
+import { basketballService } from "@/services/basketball.service"
 import { mapToDataverseMatchSummary } from "@/services/dataverse.service"
-import { AmericanFootball_Sofascore_Event } from "@/types/american-football"
+import { footballService } from "@/services/football.service"
+import { iceHockeyService } from "@/services/ice-hockey.service"
+import { rugbyLeagueService } from "@/services/rugby-league.service"
+import { tennisService } from "@/services/tennis.service"
 import { DataverseMatchSummary } from "@/types/dataverse"
-import {
-  DeepPartial,
-  DisplayTypes,
-  MatchStatus,
-  MatchSummary,
-  SPORT,
-} from "@/types/misc"
+import { DisplayTypes, SPORT } from "@/types/misc"
 import { Sofascore_Event } from "@/types/sofascore"
 import { loadEnvConfig } from "@next/env"
 
@@ -112,6 +106,17 @@ const sportFetchNextEventsMap: Partial<Record<SPORT, typeof fetchNextEvents>> =
     [SPORT.RUGBY_LEAGUE]: fetchRugbyLeagueNextMatches,
     [SPORT.TENNIS]: fetchTennisTournamentNextMatches,
   }
+
+const sportEventsMappers: Partial<Record<SPORT, any>> = {
+  [SPORT.AMERICAN_FOOTBALL]: americanFootballService.eventMapper,
+  [SPORT.AUSSIE_RULES]: aussieRulesService.eventMapper,
+  [SPORT.BASEBALL]: baseballService.eventMapper,
+  [SPORT.BASKETBALL]: basketballService.eventMapper,
+  [SPORT.FOOTBALL]: footballService.eventMapper,
+  [SPORT.ICE_HOCKEY]: iceHockeyService.eventMapper,
+  [SPORT.RUGBY_LEAGUE]: rugbyLeagueService.eventMapper,
+  [SPORT.TENNIS]: tennisService.eventMapper,
+}
 
 if (!leagueId || !seasonId || !sport) {
   console.error(
@@ -188,131 +193,6 @@ async function fetchLatestEvents() {
   events.push(...data.events)
   console.log(`Fetched ${events.length} latest events.`)
   return events
-}
-
-// ---------------------------------------------------------------------------
-// Mapping
-// ---------------------------------------------------------------------------
-
-function eventMapper(
-  event: AmericanFootball_Sofascore_Event,
-  options?: DeepPartial<MatchSummary>,
-): MatchSummary {
-  const startDate = new Date(0)
-  startDate.setUTCSeconds(event.startTimestamp)
-
-  const status =
-    event.status.type === "inprogress" || event.status.type === "interrupted"
-      ? MatchStatus.LIVE
-      : event.status.type === "notstarted"
-        ? MatchStatus.UPCOMING
-        : MatchStatus.COMPLETED
-
-  return {
-    id: options?.id ?? event.id.toString(),
-    startDate: options?.startDate ?? startDate,
-    endDate: options?.endDate,
-    sport: sport,
-    status: options?.status ?? status,
-    roundLabel: options?.roundLabel ?? `Round ${event.roundInfo?.round}`,
-    summaryText:
-      options?.summaryText ??
-      setMatchSummary(
-        event.status.type,
-        event.homeTeam.name,
-        event.homeScore.current,
-        event.awayTeam.name,
-        event.awayScore.current,
-      ),
-    timer:
-      options?.timer ??
-      setTimer(
-        event.status.type,
-        event.status.description,
-        options?.startDate ?? startDate,
-        event.time?.played ?? 0,
-        event.time?.periodLength ?? 0,
-      ),
-    timerDisplayColour:
-      options?.timerDisplayColour ??
-      (event.status.type === "inprogress" || event.status.type === "interrupted"
-        ? "green"
-        : "gray"),
-    otherDetail:
-      options?.otherDetail ??
-      setSeriesInfo(
-        event.homeTeam.nameCode,
-        event.homeScore.series,
-        event.awayTeam.nameCode,
-        event.awayScore.series,
-      ),
-    venue:
-      options?.venue ??
-      (event?.venue?.name &&
-        `${event?.venue?.name}, ${event?.venue?.city.name}`),
-    matchSlug:
-      options?.matchSlug ??
-      `/sports/${sport}/${event.tournament.uniqueTournament.id}/${event.season.id}/match/${event.id}`,
-    seasonId: options?.seasonId ?? event.season.id.toString(),
-    leagueId:
-      options?.leagueId ?? event.tournament.uniqueTournament.id.toString(),
-    leagueName: options?.leagueName,
-    leagueSlug: options?.leagueSlug,
-    leagueImg: options?.leagueImg ?? resolveSportImage(""),
-    competitorDetails: [
-      {
-        id: options?.competitorDetails?.[0]?.id ?? event.homeTeam.id.toString(),
-        name:
-          options?.competitorDetails?.[0]?.name ??
-          `${event.homeTeamSeed ? `${event.homeTeamSeed} ` : ""}${shortenTeamNames(event.homeTeam.name)}`,
-        score:
-          options?.competitorDetails?.[0]?.score ??
-          event.homeScore.current?.toString() ??
-          "0",
-        img:
-          options?.competitorDetails?.[0]?.img ??
-          resolveSportImage(event.homeTeam.name),
-        winDrawLoss:
-          event.homeTeamSeasonHistoricalForm &&
-          `${event.homeTeamSeasonHistoricalForm.wins ?? 0}-${event.homeTeamSeasonHistoricalForm.losses ?? 0}${event.homeTeamSeasonHistoricalForm.draws ? "-" + event.homeTeamSeasonHistoricalForm.draws : ""}`,
-        slug:
-          options?.competitorDetails?.[0]?.slug ??
-          `/sports/${sport}/team/${event.homeTeam.id}`,
-      },
-      {
-        id: options?.competitorDetails?.[1]?.id ?? event.awayTeam.id.toString(),
-        name:
-          options?.competitorDetails?.[1]?.name ??
-          `${event.awayTeamSeed ? `${event.awayTeamSeed} ` : ""}${shortenTeamNames(event.awayTeam.name)}`,
-        score:
-          options?.competitorDetails?.[1]?.score ??
-          event.awayScore.current?.toString() ??
-          "0",
-        img:
-          options?.competitorDetails?.[1]?.img ??
-          resolveSportImage(event.awayTeam.name),
-        winDrawLoss:
-          event.awayTeamSeasonHistoricalForm &&
-          `${event.awayTeamSeasonHistoricalForm.wins ?? 0}-${event.awayTeamSeasonHistoricalForm.losses ?? 0}${event.awayTeamSeasonHistoricalForm.draws ? "-" + event.awayTeamSeasonHistoricalForm.draws : ""}`,
-        slug:
-          options?.competitorDetails?.[1]?.slug ??
-          `/sports/${sport}/team/${event.awayTeam.id}`,
-      },
-    ],
-    winner:
-      options?.winner ??
-      (event.winnerCode !== 1 && event.winnerCode !== 2
-        ? undefined
-        : event.winnerCode),
-  }
-}
-
-function mapEventToRecord(
-  event: Sofascore_Event,
-): Omit<DataverseMatchSummary, "ss_matchsummaryid"> {
-  const matchSummary = eventMapper(event)
-
-  return mapToDataverseMatchSummary(matchSummary)
 }
 
 // ---------------------------------------------------------------------------
@@ -443,7 +323,8 @@ async function main() {
   console.log(`Fetched ${events.length} matches from API.`)
 
   const operations: BatchOperation[] = events.map((e) => {
-    const record = mapEventToRecord(e)
+    const matchSummary = sportEventsMappers[sport](event)
+    const record = mapToDataverseMatchSummary(matchSummary)
     const dvId = existingRecords.get(e.id.toString())
     return dvId ? { method: "PATCH", dvId, record } : { method: "POST", record }
   })

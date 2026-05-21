@@ -1,9 +1,5 @@
-﻿import MatchSummaryCard from "@/components/all-sports/MatchSummaryCard"
-import SessionSummaryCard from "@/components/motorsport/SessionSummaryCard"
-import TennisMatchCard from "@/components/tennis/TennisMatchCard"
-import { ScoreBreakdownConfig } from "@/services/sofascore.service"
+﻿import { ScoreBreakdownConfig } from "@/services/sofascore.service"
 import {
-  CardVariant,
   DisplayTypes,
   LadderConfig,
   LadderPlacingCategory,
@@ -15,12 +11,6 @@ import {
 } from "@/types/playoff-picture"
 import { RankingList } from "@/types/tennis"
 import { resolveSportImage } from "./imageMapping"
-
-export const cardVariantMap: Record<CardVariant, typeof MatchSummaryCard> = {
-  [CardVariant.TENNIS]: TennisMatchCard,
-  [CardVariant.SESSION]: SessionSummaryCard,
-  [CardVariant.DEFAULT]: MatchSummaryCard,
-}
 
 export const RUGBY_LEAGUE_LADDER_HEADINGS = [
   "Team",
@@ -515,6 +505,11 @@ export const MOTORSPORT_CATEGORIES: LeagueSeasonConfig[] = [
     slug: "supercars",
     seasons: [{ name: "2026", slug: "2026" }],
     externalURL: `https://www.supercars.com/calendar`,
+  },
+  {
+    name: "MotoGP",
+    slug: "17",
+    seasons: [{ name: "2026", slug: "220597" }],
   },
 ]
 
@@ -1539,7 +1534,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     name: "French Open - Men's Singles",
     slug: "2480",
     seasons: [
-      // { name: "2026", slug: "80012" },
+      { name: "2026", slug: "85951" },
       { name: "2025", slug: "61364" },
     ],
   },
@@ -1547,7 +1542,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     name: "French Open - Women's Singles",
     slug: "2577",
     seasons: [
-      // { name: "2026", slug: "80013" },
+      { name: "2026", slug: "85953" },
       { name: "2025", slug: "61365" },
     ],
   },
