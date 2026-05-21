@@ -323,7 +323,7 @@ async function main() {
   console.log(`Fetched ${events.length} matches from API.`)
 
   const operations: BatchOperation[] = events.map((e) => {
-    const matchSummary = sportEventsMappers[sport](event)
+    const matchSummary = sportEventsMappers[sport](e)
     const record = mapToDataverseMatchSummary(matchSummary)
     const dvId = existingRecords.get(e.id.toString())
     return dvId ? { method: "PATCH", dvId, record } : { method: "POST", record }
