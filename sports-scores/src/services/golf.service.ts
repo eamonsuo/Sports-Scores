@@ -303,7 +303,7 @@ export function mapGolfLeaderboard(data: Golf_SlashGolfAPI_Leaderboard) {
 }
 
 // Hidden in leagueseasonmatches for now
-function mapTournamentToMatchSummary(
+export function mapTournamentToMatchSummary(
   event: SlashGolf_Tournament,
   options?: DeepPartial<MatchSummary>,
 ): MatchSummary {
@@ -344,14 +344,18 @@ function mapTournamentToMatchSummary(
     endDate: options?.endDate ?? endDate,
     sport: SPORT.GOLF,
     status: options?.status ?? status,
+    roundLabel:
+      options?.roundLabel ?? getRoundLabel(event.name, options?.leagueId),
     summaryText: options?.summaryText ?? "Details",
-    roundLabel: options?.roundLabel,
     timer: options?.timer ?? status.charAt(0) + status.slice(1).toLowerCase(),
     timerDisplayColour:
       options?.timerDisplayColour ??
       (status === MatchStatus.LIVE ? "green" : "gray"),
-    matchSlug: options?.matchSlug,
+    otherDetail: options?.otherDetail,
     venue: options?.venue,
+    matchSlug: options?.matchSlug,
+    seasonId: options?.seasonId,
+    leagueId: options?.leagueId,
     leagueName: options?.leagueName ?? event.name,
     leagueSlug: options?.leagueSlug,
     leagueImg:
@@ -359,8 +363,34 @@ function mapTournamentToMatchSummary(
         ? getCountryImageUrl(CountryFlagCode.UnitedStates)
         : tournamentImage,
     competitorDetails: [],
-    seasonId: options?.seasonId,
-    leagueId: options?.leagueId,
     winner: options?.winner,
   }
+}
+
+const PGA_OTHER_EVENTS = new Set([
+  "Presidents Cup",
+  "Hero World Challenge",
+  "Grant Thornton Invitational",
+])
+
+/** FedExCup Fall events (post-TOUR Championship, award points toward next season) */
+const PGA_FALL_EVENTS = new Set([
+  "Biltmore Championship Asheville",
+  "Bank of Utah Championship",
+  "Baycurrent Classic",
+  "Butterfield Bermuda Championship",
+  "VidantaWorld Mexico Open",
+  "World Wide Technology Championship",
+  "Good Good Championship",
+  "The RSM Classic",
+])
+
+function getRoundLabel(tournamentName: string, leagueId?: string): string {
+  if (PGA_OTHER_EVENTS.has(tournamentName)) {
+    return "Other"
+  }
+  if (PGA_FALL_EVENTS.has(tournamentName)) {
+    return "FedExCup Fall"
+  }
+  return leagueId === "pga" ? `FedExCup` : "Schedule"
 }

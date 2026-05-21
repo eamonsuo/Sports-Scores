@@ -1,12 +1,17 @@
 /**
- * Fetches all matches for a given tournament/season from the Sofascore API
- * and bulk-uploads them to the Dataverse ss_matchsummary table.
+ * Fetches matches for a given tournament/season and bulk-uploads them to
+ * the Dataverse ss_matchsummary table.
+ *
+ * Supports both Sofascore-based leagues and custom adapters (F1, Golf,
+ * Motorsport substages, file-based) via a unified adapter registry.
  *
  * Run from the sports-scores directory:
- *   npx tsx scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> [displayType] [allEventsMode]
+ *   npx tsx scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> [displayType] [allEventsMode] [useSportApi]
  *
- * Example (NRL 2025):
- *   npx tsx scripts/bulk-upload-events.ts 294 69277 rugby-league round false
+ * Examples:
+ *   npx tsx scripts/bulk-upload-events.ts 294 86317 rugby-league round false true
+ *   npx tsx scripts/bulk-upload-events.ts f1 2026 motorsport
+ *   npx tsx scripts/bulk-upload-events.ts pga 2026 golf
  */
 
 import {
@@ -21,14 +26,17 @@ import {
   fetchBasketballLastMatches,
   fetchBasketballNextMatches,
 } from "@/endpoints/basketball.api"
+import { fetchF1Events } from "@/endpoints/f1.api"
 import {
   fetchFootballLastMatches,
   fetchFootballNextMatches,
 } from "@/endpoints/football.api"
+import { fetchGolfSchedule } from "@/endpoints/golf.api"
 import {
   fetchIceHockeyLastMatches,
   fetchIceHockeyNextMatches,
 } from "@/endpoints/ice-hockey.api"
+import { fetchMotorsportSubstages } from "@/endpoints/motorsport.api"
 import {
   fetchRugbyLeagueLastMatches,
   fetchRugbyLeagueNextMatches,
@@ -47,14 +55,19 @@ import { aussieRulesService } from "@/services/aussie-rules.service"
 import { baseballService } from "@/services/baseball.service"
 import { basketballService } from "@/services/basketball.service"
 import { mapToDataverseMatchSummary } from "@/services/dataverse.service"
+import { mapRaceToMatchSummaries } from "@/services/f1.service"
 import { footballService } from "@/services/football.service"
+import { mapTournamentToMatchSummary } from "@/services/golf.service"
 import { iceHockeyService } from "@/services/ice-hockey.service"
+import { motorsportSofascoreService } from "@/services/motorsport-sofascore.service"
 import { rugbyLeagueService } from "@/services/rugby-league.service"
 import { tennisService } from "@/services/tennis.service"
 import { DataverseMatchSummary } from "@/types/dataverse"
-import { DisplayTypes, SPORT } from "@/types/misc"
+import { DisplayTypes, MatchStatus, MatchSummary, SPORT } from "@/types/misc"
 import { Sofascore_Event } from "@/types/sofascore"
 import { loadEnvConfig } from "@next/env"
+import { existsSync, readFileSync } from "fs"
+import { resolve } from "path"
 
 loadEnvConfig(process.cwd())
 
@@ -65,6 +78,10 @@ const CLIENT_SECRET = process.env.DATAVERSE_CLIENT_SECRET ?? ""
 
 const TABLE = "ss_matchsummaries"
 const CHUNK_SIZE = 100
+
+// ---------------------------------------------------------------------------
+// CLI args
+// ---------------------------------------------------------------------------
 
 const [
   ,
@@ -83,46 +100,325 @@ const seasonId = seasonIdArg
 const sport = sportArg as SPORT
 const displayType = (displayTypeArg as DisplayTypes) ?? DisplayTypes.ROUND
 
-const sportFetchLastEventsMap: Partial<Record<SPORT, typeof fetchLastEvents>> =
-  {
-    [SPORT.AMERICAN_FOOTBALL]: fetchAmericanFootballLastMatches,
-    [SPORT.AUSSIE_RULES]: fetchTournamentLastMatches,
-    [SPORT.BASEBALL]: fetchBaseballLastMatches,
-    [SPORT.BASKETBALL]: fetchBasketballLastMatches,
-    [SPORT.FOOTBALL]: fetchFootballLastMatches,
-    [SPORT.ICE_HOCKEY]: fetchIceHockeyLastMatches,
-    [SPORT.RUGBY_LEAGUE]: fetchRugbyLeagueLastMatches,
-    [SPORT.TENNIS]: fetchTennisTournamentLastMatches,
-  }
-
-const sportFetchNextEventsMap: Partial<Record<SPORT, typeof fetchNextEvents>> =
-  {
-    [SPORT.AMERICAN_FOOTBALL]: fetchAmericanFootballNextMatches,
-    [SPORT.AUSSIE_RULES]: fetchTournamentNextMatches,
-    [SPORT.BASEBALL]: fetchBaseballNextMatches,
-    [SPORT.BASKETBALL]: fetchBasketballNextMatches,
-    [SPORT.FOOTBALL]: fetchFootballNextMatches,
-    [SPORT.ICE_HOCKEY]: fetchIceHockeyNextMatches,
-    [SPORT.RUGBY_LEAGUE]: fetchRugbyLeagueNextMatches,
-    [SPORT.TENNIS]: fetchTennisTournamentNextMatches,
-  }
-
-const sportEventsMappers: Partial<Record<SPORT, any>> = {
-  [SPORT.AMERICAN_FOOTBALL]: americanFootballService.eventMapper,
-  [SPORT.AUSSIE_RULES]: aussieRulesService.eventMapper,
-  [SPORT.BASEBALL]: baseballService.eventMapper,
-  [SPORT.BASKETBALL]: basketballService.eventMapper,
-  [SPORT.FOOTBALL]: footballService.eventMapper,
-  [SPORT.ICE_HOCKEY]: iceHockeyService.eventMapper,
-  [SPORT.RUGBY_LEAGUE]: rugbyLeagueService.eventMapper,
-  [SPORT.TENNIS]: tennisService.eventMapper,
-}
-
 if (!leagueId || !seasonId || !sport) {
   console.error(
-    "Usage: npx tsx scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> <displayType?> <allEventsMode?> <useSportApi?>",
+    "Usage: npx tsx scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> [displayType] [allEventsMode] [useSportApi]",
   )
   process.exit(1)
+}
+
+// ---------------------------------------------------------------------------
+// Unified Adapter Interface
+// ---------------------------------------------------------------------------
+
+type LeagueAdapter = {
+  fetchMatches: (
+    leagueId: string,
+    seasonId: string,
+    allEvents: boolean,
+  ) => Promise<MatchSummary[]>
+}
+
+// ---------------------------------------------------------------------------
+// Sofascore adapter factory
+// ---------------------------------------------------------------------------
+
+function createSofascoreAdapter(
+  fetchLast: typeof fetchLastEvents,
+  fetchNext: typeof fetchNextEvents,
+  mapper: (event: Sofascore_Event) => MatchSummary,
+): LeagueAdapter {
+  return {
+    async fetchMatches(leagueId, seasonId, allEvents) {
+      if (allEvents) {
+        const [lastEvents, nextEvents] = await Promise.all([
+          fetchAllPages("last", fetchLast, leagueId, seasonId),
+          fetchAllPages("next", fetchNext, leagueId, seasonId),
+        ])
+        return [...lastEvents, ...nextEvents].map(mapper)
+      } else {
+        console.log("Fetching latest events...")
+        const data = await fetchLast(leagueId, seasonId)
+        if (!data || data.events.length === 0) return []
+        console.log(`Fetched ${data.events.length} latest events.`)
+        return data.events.map(mapper)
+      }
+    },
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Custom adapter: file-based
+// ---------------------------------------------------------------------------
+
+function createFileAdapter(adapterLeagueId: string): LeagueAdapter {
+  return {
+    async fetchMatches(_leagueId, seasonId) {
+      const filePath = resolve(
+        __dirname,
+        `${adapterLeagueId}-${seasonId}-events.json`,
+      )
+
+      if (!existsSync(filePath)) {
+        throw new Error(`Events file not found: ${filePath}`)
+      }
+
+      const raw = JSON.parse(readFileSync(filePath, "utf-8")) as Array<{
+        id: string
+        sport: string
+        summaryText: string
+        startDate: string
+        endDate?: string
+        status: string
+        leagueName: string
+        leagueImg?: string
+        leagueSlug: string
+        matchSlug: string
+        roundLabel: string
+        timer: string
+        timerDisplayColour: string
+        venue: string
+        seasonId: string
+        leagueId: string
+        competitorDetails: { id: string; score: string; name: string }[]
+      }>
+
+      return raw.map((item) => ({
+        id: item.id,
+        sport: item.sport as SPORT,
+        summaryText: item.summaryText,
+        startDate: new Date(item.startDate),
+        endDate: item.endDate ? new Date(item.endDate) : undefined,
+        status: item.status as MatchStatus,
+        leagueName: item.leagueName,
+        leagueImg: item.leagueImg,
+        leagueSlug: item.leagueSlug,
+        matchSlug: item.matchSlug,
+        roundLabel: item.roundLabel,
+        timer: item.status === "UPCOMING" ? new Date(item.timer) : item.timer,
+        timerDisplayColour: item.timerDisplayColour as
+          | "green"
+          | "yellow"
+          | "gray",
+        venue: item.venue,
+        seasonId: item.seasonId,
+        leagueId: item.leagueId,
+        competitorDetails: item.competitorDetails ?? [],
+      }))
+    },
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Adapter registry
+// ---------------------------------------------------------------------------
+
+type AdapterMap = Record<string, LeagueAdapter> & { default?: LeagueAdapter }
+
+const adapters: Partial<Record<SPORT, AdapterMap>> = {
+  // --- Sofascore-based sports (sport-specific endpoints) ---
+  [SPORT.AMERICAN_FOOTBALL]: {
+    default: createSofascoreAdapter(
+      fetchAmericanFootballLastMatches,
+      fetchAmericanFootballNextMatches,
+      americanFootballService.eventMapper.bind(americanFootballService),
+    ),
+  },
+  [SPORT.AUSSIE_RULES]: {
+    default: createSofascoreAdapter(
+      fetchTournamentLastMatches,
+      fetchTournamentNextMatches,
+      aussieRulesService.eventMapper.bind(aussieRulesService),
+    ),
+  },
+  [SPORT.BASEBALL]: {
+    default: createSofascoreAdapter(
+      fetchBaseballLastMatches,
+      fetchBaseballNextMatches,
+      baseballService.eventMapper.bind(baseballService),
+    ),
+  },
+  [SPORT.BASKETBALL]: {
+    default: createSofascoreAdapter(
+      fetchBasketballLastMatches,
+      fetchBasketballNextMatches,
+      basketballService.eventMapper.bind(basketballService),
+    ),
+  },
+  [SPORT.FOOTBALL]: {
+    default: createSofascoreAdapter(
+      fetchFootballLastMatches,
+      fetchFootballNextMatches,
+      footballService.eventMapper.bind(footballService),
+    ),
+  },
+  [SPORT.ICE_HOCKEY]: {
+    default: createSofascoreAdapter(
+      fetchIceHockeyLastMatches,
+      fetchIceHockeyNextMatches,
+      iceHockeyService.eventMapper.bind(iceHockeyService),
+    ),
+  },
+  [SPORT.RUGBY_LEAGUE]: {
+    default: createSofascoreAdapter(
+      fetchRugbyLeagueLastMatches,
+      fetchRugbyLeagueNextMatches,
+      rugbyLeagueService.eventMapper.bind(rugbyLeagueService),
+    ),
+  },
+  [SPORT.TENNIS]: {
+    default: createSofascoreAdapter(
+      fetchTennisTournamentLastMatches,
+      fetchTennisTournamentNextMatches,
+      tennisService.eventMapper.bind(tennisService),
+    ),
+  },
+
+  // --- Motorsport (custom adapters per league) ---
+  [SPORT.MOTORSPORT]: {
+    f1: {
+      async fetchMatches(_leagueId, seasonId) {
+        const rawEvents = await fetchF1Events(seasonId)
+        if (!rawEvents) {
+          console.log("No F1 races found.")
+          return []
+        }
+        return rawEvents.flatMap((race) => mapRaceToMatchSummaries(race))
+      },
+    },
+    supercars: createFileAdapter("supercars"),
+    "17": {
+      async fetchMatches(_leagueId, seasonId) {
+        const rawEvents = await fetchMotorsportSubstages(seasonId)
+        if (!rawEvents) {
+          console.log("No MotoGP races found.")
+          return []
+        }
+
+        console.log(
+          `season ${seasonId} - found ${rawEvents.stages.length} races`,
+        )
+
+        const allSessions: MatchSummary[] = []
+        let i = 1
+        for (const { id, name } of rawEvents.stages) {
+          if (name.includes("Test")) continue
+
+          const gpSessions = await fetchMotorsportSubstages(id.toString())
+          console.log(
+            `stage ${name} (${id}) - found ${gpSessions?.stages.length ?? 0} sessions`,
+          )
+
+          allSessions.push(
+            ...(gpSessions?.stages ?? []).flatMap((stage) =>
+              motorsportSofascoreService.eventMapper(stage, {
+                seasonId,
+                roundLabel: `Round ${i}`,
+                matchSlug: `/sports/motorsport/${leagueId}/${seasonId}/match/${stage.id}`,
+                leagueName: name,
+              }),
+            ),
+          )
+          i++
+        }
+
+        console.log(
+          `season ${seasonId} - total mapped sessions: ${allSessions.length}`,
+        )
+        return allSessions
+      },
+    },
+  },
+
+  // --- Golf (custom adapters per league) ---
+  [SPORT.GOLF]: {
+    pga: {
+      async fetchMatches(_leagueId, seasonId) {
+        const rawSchedule = await fetchGolfSchedule("1", seasonId)
+        if (!rawSchedule || !rawSchedule.schedule) {
+          console.log("No PGA schedule found.")
+          return []
+        }
+        return rawSchedule.schedule.map((t) =>
+          mapTournamentToMatchSummary(t, {
+            matchSlug: `/sports/golf/pga/${seasonId}/match/${t.tournId}`,
+            seasonId,
+            leagueId: "pga",
+          }),
+        )
+      },
+    },
+    liv: {
+      async fetchMatches(_leagueId, seasonId) {
+        const rawSchedule = await fetchGolfSchedule("2", seasonId)
+        if (!rawSchedule || !rawSchedule.schedule) {
+          console.log("No LIV schedule found.")
+          return []
+        }
+        return rawSchedule.schedule.map((t) =>
+          mapTournamentToMatchSummary(t, {
+            matchSlug: `/sports/golf/liv/${seasonId}/match/${t.tournId}`,
+            seasonId,
+            leagueId: "liv",
+          }),
+        )
+      },
+    },
+    australasia: createFileAdapter("australasia"),
+    tgl: createFileAdapter("tgl"),
+  },
+}
+
+// Generic Sofascore fallback (no sport-specific endpoints)
+const genericSofascoreAdapter = createSofascoreAdapter(
+  fetchLastEvents,
+  fetchNextEvents,
+  (event: Sofascore_Event) => event as unknown as MatchSummary,
+)
+
+// ---------------------------------------------------------------------------
+// Adapter resolution
+// ---------------------------------------------------------------------------
+
+function resolveAdapter(): LeagueAdapter {
+  const sportAdapters = adapters[sport]
+
+  // 1. League-specific adapter (custom or override)
+  if (sportAdapters?.[leagueId]) {
+    return sportAdapters[leagueId]
+  }
+
+  // 2. Sport-specific Sofascore adapter (when useSportApi is true)
+  if (useSportApi && sportAdapters?.default) {
+    return sportAdapters.default
+  }
+
+  // 3. Generic Sofascore fallback
+  return genericSofascoreAdapter
+}
+
+// ---------------------------------------------------------------------------
+// Paginated fetch helper (used by Sofascore adapters)
+// ---------------------------------------------------------------------------
+
+async function fetchAllPages(
+  label: string,
+  fn: typeof fetchLastEvents,
+  leagueId: string,
+  seasonId: string,
+) {
+  const events: Sofascore_Event[] = []
+  let page = 0
+  while (true) {
+    console.log(`Fetching ${label} events page ${page}...`)
+    const data = await fn(leagueId, seasonId, page)
+    if (!data || data.events.length === 0) break
+    events.push(...data.events)
+    if (!data.hasNextPage) break
+    page++
+  }
+  console.log(`Fetched ${events.length} ${label} events in ${page + 1} pages.`)
+  return events
 }
 
 // ---------------------------------------------------------------------------
@@ -150,49 +446,48 @@ async function getAccessToken() {
 }
 
 // ---------------------------------------------------------------------------
-// Fetch records from API
+// Fetch existing match IDs from Dataverse (dedup)
 // ---------------------------------------------------------------------------
 
-async function fetchAllPages(label: string, fn: typeof fetchLastEvents) {
-  const events: Sofascore_Event[] = []
-  let page = 0
-  while (true) {
-    console.log(`Fetching ${label} events page ${page}...`)
-    const data = await fn(leagueId, seasonId, page)
-    if (!data || data.events.length === 0) break
-    events.push(...data.events)
-    if (!data.hasNextPage) break
-    page++
+async function fetchExistingRecords(
+  token: string,
+  leagueId: string,
+  seasonId: string,
+  sport: string,
+): Promise<Map<string, string>> {
+  const map = new Map<string, string>()
+  let url: string | null =
+    `${ENVIRONMENT_URL}/api/data/v9.2/${TABLE}` +
+    `?$select=ss_matchid,ss_matchsummaryid` +
+    `&$filter=ss_leagueid eq '${leagueId}' and ss_seasonid eq '${seasonId}' and ss_sport eq '${sport}'` +
+    `&$top=5000`
+
+  while (url) {
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+        "OData-MaxVersion": "4.0",
+        "OData-Version": "4.0",
+        Prefer: "odata.maxpagesize=5000",
+      },
+    })
+    if (!res.ok) {
+      throw new Error(
+        `Failed to fetch existing records: ${res.status} ${await res.text()}`,
+      )
+    }
+    const data = (await res.json()) as {
+      value: { ss_matchid: string; ss_matchsummaryid: string }[]
+      "@odata.nextLink"?: string
+    }
+    for (const row of data.value) {
+      map.set(row.ss_matchid, row.ss_matchsummaryid)
+    }
+    url = data["@odata.nextLink"] ?? null
   }
-  console.log(`Fetched ${events.length} ${label} events in ${page + 1} pages.`)
-  return events
-}
 
-async function fetchAllRecords() {
-  const lastFn = useSportApi
-    ? (sportFetchLastEventsMap[sport] ?? fetchLastEvents)
-    : fetchLastEvents
-  const nextFn = useSportApi
-    ? (sportFetchNextEventsMap[sport] ?? fetchNextEvents)
-    : fetchNextEvents
-
-  const [lastEvents, nextEvents] = await Promise.all([
-    fetchAllPages("last", lastFn),
-    fetchAllPages("next", nextFn),
-  ])
-
-  return [...lastEvents, ...nextEvents]
-}
-
-async function fetchLatestEvents() {
-  const events: Sofascore_Event[] = []
-  const fetchFn = sportFetchLastEventsMap[sport] ?? fetchLastEvents
-  console.log(`Fetching latest events `)
-  const data = await fetchFn(leagueId, seasonId)
-  if (!data || data.events.length === 0) return events
-  events.push(...data.events)
-  console.log(`Fetched ${events.length} latest events.`)
-  return events
+  return map
 }
 
 // ---------------------------------------------------------------------------
@@ -262,49 +557,6 @@ async function uploadBatch(token: string, operations: BatchOperation[]) {
 }
 
 // ---------------------------------------------------------------------------
-// Fetch existing match IDs from Dataverse
-// ---------------------------------------------------------------------------
-
-// Returns Map<ss_matchid, ss_matchsummaryid (Dataverse GUID)>
-async function fetchExistingRecords(
-  token: string,
-): Promise<Map<string, string>> {
-  const map = new Map<string, string>()
-  let url: string | null =
-    `${ENVIRONMENT_URL}/api/data/v9.2/${TABLE}` +
-    `?$select=ss_matchid,ss_matchsummaryid` +
-    `&$filter=ss_leagueid eq '${leagueId}' and ss_seasonid eq '${seasonId}' and ss_sport eq '${sport}'` +
-    `&$top=5000`
-
-  while (url) {
-    const res = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-        "OData-MaxVersion": "4.0",
-        "OData-Version": "4.0",
-        Prefer: "odata.maxpagesize=5000",
-      },
-    })
-    if (!res.ok) {
-      throw new Error(
-        `Failed to fetch existing records: ${res.status} ${await res.text()}`,
-      )
-    }
-    const data = (await res.json()) as {
-      value: { ss_matchid: string; ss_matchsummaryid: string }[]
-      "@odata.nextLink"?: string
-    }
-    for (const row of data.value) {
-      map.set(row.ss_matchid, row.ss_matchsummaryid)
-    }
-    url = data["@odata.nextLink"] ?? null
-  }
-
-  return map
-}
-
-// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 
@@ -313,30 +565,35 @@ async function main() {
     `\nBulk uploading ${sport} matches — league ${leagueId}, season ${seasonId}`,
   )
 
+  const adapter = resolveAdapter()
+  const matches = await adapter.fetchMatches(leagueId, seasonId, allEventsMode)
+  console.log(`Fetched ${matches.length} matches.`)
+
+  if (matches.length === 0) {
+    console.log("Nothing to upload.")
+    return
+  }
+
   const token = await getAccessToken()
 
   console.log("Checking for existing records in Dataverse...")
-  const existingRecords = await fetchExistingRecords(token)
+  const existingRecords = await fetchExistingRecords(
+    token,
+    leagueId,
+    seasonId,
+    sport,
+  )
   console.log(`Found ${existingRecords.size} existing matches in Dataverse.`)
 
-  const events = await (allEventsMode ? fetchAllRecords() : fetchLatestEvents())
-  console.log(`Fetched ${events.length} matches from API.`)
-
-  const operations: BatchOperation[] = events.map((e) => {
-    const matchSummary = sportEventsMappers[sport](e)
-    const record = mapToDataverseMatchSummary(matchSummary)
-    const dvId = existingRecords.get(e.id.toString())
+  const operations: BatchOperation[] = matches.map((m) => {
+    const record = mapToDataverseMatchSummary(m)
+    const dvId = existingRecords.get(m.id.toString())
     return dvId ? { method: "PATCH", dvId, record } : { method: "POST", record }
   })
 
   const createCount = operations.filter((o) => o.method === "POST").length
   const updateCount = operations.filter((o) => o.method === "PATCH").length
   console.log(`${createCount} to create, ${updateCount} to update.`)
-
-  if (operations.length === 0) {
-    console.log("Nothing to upload.")
-    return
-  }
 
   const totalChunks = Math.ceil(operations.length / CHUNK_SIZE)
   let totalSuccess = 0

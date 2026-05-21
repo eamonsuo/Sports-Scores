@@ -10,69 +10,57 @@ Quick reference for all scripts and agent commands available to populate the Dat
 
 ### `bulk-upload-events.ts`
 
-Fetches matches from the Sofascore API for a given tournament/season and bulk-uploads them to Dataverse. Handles dedup automatically.
+Unified upload script that fetches matches from Sofascore APIs **and** custom sources (F1, Golf, Motorsport substages, file-based JSON) and bulk-uploads them to Dataverse. Handles dedup automatically via a unified adapter registry.
 
 ```
-npx tsx scripts/bulk-upload-events.ts <tournamentId> <seasonId> <sport> [displayType] [allEventsMode] [useSportApi]
+npx tsx scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> [displayType] [allEventsMode] [useSportApi]
 ```
 
 | Arg             | Description                                        | Default  |
 | --------------- | -------------------------------------------------- | -------- |
-| `tournamentId`  | Sofascore tournament ID                            | required |
-| `seasonId`      | Sofascore season ID                                | required |
-| `sport`         | Sport key (e.g. `rugby-league`, `basketball`)      | required |
+| `leagueId`      | Sofascore tournament ID or custom league key       | required |
+| `seasonId`      | Sofascore season ID or year                        | required |
+| `sport`         | Sport key (e.g. `rugby-league`, `motorsport`)      | required |
 | `displayType`   | `round` or `date`                                  | `round`  |
 | `allEventsMode` | `true` to fetch all pages, `false` for latest only | `true`   |
 | `useSportApi`   | `true` to use sport-specific API endpoints         | `false`  |
 
-**Examples:**
+**Sofascore examples:**
 
 ```bash
 # NRL 2026
-npx tsx scripts/bulk-upload-events.ts 294 86317 rugby-league round false
+npx tsx scripts/bulk-upload-events.ts 294 86317 rugby-league round false true
 
 # AFL 2026
 npx tsx scripts/bulk-upload-events.ts 656 86748 aussie-rules round false
 ```
 
----
-
-### `upload-custom-events.ts`
-
-Uploads events from non-Sofascore sources (F1 API, JSON files, etc.) to Dataverse. Each sport has its own adapter.
-
-```
-npx tsx scripts/upload-custom-events.ts <sport> <sub-sport> [...args]
-```
-
-**Adapters:**
-
-| Sport        | Sub-sport   | Extra args | Source                                   |
-| ------------ | ----------- | ---------- | ---------------------------------------- |
-| `motorsport` | `f1`        | `<season>` | Jolpica F1 API                           |
-| `motorsport` | `supercars` | `<season>` | `scripts/supercars-{season}-events.json` |
-| `golf`       | `pga`       | `<season>` | SlashGolf API                            |
-| `golf`       | `liv`       | `<season>` | SlashGolf API                            |
-| `golf`       | `dpworld`   | `<season>` | `scripts/dpwt-{season}-events.json`      |
-
-**Examples:**
+**Custom adapter examples:**
 
 ```bash
 # F1 2026
-npx tsx scripts/upload-custom-events.ts motorsport f1 2026
+npx tsx scripts/bulk-upload-events.ts f1 2026 motorsport
 
-# Supercars 2026
-npx tsx scripts/upload-custom-events.ts motorsport supercars 2026
+# MotoGP 2026
+npx tsx scripts/bulk-upload-events.ts 17 2026 motorsport
 
-# DP World Tour 2026
-npx tsx scripts/upload-custom-events.ts golf dpworld 2026
+# Supercars 2026 (file-based)
+npx tsx scripts/bulk-upload-events.ts supercars 2026 motorsport
+
+# PGA Tour 2026
+npx tsx scripts/bulk-upload-events.ts pga 2026 golf
+
+# LIV Golf 2026
+npx tsx scripts/bulk-upload-events.ts liv 2026 golf
 ```
+
+**Custom adapters:** The script contains a unified `adapters` registry. File-based leagues use `createFileAdapter("<leagueId>")` which reads from `scripts/{leagueId}-{seasonId}-events.json`.
 
 ---
 
 ### `generate-matrix.ts`
 
-Generates `eventUploadMatrix.json` and `eventUploadMatrixAll.json` for GitHub Actions bulk-upload workflows. Edit the `SYNC_CONFIG` array in the script to add/remove leagues.
+Generates `eventUploadMatrix.json` and `leagueLookup.json` for GitHub Actions bulk-upload workflows, and injects league choices into the workflow YAML. Edit the `ALL_LEAGUES_CONFIG` array in the script to add/remove leagues.
 
 ```
 npx tsx scripts/generate-matrix.ts
@@ -104,7 +92,7 @@ Scrapes Supercars track schedules from supercars.com using Playwright, builds Ma
 
 ### `/scrape-schedule`
 
-Generic schedule scraper for any sport/tour. Uses MCP browser tools to scrape a URL, maps events to MatchSummary records, creates a staged JSON file, checks in with the user, then uploads via `upload-custom-events.ts`.
+Generic schedule scraper for any sport/tour. Uses MCP browser tools to scrape a URL, maps events to MatchSummary records, creates a staged JSON file, checks in with the user, then uploads via `bulk-upload-events.ts`.
 
 **Location:** `.github/prompts/scrape-schedule.prompt.md`
 

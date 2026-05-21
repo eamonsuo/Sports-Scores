@@ -201,18 +201,6 @@ function mapNetballMatch(
     sport: SPORT.NETBALL,
     status: options?.status ?? status,
     roundLabel: options?.roundLabel ?? `Round ${event.intRound}`,
-    timer:
-      options?.timer ??
-      (status === MatchStatus.UPCOMING
-        ? (options?.startDate ?? startDate)
-        : "Ended"),
-    timerDisplayColour: options?.timerDisplayColour ?? "gray",
-    matchSlug:
-      options?.matchSlug ??
-      `/sports/${SPORT.NETBALL}/${event.idLeague}/${event.strSeason}/match/${event.idEvent}`,
-    venue: options?.venue ?? event?.strVenue ?? "",
-    leagueName: options?.leagueName,
-    leagueSlug: options?.leagueSlug,
     summaryText:
       options?.summaryText ??
       setMatchSummary(
@@ -222,6 +210,22 @@ function mapNetballMatch(
         event.strAwayTeam,
         event.intAwayScore ?? 0,
       ),
+    timer:
+      options?.timer ??
+      (status === MatchStatus.UPCOMING
+        ? (options?.startDate ?? startDate)
+        : "Ended"),
+    timerDisplayColour: options?.timerDisplayColour ?? "gray",
+    otherDetail: options?.otherDetail,
+    venue: options?.venue ?? event?.strVenue ?? "",
+    matchSlug:
+      options?.matchSlug ??
+      `/sports/${SPORT.NETBALL}/${event.idLeague}/${event.strSeason}/match/${event.idEvent}`,
+    seasonId: options?.seasonId ?? event.strSeason,
+    leagueId: options?.leagueId ?? event.idLeague,
+    leagueName: options?.leagueName,
+    leagueSlug: options?.leagueSlug,
+    leagueImg: options?.leagueImg,
     competitorDetails: [
       {
         id: options?.competitorDetails?.[0]?.id ?? event.idHomeTeam ?? "",
@@ -246,7 +250,6 @@ function mapNetballMatch(
         winDrawLoss: options?.competitorDetails?.[1]?.winDrawLoss,
       },
     ],
-    seasonId: options?.seasonId ?? event.strSeason,
-    leagueId: options?.leagueId ?? event.idLeague,
+    winner: options?.winner,
   }
 }

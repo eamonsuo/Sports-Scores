@@ -1,5 +1,9 @@
 import { updateQuota } from "@/lib/projUtils"
 import { SPORT } from "@/types/misc"
+import {
+  Sofascore_Stages_Response,
+  Sofascore_StageStanding_Response,
+} from "@/types/sofascore"
 
 async function fetchMotorsportApi(endpoint: string) {
   const url = process.env.MOTORSPORT_BASEURL + endpoint
@@ -19,19 +23,26 @@ async function fetchMotorsportApi(endpoint: string) {
   return res.json()
 }
 
-export async function fetchMotorsportSeasonRaces(seasonId: string) {
-  return (await fetchMotorsportApi(`/stage/${seasonId}/extended`)) as any
+//Use Categories to get stage id
+//Use UniqueStageSeasons to get season for a stage id
+//Use StageSubstages to get season races for a uniquestage id
+export async function fetchMotorsportSubstages(stageId: string) {
+  return (await fetchMotorsportApi(
+    `/stage/${stageId}/substages`,
+  )) as Sofascore_Stages_Response
 }
 
-export async function fetchMotorsportRaceStages(stageId: string) {
-  return (await fetchMotorsportApi(`/stage/${stageId}/substages`)) as any
+export async function fetchMotorsportStageStandings(stageId: string) {
+  return (await fetchMotorsportApi(
+    `/stage/${stageId}/standings/competitor`,
+  )) as Sofascore_StageStanding_Response
 }
 
-export async function fetchMotorsportRiderSeasonRaces(
-  riderId: string,
+export async function fetchMotorsportDriverSeasonRaces(
+  teamId: string,
   seasonId: string,
 ) {
   return (await fetchMotorsportApi(
-    `/team/${riderId}/stage/season/${seasonId}/races`,
+    `/team/${teamId}/stage/season/${seasonId}/races`,
   )) as any
 }

@@ -61,6 +61,15 @@ export interface SofascoreAPI {
   ) => Promise<Sofascore_Rankings_Response | null>
 }
 
+export interface SofascoreStagesAPI {
+  fetchStageRaces: (
+    stageId: string,
+  ) => Promise<Sofascore_Stages_Response | null>
+  fetchStageStandings: (
+    stageId: string,
+  ) => Promise<Sofascore_StageStanding_Response | null>
+}
+
 interface Sofascore_Rankings_Response {
   rankingType: {
     sport: Sofascore_Sport
@@ -461,3 +470,165 @@ interface Sofascore_CupParticipant {
 }
 
 interface Sofascore_Ranking {}
+
+export interface Sofascore_Stages_Response {
+  stages: Sofascore_Stage[]
+}
+
+export interface Sofascore_Stage {
+  uniqueStage: Sofascore_UniqueStage
+  description: string
+  slug: string
+  type: Sofascore_StageType
+  status: Sofascore_StageStatus
+  year: string
+  country: Sofascore_Country
+  id: number
+  name: string
+  info: Sofascore_StageInfo
+  startDateTimestamp: number
+  endDateTimestamp: number
+  seasonStageName: string
+  winner?: Sofascore_StageWinner
+  flag: string
+  stageParent: Sofascore_StageParent
+}
+
+interface Sofascore_UniqueStage {
+  category: Sofascore_UniqueStageCategory
+  name: string
+  slug: string
+  id: number
+}
+
+interface Sofascore_UniqueStageCategory {
+  id?: number
+  country?: Sofascore_Country
+  name?: string
+  slug?: string
+  sport?: Sofascore_Sport
+  flag?: string
+  fieldTranslations?: Sofascore_FieldTranslations
+  priority?: number
+}
+
+interface Sofascore_StageType {
+  id: number
+  name: string
+}
+
+interface Sofascore_StageStatus {
+  description: string
+  type: string
+}
+
+interface Sofascore_StageInfo {
+  circuit?: string
+  circuitCity?: string
+  circuitCountry?: string
+  stageRound?: number
+  version?: string
+  laps?: number
+  lapsCompleted?: number
+}
+
+interface Sofascore_StageWinner {
+  name: string
+  slug: string
+  shortName: string
+  gender: string
+  sport: Sofascore_Sport
+  userCount: number
+  nameCode: string
+  national: boolean
+  disabled?: boolean
+  parentTeam?: Sofascore_StageWinnerTeam
+  type: number
+  country: Sofascore_Country
+  id: number
+  teamColors: Sofascore_TeamColors
+  fieldTranslations: Sofascore_FieldTranslations
+}
+
+interface Sofascore_StageWinnerTeam {
+  name: string
+  slug: string
+  shortName: string
+  gender?: string
+  sport: Sofascore_Sport
+  userCount: number
+  nameCode: string
+  disabled: boolean
+  national: boolean
+  type: number
+  country: Sofascore_Country
+  id: number
+  teamColors: Sofascore_TeamColors
+  fieldTranslations: Sofascore_FieldTranslations
+}
+
+interface Sofascore_StageParent {
+  description: string
+  id: number
+  startDateTimestamp: number
+  slug: string
+}
+
+export interface Sofascore_StageStanding_Response {
+  standings: Sofascore_StageStandingRow[]
+}
+
+export interface Sofascore_StageStandingRow {
+  updatedAtTimestamp: number
+  team: Sofascore_StageParticipant
+  parentTeam?: Sofascore_StageConstructor
+  points?: number
+  position: number
+  victories?: number
+  racesStarted: number
+  racesWithPoints?: number
+  podiums?: number
+  fastestLaps?: number
+}
+
+interface Sofascore_StageParticipant {
+  name?: string
+  slug?: string
+  shortName?: string
+  gender?: string
+  sport?: Sofascore_Sport
+  category?: Sofascore_UniqueStageCategory
+  userCount?: number
+  nameCode?: string
+  national?: boolean
+  disabled?: boolean
+  parentTeam?: Sofascore_StageConstructor
+  type?: number
+  country?: Sofascore_Country
+  id?: number
+  fullName?: string
+  flag?: string
+  teamColors?: Sofascore_TeamColors
+  fieldTranslations?: Sofascore_FieldTranslations
+  tournament?: Record<string, unknown>
+}
+
+interface Sofascore_StageConstructor {
+  name?: string
+  slug?: string
+  shortName?: string
+  gender?: string
+  sport?: Sofascore_Sport
+  category?: Sofascore_UniqueStageCategory
+  userCount?: number
+  nameCode?: string
+  disabled?: boolean
+  national?: boolean
+  type?: number
+  country?: Sofascore_Country
+  id?: number
+  fullName?: string
+  flag?: string
+  teamColors?: Sofascore_TeamColors
+  fieldTranslations?: Sofascore_FieldTranslations
+}

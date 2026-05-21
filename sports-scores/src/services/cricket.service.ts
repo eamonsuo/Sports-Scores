@@ -88,12 +88,19 @@ export async function cricketMatchesByDate(date: Date) {
         endDate:
           sDate.toDateString() !== endDate.toDateString() ? endDate : undefined,
         sport: SPORT.CRICKET,
-        venue: "",
         status: mapCricketStatus(event.Eps),
+        roundLabel: undefined,
         summaryText: event.Eps === "NS" ? "" : event.ECo,
         timer: event.Eps === "L" ? "Live" : event.Eps === "NS" ? sDate : null,
         timerDisplayColour: event.Eps === "L" ? "green" : "gray",
         otherDetail: event.ErnInf,
+        venue: "",
+        matchSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/match/${event.Eid}`,
+        seasonId: item.Scd,
+        leagueId: item.Ccd,
+        leagueName: item.Snm,
+        leagueSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/matches`,
+        leagueImg: resolveSportImage(item.Snm),
         competitorDetails: [
           {
             id: event.Eid + "-home",
@@ -108,9 +115,7 @@ export async function cricketMatchesByDate(date: Date) {
             name: event.T2[0].Nm,
           },
         ],
-        leagueName: item.Snm,
-        matchSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/match/${event.Eid}`,
-        leagueSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/matches`,
+        winner: undefined,
       } as MatchSummary
     })
   })
@@ -143,13 +148,21 @@ export async function cricketMyTeamsMatches() {
         return {
           id: event.Eid,
           startDate: sDate,
+          endDate: undefined,
           sport: SPORT.CRICKET,
-          venue: "",
+          status: mapCricketStatus(event.Eps),
+          roundLabel: undefined,
           summaryText: event.Eps === "NS" ? "" : event.ECo,
           timer: event.Eps === "L" ? "Live" : event.Eps === "NS" ? sDate : null,
           timerDisplayColour: event.Eps === "L" ? "green" : "gray",
-          status: mapCricketStatus(event.Eps),
           otherDetail: "",
+          venue: "",
+          matchSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/match/${event.Eid}`,
+          seasonId: item.Scd,
+          leagueId: item.Ccd,
+          leagueName: item.Snm,
+          leagueSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/matches`,
+          leagueImg: resolveSportImage(item.Snm),
           competitorDetails: [
             {
               id: event.Eid + "-home",
@@ -162,9 +175,7 @@ export async function cricketMyTeamsMatches() {
               name: event.T2[0].Nm,
             },
           ],
-          leagueName: item.Snm,
-          matchSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/match/${event.Eid}`,
-          leagueSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/matches`,
+          winner: undefined,
         } as MatchSummary
       })
     })
@@ -260,12 +271,19 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
         endDate:
           sDate.toDateString() !== endDate.toDateString() ? endDate : undefined,
         sport: SPORT.CRICKET,
-        venue: "",
         status: mapCricketStatus(event.Eps),
+        roundLabel: undefined,
         summaryText: event.Eps === "NS" ? "" : event.ECo,
         timer: event.Eps === "L" ? "Live" : event.Eps === "NS" ? sDate : null,
         timerDisplayColour: event.Eps === "L" ? "green" : "gray",
         otherDetail: event.ErnInf,
+        venue: "",
+        matchSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/match/${event.Eid}`,
+        seasonId: item.Scd,
+        leagueId: item.Ccd,
+        leagueName: item.Snm,
+        leagueSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/matches`,
+        leagueImg: resolveSportImage(item.Snm),
         competitorDetails: [
           {
             id: event.Eid + "-home",
@@ -280,9 +298,7 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
             name: event.T2[0].Nm,
           },
         ],
-        leagueName: item.Snm,
-        matchSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/match/${event.Eid}`,
-        leagueSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/matches`,
+        winner: undefined,
       } as MatchSummary
     })
   })

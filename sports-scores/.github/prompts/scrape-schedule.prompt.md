@@ -60,6 +60,7 @@ Use the Playwright MCP browser tools to:
 ```
 
 Choose the selector based on the snapshot structure:
+
 - If the page renders a `<table>`, use `tr` as the item selector.
 - If the page uses card or list elements, use `[class*="event"]`, `[class*="card"]`, or `li` depending on what is present.
 - If the page is JS-heavy and content is missing, wait for `networkidle` before taking the snapshot, then re-evaluate.
@@ -100,7 +101,7 @@ Use the following field mapping. If a `scripts/{leagueId}-{seasonId}-events.json
 
 ### 4. Write the staged JSON file
 
-Save the records to `scripts/{leagueId}-{seasonId}-events.json` (this naming matches the convention expected by the file-reading adapters in `upload-custom-events.ts`).
+Save the records to `scripts/{leagueId}-{seasonId}-events.json` (this naming matches the convention expected by the file-based adapters in `bulk-upload-events.ts`).
 
 ### 5. Check in with the user
 
@@ -116,22 +117,20 @@ Ask: _"Does this mapping look correct? Shall I proceed with the upload?"_
 
 ### 6. Upload to Dataverse
 
-The upload is handled via `scripts/upload-custom-events.ts`. This script requires an **adapter** registered for the sport/leagueId combination.
+The upload is handled via `scripts/bulk-upload-events.ts`. This script uses a unified adapter registry — file-based adapters, API adapters, and Sofascore adapters all live in the same file.
 
-**Check if an adapter already exists** by looking at the adapter registry in `scripts/upload-custom-events.ts`. If one exists, run it directly:
+**Check if an adapter already exists** by looking at the `adapters` registry in `scripts/bulk-upload-events.ts`. If one exists, run it directly:
 
 ```bash
-npx tsx scripts/upload-custom-events.ts <sport> <leagueId> <seasonId>
+npx tsx scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport>
 ```
 
-**If no adapter exists**, register one using `createFileAdapter("<leagueId>")` — this generic factory in `scripts/upload-custom-events.ts` reads from `scripts/{leagueId}-{seasonId}-events.json` and maps all standard `MatchSummary` fields automatically (including optional `leagueImg`). Add it to the appropriate `{sport}Adapters` map (create the map and add it to `adapterRegistry` if the sport is new):
+**If no adapter exists**, register one using `createFileAdapter("<leagueId>")` — this generic factory in `bulk-upload-events.ts` reads from `scripts/{leagueId}-{seasonId}-events.json` and maps all standard `MatchSummary` fields automatically (including optional `leagueImg`). Add it to the appropriate sport entry in the `adapters` registry (create the sport entry if it's new):
 
 ```typescript
-const fetchMyLeagueAdapter = createFileAdapter("myLeague")
-
-const golfAdapters: SubAdapterMap = {
+[SPORT.GOLF]: {
   // ...existing adapters
-  myLeague: fetchMyLeagueAdapter,
+  myLeague: createFileAdapter("myLeague"),
 }
 ```
 

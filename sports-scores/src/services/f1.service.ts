@@ -257,7 +257,7 @@ class F1Service implements SportService {
   }
 }
 
-function mapRaceToMatchSummaries(session: Jolpica_Race) {
+export function mapRaceToMatchSummaries(session: Jolpica_Race) {
   let startDate: Date
   let sessions: MatchSummary[] = []
 
@@ -329,20 +329,12 @@ function mapSessionToMatchSummary(
 
   return {
     id: options?.id ?? session.season + session.round + sessionType,
-    sport: SPORT.MOTORSPORT,
-    summaryText: options?.summaryText ?? sessionType.replace("-", " "),
     startDate: options?.startDate ?? startDate,
     endDate: options?.endDate,
+    sport: SPORT.MOTORSPORT,
     status: options?.status ?? status,
-    leagueName: options?.leagueName ?? session.raceName,
-    leagueImg:
-      options?.leagueImg ?? resolveSportImage(session.Circuit.Location.country),
-    leagueSlug:
-      options?.leagueSlug ?? `/sports/${SPORT.MOTORSPORT}/f1/${session.season}`,
-    matchSlug:
-      options?.matchSlug ??
-      `/sports/${SPORT.MOTORSPORT}/f1/${session.season}/${session.round}/${sessionType}`,
     roundLabel: options?.roundLabel ?? `Round ${session.round}`,
+    summaryText: options?.summaryText ?? sessionType.replace("-", " "),
     timer:
       options?.timer ??
       (status === MatchStatus.UPCOMING
@@ -351,13 +343,21 @@ function mapSessionToMatchSummary(
     timerDisplayColour:
       options?.timerDisplayColour ??
       (status === MatchStatus.LIVE ? "green" : "gray"),
-    competitorDetails: [],
+    otherDetail: options?.otherDetail,
     venue:
       options?.venue ??
       session.Circuit.circuitName + ", " + session.Circuit.Location.locality,
-
+    matchSlug:
+      options?.matchSlug ??
+      `/sports/${SPORT.MOTORSPORT}/f1/${session.season}/${session.round}/${sessionType}`,
     seasonId: options?.seasonId ?? session.season,
     leagueId: options?.leagueId ?? "f1",
+    leagueName: options?.leagueName ?? session.raceName,
+    leagueSlug:
+      options?.leagueSlug ?? `/sports/${SPORT.MOTORSPORT}/f1/${session.season}`,
+    leagueImg:
+      options?.leagueImg ?? resolveSportImage(session.Circuit.Location.country),
+    competitorDetails: [],
     winner: options?.winner,
   }
 }

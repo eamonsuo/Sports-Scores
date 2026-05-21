@@ -20,7 +20,7 @@ import {
   matchSummariesBySportAndDay,
   matchSummariesByTournament,
 } from "./dataverse.service"
-import { f1Service } from "./f1.service"
+import { motorsportSofascoreService } from "./motorsport-sofascore.service"
 
 class MotorsportService implements SportService {
   protected sport: SPORT
@@ -38,6 +38,11 @@ class MotorsportService implements SportService {
     seasonId: string,
   ): Promise<Matches | null> {
     switch (leagueId) {
+      case "sofascore":
+        return await motorsportSofascoreService.matchesByLeagueSeason(
+          leagueId,
+          seasonId,
+        )
       case "f1":
       // return await f1Service.matchesByLeagueSeason(leagueId, seasonId);
 
@@ -57,6 +62,8 @@ class MotorsportService implements SportService {
               new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
           )
           .map(this.eventMapper)
+
+        if (!allMatches) return null
 
         const { leagueConfig } = getSportConfigurations(
           this.categories,
@@ -134,7 +141,7 @@ class MotorsportService implements SportService {
     return {
       ...event,
       status,
-      leagueImg: resolveSportImage(event.leagueName ?? ""),
+      leagueImg: event.leagueImg ?? resolveSportImage(event.leagueName ?? ""),
       timer:
         status === MatchStatus.UPCOMING
           ? event.startDate
@@ -142,7 +149,5 @@ class MotorsportService implements SportService {
     }
   }
 }
-
-export { f1Service }
 
 export const motorsportService = new MotorsportService()
