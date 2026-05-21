@@ -20,7 +20,7 @@ on:
         required: true
         default: true
         type: boolean
-      tournamentId:
+      leagueId:
         description: "Sofascore tournament ID (single mode only)"
         required: false
         type: string
@@ -116,7 +116,7 @@ jobs:
       - name: Run bulk upload - ${{ matrix.name }}
         run: |
           npx tsx scripts/bulk-upload-events.ts \
-            "${{ matrix.tournamentId }}" \
+            "${{ matrix.leagueId }}" \
             "${{ matrix.seasonId }}" \
             "${{ matrix.sport }}" \
             "${{ matrix.displayType }}" \
@@ -127,7 +127,7 @@ jobs:
   upload-single:
     if: ${{ inputs.mode == 'single' }}
     runs-on: ubuntu-latest
-    name: Upload All ${{ inputs.sport }} ${{ inputs.tournamentId }} Matches
+    name: Upload All ${{ inputs.sport }} ${{ inputs.leagueId }} Matches
     defaults:
       run:
         working-directory: sports-scores
@@ -142,10 +142,10 @@ jobs:
 
       - run: npm ci
 
-      - name: Run bulk upload - ${{ inputs.sport }} ${{ inputs.tournamentId }}
+      - name: Run bulk upload - ${{ inputs.sport }} ${{ inputs.leagueId }}
         run: |
           npx tsx scripts/bulk-upload-events.ts \
-            "${{ inputs.tournamentId }}" \
+            "${{ inputs.leagueId }}" \
             "${{ inputs.seasonId }}" \
             "${{ inputs.sport }}" \
             "${{ inputs.displayType }}" \
