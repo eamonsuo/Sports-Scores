@@ -1,5 +1,4 @@
 import {
-  CardVariant,
   DisplayTypes,
   FixtureRound,
   LeagueSeasonConfig,
@@ -23,7 +22,6 @@ export async function mapFixtureRounds(
   leagueConfig:
     | LeagueSeasonConfig
     | LeagueSeasonConfig[] = DEFAULT_LEAGUE_SEASON_CONFIG,
-  cardVariant?: CardVariant,
 ) {
   const isMultiLeague = Array.isArray(leagueConfig)
   const displayType: DisplayTypes = isMultiLeague
@@ -62,7 +60,6 @@ export async function mapFixtureRounds(
             roundLabel,
             matches: [],
             byes: byes,
-            cardVariant,
           }
         }
 

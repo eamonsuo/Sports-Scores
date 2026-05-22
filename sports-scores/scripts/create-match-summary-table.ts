@@ -176,6 +176,7 @@ const ATTRIBUTES = [
   integer(`${PREFIX}_winner`, "Winner"),
   str(`${PREFIX}_leagueid`, "League ID", 200),
   str(`${PREFIX}_seasonid`, "Season ID", 200),
+  str(`${PREFIX}_cardvariant`, "Card Variant", 50),
 ]
 
 // ---------------------------------------------------------------------------

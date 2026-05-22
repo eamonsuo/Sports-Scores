@@ -71,11 +71,7 @@ class MotorsportService implements SportService {
           seasonId,
         )
 
-        const fixtures = await mapFixtureRounds(
-          allMatches,
-          leagueConfig,
-          this.cardVariant,
-        )
+        const fixtures = await mapFixtureRounds(allMatches, leagueConfig)
 
         return {
           fixtures,
@@ -100,11 +96,7 @@ class MotorsportService implements SportService {
       )
       .map(this.eventMapper)
 
-    const fixtures = await mapFixtureRounds(
-      allMatches,
-      this.categories,
-      this.cardVariant,
-    )
+    const fixtures = await mapFixtureRounds(allMatches, this.categories)
 
     return {
       fixtures: fixtures,
@@ -146,6 +138,7 @@ class MotorsportService implements SportService {
         status === MatchStatus.UPCOMING
           ? event.startDate
           : status.charAt(0) + status.slice(1).toLowerCase(),
+      cardVariant: event.cardVariant ?? CardVariant.SESSION,
     }
   }
 }

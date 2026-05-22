@@ -141,7 +141,7 @@ export default function FixtureRoundList({
                 <Button variant="secondary">All Events</Button>
               </Link>
             )}
-            <FixtureList data={item.matches} cardVariant={item.cardVariant} />
+            <FixtureList data={item.matches} />
             {(item.byes?.length ?? 0) > 0 ? (
               <div className="flex items-center gap-1 overflow-x-auto p-4 dark:text-neutral-400">
                 Bye:{" "}

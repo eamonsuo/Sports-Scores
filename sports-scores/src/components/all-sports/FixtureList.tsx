@@ -17,15 +17,7 @@ const cardVariantMap: Record<CardVariant, typeof MatchSummaryCard> = {
 }
 
 // Assumes data prop is already sorted in desired order
-export default function FixtureList({
-  data,
-  cardVariant = CardVariant.DEFAULT,
-}: {
-  data: MatchSummary[]
-  cardVariant?: CardVariant
-}) {
-  const CardComponent = cardVariantMap[cardVariant] ?? MatchSummaryCard
-
+export default function FixtureList({ data }: { data: MatchSummary[] }) {
   useEffect(() => {
     let retryInterval: ReturnType<typeof setInterval> | null = null
 
@@ -104,6 +96,9 @@ export default function FixtureList({
               now <= item.endDate.getTime()))
 
         if (isCurrentDate) currentMatch = currentDateFlag = true
+
+        const CardComponent =
+          cardVariantMap[item.cardVariant] ?? MatchSummaryCard
 
         return (
           <React.Fragment key={item.id}>

@@ -63,7 +63,13 @@ import { motorsportSofascoreService } from "@/services/motorsport-sofascore.serv
 import { rugbyLeagueService } from "@/services/rugby-league.service"
 import { tennisService } from "@/services/tennis.service"
 import { DataverseMatchSummary } from "@/types/dataverse"
-import { DisplayTypes, MatchStatus, MatchSummary, SPORT } from "@/types/misc"
+import {
+  CardVariant,
+  DisplayTypes,
+  MatchStatus,
+  MatchSummary,
+  SPORT,
+} from "@/types/misc"
 import { Sofascore_Event } from "@/types/sofascore"
 import { loadEnvConfig } from "@next/env"
 import { existsSync, readFileSync } from "fs"
@@ -181,6 +187,7 @@ function createFileAdapter(adapterLeagueId: string): LeagueAdapter {
         seasonId: string
         leagueId: string
         competitorDetails: { id: string; score: string; name: string }[]
+        cardVariant: string
       }>
 
       return raw.map((item) => ({
@@ -204,6 +211,7 @@ function createFileAdapter(adapterLeagueId: string): LeagueAdapter {
         seasonId: item.seasonId,
         leagueId: item.leagueId,
         competitorDetails: item.competitorDetails ?? [],
+        cardVariant: (item.cardVariant as CardVariant) ?? CardVariant.DEFAULT,
       }))
     },
   }

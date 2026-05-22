@@ -10,6 +10,7 @@ import { NETBALL_LEAGUES } from "@/lib/constants"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
 import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils"
 import {
+  CardVariant,
   DeepPartial,
   DisplayTypes,
   MatchStatus,
@@ -251,5 +252,6 @@ function mapNetballMatch(
       },
     ],
     winner: options?.winner,
+    cardVariant: options?.cardVariant ?? CardVariant.DEFAULT,
   }
 }

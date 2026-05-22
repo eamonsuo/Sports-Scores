@@ -89,11 +89,7 @@ class GolfService implements SportService {
       seasonId,
     )
 
-    const fixtures = await mapFixtureRounds(
-      allMatches,
-      leagueConfig,
-      leagueId === "tgl" ? CardVariant.DEFAULT : this.cardVariant,
-    )
+    const fixtures = await mapFixtureRounds(allMatches, leagueConfig)
 
     return {
       fixtures,
@@ -117,11 +113,7 @@ class GolfService implements SportService {
       )
       .map((event) => this.eventMapper(event))
 
-    const fixtures = await mapFixtureRounds(
-      allMatches,
-      this.tours,
-      this.cardVariant,
-    )
+    const fixtures = await mapFixtureRounds(allMatches, this.tours)
 
     return {
       fixtures: fixtures,
@@ -206,6 +198,7 @@ class GolfService implements SportService {
           : tournamentImage,
       timer: status.charAt(0) + status.slice(1).toLowerCase(),
       timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
+      cardVariant: event.cardVariant ?? CardVariant.SESSION,
     }
   }
 }
@@ -364,6 +357,7 @@ export function mapTournamentToMatchSummary(
         : tournamentImage,
     competitorDetails: [],
     winner: options?.winner,
+    cardVariant: options?.cardVariant ?? CardVariant.SESSION,
   }
 }
 

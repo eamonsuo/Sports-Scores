@@ -114,11 +114,7 @@ export abstract class SofascoreSport implements SportService {
       seasonId,
     )
 
-    const fixtures = await mapFixtureRounds(
-      allMatches,
-      leagueConfig,
-      this.cardVariant,
-    )
+    const fixtures = await mapFixtureRounds(allMatches, leagueConfig)
 
     return {
       fixtures,
@@ -155,20 +151,20 @@ export abstract class SofascoreSport implements SportService {
     const allMatches = matches.events.map((event) =>
       this.eventMapper(event, {
         roundLabel: event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
-        leagueName: `${
-          this.leagues.find(
-            (l) => l.slug === event.tournament.uniqueTournament.id.toString(),
-          )?.name
-        } - ${event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`}`,
+        leagueName:
+          `${
+            this.leagues.find(
+              (l) => l.slug === event.tournament.uniqueTournament.id.toString(),
+            )?.name
+          }` +
+          (event.roundInfo?.name || event.roundInfo?.round
+            ? ` - ${event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`}`
+            : ""),
         leagueSlug: `/sports/${this.sport}/${event.tournament.uniqueTournament.id}/${event.season.id}`,
       }),
     )
 
-    const fixtures = await mapFixtureRounds(
-      allMatches,
-      this.leagues,
-      this.cardVariant,
-    )
+    const fixtures = await mapFixtureRounds(allMatches, this.leagues)
 
     return {
       fixtures,
@@ -197,11 +193,7 @@ export abstract class SofascoreSport implements SportService {
       }),
     )
 
-    const fixtures = await mapFixtureRounds(
-      allMatches,
-      undefined,
-      this.cardVariant,
-    )
+    const fixtures = await mapFixtureRounds(allMatches, undefined)
 
     return {
       fixtures,
@@ -457,6 +449,8 @@ export abstract class SofascoreSport implements SportService {
         (event.winnerCode !== 1 && event.winnerCode !== 2
           ? undefined
           : event.winnerCode),
+      cardVariant:
+        options?.cardVariant ?? this.cardVariant ?? CardVariant.DEFAULT,
     }
   }
 
@@ -638,11 +632,7 @@ export abstract class SofascoreStageSport implements SportService {
       seasonId,
     )
 
-    const fixtures = await mapFixtureRounds(
-      allMatches,
-      leagueConfig,
-      this.cardVariant,
-    )
+    const fixtures = await mapFixtureRounds(allMatches, leagueConfig)
 
     return {
       fixtures,
@@ -743,6 +733,8 @@ export abstract class SofascoreStageSport implements SportService {
           ]
         : [],
       winner: options?.winner ?? 1,
+      cardVariant:
+        options?.cardVariant ?? this.cardVariant ?? CardVariant.DEFAULT,
     }
   }
 
