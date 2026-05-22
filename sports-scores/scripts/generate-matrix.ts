@@ -126,18 +126,18 @@ const SYNC_CONFIG: SyncEntry[] = [
   //   leagues: DARTS_LEAGUES,
   //   slugs: ["*"],
   // },
-  // {
-  //   sport: "motorsport",
-  //   displayType: DisplayTypes.ROUND,
-  //   leagues: MOTORSPORT_CATEGORIES,
-  //   slugs: ["*"],
-  // },
-  // {
-  //   sport: "golf",
-  //   displayType: DisplayTypes.ROUND,
-  //   leagues: GOLF_TOURS,
-  //   slugs: ["*"],
-  // },
+  {
+    sport: "motorsport",
+    displayType: DisplayTypes.ROUND,
+    leagues: MOTORSPORT_CATEGORIES,
+    slugs: ["f1"],
+  },
+  {
+    sport: "golf",
+    displayType: DisplayTypes.ROUND,
+    leagues: GOLF_TOURS,
+    slugs: ["pga", "liv"],
+  },
   // {
   //   sport: "cycling",
   //   displayType: DisplayTypes.ROUND,
