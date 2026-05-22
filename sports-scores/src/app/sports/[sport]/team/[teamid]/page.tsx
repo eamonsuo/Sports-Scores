@@ -46,12 +46,7 @@ function pageSettings(data: Matches): {
     },
     {
       btnLabel: `Matches List`,
-      component: (
-        <FixtureList
-          data={fixtureList}
-          cardVariant={data.fixtures[0].cardVariant}
-        />
-      ),
+      component: <FixtureList data={fixtureList} />,
       state: "list",
     },
   ]

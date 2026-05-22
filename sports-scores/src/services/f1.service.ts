@@ -71,11 +71,7 @@ class F1Service implements SportService {
       seasonId,
     )
 
-    const fixtures = await mapFixtureRounds(
-      allEvents,
-      leagueConfig,
-      this.cardVariant,
-    )
+    const fixtures = await mapFixtureRounds(allEvents, leagueConfig)
 
     return {
       fixtures,
@@ -101,11 +97,7 @@ class F1Service implements SportService {
 
     if (!filteredEvents || filteredEvents.length === 0) return null
 
-    const fixtures = await mapFixtureRounds(
-      filteredEvents,
-      this.categories,
-      this.cardVariant,
-    )
+    const fixtures = await mapFixtureRounds(filteredEvents, this.categories)
 
     return {
       fixtures,
@@ -359,6 +351,7 @@ function mapSessionToMatchSummary(
       options?.leagueImg ?? resolveSportImage(session.Circuit.Location.country),
     competitorDetails: [],
     winner: options?.winner,
+    cardVariant: options?.cardVariant ?? CardVariant.SESSION,
   }
 }
 

@@ -17,7 +17,7 @@ import {
   Cricket_LiveScoreAPI_MatchesGetInnings,
   Cricket_LiveScoreAPI_MatchesGetScoreBoard,
 } from "@/types/cricket"
-import { MatchStatus, MatchSummary, SPORT } from "@/types/misc"
+import { CardVariant, MatchStatus, MatchSummary, SPORT } from "@/types/misc"
 
 const cachedFetchCricketMatchesByDateLiveScore = withDevCache(
   "cricket",
@@ -116,6 +116,7 @@ export async function cricketMatchesByDate(date: Date) {
           },
         ],
         winner: undefined,
+        cardVariant: CardVariant.DEFAULT,
       } as MatchSummary
     })
   })
@@ -176,6 +177,7 @@ export async function cricketMyTeamsMatches() {
             },
           ],
           winner: undefined,
+          cardVariant: CardVariant.DEFAULT,
         } as MatchSummary
       })
     })
@@ -299,6 +301,7 @@ export async function cricketSeriesDetails(ccd: string, scd: string) {
           },
         ],
         winner: undefined,
+        cardVariant: CardVariant.DEFAULT,
       } as MatchSummary
     })
   })

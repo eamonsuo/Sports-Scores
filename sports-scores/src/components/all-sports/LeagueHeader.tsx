@@ -21,7 +21,7 @@ export default function LeagueHeader({
           className,
         )}
       >
-        {img && (
+        {img && img !== "/vercel.svg" && (
           <Image
             src={img}
             height={100}

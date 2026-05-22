@@ -97,6 +97,7 @@ export type MatchSummary = {
   leagueId?: string
   seasonId?: string
   dataverseGUID?: string
+  cardVariant: CardVariant
 }
 
 export enum MatchStatus {
@@ -115,7 +116,6 @@ export interface FixtureRound {
   matches: MatchSummary[]
   roundLabel: string
   byes?: { name?: string; img?: string }[]
-  cardVariant?: CardVariant
   roundSlug?: string
 }
 

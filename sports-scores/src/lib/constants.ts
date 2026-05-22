@@ -699,7 +699,6 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2025", slug: "69962", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
       { name: "2024", slug: "57568", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
     ],
-    excludeFromToday: true,
   },
   {
     name: "World Cup",
@@ -818,6 +817,7 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2025", slug: "73301", ladderConfig: FINALS_TOP_8_LADDER_CONFIG },
       { name: "2024", slug: "57568", ladderConfig: FINALS_TOP_8_LADDER_CONFIG },
     ],
+    excludeFromToday: true,
   },
   {
     name: "SANFL",
@@ -827,6 +827,7 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2025", slug: "71309", ladderConfig: FINALS_TOP_5_LADDER_CONFIG },
       { name: "2024", slug: "59236", ladderConfig: FINALS_TOP_5_LADDER_CONFIG },
     ],
+    excludeFromToday: true,
   },
   {
     name: "WAFL",
@@ -836,6 +837,7 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2025", slug: "71310", ladderConfig: FINALS_TOP_5_LADDER_CONFIG },
       { name: "2024", slug: "59237", ladderConfig: FINALS_TOP_5_LADDER_CONFIG },
     ],
+    excludeFromToday: true,
   },
   {
     name: "AFL Preseason",
@@ -907,6 +909,7 @@ export const AMERICAN_FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       { name: "25/26", slug: "74693" },
       { name: "24/25", slug: "59703" },
     ],
+    excludeFromToday: true,
   },
   {
     name: "NCAA Division I, FBS Post Season",

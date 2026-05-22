@@ -5,6 +5,7 @@ import {
 } from "@/endpoints/dataverse.api"
 import { DataverseMatchSummary } from "@/types/dataverse"
 import {
+  CardVariant,
   DeepPartial,
   MatchStatus,
   MatchSummary,
@@ -94,6 +95,7 @@ function mapToMatchSummary(r: DataverseMatchSummary): MatchSummary {
     leagueId: r.ss_leagueid ?? undefined,
     seasonId: r.ss_seasonid ?? undefined,
     dataverseGUID: r.ss_matchsummaryid,
+    cardVariant: (r.ss_cardvariant as CardVariant) ?? CardVariant.DEFAULT,
   }
 }
 
@@ -127,6 +129,7 @@ export function mapToDataverseMatchSummary(
     ss_winner: m.winner ?? null,
     ss_leagueid: m.leagueId ?? null,
     ss_seasonid: m.seasonId ?? null,
+    ss_cardvariant: m.cardVariant ?? null,
   }
 }
 

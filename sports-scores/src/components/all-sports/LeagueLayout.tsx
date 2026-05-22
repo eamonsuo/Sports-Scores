@@ -3,7 +3,7 @@ import { DEFAULT_NAV_BUTTONS, SPORT_ROUTE_CONFIG } from "@/lib/routeConfig"
 import { SPORT } from "@/types/misc"
 import { RankingList } from "@/types/tennis"
 
-export default async function SportsLayout({
+export default async function LeagueLayout({
   children,
   sport,
   league,

@@ -126,9 +126,7 @@ function pageSettings(data: FixtureRound[]): {
     },
     {
       btnLabel: `TV Guide`,
-      component: (
-        <FixtureList data={fixtureList} cardVariant={data[0]?.cardVariant} />
-      ),
+      component: <FixtureList data={fixtureList} />,
       state: "list",
     },
   ]

@@ -26,6 +26,7 @@ export interface DataverseMatchSummary {
   ss_winner: number | null
   ss_leagueid: string | null
   ss_seasonid: string | null
+  ss_cardvariant: string | null
 }
 
 // ss_sporteventschedule table
