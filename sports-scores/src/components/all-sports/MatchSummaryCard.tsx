@@ -1,4 +1,3 @@
-import fallback from "@/../public/vercel.svg"
 import { formatTime } from "@/lib/projUtils"
 import { cn } from "@/lib/utils"
 import { MatchSummary } from "@/types/misc"
@@ -6,6 +5,8 @@ import clsx from "clsx"
 import Image from "next/image"
 import Link from "next/link"
 import Timer from "../misc-ui/Timer"
+
+const fallback = "/vercel.svg"
 
 export default function MatchSummaryCard({
   event,
@@ -43,13 +44,29 @@ export default function MatchSummaryCard({
 
         <div className="m-2 grid w-full grid-cols-5 gap-2">
           <div className="content-center justify-self-start">
-            <Image
-              src={homeDetails?.img ?? fallback}
-              width={100}
-              height={100}
-              style={{ width: "40px", height: "auto" }}
-              alt="Home team image"
-            />
+            {Array.isArray(homeDetails?.img) ? (
+              <div className="flex">
+                {homeDetails.img.map((img, idx) => (
+                  <Image
+                    key={idx}
+                    src={img || fallback}
+                    width={100}
+                    height={100}
+                    style={{ width: "32px", height: "auto" }}
+                    alt={`${homeDetails.name} player ${idx + 1}`}
+                    className="me-0.5"
+                  />
+                ))}
+              </div>
+            ) : (
+              <Image
+                src={homeDetails?.img || fallback}
+                width={80}
+                height={80}
+                style={{ width: "32px", height: "auto" }}
+                alt={homeDetails?.name ?? "Home player"}
+              />
+            )}
           </div>
           <p
             className={clsx(
@@ -77,13 +94,29 @@ export default function MatchSummaryCard({
             {awayDetails?.score}
           </p>
           <div className="content-center justify-self-end">
-            <Image
-              src={awayDetails?.img ?? fallback}
-              width={100}
-              height={100}
-              style={{ width: "40px", height: "auto" }}
-              alt="Away team image"
-            />
+            {Array.isArray(awayDetails?.img) ? (
+              <div className="flex">
+                {awayDetails.img.map((img, idx) => (
+                  <Image
+                    key={idx}
+                    src={img || fallback}
+                    width={100}
+                    height={100}
+                    style={{ width: "32px", height: "auto" }}
+                    alt={`${awayDetails.name} player ${idx + 1}`}
+                    className="me-0.5"
+                  />
+                ))}
+              </div>
+            ) : (
+              <Image
+                src={awayDetails?.img || fallback}
+                width={80}
+                height={80}
+                style={{ width: "32px", height: "auto" }}
+                alt={awayDetails?.name ?? "Away player"}
+              />
+            )}
           </div>
           <p
             className={clsx(

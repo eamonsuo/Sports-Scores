@@ -124,5 +124,33 @@
     "seasonId": "78476",
     "sport": "ice-hockey",
     "displayType": "date"
+  },
+  {
+    "name": "Super Rugby 2026",
+    "leagueId": "422",
+    "seasonId": "86502",
+    "sport": "rugby-union",
+    "displayType": "round"
+  },
+  {
+    "name": "Formula 1 2026",
+    "leagueId": "f1",
+    "seasonId": "2026",
+    "sport": "motorsport",
+    "displayType": "round"
+  },
+  {
+    "name": "PGA Tour 2026",
+    "leagueId": "pga",
+    "seasonId": "2026",
+    "sport": "golf",
+    "displayType": "round"
+  },
+  {
+    "name": "LIV Golf 2026",
+    "leagueId": "liv",
+    "seasonId": "2026",
+    "sport": "golf",
+    "displayType": "round"
   }
 ]

@@ -217,7 +217,7 @@ class TennisService extends SofascoreSport {
     return null
   }
 
-  protected override eventMapper(
+  override eventMapper(
     match: Tennis_Sofascore_Event,
     options?: DeepPartial<MatchSummary>,
   ): MatchSummary {

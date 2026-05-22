@@ -31,9 +31,12 @@ import { PlayoffPictureStanding } from "@/types/playoff-picture"
 import {
   PeriodKey,
   Sofascore_Event,
+  Sofascore_Stage,
+  Sofascore_StageStandingRow,
   Sofascore_Standing,
   Sofascore_StandingRow,
   SofascoreAPI,
+  SofascoreStagesAPI,
 } from "@/types/sofascore"
 import { TZDate } from "@date-fns/tz/date"
 import { isSameDay } from "date-fns"
@@ -345,7 +348,7 @@ export abstract class SofascoreSport implements SportService {
     }
   }
 
-  protected eventMapper(
+  eventMapper(
     event: Sofascore_Event,
     options?: DeepPartial<MatchSummary>,
   ): MatchSummary {
@@ -366,6 +369,15 @@ export abstract class SofascoreSport implements SportService {
       sport: this.sport,
       status: options?.status ?? status,
       roundLabel: options?.roundLabel ?? `Round ${event.roundInfo?.round}`,
+      summaryText:
+        options?.summaryText ??
+        setMatchSummary(
+          event.status.type,
+          event.homeTeam.name,
+          event.homeScore.current,
+          event.awayTeam.name,
+          event.awayScore.current,
+        ),
       timer:
         options?.timer ??
         setTimer(
@@ -381,9 +393,6 @@ export abstract class SofascoreSport implements SportService {
         event.status.type === "interrupted"
           ? "green"
           : "gray"),
-      matchSlug:
-        options?.matchSlug ??
-        `/sports/${this.sport}/${event.tournament.uniqueTournament.id}/${event.season.id}/match/${event.id}`,
       otherDetail:
         options?.otherDetail ??
         setSeriesInfo(
@@ -396,17 +405,15 @@ export abstract class SofascoreSport implements SportService {
         options?.venue ??
         (event?.venue?.name &&
           `${event?.venue?.name}, ${event?.venue?.city.name}`),
+      matchSlug:
+        options?.matchSlug ??
+        `/sports/${this.sport}/${event.tournament.uniqueTournament.id}/${event.season.id}/match/${event.id}`,
+      seasonId: options?.seasonId ?? event.season.id.toString(),
+      leagueId:
+        options?.leagueId ?? event.tournament.uniqueTournament.id.toString(),
       leagueName: options?.leagueName,
       leagueSlug: options?.leagueSlug,
-      summaryText:
-        options?.summaryText ??
-        setMatchSummary(
-          event.status.type,
-          event.homeTeam.name,
-          event.homeScore.current,
-          event.awayTeam.name,
-          event.awayScore.current,
-        ),
+      leagueImg: options?.leagueImg ?? resolveSportImage(""),
       competitorDetails: [
         {
           id:
@@ -445,9 +452,6 @@ export abstract class SofascoreSport implements SportService {
             `/sports/${this.sport}/team/${event.awayTeam.id}`,
         },
       ],
-      seasonId: options?.seasonId ?? event.season.id.toString(),
-      leagueId:
-        options?.leagueId ?? event.tournament.uniqueTournament.id.toString(),
       winner:
         options?.winner ??
         (event.winnerCode !== 1 && event.winnerCode !== 2
@@ -577,5 +581,191 @@ export function mapSofascoreToStanding(
       pointsAgainst: row.scoresAgainst,
       pointsDiff: row.scoresFor - row.scoresAgainst,
     },
+  }
+}
+
+export abstract class SofascoreStageSport implements SportService {
+  protected apiEndpoints: SofascoreStagesAPI
+  protected sport: SPORT
+  protected leagues: LeagueSeasonConfig[]
+  protected cardVariant?: CardVariant
+
+  constructor(
+    apiEndpoints: SofascoreStagesAPI,
+    sport: SPORT,
+    leagues: LeagueSeasonConfig[],
+    cardVariant?: CardVariant,
+  ) {
+    this.apiEndpoints = apiEndpoints
+    this.sport = sport
+    this.leagues = leagues
+    this.cardVariant = cardVariant
+  }
+
+  async matchesByLeagueSeason(
+    leagueId: string,
+    seasonId: string,
+  ): Promise<Matches | null> {
+    const [stageResponse, dataverseMatches] = await Promise.all([
+      this.apiEndpoints.fetchStageRaces(seasonId),
+      matchSummariesByTournament(leagueId, seasonId, this.sport),
+    ])
+
+    if (
+      !stageResponse &&
+      (!dataverseMatches || dataverseMatches.length === 0)
+    ) {
+      return null
+    }
+
+    const apiMatches = (stageResponse?.stages ?? []).map((event) =>
+      this.eventMapper(event),
+    )
+
+    // Merge API and dataverse matches, deduplicating by id (API takes priority)
+    const apiIds = new Set(apiMatches.map((m) => m.id))
+
+    const allMatches = apiMatches
+      .concat((dataverseMatches ?? []).filter((m) => !apiIds.has(m.id)))
+      .sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+      )
+
+    const { leagueConfig } = getSportConfigurations(
+      this.leagues,
+      leagueId,
+      seasonId,
+    )
+
+    const fixtures = await mapFixtureRounds(
+      allMatches,
+      leagueConfig,
+      this.cardVariant,
+    )
+
+    return {
+      fixtures,
+      currentRound: getCurrentRound(fixtures, leagueConfig?.display),
+    } as Matches
+  }
+
+  async matchesByDate(date: Date): Promise<Matches | null> {
+    return null
+  }
+
+  async matchesByTeam(teamId: string): Promise<Matches | null> {
+    return null
+  }
+
+  async matchDetails(matchId: string): Promise<MatchDetail | null> {
+    return null
+  }
+
+  async standings(
+    leagueId: string,
+    seasonId: string,
+    headings: readonly string[] = ["Team", "Pts"],
+  ): Promise<Standings<readonly string[]> | null> {
+    const standings = await this.apiEndpoints.fetchStageStandings(seasonId)
+
+    if (!standings) return null
+
+    return {
+      standings: [this.standingsMapper(standings.standings, headings)],
+    } as Standings<typeof headings>
+  }
+
+  async brackets(leagueId: string, seasonId: string): Promise<Brackets | null> {
+    return null
+  }
+
+  eventMapper(
+    event: Sofascore_Stage,
+    options?: DeepPartial<MatchSummary>,
+  ): MatchSummary {
+    const startDate = new Date(0)
+    startDate.setUTCSeconds(event.startDateTimestamp)
+
+    const status =
+      event.status.type === "inprogress" || event.status.type === "interrupted"
+        ? MatchStatus.LIVE
+        : event.status.type === "notstarted"
+          ? MatchStatus.UPCOMING
+          : MatchStatus.COMPLETED
+
+    return {
+      id: options?.id ?? event.id.toString(),
+      startDate: options?.startDate ?? startDate,
+      endDate: options?.endDate,
+      sport: this.sport,
+      status: options?.status ?? status,
+      roundLabel: options?.roundLabel,
+      summaryText: options?.summaryText ?? event.name,
+      timer:
+        (options?.timer ?? status === MatchStatus.UPCOMING)
+          ? startDate
+          : status.charAt(0) + status.slice(1).toLowerCase(),
+      timerDisplayColour:
+        options?.timerDisplayColour ??
+        (event.status.type === "inprogress" ||
+        event.status.type === "interrupted"
+          ? "green"
+          : "gray"),
+      otherDetail: options?.otherDetail,
+      venue: options?.venue,
+      matchSlug: options?.matchSlug,
+      seasonId: options?.seasonId ?? event.stageParent.id.toString(),
+      leagueId: options?.leagueId ?? event.uniqueStage.id.toString(),
+      leagueName: options?.leagueName ?? event.stageParent.description,
+      leagueSlug:
+        options?.leagueSlug ??
+        `/sports/${this.sport}/${event.uniqueStage.id}/${event.stageParent.id}`,
+      leagueImg:
+        options?.leagueImg ??
+        resolveSportImage(event.country?.name ?? event.name),
+      competitorDetails: event?.winner
+        ? [
+            {
+              id:
+                options?.competitorDetails?.[0]?.id ??
+                event.winner.id.toString(),
+              name: options?.competitorDetails?.[0]?.name ?? event.winner.name,
+              score: options?.competitorDetails?.[0]?.score ?? "",
+              img:
+                options?.competitorDetails?.[0]?.img ??
+                resolveSportImage(event.winner.country.name ?? ""),
+              winDrawLoss: options?.competitorDetails?.[0]?.winDrawLoss,
+              slug:
+                options?.competitorDetails?.[0]?.slug ??
+                `/sports/${this.sport}/team/${event.winner.id}`,
+            },
+          ]
+        : [],
+      winner: options?.winner ?? 1,
+    }
+  }
+
+  protected standingsMapper(
+    table: Sofascore_StageStandingRow[],
+    headings: readonly string[],
+  ): SportsLadder<typeof headings> {
+    return {
+      // tableName: table.name,
+      headings: headings,
+      data: table.map((item) => {
+        return {
+          position: item.position,
+          team: {
+            id: item.team?.id?.toString() ?? "",
+            name: shortenTeamNames(item.team?.name ?? ""),
+            logo: resolveSportImage(item.team?.country?.name ?? ""),
+          },
+          sport: this.sport,
+
+          Pts: item.points,
+        }
+      }),
+    } as SportsLadder<typeof headings>
   }
 }
