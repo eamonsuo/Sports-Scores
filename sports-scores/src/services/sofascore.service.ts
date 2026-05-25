@@ -91,6 +91,7 @@ export abstract class SofascoreSport implements SportService {
 
     const apiMatches = (lastMatches?.events ?? [])
       .concat(nextMatches?.events ?? [])
+      .filter((event) => event.status.type !== "canceled")
       .map((event) =>
         this.eventMapper(event, {
           roundLabel:
@@ -137,8 +138,10 @@ export abstract class SofascoreSport implements SportService {
         const eventDate = new TZDate(item.startTimestamp * 1000, timezone)
         return isSameDay(eventDate, date)
       })
-      .filter((item) =>
-        validLeagueIds.includes(item.tournament.uniqueTournament.id),
+      .filter(
+        (item) =>
+          validLeagueIds.includes(item.tournament.uniqueTournament.id) &&
+          item.status.type !== "canceled",
       )
       .sort(
         (a, b) =>
@@ -184,14 +187,16 @@ export abstract class SofascoreSport implements SportService {
       nextMatches?.events ?? [],
     )
 
-    const allMatches = matches.map((event) =>
-      this.eventMapper(event, {
-        roundLabel:
-          event.tournament.uniqueTournament.name + " " + event.season.year,
-        leagueName: event.tournament.name + " " + event.season.year,
-        leagueSlug: `/sports/${this.sport}/${event.tournament.uniqueTournament.id}/${event.season.id}`,
-      }),
-    )
+    const allMatches = matches
+      .filter((event) => event.status.type !== "canceled")
+      .map((event) =>
+        this.eventMapper(event, {
+          roundLabel:
+            event.tournament.uniqueTournament.name + " " + event.season.year,
+          leagueName: event.tournament.name + " " + event.season.year,
+          leagueSlug: `/sports/${this.sport}/${event.tournament.uniqueTournament.id}/${event.season.id}`,
+        }),
+      )
 
     const fixtures = await mapFixtureRounds(allMatches, undefined)
 

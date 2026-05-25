@@ -338,6 +338,8 @@ export function resolveSportImage(teamName: string) {
       return "https://static-files.cricket-australia.pulselive.com/flag/120/99@2x.png"
     case "Perth Scorchers":
       return "https://static-files.cricket-australia.pulselive.com/flag/120/95@2x.png"
+    case "England Lions":
+      return getCountryImageUrl(CountryFlagCode.England)
 
     // IPL Teams
     case "Chennai Super Kings":

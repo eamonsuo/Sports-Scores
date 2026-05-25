@@ -233,7 +233,7 @@ class TennisService extends SofascoreSport {
         match.awayScore.current ?? 0,
       ),
       leagueName: `${match.tournament.category.name} ${match.tournament.uniqueTournament?.tennisPoints ?? ""} - ${match.tournament.category.name === "ATP" || match.tournament.category.name === "WTA" || match.tournament.category.name === "Challenger" ? match.tournament.name : match.tournament.uniqueTournament.name}`,
-      leagueSlug: `${match.tournament.uniqueTournament.id}/${match.season.id}`,
+      leagueSlug: `/sports/${this.sport}/${match.tournament.uniqueTournament.id}/${match.season.id}`,
       competitorDetails: [
         {
           id: match.homeTeam.id.toString(),

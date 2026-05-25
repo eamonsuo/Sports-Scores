@@ -61,6 +61,7 @@ const excludedSeries = [
   "Plunket",
   "One-Day Cup Women",
   "One-Day Cup 2 Women",
+  "Vitality Blast",
 ]
 
 export async function cricketMatchesByDate(date: Date) {
