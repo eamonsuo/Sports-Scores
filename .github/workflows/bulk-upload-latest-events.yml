@@ -188,6 +188,10 @@ env:
   NRL_BASEURL: ${{ secrets.NRL_BASEURL }}
   TENNIS_BASEURL: ${{ secrets.TENNIS_BASEURL }}
   RUGBY_UNION_BASEURL: ${{ secrets.RUGBY_UNION_BASEURL }}
+  MOTORSPORT_BASEURL: ${{ secrets.MOTORSPORT_BASEURL }}
+  F1_BASEURL: ${{ secrets.F1_BASEURL }}
+  OPENF1_BASEURL: ${{ secrets.OPENF1_BASEURL }}
+  GOLF_BASEURL: ${{ secrets.GOLF_BASEURL }}
 
 jobs:
   # ---- Read the committed matrix JSON ----

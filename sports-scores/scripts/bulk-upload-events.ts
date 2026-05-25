@@ -303,19 +303,12 @@ const adapters: Partial<Record<SPORT, AdapterMap>> = {
           return []
         }
 
-        console.log(
-          `season ${seasonId} - found ${rawEvents.stages.length} races`,
-        )
-
         const allSessions: MatchSummary[] = []
         let i = 1
         for (const { id, name } of rawEvents.stages) {
           if (name.includes("Test")) continue
 
           const gpSessions = await fetchMotorsportSubstages(id.toString())
-          console.log(
-            `stage ${name} (${id}) - found ${gpSessions?.stages.length ?? 0} sessions`,
-          )
 
           allSessions.push(
             ...(gpSessions?.stages ?? []).flatMap((stage) =>
@@ -330,9 +323,6 @@ const adapters: Partial<Record<SPORT, AdapterMap>> = {
           i++
         }
 
-        console.log(
-          `season ${seasonId} - total mapped sessions: ${allSessions.length}`,
-        )
         return allSessions
       },
     },

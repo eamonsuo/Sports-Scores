@@ -689,7 +689,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2016", slug: "11366", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
       { name: "2015", slug: "10176", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
     ],
-    excludeFromToday: true,
+    excludeFromToday: false,
   },
   {
     name: "New South Wales Cup",
@@ -699,6 +699,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2025", slug: "69962", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
       { name: "2024", slug: "57568", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
     ],
+    excludeFromToday: true,
   },
   {
     name: "World Cup",
@@ -753,6 +754,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2025", slug: "69930", ladderConfig: FINALS_TOP_6_LADDER_CONFIG },
       { name: "2024", slug: "57044", ladderConfig: FINALS_TOP_6_LADDER_CONFIG },
     ],
+    excludeFromToday: true,
   },
 ]
 
