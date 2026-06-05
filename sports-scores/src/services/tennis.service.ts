@@ -108,7 +108,7 @@ class TennisService extends SofascoreSport {
       .filter(
         (item) =>
           (validLeagueIds.includes(item.tournament.category.id) ||
-            validLeagueIds.includes(item.tournament.uniqueTournament.id)) &&
+            validLeagueIds.includes(item.tournament.uniqueTournament?.id)) &&
           item.status.type !== "canceled",
       )
 
