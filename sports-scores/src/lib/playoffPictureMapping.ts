@@ -331,6 +331,14 @@ function buildNbaConference(
   const standings = findStandings(tables, tableName)
   const { nonQualifiers } = sliceAndClassify(standings, config)
 
+  if (standings.length === 0) {
+    return {
+      name: displayName,
+      colour,
+      conferenceMatches: [],
+    }
+  }
+
   return {
     name: displayName,
     colour,
@@ -386,7 +394,7 @@ function buildNba(
     buildNbaConference(
       tables,
       config,
-      "NBA Western Conference",
+      "Western Conference",
       "Western Conference",
       "text-red-700 dark:text-red-400",
       "West",
@@ -394,7 +402,7 @@ function buildNba(
     buildNbaConference(
       tables,
       config,
-      "NBA Eastern Conference",
+      "Eastern Conference",
       "Eastern Conference",
       "text-blue-700 dark:text-blue-400",
       "East",
