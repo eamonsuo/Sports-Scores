@@ -19,7 +19,7 @@ export default async function Page(props: {
 
   return (
     <div className="flex-1 overflow-y-auto px-4">
-      {pageData.standings.map((table, index) => (
+      {pageData.standings[0].tables.map((table, index) => (
         <Ladder
           key={index}
           data={table.data}

@@ -113,7 +113,7 @@ class MotorsportService implements SportService {
   async standings(
     leagueId: string,
     seasonId: string,
-  ): Promise<Standings<readonly string[]> | null> {
+  ): Promise<Standings | null> {
     return null
   }
 

@@ -13,22 +13,23 @@ const defaultColours = [
   "bg-yellow-300",
 ]
 
-export default function Ladder<const H extends readonly string[]>({
+export default function Ladder({
   tableName,
   headings,
   data,
   placingCategories,
-}: SportsLadder<H>) {
+}: SportsLadder) {
   return (
     <div>
-      <p className="pb-1 pt-3 dark:text-neutral-400">{tableName}</p>
+      {tableName && (
+        <p className="pb-1 pt-3 dark:text-neutral-400">{tableName}</p>
+      )}
 
       <table className="w-full dark:text-neutral-400">
         <thead>
           <tr>
             <th></th>
             <th className="pe-2"></th>
-            {/* <th className="px-2">Team</th> - MUST BE SPECIFIED AS PART OF HEADINGS CONST*/}
             {headings.map((heading) => (
               <th key={heading} className="px-2">
                 {heading}
@@ -51,49 +52,47 @@ export default function Ladder<const H extends readonly string[]>({
                 ? defaultColours[categoryIdx % defaultColours.length]
                 : undefined)
             return (
-              <tr key={item.team.id} className="border-b border-t">
+              <tr key={item.teamId} className="border-b border-t">
                 <td className={clsx("w-1 p-0", colour)} />
                 <td className="py-2 pe-2 ps-1">{item.position}</td>
                 <td className="text-left text-sm">
                   <Link
                     href={
                       item.sport
-                        ? `/sports/${item.sport}/team/${item.team.id}`
+                        ? `/sports/${item.sport}/team/${item.teamId}`
                         : ""
                     }
                   >
                     <div className="flex items-center">
                       <div className="me-2 flex gap-2">
-                        {Array.isArray(item.team.logo) ? (
-                          item.team.logo.map((img, idx) => (
+                        {Array.isArray(item.teamLogo) ? (
+                          item.teamLogo.map((img, idx) => (
                             <Image
                               key={idx + "-logo"}
                               src={img || fallback}
                               width={100}
                               height={100}
                               style={{ width: "20px", height: "auto" }}
-                              alt={`${item.team.name} player ${idx + 1}`}
+                              alt={`${item.teamName} player ${idx + 1}`}
                             />
                           ))
                         ) : (
                           <Image
-                            src={item.team.logo || fallback}
+                            src={item.teamLogo || fallback}
                             width={80}
                             height={80}
                             style={{ width: "20px", height: "auto" }}
-                            alt={item.team.name}
+                            alt={item.teamName}
                           />
                         )}
                       </div>
-                      {item.team.name}
+                      {item.teamName}
                     </div>
                   </Link>
                 </td>
 
                 {headings.slice(1).map((heading) => (
-                  <td key={heading}>
-                    {item[heading] as string | number | undefined}
-                  </td>
+                  <td key={heading}>{item[heading]}</td>
                 ))}
               </tr>
             )

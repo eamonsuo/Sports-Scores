@@ -130,7 +130,7 @@ class GolfService implements SportService {
   async standings(
     leagueId: string,
     seasonId: string,
-  ): Promise<Standings<readonly string[]> | null> {
+  ): Promise<Standings | null> {
     const rawRanking = await cachedFetchRankings(
       leagueId === "pga" ? "02671" : "186",
       seasonId,
@@ -149,24 +149,28 @@ class GolfService implements SportService {
     return {
       standings: [
         {
-          headings: ladderConfig?.headings ?? GOLF_FEDEX_HEADINGS,
-          data: (rawRanking.rankings as SlashGolf_PlayerRanking[]).map(
-            (item) => {
-              let playerName = item.firstName + " " + item.lastName
-              return {
-                position: item.rank,
-                team: {
-                  id: item.playerId,
-                  name: playerName,
-                  logo: resolveSportImage(playerName),
+          tables: [
+            {
+              headings:
+                ladderConfig?.ladderGroup[0]?.headings ?? GOLF_FEDEX_HEADINGS,
+              data: (rawRanking.rankings as SlashGolf_PlayerRanking[]).map(
+                (item) => {
+                  let playerName = item.firstName + " " + item.lastName
+                  return {
+                    position: item.rank,
+                    teamId: item.playerId,
+                    teamName: playerName,
+                    teamLogo: resolveSportImage(playerName),
+                    Total: item.totalPoints?.toString() ?? "",
+                    Behind: item.pointsBehind?.toString() ?? "",
+                    Prev: item.previousRank?.toString() ?? "",
+                  }
                 },
-                Total: item.totalPoints?.toString() ?? "",
-                Behind: item.pointsBehind?.toString() ?? "",
-                Prev: item.previousRank?.toString() ?? "",
-              }
+              ),
+              placingCategories:
+                ladderConfig?.ladderGroup[0]?.placingCategories,
             },
-          ),
-          placingCategories: ladderConfig?.placingCategories,
+          ],
         },
       ],
     }

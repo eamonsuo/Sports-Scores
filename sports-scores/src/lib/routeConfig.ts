@@ -9,28 +9,29 @@ import { motorsportService } from "@/services/motorsport.service"
 import { rugbyLeagueService } from "@/services/rugby-league.service"
 import { rugbyUnionService } from "@/services/rugby-union.service"
 import { tennisService } from "@/services/tennis.service"
-import { LeagueSeasonConfig, SPORT, SportService } from "@/types/misc"
+import { ClientLeagueSeasonConfig, SPORT, SportService } from "@/types/misc"
 import {
-  AMERICAN_FOOTBALL_LEAGUES,
-  AUSSIE_RULES_LEAGUES,
-  BASEBALL_LEAGUES,
-  BASKETBALL_LEAGUES,
-  CRICKET_LEAGUES,
-  DARTS_LEAGUES,
-  FOOTBALL_LEAGUES,
-  GOLF_TOURS,
-  ICE_HOCKEY_LEAGUES,
-  MOTORSPORT_CATEGORIES,
-  NETBALL_LEAGUES,
-  RUGBY_LEAGUE_LEAGUES,
-  RUGBY_UNION_LEAGUES,
-  TENNIS_LEAGUES,
+  AMERICAN_FOOTBALL_LEAGUES_CLIENT,
+  AUSSIE_RULES_LEAGUES_CLIENT,
+  BASEBALL_LEAGUES_CLIENT,
+  BASKETBALL_LEAGUES_CLIENT,
+  CRICKET_LEAGUES_CLIENT,
+  CYCLING_TOURS_CLIENT,
+  DARTS_LEAGUES_CLIENT,
+  FOOTBALL_LEAGUES_CLIENT,
+  GOLF_TOURS_CLIENT,
+  ICE_HOCKEY_LEAGUES_CLIENT,
+  MOTORSPORT_CATEGORIES_CLIENT,
+  NETBALL_LEAGUES_CLIENT,
+  RUGBY_LEAGUE_LEAGUES_CLIENT,
+  RUGBY_UNION_LEAGUES_CLIENT,
+  TENNIS_LEAGUES_CLIENT,
 } from "./constants"
 
 type NavButton = { href: string; label: string; page: string }
 
 type SportRouteConfig = {
-  leagues: LeagueSeasonConfig[]
+  leagues: ClientLeagueSeasonConfig[]
   service: SportService
   navButtons?: NavButton[] // override default for all leagues
   navButtonsByLeague?: Record<string, NavButton[]> // override per league slug
@@ -43,35 +44,35 @@ export const DEFAULT_NAV_BUTTONS = [
 
 export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
   [SPORT.AMERICAN_FOOTBALL]: {
-    leagues: AMERICAN_FOOTBALL_LEAGUES,
+    leagues: AMERICAN_FOOTBALL_LEAGUES_CLIENT,
     service: americanFootballService,
   },
   [SPORT.AUSSIE_RULES]: {
-    leagues: AUSSIE_RULES_LEAGUES,
+    leagues: AUSSIE_RULES_LEAGUES_CLIENT,
     service: aussieRulesService,
   },
   [SPORT.BASEBALL]: {
-    leagues: BASEBALL_LEAGUES,
+    leagues: BASEBALL_LEAGUES_CLIENT,
     service: baseballService,
   },
   [SPORT.BASKETBALL]: {
-    leagues: BASKETBALL_LEAGUES,
+    leagues: BASKETBALL_LEAGUES_CLIENT,
     service: basketballService,
   },
   [SPORT.CRICKET]: {
-    leagues: CRICKET_LEAGUES,
+    leagues: CRICKET_LEAGUES_CLIENT,
     service: aussieRulesService,
   },
   [SPORT.CYCLING]: {
-    leagues: [],
+    leagues: CYCLING_TOURS_CLIENT,
     service: aussieRulesService,
   },
   [SPORT.DARTS]: {
-    leagues: DARTS_LEAGUES,
+    leagues: DARTS_LEAGUES_CLIENT,
     service: aussieRulesService,
   },
   [SPORT.FOOTBALL]: {
-    leagues: FOOTBALL_LEAGUES,
+    leagues: FOOTBALL_LEAGUES_CLIENT,
     service: footballService,
     navButtons: [
       { href: "#current-date", label: "Matches", page: "matches" },
@@ -80,7 +81,7 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
     ],
   },
   [SPORT.GOLF]: {
-    leagues: GOLF_TOURS,
+    leagues: GOLF_TOURS_CLIENT,
     service: golfService,
     navButtons: [
       { href: "#current-date", label: "Tournaments", page: "matches" },
@@ -98,11 +99,11 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
     },
   },
   [SPORT.ICE_HOCKEY]: {
-    leagues: ICE_HOCKEY_LEAGUES,
+    leagues: ICE_HOCKEY_LEAGUES_CLIENT,
     service: iceHockeyService,
   },
   [SPORT.MOTORSPORT]: {
-    leagues: MOTORSPORT_CATEGORIES,
+    leagues: MOTORSPORT_CATEGORIES_CLIENT,
     service: motorsportService,
     navButtons: [
       { href: "#current-date", label: "Races", page: "races" },
@@ -111,7 +112,7 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
     ],
   },
   [SPORT.NETBALL]: {
-    leagues: NETBALL_LEAGUES,
+    leagues: NETBALL_LEAGUES_CLIENT,
     service: aussieRulesService,
   },
   [SPORT.OLYMPICS]: {
@@ -119,11 +120,11 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
     service: aussieRulesService,
   },
   [SPORT.RUGBY_LEAGUE]: {
-    leagues: RUGBY_LEAGUE_LEAGUES,
+    leagues: RUGBY_LEAGUE_LEAGUES_CLIENT,
     service: rugbyLeagueService,
   },
   [SPORT.RUGBY_UNION]: {
-    leagues: RUGBY_UNION_LEAGUES,
+    leagues: RUGBY_UNION_LEAGUES_CLIENT,
     service: rugbyUnionService,
   },
   [SPORT.SURFING]: {
@@ -131,7 +132,7 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
     service: aussieRulesService,
   },
   [SPORT.TENNIS]: {
-    leagues: TENNIS_LEAGUES,
+    leagues: TENNIS_LEAGUES_CLIENT,
     service: tennisService,
     navButtons: [
       { href: "#current-date", label: "Matches", page: "matches" },

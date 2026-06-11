@@ -6,7 +6,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/zzzshadcn/popover"
-import { LeagueSeasonConfig, SPORT } from "@/types/misc"
+import {
+  ClientLeagueSeasonConfig,
+  LeagueSeasonConfig,
+  SPORT,
+} from "@/types/misc"
 import { format } from "date-fns/format"
 import { ChevronDownIcon, ExternalLinkIcon } from "lucide-react"
 import Link from "next/link"
@@ -25,7 +29,7 @@ export default function LeagueSeasonToggle({
   leagues,
 }: {
   sport: SPORT
-  leagues: LeagueSeasonConfig[]
+  leagues: ClientLeagueSeasonConfig[]
 }) {
   const router = useRouter()
   const pathname = usePathname()
@@ -51,7 +55,7 @@ export default function LeagueSeasonToggle({
         const afterLeague = remainder.slice(league.slug.length + 1)
         return {
           leagueSlug: league.slug,
-          seasonSlug: afterLeague || null,
+          seasonSlug: afterLeague.split("/")[0] || null,
         }
       }
     }

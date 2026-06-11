@@ -33,7 +33,7 @@ import { TZDate } from "@date-fns/tz"
 import { isSameDay } from "date-fns"
 import { SofascoreSport } from "./sofascore.service"
 
-const TENNIS_RANKING_HEADINGS = ["Player", "Total", "Prev"] as const
+const TENNIS_RANKING_HEADINGS = ["Player", "Total", "Prev"]
 
 class TennisService extends SofascoreSport {
   constructor() {
@@ -166,7 +166,7 @@ class TennisService extends SofascoreSport {
   override async standings(
     leagueId: string,
     seasonId: string,
-  ): Promise<Standings<readonly string[]> | null> {
+  ): Promise<Standings | null> {
     let rankings: Tennis_TennisApi_Rankings_Response
 
     switch (leagueId) {
@@ -195,25 +195,28 @@ class TennisService extends SofascoreSport {
     return {
       standings: [
         {
-          headings: TENNIS_RANKING_HEADINGS,
-          data: rankings.rankings.map((rank) => ({
-            position: rank.ranking,
-            team: {
-              id: rank.id,
-              name: rank.rowName,
-              logo: resolveSportImage(rank.team.country.name ?? rank.team.name),
+          tables: [
+            {
+              headings: TENNIS_RANKING_HEADINGS,
+              data: rankings.rankings.map((rank) => ({
+                position: rank.ranking,
+                teamId: rank.id,
+                teamName: rank.rowName,
+                teamLogo: resolveSportImage(
+                  rank.team.country.name ?? rank.team.name,
+                ),
+
+                Total: rank.points,
+                Prev: rank.previousRanking,
+              })),
             },
-            Total: rank.points,
-            Prev: rank.previousRanking,
-          })),
+          ],
         },
       ],
     }
   }
 
-  async tennisRankings(
-    rankingList: RankingList,
-  ): Promise<Standings<readonly string[]> | null> {
+  async tennisRankings(rankingList: RankingList): Promise<Standings | null> {
     return null
   }
 

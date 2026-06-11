@@ -67,11 +67,4 @@ class BaseballService extends SofascoreSport {
   }
 }
 
-// Custom sort: division < conference < MLB
-function tableOrder(name: string): number {
-  if (name === "MLB") return 2
-  if (name.split(" ").length == 2) return 1
-  return 0 // Division tables
-}
-
 export const baseballService = new BaseballService()

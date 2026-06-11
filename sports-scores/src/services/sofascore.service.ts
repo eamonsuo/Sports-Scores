@@ -14,6 +14,8 @@ import {
   CardVariant,
   DeepPartial,
   DisplayTypes,
+  LadderConfig,
+  LadderGroup,
   LadderPlacingCategory,
   LeagueSeasonConfig,
   MatchDetail,
@@ -35,6 +37,7 @@ import {
   Sofascore_StageStandingRow,
   Sofascore_Standing,
   Sofascore_StandingRow,
+  Sofascore_TotalStandings_Response,
   SofascoreAPI,
   SofascoreStagesAPI,
 } from "@/types/sofascore"
@@ -51,7 +54,7 @@ export abstract class SofascoreSport implements SportService {
   protected apiEndpoints: SofascoreAPI
   protected sport: SPORT
   protected leagues: LeagueSeasonConfig[]
-  protected headings: readonly string[]
+  protected headings: string[]
   protected scoreBreakdownConfig?: ScoreBreakdownConfig
   protected cardVariant?: CardVariant
 
@@ -59,7 +62,7 @@ export abstract class SofascoreSport implements SportService {
     apiEndpoints: SofascoreAPI,
     sport: SPORT,
     leagues: LeagueSeasonConfig[],
-    headings: readonly string[],
+    headings: string[],
     scoreBreakdownConfig?: ScoreBreakdownConfig,
     cardVariant?: CardVariant,
   ) {
@@ -95,7 +98,7 @@ export abstract class SofascoreSport implements SportService {
       .map((event) =>
         this.eventMapper(event, {
           roundLabel:
-            event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
+            event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`,
         }),
       )
 
@@ -153,7 +156,8 @@ export abstract class SofascoreSport implements SportService {
 
     const allMatches = matches.events.map((event) =>
       this.eventMapper(event, {
-        roundLabel: event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`,
+        roundLabel:
+          event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`,
         leagueName:
           `${
             this.leagues.find(
@@ -161,7 +165,7 @@ export abstract class SofascoreSport implements SportService {
             )?.name
           }` +
           (event.roundInfo?.name || event.roundInfo?.round
-            ? ` - ${event.roundInfo?.name ?? `Round ${event.roundInfo?.round}`}`
+            ? ` - ${event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`}`
             : ""),
         leagueSlug: `/sports/${this.sport}/${event.tournament.uniqueTournament.id}/${event.season.id}`,
       }),
@@ -242,7 +246,7 @@ export abstract class SofascoreSport implements SportService {
   async standings(
     leagueId: string,
     seasonId: string,
-  ): Promise<Standings<readonly string[]> | null> {
+  ): Promise<Standings | null> {
     const standings = await this.apiEndpoints.fetchStandingsTotal(
       leagueId,
       seasonId,
@@ -259,12 +263,8 @@ export abstract class SofascoreSport implements SportService {
     )
 
     return {
-      standings: standings?.standings
-        // TODO: How do I want to sort tables??
-        .sort(this.standingsSorter)
-        .map((table) =>
-          this.standingsMapper(table, ladderConfig?.placingCategories),
-        ),
+      standings: this.standingsStructureMap(standings, ladderConfig),
+
       playoffPicture: resolvePlayoffPicture(
         ladderConfig?.playoffPictureConfig,
         standings?.standings.map((table) => ({
@@ -277,7 +277,7 @@ export abstract class SofascoreSport implements SportService {
           ),
         })),
       ),
-    } as Standings<typeof this.headings>
+    }
   }
 
   async brackets(leagueId: string, seasonId: string): Promise<Brackets | null> {
@@ -459,21 +459,53 @@ export abstract class SofascoreSport implements SportService {
     }
   }
 
+  standingsStructureMap(
+    standings: Sofascore_TotalStandings_Response,
+    config?: LadderConfig,
+  ): LadderGroup[] {
+    if (config) {
+      return config?.ladderGroup.map((group) => ({
+        tables: standings?.standings
+          .filter((table) =>
+            group.groupFilter ? group.groupFilter(table.name) : true,
+          )
+          .map((table) =>
+            this.standingsMapper(
+              table,
+              group?.headings,
+              group?.placingCategories,
+            ),
+          ),
+        label: group?.label ?? "All",
+      }))
+    }
+    return [
+      {
+        tables: standings?.standings.map((table) =>
+          this.standingsMapper(
+            table,
+            this.headings,
+            // this.placingCategories,
+          ),
+        ),
+      },
+    ]
+  }
+
   protected standingsMapper(
     table: Sofascore_Standing,
+    headings?: string[],
     placingCategories?: LadderPlacingCategory[],
-  ): SportsLadder<typeof this.headings> {
+  ): SportsLadder {
     return {
       tableName: table.name,
-      headings: this.headings,
+      headings: headings ?? this.headings,
       data: table.rows.map((item) => {
         return {
           position: item.position,
-          team: {
-            id: item.team.id.toString(),
-            name: shortenTeamNames(item.team.name),
-            logo: resolveSportImage(item.team.name),
-          },
+          teamId: item.team.id.toString(),
+          teamName: shortenTeamNames(item.team.name),
+          teamLogo: resolveSportImage(item.team.name),
           sport: this.sport,
 
           Pts: item.points,
@@ -493,11 +525,7 @@ export abstract class SofascoreSport implements SportService {
         }
       }),
       placingCategories,
-    } as SportsLadder<typeof this.headings>
-  }
-
-  standingsSorter(a: Sofascore_Standing, b: Sofascore_Standing): number {
-    return 0
+    }
   }
 
   protected matchDetailsMapper(matchDetails: Sofascore_Event): {
@@ -660,15 +688,17 @@ export abstract class SofascoreStageSport implements SportService {
   async standings(
     leagueId: string,
     seasonId: string,
-    headings: readonly string[] = ["Team", "Pts"],
-  ): Promise<Standings<readonly string[]> | null> {
+    headings: string[] = ["Team", "Pts"],
+  ): Promise<Standings | null> {
     const standings = await this.apiEndpoints.fetchStageStandings(seasonId)
 
     if (!standings) return null
 
     return {
-      standings: [this.standingsMapper(standings.standings, headings)],
-    } as Standings<typeof headings>
+      standings: [
+        { tables: [this.standingsMapper(standings.standings, headings)] },
+      ],
+    }
   }
 
   async brackets(leagueId: string, seasonId: string): Promise<Brackets | null> {
@@ -745,24 +775,22 @@ export abstract class SofascoreStageSport implements SportService {
 
   protected standingsMapper(
     table: Sofascore_StageStandingRow[],
-    headings: readonly string[],
-  ): SportsLadder<typeof headings> {
+    headings: string[],
+  ): SportsLadder {
     return {
       // tableName: table.name,
       headings: headings,
       data: table.map((item) => {
         return {
           position: item.position,
-          team: {
-            id: item.team?.id?.toString() ?? "",
-            name: shortenTeamNames(item.team?.name ?? ""),
-            logo: resolveSportImage(item.team?.country?.name ?? ""),
-          },
+          teamId: item.team?.id?.toString() ?? "",
+          teamName: shortenTeamNames(item.team?.name ?? ""),
+          teamLogo: resolveSportImage(item.team?.country?.name ?? ""),
           sport: this.sport,
 
           Pts: item.points,
         }
       }),
-    } as SportsLadder<typeof headings>
+    }
   }
 }

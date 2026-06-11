@@ -11,6 +11,7 @@ import {
 } from "@/types/playoff-picture"
 import { RankingList } from "@/types/tennis"
 import { resolveSportImage } from "./imageMapping"
+import { ladderConfigMap, stripLeagueSeasonConfig } from "./projUtils"
 
 export const RUGBY_LEAGUE_LADDER_HEADINGS = [
   "Team",
@@ -19,40 +20,20 @@ export const RUGBY_LEAGUE_LADDER_HEADINGS = [
   "D",
   "Diff",
   "Pts",
-] as const
-export const FOOTBALL_LADDER_HEADINGS = [
-  "Team",
-  "P",
-  "W",
-  "D",
-  "L",
-  "Pts",
-] as const
-export const AUSSIE_RULES_LADDER_HEADINGS = [
-  "Team",
-  "P",
-  "W",
-  "D",
-  "%",
-  "Pts",
-] as const
-export const BASKETBALL_LADDER_HEADINGS = [
-  "Team",
-  "P",
-  "W",
-  "L",
-  "PCT",
-] as const
-export const BASEBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "PCT"] as const
+]
+export const FOOTBALL_LADDER_HEADINGS = ["Team", "P", "W", "D", "L", "Pts"]
+export const AUSSIE_RULES_LADDER_HEADINGS = ["Team", "P", "W", "D", "%", "Pts"]
+export const BASKETBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "PCT"]
+export const BASEBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "PCT"]
 export const ICE_HOCKEY_LADDER_HEADINGS = [
   "Team",
   "P",
   "W",
   "OTL",
-  "L",
+  // "L",
   "Diff",
   "Pts",
-] as const
+]
 export const RUGBY_UNION_LADDER_HEADINGS = [
   "Team",
   "P",
@@ -61,16 +42,10 @@ export const RUGBY_UNION_LADDER_HEADINGS = [
   "Diff",
   "BP",
   "Pts",
-] as const
-export const AMERICAN_FOOTBALL_LADDER_HEADINGS = [
-  "Team",
-  "P",
-  "W",
-  "L",
-  "D",
-] as const
-export const GOLF_FEDEX_HEADINGS = ["Player", "Total", "Behind"] as const
-export const GOLF_OWGR_HEADINGS = ["Player", "Total", "Prev"] as const
+]
+export const AMERICAN_FOOTBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "D"]
+export const GOLF_FEDEX_HEADINGS = ["Player", "Total", "Behind"]
+export const GOLF_OWGR_HEADINGS = ["Player", "Total", "Prev"]
 
 export const SCORE_BREAKDOWN_HALVES_CONFIG: ScoreBreakdownConfig = {
   periodNames: ["1st Half", "2nd Half"],
@@ -101,51 +76,61 @@ const RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG: PlayoffPictureConfig = {
   structure: PlayoffPictureStructure.Top8,
 }
 
-const TOP_8_LADDER_CONFIG: LadderPlacingCategory[] = [
+const TOP_8_SECOND_CHANCE_PLACING: LadderPlacingCategory[] = [
   { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
   { label: "Finals", position: [5, 6, 7, 8] },
+]
+
+const TOP_10_SECOND_CHANCE_PLACING: LadderPlacingCategory[] = [
+  { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
+  { label: "Finals", position: [5, 6] },
+  { label: "Finals - Wildcard Round", position: [7, 8, 9, 10] },
 ]
 
 // ── Ladder Config Constants ──────────────────────────────────────────────────
 
 // Shared across multiple sports
-const FINALS_TOP_4_LADDER_CONFIG: LadderConfig = {
-  placingCategories: [{ label: "Finals", position: [1, 2, 3, 4] }],
-}
+const FINALS_TOP_4_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Finals", position: [1, 2, 3, 4] },
+]
 
-const FINALS_TOP_5_LADDER_CONFIG: LadderConfig = {
-  placingCategories: [{ label: "Finals", position: [1, 2, 3, 4, 5] }],
-}
+const FINALS_TOP_5_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Finals", position: [1, 2, 3, 4, 5] },
+]
 
-const FINALS_TOP_6_LADDER_CONFIG: LadderConfig = {
-  placingCategories: [{ label: "Finals", position: [1, 2, 3, 4, 5, 6] }],
-}
+const FINALS_TOP_6_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Finals", position: [1, 2, 3, 4, 5, 6] },
+]
 
-const FINALS_TOP_8_LADDER_CONFIG: LadderConfig = {
-  placingCategories: [{ label: "Finals", position: [1, 2, 3, 4, 5, 6, 7, 8] }],
-}
+const FINALS_TOP_8_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Finals", position: [1, 2, 3, 4, 5, 6, 7, 8] },
+]
 
 // Cricket
-const CRICKET_PLAYOFFS_TOP_4_LADDER_CONFIG: LadderConfig = {
-  placingCategories: [{ label: "Playoffs", position: [1, 2, 3, 4] }],
-}
+const CRICKET_PLAYOFFS_TOP_4_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Playoffs", position: [1, 2, 3, 4] },
+]
 
 // Rugby League
 const NRL_TOP_8_LADDER_CONFIG: LadderConfig = {
-  placingCategories: TOP_8_LADDER_CONFIG,
+  ladderGroup: [
+    {
+      placingCategories: TOP_8_SECOND_CHANCE_PLACING,
+    },
+  ],
   playoffPictureConfig: RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG,
 }
 
-const RL_WORLD_CUP_LADDER_CONFIG: LadderConfig = {
-  placingCategories: [{ label: "Quarterfinals", position: [1, 2] }],
-}
+const RL_WORLD_CUP_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Quarterfinals", position: [1, 2] },
+]
 
 // AFL
 const AFL_TOP_10_LADDER_CONFIG: LadderConfig = {
-  placingCategories: [
-    { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
-    { label: "Finals", position: [5, 6] },
-    { label: "Finals - Wildcard Round", position: [7, 8, 9, 10] },
+  ladderGroup: [
+    {
+      placingCategories: TOP_10_SECOND_CHANCE_PLACING,
+    },
   ],
   playoffPictureConfig: {
     rankingSystem: "points",
@@ -158,7 +143,11 @@ const AFL_TOP_10_LADDER_CONFIG: LadderConfig = {
 }
 
 const AFL_TOP_8_LADDER_CONFIG: LadderConfig = {
-  placingCategories: TOP_8_LADDER_CONFIG,
+  ladderGroup: [
+    {
+      placingCategories: TOP_8_SECOND_CHANCE_PLACING,
+    },
+  ],
   playoffPictureConfig: {
     rankingSystem: "points",
     pointsPerWin: 4,
@@ -170,106 +159,96 @@ const AFL_TOP_8_LADDER_CONFIG: LadderConfig = {
 }
 
 // Football - European domestic (shared: CL 1-4, EL 5, Conf 6, Rel 18-20)
-const EUROPEAN_DOMESTIC_SHARED_LADDER: LadderConfig = {
-  placingCategories: [
-    { label: "Champions League", position: [1, 2, 3, 4] },
-    { label: "Europa League", position: [5] },
-    { label: "Conference League", position: [6] },
-    { label: "Relegation", position: [18, 19, 20], colour: "bg-red-500" },
-  ],
-}
+const EUROPEAN_DOMESTIC_SHARED_LADDER: LadderPlacingCategory[] = [
+  { label: "Champions League", position: [1, 2, 3, 4] },
+  { label: "Europa League", position: [5] },
+  { label: "Conference League", position: [6] },
+  { label: "Relegation", position: [18, 19, 20], colour: "bg-red-500" },
+]
 
-const WSL_LADDER_CONFIG: LadderConfig = {
-  placingCategories: [
-    { label: "Champions League - League Phase", position: [1, 2] },
-    { label: "Champions League - Third Round Qualifiers", position: [3] },
-    { label: "Relegation Play-off", position: [12], colour: "bg-red-500" },
-  ],
-}
+const WSL_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Champions League - League Phase", position: [1, 2] },
+  { label: "Champions League - Third Round Qualifiers", position: [3] },
+  { label: "Relegation Play-off", position: [12], colour: "bg-red-500" },
+]
 
-const CHAMPIONSHIP_LADDER_CONFIG: LadderConfig = {
-  placingCategories: [
-    { label: "Premier League Promotion", position: [1, 2] },
-    { label: "Promotion Playoffs", position: [3, 4, 5, 6] },
-    { label: "Relegation", position: [22, 23, 24], colour: "bg-red-500" },
-  ],
-}
+const CHAMPIONSHIP_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Premier League Promotion", position: [1, 2] },
+  { label: "Promotion Playoffs", position: [3, 4, 5, 6] },
+  { label: "Relegation", position: [22, 23, 24], colour: "bg-red-500" },
+]
 
-const FIFA_WORLD_CUP_LADDER_CONFIG: LadderConfig = {
-  placingCategories: [
-    { label: "Round of 32", position: [1, 2] },
-    {
-      label: "Possible Round of 32 - Best 8/12 3rd placed teams",
-      position: [3],
-    },
-  ],
-}
+const FIFA_WORLD_CUP_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Round of 32", position: [1, 2] },
+  {
+    label: "Possible Round of 32 - Best 8/12 3rd placed teams",
+    position: [3],
+  },
+]
 
-const UEFA_24_TEAM_LADDER_CONFIG: LadderConfig = {
-  placingCategories: [
-    { label: "Round of 16 (seeded)", position: [1, 2, 3, 4, 5, 6, 7, 8] },
-    {
-      label: "Knockout Playoffs (seeded)",
-      position: [9, 10, 11, 12, 13, 14, 15, 16],
-    },
-    {
-      label: "Knockout Playoffs (unseeded)",
-      position: [17, 18, 19, 20, 21, 22, 23, 24],
-    },
-  ],
-}
+const UEFA_24_TEAM_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Round of 16 (seeded)", position: [1, 2, 3, 4, 5, 6, 7, 8] },
+  {
+    label: "Knockout Playoffs (seeded)",
+    position: [9, 10, 11, 12, 13, 14, 15, 16],
+  },
+  {
+    label: "Knockout Playoffs (unseeded)",
+    position: [17, 18, 19, 20, 21, 22, 23, 24],
+  },
+]
 
-const UEFA_WOMENS_CL_LADDER_CONFIG: LadderConfig = {
-  placingCategories: [
-    { label: "Quarter Finals (seeded)", position: [1, 2, 3, 4] },
-    { label: "Knockout Playoffs (seeded)", position: [5, 6, 7, 8] },
-    { label: "Knockout Playoffs (unseeded)", position: [9, 10, 11, 12] },
-  ],
-}
+const UEFA_WOMENS_CL_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Quarter Finals (seeded)", position: [1, 2, 3, 4] },
+  { label: "Knockout Playoffs (seeded)", position: [5, 6, 7, 8] },
+  { label: "Knockout Playoffs (unseeded)", position: [9, 10, 11, 12] },
+]
 
-const MLS_LADDER_CONFIG: LadderConfig = {
-  placingCategories: [
-    { label: "CONCACAF Champions Cup", position: [1] },
-    { label: "Playoffs", position: [2, 3, 4, 5, 6, 7] },
-    { label: "Wild Card", position: [8, 9] },
-  ],
-}
+const MLS_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "CONCACAF Champions Cup", position: [1] },
+  { label: "Playoffs", position: [2, 3, 4, 5, 6, 7] },
+  { label: "Wild Card", position: [8, 9] },
+]
 
-const NWSL_LADDER_CONFIG: LadderConfig = {
-  placingCategories: [
-    { label: "CONCACAF Champions Cup", position: [1, 2] },
-    { label: "Playoffs", position: [3, 4, 5, 6, 7, 8] },
-  ],
-}
+const NWSL_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "CONCACAF Champions Cup", position: [1, 2] },
+  { label: "Playoffs", position: [3, 4, 5, 6, 7, 8] },
+]
 
-const LIGUE_1_LADDER_CONFIG: LadderConfig = {
-  placingCategories: [
-    { label: "Champions League", position: [1, 2, 3] },
-    { label: "Champions League - Third Round Qualifiers", position: [4] },
-    { label: "Europa League", position: [5] },
-    { label: "Conference League", position: [6] },
-    { label: "Relegation Playoffs", position: [16], colour: "bg-red-300" },
-    { label: "Relegation", position: [17, 18], colour: "bg-red-500" },
-  ],
-}
+const LIGUE_1_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Champions League", position: [1, 2, 3] },
+  { label: "Champions League - Third Round Qualifiers", position: [4] },
+  { label: "Europa League", position: [5] },
+  { label: "Conference League", position: [6] },
+  { label: "Relegation Playoffs", position: [16], colour: "bg-red-300" },
+  { label: "Relegation", position: [17, 18], colour: "bg-red-500" },
+]
 
-const BUNDESLIGA_LADDER_CONFIG: LadderConfig = {
-  placingCategories: [
-    { label: "Champions League", position: [1, 2, 3, 4] },
-    { label: "Europa League", position: [5] },
-    { label: "Conference League", position: [6] },
-    {
-      label: "Relegation Playoffs",
-      position: [16],
-      colour: "bg-red-300",
-    },
-    { label: "Relegation", position: [17, 18], colour: "bg-red-500" },
-  ],
-}
+const BUNDESLIGA_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Champions League", position: [1, 2, 3, 4] },
+  { label: "Europa League", position: [5] },
+  { label: "Conference League", position: [6] },
+  {
+    label: "Relegation Playoffs",
+    position: [16],
+    colour: "bg-red-300",
+  },
+  { label: "Relegation", position: [17, 18], colour: "bg-red-500" },
+]
 
 // NFL
 const NFL_2020_LADDER_CONFIG: LadderConfig = {
-  // placingCategories: ,
+  ladderGroup: [
+    { groupFilter: (tableName) => tableName.includes("AFC"), label: "AFC" },
+    { groupFilter: (tableName) => tableName.includes("NFC"), label: "NFC" },
+    {
+      groupFilter: (tableName) =>
+        tableName.includes("NFL") &&
+        !tableName.includes("AFC") &&
+        !tableName.includes("NFC"),
+      label: "NFL",
+    },
+  ],
   playoffPictureConfig: {
     rankingSystem: "percentage",
     totalSeasonGames: 17,
@@ -280,7 +259,22 @@ const NFL_2020_LADDER_CONFIG: LadderConfig = {
 
 // NBA
 const NBA_2021_LADDER_CONFIG: LadderConfig = {
-  // placingCategories: ,
+  ladderGroup: [
+    {
+      groupFilter: (tableName) => tableName?.includes("Division"),
+      label: "Division",
+    },
+    {
+      groupFilter: (tableName) =>
+        tableName === "Western Conference" ||
+        tableName === "Eastern Conference",
+      label: "Conference",
+    },
+    {
+      groupFilter: (tableName) => tableName.includes("NBA"),
+      label: "League",
+    },
+  ],
   playoffPictureConfig: {
     rankingSystem: "percentage",
     totalSeasonGames: 82,
@@ -291,7 +285,22 @@ const NBA_2021_LADDER_CONFIG: LadderConfig = {
 
 // NHL
 const NHL_2014_LADDER_CONFIG: LadderConfig = {
-  // placingCategories: ,
+  ladderGroup: [
+    {
+      groupFilter: (tableName) => tableName?.includes("Division"),
+      label: "Division",
+    },
+    {
+      groupFilter: (tableName) =>
+        tableName === "Western Conference" ||
+        tableName === "Eastern Conference",
+      label: "Conference",
+    },
+    {
+      groupFilter: (tableName) => tableName.includes("NHL"),
+      label: "League",
+    },
+  ],
   playoffPictureConfig: {
     rankingSystem: "points",
     pointsPerWin: 2,
@@ -304,7 +313,24 @@ const NHL_2014_LADDER_CONFIG: LadderConfig = {
 
 // MLB
 const MLB_2022_LADDER_CONFIG: LadderConfig = {
-  // placingCategories: ,
+  ladderGroup: [
+    {
+      groupFilter: (tableName) =>
+        tableName.includes("West") ||
+        tableName.includes("East") ||
+        tableName.includes("Central"),
+      label: "Division",
+    },
+    {
+      groupFilter: (tableName) =>
+        tableName === "American League" || tableName === "National League",
+      label: "Conference",
+    },
+    {
+      groupFilter: (tableName) => tableName.includes("MLB"),
+      label: "League",
+    },
+  ],
   playoffPictureConfig: {
     rankingSystem: "percentage",
     totalSeasonGames: 162,
@@ -315,25 +341,29 @@ const MLB_2022_LADDER_CONFIG: LadderConfig = {
 
 // PGA
 const PGA_2013_LADDER_CONFIG: LadderConfig = {
-  placingCategories: [
+  ladderGroup: [
     {
-      label: "TOUR Championship",
-      position: Array.from({ length: 30 }, (_, i) => i + 1),
-    },
-    {
-      label: "BMW Championship",
-      position: Array.from({ length: 20 }, (_, i) => i + 31),
-    },
-    {
-      label: "St. Jude Championship",
-      position: Array.from({ length: 20 }, (_, i) => i + 51),
-    },
-    {
-      label: "Full TOUR Card",
-      position: Array.from({ length: 30 }, (_, i) => i + 71),
+      placingCategories: [
+        {
+          label: "TOUR Championship",
+          position: Array.from({ length: 30 }, (_, i) => i + 1),
+        },
+        {
+          label: "BMW Championship",
+          position: Array.from({ length: 20 }, (_, i) => i + 31),
+        },
+        {
+          label: "St. Jude Championship",
+          position: Array.from({ length: 20 }, (_, i) => i + 51),
+        },
+        {
+          label: "Full TOUR Card",
+          position: Array.from({ length: 30 }, (_, i) => i + 71),
+        },
+      ],
+      headings: GOLF_FEDEX_HEADINGS,
     },
   ],
-  headings: GOLF_FEDEX_HEADINGS,
 }
 
 export const NRL_TEAMS_NAME_LOGO = [
@@ -451,7 +481,11 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "2026",
         slug: "ipl",
-        ladderConfig: CRICKET_PLAYOFFS_TOP_4_LADDER_CONFIG,
+        ladderConfig: {
+          ladderGroup: [
+            { placingCategories: CRICKET_PLAYOFFS_TOP_4_LADDER_CONFIG },
+          ],
+        },
       },
     ],
   },
@@ -482,12 +516,14 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
+export const CRICKET_LEAGUES_CLIENT = stripLeagueSeasonConfig(CRICKET_LEAGUES)
+
 export const MOTORSPORT_SESSION_STANDINGS_HEADINGS = [
   "Driver",
   "Gap",
   "Pts",
   "Grid",
-] as const
+]
 
 export const MOTORSPORT_CATEGORIES: LeagueSeasonConfig[] = [
   {
@@ -512,6 +548,10 @@ export const MOTORSPORT_CATEGORIES: LeagueSeasonConfig[] = [
     seasons: [{ name: "2026", slug: "220597" }],
   },
 ]
+
+export const MOTORSPORT_CATEGORIES_CLIENT = stripLeagueSeasonConfig(
+  MOTORSPORT_CATEGORIES,
+)
 
 export const GOLF_TOURS: LeagueSeasonConfig[] = [
   {
@@ -589,12 +629,14 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
       {
         name: "Current",
         slug: "2026/ladder",
-        ladderConfig: { headings: GOLF_OWGR_HEADINGS },
+        ladderConfig: { ladderGroup: [{ headings: GOLF_OWGR_HEADINGS }] },
       },
       { name: "2025", slug: "2025/ladder" },
     ],
   },
 ]
+
+export const GOLF_TOURS_CLIENT = stripLeagueSeasonConfig(GOLF_TOURS)
 
 export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
   {
@@ -633,10 +675,34 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     name: "NRLW",
     slug: "19120",
     seasons: [
-      { name: "2026", slug: "87573", ladderConfig: FINALS_TOP_6_LADDER_CONFIG },
-      { name: "2025", slug: "69964", ladderConfig: FINALS_TOP_6_LADDER_CONFIG },
-      { name: "2024", slug: "56809", ladderConfig: FINALS_TOP_6_LADDER_CONFIG },
-      { name: "2023", slug: "51393", ladderConfig: FINALS_TOP_6_LADDER_CONFIG },
+      {
+        name: "2026",
+        slug: "87573",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2025",
+        slug: "69964",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2024",
+        slug: "56809",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2023",
+        slug: "51393",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
+      },
     ],
   },
   {
@@ -705,8 +771,20 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     name: "World Cup",
     slug: "431",
     seasons: [
-      { name: "2026", slug: "87548", ladderConfig: RL_WORLD_CUP_LADDER_CONFIG },
-      { name: "2021", slug: "42989", ladderConfig: RL_WORLD_CUP_LADDER_CONFIG },
+      {
+        name: "2026",
+        slug: "87548",
+        ladderConfig: ladderConfigMap({
+          placingCategories: RL_WORLD_CUP_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2021",
+        slug: "42989",
+        ladderConfig: ladderConfigMap({
+          placingCategories: RL_WORLD_CUP_LADDER_CONFIG,
+        }),
+      },
     ],
   },
   {
@@ -750,13 +828,34 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     name: "Super League",
     slug: "302",
     seasons: [
-      { name: "2026", slug: "86986", ladderConfig: FINALS_TOP_6_LADDER_CONFIG },
-      { name: "2025", slug: "69930", ladderConfig: FINALS_TOP_6_LADDER_CONFIG },
-      { name: "2024", slug: "57044", ladderConfig: FINALS_TOP_6_LADDER_CONFIG },
+      {
+        name: "2026",
+        slug: "86986",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2025",
+        slug: "69930",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2024",
+        slug: "57044",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
+      },
     ],
     excludeFromToday: true,
   },
 ]
+
+export const RUGBY_LEAGUE_LEAGUES_CLIENT =
+  stripLeagueSeasonConfig(RUGBY_LEAGUE_LEAGUES)
 
 export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
   {
@@ -795,29 +894,103 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
     name: "AFLW",
     slug: "10159",
     seasons: [
-      { name: "2025", slug: "76123", ladderConfig: FINALS_TOP_8_LADDER_CONFIG },
-      { name: "2024", slug: "64462", ladderConfig: FINALS_TOP_8_LADDER_CONFIG },
-      { name: "2023", slug: "54077", ladderConfig: FINALS_TOP_8_LADDER_CONFIG },
+      {
+        name: "2025",
+        slug: "76123",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_8_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2024",
+        slug: "64462",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_8_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2023",
+        slug: "54077",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_8_LADDER_CONFIG,
+        }),
+      },
       {
         name: "2022 S7",
         slug: "45127",
-        ladderConfig: FINALS_TOP_8_LADDER_CONFIG,
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_8_LADDER_CONFIG,
+        }),
       },
-      { name: "2022", slug: "40037", ladderConfig: FINALS_TOP_8_LADDER_CONFIG },
-      { name: "2021", slug: "35108", ladderConfig: FINALS_TOP_8_LADDER_CONFIG },
-      { name: "2020", slug: "26102", ladderConfig: FINALS_TOP_8_LADDER_CONFIG },
-      { name: "2019", slug: "20117", ladderConfig: FINALS_TOP_8_LADDER_CONFIG },
-      { name: "2018", slug: "15781", ladderConfig: FINALS_TOP_8_LADDER_CONFIG },
-      { name: "2017", slug: "12890", ladderConfig: FINALS_TOP_8_LADDER_CONFIG },
+      {
+        name: "2022",
+        slug: "40037",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_8_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2021",
+        slug: "35108",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_8_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2020",
+        slug: "26102",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_8_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2019",
+        slug: "20117",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_8_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2018",
+        slug: "15781",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_8_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2017",
+        slug: "12890",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_8_LADDER_CONFIG,
+        }),
+      },
     ],
   },
   {
     name: "VFL",
     slug: "25506",
     seasons: [
-      { name: "2026", slug: "90001", ladderConfig: FINALS_TOP_8_LADDER_CONFIG },
-      { name: "2025", slug: "73301", ladderConfig: FINALS_TOP_8_LADDER_CONFIG },
-      { name: "2024", slug: "57568", ladderConfig: FINALS_TOP_8_LADDER_CONFIG },
+      {
+        name: "2026",
+        slug: "90001",
+        ladderConfig: ladderConfigMap({
+          placingCategories: TOP_10_SECOND_CHANCE_PLACING,
+        }),
+      },
+      {
+        name: "2025",
+        slug: "73301",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_8_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2024",
+        slug: "57568",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_8_LADDER_CONFIG,
+        }),
+      },
     ],
     excludeFromToday: true,
   },
@@ -825,9 +998,27 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
     name: "SANFL",
     slug: "20126",
     seasons: [
-      { name: "2026", slug: "89835", ladderConfig: FINALS_TOP_5_LADDER_CONFIG },
-      { name: "2025", slug: "71309", ladderConfig: FINALS_TOP_5_LADDER_CONFIG },
-      { name: "2024", slug: "59236", ladderConfig: FINALS_TOP_5_LADDER_CONFIG },
+      {
+        name: "2026",
+        slug: "89835",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_5_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2025",
+        slug: "71309",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_5_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2024",
+        slug: "59236",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_5_LADDER_CONFIG,
+        }),
+      },
     ],
     excludeFromToday: true,
   },
@@ -835,9 +1026,27 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
     name: "WAFL",
     slug: "20160",
     seasons: [
-      { name: "2026", slug: "89836", ladderConfig: FINALS_TOP_5_LADDER_CONFIG },
-      { name: "2025", slug: "71310", ladderConfig: FINALS_TOP_5_LADDER_CONFIG },
-      { name: "2024", slug: "59237", ladderConfig: FINALS_TOP_5_LADDER_CONFIG },
+      {
+        name: "2026",
+        slug: "89836",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_5_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2025",
+        slug: "71310",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_5_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2024",
+        slug: "59237",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_5_LADDER_CONFIG,
+        }),
+      },
     ],
     excludeFromToday: true,
   },
@@ -857,11 +1066,15 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
+export const AUSSIE_RULES_LEAGUES_CLIENT =
+  stripLeagueSeasonConfig(AUSSIE_RULES_LEAGUES)
+
 export const AMERICAN_FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "NFL",
     slug: "9464",
     seasons: [
+      { name: "26/27", slug: "94366", ladderConfig: NFL_2020_LADDER_CONFIG },
       { name: "25/26", slug: "75522", ladderConfig: NFL_2020_LADDER_CONFIG },
       { name: "24/25", slug: "60592", ladderConfig: NFL_2020_LADDER_CONFIG },
       { name: "23/24", slug: "51361", ladderConfig: NFL_2020_LADDER_CONFIG },
@@ -931,6 +1144,10 @@ export const AMERICAN_FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
+export const AMERICAN_FOOTBALL_LEAGUES_CLIENT = stripLeagueSeasonConfig(
+  AMERICAN_FOOTBALL_LEAGUES,
+)
+
 export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   //Australia - category 34
   {
@@ -940,12 +1157,16 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "25/26",
         slug: "82603",
-        ladderConfig: FINALS_TOP_6_LADDER_CONFIG,
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
       },
       {
         name: "24/25",
         slug: "64864",
-        ladderConfig: FINALS_TOP_6_LADDER_CONFIG,
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
       },
     ],
   },
@@ -956,12 +1177,16 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "25/26",
         slug: "82605",
-        ladderConfig: FINALS_TOP_6_LADDER_CONFIG,
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
       },
       {
         name: "24/25",
         slug: "66775",
-        ladderConfig: FINALS_TOP_6_LADDER_CONFIG,
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
       },
     ],
   },
@@ -996,12 +1221,16 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "25/26",
         slug: "76986",
-        ladderConfig: EUROPEAN_DOMESTIC_SHARED_LADDER,
+        ladderConfig: ladderConfigMap({
+          placingCategories: EUROPEAN_DOMESTIC_SHARED_LADDER,
+        }),
       },
       {
         name: "24/25",
         slug: "61627",
-        ladderConfig: EUROPEAN_DOMESTIC_SHARED_LADDER,
+        ladderConfig: ladderConfigMap({
+          placingCategories: EUROPEAN_DOMESTIC_SHARED_LADDER,
+        }),
       },
     ],
   },
@@ -1009,38 +1238,50 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     name: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 WSL",
     slug: "1044",
     seasons: [
-      { name: "25/26", slug: "79227", ladderConfig: WSL_LADDER_CONFIG },
-      { name: "24/25", slug: "64370", ladderConfig: WSL_LADDER_CONFIG },
+      {
+        name: "25/26",
+        slug: "79227",
+        ladderConfig: ladderConfigMap({ placingCategories: WSL_LADDER_CONFIG }),
+      },
+      {
+        name: "24/25",
+        slug: "64370",
+        ladderConfig: ladderConfigMap({ placingCategories: WSL_LADDER_CONFIG }),
+      },
     ],
   },
   {
-    name: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Championship",
+    name: "🏴 Championship",
     slug: "18",
     seasons: [
       {
         name: "25/26",
         slug: "77347",
-        ladderConfig: CHAMPIONSHIP_LADDER_CONFIG,
+        ladderConfig: ladderConfigMap({
+          placingCategories: CHAMPIONSHIP_LADDER_CONFIG,
+        }),
       },
       {
         name: "24/25",
         slug: "61961",
-        ladderConfig: CHAMPIONSHIP_LADDER_CONFIG,
+        ladderConfig: ladderConfigMap({
+          placingCategories: CHAMPIONSHIP_LADDER_CONFIG,
+        }),
       },
     ],
   },
   {
-    name: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 FA Cup",
+    name: "🏴 FA Cup",
     slug: "19",
     seasons: [{ name: "25/26", slug: "82557" }],
   },
   {
-    name: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Women's FA Cup",
+    name: "🏴 Women's FA Cup",
     slug: "11666",
     seasons: [{ name: "25/26", slug: "84634" }],
   },
   {
-    name: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 EFL Cup",
+    name: "🏴 EFL Cup",
     slug: "21",
     seasons: [{ name: "25/26", slug: "77500" }],
   },
@@ -1085,12 +1326,16 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "2026",
         slug: "58210",
-        ladderConfig: FIFA_WORLD_CUP_LADDER_CONFIG,
+        ladderConfig: ladderConfigMap({
+          placingCategories: FIFA_WORLD_CUP_LADDER_CONFIG,
+        }),
       },
       {
         name: "2022",
         slug: "41087",
-        ladderConfig: FIFA_WORLD_CUP_LADDER_CONFIG,
+        ladderConfig: ladderConfigMap({
+          placingCategories: FIFA_WORLD_CUP_LADDER_CONFIG,
+        }),
       },
     ],
   },
@@ -1217,7 +1462,9 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "25/26",
         slug: "76953",
-        ladderConfig: UEFA_24_TEAM_LADDER_CONFIG,
+        ladderConfig: ladderConfigMap({
+          placingCategories: UEFA_24_TEAM_LADDER_CONFIG,
+        }),
       },
     ],
     externalURL:
@@ -1230,7 +1477,9 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "25/26",
         slug: "77328",
-        ladderConfig: UEFA_WOMENS_CL_LADDER_CONFIG,
+        ladderConfig: ladderConfigMap({
+          placingCategories: UEFA_WOMENS_CL_LADDER_CONFIG,
+        }),
       },
     ],
     externalURL:
@@ -1243,7 +1492,9 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "25/26",
         slug: "76984",
-        ladderConfig: UEFA_24_TEAM_LADDER_CONFIG,
+        ladderConfig: ladderConfigMap({
+          placingCategories: UEFA_24_TEAM_LADDER_CONFIG,
+        }),
       },
     ],
     externalURL:
@@ -1256,7 +1507,9 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "25/26",
         slug: "76960",
-        ladderConfig: UEFA_24_TEAM_LADDER_CONFIG,
+        ladderConfig: ladderConfigMap({
+          placingCategories: UEFA_24_TEAM_LADDER_CONFIG,
+        }),
       },
     ],
     externalURL:
@@ -1289,8 +1542,16 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     name: "🇺🇸 MLS",
     slug: "242",
     seasons: [
-      { name: "2026", slug: "86668", ladderConfig: MLS_LADDER_CONFIG },
-      { name: "2025", slug: "70158", ladderConfig: MLS_LADDER_CONFIG },
+      {
+        name: "2026",
+        slug: "86668",
+        ladderConfig: ladderConfigMap({ placingCategories: MLS_LADDER_CONFIG }),
+      },
+      {
+        name: "2025",
+        slug: "70158",
+        ladderConfig: ladderConfigMap({ placingCategories: MLS_LADDER_CONFIG }),
+      },
     ],
     externalURL:
       "https://en.wikipedia.org/wiki/2026_Major_League_Soccer_season",
@@ -1300,7 +1561,13 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     name: "🇺🇸 NWSL",
     slug: "1690",
     seasons: [
-      { name: "2025", slug: "71412", ladderConfig: NWSL_LADDER_CONFIG },
+      {
+        name: "2025",
+        slug: "71412",
+        ladderConfig: ladderConfigMap({
+          placingCategories: NWSL_LADDER_CONFIG,
+        }),
+      },
     ],
     externalURL:
       "https://en.wikipedia.org/wiki/2026_National_Women%27s_Soccer_League_season",
@@ -1311,7 +1578,13 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     name: "🇫🇷 Ligue 1",
     slug: "34",
     seasons: [
-      { name: "25/26", slug: "77356", ladderConfig: LIGUE_1_LADDER_CONFIG },
+      {
+        name: "25/26",
+        slug: "77356",
+        ladderConfig: ladderConfigMap({
+          placingCategories: LIGUE_1_LADDER_CONFIG,
+        }),
+      },
     ],
     externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Ligue_1",
     excludeFromToday: true,
@@ -1321,7 +1594,13 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     name: "🇩🇪 Bundesliga",
     slug: "35",
     seasons: [
-      { name: "25/26", slug: "77333", ladderConfig: BUNDESLIGA_LADDER_CONFIG },
+      {
+        name: "25/26",
+        slug: "77333",
+        ladderConfig: ladderConfigMap({
+          placingCategories: BUNDESLIGA_LADDER_CONFIG,
+        }),
+      },
     ],
     externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Bundesliga",
     excludeFromToday: true,
@@ -1334,7 +1613,9 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "25/26",
         slug: "76457",
-        ladderConfig: EUROPEAN_DOMESTIC_SHARED_LADDER,
+        ladderConfig: ladderConfigMap({
+          placingCategories: EUROPEAN_DOMESTIC_SHARED_LADDER,
+        }),
       },
     ],
     externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Serie_A",
@@ -1348,7 +1629,9 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "25/26",
         slug: "77559",
-        ladderConfig: EUROPEAN_DOMESTIC_SHARED_LADDER,
+        ladderConfig: ladderConfigMap({
+          placingCategories: EUROPEAN_DOMESTIC_SHARED_LADDER,
+        }),
       },
     ],
     externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_La_Liga",
@@ -1381,6 +1664,8 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     seasons: [{ name: "2026", slug: "91221" }],
   },
 ]
+
+export const FOOTBALL_LEAGUES_CLIENT = stripLeagueSeasonConfig(FOOTBALL_LEAGUES)
 
 export const BASEBALL_LEAGUES: LeagueSeasonConfig[] = [
   //Australia - category 34
@@ -1417,6 +1702,8 @@ export const BASEBALL_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
+export const BASEBALL_LEAGUES_CLIENT = stripLeagueSeasonConfig(BASEBALL_LEAGUES)
+
 export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "NBL",
@@ -1425,12 +1712,16 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "25/26",
         slug: "77205",
-        ladderConfig: FINALS_TOP_6_LADDER_CONFIG,
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
       },
       {
         name: "24/25",
         slug: "61848",
-        ladderConfig: FINALS_TOP_6_LADDER_CONFIG,
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
       },
     ],
   },
@@ -1490,6 +1781,9 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
   // },
 ]
 
+export const BASKETBALL_LEAGUES_CLIENT =
+  stripLeagueSeasonConfig(BASKETBALL_LEAGUES)
+
 export const TENNIS_CATEGORIES: LeagueSeasonConfig[] = [
   {
     name: "ATP",
@@ -1515,6 +1809,9 @@ export const TENNIS_CATEGORIES: LeagueSeasonConfig[] = [
     seasons: [{ name: "2026", slug: "" }],
   },
 ]
+
+export const TENNIS_CATEGORIES_CLIENT =
+  stripLeagueSeasonConfig(TENNIS_CATEGORIES)
 
 export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
   {
@@ -1611,6 +1908,8 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
+export const TENNIS_LEAGUES_CLIENT = stripLeagueSeasonConfig(TENNIS_LEAGUES)
+
 export const DARTS_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "Home",
@@ -1640,15 +1939,41 @@ export const DARTS_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
+export const DARTS_LEAGUES_CLIENT = stripLeagueSeasonConfig(DARTS_LEAGUES)
+
 export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "Super Rugby",
     slug: "422",
     seasons: [
-      { name: "2026", slug: "86502", ladderConfig: FINALS_TOP_6_LADDER_CONFIG },
-      { name: "2025", slug: "69795", ladderConfig: FINALS_TOP_6_LADDER_CONFIG },
-      { name: "2024", slug: "56889", ladderConfig: FINALS_TOP_6_LADDER_CONFIG },
-      { name: "2023", slug: "47476", ladderConfig: FINALS_TOP_6_LADDER_CONFIG },
+      {
+        name: "2026",
+        slug: "86502",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2025",
+        slug: "69795",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2024",
+        slug: "56889",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2023",
+        slug: "47476",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
+      },
     ],
   },
   {
@@ -1678,8 +2003,20 @@ export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
     name: "Queensland Premier Rugby",
     slug: "2048",
     seasons: [
-      { name: "2026", slug: "87649", ladderConfig: FINALS_TOP_4_LADDER_CONFIG },
-      { name: "2025", slug: "69968", ladderConfig: FINALS_TOP_4_LADDER_CONFIG },
+      {
+        name: "2026",
+        slug: "87649",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_4_LADDER_CONFIG,
+        }),
+      },
+      {
+        name: "2025",
+        slug: "69968",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_4_LADDER_CONFIG,
+        }),
+      },
     ],
     excludeFromToday: true,
   },
@@ -1757,6 +2094,9 @@ export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
+export const RUGBY_UNION_LEAGUES_CLIENT =
+  stripLeagueSeasonConfig(RUGBY_UNION_LEAGUES)
+
 export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "AIHL",
@@ -1824,6 +2164,9 @@ export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
+export const ICE_HOCKEY_LEAGUES_CLIENT =
+  stripLeagueSeasonConfig(ICE_HOCKEY_LEAGUES)
+
 export const NETBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "Super Netball",
@@ -1861,6 +2204,8 @@ export const NETBALL_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
+export const NETBALL_LEAGUES_CLIENT = stripLeagueSeasonConfig(NETBALL_LEAGUES)
+
 export const CYCLING_TOURS: LeagueSeasonConfig[] = [
   {
     name: "Men",
@@ -1887,3 +2232,5 @@ export const CYCLING_TOURS: LeagueSeasonConfig[] = [
     ],
   },
 ]
+
+export const CYCLING_TOURS_CLIENT = stripLeagueSeasonConfig(CYCLING_TOURS)
