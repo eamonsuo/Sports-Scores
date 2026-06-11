@@ -70,6 +70,7 @@ export default function EventCardGrid({ events }: EventCardGridProps) {
             <div className="hideScroll flex gap-2 overflow-x-auto pb-2">
               {monthKeys.map((monthKey) => (
                 <button
+                  suppressHydrationWarning
                   key={monthKey}
                   onClick={() => scrollToMonth(monthKey)}
                   className="whitespace-nowrap rounded-lg bg-white px-4 py-2 text-sm font-medium text-black shadow-sm transition-all hover:bg-gray-50 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"

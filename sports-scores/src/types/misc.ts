@@ -4,32 +4,23 @@ import type {
   PlayoffPictureGroup,
 } from "@/types/playoff-picture"
 
-// ── Types extracted from all-sports components ───────────────────────────────
-
-export type LadderTeamDetail = {
-  id: string | number
-  name: string
-  logo?: string | string[]
-}
-
-export type LadderTeam = {
-  team: LadderTeamDetail
-  position: number
-}
-
 export type LadderPlacingCategory = {
   position: number[]
   label: string
   colour?: string
 }
 
-export type LadderRow = LadderTeam & {
-  [key: string]: string | number | LadderTeamDetail | undefined
+export type LadderRow = {
+  teamId: string | number
+  teamName: string
+  teamLogo?: string | string[]
+  position: number
+  [key: string]: string | number | undefined | string[]
 }
 
-export interface SportsLadder<H extends readonly string[]> {
+export interface SportsLadder {
   tableName?: string
-  headings: H
+  headings: string[]
   data: LadderRow[]
   placingCategories?: LadderPlacingCategory[]
 }
@@ -46,6 +37,10 @@ export type LeagueSeasonConfig = {
     img: string
   }[]
   excludeFromToday?: boolean
+}
+
+export type ClientLeagueSeasonConfig = Omit<LeagueSeasonConfig, "seasons"> & {
+  seasons: Omit<LeagueSeasonConfig["seasons"][number], "ladderConfig">[]
 }
 
 export type PeriodScore = {
@@ -119,11 +114,16 @@ export interface FixtureRound {
   roundSlug?: string
 }
 
-export type LadderConfig = {
-  // headings: string[];
+export type LadderGroupConfig = {
+  groupFilter?: (tableName: string) => boolean
   placingCategories?: LadderPlacingCategory[]
+  headings?: string[]
+  label?: string
+}
+
+export type LadderConfig = {
+  ladderGroup: LadderGroupConfig[]
   playoffPictureConfig?: PlayoffPictureConfig
-  headings?: readonly string[]
 }
 
 export interface SportService {
@@ -136,10 +136,7 @@ export interface SportService {
   matchesByTeam(teamId: string): Promise<Matches | null>
   matchDetails(matchId: string): Promise<MatchDetail | null>
 
-  standings(
-    leagueId: string,
-    seasonId: string,
-  ): Promise<Standings<readonly string[]> | null>
+  standings(leagueId: string, seasonId: string): Promise<Standings | null>
 
   brackets(leagueId: string, seasonId: string): Promise<Brackets | null>
 }
@@ -159,8 +156,13 @@ export interface MatchDetail {
   scoreEvents?: ScoreDifference[]
 }
 
-export interface Standings<T extends readonly string[]> {
-  standings: SportsLadder<T>[]
+export interface LadderGroup {
+  label?: string
+  tables: SportsLadder[]
+}
+
+export interface Standings {
+  standings: LadderGroup[]
   playoffPicture?: PlayoffPictureGroup[]
 }
 

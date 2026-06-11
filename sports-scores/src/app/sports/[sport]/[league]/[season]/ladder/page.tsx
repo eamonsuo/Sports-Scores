@@ -1,4 +1,4 @@
-import Ladder from "@/components/all-sports/Ladder"
+import LadderGroupList from "@/components/all-sports/LadderGroupList"
 import PlayoffPicture from "@/components/all-sports/PlayoffPicture"
 import Placeholder from "@/components/misc-ui/Placeholder"
 import { SPORT_ROUTE_CONFIG } from "@/lib/routeConfig"
@@ -24,17 +24,10 @@ export default async function Page(props: {
           buttonLabel="Finals Series"
         />
       )}{" "}
-      {pageData.standings.map((table, index) => (
-        <Ladder
-          key={index}
-          data={table.data}
-          headings={table.headings}
-          placingCategories={table.placingCategories}
-          tableName={
-            pageData.standings.length > 1 ? table.tableName : undefined
-          }
-        />
-      ))}
+      <LadderGroupList
+        data={pageData.standings}
+        curGroup={pageData.standings[0].label ?? ""}
+      />
     </div>
   )
 }

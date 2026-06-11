@@ -16,7 +16,6 @@ import {
 import { withDevCache } from "@/lib/devCache"
 import { AmericanFootball_Sofascore_Event } from "@/types/american-football"
 import { DeepPartial, MatchSummary, SPORT } from "@/types/misc"
-import { Sofascore_Standing } from "@/types/sofascore"
 import { SofascoreSport } from "./sofascore.service"
 
 class AmericanFootballService extends SofascoreSport {
@@ -99,14 +98,6 @@ class AmericanFootballService extends SofascoreSport {
         },
       ],
     })
-  }
-
-  //TODO: How to organise standings?
-  override standingsSorter(
-    a: Sofascore_Standing,
-    b: Sofascore_Standing,
-  ): number {
-    return 0
   }
 }
 

@@ -233,7 +233,7 @@ function buildTop10(
               {
                 id: "LowWild",
                 name: "Low Wild Card seed",
-                positionDisplay: "8/9/10",
+                positionDisplay: "Low WC",
               },
             ],
             [
@@ -241,7 +241,7 @@ function buildTop10(
               {
                 id: "HighWild",
                 name: "High Wild Card seed",
-                positionDisplay: "7/8/9",
+                positionDisplay: "High WC",
               },
             ],
           ],

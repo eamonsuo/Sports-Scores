@@ -1,5 +1,13 @@
 import { updateGlobalApiQuota } from "@/lib/apiCounter"
-import { CountryFlagCode, LeagueSeasonConfig, SPORT } from "@/types/misc"
+import {
+  ClientLeagueSeasonConfig,
+  CountryFlagCode,
+  LadderConfig,
+  LadderGroupConfig,
+  LeagueSeasonConfig,
+  SPORT,
+} from "@/types/misc"
+import { PlayoffPictureConfig } from "@/types/playoff-picture"
 import { Sofascore_Score } from "@/types/sofascore"
 import { format } from "date-fns/format"
 
@@ -284,4 +292,30 @@ export function getSportConfigurations(
   const ladderConfig = seasonConfig?.ladderConfig
 
   return { leagueConfig, seasonConfig, ladderConfig }
+}
+
+export function stripLeagueSeasonConfig(
+  config: LeagueSeasonConfig[],
+): ClientLeagueSeasonConfig[] {
+  return config.map(({ seasons, ...rest }) => ({
+    ...rest,
+    seasons: seasons.map(({ ladderConfig, ...seasonRest }) => seasonRest),
+  }))
+}
+
+export function ladderConfigMap(
+  ladderGroupConfig?: LadderGroupConfig[] | LadderGroupConfig,
+  playoffPictureConfig?: PlayoffPictureConfig,
+): LadderConfig {
+  let ladderGroup: LadderGroupConfig[]
+
+  if (Array.isArray(ladderGroupConfig)) {
+    ladderGroup = ladderGroupConfig
+  } else if (ladderGroupConfig) {
+    ladderGroup = [ladderGroupConfig]
+  } else {
+    ladderGroup = []
+  }
+
+  return { ladderGroup, playoffPictureConfig }
 }

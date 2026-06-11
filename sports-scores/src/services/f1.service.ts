@@ -37,8 +37,8 @@ import { isSameDay } from "date-fns"
 import { addHours } from "date-fns/addHours"
 import { TZDate } from "react-day-picker"
 
-const F1_DRIVER_STANDINGS_HEADINGS = ["Driver", "Pts", "Wins"] as const
-const F1_CONSTRUCTOR_STANDINGS_HEADINGS = ["Constructor", "Pts"] as const
+const F1_DRIVER_STANDINGS_HEADINGS = ["Driver", "Pts", "Wins"]
+const F1_CONSTRUCTOR_STANDINGS_HEADINGS = ["Constructor", "Pts"]
 
 class F1Service implements SportService {
   protected sport: SPORT
@@ -115,7 +115,7 @@ class F1Service implements SportService {
   async standings(
     leagueId: string,
     seasonId: string,
-  ): Promise<Standings<readonly string[]> | null> {
+  ): Promise<Standings | null> {
     return null
   }
 
@@ -127,7 +127,7 @@ class F1Service implements SportService {
     season: string,
     round: string,
     sessionType: F1SessionType,
-  ): Promise<Standings<readonly string[]> | null> {
+  ): Promise<Standings | null> {
     let raceResult: LadderRow[]
 
     switch (sessionType) {
@@ -177,16 +177,18 @@ class F1Service implements SportService {
     return {
       standings: [
         {
-          headings: MOTORSPORT_SESSION_STANDINGS_HEADINGS,
-          data: raceResult,
+          tables: [
+            {
+              headings: MOTORSPORT_SESSION_STANDINGS_HEADINGS,
+              data: raceResult,
+            },
+          ],
         },
       ],
     }
   }
 
-  async standingsDrivers(
-    season: string,
-  ): Promise<Standings<readonly string[]> | null> {
+  async standingsDrivers(season: string): Promise<Standings | null> {
     const rawStandings = await fetchF1DriverStandings(season)
 
     if (!rawStandings) {
@@ -196,32 +198,34 @@ class F1Service implements SportService {
     return {
       standings: [
         {
-          headings: F1_DRIVER_STANDINGS_HEADINGS,
-          data: rawStandings.map((item, index) => {
-            return {
-              position: Number(item.position) ?? index + 1,
-              team: {
-                id: item.Driver.permanentNumber,
-                name: item.Driver.givenName + " " + item.Driver.familyName,
-                logo: [
-                  resolveSportImage(
+          tables: [
+            {
+              headings: F1_DRIVER_STANDINGS_HEADINGS,
+              data: rawStandings.map((item, index) => {
+                return {
+                  position: Number(item.position) ?? index + 1,
+                  teamId: item.Driver.permanentNumber,
+                  teamName:
                     item.Driver.givenName + " " + item.Driver.familyName,
-                  ),
-                  resolveSportImage(item.Constructors[0].name),
-                ],
-              },
-              Pts: item.points,
-              Wins: item.wins,
-            }
-          }),
+                  teamLogo: [
+                    resolveSportImage(
+                      item.Driver.givenName + " " + item.Driver.familyName,
+                    ),
+                    resolveSportImage(item.Constructors[0].name),
+                  ],
+
+                  Pts: item.points,
+                  Wins: item.wins,
+                }
+              }),
+            },
+          ],
         },
       ],
     }
   }
 
-  async standingsConstructor(
-    season: string,
-  ): Promise<Standings<readonly string[]> | null> {
+  async standingsConstructor(season: string): Promise<Standings | null> {
     const rawStandings = await fetchF1ConstructorStandings(season)
 
     if (!rawStandings) {
@@ -231,18 +235,20 @@ class F1Service implements SportService {
     return {
       standings: [
         {
-          headings: F1_CONSTRUCTOR_STANDINGS_HEADINGS,
-          data: rawStandings.map((item, index) => {
-            return {
-              position: Number(item.position) ?? index + 1,
-              team: {
-                id: item.Constructor.constructorId,
-                name: item.Constructor.name,
-                logo: resolveSportImage(item.Constructor.name),
-              },
-              Pts: item.points,
-            }
-          }),
+          tables: [
+            {
+              headings: F1_CONSTRUCTOR_STANDINGS_HEADINGS,
+              data: rawStandings.map((item, index) => {
+                return {
+                  position: Number(item.position) ?? index + 1,
+                  teamId: item.Constructor.constructorId,
+                  teamName: item.Constructor.name,
+                  teamLogo: resolveSportImage(item.Constructor.name),
+                  Pts: item.points,
+                }
+              }),
+            },
+          ],
         },
       ],
     }
@@ -412,14 +418,13 @@ async function fetchOpenF1SessionResult(
 
     return {
       position: item.position,
-      team: {
-        id: item.driver_number,
-        name: driverName,
-        logo: [
-          resolveSportImage(driverName),
-          resolveSportImage(driverDetails?.team_name ?? ""),
-        ],
-      },
+      teamId: item.driver_number,
+      teamName: driverName,
+      teamLogo: [
+        resolveSportImage(driverName),
+        resolveSportImage(driverDetails?.team_name ?? ""),
+      ],
+
       Gap: "",
       Pts: "",
       Grid: "",
@@ -454,14 +459,12 @@ function mapJolpicaRaceResults(
 
     return {
       position: Number(item.position),
-      team: {
-        id: item.number,
-        name: driverName,
-        logo: [
-          resolveSportImage(driverName),
-          resolveSportImage(item.Constructor.name),
-        ],
-      },
+      teamId: item.number,
+      teamName: driverName,
+      teamLogo: [
+        resolveSportImage(driverName),
+        resolveSportImage(item.Constructor.name),
+      ],
       Gap: item.Time ? lappedStatus + item.Time.time : item.status,
       Pts: item.points,
       Grid: item.grid,
@@ -500,14 +503,12 @@ function mapJolpicaQualifyingResults(
 
     return {
       position: Number(item.position),
-      team: {
-        id: item.number,
-        name: driverName,
-        logo: [
-          resolveSportImage(driverName),
-          resolveSportImage(item.Constructor.name),
-        ],
-      },
+      teamId: item.number,
+      teamName: driverName,
+      teamLogo: [
+        resolveSportImage(driverName),
+        resolveSportImage(item.Constructor.name),
+      ],
       Gap: gap ?? "",
       Pts: "",
       Grid: "",
