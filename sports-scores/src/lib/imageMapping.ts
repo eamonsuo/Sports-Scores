@@ -5,7 +5,7 @@ const fallback = "/vercel.svg"
 
 export function resolveSportImage(teamName: string) {
   teamName = teamName.replace(
-    /\s((W|A|U19|Women|Reserve|Reserves|7s)(\sW)?)$/i,
+    /\s((W|A|U19|Women|Reserve|Reserves|7s|U23)(\sW)?)$/i,
     "",
   )
   switch (teamName) {
@@ -1970,6 +1970,8 @@ export function resolveSportImage(teamName: string) {
       return getCountryImageUrl(CountryFlagCode.Tajikistan)
     case "Tanzania":
       return getCountryImageUrl(CountryFlagCode.Tanzania)
+    case "Zanzibar":
+      return "https://upload.wikimedia.org/wikipedia/commons/d/d4/Flag_of_Zanzibar.svg"
     case "Thailand":
       return getCountryImageUrl(CountryFlagCode.Thailand)
     case "Timor-Leste":

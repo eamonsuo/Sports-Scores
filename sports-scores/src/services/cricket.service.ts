@@ -447,6 +447,9 @@ export function mapScorecardDetails(
 }
 
 export function convertNumbertoDate(dateNumber: number) {
+  if (!dateNumber) {
+    return new Date()
+  }
   let dateString = dateNumber.toString()
   let year = dateString.substring(0, 4)
   let month = dateString.substring(4, 6)

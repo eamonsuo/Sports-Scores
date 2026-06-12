@@ -2234,3 +2234,14 @@ export const CYCLING_TOURS: LeagueSeasonConfig[] = [
 ]
 
 export const CYCLING_TOURS_CLIENT = stripLeagueSeasonConfig(CYCLING_TOURS)
+
+export const SURFING_TOURS: LeagueSeasonConfig[] = [
+  {
+    name: "WSL",
+    slug: "wsl",
+    seasons: [{ name: "2026", slug: "2026" }],
+    externalURL: "https://www.worldsurfleague.com/events/2026/ct",
+  },
+]
+
+export const SURFING_TOURS_CLIENT = stripLeagueSeasonConfig(SURFING_TOURS)

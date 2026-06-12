@@ -10,6 +10,7 @@ import {
   NETBALL_LEAGUES,
   RUGBY_LEAGUE_LEAGUES,
   RUGBY_UNION_LEAGUES,
+  SURFING_TOURS,
 } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import { SPORT } from "@/types/misc"
@@ -66,6 +67,12 @@ const footerLinks: {
     altText: "Golf",
   },
   {
+    sport: SPORT.SURFING,
+    link: `/sports/${SPORT.SURFING}/${SURFING_TOURS[0].slug}/${SURFING_TOURS[0].seasons[0].slug}`,
+    img: "/footer/surfboard.svg",
+    altText: "Surfing",
+  },
+  {
     sport: SPORT.BASKETBALL,
     link: `/sports/${SPORT.BASKETBALL}/today`,
     img: "/footer/basketball.svg",
@@ -77,7 +84,6 @@ const footerLinks: {
     img: "/footer/football.svg",
     altText: "Football",
   },
-
   {
     sport: SPORT.TENNIS,
     link: `/sports/${SPORT.TENNIS}/today`,
@@ -114,13 +120,7 @@ const footerLinks: {
     img: "/footer/dart.svg",
     altText: "Darts",
   },
-  {
-    sport: SPORT.SURFING,
-    // link: `/sports/${SPORT.SURFING}`,
-    link: `https://www.worldsurfleague.com/events/2026/ct`,
-    img: "/footer/surfboard.svg",
-    altText: "Surfing",
-  },
+
   {
     sport: SPORT.CYCLING,
     // link: `/sports/${SPORT.CYCLING}`,
