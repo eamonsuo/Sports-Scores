@@ -16,6 +16,7 @@ import { motorsportService } from "@/services/motorsport.service"
 import { netballMatchesByDate } from "@/services/netball.service"
 import { rugbyLeagueService } from "@/services/rugby-league.service"
 import { rugbyUnionService } from "@/services/rugby-union.service"
+import { surfingService } from "@/services/surfing.service"
 import { tennisService } from "@/services/tennis.service"
 import { FixtureRound, SPORT } from "@/types/misc"
 import { TZDate } from "@date-fns/tz/date"
@@ -61,7 +62,7 @@ export default async function Page({
     motorsportService.matchesByDate(parsedDate),
     rugbyUnionService.matchesByDate(parsedDate),
     netballMatchesByDate(parsedDate),
-    null,
+    surfingService.matchesByDate(parsedDate),
     null,
     null,
   ])
@@ -79,6 +80,7 @@ export default async function Page({
     .concat(americanFootballToday?.fixtures ?? [])
     .concat(golfToday?.fixtures ?? [])
     .concat(motorsportToday?.fixtures ?? [])
+    .concat(surfingToday?.fixtures ?? [])
     .concat(footballToday?.fixtures ?? [])
     .concat(basketballToday?.fixtures ?? [])
     .concat(baseballToday?.fixtures ?? [])
@@ -86,6 +88,8 @@ export default async function Page({
     .concat(tennisToday?.fixtures ?? [])
     .concat(rugbyUnionToday?.fixtures ?? [])
     .concat(netballToday?.fixtures ?? [])
+  // .concat(dartsToday?.fixtures ?? [])
+  // .concat(cyclingToday?.fixtures ?? [])
 
   return (
     <div className="flex h-full flex-col">

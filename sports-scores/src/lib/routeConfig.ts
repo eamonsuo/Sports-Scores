@@ -8,6 +8,7 @@ import { iceHockeyService } from "@/services/ice-hockey.service"
 import { motorsportService } from "@/services/motorsport.service"
 import { rugbyLeagueService } from "@/services/rugby-league.service"
 import { rugbyUnionService } from "@/services/rugby-union.service"
+import { surfingService } from "@/services/surfing.service"
 import { tennisService } from "@/services/tennis.service"
 import { ClientLeagueSeasonConfig, SPORT, SportService } from "@/types/misc"
 import {
@@ -25,6 +26,7 @@ import {
   NETBALL_LEAGUES_CLIENT,
   RUGBY_LEAGUE_LEAGUES_CLIENT,
   RUGBY_UNION_LEAGUES_CLIENT,
+  SURFING_TOURS_CLIENT,
   TENNIS_LEAGUES_CLIENT,
 } from "./constants"
 
@@ -128,8 +130,16 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
     service: rugbyUnionService,
   },
   [SPORT.SURFING]: {
-    leagues: [],
-    service: aussieRulesService,
+    leagues: SURFING_TOURS_CLIENT,
+    service: surfingService,
+    navButtons: [
+      { href: "#current-date", label: "Events", page: "matches" },
+      {
+        href: "https://www.worldsurfleague.com/athletes/rankings",
+        label: "Rankings",
+        page: "ladder",
+      },
+    ],
   },
   [SPORT.TENNIS]: {
     leagues: TENNIS_LEAGUES_CLIENT,
