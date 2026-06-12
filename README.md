@@ -9,7 +9,9 @@ Currently Implemented:
 - Aussie Rules (AFL, AFLW, VFL, SANFL, WAFL, AFL Pre-Season) - Fixtures, Ladder, Match Details, Today's Matches
 - American Football (NFL, NFL Preseason, NCAA) - Fixtures, Ladder, Match Details, Today's Matches
 - Motorsport (F1) - Session Results, Driver & Team Standings
-- Golf - PGA Tour (Schedule, Scoreboards, Standings), LIV (Schedule, Scoreboards), OWGR
+- Golf - PGA Tour (Schedule, Scoreboards, Standings), LIV (Schedule, Scoreboards), OWGR,
+    - LPGA, AusPGA, European Tour, TGL (Schedule, External links)
+- Surfing (WSL) - Fixtures, Today's Matches
 - Football (A Leagues, Aus National teams, Major European leagues, FA Cup, AFC, UEFA, FIFA competitions) - Fixtures, Ladder, Match Details, Brackets, Today's Matches
 - Baseball (ABL, MLB, World competitions) - Fixtures, Ladder, Match Details, Today's Matches
 - Basketball (NBL, WNBL, NBA, WNBA) - Fixtures, Ladder, Match Details, Today's Matches
@@ -17,11 +19,9 @@ Currently Implemented:
 - Tennis (Australian tournaments) - Fixtures, Match Details, Brackets, Today's Matches
 - Rugby Union (Super Rugby, Internationals, QLD Premier) - Fixtures, Ladder, Match Details, Today's Matches
 - Netball (Super Netball, Internationals) - Fixtures, Ladder, Match Details, Today's Matches
+- Darts (PDC) - Leagues
 
 To Be Implemented:
 
-- Surfing (WSL)
 - Olympics
-- Other Golf Leagues (LPGA, AusPGA, European Tour, TGL)
-- Darts (PDC)
 - Improve Netball & Cricket (My Teams) Data
