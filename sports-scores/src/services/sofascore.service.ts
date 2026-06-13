@@ -14,6 +14,7 @@ import {
   CardVariant,
   DeepPartial,
   DisplayTypes,
+  FixtureRound,
   LadderConfig,
   LadderGroup,
   LadderPlacingCategory,
@@ -171,10 +172,18 @@ export abstract class SofascoreSport implements SportService {
       }),
     )
 
-    const fixtures = await mapFixtureRounds(allMatches, this.leagues)
+    let fixtures = await mapFixtureRounds(allMatches, this.leagues)
+    let myTeams: FixtureRound = {
+      matches: allMatches.filter((match) =>
+        match.competitorDetails.some((team) =>
+          this.leagues.some((l) => l.slug === `team/${team.id}`),
+        ),
+      ),
+      roundLabel: "My Teams",
+    }
 
     return {
-      fixtures,
+      fixtures: [myTeams, ...fixtures],
       currentRound: getCurrentRound(fixtures, DisplayTypes.LEAGUE),
     }
   }

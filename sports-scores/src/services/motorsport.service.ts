@@ -138,6 +138,7 @@ class MotorsportService implements SportService {
         status === MatchStatus.UPCOMING
           ? event.startDate
           : status.charAt(0) + status.slice(1).toLowerCase(),
+      timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
       cardVariant: event.cardVariant ?? CardVariant.SESSION,
     }
   }

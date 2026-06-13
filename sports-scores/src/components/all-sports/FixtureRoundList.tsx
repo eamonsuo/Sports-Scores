@@ -3,11 +3,18 @@
 import fallback from "@/../public/vercel.svg"
 import { FixtureRound } from "@/types/misc"
 import { clsx } from "clsx"
+import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { Button } from "../misc-ui/Button"
-import FixtureList from "./FixtureList"
+import FixtureListComponent from "./FixtureList"
+
+// TODO: REMOVE IN FUTURE
+const FixtureList =
+  process.env.NODE_ENV === "development"
+    ? dynamic(() => import("./FixtureList"), { ssr: false })
+    : FixtureListComponent
 
 export default function FixtureRoundList({
   data,
