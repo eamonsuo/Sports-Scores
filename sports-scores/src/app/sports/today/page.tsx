@@ -67,7 +67,7 @@ export default async function Page({
     null,
   ])
 
-  const allSports: FixtureRound[] = ([] as FixtureRound[])
+  let allSports: FixtureRound[] = ([] as FixtureRound[])
     .concat([
       {
         matches: cricketoday ?? [],
@@ -90,6 +90,16 @@ export default async function Page({
     .concat(netballToday?.fixtures ?? [])
   // .concat(dartsToday?.fixtures ?? [])
   // .concat(cyclingToday?.fixtures ?? [])
+
+  const myTeams = allSports.filter(
+    (fixtures) => fixtures.roundLabel === "My Teams",
+  )
+  allSports = allSports.filter((fixtures) => fixtures.roundLabel !== "My Teams")
+  if (myTeams.length > 0)
+    allSports.unshift({
+      matches: myTeams.flatMap((fixtures) => fixtures.matches),
+      roundLabel: "My Teams",
+    })
 
   return (
     <div className="flex h-full flex-col">

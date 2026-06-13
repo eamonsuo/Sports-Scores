@@ -1320,7 +1320,8 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   // },
   // International - category 1468
   {
-    name: "🌍 FIFA World Cup",
+    name: "FIFA World Cup",
+    icon: "https://r2.thesportsdb.com/images/media/league/trophy/mmyv4f1724782185.png/medium",
     slug: "16",
     seasons: [
       {
