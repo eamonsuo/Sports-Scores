@@ -176,6 +176,7 @@ export interface Brackets {
 }
 
 export enum SPORT {
+  ALL_SPORTS = "all-sports",
   AUSSIE_RULES = "aussie-rules",
   BASEBALL = "baseball",
   CRICKET = "cricket",

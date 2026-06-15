@@ -103,7 +103,7 @@ export default async function Page({
 
   return (
     <div className="flex h-full flex-col">
-      <LeagueSeasonToggle sport={SPORT.RUGBY_LEAGUE} leagues={[]} />
+      <LeagueSeasonToggle sport={SPORT.ALL_SPORTS} leagues={[]} />
       <div className="overflow-y-auto">
         <ClientSportsPage
           options={pageSettings(allSports)}

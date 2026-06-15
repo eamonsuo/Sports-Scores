@@ -1377,8 +1377,9 @@ export function resolveSportImage(teamName: string) {
     case "Isack Hadjar":
       return getCountryImageUrl(CountryFlagCode.France)
     case "Franco Colapinto":
-    case "Gabriel Bortoleto":
       return getCountryImageUrl(CountryFlagCode.Argentina)
+    case "Gabriel Bortoleto":
+      return getCountryImageUrl(CountryFlagCode.Brazil)
     case "Valtteri Bottas":
       return getCountryImageUrl(CountryFlagCode.Finland)
 

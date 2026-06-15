@@ -139,7 +139,9 @@ export default function LeagueSeasonToggle({
     if (!todayActive) {
       setTodayActive(true)
       setSelectedDate(new Date())
-      router.push(`/sports/${sport}/today`)
+      router.push(
+        sport === SPORT.ALL_SPORTS ? `/sports/today` : `/sports/${sport}/today`,
+      )
     } else {
       setTodayActive(false)
       redirectToRoute(selectedLeague.slug, selectedSeason.slug)
@@ -152,7 +154,12 @@ export default function LeagueSeasonToggle({
     setSelectedDate(date)
     setCalendarOpen(false)
     const dateStr = format(date, "yyyy-MM-dd")
-    router.push(`/sports/${sport}/today?date=${dateStr}`)
+
+    router.push(
+      sport === SPORT.ALL_SPORTS
+        ? `/sports/today?date=${dateStr}`
+        : `/sports/${sport}/today?date=${dateStr}`,
+    )
   }
 
   // Helper to truncate long names

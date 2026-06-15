@@ -96,12 +96,7 @@ export abstract class SofascoreSport implements SportService {
     const apiMatches = (lastMatches?.events ?? [])
       .concat(nextMatches?.events ?? [])
       .filter((event) => event.status.type !== "canceled")
-      .map((event) =>
-        this.eventMapper(event, {
-          roundLabel:
-            event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`,
-        }),
-      )
+      .map((event) => this.eventMapper(event))
 
     // Merge API and dataverse matches, deduplicating by id (API takes priority)
     const apiIds = new Set(apiMatches.map((m) => m.id))
@@ -147,33 +142,32 @@ export abstract class SofascoreSport implements SportService {
           validLeagueIds.includes(item.tournament.uniqueTournament.id) &&
           item.status.type !== "canceled",
       )
-      .sort(
-        (a, b) =>
-          validLeagueIds.indexOf(a.tournament.uniqueTournament.id) -
-          validLeagueIds.indexOf(b.tournament.uniqueTournament.id),
-      )
 
     if (!matches.events || matches.events.length === 0) return null
 
-    const allMatches = matches.events.map((event) =>
-      this.eventMapper(event, {
-        roundLabel:
-          event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`,
-        leagueName:
-          `${
-            this.leagues.find(
-              (l) => l.slug === event.tournament.uniqueTournament.id.toString(),
-            )?.name
-          }` +
-          (event.roundInfo?.name || event.roundInfo?.round
-            ? ` - ${event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`}`
-            : ""),
-        leagueSlug: `/sports/${this.sport}/${event.tournament.uniqueTournament.id}/${event.season.id}`,
-      }),
-    )
+    const allMatches = matches.events
+      .map((event) =>
+        this.eventMapper(event, {
+          leagueName:
+            `${
+              this.leagues.find(
+                (l) =>
+                  l.slug === event.tournament.uniqueTournament.id.toString(),
+              )?.name
+            }` +
+            (event.roundInfo?.name || event.roundInfo?.round
+              ? ` - ${event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`}`
+              : ""),
+          leagueSlug: `/sports/${this.sport}/${event.tournament.uniqueTournament.id}/${event.season.id}`,
+        }),
+      )
+      .sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+      )
 
-    let fixtures = await mapFixtureRounds(allMatches, this.leagues)
-    let myTeams: FixtureRound = {
+    const fixtures = await mapFixtureRounds(allMatches, this.leagues)
+    const myTeams: FixtureRound = {
       matches: allMatches.filter((match) =>
         match.competitorDetails.some((team) =>
           this.leagues.some((l) => l.slug === `team/${team.id}`),
@@ -374,7 +368,10 @@ export abstract class SofascoreSport implements SportService {
       endDate: options?.endDate,
       sport: this.sport,
       status: options?.status ?? status,
-      roundLabel: options?.roundLabel ?? `Round ${event.roundInfo?.round}`,
+      roundLabel:
+        options?.roundLabel ??
+        event.roundInfo?.name ??
+        `Round ${event.roundInfo?.round ?? "x"}`,
       summaryText:
         options?.summaryText ??
         setMatchSummary(
