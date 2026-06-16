@@ -45,6 +45,10 @@ export const DEFAULT_NAV_BUTTONS = [
 ]
 
 export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
+  [SPORT.ALL_SPORTS]: {
+    leagues: [],
+    service: aussieRulesService,
+  },
   [SPORT.AMERICAN_FOOTBALL]: {
     leagues: AMERICAN_FOOTBALL_LEAGUES_CLIENT,
     service: americanFootballService,
