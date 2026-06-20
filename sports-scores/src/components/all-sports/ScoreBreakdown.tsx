@@ -1,4 +1,4 @@
-import fallback from "@/../public/vercel.svg"
+import { FALLBACK_IMAGE } from "@/lib/constants"
 import { PeriodScore } from "@/types/misc"
 import Image from "next/image"
 
@@ -29,7 +29,7 @@ export default function ScoreBreakdown({
                 {homeLogo.map((img, idx) => (
                   <Image
                     key={idx}
-                    src={img || fallback}
+                    src={img || FALLBACK_IMAGE}
                     width={40}
                     height={40}
                     style={{ width: "15px", height: "auto" }}
@@ -40,7 +40,7 @@ export default function ScoreBreakdown({
               </div>
             ) : (
               <Image
-                src={homeLogo ?? fallback}
+                src={homeLogo ?? FALLBACK_IMAGE}
                 width={40}
                 height={40}
                 style={{ width: "15px", height: "auto" }}
@@ -59,7 +59,7 @@ export default function ScoreBreakdown({
                 {awayLogo.map((img, idx) => (
                   <Image
                     key={idx}
-                    src={img || fallback}
+                    src={img || FALLBACK_IMAGE}
                     width={40}
                     height={40}
                     style={{ width: "15px", height: "auto" }}
@@ -70,7 +70,7 @@ export default function ScoreBreakdown({
               </div>
             ) : (
               <Image
-                src={awayLogo ?? fallback}
+                src={awayLogo ?? FALLBACK_IMAGE}
                 width={40}
                 height={40}
                 style={{ width: "15px", height: "auto" }}

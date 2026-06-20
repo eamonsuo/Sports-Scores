@@ -68,9 +68,17 @@ export async function fetchFootballMatchIncidents(matchId: string) {
   )) as Sofascore_EventIncidents_Response
 }
 
+// All matches
+// export async function fetchFootballMatchesByDate(date: Date) {
+//   return (await fetchFootballApi(
+//     `/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+//   )) as Sofascore_Events_Response
+// }
+
+// Top League matches
 export async function fetchFootballMatchesByDate(date: Date) {
   return (await fetchFootballApi(
-    `/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+    `/matches/top/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
   )) as Sofascore_Events_Response
 }
 

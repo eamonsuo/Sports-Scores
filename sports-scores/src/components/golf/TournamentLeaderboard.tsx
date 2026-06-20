@@ -1,4 +1,4 @@
-import fallback from "@/../public/vercel.svg"
+import { FALLBACK_IMAGE } from "@/lib/constants"
 import Image from "next/image"
 
 export type GolfLeaderboardPlayerRow = {
@@ -35,7 +35,7 @@ export default function TournamentLeaderboard({
             <td className="pe-2">
               <div className="flex items-center justify-center">
                 <Image
-                  src={item.img ?? fallback}
+                  src={item.img ?? FALLBACK_IMAGE}
                   height={60}
                   width={60}
                   style={{ width: "25px", height: "auto" }}

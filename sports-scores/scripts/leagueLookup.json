@@ -113,31 +113,31 @@
     "sport": "football",
     "displayType": "round"
   },
-  "football — 🏴󠁧󠁢󠁥󠁮󠁧󠁿 Championship": {
+  "football — 🏴 Championship": {
     "leagueId": "18",
     "seasonId": "77347",
     "sport": "football",
     "displayType": "round"
   },
-  "football — 🏴󠁧󠁢󠁥󠁮󠁧󠁿 FA Cup": {
+  "football — 🏴 FA Cup": {
     "leagueId": "19",
     "seasonId": "82557",
     "sport": "football",
     "displayType": "round"
   },
-  "football — 🏴󠁧󠁢󠁥󠁮󠁧󠁿 Women's FA Cup": {
+  "football — 🏴 Women's FA Cup": {
     "leagueId": "11666",
     "seasonId": "84634",
     "sport": "football",
     "displayType": "round"
   },
-  "football — 🏴󠁧󠁢󠁥󠁮󠁧󠁿 EFL Cup": {
+  "football — 🏴 EFL Cup": {
     "leagueId": "21",
     "seasonId": "77500",
     "sport": "football",
     "displayType": "round"
   },
-  "football — 🌍 FIFA World Cup": {
+  "football — FIFA World Cup": {
     "leagueId": "16",
     "seasonId": "58210",
     "sport": "football",
@@ -355,7 +355,7 @@
   },
   "american-football — NFL": {
     "leagueId": "9464",
-    "seasonId": "75522",
+    "seasonId": "94366",
     "sport": "american-football",
     "displayType": "round"
   },
@@ -690,8 +690,8 @@
     "displayType": "round"
   },
   "motorsport — Formula 1": {
-    "leagueId": "f1",
-    "seasonId": "2026",
+    "leagueId": "40",
+    "seasonId": "214140",
     "sport": "motorsport",
     "displayType": "round"
   },
@@ -767,15 +767,57 @@
     "sport": "golf",
     "displayType": "round"
   },
-  "cycling — Men": {
+  "cycling — UCI World Tour - Men": {
     "leagueId": "9",
     "seasonId": "220825",
     "sport": "cycling",
     "displayType": "round"
   },
-  "cycling — Women": {
+  "cycling — UCI World Tour - Women": {
     "leagueId": "94",
     "seasonId": "220906",
+    "sport": "cycling",
+    "displayType": "round"
+  },
+  "cycling — Tour de France": {
+    "leagueId": "le-tour",
+    "seasonId": "220828",
+    "sport": "cycling",
+    "displayType": "round"
+  },
+  "cycling — Giro d'Italia": {
+    "leagueId": "giro",
+    "seasonId": "220827",
+    "sport": "cycling",
+    "displayType": "round"
+  },
+  "cycling — Vuelta a España": {
+    "leagueId": "vuelta",
+    "seasonId": "220829",
+    "sport": "cycling",
+    "displayType": "round"
+  },
+  "cycling — Tour Down Under": {
+    "leagueId": "tour-down-under",
+    "seasonId": "221114",
+    "sport": "cycling",
+    "displayType": "round"
+  },
+  "cycling — Cadel Evans Great Ocean Road Race": {
+    "leagueId": "cadel",
+    "seasonId": "221115",
+    "sport": "cycling",
+    "displayType": "round"
+  },
+  "cycling — UCI World Championship TT": {
+    "leagueId": "world-tt",
+    "seasonId": "220913",
+    "sport": "cycling",
+    "displayType": "round"
+  },
+  "cycling — UCI World Championship RR": {
+    "leagueId": "world-rr",
+    "seasonId": "220912",
     "sport": "cycling",
     "displayType": "round"
   }

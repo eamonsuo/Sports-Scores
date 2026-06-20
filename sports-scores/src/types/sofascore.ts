@@ -68,6 +68,9 @@ export interface SofascoreStagesAPI {
   fetchStageStandings: (
     stageId: string,
   ) => Promise<Sofascore_StageStanding_Response | null>
+  fetchTeamStandings: (
+    stageId: string,
+  ) => Promise<Sofascore_StageStanding_Response | null>
 }
 
 interface Sofascore_Rankings_Response {
@@ -530,6 +533,14 @@ interface Sofascore_StageInfo {
   version?: string
   laps?: number
   lapsCompleted?: number
+  // Cycling
+  discipline?: string
+  departureCity?: string
+  arrivalCity?: string
+  stageType?: string
+  raceDistance?: number
+  raceType?: string
+  stagetype?: string
 }
 
 interface Sofascore_StageWinner {
@@ -581,14 +592,43 @@ export interface Sofascore_StageStanding_Response {
 export interface Sofascore_StageStandingRow {
   updatedAtTimestamp: number
   team: Sofascore_StageParticipant
+  position?: number
   parentTeam?: Sofascore_StageConstructor
   points?: number
-  position: number
   victories?: number
-  racesStarted: number
+
+  gap?: string
+  time?: string
+  // Motorsport
+  racesStarted?: number
   racesWithPoints?: number
   podiums?: number
   fastestLaps?: number
+  gridPosition?: number
+  comment?: string
+  laps?: number
+  interval?: string
+  number?: number
+  status?: string
+  didNotFinish?: number
+  startNumber?: number
+  pitStops?: number
+  lapsBehind?: number
+  fastestLapTime?: string
+  tyreType?: string
+  tyreState?: string
+  tyreInfo?: { type: string; laps: number }[]
+  personalFastestLap: 60
+  personalFastestLapTime: "1:20.150"
+  // Cycling
+  totalTime?: string
+  sprint?: number
+  climb?: number
+  youngRider?: string
+  sprintPosition?: number
+  climbPosition?: number
+  youngRiderPosition?: number
+  shirt?: string
 }
 
 interface Sofascore_StageParticipant {

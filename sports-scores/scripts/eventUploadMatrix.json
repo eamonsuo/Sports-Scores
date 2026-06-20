@@ -63,9 +63,9 @@
     "displayType": "round"
   },
   {
-    "name": "NFL 25/26",
+    "name": "NFL 26/27",
     "leagueId": "9464",
-    "seasonId": "75522",
+    "seasonId": "94366",
     "sport": "american-football",
     "displayType": "round"
   },
@@ -130,13 +130,6 @@
     "leagueId": "422",
     "seasonId": "86502",
     "sport": "rugby-union",
-    "displayType": "round"
-  },
-  {
-    "name": "Formula 1 2026",
-    "leagueId": "f1",
-    "seasonId": "2026",
-    "sport": "motorsport",
     "displayType": "round"
   },
   {

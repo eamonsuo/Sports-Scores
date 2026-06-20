@@ -26,6 +26,7 @@ import {
   fetchBasketballLastMatches,
   fetchBasketballNextMatches,
 } from "@/endpoints/basketball.api"
+import { fetchCyclingSubstages } from "@/endpoints/cycling.api"
 import { fetchF1Events } from "@/endpoints/f1.api"
 import {
   fetchFootballLastMatches,
@@ -54,23 +55,25 @@ import { americanFootballService } from "@/services/american-football.service"
 import { aussieRulesService } from "@/services/aussie-rules.service"
 import { baseballService } from "@/services/baseball.service"
 import { basketballService } from "@/services/basketball.service"
+import { cyclingService } from "@/services/cycling.service"
 import { mapToDataverseMatchSummary } from "@/services/dataverse.service"
 import { mapRaceToMatchSummaries } from "@/services/f1.service"
 import { footballService } from "@/services/football.service"
 import { mapTournamentToMatchSummary } from "@/services/golf.service"
 import { iceHockeyService } from "@/services/ice-hockey.service"
-import { motorsportSofascoreService } from "@/services/motorsport-sofascore.service"
+import { motorsportService } from "@/services/motorsport.service"
 import { rugbyLeagueService } from "@/services/rugby-league.service"
 import { tennisService } from "@/services/tennis.service"
 import { DataverseMatchSummary } from "@/types/dataverse"
 import {
   CardVariant,
+  DeepPartial,
   DisplayTypes,
   MatchStatus,
   MatchSummary,
   SPORT,
 } from "@/types/misc"
-import { Sofascore_Event } from "@/types/sofascore"
+import { Sofascore_Event, Sofascore_Stage } from "@/types/sofascore"
 import { loadEnvConfig } from "@next/env"
 import { existsSync, readFileSync } from "fs"
 import { resolve } from "path"
@@ -148,6 +151,65 @@ function createSofascoreAdapter(
         if (!data || data.events.length === 0) return []
         console.log(`Fetched ${data.events.length} latest events.`)
         return data.events.map(mapper)
+      }
+    },
+  }
+}
+
+function createSofascoreStagesAdapter(
+  fetchStages: typeof fetchMotorsportSubstages,
+  mapper: (
+    event: Sofascore_Stage,
+    options?: DeepPartial<MatchSummary>,
+  ) => MatchSummary,
+): LeagueAdapter {
+  return {
+    async fetchMatches(leagueId, seasonId, allEvents) {
+      if (allEvents) {
+        console.log("Fetching all events...")
+        const stageResponse = await fetchStages(seasonId)
+        const allSessions: MatchSummary[] = []
+        let i = 1
+
+        console.log(`Fetched ${stageResponse?.stages?.length ?? 0} stages.`)
+        console.log("Fetching substages...")
+
+        for (const { id, name } of stageResponse?.stages ?? []) {
+          // if (name.includes("Test")) continue
+          const raceSessions = await fetchStages(id.toString())
+          console.log(
+            `Fetched ${raceSessions?.stages?.length ?? 0} stages for ${name} stage.`,
+          )
+
+          allSessions.push(
+            ...(raceSessions?.stages ?? []).flatMap((stage) =>
+              mapper(stage, {
+                seasonId,
+                roundLabel: `Round ${i}`,
+                matchSlug: `/sports/motorsport/${leagueId}/${seasonId}/match/${stage.id}`,
+                leagueName: name,
+              }),
+            ),
+          )
+          i++
+        }
+
+        console.log(
+          `Fetched ${allSessions.length} total substages from ${i} calls...`,
+        )
+        return allSessions
+      } else {
+        console.log("Fetching single stage events...")
+        const stageResponse = await fetchStages(seasonId)
+        console.log(`Fetched ${stageResponse?.stages?.length ?? 0} stages.`)
+        return (stageResponse?.stages).flatMap((stage) =>
+          mapper(stage, {
+            leagueId,
+            leagueSlug: `/sports/cycling/${leagueId}/${seasonId}`,
+            seasonId,
+            matchSlug: `/sports/cycling/${leagueId}/${seasonId}/match/${stage.id}`,
+          }),
+        )
       }
     },
   }
@@ -295,37 +357,18 @@ const adapters: Partial<Record<SPORT, AdapterMap>> = {
       },
     },
     supercars: createFileAdapter("supercars"),
-    "17": {
-      async fetchMatches(_leagueId, seasonId) {
-        const rawEvents = await fetchMotorsportSubstages(seasonId)
-        if (!rawEvents) {
-          console.log("No MotoGP races found.")
-          return []
-        }
+    default: createSofascoreStagesAdapter(
+      fetchMotorsportSubstages,
+      motorsportService.eventMapper.bind(motorsportService),
+    ),
+  },
 
-        const allSessions: MatchSummary[] = []
-        let i = 1
-        for (const { id, name } of rawEvents.stages) {
-          if (name.includes("Test")) continue
-
-          const gpSessions = await fetchMotorsportSubstages(id.toString())
-
-          allSessions.push(
-            ...(gpSessions?.stages ?? []).flatMap((stage) =>
-              motorsportSofascoreService.eventMapper(stage, {
-                seasonId,
-                roundLabel: `Round ${i}`,
-                matchSlug: `/sports/motorsport/${leagueId}/${seasonId}/match/${stage.id}`,
-                leagueName: name,
-              }),
-            ),
-          )
-          i++
-        }
-
-        return allSessions
-      },
-    },
+  // --- Cycling (custom adapters per league) ---
+  [SPORT.CYCLING]: {
+    default: createSofascoreStagesAdapter(
+      fetchCyclingSubstages,
+      cyclingService.eventMapper.bind(cyclingService),
+    ),
   },
 
   // --- Golf (custom adapters per league) ---

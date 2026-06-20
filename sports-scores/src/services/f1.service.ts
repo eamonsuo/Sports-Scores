@@ -12,6 +12,8 @@ import {
 } from "@/endpoints/f1.api"
 import {
   MOTORSPORT_CATEGORIES,
+  MOTORSPORT_CONSTRUCTOR_STANDINGS_HEADINGS,
+  MOTORSPORT_DRIVER_STANDINGS_HEADINGS,
   MOTORSPORT_SESSION_STANDINGS_HEADINGS,
 } from "@/lib/constants"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
@@ -36,9 +38,6 @@ import {
 import { isSameDay } from "date-fns"
 import { addHours } from "date-fns/addHours"
 import { TZDate } from "react-day-picker"
-
-const F1_DRIVER_STANDINGS_HEADINGS = ["Driver", "Pts", "Wins"]
-const F1_CONSTRUCTOR_STANDINGS_HEADINGS = ["Constructor", "Pts"]
 
 class F1Service implements SportService {
   protected sport: SPORT
@@ -200,7 +199,7 @@ class F1Service implements SportService {
         {
           tables: [
             {
-              headings: F1_DRIVER_STANDINGS_HEADINGS,
+              headings: MOTORSPORT_DRIVER_STANDINGS_HEADINGS,
               data: rawStandings.map((item, index) => {
                 return {
                   position: Number(item.position) ?? index + 1,
@@ -237,7 +236,7 @@ class F1Service implements SportService {
         {
           tables: [
             {
-              headings: F1_CONSTRUCTOR_STANDINGS_HEADINGS,
+              headings: MOTORSPORT_CONSTRUCTOR_STANDINGS_HEADINGS,
               data: rawStandings.map((item, index) => {
                 return {
                   position: Number(item.position) ?? index + 1,

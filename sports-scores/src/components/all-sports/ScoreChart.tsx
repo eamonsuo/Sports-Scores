@@ -1,5 +1,5 @@
 "use client"
-import fallback from "@/../public/vercel.svg"
+import { FALLBACK_IMAGE } from "@/lib/constants"
 import { ScoreDifference } from "@/types/misc"
 import Image from "next/image"
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
@@ -43,14 +43,14 @@ export default function ScoreChart({
       <div className="mx-4 flex gap-2">
         <div className="flex flex-col place-content-around">
           <Image
-            src={homeLogoSrc ?? fallback}
+            src={homeLogoSrc ?? FALLBACK_IMAGE}
             width={40}
             height={40}
             style={{ width: "15px", height: "auto" }}
             alt="Home team image"
           />
           <Image
-            src={awayLogoSrc ?? fallback}
+            src={awayLogoSrc ?? FALLBACK_IMAGE}
             width={40}
             height={40}
             style={{ width: "15px", height: "auto" }}

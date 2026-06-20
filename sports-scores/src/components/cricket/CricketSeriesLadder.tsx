@@ -1,4 +1,4 @@
-import fallback from "@/../public/vercel.svg"
+import { FALLBACK_IMAGE } from "@/lib/constants"
 import Image from "next/image"
 
 export type CricketLadder = {
@@ -41,7 +41,7 @@ export default function CricketSeriesLadder({ data }: { data: CricketLadder }) {
               <td className="text-left text-sm">
                 <div className="flex items-center">
                   <Image
-                    src={item.logo ?? fallback}
+                    src={item.logo ?? FALLBACK_IMAGE}
                     height={40}
                     width={40}
                     style={{ width: "auto", height: "15px" }}

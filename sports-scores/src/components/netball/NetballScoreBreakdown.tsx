@@ -1,4 +1,4 @@
-import fallback from "@/../public/vercel.svg"
+import { FALLBACK_IMAGE } from "@/lib/constants"
 import Image from "next/image"
 
 export type NetballScoreBreakdown = {
@@ -36,7 +36,7 @@ export default function NetballScoreBreakdown({
         <tr>
           <td>
             <Image
-              src={homeLogoSrc ?? fallback}
+              src={homeLogoSrc ?? FALLBACK_IMAGE}
               width={40}
               height={40}
               style={{ width: "15px", height: "auto" }}
@@ -50,7 +50,7 @@ export default function NetballScoreBreakdown({
         <tr>
           <td>
             <Image
-              src={awayLogoSrc ?? fallback}
+              src={awayLogoSrc ?? FALLBACK_IMAGE}
               width={40}
               height={40}
               style={{ width: "15px", height: "auto" }}

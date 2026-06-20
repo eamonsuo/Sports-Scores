@@ -32,7 +32,7 @@ export async function fetchMotorsportSubstages(stageId: string) {
   )) as Sofascore_Stages_Response
 }
 
-export async function fetchMotorsportStageStandings(stageId: string) {
+export async function fetchMotorsportDriverStandings(stageId: string) {
   return (await fetchMotorsportApi(
     `/stage/${stageId}/standings/competitor`,
   )) as Sofascore_StageStanding_Response
@@ -45,4 +45,10 @@ export async function fetchMotorsportDriverSeasonRaces(
   return (await fetchMotorsportApi(
     `/team/${teamId}/stage/season/${seasonId}/races`,
   )) as any
+}
+
+export async function fetchMotorsportTeamStandings(stageId: string) {
+  return (await fetchMotorsportApi(
+    `/stage/${stageId}/standings/team`,
+  )) as Sofascore_StageStanding_Response
 }

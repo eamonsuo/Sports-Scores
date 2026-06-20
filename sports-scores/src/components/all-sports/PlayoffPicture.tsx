@@ -1,5 +1,5 @@
 "use client"
-import fallback from "@/../public/vercel.svg"
+import { FALLBACK_IMAGE } from "@/lib/constants"
 import type {
   PlayoffPictureGroup,
   PlayoffPictureTeam,
@@ -27,7 +27,7 @@ function Matchup({
       <span className="w-4 text-right">{home.positionDisplay}</span>
       {home.logo && (
         <Image
-          src={home.logo ?? fallback}
+          src={home.logo ?? FALLBACK_IMAGE}
           alt={"Team Logo"}
           width={80}
           height={80}
@@ -37,7 +37,7 @@ function Matchup({
       <span className="mx-2 text-xs text-gray-400">vs</span>
       {away.logo && (
         <Image
-          src={away.logo ?? fallback}
+          src={away.logo ?? FALLBACK_IMAGE}
           alt={"Team Logo"}
           width={80}
           height={80}
@@ -104,7 +104,7 @@ export default function PlayoffPicture({
                             .map((team) => (
                               <span key={team.id} className="flex items-center">
                                 <Image
-                                  src={team.logo ?? fallback}
+                                  src={team.logo ?? FALLBACK_IMAGE}
                                   alt={"Team Logo"}
                                   width={80}
                                   height={80}

@@ -1,4 +1,4 @@
-import fallback from "@/../public/vercel.svg"
+import { FALLBACK_IMAGE } from "@/lib/constants"
 import Image from "next/image"
 
 export default function MatchDetailsHero({
@@ -21,7 +21,7 @@ export default function MatchDetailsHero({
             {homeInfo.img.map((img, idx) => (
               <Image
                 key={idx}
-                src={img || fallback}
+                src={img || FALLBACK_IMAGE}
                 width={150}
                 height={150}
                 style={{ width: "60px", height: "auto" }}
@@ -32,7 +32,7 @@ export default function MatchDetailsHero({
           </div>
         ) : (
           <Image
-            src={homeImg || fallback}
+            src={homeImg || FALLBACK_IMAGE}
             width={150}
             height={150}
             style={{ width: "60px", height: "auto" }}
@@ -48,7 +48,7 @@ export default function MatchDetailsHero({
             {awayInfo.img.map((img, idx) => (
               <Image
                 key={idx}
-                src={img || fallback}
+                src={img || FALLBACK_IMAGE}
                 width={150}
                 height={150}
                 style={{ width: "60px", height: "auto" }}
@@ -59,7 +59,7 @@ export default function MatchDetailsHero({
           </div>
         ) : (
           <Image
-            src={awayImg || fallback}
+            src={awayImg || FALLBACK_IMAGE}
             width={150}
             height={150}
             style={{ width: "60px", height: "auto" }}

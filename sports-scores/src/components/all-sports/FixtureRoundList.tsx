@@ -1,6 +1,6 @@
 "use client"
 
-import fallback from "@/../public/vercel.svg"
+import { FALLBACK_IMAGE } from "@/lib/constants"
 import { FixtureRound } from "@/types/misc"
 import { clsx } from "clsx"
 import dynamic from "next/dynamic"
@@ -155,7 +155,7 @@ export default function FixtureRoundList({
                 {item.byes?.map((x) => (
                   <Image
                     key={x.name}
-                    src={x.img ?? fallback}
+                    src={x.img ?? FALLBACK_IMAGE}
                     width={60}
                     height={60}
                     style={{ width: "25px", height: "auto" }}

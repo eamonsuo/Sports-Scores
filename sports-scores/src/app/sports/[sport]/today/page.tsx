@@ -24,7 +24,12 @@ export default async function Page({
   const pageData = await config.service.matchesByDate(parsedDate)
 
   if (pageData === null) {
-    return <Placeholder>NO DATA</Placeholder>
+    return (
+      <>
+        <Placeholder>NO DATA</Placeholder>
+        <DateNav date={parsedDate} />
+      </>
+    )
   }
 
   return (

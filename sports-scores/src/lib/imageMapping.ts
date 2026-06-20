@@ -1,7 +1,6 @@
 import { CountryFlagCode } from "@/types/misc"
+import { FALLBACK_IMAGE } from "./constants"
 import { getCountryImageUrl } from "./projUtils"
-
-const fallback = "/vercel.svg"
 
 export function resolveSportImage(teamName: string) {
   teamName = teamName.replace(
@@ -277,6 +276,7 @@ export function resolveSportImage(teamName: string) {
 
     // F1
     case "Red Bull":
+    case "Red Bull Racing":
       return "/f1/redbull-f1.svg"
     case "Mercedes":
       return "/f1/mercedes-benz.svg"
@@ -285,6 +285,7 @@ export function resolveSportImage(teamName: string) {
     case "McLaren":
       return "/f1/mclaren.png"
     case "Alpine F1 Team":
+    case "Alpine":
       return "/f1/alpine.png"
     case "Aston Martin":
       return "/f1/astonmartin.svg"
@@ -294,12 +295,14 @@ export function resolveSportImage(teamName: string) {
     case "Sauber":
       return "/f1/sauber.webp"
     case "Haas F1 Team":
+    case "Haas":
       return "/f1/haas.png"
     case "Williams":
       return "/f1/williams-f1.svg"
     case "Audi":
       return "https://upload.wikimedia.org/wikipedia/commons/0/03/Audif1.com_logo17_%28cropped%29.svg"
     case "Cadillac F1 Team":
+    case "Cadillac Formula 1 Team":
       return "https://upload.wikimedia.org/wikipedia/en/b/bc/Cadillac_Formula_1_Team_Logo_%282025%29.svg"
 
     //Cricket
@@ -2042,6 +2045,6 @@ export function resolveSportImage(teamName: string) {
       return getCountryImageUrl(CountryFlagCode.Zimbabwe)
 
     default:
-      return fallback
+      return FALLBACK_IMAGE
   }
 }

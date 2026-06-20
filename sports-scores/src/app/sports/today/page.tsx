@@ -9,6 +9,7 @@ import { aussieRulesService } from "@/services/aussie-rules.service"
 import { baseballService } from "@/services/baseball.service"
 import { basketballService } from "@/services/basketball.service"
 import { cricketMatchesByDate } from "@/services/cricket.service"
+import { cyclingService } from "@/services/cycling.service"
 import { footballService } from "@/services/football.service"
 import { golfService } from "@/services/golf.service"
 import { iceHockeyService } from "@/services/ice-hockey.service"
@@ -64,7 +65,7 @@ export default async function Page({
     netballMatchesByDate(parsedDate),
     surfingService.matchesByDate(parsedDate),
     null,
-    null,
+    cyclingService.matchesByDate(parsedDate),
   ])
 
   let allSports: FixtureRound[] = ([] as FixtureRound[])
@@ -88,13 +89,15 @@ export default async function Page({
     .concat(tennisToday?.fixtures ?? [])
     .concat(rugbyUnionToday?.fixtures ?? [])
     .concat(netballToday?.fixtures ?? [])
-  // .concat(dartsToday?.fixtures ?? [])
-  // .concat(cyclingToday?.fixtures ?? [])
+    // .concat(dartsToday?.fixtures ?? [])
+    .concat(cyclingToday?.fixtures ?? [])
 
   const myTeams = allSports.filter(
     (fixtures) => fixtures.roundLabel === "My Teams",
   )
+
   allSports = allSports.filter((fixtures) => fixtures.roundLabel !== "My Teams")
+
   if (myTeams.length > 0)
     allSports.unshift({
       matches: myTeams.flatMap((fixtures) => fixtures.matches),
