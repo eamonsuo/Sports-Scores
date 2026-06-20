@@ -17,6 +17,7 @@ import {
   FixtureRound,
   LadderConfig,
   LadderGroup,
+  LadderGroupConfig,
   LadderPlacingCategory,
   LeagueSeasonConfig,
   MatchDetail,
@@ -43,7 +44,7 @@ import {
   SofascoreStagesAPI,
 } from "@/types/sofascore"
 import { TZDate } from "@date-fns/tz/date"
-import { isSameDay } from "date-fns"
+import { addHours, isSameDay } from "date-fns"
 import { matchSummariesByTournament } from "./dataverse.service"
 
 export type ScoreBreakdownConfig = {
@@ -353,7 +354,9 @@ export abstract class SofascoreSport implements SportService {
     options?: DeepPartial<MatchSummary>,
   ): MatchSummary {
     const startDate = new Date(0)
+    const endDate = new Date(0)
     startDate.setUTCSeconds(event.startTimestamp)
+    endDate.setUTCSeconds(event?.endTimestamp ?? 0)
 
     const status =
       event.status.type === "inprogress" || event.status.type === "interrupted"
@@ -365,7 +368,11 @@ export abstract class SofascoreSport implements SportService {
     return {
       id: options?.id ?? event.id.toString(),
       startDate: options?.startDate ?? startDate,
-      endDate: options?.endDate,
+      endDate:
+        options?.endDate ??
+        (event?.endTimestamp && !isSameDay(startDate, endDate)
+          ? endDate
+          : undefined),
       sport: this.sport,
       status: options?.status ?? status,
       roundLabel:
@@ -507,6 +514,8 @@ export abstract class SofascoreSport implements SportService {
       tableName: table.name,
       headings: headings ?? this.headings,
       data: table.rows.map((item) => {
+        const pointDifferential =
+          (item.scoresFor ?? 0) - (item.scoresAgainst ?? 0)
         return {
           position: item.position,
           teamId: item.team.id.toString(),
@@ -522,7 +531,8 @@ export abstract class SofascoreSport implements SportService {
           D: item.draws,
           F: item.scoresFor,
           A: item.scoresAgainst,
-          Diff: item.scoresFor - item.scoresAgainst,
+          Diff:
+            pointDifferential > 0 ? `+${pointDifferential}` : pointDifferential,
           PCT: item.percentage,
           "%": item.scoresAgainst
             ? Math.round((item.scoresFor / item.scoresAgainst) * 100)
@@ -617,6 +627,11 @@ export function mapSofascoreToStanding(
   }
 }
 
+const DEFAULT_LADDER_CONFIG: LadderGroupConfig = {
+  label: "Overall",
+  headings: ["", "Gap", "Pts"],
+}
+
 export abstract class SofascoreStageSport implements SportService {
   protected apiEndpoints: SofascoreStagesAPI
   protected sport: SPORT
@@ -639,31 +654,29 @@ export abstract class SofascoreStageSport implements SportService {
     leagueId: string,
     seasonId: string,
   ): Promise<Matches | null> {
-    const [stageResponse, dataverseMatches] = await Promise.all([
-      this.apiEndpoints.fetchStageRaces(seasonId),
-      matchSummariesByTournament(leagueId, seasonId, this.sport),
-    ])
+    const stageResponse = await this.apiEndpoints.fetchStageRaces(seasonId)
 
-    if (
-      !stageResponse &&
-      (!dataverseMatches || dataverseMatches.length === 0)
-    ) {
-      return null
-    }
+    const allSessions: MatchSummary[] = []
+    let i = 1
+    for (const { id, name } of stageResponse?.stages ?? []) {
+      // if (name.includes("Test")) continue
 
-    const apiMatches = (stageResponse?.stages ?? []).map((event) =>
-      this.eventMapper(event),
-    )
-
-    // Merge API and dataverse matches, deduplicating by id (API takes priority)
-    const apiIds = new Set(apiMatches.map((m) => m.id))
-
-    const allMatches = apiMatches
-      .concat((dataverseMatches ?? []).filter((m) => !apiIds.has(m.id)))
-      .sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+      const raceSessions = await this.apiEndpoints.fetchStageRaces(
+        id.toString(),
       )
+
+      allSessions.push(
+        ...(raceSessions?.stages ?? []).flatMap((stage) =>
+          this.eventMapper(stage, {
+            seasonId,
+            roundLabel: `Round ${i}`,
+            matchSlug: `/sports/motorsport/${leagueId}/${seasonId}/match/${stage.id}`,
+            leagueName: name,
+          }),
+        ),
+      )
+      i++
+    }
 
     const { leagueConfig } = getSportConfigurations(
       this.leagues,
@@ -671,7 +684,7 @@ export abstract class SofascoreStageSport implements SportService {
       seasonId,
     )
 
-    const fixtures = await mapFixtureRounds(allMatches, leagueConfig)
+    const fixtures = await mapFixtureRounds(allSessions, leagueConfig)
 
     return {
       fixtures,
@@ -687,24 +700,35 @@ export abstract class SofascoreStageSport implements SportService {
     return null
   }
 
-  async matchDetails(matchId: string): Promise<MatchDetail | null> {
-    return null
+  async matchDetails(
+    matchId: string,
+    leagueId: string,
+    seasonId: string,
+  ): Promise<MatchDetail | null> {
+    const stageStandings = await this.apiEndpoints.fetchStageStandings(matchId)
+
+    if (!stageStandings) return null
+
+    const { ladderConfig } = getSportConfigurations(
+      this.leagues,
+      leagueId,
+      seasonId,
+    )
+
+    const tableConfig = ladderConfig?.ladderGroup.find(
+      (label) => label.label === "Session",
+    )
+
+    return {
+      standings: [this.standingsMapper(stageStandings.standings, tableConfig)],
+    }
   }
 
   async standings(
     leagueId: string,
     seasonId: string,
-    headings: string[] = ["Team", "Pts"],
   ): Promise<Standings | null> {
-    const standings = await this.apiEndpoints.fetchStageStandings(seasonId)
-
-    if (!standings) return null
-
-    return {
-      standings: [
-        { tables: [this.standingsMapper(standings.standings, headings)] },
-      ],
-    }
+    return null
   }
 
   async brackets(leagueId: string, seasonId: string): Promise<Brackets | null> {
@@ -716,19 +740,25 @@ export abstract class SofascoreStageSport implements SportService {
     options?: DeepPartial<MatchSummary>,
   ): MatchSummary {
     const startDate = new Date(0)
+    const endDate = new Date(0)
     startDate.setUTCSeconds(event.startDateTimestamp)
+    endDate.setUTCSeconds(event?.endDateTimestamp ?? 0)
 
     const status =
       event.status.type === "inprogress" || event.status.type === "interrupted"
         ? MatchStatus.LIVE
-        : event.status.type === "notstarted"
+        : event.status.type === "notstarted" || event.status.type === ""
           ? MatchStatus.UPCOMING
           : MatchStatus.COMPLETED
 
     return {
       id: options?.id ?? event.id.toString(),
       startDate: options?.startDate ?? startDate,
-      endDate: options?.endDate,
+      endDate:
+        options?.endDate ??
+        (event?.endDateTimestamp && !isSameDay(startDate, endDate)
+          ? endDate
+          : undefined),
       sport: this.sport,
       status: options?.status ?? status,
       roundLabel: options?.roundLabel,
@@ -779,24 +809,67 @@ export abstract class SofascoreStageSport implements SportService {
     }
   }
 
+  matchSummaryMapper(
+    event: MatchSummary,
+    options?: DeepPartial<Omit<MatchSummary, "competitorDetails">>,
+  ): MatchSummary {
+    let currentDate = new Date()
+
+    const status =
+      event.startDate > currentDate
+        ? MatchStatus.UPCOMING
+        : event.startDate > addHours(currentDate, -2) ||
+            (event.endDate && event.endDate > currentDate)
+          ? MatchStatus.LIVE
+          : MatchStatus.COMPLETED
+    return {
+      ...event,
+      ...options,
+      status,
+      leagueImg: event.leagueImg ?? resolveSportImage(event.leagueName ?? ""),
+      timer:
+        status === MatchStatus.UPCOMING
+          ? event.startDate
+          : status.charAt(0) + status.slice(1).toLowerCase(),
+      timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
+      cardVariant: event.cardVariant ?? CardVariant.SESSION,
+    }
+  }
+
   protected standingsMapper(
     table: Sofascore_StageStandingRow[],
-    headings: string[],
-  ): SportsLadder {
+    config?: LadderGroupConfig,
+    label?: string,
+  ): LadderGroup {
     return {
-      // tableName: table.name,
-      headings: headings,
-      data: table.map((item) => {
-        return {
-          position: item.position,
-          teamId: item.team?.id?.toString() ?? "",
-          teamName: shortenTeamNames(item.team?.name ?? ""),
-          teamLogo: resolveSportImage(item.team?.country?.name ?? ""),
-          sport: this.sport,
+      label: config?.label ?? label ?? "Session",
+      tables: [
+        {
+          headings: config?.headings ?? ["", "Gap"],
+          data: table.map((item) => {
+            return {
+              position: item.position ?? "-",
+              teamId: item.team?.id?.toString() ?? "",
+              teamName: shortenTeamNames(item.team?.name ?? ""),
+              teamLogo: resolveSportImage(
+                item.team?.country?.name ?? item.team?.name ?? "",
+              ),
+              sport: this.sport,
 
-          Pts: item.points,
-        }
-      }),
+              Pts: item.points,
+              Wins: item.victories,
+              Podiums: item.podiums,
+              Gap:
+                item.gap ??
+                item.time ??
+                (item.lapsBehind ? `+${item.lapsBehind} Laps` : "-"),
+              Time: item.time,
+              Grid: item.gridPosition,
+            }
+          }),
+          placingCategories: config?.placingCategories,
+        },
+      ],
     }
   }
 }

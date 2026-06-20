@@ -1,3 +1,4 @@
+import LadderGroupList from "@/components/all-sports/LadderGroupList"
 import MatchDetailsHero from "@/components/all-sports/MatchDetailsHero"
 import ScoreBreakdown from "@/components/all-sports/ScoreBreakdown"
 import ScoreChart from "@/components/all-sports/ScoreChart"
@@ -16,31 +17,42 @@ export default async function Page(props: {
   const { league, season, id, sport } = await props.params
   const config = SPORT_ROUTE_CONFIG[sport as SPORT]
 
-  const pageData = await config.service.matchDetails(id)
+  const pageData = await config.service.matchDetails(id, league, season)
 
-  if (pageData === null || pageData.matchDetails === null) {
+  if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>
   }
 
-  return (
-    <div className="flex flex-1 flex-col overflow-y-auto pb-4">
-      <MatchDetailsHero
-        homeInfo={pageData.matchDetails.homeTeam}
-        awayInfo={pageData.matchDetails.awayTeam}
-        status={pageData.matchDetails.status}
-      />
-      <ScoreBreakdown
-        scoreData={pageData.scoreBreakdown}
-        homeLogo={pageData.matchDetails.homeTeam.img}
-        awayLogo={pageData.matchDetails.awayTeam.img}
-      />
-      {pageData.scoreEvents && (
-        <ScoreChart
-          scoreDifference={pageData.scoreEvents}
+  if ("matchDetails" in pageData && pageData.matchDetails !== null) {
+    return (
+      <div className="flex flex-1 flex-col overflow-y-auto pb-4">
+        <MatchDetailsHero
+          homeInfo={pageData.matchDetails.homeTeam}
+          awayInfo={pageData.matchDetails.awayTeam}
+          status={pageData.matchDetails.status}
+        />
+        <ScoreBreakdown
+          scoreData={pageData.scoreBreakdown}
           homeLogo={pageData.matchDetails.homeTeam.img}
           awayLogo={pageData.matchDetails.awayTeam.img}
         />
-      )}
-    </div>
-  )
+        {pageData.scoreEvents && (
+          <ScoreChart
+            scoreDifference={pageData.scoreEvents}
+            homeLogo={pageData.matchDetails.homeTeam.img}
+            awayLogo={pageData.matchDetails.awayTeam.img}
+          />
+        )}
+      </div>
+    )
+  } else if ("standings" in pageData && pageData.standings !== null) {
+    return (
+      <div className="flex-1 overflow-y-auto px-4">
+        <LadderGroupList
+          data={pageData.standings}
+          curGroup={pageData.standings[0].label ?? ""}
+        />
+      </div>
+    )
+  }
 }

@@ -120,11 +120,9 @@ const footerLinks: {
     img: "/footer/dart.svg",
     altText: "Darts",
   },
-
   {
     sport: SPORT.CYCLING,
-    // link: `/sports/${SPORT.CYCLING}`,
-    link: `https://www.flashscore.com.au/cycling/`,
+    link: `/sports/${SPORT.CYCLING}/today`,
     img: "/footer/bike.svg",
     altText: "Cycling",
   },
@@ -134,7 +132,6 @@ const footerLinks: {
     img: "/footer/american-football.svg",
     altText: "AMERICAN FOOTBALL",
   },
-
   {
     sport: SPORT.OLYMPICS,
     link: `/sports/${SPORT.OLYMPICS}`,

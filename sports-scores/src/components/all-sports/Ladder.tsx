@@ -1,4 +1,5 @@
-import fallback from "@/../public/vercel.svg"
+import { FALLBACK_IMAGE } from "@/lib/constants"
+import { cn } from "@/lib/utils"
 import { SportsLadder } from "@/types/misc"
 import { clsx } from "clsx"
 import Image from "next/image"
@@ -42,7 +43,7 @@ export default function Ladder({
             // Get the colour for this placing if specified
             const categoryIdx =
               placingCategories?.findIndex((c) =>
-                c.position.includes(item.position),
+                c.position.includes(Number(item.position)),
               ) ?? -1
             const category =
               categoryIdx >= 0 ? placingCategories?.[categoryIdx] : undefined
@@ -53,7 +54,7 @@ export default function Ladder({
                 : undefined)
             return (
               <tr key={item.teamId} className="border-b border-t">
-                <td className={clsx("w-1 p-0", colour)} />
+                <td className={cn("w-1 p-0", colour)} />
                 <td className="py-2 pe-2 ps-1">{item.position}</td>
                 <td className="text-left text-sm">
                   <Link
@@ -69,7 +70,7 @@ export default function Ladder({
                           item.teamLogo.map((img, idx) => (
                             <Image
                               key={idx + "-logo"}
-                              src={img || fallback}
+                              src={img || FALLBACK_IMAGE}
                               width={100}
                               height={100}
                               style={{ width: "20px", height: "auto" }}
@@ -78,7 +79,7 @@ export default function Ladder({
                           ))
                         ) : (
                           <Image
-                            src={item.teamLogo || fallback}
+                            src={item.teamLogo || FALLBACK_IMAGE}
                             width={80}
                             height={80}
                             style={{ width: "20px", height: "auto" }}
@@ -92,7 +93,17 @@ export default function Ladder({
                 </td>
 
                 {headings.slice(1).map((heading) => (
-                  <td key={heading}>{item[heading]}</td>
+                  <td
+                    key={heading}
+                    className={cn(
+                      item[heading]?.toString()?.includes("↑") &&
+                        "text-green-500",
+                      item[heading]?.toString()?.includes("↓") &&
+                        "text-red-500",
+                    )}
+                  >
+                    {item[heading]}
+                  </td>
                 ))}
               </tr>
             )

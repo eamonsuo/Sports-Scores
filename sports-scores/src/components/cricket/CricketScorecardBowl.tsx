@@ -1,4 +1,4 @@
-import fallback from "@/../public/vercel.svg"
+import { FALLBACK_IMAGE } from "@/lib/constants"
 import Image from "next/image"
 
 export type CricketScorecardBowlProps = {
@@ -33,7 +33,7 @@ export default async function CricketScorecardBowl({
             <td className="ps-2">{data.indexOf(item) + 1}</td>
             <td className="flex gap-2 py-2 text-left">
               <Image
-                src={item.image ?? fallback}
+                src={item.image ?? FALLBACK_IMAGE}
                 alt=""
                 width={30}
                 height={30}

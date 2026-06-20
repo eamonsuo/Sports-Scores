@@ -1,4 +1,10 @@
-import { MOTORSPORT_CATEGORIES } from "@/lib/constants"
+import {
+  fetchMotorsportDriverStandings,
+  fetchMotorsportSubstages,
+  fetchMotorsportTeamStandings,
+} from "@/endpoints/motorsport.api"
+import { FALLBACK_IMAGE, MOTORSPORT_CATEGORIES } from "@/lib/constants"
+import { withDevCache } from "@/lib/devCache"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
 import { resolveSportImage } from "@/lib/imageMapping"
 import { getSportConfigurations } from "@/lib/projUtils"
@@ -6,78 +12,85 @@ import {
   Brackets,
   CardVariant,
   DisplayTypes,
-  LeagueSeasonConfig,
+  LadderGroup,
+  LadderGroupConfig,
   MatchDetail,
   Matches,
-  MatchStatus,
-  MatchSummary,
   SPORT,
-  SportService,
   Standings,
 } from "@/types/misc"
-import { addHours } from "date-fns"
+import { Sofascore_StageStandingRow } from "@/types/sofascore"
 import {
   matchSummariesBySportAndDay,
   matchSummariesByTournament,
 } from "./dataverse.service"
-import { motorsportSofascoreService } from "./motorsport-sofascore.service"
+import { f1Service } from "./f1.service"
+import { SofascoreStageSport } from "./sofascore.service"
 
-class MotorsportService implements SportService {
-  protected sport: SPORT
-  protected categories: LeagueSeasonConfig[]
-  protected cardVariant?: CardVariant
-
+class MotorsportService extends SofascoreStageSport {
   constructor() {
-    this.sport = SPORT.MOTORSPORT
-    this.categories = MOTORSPORT_CATEGORIES
-    this.cardVariant = CardVariant.SESSION
+    super(
+      {
+        fetchStageRaces: withDevCache(
+          "motorsport",
+          "stage-races",
+          fetchMotorsportSubstages,
+        ),
+        fetchStageStandings: withDevCache(
+          "motorsport",
+          "stage-standings",
+          fetchMotorsportDriverStandings,
+        ),
+        fetchTeamStandings: withDevCache(
+          "motorsport",
+          "team-standings",
+          fetchMotorsportTeamStandings,
+        ),
+      },
+      SPORT.MOTORSPORT,
+      MOTORSPORT_CATEGORIES,
+      CardVariant.SESSION,
+    )
   }
 
   async matchesByLeagueSeason(
     leagueId: string,
     seasonId: string,
   ): Promise<Matches | null> {
-    switch (leagueId) {
-      case "sofascore":
-        return await motorsportSofascoreService.matchesByLeagueSeason(
-          leagueId,
-          seasonId,
-        )
-      case "f1":
-      // return await f1Service.matchesByLeagueSeason(leagueId, seasonId);
-
-      default:
-        const dataverseMatches = await matchSummariesByTournament(
-          leagueId,
-          seasonId,
-          this.sport,
-        )
-        if (!dataverseMatches || dataverseMatches.length === 0) {
-          return null
-        }
-
-        const allMatches = dataverseMatches
-          .sort(
-            (a, b) =>
-              new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-          )
-          .map(this.eventMapper)
-
-        if (!allMatches) return null
-
-        const { leagueConfig } = getSportConfigurations(
-          this.categories,
-          leagueId,
-          seasonId,
-        )
-
-        const fixtures = await mapFixtureRounds(allMatches, leagueConfig)
-
-        return {
-          fixtures,
-          currentRound: getCurrentRound(fixtures, leagueConfig?.display),
-        } as Matches
+    if (leagueId === "f1") {
+      return await f1Service.matchesByLeagueSeason(leagueId, seasonId)
     }
+
+    const dataverseMatches = await matchSummariesByTournament(
+      leagueId,
+      seasonId,
+      this.sport,
+    )
+    if (!dataverseMatches || dataverseMatches.length === 0) {
+      return null
+    }
+
+    const allMatches = dataverseMatches
+      .sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+      )
+      .map((match) => this.matchSummaryMapper(match))
+
+    if (!allMatches) return null
+
+    const { leagueConfig } = getSportConfigurations(
+      this.leagues,
+      leagueId,
+      seasonId,
+    )
+
+    const fixtures = await mapFixtureRounds(allMatches, leagueConfig)
+
+    return {
+      fixtures,
+      currentRound: getCurrentRound(fixtures, leagueConfig?.display),
+    } as Matches
   }
 
   async matchesByDate(date: Date): Promise<Matches | null> {
@@ -94,9 +107,9 @@ class MotorsportService implements SportService {
         (a, b) =>
           new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
       )
-      .map(this.eventMapper)
+      .map((match) => this.matchSummaryMapper(match))
 
-    const fixtures = await mapFixtureRounds(allMatches, this.categories)
+    const fixtures = await mapFixtureRounds(allMatches, this.leagues)
 
     return {
       fixtures: fixtures,
@@ -107,40 +120,110 @@ class MotorsportService implements SportService {
   async matchesByTeam(teamId: string): Promise<Matches | null> {
     return null
   }
-  async matchDetails(matchId: string): Promise<MatchDetail | null> {
-    return null
+
+  async matchDetails(
+    matchId: string,
+    leagueId: string,
+    seasonId: string,
+  ): Promise<MatchDetail | null> {
+    return await super.matchDetails(matchId, leagueId, seasonId)
   }
+
   async standings(
     leagueId: string,
     seasonId: string,
   ): Promise<Standings | null> {
-    return null
+    if (leagueId === "f1") {
+      return await f1Service.standings(leagueId, seasonId)
+    }
+
+    const stageStandings = await this.apiEndpoints.fetchStageStandings(seasonId)
+    const teamStandings = await this.apiEndpoints.fetchTeamStandings(seasonId)
+
+    if (!stageStandings && !teamStandings) return null
+
+    const { ladderConfig } = getSportConfigurations(
+      this.leagues,
+      leagueId,
+      seasonId,
+    )
+
+    const athleteConfig = ladderConfig?.ladderGroup[0]
+
+    const teamConfig = ladderConfig?.ladderGroup[1]
+
+    const athleteStandings = stageStandings
+      ? this.standingsMapper(stageStandings.standings, athleteConfig)
+      : null
+
+    const teamStandingsMapped = teamStandings
+      ? this.standingsMapper(teamStandings.standings, teamConfig)
+      : null
+
+    return {
+      standings: [athleteStandings, teamStandingsMapped].filter(
+        (item) => item !== null,
+      ),
+    }
   }
 
   async brackets(leagueId: string, seasonId: string): Promise<Brackets | null> {
     return null
   }
 
-  eventMapper(event: MatchSummary): MatchSummary {
-    let currentDate = new Date()
+  protected standingsMapper(
+    table: Sofascore_StageStandingRow[],
+    config?: LadderGroupConfig,
+    label?: string,
+  ): LadderGroup {
+    const standings = super.standingsMapper(table, config, label)
 
-    const status =
-      event.startDate > currentDate
-        ? MatchStatus.UPCOMING
-        : event.startDate > addHours(currentDate, -2)
-          ? MatchStatus.LIVE
-          : MatchStatus.COMPLETED
-    return {
-      ...event,
-      status,
-      leagueImg: event.leagueImg ?? resolveSportImage(event.leagueName ?? ""),
-      timer:
-        status === MatchStatus.UPCOMING
-          ? event.startDate
-          : status.charAt(0) + status.slice(1).toLowerCase(),
-      timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
-      cardVariant: event.cardVariant ?? CardVariant.SESSION,
+    standings.tables = standings.tables.map((mappedTable) => {
+      return {
+        ...mappedTable,
+        data: mappedTable.data.map((item, idx) => {
+          return {
+            ...item,
+            teamLogo:
+              this.resolveImage(table[idx].team?.name ?? "") ??
+              this.resolveImage(table[idx].team?.country?.name ?? "") ??
+              FALLBACK_IMAGE,
+            "+/-": this.setPlacesGained(
+              Number(table[idx].position),
+              Number(table[idx].gridPosition),
+            ),
+          }
+        }),
+      }
+    })
+
+    return standings
+  }
+
+  private setPlacesGained(currentPosition?: number, previousPosition?: number) {
+    if (!currentPosition || !previousPosition) {
+      return ""
     }
+    const difference = previousPosition - currentPosition
+    if (difference > 0) {
+      return `↑${difference}`
+    } else if (difference < 0) {
+      return `↓${Math.abs(difference)}`
+    } else {
+      return "0"
+    }
+  }
+
+  private resolveImage(teamName: string) {
+    const result = resolveSportImage(teamName)
+    return result === FALLBACK_IMAGE ? null : result
+  }
+
+  async matchesFromAPI(
+    leagueId: string,
+    seasonId: string,
+  ): Promise<Matches | null> {
+    return super.matchesByLeagueSeason(leagueId, seasonId)
   }
 }
 

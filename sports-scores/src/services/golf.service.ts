@@ -29,7 +29,7 @@ import {
   SportService,
   Standings,
 } from "@/types/misc"
-import { addDays, setHours } from "date-fns"
+import { addDays, addHours } from "date-fns"
 import {
   matchSummariesBySportAndDay,
   matchSummariesByTournament,
@@ -322,7 +322,7 @@ export function mapTournamentToMatchSummary(
     case "LIV Golf UK":
       break
     default:
-      startDate = setHours(addDays(startDate, 1), 0)
+      startDate = addHours(addDays(startDate, 1), -10)
       endDate = addDays(endDate, 1)
   }
 

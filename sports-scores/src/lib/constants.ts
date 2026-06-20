@@ -13,6 +13,8 @@ import { RankingList } from "@/types/tennis"
 import { resolveSportImage } from "./imageMapping"
 import { ladderConfigMap, stripLeagueSeasonConfig } from "./projUtils"
 
+export const FALLBACK_IMAGE = "/vercel.svg"
+
 export const RUGBY_LEAGUE_LADDER_HEADINGS = [
   "Team",
   "P",
@@ -21,7 +23,7 @@ export const RUGBY_LEAGUE_LADDER_HEADINGS = [
   "Diff",
   "Pts",
 ]
-export const FOOTBALL_LADDER_HEADINGS = ["Team", "P", "W", "D", "L", "Pts"]
+export const FOOTBALL_LADDER_HEADINGS = ["Team", "P", "W", "D", "Diff", "Pts"]
 export const AUSSIE_RULES_LADDER_HEADINGS = ["Team", "P", "W", "D", "%", "Pts"]
 export const BASKETBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "PCT"]
 export const BASEBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "PCT"]
@@ -178,13 +180,28 @@ const CHAMPIONSHIP_LADDER_CONFIG: LadderPlacingCategory[] = [
   { label: "Relegation", position: [22, 23, 24], colour: "bg-red-500" },
 ]
 
-const FIFA_WORLD_CUP_LADDER_CONFIG: LadderPlacingCategory[] = [
-  { label: "Round of 32", position: [1, 2] },
-  {
-    label: "Possible Round of 32 - Best 8/12 3rd placed teams",
-    position: [3],
-  },
-]
+const FIFA_WORLD_CUP_LADDER_CONFIG: LadderConfig = {
+  ladderGroup: [
+    {
+      label: "Groups",
+      groupFilter: (tableName) => tableName.includes("Group"),
+      placingCategories: [
+        { label: "Round of 32", position: [1, 2] },
+        {
+          label: "Possible Round of 32 - Best 8/12 3rd placed teams",
+          position: [3],
+        },
+      ],
+    },
+    {
+      label: "Third Place Teams",
+      groupFilter: (tableName) => !tableName.includes("Group"),
+      placingCategories: [
+        { label: "Round of 32", position: [1, 2, 3, 4, 5, 6, 7, 8] },
+      ],
+    },
+  ],
+}
 
 const UEFA_24_TEAM_LADDER_CONFIG: LadderPlacingCategory[] = [
   { label: "Round of 16 (seeded)", position: [1, 2, 3, 4, 5, 6, 7, 8] },
@@ -522,18 +539,56 @@ export const MOTORSPORT_SESSION_STANDINGS_HEADINGS = [
   "Driver",
   "Gap",
   "Pts",
-  "Grid",
+  "+/-",
 ]
+
+export const MOTORSPORT_DRIVER_STANDINGS_HEADINGS = ["Driver", "Pts", "Wins"]
+export const MOTORSPORT_CONSTRUCTOR_STANDINGS_HEADINGS = ["Constructor", "Pts"]
+
+const MOTORSPORT_LADDER_CONFIG: LadderConfig = {
+  ladderGroup: [
+    {
+      label: "Drivers",
+      groupFilter: (tableName) => tableName.includes("Athlete"),
+      placingCategories: [
+        { label: "World Champion", position: [1], colour: "bg-yellow-300" },
+      ],
+      headings: MOTORSPORT_DRIVER_STANDINGS_HEADINGS,
+    },
+    {
+      label: "Constructors",
+      groupFilter: (tableName) => tableName.includes("Team"),
+      placingCategories: [
+        {
+          label: "Constructor Champion",
+          position: [1],
+          colour: "bg-yellow-300",
+        },
+      ],
+      headings: MOTORSPORT_CONSTRUCTOR_STANDINGS_HEADINGS,
+    },
+    {
+      label: "Session",
+      groupFilter: (tableName) => tableName.includes("Session"),
+      headings: MOTORSPORT_SESSION_STANDINGS_HEADINGS,
+    },
+  ],
+}
 
 export const MOTORSPORT_CATEGORIES: LeagueSeasonConfig[] = [
   {
     name: "Formula 1",
-    slug: "f1",
+    slug: "40",
+    // slug: "f1",
     seasons: [
-      { name: "2026", slug: "2026" },
-      { name: "2025", slug: "2025" },
-      { name: "2024", slug: "2024" },
-      { name: "2023", slug: "2023" },
+      { name: "2026", slug: "214140", ladderConfig: MOTORSPORT_LADDER_CONFIG },
+      { name: "2025", slug: "209766", ladderConfig: MOTORSPORT_LADDER_CONFIG },
+      { name: "2024", slug: "206455", ladderConfig: MOTORSPORT_LADDER_CONFIG },
+      { name: "2023", slug: "203647", ladderConfig: MOTORSPORT_LADDER_CONFIG },
+      // { name: "2026", slug: "2026", ladderConfig: MOTORSPORT_LADDER_CONFIG },
+      // { name: "2025", slug: "2025", ladderConfig: MOTORSPORT_LADDER_CONFIG },
+      // { name: "2024", slug: "2024", ladderConfig: MOTORSPORT_LADDER_CONFIG },
+      // { name: "2023", slug: "2023", ladderConfig: MOTORSPORT_LADDER_CONFIG },
     ],
   },
   {
@@ -545,7 +600,9 @@ export const MOTORSPORT_CATEGORIES: LeagueSeasonConfig[] = [
   {
     name: "MotoGP",
     slug: "17",
-    seasons: [{ name: "2026", slug: "220597" }],
+    seasons: [
+      { name: "2026", slug: "220597", ladderConfig: MOTORSPORT_LADDER_CONFIG },
+    ],
   },
 ]
 
@@ -1327,16 +1384,11 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "2026",
         slug: "58210",
-        ladderConfig: ladderConfigMap({
-          placingCategories: FIFA_WORLD_CUP_LADDER_CONFIG,
-        }),
+        ladderConfig: FIFA_WORLD_CUP_LADDER_CONFIG,
       },
       {
         name: "2022",
         slug: "41087",
-        ladderConfig: ladderConfigMap({
-          placingCategories: FIFA_WORLD_CUP_LADDER_CONFIG,
-        }),
       },
     ],
   },
@@ -2207,9 +2259,132 @@ export const NETBALL_LEAGUES: LeagueSeasonConfig[] = [
 
 export const NETBALL_LEAGUES_CLIENT = stripLeagueSeasonConfig(NETBALL_LEAGUES)
 
+const TOUR_DE_FRANCE_LADDER_CONFIG: LadderConfig = {
+  ladderGroup: [
+    {
+      label: "Overall",
+      headings: ["Rider", "Gap"],
+      placingCategories: [
+        { label: "Maillot Jaune", position: [1], colour: "bg-yellow-500" },
+      ],
+    },
+    {
+      label: "Mountain",
+      headings: ["Rider", "Pts"],
+      placingCategories: [
+        { label: "Polka Dot Jersey", position: [1], colour: "bg-red-500" },
+      ],
+    },
+    {
+      label: "Sprint",
+      headings: ["Rider", "Pts"],
+      placingCategories: [
+        { label: "Green Jersey", position: [1], colour: "bg-green-500" },
+      ],
+    },
+    {
+      label: "Young (U26)",
+      headings: ["Rider", "Gap"],
+      placingCategories: [
+        { label: "White Jersey", position: [1], colour: "bg-white" },
+      ],
+    },
+    {
+      label: "Teams",
+      headings: ["Team", "Gap"],
+    },
+    {
+      label: "Session",
+      headings: ["Rider", "Gap"],
+    },
+  ],
+}
+
+const GIRO_LADDER_CONFIG: LadderConfig = {
+  ladderGroup: [
+    {
+      label: "Overall",
+      headings: ["Rider", "Gap"],
+      placingCategories: [
+        { label: "Maglia Rosa", position: [1], colour: "bg-pink-500" },
+      ],
+    },
+    {
+      label: "Mountain",
+      headings: ["Rider", "Pts"],
+      placingCategories: [
+        { label: "Blue Jersey", position: [1], colour: "bg-blue-500" },
+      ],
+    },
+    {
+      label: "Sprint",
+      headings: ["Rider", "Pts"],
+      placingCategories: [
+        { label: "Red Jersey", position: [1], colour: "bg-red-500" },
+      ],
+    },
+    {
+      label: "Young (U26)",
+      headings: ["Rider", "Gap"],
+      placingCategories: [
+        { label: "White Jersey", position: [1], colour: "bg-white" },
+      ],
+    },
+    {
+      label: "Teams",
+      headings: ["Team", "Gap"],
+    },
+    {
+      label: "Session",
+      headings: ["Rider", "Gap"],
+    },
+  ],
+}
+
+const VUELTA_LADDER_CONFIG: LadderConfig = {
+  ladderGroup: [
+    {
+      label: "Overall",
+      headings: ["Rider", "Gap"],
+      placingCategories: [
+        { label: "Maillot Rojo", position: [1], colour: "bg-red-500" },
+      ],
+    },
+    {
+      label: "Mountain",
+      headings: ["Rider", "Pts"],
+      placingCategories: [
+        { label: "Polka Dot Jersey", position: [1], colour: "bg-blue-500" },
+      ],
+    },
+    {
+      label: "Sprint",
+      headings: ["Rider", "Pts"],
+      placingCategories: [
+        { label: "Green Jersey", position: [1], colour: "bg-green-500" },
+      ],
+    },
+    {
+      label: "Young (U26)",
+      headings: ["Rider", "Gap"],
+      placingCategories: [
+        { label: "White Jersey", position: [1], colour: "bg-white" },
+      ],
+    },
+    {
+      label: "Teams",
+      headings: ["Team", "Gap"],
+    },
+    {
+      label: "Session",
+      headings: ["Rider", "Gap"],
+    },
+  ],
+}
+
 export const CYCLING_TOURS: LeagueSeasonConfig[] = [
   {
-    name: "Men",
+    name: "UCI World Tour - Men",
     slug: "9",
     seasons: [
       { name: "2026", slug: "220825" },
@@ -2217,7 +2392,7 @@ export const CYCLING_TOURS: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "Women",
+    name: "UCI World Tour - Women",
     slug: "94",
     seasons: [
       { name: "2026", slug: "220906" },
@@ -2226,11 +2401,71 @@ export const CYCLING_TOURS: LeagueSeasonConfig[] = [
   },
   {
     name: "Tour de France",
-    slug: "",
+    slug: "le-tour",
     seasons: [
-      { name: "2026", slug: "" },
-      { name: "2025", slug: "210217" },
+      {
+        name: "2026",
+        slug: "220828",
+        ladderConfig: TOUR_DE_FRANCE_LADDER_CONFIG,
+      },
+      {
+        name: "2025",
+        slug: "210217",
+        ladderConfig: TOUR_DE_FRANCE_LADDER_CONFIG,
+      },
     ],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_Tour_de_France#Route_and_stages",
+  },
+  {
+    name: "Giro d'Italia",
+    slug: "giro",
+    seasons: [
+      { name: "2026", slug: "220827", ladderConfig: GIRO_LADDER_CONFIG },
+    ],
+  },
+  {
+    name: "Vuelta a España",
+    slug: "vuelta",
+    seasons: [
+      { name: "2026", slug: "220829", ladderConfig: VUELTA_LADDER_CONFIG },
+    ],
+  },
+  {
+    name: "Tour Down Under",
+    slug: "tour-down-under",
+    seasons: [
+      {
+        name: "2026",
+        slug: "221114",
+        ladderConfig: ladderConfigMap({
+          label: "Overall",
+          headings: ["Rider", "Gap"],
+          placingCategories: [
+            {
+              label: "Ochre Jersey",
+              position: [1],
+              colour: "bg-[#CC7722]",
+            },
+          ],
+        }),
+      },
+    ],
+  },
+  {
+    name: "Cadel Evans Great Ocean Road Race",
+    slug: "cadel",
+    seasons: [{ name: "2026", slug: "221115" }],
+  },
+  {
+    name: "UCI World Championship TT",
+    slug: "world-tt",
+    seasons: [{ name: "2026", slug: "220913" }],
+  },
+  {
+    name: "UCI World Championship RR",
+    slug: "world-rr",
+    seasons: [{ name: "2026", slug: "220912" }],
   },
 ]
 

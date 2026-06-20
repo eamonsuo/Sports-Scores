@@ -1,7 +1,7 @@
 "use client"
 
 import MatchSummaryCard from "@/components/all-sports/MatchSummaryCard"
-import SessionSummaryCard from "@/components/motorsport/SessionSummaryCard"
+import SessionSummaryCard from "@/components/all-sports/SessionSummaryCard"
 import TennisMatchCard from "@/components/tennis/TennisMatchCard"
 import { cn } from "@/lib/utils"
 import { CardVariant, MatchSummary } from "@/types/misc"

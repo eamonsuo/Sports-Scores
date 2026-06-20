@@ -2,7 +2,7 @@
 
 import { LadderGroup } from "@/types/misc"
 import { clsx } from "clsx"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import Ladder from "./Ladder"
 
 export default function LadderGroupList({
@@ -13,11 +13,23 @@ export default function LadderGroupList({
   curGroup: string
 }) {
   const [group, setGroup] = useState(curGroup)
+  const [containerHeight, setContainerHeight] = useState<number | undefined>()
   const btnListRef = useRef<HTMLDivElement>(null)
   const initialBtn = useRef<HTMLButtonElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const groupRefs = useRef<(HTMLDivElement | null)[]>([])
 
-  const groupLabels = data.map((item) => item.label ?? "")
+  const groupLabels = useMemo(
+    () => data.map((item) => item.label ?? ""),
+    [data],
+  )
+
+  function updateContainerHeight(index: number) {
+    const nextHeight = groupRefs.current[index]?.scrollHeight
+    if (nextHeight !== undefined) {
+      setContainerHeight(nextHeight)
+    }
+  }
 
   useEffect(() => {
     //Ensure the curGroup is scrolled into the centre of view on page load
@@ -31,8 +43,25 @@ export default function LadderGroupList({
     if (scrollContainerRef.current && index !== -1) {
       const container = scrollContainerRef.current
       container.scrollLeft = index * container.offsetWidth
+      setTimeout(() => updateContainerHeight(index), 0)
     }
-  }, []) //Empty array so only runs once on mount
+  }, [curGroup, groupLabels]) //Re-run if data or current group changes
+
+  useEffect(() => {
+    const activeIndex = groupLabels.indexOf(group)
+    if (activeIndex === -1) return
+
+    updateContainerHeight(activeIndex)
+
+    const activeGroupNode = groupRefs.current[activeIndex]
+    if (!activeGroupNode || typeof ResizeObserver === "undefined") return
+
+    const observer = new ResizeObserver(() =>
+      updateContainerHeight(activeIndex),
+    )
+    observer.observe(activeGroupNode)
+    return () => observer.disconnect()
+  }, [group, groupLabels])
 
   //When called ensures the new group state is set and the related button is visible in view
   function handleGroupClick(groupLabel: string) {
@@ -53,6 +82,7 @@ export default function LadderGroupList({
         left: index * container.offsetWidth,
         behavior: "smooth",
       })
+      setTimeout(() => updateContainerHeight(index), 0)
     }
   }
 
@@ -66,6 +96,7 @@ export default function LadderGroupList({
 
       if (groupLabels[index] && groupLabels[index] !== group) {
         setGroup(groupLabels[index])
+        updateContainerHeight(index)
 
         // Scroll button into view only if it's not already visible
         // Use setTimeout to allow React to update the button styling first
@@ -123,13 +154,20 @@ export default function LadderGroupList({
       <div
         ref={scrollContainerRef}
         onScroll={handleScroll}
-        className="hideScroll flex flex-1 snap-x snap-mandatory overflow-x-auto overflow-y-hidden"
-        style={{ scrollBehavior: "smooth" }}
+        className="hideScroll flex flex-1 snap-x snap-mandatory items-start overflow-x-auto overflow-y-hidden"
+        style={{
+          scrollBehavior: "smooth",
+          height: containerHeight ? `${containerHeight}px` : undefined,
+          transition: "height 200ms ease",
+        }}
       >
-        {data.map((item) => (
+        {data.map((item, groupIndex) => (
           <div
             key={item.label + "-ladders"}
             className="w-full flex-shrink-0 snap-start overflow-y-auto"
+            ref={(node) => {
+              groupRefs.current[groupIndex] = node
+            }}
           >
             {item.tables.map((table, index) => (
               <Ladder

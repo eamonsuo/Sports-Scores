@@ -4,53 +4,9 @@ import type {
   PlayoffPictureGroup,
 } from "@/types/playoff-picture"
 
-export type LadderPlacingCategory = {
-  position: number[]
-  label: string
-  colour?: string
-}
-
-export type LadderRow = {
-  teamId: string | number
-  teamName: string
-  teamLogo?: string | string[]
-  position: number
-  [key: string]: string | number | undefined | string[]
-}
-
-export interface SportsLadder {
-  tableName?: string
-  headings: string[]
-  data: LadderRow[]
-  placingCategories?: LadderPlacingCategory[]
-}
-
-export type LeagueSeasonConfig = {
-  name: string
-  slug: string
-  icon?: string
-  seasons: { name: string; slug: string; ladderConfig?: LadderConfig }[]
-  display?: DisplayTypes
-  externalURL?: string
-  byes?: {
-    name: string
-    img: string
-  }[]
-  excludeFromToday?: boolean
-}
-
-export type ClientLeagueSeasonConfig = Omit<LeagueSeasonConfig, "seasons"> & {
-  seasons: Omit<LeagueSeasonConfig["seasons"][number], "ladderConfig">[]
-}
-
-export type PeriodScore = {
-  teams: { home: { score: number | string }; away: { score: number | string } }
-  periodName: string
-}
-
-export type ScoreDifference = { event: string; difference: number }
-
-// ── General types ────────────────────────────────────────────────────────────
+/**
+ * Generic Types
+ */
 
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends Date | undefined
@@ -95,23 +51,32 @@ export type MatchSummary = {
   cardVariant: CardVariant
 }
 
-export enum MatchStatus {
-  LIVE = "LIVE",
-  UPCOMING = "UPCOMING",
-  COMPLETED = "COMPLETED",
-}
-
-export enum CardVariant {
-  TENNIS = "tennis",
-  SESSION = "session",
-  DEFAULT = "default",
-}
-
 export interface FixtureRound {
   matches: MatchSummary[]
   roundLabel: string
   byes?: { name?: string; img?: string }[]
   roundSlug?: string
+}
+
+export type LadderRow = {
+  teamId: string | number
+  teamName: string
+  teamLogo?: string | string[]
+  position: number | string
+  [key: string]: string | number | undefined | string[]
+}
+
+export type LadderPlacingCategory = {
+  position: number[]
+  label: string
+  colour?: string
+}
+
+export interface SportsLadder {
+  tableName?: string
+  headings: string[]
+  data: LadderRow[]
+  placingCategories?: LadderPlacingCategory[]
 }
 
 export type LadderGroupConfig = {
@@ -126,27 +91,54 @@ export type LadderConfig = {
   playoffPictureConfig?: PlayoffPictureConfig
 }
 
+export type LeagueSeasonConfig = {
+  name: string
+  slug: string
+  icon?: string
+  seasons: { name: string; slug: string; ladderConfig?: LadderConfig }[]
+  display?: DisplayTypes
+  externalURL?: string
+  byes?: {
+    name: string
+    img: string
+  }[]
+  excludeFromToday?: boolean
+}
+
+export type ClientLeagueSeasonConfig = Omit<LeagueSeasonConfig, "seasons"> & {
+  seasons: Omit<LeagueSeasonConfig["seasons"][number], "ladderConfig">[]
+}
+
+/**
+ * Service Interface
+ */
+
 export interface SportService {
   matchesByLeagueSeason(
     leagueId: string,
     seasonId: string,
   ): Promise<Matches | null>
-
   matchesByDate(date: Date): Promise<Matches | null>
   matchesByTeam(teamId: string): Promise<Matches | null>
-  matchDetails(matchId: string): Promise<MatchDetail | null>
-
+  matchDetails(
+    matchId: string,
+    leagueId?: string,
+    seasonId?: string,
+  ): Promise<MatchDetail | null>
   standings(leagueId: string, seasonId: string): Promise<Standings | null>
-
   brackets(leagueId: string, seasonId: string): Promise<Brackets | null>
 }
+
+/**
+ * Service Response Types
+ */
 
 export interface Matches {
   fixtures: FixtureRound[]
   currentRound: string
 }
 
-export interface MatchDetail {
+export interface TeamMatchDetail {
   matchDetails: {
     homeTeam: TeamScoreDetails
     awayTeam: TeamScoreDetails
@@ -155,6 +147,19 @@ export interface MatchDetail {
   scoreBreakdown: PeriodScore[]
   scoreEvents?: ScoreDifference[]
 }
+
+export interface StageMatchDetail {
+  standings: LadderGroup[]
+}
+
+export type MatchDetail = TeamMatchDetail | StageMatchDetail
+
+export type PeriodScore = {
+  teams: { home: { score: number | string }; away: { score: number | string } }
+  periodName: string
+}
+
+export type ScoreDifference = { event: string; difference: number }
 
 export interface LadderGroup {
   label?: string
@@ -174,6 +179,10 @@ export interface Brackets {
     matches: BracketMatch[]
   }[]
 }
+
+/**
+ * Enums
+ */
 
 export enum SPORT {
   ALL_SPORTS = "all-sports",
@@ -196,16 +205,22 @@ export enum SPORT {
   DARTS = "darts",
 }
 
+export enum MatchStatus {
+  LIVE = "LIVE",
+  UPCOMING = "UPCOMING",
+  COMPLETED = "COMPLETED",
+}
+
+export enum CardVariant {
+  TENNIS = "tennis",
+  SESSION = "session",
+  DEFAULT = "default",
+}
+
 export enum DisplayTypes {
   ROUND = "round",
   DATE = "date",
   LEAGUE = "league",
-}
-
-export enum APIEventTypes {
-  SOFASCORE = "SOFASCORE",
-  SPORTSMONKS_CRICKET = "SPORTSMONKS_CRICKET",
-  SPORTSDB = "SPORTSDB",
 }
 
 export enum CountryFlagCode {

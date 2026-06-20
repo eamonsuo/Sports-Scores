@@ -10,8 +10,7 @@ import {
 import { PlayoffPictureConfig } from "@/types/playoff-picture"
 import { Sofascore_Score } from "@/types/sofascore"
 import { format } from "date-fns/format"
-
-const fallback = "/vercel.svg"
+import { FALLBACK_IMAGE } from "./constants"
 
 export function updateQuota(response: Response, sport: SPORT) {
   const limit = response.headers.get("x-ratelimit-requests-limit")
@@ -138,7 +137,7 @@ export function setSeriesInfo(
 
 export function getCountryImageUrl(countryCode?: CountryFlagCode) {
   if (countryCode === null || countryCode === undefined) {
-    return fallback
+    return FALLBACK_IMAGE
   }
 
   return `https://flagcdn.com/${countryCode}.svg`
