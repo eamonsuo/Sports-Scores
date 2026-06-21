@@ -54,7 +54,10 @@ export default function Ladder({
                 : undefined)
             return (
               <tr key={item.teamId} className="border-b border-t">
-                <td className={cn("w-1 p-0", colour)} />
+                <td
+                  className={cn("w-1 p-0", colour)}
+                  style={{ backgroundColor: item.teamColour }}
+                />
                 <td className="py-2 pe-2 ps-1">{item.position}</td>
                 <td className="text-left text-sm">
                   <Link

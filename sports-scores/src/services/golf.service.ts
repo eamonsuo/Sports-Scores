@@ -191,7 +191,7 @@ class GolfService implements SportService {
           : MatchStatus.COMPLETED
 
     const tournamentImage =
-      event.leagueImg ?? resolveSportImage(event.leagueName ?? "")
+      event.leagueImg ?? resolveSportImage(event.leagueName)
 
     return {
       ...event,

@@ -2,7 +2,23 @@ import { CountryFlagCode } from "@/types/misc"
 import { FALLBACK_IMAGE } from "./constants"
 import { getCountryImageUrl } from "./projUtils"
 
-export function resolveSportImage(teamName: string) {
+export function resolveSportImage(
+  teamName: (string | undefined) | (string | undefined)[],
+) {
+  if (!Array.isArray(teamName)) {
+    return resolveImage(teamName ?? "")
+  }
+
+  for (const name of teamName) {
+    const result = resolveImage(name ?? "")
+    if (result !== FALLBACK_IMAGE) {
+      return result
+    }
+  }
+  return FALLBACK_IMAGE
+}
+
+export function resolveImage(teamName: string) {
   teamName = teamName.replace(
     /\s((W|A|U19|Women|Reserve|Reserves|7s|U23)(\sW)?)$/i,
     "",
@@ -1987,6 +2003,7 @@ export function resolveSportImage(teamName: string) {
     case "Tonga":
       return getCountryImageUrl(CountryFlagCode.Tonga)
     case "Trinidad And Tobago":
+    case "Trinidad and Tobago":
       return getCountryImageUrl(CountryFlagCode.TrinidadAndTobago)
     case "Tunisia":
       return getCountryImageUrl(CountryFlagCode.Tunisia)

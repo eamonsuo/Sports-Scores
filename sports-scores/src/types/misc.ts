@@ -62,6 +62,7 @@ export type LadderRow = {
   teamId: string | number
   teamName: string
   teamLogo?: string | string[]
+  teamColour?: string
   position: number | string
   [key: string]: string | number | undefined | string[]
 }

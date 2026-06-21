@@ -550,21 +550,21 @@ const MOTORSPORT_LADDER_CONFIG: LadderConfig = {
     {
       label: "Drivers",
       groupFilter: (tableName) => tableName.includes("Athlete"),
-      placingCategories: [
-        { label: "World Champion", position: [1], colour: "bg-yellow-300" },
-      ],
+      // placingCategories: [
+      //   { label: "World Champion", position: [1], colour: "bg-yellow-300" },
+      // ],
       headings: MOTORSPORT_DRIVER_STANDINGS_HEADINGS,
     },
     {
       label: "Constructors",
       groupFilter: (tableName) => tableName.includes("Team"),
-      placingCategories: [
-        {
-          label: "Constructor Champion",
-          position: [1],
-          colour: "bg-yellow-300",
-        },
-      ],
+      //   placingCategories: [
+      //     {
+      //       label: "Constructor Champion",
+      //       position: [1],
+      //       colour: "bg-yellow-300",
+      //     },
+      //   ],
       headings: MOTORSPORT_CONSTRUCTOR_STANDINGS_HEADINGS,
     },
     {
@@ -585,10 +585,6 @@ export const MOTORSPORT_CATEGORIES: LeagueSeasonConfig[] = [
       { name: "2025", slug: "209766", ladderConfig: MOTORSPORT_LADDER_CONFIG },
       { name: "2024", slug: "206455", ladderConfig: MOTORSPORT_LADDER_CONFIG },
       { name: "2023", slug: "203647", ladderConfig: MOTORSPORT_LADDER_CONFIG },
-      // { name: "2026", slug: "2026", ladderConfig: MOTORSPORT_LADDER_CONFIG },
-      // { name: "2025", slug: "2025", ladderConfig: MOTORSPORT_LADDER_CONFIG },
-      // { name: "2024", slug: "2024", ladderConfig: MOTORSPORT_LADDER_CONFIG },
-      // { name: "2023", slug: "2023", ladderConfig: MOTORSPORT_LADDER_CONFIG },
     ],
   },
   {
@@ -1964,31 +1960,136 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
 export const TENNIS_LEAGUES_CLIENT = stripLeagueSeasonConfig(TENNIS_LEAGUES)
 
 export const DARTS_LEAGUES: LeagueSeasonConfig[] = [
+  //Majors
+  // The premier event of darts: large global field, sets format.
   {
-    name: "Home",
-    slug: "",
-    seasons: [{ name: "N/A", slug: "" }],
-  },
-  {
-    name: "2026 World Champs",
-    slug: "world-champs",
-    seasons: [{ name: "2026", slug: "" }],
-  },
-  {
-    name: "FlashScore",
-    slug: "all",
+    name: "World Darts Championship",
+    slug: "616",
     seasons: [
-      { name: "25/26", slug: "" },
-      { name: "24/25", slug: "" },
+      // { name: "26/27", slug: "85121" },
+      { name: "25/26", slug: "85121" },
+      { name: "24/25", slug: "68103" },
+    ],
+  },
+  // Top 24 + 8 qualifiers. 2 leg sets. Encourages fast and unpredictable matches.
+  {
+    name: "World Masters",
+    slug: "1548",
+    seasons: [
+      { name: "2026", slug: "84672" },
+      { name: "2025", slug: "69486" },
+    ],
+  },
+  // An open-format major with a random draw, allowing amateurs and pros to compete together. FA Cup of Darts
+  {
+    name: "UK Open",
+    slug: "670",
+    seasons: [
+      { name: "2026", slug: "84753" },
+      { name: "2025", slug: "69483" },
+    ],
+  },
+  // A national teams event where countries compete in pairs for international glory.
+  {
+    name: "World Cup of Darts",
+    slug: "1744",
+    seasons: [
+      {
+        name: "2026",
+        slug: "84794",
+        ladderConfig: ladderConfigMap({
+          placingCategories: [{ label: "Knockout", position: [1] }],
+        }),
+      },
+      { name: "2025", slug: "76322" },
+    ],
+  },
+
+  // An elite 32-player event known for high-quality matches and a legs-only format.
+  {
+    name: "World Matchplay",
+    slug: "689",
+    seasons: [
+      // { name: "2026", slug: "85121" },
+      { name: "2025", slug: "69484" },
+    ],
+  },
+  // A unique major requiring players to start and finish legs on a double (double-in, double-out).
+  {
+    name: "World Grand Prix",
+    slug: "751",
+    seasons: [
+      // { name: "2026", slug: "85121" },
+      { name: "2025", slug: "69485" },
+    ],
+  },
+  // A mixed-format event with group stages and knockout rounds featuring cross-competition qualifiers.
+  {
+    name: "Grand Slam of Darts",
+    slug: "597",
+    seasons: [
+      // { name: "2026", slug: "85815" },
+      { name: "2025", slug: "85815" },
+    ],
+  },
+  //Leagues
+  // Premier weekly league featuring top 8 players
+  {
+    name: "Premier League Darts",
+    slug: "11565",
+    seasons: [
+      { name: "2026", slug: "84759" },
+      { name: "2025", slug: "69498" },
+    ],
+  },
+  //Exhibition tournaments around the world
+  {
+    name: "World Series of Darts - Australian Darts Masters",
+    slug: "23242",
+    seasons: [
+      // { name: "2026", slug: "85121" },
+      { name: "2025", slug: "69511" },
     ],
   },
   {
-    name: "PDC Tournaments",
-    slug: "pdc",
+    name: "World Series of Darts - Finals",
+    slug: "11545",
     seasons: [
-      { name: "25/26", slug: "" },
-      { name: "24/25", slug: "" },
+      // { name: "2026", slug: "85121" },
+      { name: "2025", slug: "69497" },
     ],
+  },
+  //Regular weekly league for PDC Tour members
+  {
+    name: "Players Championship - Season",
+    slug: "2066",
+    seasons: [
+      // { name: "2026", slug: "85121" },
+      { name: "2025", slug: "71945" },
+    ],
+  },
+  {
+    name: "Players Championship - Finals",
+    slug: "631",
+    seasons: [
+      // { name: "2026", slug: "85121" },
+      { name: "2025", slug: "69482" },
+    ],
+  },
+  //Regular weekly league of European Tour events for PDC Tour members
+  {
+    name: "European Championship",
+    slug: "592",
+    seasons: [
+      // { name: "2026", slug: "85121" },
+      { name: "2025", slug: "69481" },
+    ],
+  },
+  {
+    name: "PDC Rankings",
+    slug: "rankings",
+    seasons: [{ name: "Current", slug: "external" }],
+    externalURL: "https://www.pdc.tv/rankings#World_Rankings",
   },
 ]
 

@@ -4,6 +4,7 @@ import {
   fetchScheduledEvents,
   fetchTeamLastMatches,
   fetchTeamNextMatches,
+  fetchTournamentBrackets,
   fetchTournamentLastMatches,
   fetchTournamentNextMatches,
   fetchTournamentStandings,
@@ -51,7 +52,11 @@ class AussieRulesService extends SofascoreSport {
           "standings",
           fetchTournamentStandings,
         ),
-        fetchCupTrees: async () => null,
+        fetchCupTrees: withDevCache(
+          "aussie-rules",
+          "tournament-brackets",
+          fetchTournamentBrackets,
+        ),
         fetchPlayerRankings: async () => null,
         fetchTeamLastEvents: withDevCache(
           "aussie-rules",

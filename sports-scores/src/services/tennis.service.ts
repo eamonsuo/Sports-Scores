@@ -202,9 +202,10 @@ class TennisService extends SofascoreSport {
                 position: rank.ranking,
                 teamId: rank.id,
                 teamName: rank.rowName,
-                teamLogo: resolveSportImage(
-                  rank.team.country.name ?? rank.team.name,
-                ),
+                teamLogo: resolveSportImage([
+                  rank.team.country.name,
+                  rank.team.name,
+                ]),
 
                 Total: rank.points,
                 Prev: rank.previousRanking,

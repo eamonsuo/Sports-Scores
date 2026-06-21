@@ -116,7 +116,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.DARTS,
-    link: `/sports/${SPORT.DARTS}`,
+    link: `/sports/${SPORT.DARTS}/today`,
     img: "/footer/dart.svg",
     altText: "Darts",
   },
