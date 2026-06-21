@@ -1,4 +1,5 @@
 import { Match as BracketMatch } from "@/components/bracket/types"
+import { FALLBACK_IMAGE } from "@/lib/constants"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
 import { resolveSportImage } from "@/lib/imageMapping"
 import { resolvePlayoffPicture } from "@/lib/playoffPictureMapping"
@@ -256,7 +257,7 @@ export abstract class SofascoreSport implements SportService {
       seasonId,
     )
 
-    if (!standings) {
+    if (!standings || "error" in standings) {
       return null
     }
 
@@ -423,7 +424,7 @@ export abstract class SofascoreSport implements SportService {
         options?.leagueId ?? event.tournament.uniqueTournament.id.toString(),
       leagueName: options?.leagueName,
       leagueSlug: options?.leagueSlug,
-      leagueImg: options?.leagueImg ?? resolveSportImage(""),
+      leagueImg: options?.leagueImg ?? FALLBACK_IMAGE,
       competitorDetails: [
         {
           id:
@@ -437,7 +438,10 @@ export abstract class SofascoreSport implements SportService {
             "0",
           img:
             options?.competitorDetails?.[0]?.img ??
-            resolveSportImage(event.homeTeam.name),
+            resolveSportImage([
+              event.homeTeam.name,
+              event.homeTeam.country?.name,
+            ]),
           winDrawLoss: options?.competitorDetails?.[0]?.winDrawLoss,
           slug:
             options?.competitorDetails?.[0]?.slug ??
@@ -455,7 +459,10 @@ export abstract class SofascoreSport implements SportService {
             "0",
           img:
             options?.competitorDetails?.[1]?.img ??
-            resolveSportImage(event.awayTeam.name),
+            resolveSportImage([
+              event.awayTeam.name,
+              event.awayTeam.country?.name,
+            ]),
           winDrawLoss: options?.competitorDetails?.[1]?.winDrawLoss,
           slug:
             options?.competitorDetails?.[1]?.slug ??
@@ -488,19 +495,30 @@ export abstract class SofascoreSport implements SportService {
               group?.headings,
               group?.placingCategories,
             ),
+          )
+          .sort((a, b) =>
+            a.tableName && b.tableName
+              ? a.tableName.localeCompare(b.tableName)
+              : 0,
           ),
         label: group?.label ?? "All",
       }))
     }
     return [
       {
-        tables: standings?.standings.map((table) =>
-          this.standingsMapper(
-            table,
-            this.headings,
-            // this.placingCategories,
+        tables: standings?.standings
+          .map((table) =>
+            this.standingsMapper(
+              table,
+              this.headings,
+              // this.placingCategories,
+            ),
+          )
+          .sort((a, b) =>
+            a.tableName && b.tableName
+              ? a.tableName.localeCompare(b.tableName)
+              : 0,
           ),
-        ),
       },
     ]
   }
@@ -520,7 +538,10 @@ export abstract class SofascoreSport implements SportService {
           position: item.position,
           teamId: item.team.id.toString(),
           teamName: shortenTeamNames(item.team.name),
-          teamLogo: resolveSportImage(item.team.name),
+          teamLogo: resolveSportImage([
+            item.team?.name,
+            item.team?.country?.name,
+          ]),
           sport: this.sport,
 
           Pts: item.points,
@@ -555,13 +576,13 @@ export abstract class SofascoreSport implements SportService {
         id: matchDetails?.homeTeam.id?.toString() ?? "",
         name: shortenTeamNames(matchDetails?.homeTeam.name ?? ""),
         score: matchDetails?.homeScore?.current?.toString() ?? "0",
-        img: resolveSportImage(matchDetails?.homeTeam.name ?? ""),
+        img: resolveSportImage(matchDetails?.homeTeam.name),
       },
       awayTeam: {
         id: matchDetails?.awayTeam.id?.toString() ?? "",
         name: shortenTeamNames(matchDetails?.awayTeam.name ?? ""),
         score: matchDetails?.awayScore?.current?.toString() ?? "0",
-        img: resolveSportImage(matchDetails?.awayTeam.name ?? ""),
+        img: resolveSportImage(matchDetails?.awayTeam.name),
       },
     }
   }
@@ -625,11 +646,6 @@ export function mapSofascoreToStanding(
       pointsDiff: row.scoresFor - row.scoresAgainst,
     },
   }
-}
-
-const DEFAULT_LADDER_CONFIG: LadderGroupConfig = {
-  label: "Overall",
-  headings: ["", "Gap", "Pts"],
 }
 
 export abstract class SofascoreStageSport implements SportService {
@@ -784,7 +800,7 @@ export abstract class SofascoreStageSport implements SportService {
         `/sports/${this.sport}/${event.uniqueStage.id}/${event.stageParent.id}`,
       leagueImg:
         options?.leagueImg ??
-        resolveSportImage(event.country?.name ?? event.name),
+        resolveSportImage([event.country?.name, event.name]),
       competitorDetails: event?.winner
         ? [
             {
@@ -795,7 +811,7 @@ export abstract class SofascoreStageSport implements SportService {
               score: options?.competitorDetails?.[0]?.score ?? "",
               img:
                 options?.competitorDetails?.[0]?.img ??
-                resolveSportImage(event.winner.country.name ?? ""),
+                resolveSportImage(event.winner.country.name),
               winDrawLoss: options?.competitorDetails?.[0]?.winDrawLoss,
               slug:
                 options?.competitorDetails?.[0]?.slug ??
@@ -826,7 +842,7 @@ export abstract class SofascoreStageSport implements SportService {
       ...event,
       ...options,
       status,
-      leagueImg: event.leagueImg ?? resolveSportImage(event.leagueName ?? ""),
+      leagueImg: event.leagueImg ?? resolveSportImage(event.leagueName),
       timer:
         status === MatchStatus.UPCOMING
           ? event.startDate
@@ -851,9 +867,10 @@ export abstract class SofascoreStageSport implements SportService {
               position: item.position ?? "-",
               teamId: item.team?.id?.toString() ?? "",
               teamName: shortenTeamNames(item.team?.name ?? ""),
-              teamLogo: resolveSportImage(
-                item.team?.country?.name ?? item.team?.name ?? "",
-              ),
+              teamLogo: resolveSportImage([
+                item.team?.name,
+                item.team?.country?.name,
+              ]),
               sport: this.sport,
 
               Pts: item.points,

@@ -117,7 +117,7 @@ class SurfingService implements SportService {
           : MatchStatus.COMPLETED
 
     const tournamentImage = resolveSportImage(
-      event.venue?.split(",").at(-1)?.trimStart() ?? "",
+      event.venue?.split(",").at(-1)?.trimStart(),
     )
 
     return {

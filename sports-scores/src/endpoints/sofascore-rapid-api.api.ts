@@ -6,6 +6,7 @@ import {
   Sofascore_EventPage_Response,
   Sofascore_Events_Response,
   Sofascore_TotalStandings_Response,
+  Sofascore_TournamentCupTrees_Response,
 } from "@/types/sofascore"
 import { format } from "date-fns/format"
 
@@ -72,6 +73,15 @@ export async function fetchTournamentStandings(
   return (await fetchSofascoreRapidApi(
     `/tournaments/get-standings?tournamentId=${tournamentId}&seasonId=${seasonId}&type=total`,
   )) as Sofascore_TotalStandings_Response
+}
+
+export async function fetchTournamentBrackets(
+  tournamentId: string,
+  seasonId: string,
+) {
+  return (await fetchSofascoreRapidApi(
+    `/tournaments/get-cuptrees?tournamentId=${tournamentId}&seasonId=${seasonId}`,
+  )) as Sofascore_TournamentCupTrees_Response
 }
 
 export async function fetchMatchDetails(matchId: string) {

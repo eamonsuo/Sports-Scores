@@ -82,6 +82,11 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
   [SPORT.DARTS]: {
     leagues: DARTS_LEAGUES_CLIENT,
     service: dartsService,
+    navButtons: [
+      { href: "#current-date", label: "Matches", page: "matches" },
+      { href: "bracket", label: "Bracket", page: "bracket" },
+      { href: "ladder", label: "Ladder", page: "ladder" },
+    ],
   },
   [SPORT.FOOTBALL]: {
     leagues: FOOTBALL_LEAGUES_CLIENT,

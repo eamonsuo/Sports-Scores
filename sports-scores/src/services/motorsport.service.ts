@@ -3,10 +3,9 @@ import {
   fetchMotorsportSubstages,
   fetchMotorsportTeamStandings,
 } from "@/endpoints/motorsport.api"
-import { FALLBACK_IMAGE, MOTORSPORT_CATEGORIES } from "@/lib/constants"
+import { MOTORSPORT_CATEGORIES } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
-import { resolveSportImage } from "@/lib/imageMapping"
 import { getSportConfigurations } from "@/lib/projUtils"
 import {
   Brackets,
@@ -184,10 +183,9 @@ class MotorsportService extends SofascoreStageSport {
         data: mappedTable.data.map((item, idx) => {
           return {
             ...item,
-            teamLogo:
-              this.resolveImage(table[idx].team?.name ?? "") ??
-              this.resolveImage(table[idx].team?.country?.name ?? "") ??
-              FALLBACK_IMAGE,
+            teamColour: table[idx].parentTeam
+              ? table[idx].parentTeam.teamColors?.primary
+              : table[idx].team?.teamColors?.primary,
             "+/-": this.setPlacesGained(
               Number(table[idx].position),
               Number(table[idx].gridPosition),
@@ -212,11 +210,6 @@ class MotorsportService extends SofascoreStageSport {
     } else {
       return "0"
     }
-  }
-
-  private resolveImage(teamName: string) {
-    const result = resolveSportImage(teamName)
-    return result === FALLBACK_IMAGE ? null : result
   }
 
   async matchesFromAPI(
