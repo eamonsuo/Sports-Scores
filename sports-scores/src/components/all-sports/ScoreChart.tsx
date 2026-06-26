@@ -14,7 +14,6 @@ export default function ScoreChart({
   homeLogo?: string | string[]
   awayLogo?: string | string[]
 }) {
-  console.log("ScoreChart rendered with scoreDifference:", scoreDifference)
   // Use first image if array (for doubles tennis), and handle empty strings
   const homeLogoSrc = Array.isArray(homeLogo)
     ? homeLogo[0] || undefined

@@ -108,3 +108,21 @@ export async function fetchFootballCupTrees(
     `/tournament/${tournamentId}/season/${seasonId}/cuptrees`,
   )) as Sofascore_TournamentCupTrees_Response
 }
+
+export async function fetchFootballMatchesByCategoryDate(
+  category: string[],
+  date: Date,
+) {
+  const responses = await Promise.all(
+    category.map(
+      (cat) =>
+        fetchFootballApi(
+          `/category/${cat}/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+        ) as Promise<Sofascore_Events_Response>,
+    ),
+  )
+
+  return {
+    events: responses.flatMap((r) => r?.events ?? []),
+  } as Sofascore_Events_Response
+}

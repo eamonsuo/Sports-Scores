@@ -2,7 +2,7 @@ import {
   fetchTennisATPRankings,
   fetchTennisBracket,
   fetchTennisMatchDetails,
-  fetchTennisMatchesByDate,
+  fetchTennisMatchesByCategoryDate,
   fetchTennisPlayerLastMatches,
   fetchTennisPlayerNextMatches,
   fetchTennisTournamentLastMatches,
@@ -52,7 +52,7 @@ class TennisService extends SofascoreSport {
         fetchEventsByDate: withDevCache(
           "tennis",
           "matches-by-date",
-          fetchTennisMatchesByDate,
+          fetchTennisMatchesByCategoryDate,
         ),
         fetchEventDetails: withDevCache(
           "tennis",
@@ -75,6 +75,7 @@ class TennisService extends SofascoreSport {
         ),
       },
       SPORT.TENNIS,
+      TENNIS_CATEGORIES.map((c) => c.slug),
       TENNIS_LEAGUES,
       [] as const,
       undefined,
@@ -84,15 +85,18 @@ class TennisService extends SofascoreSport {
 
   override async matchesByDate(date: Date) {
     const timezone = date instanceof TZDate ? date.timeZone : "UTC"
-    const matches = await this.apiEndpoints.fetchEventsByDate(date)
+    const matches = await this.apiEndpoints.fetchEventsByDate(
+      this.categories,
+      date,
+    )
 
     if (!matches) {
       return null
     }
 
-    const validLeagueIds = TENNIS_CATEGORIES.concat(TENNIS_LEAGUES)
-      .filter((l) => !l.excludeFromToday)
+    const validLeagueIds = TENNIS_LEAGUES.filter((l) => !l.excludeFromToday)
       .map((l) => Number(l.slug))
+      .concat(TENNIS_CATEGORIES.map((c) => Number(c.slug)))
     const leagueIdToName = Object.fromEntries(
       TENNIS_CATEGORIES.concat(TENNIS_LEAGUES).map((l) => [
         Number(l.slug),

@@ -1,5 +1,6 @@
 import { fetchSportEvents } from "@/endpoints/dataverse.api"
 import { SportEvent } from "@/types/event-calendar"
+import { TVChannel } from "@/types/misc"
 
 function mapToSportEvent(
   raw: import("@/types/dataverse").DataverseSportEvent,
@@ -10,6 +11,15 @@ function mapToSportEvent(
       tags = JSON.parse(raw.ss_tags)
     } catch {
       tags = undefined
+    }
+  }
+
+  let tv: TVChannel[] | undefined
+  if (raw.ss_tv) {
+    try {
+      tv = JSON.parse(raw.ss_tv)
+    } catch {
+      tv = undefined
     }
   }
 
@@ -25,6 +35,7 @@ function mapToSportEvent(
     link: raw.ss_link ?? undefined,
     location: raw.ss_location ?? undefined,
     tags,
+    tv,
     notes: raw.ss_notes ?? undefined,
   }
 }

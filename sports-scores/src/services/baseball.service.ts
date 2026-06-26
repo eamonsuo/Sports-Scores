@@ -1,13 +1,14 @@
 import {
   fetchBaseballLastMatches,
   fetchBaseballMatchDetails,
-  fetchBaseballMatchesByDate,
+  fetchBaseballMatchesByCategoryDate,
   fetchBaseballNextMatches,
   fetchBaseballStandings,
   fetchBaseballTeamLastMatches,
   fetchBaseballTeamNextMatches,
 } from "@/endpoints/baseball.api"
 import {
+  BASEBALL_CATEGORIES,
   BASEBALL_LADDER_HEADINGS,
   BASEBALL_LEAGUES,
   SCORE_BREAKDOWN_INNINGS_CONFIG,
@@ -33,7 +34,7 @@ class BaseballService extends SofascoreSport {
         fetchEventsByDate: withDevCache(
           "baseball",
           "matches-by-date",
-          fetchBaseballMatchesByDate,
+          fetchBaseballMatchesByCategoryDate,
         ),
         fetchEventDetails: withDevCache(
           "baseball",
@@ -60,6 +61,7 @@ class BaseballService extends SofascoreSport {
         ),
       },
       SPORT.BASEBALL,
+      BASEBALL_CATEGORIES,
       BASEBALL_LEAGUES,
       BASEBALL_LADDER_HEADINGS,
       SCORE_BREAKDOWN_INNINGS_CONFIG,

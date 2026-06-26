@@ -10,6 +10,7 @@ import {
   fetchTournamentStandings,
 } from "@/endpoints/sofascore-rapid-api.api"
 import {
+  AUSSIE_RULES_CATEGORIES,
   AUSSIE_RULES_LADDER_HEADINGS,
   AUSSIE_RULES_LEAGUES,
   SCORE_BREAKDOWN_QUARTERS_CONFIG,
@@ -35,7 +36,7 @@ class AussieRulesService extends SofascoreSport {
         fetchEventsByDate: withDevCache(
           "aussie-rules",
           "matches-by-date",
-          (date: Date) => fetchScheduledEvents("87", date),
+          fetchScheduledEvents,
         ),
         fetchEventDetails: withDevCache(
           "aussie-rules",
@@ -70,6 +71,7 @@ class AussieRulesService extends SofascoreSport {
         ),
       },
       SPORT.AUSSIE_RULES,
+      AUSSIE_RULES_CATEGORIES,
       AUSSIE_RULES_LEAGUES,
       AUSSIE_RULES_LADDER_HEADINGS,
       SCORE_BREAKDOWN_QUARTERS_CONFIG,

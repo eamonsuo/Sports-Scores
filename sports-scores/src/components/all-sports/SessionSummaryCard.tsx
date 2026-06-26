@@ -1,6 +1,9 @@
+import { FALLBACK_IMAGE } from "@/lib/constants"
+import { resolveSportImage } from "@/lib/imageMapping"
 import { formatTime } from "@/lib/projUtils"
 import { cn } from "@/lib/utils"
 import { MatchSummary } from "@/types/misc"
+import Image from "next/image"
 import Link from "next/link"
 import Timer from "../misc-ui/Timer"
 
@@ -25,11 +28,22 @@ export default function SessionSummaryCard({
     <Link href={href}>
       <div
         className={cn(
-          "mt-4 flex items-center gap-4 border border-gray-300 p-2 shadow-sm active:bg-gray-300 dark:border-neutral-500 dark:text-neutral-400 dark:active:bg-neutral-700",
+          "mt-4 flex gap-1 border border-gray-300 p-2 shadow-sm active:bg-gray-300 dark:border-neutral-500 dark:text-neutral-400 dark:active:bg-neutral-700",
           className,
         )}
       >
         <p className="flex-1">{event.summaryText}</p>
+        {event.tv?.map((tv, idx) => (
+          <Image
+            key={idx}
+            src={resolveSportImage(tv.channel) || FALLBACK_IMAGE}
+            width={100}
+            height={100}
+            style={{ width: "auto", height: "12px" }}
+            alt={tv.channel}
+            className="mx-auto my-auto"
+          />
+        ))}
         <Timer display={timer.display} displayColour={timer.displayColour} />
         <p>&gt;</p>
       </div>

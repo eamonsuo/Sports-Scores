@@ -1,4 +1,5 @@
 import { FALLBACK_IMAGE } from "@/lib/constants"
+import { resolveSportImage } from "@/lib/imageMapping"
 import { formatTime } from "@/lib/projUtils"
 import { cn } from "@/lib/utils"
 import { MatchSummary } from "@/types/misc"
@@ -48,7 +49,7 @@ export default function MatchSummaryCard({
                 {homeDetails.img.map((img, idx) => (
                   <Image
                     key={idx}
-                    src={img || FALLBACK_IMAGE}
+                    src={img}
                     width={100}
                     height={100}
                     style={{ width: "32px", height: "auto" }}
@@ -98,7 +99,7 @@ export default function MatchSummaryCard({
                 {awayDetails.img.map((img, idx) => (
                   <Image
                     key={idx}
-                    src={img || FALLBACK_IMAGE}
+                    src={img}
                     width={100}
                     height={100}
                     style={{ width: "32px", height: "auto" }}
@@ -125,7 +126,19 @@ export default function MatchSummaryCard({
           >
             {homeDetails?.name} <br /> {homeDetails?.winDrawLoss}
           </p>
-          <div></div>
+          <div className="flex justify-center gap-1 overflow-visible">
+            {event?.tv?.map((tvDetails, idx) => (
+              <Image
+                key={idx}
+                src={resolveSportImage(tvDetails.channel) || FALLBACK_IMAGE}
+                width={100}
+                height={100}
+                style={{ width: "auto", height: "12px" }}
+                alt={tvDetails.channel}
+                className="mx-auto my-auto"
+              />
+            ))}
+          </div>
           <p
             className={clsx(
               "col-span-2 text-right text-xs text-gray-700 dark:text-neutral-500",

@@ -48,23 +48,17 @@ const SYNC_CONFIG: SyncEntry[] = [
     leagues: RUGBY_LEAGUE_LEAGUES,
     slugs: ["294", "19120", "2135", "2134"],
   },
-  // {
-  //   sport: "rugby-league",
-  //   displayType: DISPLAY_TYPES.ROUND,
-  //   leagues: RUGBY_LEAGUE_LEAGUES,
-  //   slugs: ["*"],
-  // },
-  // {
-  //   sport: "football",
-  //   displayType: DISPLAY_TYPES.ROUND,
-  //   leagues: FOOTBALL_LEAGUES,
-  //   slugs: ["*"],
-  // },
+  {
+    sport: "football",
+    displayType: DisplayTypes.ROUND,
+    leagues: FOOTBALL_LEAGUES,
+    slugs: ["136", "1894", "1786", "17", "19"],
+  },
   {
     sport: "aussie-rules",
     displayType: DisplayTypes.ROUND,
     leagues: AUSSIE_RULES_LEAGUES,
-    slugs: ["656", "10159", "25506", "20126", "20160"],
+    slugs: ["656", "10159", "25506"],
   },
   {
     sport: "american-football",
@@ -109,11 +103,6 @@ const SYNC_CONFIG: SyncEntry[] = [
   //   slugs: ["*"],
   // },
   // {
-  //   sport: "tennis",
-  //   displayType: DisplayTypes.ROUND,
-  //   leagues: TENNIS_LEAGUES,
-  //   slugs: ["*"],
-  // },
   // {
   //   sport: "tennis",
   //   displayType: DisplayTypes.ROUND,
@@ -130,7 +119,7 @@ const SYNC_CONFIG: SyncEntry[] = [
   //   sport: "motorsport",
   //   displayType: DisplayTypes.ROUND,
   //   leagues: MOTORSPORT_CATEGORIES,
-  //   slugs: ["f1"],
+  //   slugs: ["40", "17"],
   // },
   {
     sport: "golf",

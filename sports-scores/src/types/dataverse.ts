@@ -27,6 +27,7 @@ export interface DataverseMatchSummary {
   ss_leagueid: string | null
   ss_seasonid: string | null
   ss_cardvariant: string | null
+  ss_tv: string | null // JSON: TVDetails[]
 }
 
 // ss_sporteventschedule table
@@ -43,6 +44,7 @@ export interface DataverseSportEvent {
   ss_location: string | null
   ss_tags: string | null // JSON array
   ss_notes: string | null
+  ss_tv: string | null // JSON: TVDetails[]
 }
 
 // Standard Dataverse Contact entity

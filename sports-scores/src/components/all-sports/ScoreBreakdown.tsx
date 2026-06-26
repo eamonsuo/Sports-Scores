@@ -29,7 +29,7 @@ export default function ScoreBreakdown({
                 {homeLogo.map((img, idx) => (
                   <Image
                     key={idx}
-                    src={img || FALLBACK_IMAGE}
+                    src={img}
                     width={40}
                     height={40}
                     style={{ width: "15px", height: "auto" }}
@@ -59,7 +59,7 @@ export default function ScoreBreakdown({
                 {awayLogo.map((img, idx) => (
                   <Image
                     key={idx}
-                    src={img || FALLBACK_IMAGE}
+                    src={img}
                     width={40}
                     height={40}
                     style={{ width: "15px", height: "auto" }}

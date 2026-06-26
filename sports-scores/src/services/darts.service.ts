@@ -9,7 +9,7 @@ import {
   fetchTournamentNextMatches,
   fetchTournamentStandings,
 } from "@/endpoints/sofascore-rapid-api.api"
-import { DARTS_LEAGUES } from "@/lib/constants"
+import { DARTS_CATEGORIES, DARTS_LEAGUES } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
 import { DeepPartial, MatchSummary, SPORT } from "@/types/misc"
 import { Sofascore_Event } from "@/types/sofascore"
@@ -32,7 +32,7 @@ class DartsService extends SofascoreSport {
         fetchEventsByDate: withDevCache(
           "darts",
           "matches-by-date",
-          (date: Date) => fetchScheduledEvents("104", date),
+          fetchScheduledEvents,
         ),
         fetchEventDetails: withDevCache(
           "darts",
@@ -67,6 +67,7 @@ class DartsService extends SofascoreSport {
         ),
       },
       SPORT.DARTS,
+      DARTS_CATEGORIES,
       DARTS_LEAGUES,
       ["Player", "P", "W", "L", "Pts"],
     )

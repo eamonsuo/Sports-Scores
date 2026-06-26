@@ -1,4 +1,4 @@
-import { CountryFlagCode } from "@/types/misc"
+import { CountryFlagCode, TVChannel } from "@/types/misc"
 import { FALLBACK_IMAGE } from "./constants"
 import { getCountryImageUrl } from "./projUtils"
 
@@ -24,6 +24,23 @@ export function resolveImage(teamName: string) {
     "",
   )
   switch (teamName) {
+    // TV Channels
+    case TVChannel.NINE:
+      return "https://upload.wikimedia.org/wikipedia/commons/b/b0/Nine_Network_logo_%282008%29.svg"
+    // return "https://upload.wikimedia.org/wikipedia/commons/0/00/9HD_Logo_2020.png"
+    case TVChannel.NINE_NOW:
+      return "https://en.wikipedia.org/wiki/9Now#/media/File:9Now_logo.png"
+    case TVChannel.KAYO:
+      return "https://upload.wikimedia.org/wikipedia/en/2/2c/Kayo_Sports_logo.png"
+    case TVChannel.SEVEN:
+      return "https://upload.wikimedia.org/wikipedia/commons/5/55/Seven_Network_logo.svg"
+    case TVChannel.TEN:
+      return "https://upload.wikimedia.org/wikipedia/en/9/91/Network_10_logo_2025.svg"
+    case TVChannel.SBS:
+      return "https://upload.wikimedia.org/wikipedia/en/8/83/SBS_Australia_Logo_%282019%29.svg"
+    case TVChannel.ABC:
+      return "https://upload.wikimedia.org/wikipedia/en/7/7e/ABC_TV_logo_2021.svg"
+
     // LIV Teams
     case "4ACES GC":
     case "4Aces GC":

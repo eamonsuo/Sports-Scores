@@ -6,9 +6,12 @@ import {
   LadderGroupConfig,
   LeagueSeasonConfig,
   SPORT,
+  TVChannel,
+  TVChannelConfig,
 } from "@/types/misc"
 import { PlayoffPictureConfig } from "@/types/playoff-picture"
 import { Sofascore_Score } from "@/types/sofascore"
+import { addHours } from "date-fns/addHours"
 import { format } from "date-fns/format"
 import { FALLBACK_IMAGE } from "./constants"
 
@@ -279,8 +282,8 @@ export function setTennisMatchSummary(
 
 export function getSportConfigurations(
   leagueConfigs: LeagueSeasonConfig[],
-  leagueId: string,
-  seasonId: string,
+  leagueId?: string,
+  seasonId?: string,
 ) {
   const leagueConfig = leagueConfigs.find((l) => l.slug === leagueId)
 
@@ -289,8 +292,9 @@ export function getSportConfigurations(
   )
 
   const ladderConfig = seasonConfig?.ladderConfig
+  const tvConfig = seasonConfig?.tvguide
 
-  return { leagueConfig, seasonConfig, ladderConfig }
+  return { leagueConfig, seasonConfig, ladderConfig, tvConfig }
 }
 
 export function stripLeagueSeasonConfig(
@@ -298,7 +302,9 @@ export function stripLeagueSeasonConfig(
 ): ClientLeagueSeasonConfig[] {
   return config.map(({ seasons, ...rest }) => ({
     ...rest,
-    seasons: seasons.map(({ ladderConfig, ...seasonRest }) => seasonRest),
+    seasons: seasons.map(
+      ({ ladderConfig, tvguide, ...seasonRest }) => seasonRest,
+    ),
   }))
 }
 
@@ -317,4 +323,16 @@ export function ladderConfigMap(
   }
 
   return { ladderGroup, playoffPictureConfig }
+}
+
+export function tvGuideConfigCreate(
+  channel: TVChannel,
+  addHoursToStart: number,
+  addHoursToEnd: number,
+): TVChannelConfig {
+  return {
+    channel,
+    startTime: (date: Date) => addHours(date, addHoursToStart),
+    endTime: (date: Date) => addHours(date, addHoursToEnd),
+  }
 }

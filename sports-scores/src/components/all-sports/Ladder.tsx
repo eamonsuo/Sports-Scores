@@ -73,7 +73,7 @@ export default function Ladder({
                           item.teamLogo.map((img, idx) => (
                             <Image
                               key={idx + "-logo"}
-                              src={img || FALLBACK_IMAGE}
+                              src={img}
                               width={100}
                               height={100}
                               style={{ width: "20px", height: "auto" }}

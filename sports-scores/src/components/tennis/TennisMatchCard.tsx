@@ -57,7 +57,7 @@ export default function TennisMatchCard({
                 {homeDetails.img.map((img, idx) => (
                   <Image
                     key={idx}
-                    src={img || FALLBACK_IMAGE}
+                    src={img}
                     width={100}
                     height={100}
                     style={{ width: "32px", height: "auto" }}
@@ -110,7 +110,7 @@ export default function TennisMatchCard({
                 {awayDetails.img.map((img, idx) => (
                   <Image
                     key={idx}
-                    src={img || FALLBACK_IMAGE}
+                    src={img}
                     width={80}
                     height={80}
                     style={{ width: "32px", height: "auto" }}

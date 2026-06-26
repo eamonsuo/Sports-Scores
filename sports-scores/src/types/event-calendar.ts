@@ -1,3 +1,5 @@
+import { TVChannel } from "./misc"
+
 export type EventType = "major" | "regular-season"
 
 export interface SportEvent {
@@ -14,6 +16,7 @@ export interface SportEvent {
   location?: string
   tags?: string[] // Emojis or text tags (e.g., ["♂️", "🏆", "🌍"])
   notes?: string // Additional notes (e.g., "Finals start: Oct 1", "Grand Final: Oct 4")
+  tv?: TVChannel[] // TV channel names (e.g., ["ESPN", "Channel 7"])
 }
 
 export interface MonthEvents {

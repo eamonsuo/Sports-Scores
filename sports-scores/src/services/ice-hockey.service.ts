@@ -1,7 +1,7 @@
 import {
   fetchIceHockeyLastMatches,
   fetchIceHockeyMatchDetails,
-  fetchIceHockeyMatchesByDate,
+  fetchIceHockeyMatchesByCategoryDate,
   fetchIceHockeyMatchIncidents,
   fetchIceHockeyNextMatches,
   fetchIceHockeyStandings,
@@ -9,6 +9,7 @@ import {
   fetchIceHockeyTeamNextMatches,
 } from "@/endpoints/ice-hockey.api"
 import {
+  ICE_HOCKEY_CATEGORIES,
   ICE_HOCKEY_LADDER_HEADINGS,
   ICE_HOCKEY_LEAGUES,
   SCORE_BREAKDOWN_PERIODS_CONFIG,
@@ -34,7 +35,7 @@ class IceHockeyService extends SofascoreSport {
         fetchEventsByDate: withDevCache(
           "ice-hockey",
           "matches-by-date",
-          fetchIceHockeyMatchesByDate,
+          fetchIceHockeyMatchesByCategoryDate,
         ),
         fetchEventDetails: withDevCache(
           "ice-hockey",
@@ -65,6 +66,7 @@ class IceHockeyService extends SofascoreSport {
         ),
       },
       SPORT.ICE_HOCKEY,
+      ICE_HOCKEY_CATEGORIES,
       ICE_HOCKEY_LEAGUES,
       ICE_HOCKEY_LADDER_HEADINGS,
       SCORE_BREAKDOWN_PERIODS_CONFIG,

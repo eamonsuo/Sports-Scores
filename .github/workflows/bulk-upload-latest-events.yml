@@ -3,7 +3,7 @@ name: Bulk Upload Events
 on:
   schedule:
     # Runs daily at 2:30pm AEST (04:30 UTC)
-    - cron: "30 4 * * *"
+    - cron: "30 4 * * 3"
   workflow_dispatch:
     inputs:
       mode:
@@ -61,6 +61,20 @@ on:
           - "cycling — UCI World Tour - Men"
           - "cycling — UCI World Tour - Women"
           - "cycling — Vuelta a España"
+          - "darts — European Championship"
+          - "darts — Grand Slam of Darts"
+          - "darts — PDC Rankings"
+          - "darts — Players Championship - Finals"
+          - "darts — Players Championship - Season"
+          - "darts — Premier League Darts"
+          - "darts — UK Open"
+          - "darts — World Cup of Darts"
+          - "darts — World Darts Championship"
+          - "darts — World Grand Prix"
+          - "darts — World Masters"
+          - "darts — World Matchplay"
+          - "darts — World Series of Darts - Australian Darts Masters"
+          - "darts — World Series of Darts - Finals"
           - "football — FIFA World Cup"
           - "football — 🇦🇺 A-League Men"
           - "football — 🇦🇺 A-League Women"

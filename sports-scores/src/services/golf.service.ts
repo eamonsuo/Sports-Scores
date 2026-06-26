@@ -4,7 +4,11 @@ import {
   fetchGolfRankings,
   fetchGolfSchedule,
 } from "@/endpoints/golf.api"
-import { GOLF_FEDEX_HEADINGS, GOLF_TOURS } from "@/lib/constants"
+import {
+  FALLBACK_IMAGE,
+  GOLF_FEDEX_HEADINGS,
+  GOLF_TOURS,
+} from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
 import { resolveSportImage } from "@/lib/imageMapping"
@@ -197,7 +201,7 @@ class GolfService implements SportService {
       ...event,
       status,
       leagueImg:
-        tournamentImage === "/vercel.svg"
+        tournamentImage === FALLBACK_IMAGE
           ? getCountryImageUrl(CountryFlagCode.UnitedStates)
           : tournamentImage,
       timer: status.charAt(0) + status.slice(1).toLowerCase(),
@@ -335,6 +339,12 @@ export function mapTournamentToMatchSummary(
         ? MatchStatus.LIVE
         : MatchStatus.COMPLETED
 
+  const { tvConfig } = getSportConfigurations(
+    GOLF_TOURS,
+    options?.leagueId,
+    options?.seasonId,
+  )
+
   return {
     id: options?.id ?? event.tournId,
     startDate: options?.startDate ?? startDate,
@@ -362,6 +372,25 @@ export function mapTournamentToMatchSummary(
     competitorDetails: [],
     winner: options?.winner,
     cardVariant: options?.cardVariant ?? CardVariant.SESSION,
+    tv: tvConfig?.channels
+      .filter((channel) =>
+        channel.tvFilter
+          ? channel.tvFilter(options?.startDate ?? startDate, event)
+          : true,
+      )
+      .map((channel) => ({
+        channel: channel.channel,
+        startTime: channel.startTime
+          ? channel.startTime(options?.startDate ?? startDate)
+          : (options?.startDate ?? startDate),
+        endTime:
+          options?.endDate ??
+          (event?.date.end
+            ? endDate
+            : channel.endTime
+              ? channel.endTime(options?.startDate ?? startDate)
+              : undefined),
+      })),
   }
 }
 

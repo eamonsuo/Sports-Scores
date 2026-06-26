@@ -643,13 +643,13 @@
   },
   "tennis — Wimbledon - Men's Singles": {
     "leagueId": "2361",
-    "seasonId": "63966",
+    "seasonId": "85943",
     "sport": "tennis",
     "displayType": "round"
   },
   "tennis — Wimbledon - Women's Singles": {
     "leagueId": "2600",
-    "seasonId": "63967",
+    "seasonId": "85945",
     "sport": "tennis",
     "displayType": "round"
   },
@@ -687,6 +687,90 @@
     "leagueId": "wtaRankings",
     "seasonId": "current/ladder",
     "sport": "tennis",
+    "displayType": "round"
+  },
+  "darts — World Darts Championship": {
+    "leagueId": "616",
+    "seasonId": "85121",
+    "sport": "darts",
+    "displayType": "round"
+  },
+  "darts — World Masters": {
+    "leagueId": "1548",
+    "seasonId": "84672",
+    "sport": "darts",
+    "displayType": "round"
+  },
+  "darts — UK Open": {
+    "leagueId": "670",
+    "seasonId": "84753",
+    "sport": "darts",
+    "displayType": "round"
+  },
+  "darts — World Cup of Darts": {
+    "leagueId": "1744",
+    "seasonId": "84794",
+    "sport": "darts",
+    "displayType": "round"
+  },
+  "darts — World Matchplay": {
+    "leagueId": "689",
+    "seasonId": "69484",
+    "sport": "darts",
+    "displayType": "round"
+  },
+  "darts — World Grand Prix": {
+    "leagueId": "751",
+    "seasonId": "69485",
+    "sport": "darts",
+    "displayType": "round"
+  },
+  "darts — Grand Slam of Darts": {
+    "leagueId": "597",
+    "seasonId": "85815",
+    "sport": "darts",
+    "displayType": "round"
+  },
+  "darts — Premier League Darts": {
+    "leagueId": "11565",
+    "seasonId": "84759",
+    "sport": "darts",
+    "displayType": "round"
+  },
+  "darts — World Series of Darts - Australian Darts Masters": {
+    "leagueId": "23242",
+    "seasonId": "69511",
+    "sport": "darts",
+    "displayType": "round"
+  },
+  "darts — World Series of Darts - Finals": {
+    "leagueId": "11545",
+    "seasonId": "69497",
+    "sport": "darts",
+    "displayType": "round"
+  },
+  "darts — Players Championship - Season": {
+    "leagueId": "2066",
+    "seasonId": "71945",
+    "sport": "darts",
+    "displayType": "round"
+  },
+  "darts — Players Championship - Finals": {
+    "leagueId": "631",
+    "seasonId": "69482",
+    "sport": "darts",
+    "displayType": "round"
+  },
+  "darts — European Championship": {
+    "leagueId": "592",
+    "seasonId": "69481",
+    "sport": "darts",
+    "displayType": "round"
+  },
+  "darts — PDC Rankings": {
+    "leagueId": "rankings",
+    "seasonId": "external",
+    "sport": "darts",
     "displayType": "round"
   },
   "motorsport — Formula 1": {

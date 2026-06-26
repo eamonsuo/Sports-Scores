@@ -28,6 +28,41 @@
     "displayType": "round"
   },
   {
+    "name": "🇦🇺 A-League Men 25/26",
+    "leagueId": "136",
+    "seasonId": "82603",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🇦🇺 A-League Women 25/26",
+    "leagueId": "1894",
+    "seasonId": "82605",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🇦🇺 Australia Cup 2025",
+    "leagueId": "1786",
+    "seasonId": "75270",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League 25/26",
+    "leagueId": "17",
+    "seasonId": "76986",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
+    "name": "🏴 FA Cup 25/26",
+    "leagueId": "19",
+    "seasonId": "82557",
+    "sport": "football",
+    "displayType": "round"
+  },
+  {
     "name": "AFL 2026",
     "leagueId": "656",
     "seasonId": "86748",
@@ -45,20 +80,6 @@
     "name": "VFL 2026",
     "leagueId": "25506",
     "seasonId": "90001",
-    "sport": "aussie-rules",
-    "displayType": "round"
-  },
-  {
-    "name": "SANFL 2026",
-    "leagueId": "20126",
-    "seasonId": "89835",
-    "sport": "aussie-rules",
-    "displayType": "round"
-  },
-  {
-    "name": "WAFL 2026",
-    "leagueId": "20160",
-    "seasonId": "89836",
     "sport": "aussie-rules",
     "displayType": "round"
   },

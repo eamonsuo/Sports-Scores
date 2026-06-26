@@ -1,7 +1,7 @@
 import {
   fetchRugbyLeagueLastMatches,
   fetchRugbyLeagueMatchDetails,
-  fetchRugbyLeagueMatchesByDate,
+  fetchRugbyLeagueMatchesByCategoryDate,
   fetchRugbyLeagueMatchIncidents,
   fetchRugbyLeagueNextMatches,
   fetchRugbyLeagueStandings,
@@ -9,6 +9,7 @@ import {
   fetchRugbyLeagueTeamNextMatches,
 } from "@/endpoints/rugby-league.api"
 import {
+  RUGBY_UNION_CATEGORIES,
   RUGBY_UNION_LADDER_HEADINGS,
   RUGBY_UNION_LEAGUES,
   SCORE_BREAKDOWN_HALVES_CONFIG,
@@ -34,7 +35,7 @@ class RugbyUnionService extends SofascoreSport {
         fetchEventsByDate: withDevCache(
           "rugby-union",
           "matches-by-date",
-          fetchRugbyLeagueMatchesByDate,
+          fetchRugbyLeagueMatchesByCategoryDate,
         ),
         fetchEventDetails: withDevCache(
           "rugby-union",
@@ -65,6 +66,7 @@ class RugbyUnionService extends SofascoreSport {
         ),
       },
       SPORT.RUGBY_UNION,
+      RUGBY_UNION_CATEGORIES,
       RUGBY_UNION_LEAGUES,
       RUGBY_UNION_LADDER_HEADINGS,
       SCORE_BREAKDOWN_HALVES_CONFIG,
