@@ -4,14 +4,23 @@ import {
   LadderConfig,
   LadderPlacingCategory,
   LeagueSeasonConfig,
+  MatchSummary,
+  TVChannel,
+  TVConfig,
 } from "@/types/misc"
 import {
   PlayoffPictureStructure,
   type PlayoffPictureConfig,
 } from "@/types/playoff-picture"
+import { Sofascore_Event } from "@/types/sofascore"
 import { RankingList } from "@/types/tennis"
+import { addHours } from "date-fns/addHours"
 import { resolveSportImage } from "./imageMapping"
-import { ladderConfigMap, stripLeagueSeasonConfig } from "./projUtils"
+import {
+  ladderConfigMap,
+  stripLeagueSeasonConfig,
+  tvGuideConfigCreate,
+} from "./projUtils"
 
 export const FALLBACK_IMAGE = "/vercel.svg"
 
@@ -23,10 +32,32 @@ export const RUGBY_LEAGUE_LADDER_HEADINGS = [
   "Diff",
   "Pts",
 ]
+const RUGBY_LEAGUE_MATCH_LENGTH = 1.75 // in hours, used for TV guide end time estimation
+export const RUGBY_LEAGUE_CATEGORIES = ["83"] //Rugby League
+export const FOOTBALL_CATEGORIES = [
+  "34",
+  "1468",
+  "1467",
+  "1465",
+  "1",
+  "1470",
+  "1466",
+  "1469",
+  "1471",
+] //Australia, World, Asia, Europe, England, South America, Africa, North America, Oceania
 export const FOOTBALL_LADDER_HEADINGS = ["Team", "P", "W", "D", "Diff", "Pts"]
+export const FOOTBALL_MATCH_LENGTH = 2 // in hours, used for TV guide end time estimation
 export const AUSSIE_RULES_LADDER_HEADINGS = ["Team", "P", "W", "D", "%", "Pts"]
+const AUSSIE_RULES_MATCH_LENGTH = 2.75 // in hours, used for TV guide end time estimation
+export const AUSSIE_RULES_CATEGORIES = ["87"] //Aussie Rules
+export const BASKETBALL_MATCH_LENGTH = 3 // in hours, used for TV guide end time estimation
+export const BASKETBALL_CATEGORIES = ["113", "103", "15"] //Australia, International, USA
 export const BASKETBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "PCT"]
+export const BASEBALL_MATCH_LENGTH = 3 // in hours, used for TV guide end time estimation
+export const BASEBALL_CATEGORIES = ["1701", "1543", "1374"] //Australia, World, USA
 export const BASEBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "PCT"]
+export const ICE_HOCKEY_MATCH_LENGTH = 3 // in hours, used for TV guide end time estimation
+export const ICE_HOCKEY_CATEGORIES = ["1161", "56", "37"] //Australia, International, USA
 export const ICE_HOCKEY_LADDER_HEADINGS = [
   "Team",
   "P",
@@ -36,6 +67,7 @@ export const ICE_HOCKEY_LADDER_HEADINGS = [
   "Diff",
   "Pts",
 ]
+export const RUGBY_UNION_CATEGORIES = ["82", "1456"] //Rugby Union, Rugby Sevens
 export const RUGBY_UNION_LADDER_HEADINGS = [
   "Team",
   "P",
@@ -45,6 +77,8 @@ export const RUGBY_UNION_LADDER_HEADINGS = [
   "BP",
   "Pts",
 ]
+export const AMERICAN_FOOTBALL_MATCH_LENGTH = 4 // in hours, used for TV guide end time estimation
+export const AMERICAN_FOOTBALL_CATEGORIES = ["1370"] //USA
 export const AMERICAN_FOOTBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "D"]
 export const GOLF_FEDEX_HEADINGS = ["Player", "Total", "Behind"]
 export const GOLF_OWGR_HEADINGS = ["Player", "Total", "Prev"]
@@ -575,13 +609,74 @@ const MOTORSPORT_LADDER_CONFIG: LadderConfig = {
   ],
 }
 
+const F1_SESSION_LENGTH = 1
+const F1_RACE_LENGTH = 2
+const SUPERCARS_SESSION_LENGTH = 8
+const MOTOGP_SESSION_LENGTH = 1
+
+const F1_TV_GUIDE: TVConfig = {
+  channels: [
+    {
+      channel: TVChannel.KAYO,
+      // startTime: (date) => date,
+      endTime: (date) => addHours(date, F1_SESSION_LENGTH),
+      tvFilter(date, event) {
+        const convertedEvent = event as MatchSummary
+        return !convertedEvent.summaryText.includes("Race") ? true : false
+      },
+    },
+    {
+      channel: TVChannel.KAYO,
+      // startTime: (date) => date,
+      endTime: (date) => addHours(date, F1_RACE_LENGTH),
+      tvFilter(date, event) {
+        const convertedEvent = event as MatchSummary
+        return convertedEvent.summaryText.includes("Race") ? true : false
+      },
+    },
+  ],
+}
+
+const SUPERCARS_TV_GUIDE: TVConfig = {
+  channels: [
+    {
+      channel: TVChannel.KAYO,
+      // startTime: (date) => date,
+      endTime: (date) => addHours(date, SUPERCARS_SESSION_LENGTH),
+    },
+    {
+      channel: TVChannel.SEVEN,
+      // startTime: (date) => date,
+      endTime: (date) => addHours(date, SUPERCARS_SESSION_LENGTH),
+      tvFilter(date, event) {
+        const convertedEvent = event as MatchSummary
+        if (
+          convertedEvent?.leagueName?.includes("Sydney") ||
+          convertedEvent?.leagueName?.includes("Townsville") ||
+          convertedEvent?.leagueName?.includes("Bathurst") ||
+          convertedEvent?.leagueName?.includes("Gold Coast") ||
+          convertedEvent?.leagueName?.includes("Adelaide")
+        ) {
+          return true
+        }
+        return false
+      },
+    },
+  ],
+}
+
 export const MOTORSPORT_CATEGORIES: LeagueSeasonConfig[] = [
   {
     name: "Formula 1",
     slug: "40",
     // slug: "f1",
     seasons: [
-      { name: "2026", slug: "214140", ladderConfig: MOTORSPORT_LADDER_CONFIG },
+      {
+        name: "2026",
+        slug: "214140",
+        ladderConfig: MOTORSPORT_LADDER_CONFIG,
+        tvguide: F1_TV_GUIDE,
+      },
       { name: "2025", slug: "209766", ladderConfig: MOTORSPORT_LADDER_CONFIG },
       { name: "2024", slug: "206455", ladderConfig: MOTORSPORT_LADDER_CONFIG },
       { name: "2023", slug: "203647", ladderConfig: MOTORSPORT_LADDER_CONFIG },
@@ -590,14 +685,23 @@ export const MOTORSPORT_CATEGORIES: LeagueSeasonConfig[] = [
   {
     name: "Supercars",
     slug: "supercars",
-    seasons: [{ name: "2026", slug: "2026" }],
+    seasons: [{ name: "2026", slug: "2026", tvguide: SUPERCARS_TV_GUIDE }],
     externalURL: `https://www.supercars.com/calendar`,
   },
   {
     name: "MotoGP",
     slug: "17",
     seasons: [
-      { name: "2026", slug: "220597", ladderConfig: MOTORSPORT_LADDER_CONFIG },
+      {
+        name: "2026",
+        slug: "220597",
+        ladderConfig: MOTORSPORT_LADDER_CONFIG,
+        tvguide: {
+          channels: [
+            tvGuideConfigCreate(TVChannel.KAYO, 0, MOTOGP_SESSION_LENGTH),
+          ],
+        },
+      },
     ],
   },
 ]
@@ -606,12 +710,22 @@ export const MOTORSPORT_CATEGORIES_CLIENT = stripLeagueSeasonConfig(
   MOTORSPORT_CATEGORIES,
 )
 
+const GOLF_BROADCAST_LENGTH = 8
+const KAYO_GOLF_TV_GUIDE: TVConfig = {
+  channels: [tvGuideConfigCreate(TVChannel.KAYO, 0, GOLF_BROADCAST_LENGTH)],
+}
+
 export const GOLF_TOURS: LeagueSeasonConfig[] = [
   {
     name: "PGA Tour",
     slug: "pga",
     seasons: [
-      { name: "2026", slug: "2026", ladderConfig: PGA_2013_LADDER_CONFIG },
+      {
+        name: "2026",
+        slug: "2026",
+        ladderConfig: PGA_2013_LADDER_CONFIG,
+        tvguide: KAYO_GOLF_TV_GUIDE,
+      },
       { name: "2025", slug: "2025", ladderConfig: PGA_2013_LADDER_CONFIG },
     ],
     icon: "https://r2.thesportsdb.com/images/media/league/badge/quvqqr1423564787.png",
@@ -620,7 +734,15 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
     name: "LIV Golf",
     slug: "liv",
     seasons: [
-      { name: "2026", slug: "2026" },
+      {
+        name: "2026",
+        slug: "2026",
+        tvguide: {
+          channels: [
+            tvGuideConfigCreate(TVChannel.SEVEN_PLUS, 0, GOLF_BROADCAST_LENGTH),
+          ],
+        },
+      },
       { name: "2025", slug: "2025" },
     ],
     icon: "https://r2.thesportsdb.com/images/media/league/badge/x8p62j1659513228.png",
@@ -628,14 +750,26 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
   {
     name: "LPGA Tour",
     slug: "lpga",
-    seasons: [{ name: "2026", slug: "2026" }],
+    seasons: [
+      {
+        name: "2026",
+        slug: "2026",
+        tvguide: KAYO_GOLF_TV_GUIDE,
+      },
+    ],
     externalURL: "https://www.google.com/search?igu=1&gws_rd=ssl&q=lpga",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/hdnc211555580691.png",
   },
   {
     name: "DP World Tour",
     slug: "dpworld",
-    seasons: [{ name: "2026", slug: "2026" }],
+    seasons: [
+      {
+        name: "2026",
+        slug: "2026",
+        tvguide: KAYO_GOLF_TV_GUIDE,
+      },
+    ],
     externalURL:
       "https://www.google.com/search?igu=1&gws_rd=ssl&q=dp+world+tour",
     icon: "https://www.thesportsdb.com/images/media/league/badge/3cj95h1778512316.png",
@@ -643,21 +777,39 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
   {
     name: "PGA Tour Australasia",
     slug: "australasia",
-    seasons: [{ name: "25/26", slug: "25-26" }],
+    seasons: [
+      {
+        name: "25/26",
+        slug: "25-26",
+        tvguide: KAYO_GOLF_TV_GUIDE,
+      },
+    ],
     externalURL: "https://golf.com.au/leaderboard",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/ce5bzs1751484107.png",
   },
   {
     name: "TGL",
     slug: "tgl",
-    seasons: [{ name: "2026", slug: "2026" }],
+    seasons: [
+      {
+        name: "2026",
+        slug: "2026",
+        tvguide: KAYO_GOLF_TV_GUIDE,
+      },
+    ],
     externalURL: "https://tglgolf.com/schedule",
     icon: "https://upload.wikimedia.org/wikipedia/en/f/f7/TGL_logo.png",
   },
   {
     name: "Asian Tour",
     slug: "asian-tour",
-    seasons: [{ name: "2026", slug: "2026" }],
+    seasons: [
+      {
+        name: "2026",
+        slug: "2026",
+        tvguide: KAYO_GOLF_TV_GUIDE,
+      },
+    ],
     externalURL: "https://www.asiantour.com/schedule",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/durtwn1582545153.png",
   },
@@ -691,12 +843,87 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
 
 export const GOLF_TOURS_CLIENT = stripLeagueSeasonConfig(GOLF_TOURS)
 
+const NRL_TV_GUIDE: TVConfig = {
+  channels: [
+    tvGuideConfigCreate(TVChannel.KAYO, 0, RUGBY_LEAGUE_MATCH_LENGTH),
+    {
+      channel: TVChannel.NINE,
+      // startTime: (date) => date,
+      endTime: (date) => addHours(date, RUGBY_LEAGUE_MATCH_LENGTH),
+      tvFilter(date, event) {
+        const AESTDate = addHours(date, 10) // Convert to AEST
+        const day = AESTDate.getDay()
+        const hour = AESTDate.getHours()
+        // NRL games on Nine are typically on Thursdays at 7:50pm, Fridays at 7:50pm, Saturdays at 5:30pm and Sundays at 4:00pm
+        if (
+          (day === 4 && hour >= 19) || // Thursday
+          (day === 5 && hour >= 19) || // Friday
+          (day === 6 && hour >= 18 && AESTDate > new Date(2026, 7, 5)) || // Saturday last 5 rounds
+          (day === 0 && hour > 15 && hour < 18) || // Sunday
+          ((event as Sofascore_Event)?.roundInfo?.round ?? 28) > 27 // Finals
+        ) {
+          return true
+        }
+        return false
+      },
+    },
+  ],
+}
+
+const QLD_CUP_TV_GUIDE: TVConfig = {
+  channels: [
+    {
+      channel: TVChannel.KAYO,
+      // startTime: (date) => date,
+      endTime: (date) => addHours(date, RUGBY_LEAGUE_MATCH_LENGTH),
+      tvFilter(date, event): boolean {
+        const AESTDate = addHours(date, 10) // Convert to AEST
+        const day = AESTDate.getDay()
+        const hour = AESTDate.getHours()
+        const minute = AESTDate.getMinutes()
+        if (
+          day === 0 &&
+          hour === 14 &&
+          minute === 10 // Sunday @ 2:10pm
+        ) {
+          return true
+        }
+        return false
+      },
+    },
+    {
+      channel: TVChannel.NINE,
+      // startTime: (date) => date,
+      endTime: (date) => addHours(date, RUGBY_LEAGUE_MATCH_LENGTH),
+      tvFilter(date, event) {
+        const AESTDate = addHours(date, 10) // Convert to AEST
+        const day = AESTDate.getDay()
+        const hour = AESTDate.getHours()
+        const minute = AESTDate.getMinutes()
+        if (
+          day === 0 &&
+          hour === 14 &&
+          minute === 10 // Sunday @ 2:10pm
+        ) {
+          return true
+        }
+        return false
+      },
+    },
+  ],
+}
+
 export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "NRL",
     slug: "294",
     seasons: [
-      { name: "2026", slug: "86317", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
+      {
+        name: "2026",
+        slug: "86317",
+        ladderConfig: NRL_TOP_8_LADDER_CONFIG,
+        tvguide: NRL_TV_GUIDE,
+      },
       { name: "2025", slug: "69277", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
       { name: "2024", slug: "56749", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
       { name: "2023", slug: "47382", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
@@ -722,7 +949,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "Brisbane Broncos",
     slug: "team/4258",
-    seasons: [{ name: "Current", slug: "" }],
+    seasons: [{ name: "Current", slug: "", tvguide: NRL_TV_GUIDE }],
   },
   {
     name: "NRLW",
@@ -734,6 +961,12 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: FINALS_TOP_6_LADDER_CONFIG,
         }),
+        tvguide: {
+          channels: [
+            tvGuideConfigCreate(TVChannel.NINE, 0, RUGBY_LEAGUE_MATCH_LENGTH),
+            tvGuideConfigCreate(TVChannel.KAYO, 0, RUGBY_LEAGUE_MATCH_LENGTH),
+          ],
+        },
       },
       {
         name: "2025",
@@ -762,7 +995,15 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     name: "State of Origin - Men",
     slug: "791",
     seasons: [
-      { name: "2026", slug: "87571" },
+      {
+        name: "2026",
+        slug: "87571",
+        tvguide: {
+          channels: [
+            tvGuideConfigCreate(TVChannel.NINE, 0, RUGBY_LEAGUE_MATCH_LENGTH),
+          ],
+        },
+      },
       { name: "2025", slug: "69960" },
       { name: "2024", slug: "56900" },
       { name: "2023", slug: "48134" },
@@ -785,7 +1026,15 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     name: "State of Origin - Women",
     slug: "20374",
     seasons: [
-      { name: "2026", slug: "87574" },
+      {
+        name: "2026",
+        slug: "87574",
+        tvguide: {
+          channels: [
+            tvGuideConfigCreate(TVChannel.NINE, 0, RUGBY_LEAGUE_MATCH_LENGTH),
+          ],
+        },
+      },
       { name: "2025", slug: "69965" },
       { name: "2024", slug: "56901" },
       { name: "2023", slug: "51382" },
@@ -795,7 +1044,12 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     name: "Queensland Cup",
     slug: "2135",
     seasons: [
-      { name: "2026", slug: "88763", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
+      {
+        name: "2026",
+        slug: "88763",
+        ladderConfig: NRL_TOP_8_LADDER_CONFIG,
+        tvguide: QLD_CUP_TV_GUIDE,
+      },
       { name: "2025", slug: "69961", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
       { name: "2024", slug: "57514", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
       { name: "2023", slug: "48145", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
@@ -910,12 +1164,45 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
 export const RUGBY_LEAGUE_LEAGUES_CLIENT =
   stripLeagueSeasonConfig(RUGBY_LEAGUE_LEAGUES)
 
+const AFL_TV_GUIDE: TVConfig = {
+  channels: [
+    tvGuideConfigCreate(TVChannel.KAYO, 0, AUSSIE_RULES_MATCH_LENGTH),
+    {
+      channel: TVChannel.SEVEN,
+      // startTime: (date) => date,
+      endTime: (date) => addHours(date, AUSSIE_RULES_MATCH_LENGTH),
+      tvFilter(date, event) {
+        const AESTDate = addHours(date, 10) // Convert to AEST
+        const day = AESTDate.getDay()
+        const hour = AESTDate.getHours()
+        const eventCast = event as Sofascore_Event
+        if (
+          (day === 4 && hour >= 19) || // Thursday
+          (day === 5 && hour >= 19 && hour < 20) || // Friday
+          eventCast.homeTeam.name.includes("Brisbane") || // Brisbane games
+          eventCast.awayTeam.name.includes("Brisbane") || // Brisbane games
+          eventCast.homeTeam.name.includes("Gold Coast") || // Gold Coast games
+          eventCast.awayTeam.name.includes("Gold Coast") // Gold Coast games
+        ) {
+          return true
+        }
+        return false
+      },
+    },
+  ],
+}
+
 export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "AFL",
     slug: "656",
     seasons: [
-      { name: "2026", slug: "86748", ladderConfig: AFL_TOP_10_LADDER_CONFIG },
+      {
+        name: "2026",
+        slug: "86748",
+        ladderConfig: AFL_TOP_10_LADDER_CONFIG,
+        tvguide: AFL_TV_GUIDE,
+      },
       { name: "2025", slug: "71308", ladderConfig: AFL_TOP_8_LADDER_CONFIG },
       { name: "2024", slug: "58226", ladderConfig: AFL_TOP_8_LADDER_CONFIG },
       { name: "2023", slug: "47887", ladderConfig: AFL_TOP_8_LADDER_CONFIG },
@@ -953,6 +1240,12 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: FINALS_TOP_8_LADDER_CONFIG,
         }),
+        tvguide: {
+          channels: [
+            tvGuideConfigCreate(TVChannel.KAYO, 0, AUSSIE_RULES_MATCH_LENGTH),
+            tvGuideConfigCreate(TVChannel.SEVEN, 0, AUSSIE_RULES_MATCH_LENGTH),
+          ],
+        },
       },
       {
         name: "2024",
@@ -1122,12 +1415,32 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
 export const AUSSIE_RULES_LEAGUES_CLIENT =
   stripLeagueSeasonConfig(AUSSIE_RULES_LEAGUES)
 
+const NFL_TV_GUIDE: TVConfig = {
+  channels: [
+    tvGuideConfigCreate(TVChannel.KAYO, 0, AMERICAN_FOOTBALL_MATCH_LENGTH),
+    tvGuideConfigCreate(
+      TVChannel.DISNEY_PLUS,
+      0,
+      AMERICAN_FOOTBALL_MATCH_LENGTH,
+    ),
+    tvGuideConfigCreate(
+      TVChannel.SEVEN_MATE,
+      0,
+      AMERICAN_FOOTBALL_MATCH_LENGTH,
+    ),
+  ],
+}
 export const AMERICAN_FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "NFL",
     slug: "9464",
     seasons: [
-      { name: "26/27", slug: "94366", ladderConfig: NFL_2020_LADDER_CONFIG },
+      {
+        name: "26/27",
+        slug: "94366",
+        ladderConfig: NFL_2020_LADDER_CONFIG,
+        tvguide: NFL_TV_GUIDE,
+      },
       { name: "25/26", slug: "75522", ladderConfig: NFL_2020_LADDER_CONFIG },
       { name: "24/25", slug: "60592", ladderConfig: NFL_2020_LADDER_CONFIG },
       { name: "23/24", slug: "51361", ladderConfig: NFL_2020_LADDER_CONFIG },
@@ -1201,6 +1514,57 @@ export const AMERICAN_FOOTBALL_LEAGUES_CLIENT = stripLeagueSeasonConfig(
   AMERICAN_FOOTBALL_LEAGUES,
 )
 
+const A_LEAGUE_TV_GUIDE: TVConfig = {
+  channels: [
+    {
+      channel: TVChannel.TEN_BOLD,
+      // startTime: (date) => date,
+      endTime: (date) => addHours(date, FOOTBALL_MATCH_LENGTH),
+      tvFilter(date, event) {
+        const AESTDate = addHours(date, 10) // Convert to AEST
+        const day = AESTDate.getDay()
+        const hour = AESTDate.getHours()
+        if (
+          day === 6 &&
+          hour >= 14 // Saturday arvo/night
+        ) {
+          return true
+        }
+        return false
+      },
+    },
+  ],
+}
+
+const STAN_FOOTBALL_TV_GUIDE: TVConfig = {
+  channels: [
+    tvGuideConfigCreate(TVChannel.STAN_SPORT, 0, FOOTBALL_MATCH_LENGTH),
+  ],
+}
+
+const ESPN_FOOTBALL_TV_GUIDE: TVConfig = {
+  channels: [
+    tvGuideConfigCreate(TVChannel.KAYO, 0, FOOTBALL_MATCH_LENGTH),
+    tvGuideConfigCreate(TVChannel.DISNEY_PLUS, 0, FOOTBALL_MATCH_LENGTH),
+  ],
+}
+
+const BEIN_FOOTBALL_TV_GUIDE: TVConfig = {
+  channels: [
+    tvGuideConfigCreate(TVChannel.BEIN_SPORTS, 0, FOOTBALL_MATCH_LENGTH),
+  ],
+}
+
+const FIFA_WORLD_CUP_TV_GUIDE: TVConfig = {
+  channels: [
+    {
+      channel: TVChannel.SBS,
+      // startTime: (date) => date,
+      endTime: (date) => addHours(date, FOOTBALL_MATCH_LENGTH),
+    },
+  ],
+}
+
 export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   //Australia - category 34
   {
@@ -1213,6 +1577,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: FINALS_TOP_6_LADDER_CONFIG,
         }),
+        tvguide: A_LEAGUE_TV_GUIDE,
       },
       {
         name: "24/25",
@@ -1277,6 +1642,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: EUROPEAN_DOMESTIC_SHARED_LADDER,
         }),
+        tvguide: STAN_FOOTBALL_TV_GUIDE,
       },
       {
         name: "24/25",
@@ -1313,6 +1679,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: CHAMPIONSHIP_LADDER_CONFIG,
         }),
+        tvguide: BEIN_FOOTBALL_TV_GUIDE,
       },
       {
         name: "24/25",
@@ -1326,17 +1693,23 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "🏴 FA Cup",
     slug: "19",
-    seasons: [{ name: "25/26", slug: "82557" }],
+    seasons: [
+      { name: "25/26", slug: "82557", tvguide: STAN_FOOTBALL_TV_GUIDE },
+    ],
   },
   {
     name: "🏴 Women's FA Cup",
     slug: "11666",
-    seasons: [{ name: "25/26", slug: "84634" }],
+    seasons: [
+      { name: "25/26", slug: "84634", tvguide: STAN_FOOTBALL_TV_GUIDE },
+    ],
   },
   {
     name: "🏴 EFL Cup",
     slug: "21",
-    seasons: [{ name: "25/26", slug: "77500" }],
+    seasons: [
+      { name: "25/26", slug: "77500", tvguide: BEIN_FOOTBALL_TV_GUIDE },
+    ],
   },
 
   //Australia - category 34
@@ -1381,6 +1754,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         name: "2026",
         slug: "58210",
         ladderConfig: FIFA_WORLD_CUP_LADDER_CONFIG,
+        tvguide: FIFA_WORLD_CUP_TV_GUIDE,
       },
       {
         name: "2022",
@@ -1514,6 +1888,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: UEFA_24_TEAM_LADDER_CONFIG,
         }),
+        tvguide: STAN_FOOTBALL_TV_GUIDE,
       },
     ],
     externalURL:
@@ -1529,6 +1904,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: UEFA_WOMENS_CL_LADDER_CONFIG,
         }),
+        tvguide: ESPN_FOOTBALL_TV_GUIDE,
       },
     ],
     externalURL:
@@ -1544,6 +1920,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: UEFA_24_TEAM_LADDER_CONFIG,
         }),
+        tvguide: STAN_FOOTBALL_TV_GUIDE,
       },
     ],
     externalURL:
@@ -1633,6 +2010,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: LIGUE_1_LADDER_CONFIG,
         }),
+        tvguide: BEIN_FOOTBALL_TV_GUIDE,
       },
     ],
     externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Ligue_1",
@@ -1649,6 +2027,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: BUNDESLIGA_LADDER_CONFIG,
         }),
+        tvguide: BEIN_FOOTBALL_TV_GUIDE,
       },
     ],
     externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Bundesliga",
@@ -1665,6 +2044,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: EUROPEAN_DOMESTIC_SHARED_LADDER,
         }),
+        tvguide: BEIN_FOOTBALL_TV_GUIDE,
       },
     ],
     externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Serie_A",
@@ -1681,6 +2061,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: EUROPEAN_DOMESTIC_SHARED_LADDER,
         }),
+        tvguide: BEIN_FOOTBALL_TV_GUIDE,
       },
     ],
     externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_La_Liga",
@@ -1716,13 +2097,25 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
 
 export const FOOTBALL_LEAGUES_CLIENT = stripLeagueSeasonConfig(FOOTBALL_LEAGUES)
 
+const MLB_TV_GUIDE: TVConfig = {
+  channels: [
+    tvGuideConfigCreate(TVChannel.KAYO, 0, BASEBALL_MATCH_LENGTH),
+    tvGuideConfigCreate(TVChannel.DISNEY_PLUS, 0, BASEBALL_MATCH_LENGTH),
+  ],
+}
+
 export const BASEBALL_LEAGUES: LeagueSeasonConfig[] = [
   //Australia - category 34
   {
     name: "MLB",
     slug: "11205",
     seasons: [
-      { name: "2026", slug: "84695", ladderConfig: MLB_2022_LADDER_CONFIG },
+      {
+        name: "2026",
+        slug: "84695",
+        ladderConfig: MLB_2022_LADDER_CONFIG,
+        tvguide: MLB_TV_GUIDE,
+      },
       { name: "2025", slug: "68611", ladderConfig: MLB_2022_LADDER_CONFIG },
       { name: "2024", slug: "57577", ladderConfig: MLB_2022_LADDER_CONFIG },
     ],
@@ -1752,6 +2145,13 @@ export const BASEBALL_LEAGUES: LeagueSeasonConfig[] = [
 ]
 
 export const BASEBALL_LEAGUES_CLIENT = stripLeagueSeasonConfig(BASEBALL_LEAGUES)
+
+const NBA_TV_GUIDE: TVConfig = {
+  channels: [
+    tvGuideConfigCreate(TVChannel.KAYO, 0, BASKETBALL_MATCH_LENGTH),
+    tvGuideConfigCreate(TVChannel.DISNEY_PLUS, 0, BASKETBALL_MATCH_LENGTH),
+  ],
+}
 
 export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
@@ -1786,7 +2186,12 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
     name: "NBA",
     slug: "132",
     seasons: [
-      { name: "25/26", slug: "80229", ladderConfig: NBA_2021_LADDER_CONFIG },
+      {
+        name: "25/26",
+        slug: "80229",
+        ladderConfig: NBA_2021_LADDER_CONFIG,
+        tvguide: NBA_TV_GUIDE,
+      },
       { name: "24/25", slug: "65360", ladderConfig: NBA_2021_LADDER_CONFIG },
     ],
     display: DisplayTypes.DATE,
@@ -1901,7 +2306,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     name: "Wimbledon - Men's Singles",
     slug: "2361",
     seasons: [
-      // { name: "2026", slug: "80012" },
+      { name: "2026", slug: "85943" },
       { name: "2025", slug: "63966" },
     ],
   },
@@ -1909,7 +2314,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     name: "Wimbledon - Women's Singles",
     slug: "2600",
     seasons: [
-      // { name: "2026", slug: "80013" },
+      { name: "2026", slug: "85945" },
       { name: "2025", slug: "63967" },
     ],
   },
@@ -1958,7 +2363,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
 ]
 
 export const TENNIS_LEAGUES_CLIENT = stripLeagueSeasonConfig(TENNIS_LEAGUES)
-
+export const DARTS_CATEGORIES = ["104"]
 export const DARTS_LEAGUES: LeagueSeasonConfig[] = [
   //Majors
   // The premier event of darts: large global field, sets format.
@@ -2251,6 +2656,13 @@ export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
 export const RUGBY_UNION_LEAGUES_CLIENT =
   stripLeagueSeasonConfig(RUGBY_UNION_LEAGUES)
 
+const NHL_TV_GUIDE: TVConfig = {
+  channels: [
+    tvGuideConfigCreate(TVChannel.KAYO, 0, ICE_HOCKEY_MATCH_LENGTH),
+    tvGuideConfigCreate(TVChannel.DISNEY_PLUS, 0, ICE_HOCKEY_MATCH_LENGTH),
+  ],
+}
+
 export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "AIHL",
@@ -2264,7 +2676,12 @@ export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
     name: "NHL",
     slug: "234",
     seasons: [
-      { name: "25/26", slug: "78476", ladderConfig: NHL_2014_LADDER_CONFIG },
+      {
+        name: "25/26",
+        slug: "78476",
+        ladderConfig: NHL_2014_LADDER_CONFIG,
+        tvguide: NHL_TV_GUIDE,
+      },
       { name: "24/25", slug: "63409", ladderConfig: NHL_2014_LADDER_CONFIG },
     ],
     display: DisplayTypes.DATE,
@@ -2572,11 +2989,27 @@ export const CYCLING_TOURS: LeagueSeasonConfig[] = [
 
 export const CYCLING_TOURS_CLIENT = stripLeagueSeasonConfig(CYCLING_TOURS)
 
+const SURFING_BROADCAST_LENGTH = 23
 export const SURFING_TOURS: LeagueSeasonConfig[] = [
   {
     name: "WSL",
     slug: "wsl",
-    seasons: [{ name: "2026", slug: "2026" }],
+    seasons: [
+      {
+        name: "2026",
+        slug: "2026",
+        tvguide: {
+          channels: [
+            tvGuideConfigCreate(TVChannel.KAYO, 0, SURFING_BROADCAST_LENGTH),
+            tvGuideConfigCreate(
+              TVChannel.SEVEN_PLUS,
+              0,
+              SURFING_BROADCAST_LENGTH,
+            ),
+          ],
+        },
+      },
+    ],
     externalURL: "https://www.worldsurfleague.com/events/2026/ct",
   },
 ]

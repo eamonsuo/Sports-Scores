@@ -21,7 +21,7 @@ export default function MatchDetailsHero({
             {homeInfo.img.map((img, idx) => (
               <Image
                 key={idx}
-                src={img || FALLBACK_IMAGE}
+                src={img}
                 width={150}
                 height={150}
                 style={{ width: "60px", height: "auto" }}
@@ -48,7 +48,7 @@ export default function MatchDetailsHero({
             {awayInfo.img.map((img, idx) => (
               <Image
                 key={idx}
-                src={img || FALLBACK_IMAGE}
+                src={img}
                 width={150}
                 height={150}
                 style={{ width: "60px", height: "auto" }}

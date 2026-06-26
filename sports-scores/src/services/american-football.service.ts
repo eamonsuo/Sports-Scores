@@ -1,7 +1,7 @@
 import {
   fetchAmericanFootballLastMatches,
   fetchAmericanFootballMatchDetails,
-  fetchAmericanFootballCurrentMatches as fetchAmericanFootballMatchesByDate,
+  fetchAmericanFootballMatchesByCategoryDate,
   fetchAmericanFootballMatchIncidents,
   fetchAmericanFootballNextMatches,
   fetchAmericanFootballStandings,
@@ -9,6 +9,7 @@ import {
   fetchAmericanFootballTeamNextMatches,
 } from "@/endpoints/american-football.api"
 import {
+  AMERICAN_FOOTBALL_CATEGORIES,
   AMERICAN_FOOTBALL_LADDER_HEADINGS,
   AMERICAN_FOOTBALL_LEAGUES,
   SCORE_BREAKDOWN_QUARTERS_CONFIG,
@@ -35,7 +36,7 @@ class AmericanFootballService extends SofascoreSport {
         fetchEventsByDate: withDevCache(
           "american-football",
           "matches-by-date",
-          fetchAmericanFootballMatchesByDate,
+          fetchAmericanFootballMatchesByCategoryDate,
         ),
         fetchEventDetails: withDevCache(
           "american-football",
@@ -66,6 +67,7 @@ class AmericanFootballService extends SofascoreSport {
         ),
       },
       SPORT.AMERICAN_FOOTBALL,
+      AMERICAN_FOOTBALL_CATEGORIES,
       AMERICAN_FOOTBALL_LEAGUES,
       AMERICAN_FOOTBALL_LADDER_HEADINGS,
       SCORE_BREAKDOWN_QUARTERS_CONFIG,

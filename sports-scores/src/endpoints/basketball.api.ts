@@ -90,3 +90,21 @@ export async function fetchBasketballMatchesByDate(date: Date) {
     `/basketball/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
   )) as Sofascore_Events_Response
 }
+
+export async function fetchBasketballMatchesByCategoryDate(
+  category: string[],
+  date: Date,
+) {
+  const responses = await Promise.all(
+    category.map(
+      (cat) =>
+        fetchBasketballApi(
+          `/basketball/category/${cat}/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+        ) as Promise<Sofascore_Events_Response>,
+    ),
+  )
+
+  return {
+    events: responses.flatMap((r) => r?.events ?? []),
+  } as Sofascore_Events_Response
+}

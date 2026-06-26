@@ -96,8 +96,17 @@ export async function fetchMatchIncidents(matchId: string) {
   )) as Sofascore_EventIncidents_Response
 }
 
-export async function fetchScheduledEvents(categoryId: string, date?: Date) {
-  return (await fetchSofascoreRapidApi(
-    `/tournaments/get-scheduled-events?categoryId=${categoryId}${date ? `&date=${format(date, "yyyy-MM-dd")}` : ""}`,
-  )) as Sofascore_Events_Response
+export async function fetchScheduledEvents(categoryId: string[], date: Date) {
+  const responses = await Promise.all(
+    categoryId.map(
+      (cat) =>
+        fetchSofascoreRapidApi(
+          `/tournaments/get-scheduled-events?categoryId=${cat}&date=${format(date, "yyyy-MM-dd")}`,
+        ) as Promise<Sofascore_Events_Response>,
+    ),
+  )
+
+  return {
+    events: responses.flatMap((r) => r?.events ?? []),
+  } as Sofascore_Events_Response
 }

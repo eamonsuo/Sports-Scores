@@ -56,6 +56,7 @@ export type ScoreBreakdownConfig = {
 export abstract class SofascoreSport implements SportService {
   protected apiEndpoints: SofascoreAPI
   protected sport: SPORT
+  protected categories: string[]
   protected leagues: LeagueSeasonConfig[]
   protected headings: string[]
   protected scoreBreakdownConfig?: ScoreBreakdownConfig
@@ -64,6 +65,7 @@ export abstract class SofascoreSport implements SportService {
   constructor(
     apiEndpoints: SofascoreAPI,
     sport: SPORT,
+    categories: string[],
     leagues: LeagueSeasonConfig[],
     headings: string[],
     scoreBreakdownConfig?: ScoreBreakdownConfig,
@@ -71,6 +73,7 @@ export abstract class SofascoreSport implements SportService {
   ) {
     this.apiEndpoints = apiEndpoints
     this.sport = sport
+    this.categories = categories
     this.leagues = leagues
     this.headings = headings
     this.scoreBreakdownConfig = scoreBreakdownConfig
@@ -125,7 +128,10 @@ export abstract class SofascoreSport implements SportService {
   }
 
   async matchesByDate(date: Date): Promise<Matches | null> {
-    const matches = await this.apiEndpoints.fetchEventsByDate(date)
+    const matches = await this.apiEndpoints.fetchEventsByDate(
+      this.categories,
+      date,
+    )
 
     if (!matches) return null
 
@@ -275,7 +281,7 @@ export abstract class SofascoreSport implements SportService {
         standings?.standings.map((table) => ({
           name: table.name,
           standings: table.rows.map((row) =>
-            mapSofascoreToStanding(
+            this.mapSofascoreToPlayoffPicture(
               row,
               ladderConfig?.playoffPictureConfig?.totalSeasonGames ?? 0,
             ),
@@ -365,6 +371,12 @@ export abstract class SofascoreSport implements SportService {
         : event.status.type === "notstarted"
           ? MatchStatus.UPCOMING
           : MatchStatus.COMPLETED
+
+    const { tvConfig } = getSportConfigurations(
+      this.leagues,
+      options?.leagueId ?? event.tournament.uniqueTournament.id.toString(),
+      options?.seasonId ?? event.season.id.toString(),
+    )
 
     return {
       id: options?.id ?? event.id.toString(),
@@ -476,6 +488,25 @@ export abstract class SofascoreSport implements SportService {
           : event.winnerCode),
       cardVariant:
         options?.cardVariant ?? this.cardVariant ?? CardVariant.DEFAULT,
+      tv: tvConfig?.channels
+        .filter((channel) =>
+          channel.tvFilter
+            ? channel.tvFilter(options?.startDate ?? startDate, event)
+            : true,
+        )
+        .map((channel) => ({
+          channel: channel.channel,
+          startTime: channel.startTime
+            ? channel.startTime(options?.startDate ?? startDate)
+            : (options?.startDate ?? startDate),
+          endTime:
+            options?.endDate ??
+            (event?.endTimestamp
+              ? endDate
+              : channel.endTime
+                ? channel.endTime(options?.startDate ?? startDate)
+                : undefined),
+        })),
     }
   }
 
@@ -565,6 +596,30 @@ export abstract class SofascoreSport implements SportService {
     }
   }
 
+  mapSofascoreToPlayoffPicture(
+    row: Sofascore_StandingRow,
+    totalSeasonGames: number,
+  ): PlayoffPictureStanding {
+    return {
+      team: {
+        id: row.team.id,
+        name: shortenTeamNames(row.team.name),
+        logo: resolveSportImage(row.team.name),
+      },
+      position: row.position,
+      played: row.matches,
+      totalSeasonGames,
+      wins: row.wins,
+      losses: row.losses,
+      draws: row.overtimeLosses ?? row.draws ?? 0,
+      tiebreakers: {
+        pointsFor: row.scoresFor,
+        pointsAgainst: row.scoresAgainst,
+        pointsDiff: row.scoresFor - row.scoresAgainst,
+      },
+    }
+  }
+
   protected matchDetailsMapper(matchDetails: Sofascore_Event): {
     homeTeam: TeamScoreDetails
     awayTeam: TeamScoreDetails
@@ -621,30 +676,6 @@ export abstract class SofascoreSport implements SportService {
     }
 
     return breakdown
-  }
-}
-
-export function mapSofascoreToStanding(
-  row: Sofascore_StandingRow,
-  totalSeasonGames: number,
-): PlayoffPictureStanding {
-  return {
-    team: {
-      id: row.team.id,
-      name: shortenTeamNames(row.team.name),
-      logo: resolveSportImage(row.team.name),
-    },
-    position: row.position,
-    played: row.matches,
-    totalSeasonGames,
-    wins: row.wins,
-    losses: row.losses,
-    draws: row.overtimeLosses ?? row.draws ?? 0,
-    tiebreakers: {
-      pointsFor: row.scoresFor,
-      pointsAgainst: row.scoresAgainst,
-      pointsDiff: row.scoresFor - row.scoresAgainst,
-    },
   }
 }
 
@@ -767,6 +798,12 @@ export abstract class SofascoreStageSport implements SportService {
           ? MatchStatus.UPCOMING
           : MatchStatus.COMPLETED
 
+    const { tvConfig } = getSportConfigurations(
+      this.leagues,
+      options?.leagueId ?? event.uniqueStage.id.toString(),
+      options?.seasonId ?? event.stageParent.id.toString(),
+    )
+
     return {
       id: options?.id ?? event.id.toString(),
       startDate: options?.startDate ?? startDate,
@@ -822,12 +859,31 @@ export abstract class SofascoreStageSport implements SportService {
       winner: options?.winner ?? 1,
       cardVariant:
         options?.cardVariant ?? this.cardVariant ?? CardVariant.DEFAULT,
+      tv: tvConfig?.channels
+        .filter((channel) =>
+          channel.tvFilter
+            ? channel.tvFilter(options?.startDate ?? startDate, event)
+            : true,
+        )
+        .map((channel) => ({
+          channel: channel.channel,
+          startTime: channel.startTime
+            ? channel.startTime(options?.startDate ?? startDate)
+            : (options?.startDate ?? startDate),
+          endTime:
+            options?.endDate ??
+            (event?.endDateTimestamp
+              ? endDate
+              : channel.endTime
+                ? channel.endTime(options?.startDate ?? startDate)
+                : undefined),
+        })),
     }
   }
 
   matchSummaryMapper(
     event: MatchSummary,
-    options?: DeepPartial<Omit<MatchSummary, "competitorDetails">>,
+    options?: DeepPartial<Omit<MatchSummary, "competitorDetails" | "tv">>,
   ): MatchSummary {
     let currentDate = new Date()
 
@@ -838,6 +894,13 @@ export abstract class SofascoreStageSport implements SportService {
             (event.endDate && event.endDate > currentDate)
           ? MatchStatus.LIVE
           : MatchStatus.COMPLETED
+
+    const { tvConfig } = getSportConfigurations(
+      this.leagues,
+      options?.leagueId ?? event.leagueId,
+      options?.seasonId ?? event.seasonId,
+    )
+
     return {
       ...event,
       ...options,
@@ -849,6 +912,27 @@ export abstract class SofascoreStageSport implements SportService {
           : status.charAt(0) + status.slice(1).toLowerCase(),
       timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
       cardVariant: event.cardVariant ?? CardVariant.SESSION,
+      tv:
+        event.tv ??
+        tvConfig?.channels
+          .filter((channel) =>
+            channel.tvFilter
+              ? channel.tvFilter(options?.startDate ?? event.startDate, event)
+              : true,
+          )
+          .map((channel) => ({
+            channel: channel.channel,
+            startTime: channel.startTime
+              ? channel.startTime(options?.startDate ?? event.startDate)
+              : (options?.startDate ?? event.startDate),
+            endTime:
+              options?.endDate ??
+              (event?.endDate
+                ? event.endDate
+                : channel.endTime
+                  ? channel.endTime(options?.startDate ?? event.startDate)
+                  : undefined),
+          })),
     }
   }
 

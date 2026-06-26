@@ -1,6 +1,9 @@
 import { updateQuota } from "@/lib/projUtils"
 import { SPORT } from "@/types/misc"
-import { Sofascore_TournamentCupTrees_Response } from "@/types/sofascore"
+import {
+  Sofascore_Events_Response,
+  Sofascore_TournamentCupTrees_Response,
+} from "@/types/sofascore"
 import {
   Tennis_TennisApi_EventsByDate_Response,
   Tennis_TennisApi_FixturePage_Response,
@@ -134,4 +137,22 @@ export async function fetchTennisATPRankings() {
   return (await fetchTennisApi(
     `/rankings/atp`,
   )) as Tennis_TennisApi_Rankings_Response
+}
+
+export async function fetchTennisMatchesByCategoryDate(
+  category: string[],
+  date: Date,
+) {
+  const responses = await Promise.all(
+    category.map(
+      (cat) =>
+        fetchTennisApi(
+          `/category/${cat}/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+        ) as Promise<Sofascore_Events_Response>,
+    ),
+  )
+
+  return {
+    events: responses.flatMap((r) => r?.events ?? []),
+  } as Sofascore_Events_Response
 }

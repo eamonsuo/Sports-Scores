@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation"
 import {
   AMERICAN_FOOTBALL_LEAGUES,
   AUSSIE_RULES_LEAGUES,
-  GOLF_TOURS,
   MOTORSPORT_CATEGORIES,
   NETBALL_LEAGUES,
   RUGBY_LEAGUE_LEAGUES,
@@ -62,7 +61,7 @@ const footerLinks: {
   },
   {
     sport: SPORT.GOLF,
-    link: `/sports/${SPORT.GOLF}/${GOLF_TOURS[0].slug}/${GOLF_TOURS[0].seasons[0].slug}`,
+    link: `/sports/today`,
     img: "/footer/golf-ball.svg",
     altText: "Golf",
   },

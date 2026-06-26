@@ -92,3 +92,21 @@ export async function fetchAmericanFootballCurrentMatches(date: Date) {
     `/american-football/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
   )) as AmericanFootball_AmericanFootballApi_CategorySchedule_Response
 }
+
+export async function fetchAmericanFootballMatchesByCategoryDate(
+  category: string[],
+  date: Date,
+) {
+  const responses = await Promise.all(
+    category.map(
+      (cat) =>
+        fetchAmericanFootballApi(
+          `/american-football/category/${cat}/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+        ) as Promise<AmericanFootball_AmericanFootballApi_CategorySchedule_Response>,
+    ),
+  )
+
+  return {
+    events: responses.flatMap((r) => r?.events ?? []),
+  } as AmericanFootball_AmericanFootballApi_CategorySchedule_Response
+}

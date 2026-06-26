@@ -43,7 +43,10 @@ export interface SofascoreAPI {
   fetchEventIncidents: (
     eventId: string,
   ) => Promise<Sofascore_EventIncidents_Response | null>
-  fetchEventsByDate: (date: Date) => Promise<Sofascore_Events_Response | null>
+  fetchEventsByDate: (
+    category: string[],
+    date: Date,
+  ) => Promise<Sofascore_Events_Response | null>
   fetchTeamLastEvents: (
     teamId: string,
     pageNumber?: number,

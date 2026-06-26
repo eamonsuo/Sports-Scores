@@ -3,6 +3,8 @@ import type {
   PlayoffPictureConfig,
   PlayoffPictureGroup,
 } from "@/types/playoff-picture"
+import { SlashGolf_Tournament } from "./golf"
+import { Sofascore_Event, Sofascore_Stage } from "./sofascore"
 
 /**
  * Generic Types
@@ -27,6 +29,12 @@ export type TeamScoreDetails = {
   slug?: string
 }
 
+export type TVDetails = {
+  channel: TVChannel
+  startTime?: Date
+  endTime?: Date
+}
+
 export type MatchSummary = {
   id: string
   startDate: Date
@@ -49,6 +57,7 @@ export type MatchSummary = {
   seasonId?: string
   dataverseGUID?: string
   cardVariant: CardVariant
+  tv?: TVDetails[]
 }
 
 export interface FixtureRound {
@@ -92,11 +101,34 @@ export type LadderConfig = {
   playoffPictureConfig?: PlayoffPictureConfig
 }
 
+export type TVChannelConfig = {
+  channel: TVChannel
+  startTime?: (date: Date) => Date
+  endTime?: (date: Date) => Date
+  tvFilter?: (
+    date: Date,
+    event:
+      | Sofascore_Event
+      | Sofascore_Stage
+      | SlashGolf_Tournament
+      | MatchSummary,
+  ) => boolean
+}
+
+export type TVConfig = {
+  channels: TVChannelConfig[]
+}
+
 export type LeagueSeasonConfig = {
   name: string
   slug: string
   icon?: string
-  seasons: { name: string; slug: string; ladderConfig?: LadderConfig }[]
+  seasons: {
+    name: string
+    slug: string
+    ladderConfig?: LadderConfig
+    tvguide?: TVConfig
+  }[]
   display?: DisplayTypes
   externalURL?: string
   byes?: {
@@ -107,7 +139,10 @@ export type LeagueSeasonConfig = {
 }
 
 export type ClientLeagueSeasonConfig = Omit<LeagueSeasonConfig, "seasons"> & {
-  seasons: Omit<LeagueSeasonConfig["seasons"][number], "ladderConfig">[]
+  seasons: Omit<
+    LeagueSeasonConfig["seasons"][number],
+    "ladderConfig" | "tvguide"
+  >[]
 }
 
 /**
@@ -119,7 +154,11 @@ export interface SportService {
     leagueId: string,
     seasonId: string,
   ): Promise<Matches | null>
-  matchesByDate(date: Date): Promise<Matches | null>
+  matchesByDate(
+    date: Date,
+    leagueId?: string,
+    seasonId?: string,
+  ): Promise<Matches | null>
   matchesByTeam(teamId: string): Promise<Matches | null>
   matchDetails(
     matchId: string,
@@ -222,6 +261,30 @@ export enum DisplayTypes {
   ROUND = "round",
   DATE = "date",
   LEAGUE = "league",
+}
+
+export enum TVChannel {
+  KAYO = "Kayo",
+  NINE = "9",
+  NINE_NOW = "9 Now",
+  NINE_GEM = "9 Gem",
+  NINE_GO = "9 Go",
+  STAN_SPORT = "Stan Sport",
+  SEVEN = "7",
+  SEVEN_PLUS = "7 Plus",
+  SEVEN_MATE = "7 Mate",
+  TEN = "10",
+  TEN_PLAY = "10 Play",
+  TEN_BOLD = "10 Bold",
+  PARAMOUNT_PLUS = "Paramount+",
+  ABC = "ABC",
+  ABC_IVIEW = "ABC iView",
+  SBS = "SBS",
+  SBS_ON_DEMAND = "SBS On Demand",
+  ESPN = "ESPN",
+  DISNEY_PLUS = "Disney+",
+  BEIN_SPORTS = "beIN Sports",
+  DAZN = "DAZN",
 }
 
 export enum CountryFlagCode {

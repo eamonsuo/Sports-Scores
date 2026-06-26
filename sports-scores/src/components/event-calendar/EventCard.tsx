@@ -1,5 +1,6 @@
 "use client"
 
+import { resolveSportImage } from "@/lib/imageMapping"
 import { SportEvent } from "@/types/event-calendar"
 import { format, isSameDay } from "date-fns"
 import Image from "next/image"
@@ -71,26 +72,43 @@ export default function EventCard({ event }: EventCardProps) {
         {/* Content Section */}
         <div className="flex-1 p-4">
           {/* Event Type Badge */}
-          <div className="mb-2 flex items-center gap-2">
-            <span
-              className={`rounded-full px-2 py-1 text-xs font-semibold ${
-                event.type === "major"
-                  ? "bg-yellow-500 text-black dark:bg-yellow-600"
-                  : "bg-blue-500 text-white dark:bg-blue-800 dark:text-neutral-200"
-              }`}
-            >
-              {event.sport}
-            </span>
-            {isOngoing && (
-              <span className="rounded-full bg-green-500 px-2 py-1 text-xs font-semibold text-neutral-200 dark:bg-green-700">
-                Live
+          <div className="mb-2 flex items-center justify-between gap-2">
+            <div className="mb-2 flex items-center gap-2">
+              <span
+                className={`rounded-full px-2 py-1 text-xs font-semibold ${
+                  event.type === "major"
+                    ? "bg-yellow-500 text-black dark:bg-yellow-600"
+                    : "bg-blue-500 text-white dark:bg-blue-800 dark:text-neutral-200"
+                }`}
+              >
+                {event.sport}
               </span>
-            )}
-            {showCountdown && (
-              <span className="rounded-full bg-orange-500 px-2 py-1 text-xs font-semibold text-neutral-200 dark:bg-orange-700">
-                {daysUntilStart}{" "}
-                {daysUntilStart === 1 ? "day away" : "days away"}
-              </span>
+              {isOngoing && (
+                <span className="rounded-full bg-green-500 px-2 py-1 text-xs font-semibold text-neutral-200 dark:bg-green-700">
+                  Live
+                </span>
+              )}
+              {showCountdown && (
+                <span className="rounded-full bg-orange-500 px-2 py-1 text-xs font-semibold text-neutral-200 dark:bg-orange-700">
+                  {daysUntilStart}{" "}
+                  {daysUntilStart === 1 ? "day away" : "days away"}
+                </span>
+              )}
+            </div>
+            {event.tv && event.tv.length > 0 && (
+              <div className="flex gap-1">
+                {event.tv.map((channel, index) => (
+                  <Image
+                    key={index}
+                    src={resolveSportImage(channel)}
+                    width={100}
+                    height={100}
+                    style={{ width: "auto", height: "12px" }}
+                    alt={channel}
+                    className="mx-auto my-auto"
+                  />
+                ))}
+              </div>
             )}
           </div>
 

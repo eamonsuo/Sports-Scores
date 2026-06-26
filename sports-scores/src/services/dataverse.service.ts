@@ -11,6 +11,7 @@ import {
   MatchSummary,
   SPORT,
   TeamScoreDetails,
+  TVDetails,
 } from "@/types/misc"
 import { TZDate } from "@date-fns/tz"
 import { endOfDay, startOfDay } from "date-fns"
@@ -41,22 +42,17 @@ const COLOUR_REVERSE: Record<"green" | "yellow" | "gray", 0 | 1 | 2> = {
   gray: 2,
 }
 
-function stringifyField(value: string | string[] | undefined): string | null {
-  if (value === undefined || value === null) return null
-  return Array.isArray(value) ? JSON.stringify(value) : value
-}
-
-function parseJsonField(value: string | null): string | string[] {
-  if (!value) return ""
+function parseCompetitorDetails(value: string | null): TeamScoreDetails[] {
+  if (!value) return []
   try {
     const parsed = JSON.parse(value)
-    return Array.isArray(parsed) ? parsed : String(parsed)
+    return Array.isArray(parsed) ? parsed : []
   } catch {
-    return value
+    return []
   }
 }
 
-function parseCompetitorDetails(value: string | null): TeamScoreDetails[] {
+function parseTVDetails(value: string | null): TVDetails[] {
   if (!value) return []
   try {
     const parsed = JSON.parse(value)
@@ -96,6 +92,7 @@ function mapToMatchSummary(r: DataverseMatchSummary): MatchSummary {
     seasonId: r.ss_seasonid ?? undefined,
     dataverseGUID: r.ss_matchsummaryid,
     cardVariant: (r.ss_cardvariant as CardVariant) ?? CardVariant.DEFAULT,
+    tv: parseTVDetails(r.ss_tv),
   }
 }
 
@@ -130,6 +127,7 @@ export function mapToDataverseMatchSummary(
     ss_leagueid: m.leagueId ?? null,
     ss_seasonid: m.seasonId ?? null,
     ss_cardvariant: m.cardVariant ?? null,
+    ss_tv: m.tv && m.tv.length > 0 ? JSON.stringify(m.tv) : null,
   }
 }
 
@@ -165,6 +163,7 @@ export async function matchSummariesBySportAndDay(
 
   const filters = [
     `ss_sport eq '${sport}'`,
+    `statecode eq 0`, // Only active records
     `((ss_startdate le '${dayEnd}' and ss_enddate ge '${dayStart}') or (ss_enddate eq null and ss_startdate ge '${dayStart}' and ss_startdate le '${dayEnd}'))`,
   ]
   const response = await fetchDataverseMatchSummaries(filters.join(" and "))

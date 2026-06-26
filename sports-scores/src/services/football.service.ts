@@ -2,7 +2,7 @@ import {
   fetchFootballCupTrees,
   fetchFootballLastMatches,
   fetchFootballMatchDetails,
-  fetchFootballMatchesByDate,
+  fetchFootballMatchesByCategoryDate,
   fetchFootballMatchIncidents,
   fetchFootballNextMatches,
   fetchFootballStandings,
@@ -10,6 +10,7 @@ import {
   fetchFootballTeamNextMatches,
 } from "@/endpoints/football.api"
 import {
+  FOOTBALL_CATEGORIES,
   FOOTBALL_LADDER_HEADINGS,
   FOOTBALL_LEAGUES,
   SCORE_BREAKDOWN_HALVES_CONFIG,
@@ -35,7 +36,7 @@ class FootballService extends SofascoreSport {
         fetchEventsByDate: withDevCache(
           "football",
           "matches-by-date",
-          fetchFootballMatchesByDate,
+          fetchFootballMatchesByCategoryDate,
         ),
         fetchEventDetails: withDevCache(
           "football",
@@ -70,6 +71,7 @@ class FootballService extends SofascoreSport {
         ),
       },
       SPORT.FOOTBALL,
+      FOOTBALL_CATEGORIES,
       FOOTBALL_LEAGUES,
       FOOTBALL_LADDER_HEADINGS,
       SCORE_BREAKDOWN_HALVES_CONFIG,
