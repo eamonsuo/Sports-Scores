@@ -106,7 +106,11 @@ class MotorsportService extends SofascoreStageSport {
         (a, b) =>
           new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
       )
-      .map((match) => this.matchSummaryMapper(match))
+      .map((match) =>
+        this.matchSummaryMapper(match, {
+          leagueImg: this.leagues.find((l) => l.slug === match.leagueId)?.icon,
+        }),
+      )
 
     const fixtures = await mapFixtureRounds(allMatches, this.leagues)
 

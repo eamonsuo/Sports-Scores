@@ -154,11 +154,7 @@ export interface SportService {
     leagueId: string,
     seasonId: string,
   ): Promise<Matches | null>
-  matchesByDate(
-    date: Date,
-    leagueId?: string,
-    seasonId?: string,
-  ): Promise<Matches | null>
+  matchesByDate(date: Date): Promise<Matches | null>
   matchesByTeam(teamId: string): Promise<Matches | null>
   matchDetails(
     matchId: string,

@@ -4,10 +4,10 @@ import {
   DataverseSportEvent,
 } from "@/types/dataverse"
 
-const ENVIRONMENT_URL = process.env.DATAVERSE_ENVIRONMENT_URL ?? ""
-const TENANT_ID = process.env.DATAVERSE_TENANT_ID ?? ""
-const CLIENT_ID = process.env.DATAVERSE_CLIENT_ID ?? ""
-const CLIENT_SECRET = process.env.DATAVERSE_CLIENT_SECRET ?? ""
+// const ENVIRONMENT_URL = process.env.DATAVERSE_ENVIRONMENT_URL ?? ""
+// const TENANT_ID = process.env.DATAVERSE_TENANT_ID ?? ""
+// const CLIENT_ID = process.env.DATAVERSE_CLIENT_ID ?? ""
+// const CLIENT_SECRET = process.env.DATAVERSE_CLIENT_SECRET ?? ""
 
 // Module-scoped token cache
 let cachedToken: { accessToken: string; expiresAt: number } | null = null
@@ -17,13 +17,13 @@ async function getAccessToken() {
     return cachedToken.accessToken
   }
 
-  const tokenUrl = `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token`
+  const tokenUrl = `https://login.microsoftonline.com/${process.env.DATAVERSE_TENANT_ID}/oauth2/v2.0/token`
 
   const body = new URLSearchParams({
     grant_type: "client_credentials",
-    client_id: CLIENT_ID,
-    client_secret: CLIENT_SECRET,
-    scope: `${ENVIRONMENT_URL}/.default`,
+    client_id: process.env.DATAVERSE_CLIENT_ID ?? "",
+    client_secret: process.env.DATAVERSE_CLIENT_SECRET ?? "",
+    scope: `${process.env.DATAVERSE_ENVIRONMENT_URL ?? ""}/.default`,
   })
 
   try {
@@ -58,7 +58,9 @@ async function fetchDataverseApi(entity: string, queryParams?: string) {
   const token = await getAccessToken()
   if (!token) return null
 
-  const url = new URL(`${ENVIRONMENT_URL}/api/data/v9.2/${entity}`)
+  const url = new URL(
+    `${process.env.DATAVERSE_ENVIRONMENT_URL}/api/data/v9.2/${entity}`,
+  )
   if (queryParams) url.search = `?${queryParams}`
 
   try {
@@ -101,7 +103,7 @@ async function createDataverseRecord(
   const token = await getAccessToken()
   if (!token) return null
 
-  const url = `${ENVIRONMENT_URL}/api/data/v9.2/${entity}`
+  const url = `${process.env.DATAVERSE_ENVIRONMENT_URL}/api/data/v9.2/${entity}`
 
   try {
     const res = await fetch(url, {
@@ -143,7 +145,7 @@ async function updateDataverseRecord(
   const token = await getAccessToken()
   if (!token) return false
 
-  const url = `${ENVIRONMENT_URL}/api/data/v9.2/${entity}(${id})`
+  const url = `${process.env.DATAVERSE_ENVIRONMENT_URL}/api/data/v9.2/${entity}(${id})`
 
   try {
     const res = await fetch(url, {

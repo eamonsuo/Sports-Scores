@@ -39,7 +39,7 @@ const HOUR_WIDTH = PX_PER_MIN * 60 // 180 px
 const ROW_HEIGHT = 70 // px per channel row
 const HEADER_HEIGHT = 40 // px for time ruler
 
-const TOTAL_WIDTH = 24 * HOUR_WIDTH // full-day canvas
+const TOTAL_WIDTH = 24 * HOUR_WIDTH // full-day canvas (midnight → midnight)
 
 type ChannelEvent = { match: MatchSummary; tv: TVDetails }
 
@@ -58,10 +58,9 @@ function minsFromMidnight(date: Date): number {
   return date.getHours() * 60 + date.getMinutes()
 }
 
-function resolveEventTimes(e: ChannelEvent): {
-  startMins: number
-  endMins: number
-} {
+function resolveEventTimes(
+  e: ChannelEvent,
+): Array<{ startMins: number; endMins: number }> {
   const startTime = e.tv.startTime
     ? new Date(e.tv.startTime)
     : new Date(e.match.startDate)
@@ -70,9 +69,48 @@ function resolveEventTimes(e: ChannelEvent): {
     : e.match.endDate
       ? new Date(e.match.endDate)
       : null
+
+  // Calendar-date boundaries (local time)
+  const todayMidnight = new Date()
+  todayMidnight.setHours(0, 0, 0, 0)
+  const tomorrowMidnight = new Date(todayMidnight)
+  tomorrowMidnight.setDate(tomorrowMidnight.getDate() + 1)
+
+  const startDayMidnight = new Date(startTime)
+  startDayMidnight.setHours(0, 0, 0, 0)
+
+  // ── Event started on a previous day ──────────────────────────────────────
+  if (startDayMidnight < todayMidnight) {
+    const startMinsOriginal = minsFromMidnight(startTime)
+    const rawEnd = endTime ? minsFromMidnight(endTime) : 90
+    // Block 1: midnight (12am) → end time today
+    const blocks: Array<{ startMins: number; endMins: number }> = [
+      { startMins: 0, endMins: Math.max(rawEnd === 0 ? 1 : rawEnd, 30) },
+    ]
+    // Block 2: if the event also crosses today's midnight (ends tomorrow or
+    // later), add a second block from the original daily start time → midnight.
+    if (endTime) {
+      const endDayMidnight = new Date(endTime)
+      endDayMidnight.setHours(0, 0, 0, 0)
+      if (endDayMidnight >= tomorrowMidnight && startMinsOriginal > 0) {
+        blocks.push({ startMins: startMinsOriginal, endMins: 24 * 60 })
+      }
+    }
+    return blocks
+  }
+
+  // ── Event starts today ────────────────────────────────────────────────────
   const startMins = minsFromMidnight(startTime)
-  const endMins = endTime ? minsFromMidnight(endTime) : startMins + 90
-  return { startMins, endMins: Math.max(endMins, startMins + 30) }
+  let endMins = endTime ? minsFromMidnight(endTime) : startMins + 90
+
+  if (endTime) {
+    // Midnight (00:00) as an end time means end-of-day (1440), not start-of-day
+    if (endMins === 0) endMins = 24 * 60
+    // Event crosses midnight → cap display at midnight (1440)
+    else if (endMins < startMins) endMins = 24 * 60
+  }
+
+  return [{ startMins, endMins: Math.max(endMins, startMins + 30) }]
 }
 
 /**
@@ -86,7 +124,7 @@ function resolveEventTimes(e: ChannelEvent): {
  */
 function assignLanes(events: ChannelEvent[]): ChannelData {
   const timed = events
-    .map((e) => ({ ...e, ...resolveEventTimes(e) }))
+    .flatMap((e) => resolveEventTimes(e).map((times) => ({ ...e, ...times })))
     .sort((a, b) => a.startMins - b.startMins)
 
   const laneEndTimes: number[] = []
@@ -154,11 +192,18 @@ export default function TVGuide({ data }: { data: MatchSummary[] }) {
     [channelMap],
   )
 
-  // Auto-scroll to current time on mount
+  // Auto-scroll to current time on mount; track scroll position for content pinning
   useEffect(() => {
     if (!scrollRef.current) return
+    const el = scrollRef.current
     const mins = minsFromMidnight(new Date())
-    scrollRef.current.scrollLeft = Math.max(0, mins * PX_PER_MIN - 120)
+    el.scrollLeft = Math.max(0, mins * PX_PER_MIN - 120)
+
+    const updateScrollX = () =>
+      el.style.setProperty("--scroll-x", `${el.scrollLeft}px`)
+    updateScrollX()
+    el.addEventListener("scroll", updateScrollX, { passive: true })
+    return () => el.removeEventListener("scroll", updateScrollX)
   }, [])
 
   const nowMins = useMemo(() => minsFromMidnight(new Date()), [])
@@ -267,23 +312,40 @@ export default function TVGuide({ data }: { data: MatchSummary[] }) {
                   const top = lane * laneHeight + 4
                   const height = laneHeight - 8
 
+                  // Image strip is 36px (w-9); 0 if no image
+                  const imgW = match.leagueImg ? 36 : 0
+                  // Estimate text window width from the longest displayed line.
+                  // ~6.5px per char at text-[10px] + 16px horizontal padding (px-2 each side).
+                  const longestLine = Math.max(
+                    match.leagueName?.length ?? 0,
+                    match.competitorDetails.map((c) => c.name).join(" v ")
+                      .length,
+                    10, // floor for the time string
+                  )
+                  const textW = Math.min(
+                    Math.ceil(longestLine * 6.5) + 16,
+                    Math.max(0, width - imgW),
+                  )
+                  // Max translate so the text window's right edge never exits the block
+                  const maxTranslate = Math.max(0, width - imgW - textW)
+
                   return (
                     <Link
-                      key={`${match.id}-${channel}`}
+                      key={`${match.id}-${channel}-${startMins}`}
                       href={match.matchSlug ?? "#"}
                       className={cn(
-                        "absolute flex overflow-hidden rounded-sm text-white transition-opacity hover:opacity-90",
+                        "absolute overflow-hidden rounded-sm text-white transition-opacity hover:opacity-90",
                         "bg-blue-600 dark:bg-slate-700",
                         match.status === MatchStatus.LIVE &&
                           "dark:bg-green-700",
                       )}
                       style={{ left, width, top, height }}
                     >
-                      {/* League image — left strip */}
+                      {/* League image — pinned to the left edge, never moves */}
                       {match.leagueImg && (
                         <div
                           className={cn(
-                            "flex w-9 shrink-0 items-center justify-center bg-blue-700/60 dark:bg-slate-800/60",
+                            "absolute left-0 top-0 flex h-full w-9 items-center justify-center bg-blue-700/60 dark:bg-slate-800/60",
                           )}
                         >
                           <Image
@@ -300,8 +362,17 @@ export default function TVGuide({ data }: { data: MatchSummary[] }) {
                         </div>
                       )}
 
-                      {/* Text details */}
-                      <div className="flex min-w-0 flex-col justify-center gap-0.5 px-2 py-1">
+                      {/* Text details — follows viewport left edge, stops at block's right bound */}
+                      <div
+                        className="absolute flex flex-col justify-center gap-0.5 px-2 py-1"
+                        style={{
+                          left: imgW,
+                          top: 0,
+                          bottom: 0,
+                          width: textW,
+                          transform: `translateX(clamp(0px, var(--scroll-x, 0px) - ${left + imgW}px, ${maxTranslate}px))`,
+                        }}
+                      >
                         {match.leagueName && (
                           <span className="truncate text-[10px] font-semibold leading-tight">
                             {match.leagueName}

@@ -26,20 +26,37 @@ export function resolveImage(teamName: string) {
   switch (teamName) {
     // TV Channels
     case TVChannel.NINE:
-      return "https://upload.wikimedia.org/wikipedia/commons/b/b0/Nine_Network_logo_%282008%29.svg"
+      return "/tv/9.svg"
     // return "https://upload.wikimedia.org/wikipedia/commons/0/00/9HD_Logo_2020.png"
     case TVChannel.NINE_NOW:
       return "https://en.wikipedia.org/wiki/9Now#/media/File:9Now_logo.png"
+    case TVChannel.STAN_SPORT:
+      return "https://upload.wikimedia.org/wikipedia/en/5/5b/Stan_Sport_2025_logo.jpg"
     case TVChannel.KAYO:
       return "https://upload.wikimedia.org/wikipedia/en/2/2c/Kayo_Sports_logo.png"
     case TVChannel.SEVEN:
       return "https://upload.wikimedia.org/wikipedia/commons/5/55/Seven_Network_logo.svg"
+    case TVChannel.SEVEN_PLUS:
+      return "https://upload.wikimedia.org/wikipedia/en/4/47/Logo_7plus_2020.svg"
+    case TVChannel.SEVEN_MATE:
+      return "https://upload.wikimedia.org/wikipedia/commons/6/6c/7mate_logo_2020.svg"
     case TVChannel.TEN:
+    case TVChannel.TEN_BOLD:
       return "https://upload.wikimedia.org/wikipedia/en/9/91/Network_10_logo_2025.svg"
+    case TVChannel.PARAMOUNT_PLUS:
+      return "https://upload.wikimedia.org/wikipedia/commons/a/a5/Paramount_Plus.svg"
     case TVChannel.SBS:
-      return "https://upload.wikimedia.org/wikipedia/en/8/83/SBS_Australia_Logo_%282019%29.svg"
+      return "/tv/sbs.svg"
     case TVChannel.ABC:
       return "https://upload.wikimedia.org/wikipedia/en/7/7e/ABC_TV_logo_2021.svg"
+    case TVChannel.DISNEY_PLUS:
+      return "https://upload.wikimedia.org/wikipedia/commons/6/64/Disney%2B_2024.svg"
+    case TVChannel.BEIN_SPORTS:
+      return "https://upload.wikimedia.org/wikipedia/commons/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg"
+    case TVChannel.ESPN:
+      return "https://upload.wikimedia.org/wikipedia/commons/2/2f/ESPN_wordmark.svg"
+    case TVChannel.DAZN:
+      return "https://upload.wikimedia.org/wikipedia/commons/0/06/DAZN_Logo_Master.svg"
 
     // LIV Teams
     case "4ACES GC":

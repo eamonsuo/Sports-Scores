@@ -167,6 +167,9 @@ export abstract class SofascoreSport implements SportService {
               ? ` - ${event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`}`
               : ""),
           leagueSlug: `/sports/${this.sport}/${event.tournament.uniqueTournament.id}/${event.season.id}`,
+          leagueImg: this.leagues.find(
+            (l) => l.slug === event.tournament.uniqueTournament.id.toString(),
+          )?.icon,
         }),
       )
       .sort(
@@ -905,7 +908,10 @@ export abstract class SofascoreStageSport implements SportService {
       ...event,
       ...options,
       status,
-      leagueImg: event.leagueImg ?? resolveSportImage(event.leagueName),
+      leagueImg:
+        options?.leagueImg ??
+        event.leagueImg ??
+        resolveSportImage(event.leagueName),
       timer:
         status === MatchStatus.UPCOMING
           ? event.startDate
@@ -913,26 +919,30 @@ export abstract class SofascoreStageSport implements SportService {
       timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
       cardVariant: event.cardVariant ?? CardVariant.SESSION,
       tv:
-        event.tv ??
-        tvConfig?.channels
-          .filter((channel) =>
-            channel.tvFilter
-              ? channel.tvFilter(options?.startDate ?? event.startDate, event)
-              : true,
-          )
-          .map((channel) => ({
-            channel: channel.channel,
-            startTime: channel.startTime
-              ? channel.startTime(options?.startDate ?? event.startDate)
-              : (options?.startDate ?? event.startDate),
-            endTime:
-              options?.endDate ??
-              (event?.endDate
-                ? event.endDate
-                : channel.endTime
-                  ? channel.endTime(options?.startDate ?? event.startDate)
-                  : undefined),
-          })),
+        status !== MatchStatus.COMPLETED && event.tv?.length === 0
+          ? tvConfig?.channels
+              .filter((channel) =>
+                channel.tvFilter
+                  ? channel.tvFilter(
+                      options?.startDate ?? event.startDate,
+                      event,
+                    )
+                  : true,
+              )
+              .map((channel) => ({
+                channel: channel.channel,
+                startTime: channel.startTime
+                  ? channel.startTime(options?.startDate ?? event.startDate)
+                  : (options?.startDate ?? event.startDate),
+                endTime:
+                  options?.endDate ??
+                  (event?.endDate
+                    ? event.endDate
+                    : channel.endTime
+                      ? channel.endTime(options?.startDate ?? event.startDate)
+                      : undefined),
+              }))
+          : event.tv,
     }
   }
 

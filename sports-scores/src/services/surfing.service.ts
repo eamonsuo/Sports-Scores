@@ -120,6 +120,12 @@ class SurfingService implements SportService {
       event.venue?.split(",").at(-1)?.trimStart(),
     )
 
+    const { tvConfig } = getSportConfigurations(
+      this.tours,
+      event.leagueId,
+      event.seasonId,
+    )
+
     return {
       ...event,
       status,
@@ -127,6 +133,26 @@ class SurfingService implements SportService {
       timer: status.charAt(0) + status.slice(1).toLowerCase(),
       timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
       cardVariant: event.cardVariant ?? CardVariant.SESSION,
+      tv:
+        event.tv?.length === 0
+          ? tvConfig?.channels
+              .filter((channel) =>
+                channel.tvFilter
+                  ? channel.tvFilter(event.startDate, event)
+                  : true,
+              )
+              .map((channel) => ({
+                channel: channel.channel,
+                startTime: channel.startTime
+                  ? channel.startTime(event.startDate)
+                  : event.startDate,
+                endTime: event?.endDate
+                  ? event.endDate
+                  : channel.endTime
+                    ? channel.endTime(event.startDate)
+                    : undefined,
+              }))
+          : event.tv,
     }
   }
 }

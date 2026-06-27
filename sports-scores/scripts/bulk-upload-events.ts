@@ -27,6 +27,7 @@ import {
   fetchBasketballNextMatches,
 } from "@/endpoints/basketball.api"
 import { fetchCyclingSubstages } from "@/endpoints/cycling.api"
+import { fetchDataverseMatchSummaries } from "@/endpoints/dataverse.api"
 import { fetchF1Events } from "@/endpoints/f1.api"
 import {
   fetchFootballLastMatches,
@@ -56,19 +57,25 @@ import { aussieRulesService } from "@/services/aussie-rules.service"
 import { baseballService } from "@/services/baseball.service"
 import { basketballService } from "@/services/basketball.service"
 import { cyclingService } from "@/services/cycling.service"
-import { mapToDataverseMatchSummary } from "@/services/dataverse.service"
+import {
+  mapToDataverseMatchSummary,
+  mapToMatchSummary,
+} from "@/services/dataverse.service"
 import { mapRaceToMatchSummaries } from "@/services/f1.service"
 import { footballService } from "@/services/football.service"
-import { mapTournamentToMatchSummary } from "@/services/golf.service"
+import {
+  golfService,
+  mapTournamentToMatchSummary,
+} from "@/services/golf.service"
 import { iceHockeyService } from "@/services/ice-hockey.service"
 import { motorsportService } from "@/services/motorsport.service"
 import { rugbyLeagueService } from "@/services/rugby-league.service"
+import { surfingService } from "@/services/surfing.service"
 import { tennisService } from "@/services/tennis.service"
 import { DataverseMatchSummary } from "@/types/dataverse"
 import {
   CardVariant,
   DeepPartial,
-  DisplayTypes,
   MatchStatus,
   MatchSummary,
   SPORT,
@@ -92,26 +99,15 @@ const CHUNK_SIZE = 100
 // CLI args
 // ---------------------------------------------------------------------------
 
-const [
-  ,
-  ,
-  leagueIdArg,
-  seasonIdArg,
-  sportArg,
-  displayTypeArg,
-  allEventsArg,
-  useSportApiArg,
-] = process.argv
+const [, , leagueIdArg, seasonIdArg, sportArg, allEventsArg] = process.argv
 const allEventsMode = allEventsArg === "false" ? false : true
-const useSportApi = useSportApiArg === "true"
 const leagueId = leagueIdArg
 const seasonId = seasonIdArg
 const sport = sportArg as SPORT
-const displayType = (displayTypeArg as DisplayTypes) ?? DisplayTypes.ROUND
 
 if (!leagueId || !seasonId || !sport) {
   console.error(
-    "Usage: npx tsx scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> [displayType] [allEventsMode] [useSportApi]",
+    "Usage: npx tsx scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> [allEventsMode]",
   )
   process.exit(1)
 }
@@ -280,6 +276,38 @@ function createFileAdapter(adapterLeagueId: string): LeagueAdapter {
 }
 
 // ---------------------------------------------------------------------------
+// Custom adapter: dataverse match summary mapper
+// ---------------------------------------------------------------------------
+
+function createMatchSummaryAdapter(
+  sport: SPORT,
+  mapper: (event: MatchSummary) => MatchSummary,
+): LeagueAdapter {
+  return {
+    async fetchMatches(leagueId, seasonId) {
+      const filters = [
+        `ss_leagueid eq '${leagueId}'`,
+        `ss_seasonid eq '${seasonId}'`,
+        `ss_sport eq '${sport}'`,
+      ]
+      const response = await fetchDataverseMatchSummaries(filters.join(" and "))
+      if (!response) return []
+      const matches = response.value.map(mapToMatchSummary)
+
+      if (!matches || matches.length === 0) {
+        console.log(
+          `No matches found for ${sport} leagueId=${leagueId} seasonId=${seasonId}.`,
+        )
+        return []
+      }
+
+      console.log(`Fetched ${matches.length} matches from Dataverse.`)
+      return matches.map(mapper)
+    },
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Adapter registry
 // ---------------------------------------------------------------------------
 
@@ -371,6 +399,14 @@ const adapters: Partial<Record<SPORT, AdapterMap>> = {
     ),
   },
 
+  // --- Cycling (custom adapters per league) ---
+  [SPORT.SURFING]: {
+    default: createMatchSummaryAdapter(
+      SPORT.SURFING,
+      surfingService.eventMapper.bind(surfingService),
+    ),
+  },
+
   // --- Golf (custom adapters per league) ---
   [SPORT.GOLF]: {
     pga: {
@@ -385,6 +421,7 @@ const adapters: Partial<Record<SPORT, AdapterMap>> = {
             matchSlug: `/sports/golf/pga/${seasonId}/match/${t.tournId}`,
             seasonId,
             leagueId: "pga",
+            leagueSlug: `/sports/golf/pga/${seasonId}`,
           }),
         )
       },
@@ -401,12 +438,17 @@ const adapters: Partial<Record<SPORT, AdapterMap>> = {
             matchSlug: `/sports/golf/liv/${seasonId}/match/${t.tournId}`,
             seasonId,
             leagueId: "liv",
+            leagueSlug: `/sports/golf/liv/${seasonId}`,
           }),
         )
       },
     },
-    australasia: createFileAdapter("australasia"),
-    tgl: createFileAdapter("tgl"),
+    // australasia: createFileAdapter("australasia"),
+    // tgl: createFileAdapter("tgl"),
+    default: createMatchSummaryAdapter(
+      SPORT.GOLF,
+      golfService.eventMapper.bind(golfService),
+    ),
   },
 }
 
@@ -429,8 +471,8 @@ function resolveAdapter(): LeagueAdapter {
     return sportAdapters[leagueId]
   }
 
-  // 2. Sport-specific Sofascore adapter (when useSportApi is true)
-  if (useSportApi && sportAdapters?.default) {
+  // 2. Sport-specific Sofascore adapter
+  if (sportAdapters?.default) {
     return sportAdapters.default
   }
 

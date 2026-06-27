@@ -62,7 +62,7 @@ function parseTVDetails(value: string | null): TVDetails[] {
   }
 }
 
-function mapToMatchSummary(r: DataverseMatchSummary): MatchSummary {
+export function mapToMatchSummary(r: DataverseMatchSummary): MatchSummary {
   return {
     id: r.ss_matchid ?? "",
     startDate: new Date(r.ss_startdate ?? ""),

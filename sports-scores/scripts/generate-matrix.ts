@@ -26,7 +26,7 @@ import {
   TENNIS_CATEGORIES,
   TENNIS_LEAGUES,
 } from "@/lib/constants"
-import { DisplayTypes, LeagueSeasonConfig } from "@/types/misc"
+import { LeagueSeasonConfig } from "@/types/misc"
 
 // ---------------------------------------------------------------------------
 // Configure which leagues to sync. Each entry maps a sport key + display type
@@ -35,7 +35,6 @@ import { DisplayTypes, LeagueSeasonConfig } from "@/types/misc"
 
 type SyncEntry = {
   sport: string
-  displayType: DisplayTypes
   leagues: LeagueSeasonConfig[]
   /** Slugs to include. Omit or use ["*"] for all. */
   slugs?: string[]
@@ -44,92 +43,77 @@ type SyncEntry = {
 const SYNC_CONFIG: SyncEntry[] = [
   {
     sport: "rugby-league",
-    displayType: DisplayTypes.ROUND,
     leagues: RUGBY_LEAGUE_LEAGUES,
     slugs: ["294", "19120", "2135", "2134"],
   },
   {
     sport: "football",
-    displayType: DisplayTypes.ROUND,
     leagues: FOOTBALL_LEAGUES,
     slugs: ["136", "1894", "1786", "17", "19"],
   },
   {
     sport: "aussie-rules",
-    displayType: DisplayTypes.ROUND,
     leagues: AUSSIE_RULES_LEAGUES,
     slugs: ["656", "10159", "25506"],
   },
   {
     sport: "american-football",
-    displayType: DisplayTypes.ROUND,
     leagues: AMERICAN_FOOTBALL_LEAGUES,
     slugs: ["9464"],
   },
   {
     sport: "basketball",
-    displayType: DisplayTypes.DATE,
     leagues: BASKETBALL_LEAGUES,
     slugs: ["1524", "1506", "132", "486"],
   },
   {
     sport: "baseball",
-    displayType: DisplayTypes.DATE,
     leagues: BASEBALL_LEAGUES,
     slugs: ["11205", "19445"],
   },
   {
     sport: "ice-hockey",
-    displayType: DisplayTypes.DATE,
     leagues: ICE_HOCKEY_LEAGUES,
     slugs: ["11059", "234"],
   },
   {
     sport: "rugby-union",
-    displayType: DisplayTypes.ROUND,
     leagues: RUGBY_UNION_LEAGUES,
     slugs: ["422"],
   },
   // {
   //   sport: "cricket",
-  //   displayType: DisplayTypes.ROUND,
   //   leagues: CRICKET_LEAGUES,
   //   slugs: ["*"],
   // },
   // {
   //   sport: "netball",
-  //   displayType: DisplayTypes.ROUND,
   //   leagues: NETBALL_LEAGUES,
   //   slugs: ["*"],
   // },
   // {
   // {
   //   sport: "tennis",
-  //   displayType: DisplayTypes.ROUND,
   //   leagues: TENNIS_CATEGORIES,
   //   slugs: ["*"],
   // },
   // {
   //   sport: "darts",
-  //   displayType: DisplayTypes.ROUND,
   //   leagues: DARTS_LEAGUES,
   //   slugs: ["*"],
   // },
   // {
   //   sport: "motorsport",
-  //   displayType: DisplayTypes.ROUND,
   //   leagues: MOTORSPORT_CATEGORIES,
   //   slugs: ["40", "17"],
   // },
   {
     sport: "golf",
-    displayType: DisplayTypes.ROUND,
     leagues: GOLF_TOURS,
-    slugs: ["pga", "liv"],
+    slugs: ["pga", "liv", "dpworld", "lpga", "australasia", "tgl"],
   },
   // {
   //   sport: "cycling",
-  //   displayType: DisplayTypes.ROUND,
   //   leagues: CYCLING_TOURS,
   //   slugs: ["*"],
   // },
@@ -144,7 +128,6 @@ type MatrixEntry = {
   leagueId: string
   seasonId: string
   sport: string
-  displayType: string
 }
 
 const matrix: MatrixEntry[] = []
@@ -164,7 +147,6 @@ for (const config of SYNC_CONFIG) {
       leagueId: league.slug,
       seasonId: latestSeason.slug,
       sport: config.sport,
-      displayType: league.display ?? config.displayType,
     })
   }
 }
@@ -176,74 +158,66 @@ for (const config of SYNC_CONFIG) {
 const ALL_LEAGUES_CONFIG: SyncEntry[] = [
   {
     sport: "rugby-league",
-    displayType: DisplayTypes.ROUND,
     leagues: RUGBY_LEAGUE_LEAGUES,
   },
   {
     sport: "football",
-    displayType: DisplayTypes.ROUND,
     leagues: FOOTBALL_LEAGUES,
   },
   {
     sport: "aussie-rules",
-    displayType: DisplayTypes.ROUND,
     leagues: AUSSIE_RULES_LEAGUES,
   },
   {
     sport: "american-football",
-    displayType: DisplayTypes.ROUND,
     leagues: AMERICAN_FOOTBALL_LEAGUES,
   },
   {
     sport: "basketball",
-    displayType: DisplayTypes.DATE,
     leagues: BASKETBALL_LEAGUES,
   },
   {
     sport: "baseball",
-    displayType: DisplayTypes.DATE,
     leagues: BASEBALL_LEAGUES,
   },
   {
     sport: "ice-hockey",
-    displayType: DisplayTypes.DATE,
     leagues: ICE_HOCKEY_LEAGUES,
   },
   {
     sport: "rugby-union",
-    displayType: DisplayTypes.ROUND,
     leagues: RUGBY_UNION_LEAGUES,
   },
   {
     sport: "cricket",
-    displayType: DisplayTypes.ROUND,
     leagues: CRICKET_LEAGUES,
   },
   {
     sport: "netball",
-    displayType: DisplayTypes.ROUND,
     leagues: NETBALL_LEAGUES,
   },
   {
     sport: "tennis",
-    displayType: DisplayTypes.ROUND,
     leagues: TENNIS_LEAGUES,
   },
   {
     sport: "tennis",
-    displayType: DisplayTypes.ROUND,
     leagues: TENNIS_CATEGORIES,
   },
-  { sport: "darts", displayType: DisplayTypes.ROUND, leagues: DARTS_LEAGUES },
+  {
+    sport: "darts",
+    leagues: DARTS_LEAGUES,
+  },
   {
     sport: "motorsport",
-    displayType: DisplayTypes.ROUND,
     leagues: MOTORSPORT_CATEGORIES,
   },
-  { sport: "golf", displayType: DisplayTypes.ROUND, leagues: GOLF_TOURS },
+  {
+    sport: "golf",
+    leagues: GOLF_TOURS,
+  },
   {
     sport: "cycling",
-    displayType: DisplayTypes.ROUND,
     leagues: CYCLING_TOURS,
   },
 ]
@@ -256,7 +230,6 @@ type LeagueLookupEntry = {
   leagueId: string
   seasonId: string
   sport: string
-  displayType: string
 }
 
 const leagueLookup: Record<string, LeagueLookupEntry> = {}
@@ -271,7 +244,6 @@ for (const config of ALL_LEAGUES_CONFIG) {
       leagueId: league.slug,
       seasonId: latestSeason.slug,
       sport: config.sport,
-      displayType: league.display ?? config.displayType,
     }
   }
 }

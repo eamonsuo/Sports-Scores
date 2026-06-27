@@ -2,7 +2,7 @@ import { FALLBACK_IMAGE } from "@/lib/constants"
 import { resolveSportImage } from "@/lib/imageMapping"
 import { formatTime } from "@/lib/projUtils"
 import { cn } from "@/lib/utils"
-import { MatchSummary } from "@/types/misc"
+import { MatchStatus, MatchSummary } from "@/types/misc"
 import Image from "next/image"
 import Link from "next/link"
 import Timer from "../misc-ui/Timer"
@@ -33,17 +33,18 @@ export default function SessionSummaryCard({
         )}
       >
         <p className="flex-1">{event.summaryText}</p>
-        {event.tv?.map((tv, idx) => (
-          <Image
-            key={idx}
-            src={resolveSportImage(tv.channel) || FALLBACK_IMAGE}
-            width={100}
-            height={100}
-            style={{ width: "auto", height: "12px" }}
-            alt={tv.channel}
-            className="mx-auto my-auto"
-          />
-        ))}
+        {event.status !== MatchStatus.COMPLETED &&
+          event.tv?.map((tv, idx) => (
+            <Image
+              key={idx}
+              src={resolveSportImage(tv.channel) || FALLBACK_IMAGE}
+              width={100}
+              height={100}
+              style={{ width: "auto", height: "12px" }}
+              alt={tv.channel}
+              className="my-auto me-2"
+            />
+          ))}
         <Timer display={timer.display} displayColour={timer.displayColour} />
         <p>&gt;</p>
       </div>
