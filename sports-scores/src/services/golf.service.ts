@@ -85,7 +85,7 @@ class GolfService implements SportService {
         (a, b) =>
           new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
       )
-      .map(this.eventMapper)
+      .map((event) => this.eventMapper(event))
 
     const { leagueConfig } = getSportConfigurations(
       this.tours,
@@ -115,7 +115,11 @@ class GolfService implements SportService {
         (a, b) =>
           new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
       )
-      .map((event) => this.eventMapper(event))
+      .map((event) =>
+        this.eventMapper(event, {
+          leagueImg: this.tours.find((l) => l.slug === event.leagueId)?.icon,
+        }),
+      )
 
     const fixtures = await mapFixtureRounds(allMatches, this.tours)
 
@@ -184,7 +188,10 @@ class GolfService implements SportService {
     throw new Error("Method not implemented.")
   }
 
-  eventMapper(event: MatchSummary): MatchSummary {
+  eventMapper(
+    event: MatchSummary,
+    options?: DeepPartial<Omit<MatchSummary, "competitorDetails" | "tv">>,
+  ): MatchSummary {
     let currentDate = new Date()
 
     const status =
@@ -195,10 +202,19 @@ class GolfService implements SportService {
           : MatchStatus.COMPLETED
 
     const tournamentImage =
-      event.leagueImg ?? resolveSportImage(event.leagueName)
+      options?.leagueImg ??
+      event.leagueImg ??
+      resolveSportImage(event.leagueName)
+
+    const { tvConfig } = getSportConfigurations(
+      GOLF_TOURS,
+      event.leagueId,
+      event.seasonId,
+    )
 
     return {
       ...event,
+      ...options,
       status,
       leagueImg:
         tournamentImage === FALLBACK_IMAGE
@@ -207,6 +223,26 @@ class GolfService implements SportService {
       timer: status.charAt(0) + status.slice(1).toLowerCase(),
       timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
       cardVariant: event.cardVariant ?? CardVariant.SESSION,
+      tv:
+        event.tv?.length === 0
+          ? tvConfig?.channels
+              .filter((channel) =>
+                channel.tvFilter
+                  ? channel.tvFilter(event.startDate, event)
+                  : true,
+              )
+              .map((channel) => ({
+                channel: channel.channel,
+                startTime: channel.startTime
+                  ? channel.startTime(event.startDate)
+                  : event.startDate,
+                endTime: event.endDate
+                  ? event.endDate
+                  : channel.endTime
+                    ? channel.endTime(event.startDate)
+                    : undefined,
+              }))
+          : event.tv,
     }
   }
 }
@@ -372,25 +408,28 @@ export function mapTournamentToMatchSummary(
     competitorDetails: [],
     winner: options?.winner,
     cardVariant: options?.cardVariant ?? CardVariant.SESSION,
-    tv: tvConfig?.channels
-      .filter((channel) =>
-        channel.tvFilter
-          ? channel.tvFilter(options?.startDate ?? startDate, event)
-          : true,
-      )
-      .map((channel) => ({
-        channel: channel.channel,
-        startTime: channel.startTime
-          ? channel.startTime(options?.startDate ?? startDate)
-          : (options?.startDate ?? startDate),
-        endTime:
-          options?.endDate ??
-          (event?.date.end
-            ? endDate
-            : channel.endTime
-              ? channel.endTime(options?.startDate ?? startDate)
-              : undefined),
-      })),
+    tv:
+      status !== MatchStatus.COMPLETED
+        ? tvConfig?.channels
+            .filter((channel) =>
+              channel.tvFilter
+                ? channel.tvFilter(options?.startDate ?? startDate, event)
+                : true,
+            )
+            .map((channel) => ({
+              channel: channel.channel,
+              startTime: channel.startTime
+                ? channel.startTime(options?.startDate ?? startDate)
+                : (options?.startDate ?? startDate),
+              endTime:
+                options?.endDate ??
+                (event?.date.end
+                  ? endDate
+                  : channel.endTime
+                    ? channel.endTime(options?.startDate ?? startDate)
+                    : undefined),
+            }))
+        : undefined,
   }
 }
 

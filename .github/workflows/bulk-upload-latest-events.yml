@@ -12,13 +12,8 @@ on:
         type: choice
         default: "singleLeague"
         options:
-          - allLeagues
+          - regularLeagues
           - singleLeague
-      useSportApi:
-        description: "Use sport-specific API instead of generic Sofascore API"
-        required: true
-        default: true
-        type: boolean
       league:
         description: "League to upload (single mode only)"
         required: false
@@ -189,10 +184,6 @@ on:
         options:
           - all
           - latest
-      displayType:
-        description: "Display type override e.g. round, date (single mode only)"
-        required: false
-        type: string
 
 env:
   DATAVERSE_ENVIRONMENT_URL: ${{ secrets.DATAVERSE_ENVIRONMENT_URL }}
@@ -217,7 +208,7 @@ env:
 jobs:
   # ---- Read the committed matrix JSON ----
   read-matrix:
-    if: ${{ github.event_name == 'schedule' || inputs.mode == 'allLeagues' }}
+    if: ${{ github.event_name == 'schedule' || inputs.mode == 'regularLeagues' }}
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -256,9 +247,7 @@ jobs:
             "${{ matrix.leagueId }}" \
             "${{ matrix.seasonId }}" \
             "${{ matrix.sport }}" \
-            "${{ matrix.displayType }}" \
-            ${{ inputs.fetchMatches == 'all' && 'true' || 'false' }} \
-            ${{ inputs.useSportApi }}
+            ${{ inputs.fetchMatches == 'all' && 'true' || 'false' }}
 
   # ---- Runs a single tournament (manual only) ----
   upload-single:
@@ -289,6 +278,4 @@ jobs:
             "${{ steps.resolve.outputs.leagueId }}" \
             "${{ steps.resolve.outputs.seasonId }}" \
             "${{ steps.resolve.outputs.sport }}" \
-            "${{ inputs.displayType || steps.resolve.outputs.displayType }}" \
-            ${{ inputs.fetchMatches == 'all' && 'true' || 'false' }} \
-            ${{ inputs.useSportApi }}
+            ${{ inputs.fetchMatches == 'all' && 'true' || 'false' }}

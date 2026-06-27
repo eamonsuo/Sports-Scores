@@ -3,168 +3,168 @@
     "name": "NRL 2026",
     "leagueId": "294",
     "seasonId": "86317",
-    "sport": "rugby-league",
-    "displayType": "round"
+    "sport": "rugby-league"
   },
   {
     "name": "NRLW 2026",
     "leagueId": "19120",
     "seasonId": "87573",
-    "sport": "rugby-league",
-    "displayType": "round"
+    "sport": "rugby-league"
   },
   {
     "name": "Queensland Cup 2026",
     "leagueId": "2135",
     "seasonId": "88763",
-    "sport": "rugby-league",
-    "displayType": "round"
+    "sport": "rugby-league"
   },
   {
     "name": "New South Wales Cup 2026",
     "leagueId": "2134",
     "seasonId": "89006",
-    "sport": "rugby-league",
-    "displayType": "round"
+    "sport": "rugby-league"
   },
   {
     "name": "🇦🇺 A-League Men 25/26",
     "leagueId": "136",
     "seasonId": "82603",
-    "sport": "football",
-    "displayType": "round"
+    "sport": "football"
   },
   {
     "name": "🇦🇺 A-League Women 25/26",
     "leagueId": "1894",
     "seasonId": "82605",
-    "sport": "football",
-    "displayType": "round"
+    "sport": "football"
   },
   {
     "name": "🇦🇺 Australia Cup 2025",
     "leagueId": "1786",
     "seasonId": "75270",
-    "sport": "football",
-    "displayType": "round"
+    "sport": "football"
   },
   {
     "name": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League 25/26",
     "leagueId": "17",
     "seasonId": "76986",
-    "sport": "football",
-    "displayType": "round"
+    "sport": "football"
   },
   {
     "name": "🏴 FA Cup 25/26",
     "leagueId": "19",
     "seasonId": "82557",
-    "sport": "football",
-    "displayType": "round"
+    "sport": "football"
   },
   {
     "name": "AFL 2026",
     "leagueId": "656",
     "seasonId": "86748",
-    "sport": "aussie-rules",
-    "displayType": "round"
+    "sport": "aussie-rules"
   },
   {
     "name": "AFLW 2025",
     "leagueId": "10159",
     "seasonId": "76123",
-    "sport": "aussie-rules",
-    "displayType": "round"
+    "sport": "aussie-rules"
   },
   {
     "name": "VFL 2026",
     "leagueId": "25506",
     "seasonId": "90001",
-    "sport": "aussie-rules",
-    "displayType": "round"
+    "sport": "aussie-rules"
   },
   {
     "name": "NFL 26/27",
     "leagueId": "9464",
     "seasonId": "94366",
-    "sport": "american-football",
-    "displayType": "round"
+    "sport": "american-football"
   },
   {
     "name": "NBL 25/26",
     "leagueId": "1524",
     "seasonId": "77205",
-    "sport": "basketball",
-    "displayType": "date"
+    "sport": "basketball"
   },
   {
     "name": "WNBL 25/26",
     "leagueId": "1506",
     "seasonId": "77204",
-    "sport": "basketball",
-    "displayType": "date"
+    "sport": "basketball"
   },
   {
     "name": "NBA 25/26",
     "leagueId": "132",
     "seasonId": "80229",
-    "sport": "basketball",
-    "displayType": "date"
+    "sport": "basketball"
   },
   {
     "name": "WNBA 2026",
     "leagueId": "486",
     "seasonId": "89004",
-    "sport": "basketball",
-    "displayType": "date"
+    "sport": "basketball"
   },
   {
     "name": "MLB 2026",
     "leagueId": "11205",
     "seasonId": "84695",
-    "sport": "baseball",
-    "displayType": "date"
+    "sport": "baseball"
   },
   {
     "name": "ALB 25/26",
     "leagueId": "19445",
     "seasonId": "81328",
-    "sport": "baseball",
-    "displayType": "date"
+    "sport": "baseball"
   },
   {
     "name": "AIHL 2026",
     "leagueId": "11059",
     "seasonId": "86527",
-    "sport": "ice-hockey",
-    "displayType": "date"
+    "sport": "ice-hockey"
   },
   {
     "name": "NHL 25/26",
     "leagueId": "234",
     "seasonId": "78476",
-    "sport": "ice-hockey",
-    "displayType": "date"
+    "sport": "ice-hockey"
   },
   {
     "name": "Super Rugby 2026",
     "leagueId": "422",
     "seasonId": "86502",
-    "sport": "rugby-union",
-    "displayType": "round"
+    "sport": "rugby-union"
   },
   {
     "name": "PGA Tour 2026",
     "leagueId": "pga",
     "seasonId": "2026",
-    "sport": "golf",
-    "displayType": "round"
+    "sport": "golf"
   },
   {
     "name": "LIV Golf 2026",
     "leagueId": "liv",
     "seasonId": "2026",
-    "sport": "golf",
-    "displayType": "round"
+    "sport": "golf"
+  },
+  {
+    "name": "LPGA Tour 2026",
+    "leagueId": "lpga",
+    "seasonId": "2026",
+    "sport": "golf"
+  },
+  {
+    "name": "DP World Tour 2026",
+    "leagueId": "dpworld",
+    "seasonId": "2026",
+    "sport": "golf"
+  },
+  {
+    "name": "PGA Tour Australasia 25/26",
+    "leagueId": "australasia",
+    "seasonId": "25-26",
+    "sport": "golf"
+  },
+  {
+    "name": "TGL 2026",
+    "leagueId": "tgl",
+    "seasonId": "2026",
+    "sport": "golf"
   }
 ]

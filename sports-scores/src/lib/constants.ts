@@ -14,6 +14,7 @@ import {
 } from "@/types/playoff-picture"
 import { Sofascore_Event } from "@/types/sofascore"
 import { RankingList } from "@/types/tennis"
+import { TZDate } from "@date-fns/tz/date"
 import { addHours } from "date-fns/addHours"
 import { resolveSportImage } from "./imageMapping"
 import {
@@ -35,15 +36,15 @@ export const RUGBY_LEAGUE_LADDER_HEADINGS = [
 const RUGBY_LEAGUE_MATCH_LENGTH = 1.75 // in hours, used for TV guide end time estimation
 export const RUGBY_LEAGUE_CATEGORIES = ["83"] //Rugby League
 export const FOOTBALL_CATEGORIES = [
-  "34",
-  "1468",
-  "1467",
-  "1465",
-  "1",
-  "1470",
-  "1466",
-  "1469",
-  "1471",
+  "34", // Australia
+  "1468", // World
+  "1467", // Asia
+  "1465", // Europe
+  "1", // England
+  // "1470", // South America
+  // "1466", // Africa
+  // "1469", // North America
+  // "1471", // Oceania
 ] //Australia, World, Asia, Europe, England, South America, Africa, North America, Oceania
 export const FOOTBALL_LADDER_HEADINGS = ["Team", "P", "W", "D", "Diff", "Pts"]
 export const FOOTBALL_MATCH_LENGTH = 2 // in hours, used for TV guide end time estimation
@@ -670,6 +671,7 @@ export const MOTORSPORT_CATEGORIES: LeagueSeasonConfig[] = [
     name: "Formula 1",
     slug: "40",
     // slug: "f1",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/g8cofl1513623681.png",
     seasons: [
       {
         name: "2026",
@@ -685,12 +687,14 @@ export const MOTORSPORT_CATEGORIES: LeagueSeasonConfig[] = [
   {
     name: "Supercars",
     slug: "supercars",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/64f67s1770108650.png",
     seasons: [{ name: "2026", slug: "2026", tvguide: SUPERCARS_TV_GUIDE }],
     externalURL: `https://www.supercars.com/calendar`,
   },
   {
     name: "MotoGP",
     slug: "17",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/gg3c201768486075.png",
     seasons: [
       {
         name: "2026",
@@ -772,7 +776,7 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
     ],
     externalURL:
       "https://www.google.com/search?igu=1&gws_rd=ssl&q=dp+world+tour",
-    icon: "https://www.thesportsdb.com/images/media/league/badge/3cj95h1778512316.png",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/3cj95h1778512316.png",
   },
   {
     name: "PGA Tour Australasia",
@@ -851,7 +855,7 @@ const NRL_TV_GUIDE: TVConfig = {
       // startTime: (date) => date,
       endTime: (date) => addHours(date, RUGBY_LEAGUE_MATCH_LENGTH),
       tvFilter(date, event) {
-        const AESTDate = addHours(date, 10) // Convert to AEST
+        const AESTDate = new TZDate(date, "Australia/Sydney") // Convert to AEST
         const day = AESTDate.getDay()
         const hour = AESTDate.getHours()
         // NRL games on Nine are typically on Thursdays at 7:50pm, Fridays at 7:50pm, Saturdays at 5:30pm and Sundays at 4:00pm
@@ -860,6 +864,7 @@ const NRL_TV_GUIDE: TVConfig = {
           (day === 5 && hour >= 19) || // Friday
           (day === 6 && hour >= 18 && AESTDate > new Date(2026, 7, 5)) || // Saturday last 5 rounds
           (day === 0 && hour > 15 && hour < 18) || // Sunday
+          day === 1 || // Monday - special games (e.g., ANZAC Day, Easter Monday, etc.)
           ((event as Sofascore_Event)?.roundInfo?.round ?? 28) > 27 // Finals
         ) {
           return true
@@ -877,7 +882,7 @@ const QLD_CUP_TV_GUIDE: TVConfig = {
       // startTime: (date) => date,
       endTime: (date) => addHours(date, RUGBY_LEAGUE_MATCH_LENGTH),
       tvFilter(date, event): boolean {
-        const AESTDate = addHours(date, 10) // Convert to AEST
+        const AESTDate = new TZDate(date, "Australia/Brisbane") // Convert to AEST
         const day = AESTDate.getDay()
         const hour = AESTDate.getHours()
         const minute = AESTDate.getMinutes()
@@ -896,7 +901,7 @@ const QLD_CUP_TV_GUIDE: TVConfig = {
       // startTime: (date) => date,
       endTime: (date) => addHours(date, RUGBY_LEAGUE_MATCH_LENGTH),
       tvFilter(date, event) {
-        const AESTDate = addHours(date, 10) // Convert to AEST
+        const AESTDate = new TZDate(date, "Australia/Brisbane") // Convert to AEST
         const day = AESTDate.getDay()
         const hour = AESTDate.getHours()
         const minute = AESTDate.getMinutes()
@@ -917,6 +922,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "NRL",
     slug: "294",
+    icon: "https://upload.wikimedia.org/wikipedia/en/5/50/National_Rugby_League.svg",
     seasons: [
       {
         name: "2026",
@@ -1172,7 +1178,7 @@ const AFL_TV_GUIDE: TVConfig = {
       // startTime: (date) => date,
       endTime: (date) => addHours(date, AUSSIE_RULES_MATCH_LENGTH),
       tvFilter(date, event) {
-        const AESTDate = addHours(date, 10) // Convert to AEST
+        const AESTDate = new TZDate(date, "Australia/Brisbane") // Convert to AEST
         const day = AESTDate.getDay()
         const hour = AESTDate.getHours()
         const eventCast = event as Sofascore_Event
@@ -1196,6 +1202,7 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "AFL",
     slug: "656",
+    icon: "https://upload.wikimedia.org/wikipedia/en/9/91/AFL-Logo_RGB_white_border.png",
     seasons: [
       {
         name: "2026",
@@ -1521,7 +1528,7 @@ const A_LEAGUE_TV_GUIDE: TVConfig = {
       // startTime: (date) => date,
       endTime: (date) => addHours(date, FOOTBALL_MATCH_LENGTH),
       tvFilter(date, event) {
-        const AESTDate = addHours(date, 10) // Convert to AEST
+        const AESTDate = new TZDate(date, "Australia/Brisbane") // Convert to AEST
         const day = AESTDate.getDay()
         const hour = AESTDate.getHours()
         if (

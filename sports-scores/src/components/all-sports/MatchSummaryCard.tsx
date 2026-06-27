@@ -2,7 +2,7 @@ import { FALLBACK_IMAGE } from "@/lib/constants"
 import { resolveSportImage } from "@/lib/imageMapping"
 import { formatTime } from "@/lib/projUtils"
 import { cn } from "@/lib/utils"
-import { MatchSummary } from "@/types/misc"
+import { MatchStatus, MatchSummary } from "@/types/misc"
 import clsx from "clsx"
 import Image from "next/image"
 import Link from "next/link"
@@ -127,17 +127,18 @@ export default function MatchSummaryCard({
             {homeDetails?.name} <br /> {homeDetails?.winDrawLoss}
           </p>
           <div className="flex justify-center gap-1 overflow-visible">
-            {event?.tv?.map((tvDetails, idx) => (
-              <Image
-                key={idx}
-                src={resolveSportImage(tvDetails.channel) || FALLBACK_IMAGE}
-                width={100}
-                height={100}
-                style={{ width: "auto", height: "12px" }}
-                alt={tvDetails.channel}
-                className="mx-auto my-auto"
-              />
-            ))}
+            {event.status !== MatchStatus.COMPLETED &&
+              event?.tv?.map((tvDetails, idx) => (
+                <Image
+                  key={idx}
+                  src={resolveSportImage(tvDetails.channel) || FALLBACK_IMAGE}
+                  width={100}
+                  height={100}
+                  style={{ width: "auto", height: "12px" }}
+                  alt={tvDetails.channel}
+                  className="mx-auto my-auto"
+                />
+              ))}
           </div>
           <p
             className={clsx(
