@@ -82,12 +82,12 @@ class DartsService extends SofascoreSport {
     )
 
     return super.eventMapper(event, {
-      ...options,
       venue: "",
       roundLabel: leagueTournament
         ? event.tournament.name
         : (event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`),
       leagueName: leagueTournament ? event.roundInfo?.name : undefined,
+      ...options,
     })
   }
 }

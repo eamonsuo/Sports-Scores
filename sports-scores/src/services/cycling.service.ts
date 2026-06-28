@@ -152,7 +152,7 @@ class CyclingService extends SofascoreStageSport {
     // const apiIds = new Set(apiMatches.map((m) => m.id))
     const allMatches = apiMatches
       // .concat((dataverseMatches ?? []).filter((m) => !apiIds.has(m.id)))
-      // .map((match) => this.matchSummaryMapper(match))
+      // .map((match) => this.eventMapperMatchSummary(match))
       .sort(
         (a, b) =>
           new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),

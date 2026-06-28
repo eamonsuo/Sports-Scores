@@ -190,7 +190,7 @@ class GolfService implements SportService {
 
   eventMapper(
     event: MatchSummary,
-    options?: DeepPartial<Omit<MatchSummary, "competitorDetails" | "tv">>,
+    options?: DeepPartial<MatchSummary>,
   ): MatchSummary {
     let currentDate = new Date()
 
@@ -212,9 +212,12 @@ class GolfService implements SportService {
       event.seasonId,
     )
 
+    // Strip out competitorDetails and tv from options to avoid type errors
+    const { competitorDetails, tv, ...otherOptions } = options || {}
+
     return {
       ...event,
-      ...options,
+      ...otherOptions,
       status,
       leagueImg:
         tournamentImage === FALLBACK_IMAGE
@@ -381,33 +384,33 @@ export function mapTournamentToMatchSummary(
     options?.seasonId,
   )
 
+  // Strip out competitorDetails and tv from options to avoid type errors
+  const { competitorDetails, tv, ...otherOptions } = options || {}
+
   return {
-    id: options?.id ?? event.tournId,
-    startDate: options?.startDate ?? startDate,
-    endDate: options?.endDate ?? endDate,
+    id: event.tournId,
+    startDate: startDate,
+    endDate: endDate,
     sport: SPORT.GOLF,
-    status: options?.status ?? status,
-    roundLabel:
-      options?.roundLabel ?? getRoundLabel(event.name, options?.leagueId),
-    summaryText: options?.summaryText ?? "Details",
-    timer: options?.timer ?? status.charAt(0) + status.slice(1).toLowerCase(),
-    timerDisplayColour:
-      options?.timerDisplayColour ??
-      (status === MatchStatus.LIVE ? "green" : "gray"),
-    otherDetail: options?.otherDetail,
-    venue: options?.venue,
-    matchSlug: options?.matchSlug,
-    seasonId: options?.seasonId,
-    leagueId: options?.leagueId,
-    leagueName: options?.leagueName ?? event.name,
-    leagueSlug: options?.leagueSlug,
+    status: status,
+    roundLabel: getRoundLabel(event.name, options?.leagueId),
+    summaryText: "Details",
+    timer: status.charAt(0) + status.slice(1).toLowerCase(),
+    timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
+    // otherDetail: options?.otherDetail,
+    // venue: options?.venue,
+    // matchSlug: options?.matchSlug,
+    // seasonId: options?.seasonId,
+    // leagueId: options?.leagueId,
+    leagueName: event.name,
+    // leagueSlug: options?.leagueSlug,
     leagueImg:
-      (options?.leagueImg ?? tournamentImage === "/vercel.svg")
+      tournamentImage === "/vercel.svg"
         ? getCountryImageUrl(CountryFlagCode.UnitedStates)
         : tournamentImage,
     competitorDetails: [],
-    winner: options?.winner,
-    cardVariant: options?.cardVariant ?? CardVariant.SESSION,
+    // winner: options?.winner,
+    cardVariant: CardVariant.SESSION,
     tv:
       status !== MatchStatus.COMPLETED
         ? tvConfig?.channels
@@ -430,6 +433,7 @@ export function mapTournamentToMatchSummary(
                     : undefined),
             }))
         : undefined,
+    ...otherOptions,
   }
 }
 

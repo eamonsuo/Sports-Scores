@@ -90,13 +90,12 @@ class TennisService extends SofascoreSport {
       date,
     )
 
-    if (!matches) {
-      return null
-    }
+    if (!matches) return null
 
     const validLeagueIds = TENNIS_LEAGUES.filter((l) => !l.excludeFromToday)
       .map((l) => Number(l.slug))
       .concat(TENNIS_CATEGORIES.map((c) => Number(c.slug)))
+
     const leagueIdToName = Object.fromEntries(
       TENNIS_CATEGORIES.concat(TENNIS_LEAGUES).map((l) => [
         Number(l.slug),
@@ -104,29 +103,32 @@ class TennisService extends SofascoreSport {
       ]),
     )
 
-    const filteredMatches = matches.events
+    matches.events = matches.events
       .filter((item) => {
         const eventDate = new TZDate(item.startTimestamp * 1000, timezone)
         return isSameDay(eventDate, date)
       })
-      .filter(
-        (item) =>
-          (validLeagueIds.includes(item.tournament.category.id) ||
-            validLeagueIds.includes(item.tournament.uniqueTournament?.id)) &&
-          item.status.type !== "canceled",
-      )
+      .filter((item) => item.status.type !== "canceled")
 
-    const aussieMatches = matches.events
-      .filter((item) => {
-        const eventDate = new TZDate(item.startTimestamp * 1000, timezone)
-        return isSameDay(eventDate, date)
-      })
-      .filter(
-        (item) =>
-          (item.homeTeam.country.name === "Australia" ||
-            item.awayTeam.country.name === "Australia") &&
-          item.status.type !== "canceled",
-      )
+    const filteredMatches = matches.events.filter(
+      (item) =>
+        validLeagueIds.includes(item.tournament.category.id) ||
+        validLeagueIds.includes(item.tournament.uniqueTournament?.id),
+    )
+
+    const aussieMatches = matches.events.filter(
+      (item) =>
+        item.homeTeam.country.name === "Australia" ||
+        item.awayTeam.country.name === "Australia" ||
+        item.homeTeam.subTeams?.some(
+          (subTeam) => subTeam.country.name === "Australia",
+        ) ||
+        item.awayTeam.subTeams?.some(
+          (subTeam) => subTeam.country.name === "Australia",
+        ),
+    )
+
+    if (!filteredMatches.length && !aussieMatches.length) return null
 
     // Get unique league ids in order
     const rounds = [
@@ -147,21 +149,22 @@ class TennisService extends SofascoreSport {
           )
 
           return {
-            matches: this.sortMatchesByDateAndTournament(
-              leagueMatches,
-              timezone,
-            ),
+            matches: this.sortMatchesByDateAndTournament(leagueMatches),
             roundLabel: roundLabel,
             cardVariant: "tennis",
             roundSlug: `${SPORT.TENNIS}/today`,
           } as FixtureRound
         })
-        .concat({
-          matches: this.sortMatchesByDateAndTournament(aussieMatches, timezone),
-          roundLabel: "Australians",
-          cardVariant: "tennis",
-          roundSlug: `${SPORT.TENNIS}/today`,
-        } as FixtureRound),
+        .concat(
+          aussieMatches.length > 0
+            ? ({
+                matches: this.sortMatchesByDateAndTournament(aussieMatches),
+                roundLabel: "Australians",
+                cardVariant: "tennis",
+                roundSlug: `${SPORT.TENNIS}/today`,
+              } as FixtureRound)
+            : [],
+        ),
 
       currentRound: firstTournament,
     }
@@ -349,7 +352,6 @@ class TennisService extends SofascoreSport {
   // AI Generated Helper
   private sortMatchesByDateAndTournament(
     matches: Tennis_Sofascore_Event[],
-    timezone: string = "UTC",
   ): MatchSummary[] {
     // Map to MatchSummary first
     const mapped = matches.map((match) => this.eventMapper(match))
