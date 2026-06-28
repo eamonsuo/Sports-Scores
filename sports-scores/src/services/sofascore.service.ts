@@ -1,5 +1,4 @@
 import { Match as BracketMatch } from "@/components/bracket/types"
-import { FALLBACK_IMAGE } from "@/lib/constants"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
 import { resolveSportImage } from "@/lib/imageMapping"
 import { resolvePlayoffPicture } from "@/lib/playoffPictureMapping"
@@ -213,6 +212,9 @@ export abstract class SofascoreSport implements SportService {
             event.tournament.uniqueTournament.name + " " + event.season.year,
           leagueName: event.tournament.name + " " + event.season.year,
           leagueSlug: `/sports/${this.sport}/${event.tournament.uniqueTournament.id}/${event.season.id}`,
+          leagueImg: this.leagues.find(
+            (l) => l.slug === event.tournament.uniqueTournament.id.toString(),
+          )?.icon,
         }),
       )
 
@@ -381,65 +383,54 @@ export abstract class SofascoreSport implements SportService {
       options?.seasonId ?? event.season.id.toString(),
     )
 
+    // Strip out competitorDetails and tv from options to avoid type errors
+    const { competitorDetails, tv, ...otherOptions } = options || {}
+
     return {
-      id: options?.id ?? event.id.toString(),
-      startDate: options?.startDate ?? startDate,
+      id: event.id.toString(),
+      startDate: startDate,
       endDate:
-        options?.endDate ??
-        (event?.endTimestamp && !isSameDay(startDate, endDate)
+        event?.endTimestamp && !isSameDay(startDate, endDate)
           ? endDate
-          : undefined),
+          : undefined,
       sport: this.sport,
-      status: options?.status ?? status,
+      status: status,
       roundLabel:
-        options?.roundLabel ??
-        event.roundInfo?.name ??
-        `Round ${event.roundInfo?.round ?? "x"}`,
-      summaryText:
-        options?.summaryText ??
-        setMatchSummary(
-          event.status.type,
-          event.homeTeam.name,
-          event.homeScore.current,
-          event.awayTeam.name,
-          event.awayScore.current,
-        ),
-      timer:
-        options?.timer ??
-        setTimer(
-          event.status.type,
-          event.status.description,
-          options?.startDate ?? startDate,
-          event.time?.played ?? 0,
-          event.time?.periodLength ?? 0,
-        ),
+        event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`,
+      summaryText: setMatchSummary(
+        event.status.type,
+        event.homeTeam.name,
+        event.homeScore.current,
+        event.awayTeam.name,
+        event.awayScore.current,
+      ),
+      timer: setTimer(
+        event.status.type,
+        event.status.description,
+        options?.startDate ?? startDate,
+        event.time?.played ?? 0,
+        event.time?.periodLength ?? 0,
+      ),
       timerDisplayColour:
-        options?.timerDisplayColour ??
-        (event.status.type === "inprogress" ||
+        event.status.type === "inprogress" ||
         event.status.type === "interrupted"
           ? "green"
-          : "gray"),
-      otherDetail:
-        options?.otherDetail ??
-        setSeriesInfo(
-          event.homeTeam.nameCode,
-          event.homeScore.series,
-          event.awayTeam.nameCode,
-          event.awayScore.series,
-        ),
+          : "gray",
+      otherDetail: setSeriesInfo(
+        event.homeTeam.nameCode,
+        event.homeScore.series,
+        event.awayTeam.nameCode,
+        event.awayScore.series,
+      ),
       venue:
-        options?.venue ??
-        (event?.venue?.name &&
-          `${event?.venue?.name}, ${event?.venue?.city.name}`),
-      matchSlug:
-        options?.matchSlug ??
-        `/sports/${this.sport}/${event.tournament.uniqueTournament.id}/${event.season.id}/match/${event.id}`,
-      seasonId: options?.seasonId ?? event.season.id.toString(),
-      leagueId:
-        options?.leagueId ?? event.tournament.uniqueTournament.id.toString(),
-      leagueName: options?.leagueName,
-      leagueSlug: options?.leagueSlug,
-      leagueImg: options?.leagueImg ?? FALLBACK_IMAGE,
+        event?.venue?.name &&
+        `${event?.venue?.name}, ${event?.venue?.city.name}`,
+      matchSlug: `/sports/${this.sport}/${event.tournament.uniqueTournament.id}/${event.season.id}/match/${event.id}`,
+      seasonId: event.season.id.toString(),
+      leagueId: event.tournament.uniqueTournament.id.toString(),
+      // leagueName: options?.leagueName ,
+      // leagueSlug: options?.leagueSlug ,
+      // leagueImg: FALLBACK_IMAGE,
       competitorDetails: [
         {
           id:
@@ -485,12 +476,10 @@ export abstract class SofascoreSport implements SportService {
         },
       ],
       winner:
-        options?.winner ??
-        (event.winnerCode !== 1 && event.winnerCode !== 2
+        event.winnerCode !== 1 && event.winnerCode !== 2
           ? undefined
-          : event.winnerCode),
-      cardVariant:
-        options?.cardVariant ?? this.cardVariant ?? CardVariant.DEFAULT,
+          : event.winnerCode,
+      cardVariant: this.cardVariant ?? CardVariant.DEFAULT,
       tv: tvConfig?.channels
         .filter((channel) =>
           channel.tvFilter
@@ -510,6 +499,7 @@ export abstract class SofascoreSport implements SportService {
                 ? channel.endTime(options?.startDate ?? startDate)
                 : undefined),
         })),
+      ...otherOptions,
     }
   }
 
@@ -807,40 +797,37 @@ export abstract class SofascoreStageSport implements SportService {
       options?.seasonId ?? event.stageParent.id.toString(),
     )
 
+    // Strip out competitorDetails and tv from options to avoid type errors
+    const { competitorDetails, tv, ...otherOptions } = options || {}
+
     return {
-      id: options?.id ?? event.id.toString(),
-      startDate: options?.startDate ?? startDate,
+      id: event.id.toString(),
+      startDate: startDate,
       endDate:
-        options?.endDate ??
-        (event?.endDateTimestamp && !isSameDay(startDate, endDate)
+        event?.endDateTimestamp && !isSameDay(startDate, endDate)
           ? endDate
-          : undefined),
+          : undefined,
       sport: this.sport,
-      status: options?.status ?? status,
-      roundLabel: options?.roundLabel,
-      summaryText: options?.summaryText ?? event.name,
+      status: status,
+      // roundLabel: undefined,
+      summaryText: event.name,
       timer:
-        (options?.timer ?? status === MatchStatus.UPCOMING)
+        status === MatchStatus.UPCOMING
           ? startDate
           : status.charAt(0) + status.slice(1).toLowerCase(),
       timerDisplayColour:
-        options?.timerDisplayColour ??
-        (event.status.type === "inprogress" ||
+        event.status.type === "inprogress" ||
         event.status.type === "interrupted"
           ? "green"
-          : "gray"),
-      otherDetail: options?.otherDetail,
-      venue: options?.venue,
-      matchSlug: options?.matchSlug,
-      seasonId: options?.seasonId ?? event.stageParent.id.toString(),
-      leagueId: options?.leagueId ?? event.uniqueStage.id.toString(),
-      leagueName: options?.leagueName ?? event.stageParent.description,
-      leagueSlug:
-        options?.leagueSlug ??
-        `/sports/${this.sport}/${event.uniqueStage.id}/${event.stageParent.id}`,
-      leagueImg:
-        options?.leagueImg ??
-        resolveSportImage([event.country?.name, event.name]),
+          : "gray",
+      // otherDetail: undefined,
+      // venue: undefined,
+      // matchSlug: undefined,
+      seasonId: event.stageParent.id.toString(),
+      leagueId: event.uniqueStage.id.toString(),
+      leagueName: event.stageParent.description,
+      leagueSlug: `/sports/${this.sport}/${event.uniqueStage.id}/${event.stageParent.id}`,
+      leagueImg: resolveSportImage([event.country?.name, event.name]),
       competitorDetails: event?.winner
         ? [
             {
@@ -859,9 +846,8 @@ export abstract class SofascoreStageSport implements SportService {
             },
           ]
         : [],
-      winner: options?.winner ?? 1,
-      cardVariant:
-        options?.cardVariant ?? this.cardVariant ?? CardVariant.DEFAULT,
+      winner: 1,
+      cardVariant: this.cardVariant ?? CardVariant.DEFAULT,
       tv: tvConfig?.channels
         .filter((channel) =>
           channel.tvFilter
@@ -881,12 +867,13 @@ export abstract class SofascoreStageSport implements SportService {
                 ? channel.endTime(options?.startDate ?? startDate)
                 : undefined),
         })),
+      ...otherOptions,
     }
   }
 
-  matchSummaryMapper(
+  eventMapperMatchSummary(
     event: MatchSummary,
-    options?: DeepPartial<Omit<MatchSummary, "competitorDetails" | "tv">>,
+    options?: DeepPartial<MatchSummary>,
   ): MatchSummary {
     let currentDate = new Date()
 
@@ -904,9 +891,12 @@ export abstract class SofascoreStageSport implements SportService {
       options?.seasonId ?? event.seasonId,
     )
 
+    // Strip out competitorDetails and tv from options to avoid type errors
+    const { competitorDetails, tv, ...otherOptions } = options || {}
+
     return {
       ...event,
-      ...options,
+      ...otherOptions,
       status,
       leagueImg:
         options?.leagueImg ??

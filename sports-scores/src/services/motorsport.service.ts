@@ -74,7 +74,7 @@ class MotorsportService extends SofascoreStageSport {
         (a, b) =>
           new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
       )
-      .map((match) => this.matchSummaryMapper(match))
+      .map((match) => this.eventMapperMatchSummary(match))
 
     if (!allMatches) return null
 
@@ -107,7 +107,7 @@ class MotorsportService extends SofascoreStageSport {
           new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
       )
       .map((match) =>
-        this.matchSummaryMapper(match, {
+        this.eventMapperMatchSummary(match, {
           leagueImg: this.leagues.find((l) => l.slug === match.leagueId)?.icon,
         }),
       )
