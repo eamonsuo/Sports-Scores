@@ -101,11 +101,9 @@ const CHUNK_SIZE = 100
 
 const [, , leagueIdArg, seasonIdArg, sportArg, allEventsArg] = process.argv
 const allEventsMode = allEventsArg === "false" ? false : true
-const leagueId = leagueIdArg
-const seasonId = seasonIdArg
 const sport = sportArg as SPORT
 
-if (!leagueId || !seasonId || !sport) {
+if (!leagueIdArg || !seasonIdArg || !sport) {
   console.error(
     "Usage: npx tsx scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> [allEventsMode]",
   )
@@ -217,7 +215,7 @@ function createSofascoreStagesAdapter(
 
 function createFileAdapter(adapterLeagueId: string): LeagueAdapter {
   return {
-    async fetchMatches(_leagueId, seasonId) {
+    async fetchMatches(leagueId, seasonId) {
       const filePath = resolve(
         __dirname,
         `${adapterLeagueId}-${seasonId}-events.json`,
@@ -375,7 +373,7 @@ const adapters: Partial<Record<SPORT, AdapterMap>> = {
   // --- Motorsport (custom adapters per league) ---
   [SPORT.MOTORSPORT]: {
     f1: {
-      async fetchMatches(_leagueId, seasonId) {
+      async fetchMatches(leagueId, seasonId) {
         const rawEvents = await fetchF1Events(seasonId)
         if (!rawEvents) {
           console.log("No F1 races found.")
@@ -410,7 +408,7 @@ const adapters: Partial<Record<SPORT, AdapterMap>> = {
   // --- Golf (custom adapters per league) ---
   [SPORT.GOLF]: {
     pga: {
-      async fetchMatches(_leagueId, seasonId) {
+      async fetchMatches(leagueId, seasonId) {
         const rawSchedule = await fetchGolfSchedule("1", seasonId)
         if (!rawSchedule || !rawSchedule.schedule) {
           console.log("No PGA schedule found.")
@@ -418,16 +416,16 @@ const adapters: Partial<Record<SPORT, AdapterMap>> = {
         }
         return rawSchedule.schedule.map((t) =>
           mapTournamentToMatchSummary(t, {
-            matchSlug: `/sports/golf/pga/${seasonId}/match/${t.tournId}`,
+            matchSlug: `/sports/golf/${leagueId}/${seasonId}/match/${t.tournId}`,
             seasonId,
-            leagueId: "pga",
-            leagueSlug: `/sports/golf/pga/${seasonId}`,
+            leagueId,
+            leagueSlug: `/sports/golf/${leagueId}/${seasonId}`,
           }),
         )
       },
     },
     liv: {
-      async fetchMatches(_leagueId, seasonId) {
+      async fetchMatches(leagueId, seasonId) {
         const rawSchedule = await fetchGolfSchedule("2", seasonId)
         if (!rawSchedule || !rawSchedule.schedule) {
           console.log("No LIV schedule found.")
@@ -435,10 +433,10 @@ const adapters: Partial<Record<SPORT, AdapterMap>> = {
         }
         return rawSchedule.schedule.map((t) =>
           mapTournamentToMatchSummary(t, {
-            matchSlug: `/sports/golf/liv/${seasonId}/match/${t.tournId}`,
+            matchSlug: `/sports/golf/${leagueId}/${seasonId}/match/${t.tournId}`,
             seasonId,
-            leagueId: "liv",
-            leagueSlug: `/sports/golf/liv/${seasonId}`,
+            leagueId,
+            leagueSlug: `/sports/golf/${leagueId}/${seasonId}`,
           }),
         )
       },
@@ -467,8 +465,8 @@ function resolveAdapter(): LeagueAdapter {
   const sportAdapters = adapters[sport]
 
   // 1. League-specific adapter (custom or override)
-  if (sportAdapters?.[leagueId]) {
-    return sportAdapters[leagueId]
+  if (sportAdapters?.[leagueIdArg]) {
+    return sportAdapters[leagueIdArg]
   }
 
   // 2. Sport-specific Sofascore adapter
@@ -645,11 +643,15 @@ async function uploadBatch(token: string, operations: BatchOperation[]) {
 
 async function main() {
   console.log(
-    `\nBulk uploading ${sport} matches — league ${leagueId}, season ${seasonId}`,
+    `\nBulk uploading ${sport} matches — league ${leagueIdArg}, season ${seasonIdArg}`,
   )
 
   const adapter = resolveAdapter()
-  const matches = await adapter.fetchMatches(leagueId, seasonId, allEventsMode)
+  const matches = await adapter.fetchMatches(
+    leagueIdArg,
+    seasonIdArg,
+    allEventsMode,
+  )
   console.log(`Fetched ${matches.length} matches.`)
 
   if (matches.length === 0) {
@@ -662,8 +664,8 @@ async function main() {
   console.log("Checking for existing records in Dataverse...")
   const existingRecords = await fetchExistingRecords(
     token,
-    leagueId,
-    seasonId,
+    leagueIdArg,
+    seasonIdArg,
     sport,
   )
   console.log(`Found ${existingRecords.size} existing matches in Dataverse.`)

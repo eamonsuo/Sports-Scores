@@ -1,4 +1,3 @@
-import { GolfLeaderboardPlayerRow } from "@/components/golf/TournamentLeaderboard"
 import {
   fetchGolfLeaderboard,
   fetchGolfRankings,
@@ -7,6 +6,7 @@ import {
 import {
   FALLBACK_IMAGE,
   GOLF_FEDEX_HEADINGS,
+  GOLF_LEADERBOARD_HEADINGS,
   GOLF_TOURS,
 } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
@@ -24,6 +24,7 @@ import {
   CountryFlagCode,
   DeepPartial,
   DisplayTypes,
+  LadderGroup,
   LeagueSeasonConfig,
   MatchDetail,
   Matches,
@@ -128,11 +129,21 @@ class GolfService implements SportService {
       currentRound: getCurrentRound(fixtures, DisplayTypes.LEAGUE),
     }
   }
+
   matchesByTeam(teamId: string): Promise<Matches | null> {
     throw new Error("Method not implemented.")
   }
-  matchDetails(matchId: string): Promise<MatchDetail | null> {
-    throw new Error("Method not implemented.")
+
+  async matchDetails(
+    matchId: string,
+    leagueId: string,
+    seasonId: string,
+  ): Promise<MatchDetail | null> {
+    const orgId = leagueId === "pga" ? "1" : "2"
+
+    var rawLeaderboard = await cachedFetchLeaderboard(orgId, matchId, seasonId)
+    if (!rawLeaderboard || !rawLeaderboard.leaderboardRows) return null
+    return { standings: this.leaderboardMapper(rawLeaderboard) }
   }
 
   async standings(
@@ -248,99 +259,76 @@ class GolfService implements SportService {
           : event.tv,
     }
   }
+
+  leaderboardMapper(data: Golf_SlashGolfAPI_Leaderboard): LadderGroup[] {
+    // Construct Player rankings
+    const playerTable: LadderGroup = {
+      label: "Players",
+      tables: [
+        {
+          headings: GOLF_LEADERBOARD_HEADINGS,
+          data: data.leaderboardRows.map((item) => {
+            const playerName =
+              item.players === undefined
+                ? `${item.firstName} ${item.lastName}${item.isAmateur ? " (A)" : ""}`
+                : item.players
+                    .map(
+                      (item) =>
+                        `${item.firstName} ${item.lastName}${item.isAmateur ? " (A)" : ""}`,
+                    )
+                    .join(", ")
+            return {
+              position: item.position,
+              teamId: item.playerId + playerName,
+              teamName: playerName,
+              teamLogo: resolveSportImage(playerName),
+              Total: item.total,
+              Thru: item.thru,
+              Rnd:
+                Number(item.currentRoundScore) > 0 &&
+                item.currentRoundScore[0] !== "+"
+                  ? "+" + item.currentRoundScore
+                  : item.currentRoundScore,
+            }
+          }),
+        },
+      ],
+    }
+
+    // Construct Team rankings if applicable
+    if (data.teams) {
+      const teamTable: LadderGroup = {
+        label: "Teams",
+        tables: [
+          {
+            headings: GOLF_LEADERBOARD_HEADINGS,
+            data: data.teams.map((item, idx) => {
+              return {
+                position: (idx + 1).toString(),
+                teamId: item.teamId + item.name,
+                teamName: item.name,
+                teamLogo: resolveSportImage(item.name),
+                Total: item.totalScore,
+              }
+            }),
+          },
+        ],
+      }
+      return [playerTable, teamTable]
+    }
+    return [playerTable]
+  }
 }
 
 export const golfService = new GolfService()
 
 const cachedFetchSchedule = withDevCache("golf", "schedule", fetchGolfSchedule)
 const cachedFetchRankings = withDevCache("golf", "rankings", fetchGolfRankings)
-const cachedFetchPGALeaderboard = withDevCache(
+const cachedFetchLeaderboard = withDevCache(
   "golf",
-  "pga-leaderboard",
+  "leaderboard",
   fetchGolfLeaderboard,
 )
-const cachedFetchLIVLeaderboard = withDevCache(
-  "golf",
-  "liv-leaderboard",
-  fetchGolfLeaderboard,
-)
-
-export async function golfPGATournamentLeaderboard(
-  tournId: string,
-  year: string,
-  roundId?: number,
-) {
-  var rawLeaderboard = await cachedFetchPGALeaderboard(
-    "1",
-    tournId,
-    year,
-    roundId,
-  )
-  if (!rawLeaderboard) {
-    return null
-  }
-
-  return mapGolfLeaderboard(rawLeaderboard)
-}
-
-export async function golfLIVTournamentLeaderboard(
-  tournId: string,
-  year: string,
-  roundId?: number,
-) {
-  var rawLeaderboard = await cachedFetchLIVLeaderboard(
-    "2",
-    tournId,
-    year,
-    roundId,
-  )
-  if (!rawLeaderboard) {
-    return null
-  }
-
-  return {
-    playerLeaderboard: mapGolfLeaderboard(rawLeaderboard),
-    teamLeaderboard:
-      rawLeaderboard.teams?.map((item, idx) => {
-        return {
-          name: item.name,
-          position: (idx + 1).toString(),
-          totalScore: item.totalScore,
-          thru: "",
-          curRound: "",
-          img: resolveSportImage(item.name),
-        } as GolfLeaderboardPlayerRow
-      }) ?? [],
-  }
-}
-
-export function mapGolfLeaderboard(data: Golf_SlashGolfAPI_Leaderboard) {
-  return {
-    playerPositions: data.leaderboardRows.map((item) => {
-      let playerName =
-        item.players === undefined
-          ? `${item.firstName} ${item.lastName}${item.isAmateur ? " (A)" : ""}`
-          : item.players
-              .map(
-                (item) =>
-                  `${item.firstName} ${item.lastName}${item.isAmateur ? " (A)" : ""}`,
-              )
-              .join(", ")
-      return {
-        name: playerName,
-        position: item.position,
-        totalScore: item.total,
-        thru: item.thru,
-        curRound:
-          Number(item.currentRoundScore) > 0 &&
-          item.currentRoundScore[0] !== "+"
-            ? "+" + item.currentRoundScore
-            : item.currentRoundScore,
-        img: resolveSportImage(playerName),
-      } as GolfLeaderboardPlayerRow
-    }),
-  }
-}
 
 // Hidden in leagueseasonmatches for now
 export function mapTournamentToMatchSummary(

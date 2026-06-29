@@ -83,6 +83,7 @@ export const AMERICAN_FOOTBALL_CATEGORIES = ["1370"] //USA
 export const AMERICAN_FOOTBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "D"]
 export const GOLF_FEDEX_HEADINGS = ["Player", "Total", "Behind"]
 export const GOLF_OWGR_HEADINGS = ["Player", "Total", "Prev"]
+export const GOLF_LEADERBOARD_HEADINGS = ["Player", "Total", "Thru", "Rnd"]
 
 export const SCORE_BREAKDOWN_HALVES_CONFIG: ScoreBreakdownConfig = {
   periodNames: ["1st Half", "2nd Half"],
@@ -688,8 +689,8 @@ export const MOTORSPORT_CATEGORIES: LeagueSeasonConfig[] = [
     name: "Supercars",
     slug: "supercars",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/64f67s1770108650.png",
-    seasons: [{ name: "2026", slug: "2026", tvguide: SUPERCARS_TV_GUIDE }],
     externalURL: `https://www.supercars.com/calendar`,
+    seasons: [{ name: "2026", slug: "2026", tvguide: SUPERCARS_TV_GUIDE }],
   },
   {
     name: "MotoGP",
@@ -723,6 +724,7 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
   {
     name: "PGA Tour",
     slug: "pga",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/quvqqr1423564787.png",
     seasons: [
       {
         name: "2026",
@@ -732,11 +734,11 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
       },
       { name: "2025", slug: "2025", ladderConfig: PGA_2013_LADDER_CONFIG },
     ],
-    icon: "https://r2.thesportsdb.com/images/media/league/badge/quvqqr1423564787.png",
   },
   {
     name: "LIV Golf",
     slug: "liv",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/x8p62j1659513228.png",
     seasons: [
       {
         name: "2026",
@@ -749,11 +751,12 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
       },
       { name: "2025", slug: "2025" },
     ],
-    icon: "https://r2.thesportsdb.com/images/media/league/badge/x8p62j1659513228.png",
   },
   {
     name: "LPGA Tour",
     slug: "lpga",
+    externalURL: "https://www.google.com/search?igu=1&gws_rd=ssl&q=lpga",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/hdnc211555580691.png",
     seasons: [
       {
         name: "2026",
@@ -761,12 +764,13 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
         tvguide: KAYO_GOLF_TV_GUIDE,
       },
     ],
-    externalURL: "https://www.google.com/search?igu=1&gws_rd=ssl&q=lpga",
-    icon: "https://r2.thesportsdb.com/images/media/league/badge/hdnc211555580691.png",
   },
   {
     name: "DP World Tour",
     slug: "dpworld",
+    externalURL:
+      "https://www.google.com/search?igu=1&gws_rd=ssl&q=dp+world+tour",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/3cj95h1778512316.png",
     seasons: [
       {
         name: "2026",
@@ -774,13 +778,12 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
         tvguide: KAYO_GOLF_TV_GUIDE,
       },
     ],
-    externalURL:
-      "https://www.google.com/search?igu=1&gws_rd=ssl&q=dp+world+tour",
-    icon: "https://r2.thesportsdb.com/images/media/league/badge/3cj95h1778512316.png",
   },
   {
     name: "PGA Tour Australasia",
     slug: "australasia",
+    externalURL: "https://golf.com.au/leaderboard",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/ce5bzs1751484107.png",
     seasons: [
       {
         name: "25/26",
@@ -788,12 +791,12 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
         tvguide: KAYO_GOLF_TV_GUIDE,
       },
     ],
-    externalURL: "https://golf.com.au/leaderboard",
-    icon: "https://r2.thesportsdb.com/images/media/league/badge/ce5bzs1751484107.png",
   },
   {
     name: "TGL",
     slug: "tgl",
+    externalURL: "https://tglgolf.com/schedule",
+    icon: "https://upload.wikimedia.org/wikipedia/en/f/f7/TGL_logo.png",
     seasons: [
       {
         name: "2026",
@@ -801,12 +804,12 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
         tvguide: KAYO_GOLF_TV_GUIDE,
       },
     ],
-    externalURL: "https://tglgolf.com/schedule",
-    icon: "https://upload.wikimedia.org/wikipedia/en/f/f7/TGL_logo.png",
   },
   {
     name: "Asian Tour",
     slug: "asian-tour",
+    externalURL: "https://www.asiantour.com/schedule",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/durtwn1582545153.png",
     seasons: [
       {
         name: "2026",
@@ -814,22 +817,20 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
         tvguide: KAYO_GOLF_TV_GUIDE,
       },
     ],
-    externalURL: "https://www.asiantour.com/schedule",
-    icon: "https://r2.thesportsdb.com/images/media/league/badge/durtwn1582545153.png",
   },
   {
     name: "PGA Champions Tour",
     slug: "pga-champions-tour",
-    seasons: [{ name: "2026", slug: "2026" }],
     externalURL: "https://www.pgatour.com/pgatour-champions/schedule",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/s4xljf1600855962.png",
+    seasons: [{ name: "2026", slug: "2026" }],
   },
   {
     name: "Korn Ferry Tour",
     slug: "korn-ferry-tour",
-    seasons: [{ name: "2026", slug: "2026" }],
     externalURL: "https://www.pgatour.com/korn-ferry-tour/schedule",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/7bagvc1591956878.png",
+    seasons: [{ name: "2026", slug: "2026" }],
   },
   {
     name: "OWGR",
@@ -1054,6 +1055,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     name: "Queensland Cup",
     slug: "2135",
     icon: "https://upload.wikimedia.org/wikipedia/en/6/6e/2025_Host_Plus_Cup_Logo.svg",
+    excludeFromToday: false,
     seasons: [
       {
         name: "2026",
@@ -1073,18 +1075,17 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2016", slug: "11366", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
       { name: "2015", slug: "10176", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
     ],
-    excludeFromToday: false,
   },
   {
     name: "New South Wales Cup",
     slug: "2134",
     icon: "https://upload.wikimedia.org/wikipedia/en/f/f8/NSW_Cup_Logo_2026.svg",
+    excludeFromToday: true,
     seasons: [
       { name: "2026", slug: "89006", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
       { name: "2025", slug: "69962", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
       { name: "2024", slug: "57568", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
     ],
-    excludeFromToday: true,
   },
   {
     name: "World Cup",
@@ -1149,6 +1150,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     name: "Super League",
     slug: "302",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/gp2sfv1641835011.png",
+    excludeFromToday: true,
     seasons: [
       {
         name: "2026",
@@ -1172,7 +1174,6 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
         }),
       },
     ],
-    excludeFromToday: true,
   },
 ]
 
@@ -1212,6 +1213,7 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
     name: "AFL",
     slug: "656",
     icon: "https://upload.wikimedia.org/wikipedia/en/9/91/AFL-Logo_RGB_white_border.png",
+    byes: AFL_TEAM_NAME_LOGO,
     seasons: [
       {
         name: "2026",
@@ -1239,7 +1241,6 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2008", slug: "1153", ladderConfig: AFL_TOP_8_LADDER_CONFIG },
       { name: "2007", slug: "42987", ladderConfig: AFL_TOP_8_LADDER_CONFIG },
     ],
-    byes: AFL_TEAM_NAME_LOGO,
   },
   {
     name: "Brisbane Lions",
@@ -1334,6 +1335,7 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
     name: "VFL",
     slug: "25506",
     icon: "https://upload.wikimedia.org/wikipedia/en/3/34/VFL_Football_Logo.svg",
+    excludeFromToday: true,
     seasons: [
       {
         name: "2026",
@@ -1357,12 +1359,12 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
         }),
       },
     ],
-    excludeFromToday: true,
   },
   {
     name: "SANFL",
     slug: "20126",
     icon: "https://upload.wikimedia.org/wikipedia/en/7/7d/SANFL_logo.svg",
+    excludeFromToday: true,
     seasons: [
       {
         name: "2026",
@@ -1386,12 +1388,12 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
         }),
       },
     ],
-    excludeFromToday: true,
   },
   {
     name: "WAFL",
     slug: "20160",
     icon: "https://upload.wikimedia.org/wikipedia/en/c/cb/West_Australian_Football_League_logo_2024.png",
+    excludeFromToday: true,
     seasons: [
       {
         name: "2026",
@@ -1415,7 +1417,6 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
         }),
       },
     ],
-    excludeFromToday: true,
   },
   {
     name: "AFL Preseason",
@@ -1456,6 +1457,7 @@ export const AMERICAN_FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     name: "NFL",
     slug: "9464",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/g85fqz1662057187.png",
+    byes: NFL_TEAM_NAME_LOGO,
     seasons: [
       {
         name: "26/27",
@@ -1489,7 +1491,6 @@ export const AMERICAN_FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       { name: "02/03", slug: "9705" },
       { name: "01/02", slug: "36659" },
     ],
-    byes: NFL_TEAM_NAME_LOGO,
   },
   {
     name: "NFL Preseason",
@@ -1510,11 +1511,11 @@ export const AMERICAN_FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     name: "NCAA, Regular Season",
     slug: "19510",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/hm3cyr1758455622.png",
+    excludeFromToday: true,
     seasons: [
       { name: "25/26", slug: "74693" },
       { name: "24/25", slug: "59703" },
     ],
-    excludeFromToday: true,
   },
   {
     name: "NCAA Division I, FBS Post Season",
@@ -1801,16 +1802,16 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "🌍 FIFA World Cup Qualifiers",
     slug: "fifaQualifiers",
-    seasons: [{ name: "2026", slug: "wiki" }],
     externalURL:
       "https://en.wikipedia.org/wiki/2026_FIFA_World_Cup_qualification",
+    seasons: [{ name: "2026", slug: "wiki" }],
   },
   {
     name: "🌍 FIFA World Cup Qualifiers - Inter-Confed...",
     slug: "10618",
-    seasons: [{ name: "2026", slug: "86613" }],
     externalURL:
       "https://en.wikipedia.org/wiki/2026_FIFA_World_Cup_qualification",
+    seasons: [{ name: "2026", slug: "86613" }],
   },
   {
     name: "FIFA Women's World Cup",
@@ -1824,9 +1825,9 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "🌍 FIFA Women's World Cup Qualifiers",
     slug: "fifaWQualifiers",
-    seasons: [{ name: "2027", slug: "wiki" }],
     externalURL:
       "https://en.wikipedia.org/wiki/2027_FIFA_Women%27s_World_Cup_qualification",
+    seasons: [{ name: "2027", slug: "wiki" }],
   },
   // {
   //   name: "FIFA World Cup Qualifier Playoffs",
@@ -1892,17 +1893,17 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     name: "AFC World Cup Qualifiers",
     slug: "308",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/2968zx1730130262.png/small",
-    seasons: [{ name: "23-25", slug: "53508" }],
     externalURL:
       "https://en.wikipedia.org/wiki/2026_FIFA_World_Cup_qualification_(AFC)",
+    seasons: [{ name: "23-25", slug: "53508" }],
   },
   {
     name: "AFC Women's World Cup Qualifiers",
     slug: "308-women",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/wgt3qi1735833568.png/small",
-    seasons: [{ name: "26-27", slug: "wiki" }],
     externalURL:
       "https://en.wikipedia.org/wiki/2027_FIFA_Women%27s_World_Cup_qualification#AFC",
+    seasons: [{ name: "26-27", slug: "wiki" }],
   },
   {
     name: "AFC Champions League Elite",
@@ -1927,6 +1928,8 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     name: "UEFA Champions League",
     slug: "7",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/facv1u1742998896.png/small",
+    externalURL:
+      "https://en.wikipedia.org/wiki/2025%E2%80%9326_UEFA_Champions_League",
     seasons: [
       {
         name: "25/26",
@@ -1937,13 +1940,13 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         tvguide: STAN_FOOTBALL_TV_GUIDE,
       },
     ],
-    externalURL:
-      "https://en.wikipedia.org/wiki/2025%E2%80%9326_UEFA_Champions_League",
   },
   {
     name: "UEFA Women's Champions League",
     slug: "696",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/nsi55h1761838458.png/small",
+    externalURL:
+      "https://en.wikipedia.org/wiki/2025%E2%80%9326_UEFA_Women%27s_Champions_League",
     seasons: [
       {
         name: "25/26",
@@ -1954,13 +1957,13 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         tvguide: ESPN_FOOTBALL_TV_GUIDE,
       },
     ],
-    externalURL:
-      "https://en.wikipedia.org/wiki/2025%E2%80%9326_UEFA_Women%27s_Champions_League",
   },
   {
     name: "UEFA Europa League",
     slug: "679",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/mlsr7d1718774547.png/small",
+    externalURL:
+      "https://en.wikipedia.org/wiki/2025%E2%80%9326_UEFA_Europa_League",
     seasons: [
       {
         name: "25/26",
@@ -1971,13 +1974,13 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         tvguide: STAN_FOOTBALL_TV_GUIDE,
       },
     ],
-    externalURL:
-      "https://en.wikipedia.org/wiki/2025%E2%80%9326_UEFA_Europa_League",
   },
   {
     name: "UEFA Conference League",
     slug: "17015",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/ymfo5j1718775759.png/small",
+    externalURL:
+      "https://en.wikipedia.org/wiki/2025%E2%80%9326_UEFA_Conference_League",
     seasons: [
       {
         name: "25/26",
@@ -1987,8 +1990,6 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         }),
       },
     ],
-    externalURL:
-      "https://en.wikipedia.org/wiki/2025%E2%80%9326_UEFA_Conference_League",
   },
 
   {
@@ -2018,6 +2019,9 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "🇺🇸 MLS",
     slug: "242",
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_Major_League_Soccer_season",
+    excludeFromToday: true,
     seasons: [
       {
         name: "2026",
@@ -2030,13 +2034,13 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({ placingCategories: MLS_LADDER_CONFIG }),
       },
     ],
-    externalURL:
-      "https://en.wikipedia.org/wiki/2026_Major_League_Soccer_season",
-    excludeFromToday: true,
   },
   {
     name: "🇺🇸 NWSL",
     slug: "1690",
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_National_Women%27s_Soccer_League_season",
+    excludeFromToday: true,
     seasons: [
       {
         name: "2025",
@@ -2046,14 +2050,13 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         }),
       },
     ],
-    externalURL:
-      "https://en.wikipedia.org/wiki/2026_National_Women%27s_Soccer_League_season",
-    excludeFromToday: true,
   },
   // France - category 7
   {
     name: "🇫🇷 Ligue 1",
     slug: "34",
+    externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Ligue_1",
+    excludeFromToday: true,
     seasons: [
       {
         name: "25/26",
@@ -2064,13 +2067,13 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         tvguide: BEIN_FOOTBALL_TV_GUIDE,
       },
     ],
-    externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Ligue_1",
-    excludeFromToday: true,
   },
   // Germany - category 30
   {
     name: "🇩🇪 Bundesliga",
     slug: "35",
+    externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Bundesliga",
+    excludeFromToday: true,
     seasons: [
       {
         name: "25/26",
@@ -2081,13 +2084,13 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         tvguide: BEIN_FOOTBALL_TV_GUIDE,
       },
     ],
-    externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Bundesliga",
-    excludeFromToday: true,
   },
   // Italy - category 31
   {
     name: "🇮🇹 Serie A",
     slug: "23",
+    externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Serie_A",
+    excludeFromToday: true,
     seasons: [
       {
         name: "25/26",
@@ -2098,13 +2101,13 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         tvguide: BEIN_FOOTBALL_TV_GUIDE,
       },
     ],
-    externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Serie_A",
-    excludeFromToday: true,
   },
   // Spain - category 32
   {
     name: "🇪🇸 La Liga",
     slug: "8",
+    externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_La_Liga",
+    excludeFromToday: true,
     seasons: [
       {
         name: "25/26",
@@ -2115,8 +2118,6 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         tvguide: BEIN_FOOTBALL_TV_GUIDE,
       },
     ],
-    externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_La_Liga",
-    excludeFromToday: true,
   },
 
   // North & Central America - category 1469
@@ -2161,6 +2162,7 @@ export const BASEBALL_LEAGUES: LeagueSeasonConfig[] = [
     name: "MLB",
     slug: "11205",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/c5r83j1521893739.png/small",
+    display: DisplayTypes.DATE,
     seasons: [
       {
         name: "2026",
@@ -2171,7 +2173,6 @@ export const BASEBALL_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2025", slug: "68611", ladderConfig: MLB_2022_LADDER_CONFIG },
       { name: "2024", slug: "57577", ladderConfig: MLB_2022_LADDER_CONFIG },
     ],
-    display: DisplayTypes.DATE,
   },
   {
     name: "ABL",
@@ -2242,6 +2243,7 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
     name: "NBA",
     slug: "132",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/frdjqy1536585083.png/small",
+    display: DisplayTypes.DATE,
     seasons: [
       {
         name: "25/26",
@@ -2251,7 +2253,6 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
       },
       { name: "24/25", slug: "65360", ladderConfig: NBA_2021_LADDER_CONFIG },
     ],
-    display: DisplayTypes.DATE,
   },
   // {
   //   name: "NBA Cup",
@@ -2265,24 +2266,24 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
     name: "WNBA",
     slug: "486",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/47llb31573154455.png/small",
+    display: DisplayTypes.DATE,
     seasons: [
       { name: "2026", slug: "89004" },
       { name: "2025", slug: "69751" },
       { name: "2024", slug: "57477" },
     ],
-    display: DisplayTypes.DATE,
   },
   {
     name: "March Madness",
     slug: "13434",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/ibf3d21731087087.png/small",
+    display: DisplayTypes.DATE,
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_NCAA_Division_I_men%27s_basketball_tournament",
     seasons: [
       { name: "2026", slug: "91315" },
       // { name: "2024", slug: "57477" },
     ],
-    display: DisplayTypes.DATE,
-    externalURL:
-      "https://en.wikipedia.org/wiki/2026_NCAA_Division_I_men%27s_basketball_tournament",
   },
   // {
   //   name: "Basketball World Cup",
@@ -2296,6 +2297,10 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
 
 export const BASKETBALL_LEAGUES_CLIENT =
   stripLeagueSeasonConfig(BASKETBALL_LEAGUES)
+
+const TENNIS_MAJORS_TV_GUIDE: TVConfig = {
+  channels: [tvGuideConfigCreate(TVChannel.NINE, 0, 2)],
+}
 
 export const TENNIS_CATEGORIES: LeagueSeasonConfig[] = [
   {
@@ -2332,7 +2337,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     icon: "https://upload.wikimedia.org/wikipedia/commons/b/b4/Australian_Open_Logo_2017.svg",
     slug: "2363",
     seasons: [
-      { name: "2026", slug: "80012" },
+      { name: "2026", slug: "80012", tvguide: TENNIS_MAJORS_TV_GUIDE },
       { name: "2025", slug: "69039" },
     ],
   },
@@ -2341,7 +2346,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     icon: "https://upload.wikimedia.org/wikipedia/commons/b/b4/Australian_Open_Logo_2017.svg",
     slug: "2571",
     seasons: [
-      { name: "2026", slug: "80013" },
+      { name: "2026", slug: "80013", tvguide: TENNIS_MAJORS_TV_GUIDE },
       { name: "2025", slug: "67042" },
     ],
   },
@@ -2350,7 +2355,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     slug: "2480",
     icon: "https://upload.wikimedia.org/wikipedia/en/1/1d/Logo_Roland-Garros.svg",
     seasons: [
-      { name: "2026", slug: "85951" },
+      { name: "2026", slug: "85951", tvguide: TENNIS_MAJORS_TV_GUIDE },
       { name: "2025", slug: "61364" },
     ],
   },
@@ -2359,7 +2364,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     slug: "2577",
     icon: "https://upload.wikimedia.org/wikipedia/en/1/1d/Logo_Roland-Garros.svg",
     seasons: [
-      { name: "2026", slug: "85953" },
+      { name: "2026", slug: "85953", tvguide: TENNIS_MAJORS_TV_GUIDE },
       { name: "2025", slug: "61365" },
     ],
   },
@@ -2368,7 +2373,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     slug: "2361",
     icon: "https://upload.wikimedia.org/wikipedia/en/b/b9/Wimbledon.svg",
     seasons: [
-      { name: "2026", slug: "85943" },
+      { name: "2026", slug: "85943", tvguide: TENNIS_MAJORS_TV_GUIDE },
       { name: "2025", slug: "63966" },
     ],
   },
@@ -2377,7 +2382,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     slug: "2600",
     icon: "https://upload.wikimedia.org/wikipedia/en/b/b9/Wimbledon.svg",
     seasons: [
-      { name: "2026", slug: "85945" },
+      { name: "2026", slug: "85945", tvguide: TENNIS_MAJORS_TV_GUIDE },
       { name: "2025", slug: "63967" },
     ],
   },
@@ -2387,7 +2392,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     icon: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Usopen-horizontal-logo.svg",
     seasons: [
       // { name: "2026", slug: "80012" },
-      { name: "2025", slug: "67287" },
+      { name: "2025", slug: "67287", tvguide: TENNIS_MAJORS_TV_GUIDE },
     ],
   },
   {
@@ -2396,7 +2401,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     icon: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Usopen-horizontal-logo.svg",
     seasons: [
       // { name: "2026", slug: "80013" },
-      { name: "2025", slug: "69937" },
+      { name: "2025", slug: "69937", tvguide: TENNIS_MAJORS_TV_GUIDE },
     ],
   },
 
@@ -2404,13 +2409,13 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     name: "Brisbane International - Men's Singles",
     slug: "2437",
     icon: "https://upload.wikimedia.org/wikipedia/en/4/48/Brisbane_International_logo.svg",
-    seasons: [{ name: "2026", slug: "80014" }],
+    seasons: [{ name: "2026", slug: "80014", tvguide: TENNIS_MAJORS_TV_GUIDE }],
   },
   {
     name: "Brisbane International - Women's Singles",
     slug: "2644",
     icon: "https://upload.wikimedia.org/wikipedia/en/4/48/Brisbane_International_logo.svg",
-    seasons: [{ name: "2026", slug: "85608" }],
+    seasons: [{ name: "2026", slug: "85608", tvguide: TENNIS_MAJORS_TV_GUIDE }],
   },
   {
     name: "🇦🇺 Alex De Minaur",
@@ -2560,8 +2565,8 @@ export const DARTS_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "PDC Rankings",
     slug: "rankings",
-    seasons: [{ name: "Current", slug: "external" }],
     externalURL: "https://www.pdc.tv/rankings#World_Rankings",
+    seasons: [{ name: "Current", slug: "external" }],
   },
 ]
 
@@ -2631,6 +2636,7 @@ export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "Queensland Premier Rugby",
     slug: "2048",
+    excludeFromToday: true,
     seasons: [
       {
         name: "2026",
@@ -2647,7 +2653,6 @@ export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
         }),
       },
     ],
-    excludeFromToday: true,
   },
   {
     name: "Int. Friendly Games",
@@ -2694,21 +2699,21 @@ export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
     name: "Rugby Sevens World Series",
     slug: "10055",
     icon: "https://upload.wikimedia.org/wikipedia/commons/6/6f/SVNS_Logo_%282023%29.svg",
+    externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_SVNS",
     seasons: [
       { name: "25/26", slug: "85821" },
       { name: "24/25", slug: "68941" },
     ],
-    externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_SVNS",
   },
   {
     name: "Rugby Sevens World Series - Women",
     slug: "11623",
     icon: "https://upload.wikimedia.org/wikipedia/commons/6/6f/SVNS_Logo_%282023%29.svg",
+    externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_SVNS",
     seasons: [
       { name: "25/26", slug: "85845" },
       { name: "24/25", slug: "68964" },
     ],
-    externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_SVNS",
   },
   {
     name: "World Cup Sevens",
@@ -2769,40 +2774,40 @@ export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
     name: "World Championship",
     slug: "3",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/ayqln81768730313.png/small",
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_Men%27s_Ice_Hockey_World_Championships",
     seasons: [
       { name: "2026", slug: "81043" },
       { name: "2025", slug: "64007" },
     ],
-    externalURL:
-      "https://en.wikipedia.org/wiki/2026_Men%27s_Ice_Hockey_World_Championships",
   },
 
   {
     name: "World Championship - Australia Men",
     slug: "13446",
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_IIHF_World_Championship_Division_II",
     seasons: [
       { name: "2026", slug: "wiki" },
       { name: "2025", slug: "69168" },
     ],
-    externalURL:
-      "https://en.wikipedia.org/wiki/2026_IIHF_World_Championship_Division_II",
   },
   {
     name: "World Championship - Women",
     slug: "428",
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_Women%27s_Ice_Hockey_World_Championships",
     seasons: [
       { name: "2026", slug: "wiki" },
       { name: "2025", slug: "69237" },
     ],
-    externalURL:
-      "https://en.wikipedia.org/wiki/2026_Women%27s_Ice_Hockey_World_Championships",
   },
   {
     name: "World Championship - Australia Women",
     slug: "wc-div2",
-    seasons: [{ name: "2026", slug: "wiki" }],
     externalURL:
       "https://en.wikipedia.org/wiki/2026_IIHF_Women%27s_World_Championship_Division_II",
+    seasons: [{ name: "2026", slug: "wiki" }],
   },
 
   {
@@ -2823,12 +2828,12 @@ export const NETBALL_LEAGUES: LeagueSeasonConfig[] = [
     name: "Super Netball",
     slug: "4540",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/yik0t61557761303.png/small",
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_Suncorp_Super_Netball_season",
     seasons: [
       { name: "2026", slug: "2026" },
       { name: "2025", slug: "2025" },
     ],
-    externalURL:
-      "https://en.wikipedia.org/wiki/2026_Suncorp_Super_Netball_season",
   },
   {
     name: "Constellation Cup",
@@ -3007,6 +3012,8 @@ export const CYCLING_TOURS: LeagueSeasonConfig[] = [
     name: "Tour de France",
     slug: "le-tour",
     icon: "https://upload.wikimedia.org/wikipedia/commons/5/50/Tour_de_France_logo_%28black_background%29.svg",
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_Tour_de_France#Route_and_stages",
     seasons: [
       {
         name: "2026",
@@ -3019,8 +3026,6 @@ export const CYCLING_TOURS: LeagueSeasonConfig[] = [
         ladderConfig: TOUR_DE_FRANCE_LADDER_CONFIG,
       },
     ],
-    externalURL:
-      "https://en.wikipedia.org/wiki/2026_Tour_de_France#Route_and_stages",
   },
   {
     name: "Giro d'Italia",
@@ -3088,6 +3093,7 @@ export const SURFING_TOURS: LeagueSeasonConfig[] = [
     name: "WSL",
     slug: "wsl",
     icon: "https://upload.wikimedia.org/wikipedia/commons/6/6d/World_Surf_League_Logo.png",
+    externalURL: "https://www.worldsurfleague.com/events/2026/ct",
     seasons: [
       {
         name: "2026",
@@ -3104,7 +3110,6 @@ export const SURFING_TOURS: LeagueSeasonConfig[] = [
         },
       },
     ],
-    externalURL: "https://www.worldsurfleague.com/events/2026/ct",
   },
 ]
 

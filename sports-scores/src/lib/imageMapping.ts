@@ -101,6 +101,8 @@ export function resolveImage(teamName: string) {
       return "https://r2.thesportsdb.com/images/media/team/badge/e2ccn51770673557.png"
     case "Southern Guards GC":
       return "https://r2.thesportsdb.com/images/media/team/badge/ng8z1o1770673163.png"
+    case "OKGC":
+      return "https://r2.thesportsdb.com/images/media/team/badge/uzoojx1778930001.png"
 
     //NRL
     case "Brisbane Broncos":
