@@ -47,12 +47,10 @@ export default async function Page(props: {
     )
   } else if ("standings" in pageData && pageData.standings !== null) {
     return (
-      <div className="flex-1 overflow-y-auto px-4">
-        <LadderGroupList
-          data={pageData.standings}
-          curGroup={pageData.standings[0].label ?? ""}
-        />
-      </div>
+      <LadderGroupList
+        data={pageData.standings}
+        curGroup={pageData.standings[0].label ?? ""}
+      />
     )
   }
 }

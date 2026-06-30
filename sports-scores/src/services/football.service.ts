@@ -16,7 +16,9 @@ import {
   SCORE_BREAKDOWN_HALVES_CONFIG,
 } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
-import { SPORT } from "@/types/misc"
+import { setMatchSummary } from "@/lib/projUtils"
+import { DeepPartial, MatchSummary, SPORT } from "@/types/misc"
+import { Sofascore_Event } from "@/types/sofascore"
 import { SofascoreSport } from "./sofascore.service"
 
 class FootballService extends SofascoreSport {
@@ -76,6 +78,34 @@ class FootballService extends SofascoreSport {
       FOOTBALL_LADDER_HEADINGS,
       SCORE_BREAKDOWN_HALVES_CONFIG,
     )
+  }
+
+  override eventMapper(
+    event: Sofascore_Event,
+    options?: DeepPartial<MatchSummary>,
+  ): MatchSummary {
+    return super.eventMapper(event, {
+      ...options,
+      competitorDetails: [
+        {
+          ...options?.competitorDetails?.[0],
+          score: `${event.homeScore.display}${event.homeScore.penalties ? ` (${event.homeScore.penalties})` : ""}`,
+        },
+        {
+          ...options?.competitorDetails?.[1],
+          score: `${event.awayScore.display}${event.awayScore.penalties ? ` (${event.awayScore.penalties})` : ""}`,
+        },
+      ],
+      summaryText: setMatchSummary(
+        event.status.description === "AP" && event.status.type === "finished"
+          ? "penalties"
+          : event.status.type,
+        event.homeTeam.name,
+        event.homeScore.current,
+        event.awayTeam.name,
+        event.awayScore.current,
+      ),
+    })
   }
 }
 

@@ -2151,8 +2151,8 @@ export const FOOTBALL_LEAGUES_CLIENT = stripLeagueSeasonConfig(FOOTBALL_LEAGUES)
 
 const MLB_TV_GUIDE: TVConfig = {
   channels: [
-    tvGuideConfigCreate(TVChannel.KAYO, 0, BASEBALL_MATCH_LENGTH),
-    tvGuideConfigCreate(TVChannel.DISNEY_PLUS, 0, BASEBALL_MATCH_LENGTH),
+    // tvGuideConfigCreate(TVChannel.KAYO, 0, BASEBALL_MATCH_LENGTH),
+    // tvGuideConfigCreate(TVChannel.DISNEY_PLUS, 0, BASEBALL_MATCH_LENGTH),
   ],
 }
 
@@ -2299,7 +2299,9 @@ export const BASKETBALL_LEAGUES_CLIENT =
   stripLeagueSeasonConfig(BASKETBALL_LEAGUES)
 
 const TENNIS_MAJORS_TV_GUIDE: TVConfig = {
-  channels: [tvGuideConfigCreate(TVChannel.NINE, 0, 2)],
+  channels: [
+    // tvGuideConfigCreate(TVChannel.NINE, 0, 2)
+  ],
 }
 
 export const TENNIS_CATEGORIES: LeagueSeasonConfig[] = [

@@ -288,6 +288,9 @@ export interface Sofascore_Score {
     inning2?: Sofascore_Score_Inning
   }
   series?: number
+  extra1?: number
+  extra2?: number
+  penalties?: number
 }
 
 interface Sofascore_Score_Inning {
