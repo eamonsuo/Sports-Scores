@@ -57,6 +57,14 @@ export function resolveImage(teamName: string) {
       return "https://upload.wikimedia.org/wikipedia/commons/2/2f/ESPN_wordmark.svg"
     case TVChannel.DAZN:
       return "https://upload.wikimedia.org/wikipedia/commons/0/06/DAZN_Logo_Master.svg"
+    case TVChannel.AMAZON_PRIME_VIDEO:
+      return "https://upload.wikimedia.org/wikipedia/commons/9/90/Prime_Video_logo_%282024%29.svg"
+    case TVChannel.FOX_SPORTS:
+      return "https://upload.wikimedia.org/wikipedia/commons/6/6e/Fox_Sports_logo.svg"
+    case TVChannel.YOUTUBE:
+      return "https://upload.wikimedia.org/wikipedia/commons/2/20/YouTube_2024.svg"
+    case TVChannel.OTHER:
+      return FALLBACK_IMAGE
 
     // LIV Teams
     case "4ACES GC":

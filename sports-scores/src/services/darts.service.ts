@@ -44,6 +44,7 @@ class DartsService extends SofascoreSport {
           "match-incidents",
           fetchMatchIncidents,
         ),
+        fetchEventLineups: async () => null,
         fetchStandingsTotal: withDevCache(
           "darts",
           "standings",

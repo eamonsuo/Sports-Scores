@@ -59,7 +59,7 @@ export default function PlayoffPicture({
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="my-4 w-full">
+    <div className="mx-4 mb-2 flex-col overflow-y-auto">
       <div className="mb-2 flex justify-center">
         <Button
           variant="outline"

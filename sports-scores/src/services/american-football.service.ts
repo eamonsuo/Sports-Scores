@@ -48,6 +48,7 @@ class AmericanFootballService extends SofascoreSport {
           "match-incidents",
           fetchAmericanFootballMatchIncidents,
         ),
+        fetchEventLineups: async () => null,
         fetchStandingsTotal: withDevCache(
           "american-football",
           "standings",

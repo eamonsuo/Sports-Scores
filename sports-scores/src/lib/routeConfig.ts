@@ -1,7 +1,9 @@
+import { renderCricketMatchDetailsPage } from "@/components/cricket/CricketMatchPage"
 import { americanFootballService } from "@/services/american-football.service"
 import { aussieRulesService } from "@/services/aussie-rules.service"
 import { baseballService } from "@/services/baseball.service"
 import { basketballService } from "@/services/basketball.service"
+import { cricketService } from "@/services/cricket.service"
 import { cyclingService } from "@/services/cycling.service"
 import { dartsService } from "@/services/darts.service"
 import { footballService } from "@/services/football.service"
@@ -13,6 +15,7 @@ import { rugbyUnionService } from "@/services/rugby-union.service"
 import { surfingService } from "@/services/surfing.service"
 import { tennisService } from "@/services/tennis.service"
 import { ClientLeagueSeasonConfig, SPORT, SportService } from "@/types/misc"
+import { JSX } from "react/jsx-dev-runtime"
 import {
   AMERICAN_FOOTBALL_LEAGUES_CLIENT,
   AUSSIE_RULES_LEAGUES_CLIENT,
@@ -37,6 +40,11 @@ type NavButton = { href: string; label: string; page: string }
 type SportRouteConfig = {
   leagues: ClientLeagueSeasonConfig[]
   service: SportService
+  matchDetailsPage?: (
+    league: string,
+    season: string,
+    id: string,
+  ) => Promise<JSX.Element> // override default match details page
   navButtons?: NavButton[] // override default for all leagues
   navButtonsByLeague?: Record<string, NavButton[]> // override per league slug
 }
@@ -69,7 +77,8 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
   },
   [SPORT.CRICKET]: {
     leagues: CRICKET_LEAGUES_CLIENT,
-    service: aussieRulesService,
+    service: cricketService,
+    matchDetailsPage: renderCricketMatchDetailsPage,
   },
   [SPORT.CYCLING]: {
     leagues: CYCLING_TOURS_CLIENT,

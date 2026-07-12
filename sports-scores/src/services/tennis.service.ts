@@ -17,11 +17,11 @@ import {
   CardVariant,
   DeepPartial,
   FixtureRound,
+  MatchProperties,
   MatchSummary,
   PeriodScore,
   SPORT,
   Standings,
-  TeamScoreDetails,
 } from "@/types/misc"
 import { Sofascore_Event } from "@/types/sofascore"
 import {
@@ -60,6 +60,7 @@ class TennisService extends SofascoreSport {
           fetchTennisMatchDetails,
         ),
         fetchEventIncidents: async () => null,
+        fetchEventLineups: async () => null,
         fetchStandingsTotal: async () => null,
         fetchCupTrees: withDevCache("tennis", "bracket", fetchTennisBracket),
         fetchPlayerRankings: async () => null,
@@ -310,11 +311,9 @@ class TennisService extends SofascoreSport {
     })
   }
 
-  protected override matchDetailsMapper(matchDetails: Sofascore_Event): {
-    homeTeam: TeamScoreDetails
-    awayTeam: TeamScoreDetails
-    status: string
-  } {
+  protected override matchDetailsMapper(
+    matchDetails: Sofascore_Event,
+  ): MatchProperties {
     const parentMatchDetails = super.matchDetailsMapper(matchDetails)
     return {
       ...parentMatchDetails,

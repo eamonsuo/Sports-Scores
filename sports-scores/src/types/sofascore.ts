@@ -18,6 +18,44 @@ export interface Sofascore_EventIncidents_Response {
   incidents: Sofascore_Incident[]
 }
 
+export interface Sofascore_EventLineups_Response {
+  confirmed?: boolean
+  home: Sofascore_Lineup
+  away: Sofascore_Lineup
+}
+
+export interface Sofascore_Lineup {
+  team?: Sofascore_Team
+  formation?: string
+  manager?: Sofascore_LineupManager
+  players: Sofascore_LineupPlayer[]
+  missingPlayers?: Sofascore_LineupPlayer[]
+  substitutes?: Sofascore_LineupPlayer[]
+  supportStaff?: Sofascore_LineupManager[]
+}
+
+export interface Sofascore_LineupPlayer {
+  player: Sofascore_Player
+  jerseyNumber?: string
+  shirtNumber?: number
+  position?: string
+  substitute?: boolean
+  captain?: boolean
+  rating?: number
+  injured?: boolean
+  suspended?: boolean
+  reason?: string
+}
+
+export interface Sofascore_LineupManager {
+  name: string
+  slug: string
+  shortName: string
+  id: number
+  role?: string
+  country?: Sofascore_Country
+}
+
 export interface Sofascore_TournamentCupTrees_Response {
   cupTrees: Sofascore_CupTree[]
 }
@@ -43,6 +81,9 @@ export interface SofascoreAPI {
   fetchEventIncidents: (
     eventId: string,
   ) => Promise<Sofascore_EventIncidents_Response | null>
+  fetchEventLineups: (
+    eventId: string,
+  ) => Promise<Sofascore_EventLineups_Response | null>
   fetchEventsByDate: (
     category: string[],
     date: Date,
@@ -150,6 +191,12 @@ export interface Sofascore_Event {
   fanRatingEvent: boolean
   showTotoPromo: boolean
   isEditor: boolean
+  //Cricket
+  umpire1Name?: string
+  umpire2Name?: string
+  tvUmpireName?: string
+  tossWin?: string
+  tossDecision?: string
 }
 
 interface Sofascore_Tournament {
@@ -288,6 +335,9 @@ export interface Sofascore_Score {
     inning2?: Sofascore_Score_Inning
   }
   series?: number
+  extra1?: number
+  extra2?: number
+  penalties?: number
 }
 
 interface Sofascore_Score_Inning {
@@ -381,6 +431,9 @@ export interface Sofascore_StandingRow {
   streak?: number
   overtimeLosses?: number //Ice Hockey
   scoreDiffFormatted: string
+  //Cricket
+  noResult?: number
+  netRunRate?: number
 }
 
 interface Sofascore_Promotion {
@@ -411,7 +464,7 @@ interface Sofascore_Incident {
   rescinded?: boolean // For card incidents
 }
 
-interface Sofascore_Player {
+export interface Sofascore_Player {
   name: string
   slug: string
   shortName: string

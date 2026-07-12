@@ -84,6 +84,8 @@ export function setMatchSummary(
         awayScore,
         true,
       )
+    case "penalties":
+      return (homeScore > awayScore ? homeName : awayName) + " won on penalties"
     default:
       return calculateMatchResult(
         homeName,

@@ -1,26 +1,5 @@
-import { FALLBACK_IMAGE } from "@/lib/constants"
+import { CricketScorecardBatProps } from "@/types/cricket"
 import Image from "next/image"
-
-export type CricketScorecardBatProps = {
-  batters: {
-    name: string
-    image?: string
-    runs: number
-    balls: number
-    strikeRate: number
-    dismissalText?: string
-  }[]
-  total: number
-  overs: number
-  wickets: number
-  extras: {
-    total: number
-    byes: number
-    legbyes: number
-    wides: number
-    noballs: number
-  }
-}
 
 export default async function CricketScorecardBat({
   data,
@@ -42,14 +21,16 @@ export default async function CricketScorecardBat({
         {data.batters.map((item) => (
           <tr key={item.name} className="border">
             <td className="ps-2">{data.batters.indexOf(item) + 1}</td>
-            <td className="flex gap-2 py-2 text-left">
-              <Image
-                src={item.image ?? FALLBACK_IMAGE}
-                alt=""
-                width={30}
-                height={30}
-                style={{ width: "10px", height: "auto" }}
-              ></Image>
+            <td className="flex gap-2 p-2 text-left">
+              {item.image && (
+                <Image
+                  src={item.image}
+                  alt=""
+                  width={30}
+                  height={30}
+                  style={{ width: "10px", height: "auto" }}
+                ></Image>
+              )}
               <div className="flex flex-col">
                 <p>{item.name}</p>
                 <p className="text-xs">{item.dismissalText}</p>
@@ -57,7 +38,7 @@ export default async function CricketScorecardBat({
             </td>
             <td>{item.runs}</td>
             <td>{item.balls}</td>
-            <td>{item.strikeRate}</td>
+            <td>{item.strikeRate.toFixed(2)}</td>
           </tr>
         ))}
         <tr>

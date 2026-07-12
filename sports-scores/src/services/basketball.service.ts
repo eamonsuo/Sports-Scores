@@ -47,6 +47,7 @@ class BasketballService extends SofascoreSport {
           "match-incidents",
           fetchBasketballMatchIncidents,
         ),
+        fetchEventLineups: async () => null,
         fetchStandingsTotal: withDevCache(
           "basketball",
           "standings",

@@ -1,462 +1,311 @@
-import { CricketScorecardPage } from "@/app/sports/cricket/[league]/[season]/match/[match]/page"
-import { MatchDetailsPage } from "@/components/cricket/CricketMatchDetailsPage"
-import { CricketScorecardBatProps } from "@/components/cricket/CricketScorecardBat"
-import { CricketScorecardBowlProps } from "@/components/cricket/CricketScorecardBowl"
-import { CricketLadder } from "@/components/cricket/CricketSeriesLadder"
 import {
-  fetchCricketAllSeries,
+  fetchCricketCupTrees,
+  fetchCricketLastMatches,
   fetchCricketMatchDetails,
-  fetchCricketMatchesByDateLiveScore,
+  fetchCricketMatchesByCategoryDate,
+  fetchCricketMatchIncidents,
   fetchCricketMatchInnings,
-  fetchCricketMyTeams,
-  fetchCricketSeriesMatches,
+  fetchCricketMatchLineups,
+  fetchCricketNextMatches,
+  fetchCricketStandings,
+  fetchCricketTeamLastMatches,
+  fetchCricketTeamNextMatches,
 } from "@/endpoints/cricket.api"
-import { withDevCache } from "@/lib/devCache"
-import { resolveSportImage } from "@/lib/imageMapping"
 import {
-  Cricket_LiveScoreAPI_MatchesGetInnings,
-  Cricket_LiveScoreAPI_MatchesGetScoreBoard,
+  CRICKET_CATEGORIES,
+  CRICKET_LADDER_HEADINGS,
+  CRICKET_LEAGUES,
+} from "@/lib/constants"
+import { withDevCache } from "@/lib/devCache"
+import {
+  CricketInningIncident,
+  CricketMatchDetails,
+  CricketScorecardBatProps,
+  CricketScorecardBowlProps,
+  CricketScorecardPage,
+  Sofascore_Cricket_Incident,
+  Sofascore_Cricket_Inning,
 } from "@/types/cricket"
-import { CardVariant, MatchStatus, MatchSummary, SPORT } from "@/types/misc"
+import { DeepPartial, MatchSummary, SPORT } from "@/types/misc"
+import { Sofascore_Event } from "@/types/sofascore"
+import { SofascoreSport } from "./sofascore.service"
 
-const cachedFetchCricketMatchesByDateLiveScore = withDevCache(
-  "cricket",
-  "matches-by-date",
-  fetchCricketMatchesByDateLiveScore,
-)
-const cachedFetchCricketMyTeams = withDevCache(
-  "cricket",
-  "my-teams",
-  fetchCricketMyTeams,
-)
-const cachedFetchCricketAllSeries = withDevCache(
-  "cricket",
-  "all-series",
-  fetchCricketAllSeries,
-)
-const cachedFetchCricketMatchInnings = withDevCache(
-  "cricket",
-  "match-innings",
-  fetchCricketMatchInnings,
-)
-const cachedFetchCricketMatchDetails = withDevCache(
-  "cricket",
-  "match-details",
-  fetchCricketMatchDetails,
-)
-const cachedFetchCricketSeriesMatches = withDevCache(
-  "cricket",
-  "series-matches",
-  fetchCricketSeriesMatches,
-)
-
-const excludedSeries = [
-  "CSA",
-  "The Ford",
-  "County",
-  "T10",
-  "SA20",
-  "Super Smash",
-  "Bangladesh Premier League",
-  "Plunket",
-  "One-Day Cup Women",
-  "One-Day Cup 2 Women",
-  "Vitality Blast",
-]
-
-export async function cricketMatchesByDate(date: Date) {
-  const rawMatches = await cachedFetchCricketMatchesByDateLiveScore(date)
-  if (!rawMatches || !rawMatches.Stages) return null
-
-  const matches = rawMatches.Stages.filter(
-    (series) => !excludedSeries.some((str) => series.Snm.includes(str)),
-  ).flatMap((item) => {
-    return item.Events.map((event) => {
-      let sDate = convertNumbertoDate(event.Esd)
-      let endDate = convertNumbertoDate(event.Ese)
-      let longFormat =
-        (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2)
-      let home2Ing = longFormat
-        ? `, ${event.Tr1CW2 ?? 0}/${event.Tr1C2 ?? 0}${event.Tr1CD2 === 1 ? "d" : ""}`
-        : ""
-      let away2Ing = longFormat
-        ? `, ${event.Tr2CW2 ?? 0}/${event.Tr2C2 ?? 0}${event.Tr2CD2 === 1 ? "d" : ""}`
-        : ""
-
-      return {
-        id: event.Eid,
-        startDate: sDate,
-        endDate:
-          sDate.toDateString() !== endDate.toDateString() ? endDate : undefined,
-        sport: SPORT.CRICKET,
-        status: mapCricketStatus(event.Eps),
-        roundLabel: undefined,
-        summaryText: event.Eps === "NS" ? "" : event.ECo,
-        timer: event.Eps === "L" ? "Live" : event.Eps === "NS" ? sDate : null,
-        timerDisplayColour: event.Eps === "L" ? "green" : "gray",
-        otherDetail: event.ErnInf,
-        venue: "",
-        matchSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/match/${event.Eid}`,
-        seasonId: item.Scd,
-        leagueId: item.Ccd,
-        leagueName: item.Snm,
-        leagueSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/matches`,
-        leagueImg: resolveSportImage(item.Snm),
-        competitorDetails: [
-          {
-            id: event.Eid + "-home",
-            img: resolveSportImage(event.T1[0].Nm),
-            score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
-            name: event.T1[0].Nm,
-          },
-          {
-            id: event.Eid + "-away",
-            img: resolveSportImage(event.T2[0].Nm),
-            score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
-            name: event.T2[0].Nm,
-          },
-        ],
-        winner: undefined,
-        cardVariant: CardVariant.DEFAULT,
-      } as MatchSummary
-    })
-  })
-
-  // Sort by start date
-  return matches.sort((a, b) => {
-    return a.startDate.getTime() - b.startDate.getTime()
-  })
-}
-
-export async function cricketMyTeamsMatches() {
-  const rawTeamDetails = await cachedFetchCricketMyTeams()
-
-  if (rawTeamDetails === null) {
-    return null
+class CricketService extends SofascoreSport {
+  constructor() {
+    super(
+      {
+        fetchLastEvents: withDevCache(
+          "cricket",
+          "last-matches",
+          fetchCricketLastMatches,
+        ),
+        fetchNextEvents: withDevCache(
+          "cricket",
+          "next-matches",
+          fetchCricketNextMatches,
+        ),
+        fetchEventsByDate: withDevCache(
+          "cricket",
+          "matches-by-date",
+          fetchCricketMatchesByCategoryDate,
+        ),
+        fetchEventDetails: withDevCache(
+          "cricket",
+          "match-details",
+          fetchCricketMatchDetails,
+        ),
+        fetchEventLineups: withDevCache(
+          "cricket",
+          "match-lineups",
+          fetchCricketMatchLineups,
+        ),
+        fetchEventIncidents: async () => null,
+        fetchStandingsTotal: withDevCache(
+          "cricket",
+          "standings",
+          fetchCricketStandings,
+        ),
+        fetchCupTrees: withDevCache(
+          "cricket",
+          "cuptrees",
+          fetchCricketCupTrees,
+        ),
+        fetchPlayerRankings: async () => null,
+        fetchTeamLastEvents: withDevCache(
+          "cricket",
+          "team-last-matches",
+          fetchCricketTeamLastMatches,
+        ),
+        fetchTeamNextEvents: withDevCache(
+          "cricket",
+          "team-next-matches",
+          fetchCricketTeamNextMatches,
+        ),
+      },
+      SPORT.CRICKET,
+      CRICKET_CATEGORIES,
+      CRICKET_LEAGUES,
+      CRICKET_LADDER_HEADINGS,
+    )
   }
 
-  return rawTeamDetails.flatMap((a) => {
-    return a.Stages.flatMap((item) => {
-      return item.Events.map((event) => {
-        let sDate = convertNumbertoDate(event.Esd)
-        // let longFormat =
-        //   (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2);
-        // let home2Ing = longFormat
-        //   ? `& ${event.Tr1CW2 ?? 0}/${event.Tr1C2 ?? 0}${event.Tr1CD2 === 1 ? "d" : ""}`
-        //   : "";
-        // let away2Ing = longFormat
-        //   ? `& ${event.Tr2CW2 ?? 0}/${event.Tr2C2 ?? 0}${event.Tr2CD2 === 1 ? "d" : ""}`
-        //   : "";
-        return {
-          id: event.Eid,
-          startDate: sDate,
-          endDate: undefined,
-          sport: SPORT.CRICKET,
-          status: mapCricketStatus(event.Eps),
-          roundLabel: undefined,
-          summaryText: event.Eps === "NS" ? "" : event.ECo,
-          timer: event.Eps === "L" ? "Live" : event.Eps === "NS" ? sDate : null,
-          timerDisplayColour: event.Eps === "L" ? "green" : "gray",
-          otherDetail: "",
-          venue: "",
-          matchSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/match/${event.Eid}`,
-          seasonId: item.Scd,
-          leagueId: item.Ccd,
-          leagueName: item.Snm,
-          leagueSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/matches`,
-          leagueImg: resolveSportImage(item.Snm),
-          competitorDetails: [
-            {
-              id: event.Eid + "-home",
-              score: "",
-              name: event.T1[0].Nm,
-            },
-            {
-              id: event.Eid + "-away",
-              score: "",
-              name: event.T2[0].Nm,
-            },
-          ],
-          winner: undefined,
-          cardVariant: CardVariant.DEFAULT,
-        } as MatchSummary
-      })
-    })
-  })
-}
+  override async matchDetails(
+    matchId: string,
+    leagueId?: string,
+    seasonId?: string,
+  ): Promise<CricketMatchDetails> {
+    const { matchDetails, matchLineups } = await super.matchDetails(
+      matchId,
+      leagueId,
+      seasonId,
+      {
+        details: true,
+        incidents: false,
+        lineups: true,
+      },
+    )
 
-export async function cricketAllSeries() {
-  const rawTeamDetails = await cachedFetchCricketAllSeries()
+    const [matchInnings, matchIncidents] = await Promise.all([
+      withDevCache(
+        "cricket",
+        "match-innings",
+        fetchCricketMatchInnings,
+      )(matchId),
+      withDevCache(
+        "cricket",
+        "match-incidents",
+        fetchCricketMatchIncidents,
+      )(matchId),
+    ])
 
-  if (rawTeamDetails === null) {
-    return null
-  }
-
-  return rawTeamDetails
-}
-
-export async function cricketMatchDetails(id: string): Promise<{
-  matchDetails: MatchDetailsPage
-  matchScorecard: CricketScorecardPage
-  matchSeries: string
-} | null> {
-  const rawInnings = await cachedFetchCricketMatchInnings(id)
-  const rawDetails = await cachedFetchCricketMatchDetails(id)
-
-  if (rawInnings === null || rawDetails === null) {
-    return null
-  }
-
-  const detailsPage = mapMatchDetails(rawDetails, rawInnings)
-  const scorecardPage = mapScorecardDetails(rawInnings)
-
-  return {
-    matchDetails: detailsPage,
-    matchScorecard: scorecardPage,
-    matchSeries: `/sports/${SPORT.CRICKET}/${rawDetails.Stg.Ccd}/${rawDetails.Stg.Scd}`,
-  }
-}
-
-export async function cricketSeriesResults(ccd: string, scd: string) {
-  let rawSeries = await cachedFetchCricketSeriesMatches(ccd, scd)
-
-  if (
-    rawSeries?.Stages[0].LeagueTable === undefined ||
-    rawSeries === null ||
-    rawSeries === undefined
-  ) {
-    return null
-  }
-
-  return rawSeries.Stages[0].LeagueTable.L[0].Tables.map((item) => {
     return {
-      name: item.name,
-      teams: item.team.map((team) => {
-        return {
-          name: team.Tnm,
-          logo: resolveSportImage(team.Tnm),
-          rank: team.rnk,
-          played: team.pld,
-          won: team.win,
-          drawn: team.drw,
-          lost: team.lst,
-          points: team.pts,
-          nrr: Number(team.nrr),
-        }
-      }),
-    } as CricketLadder
-  })
-}
-
-export async function cricketSeriesDetails(ccd: string, scd: string) {
-  let rawMatches = await cachedFetchCricketSeriesMatches(ccd, scd)
-
-  if (rawMatches == undefined || rawMatches.Stages == undefined) {
-    return null
+      matchDetails,
+      matchScorecard: this.matchInningsMapper(matchInnings?.innings ?? []),
+      matchIncidents: this.matchIncidentsMapper(
+        (matchIncidents?.incidents ?? []).reverse(),
+      ),
+      matchLineups,
+    }
   }
 
-  const matches = rawMatches.Stages.flatMap((item) => {
-    return item.Events.map((event) => {
-      let sDate = convertNumbertoDate(event.Esd)
-      let endDate = convertNumbertoDate(event.Ese)
-      let longFormat =
-        (event.Tr1C1 && event.Tr1C2) || (event.Tr2C1 && event.Tr2C2)
-      let home2Ing = longFormat
-        ? `, ${event.Tr1CW2 ?? 0}/${event.Tr1C2 ?? 0}${event.Tr1CD2 === 1 ? "d" : ""}`
-        : ""
-      let away2Ing = longFormat
-        ? `, ${event.Tr2CW2 ?? 0}/${event.Tr2C2 ?? 0}${event.Tr2CD2 === 1 ? "d" : ""}`
-        : ""
+  override eventMapper(
+    event: Sofascore_Event,
+    options?: DeepPartial<MatchSummary>,
+  ): MatchSummary {
+    const twoInnings =
+      (event.homeScore.innings?.inning1 && event.homeScore.innings?.inning2) ||
+      (event.awayScore.innings?.inning1 && event.awayScore.innings?.inning2)
+    let home2Ing = twoInnings
+      ? `, ${event.homeScore.innings?.inning2?.wickets ?? 0}/${event.homeScore.innings?.inning2?.score ?? 0}${/*event.Tr1CD2 === 1 ? "d" : */ ""}`
+      : ""
+    let away2Ing = twoInnings
+      ? `, ${event.awayScore.innings?.inning2?.wickets ?? 0}/${event.awayScore.innings?.inning2?.score ?? 0}${/*event.Tr2CD2 === 1 ? "d" : */ ""}`
+      : ""
 
-      return {
-        id: event.Eid,
-        startDate: sDate,
-        endDate:
-          sDate.toDateString() !== endDate.toDateString() ? endDate : undefined,
-        sport: SPORT.CRICKET,
-        status: mapCricketStatus(event.Eps),
-        roundLabel: undefined,
-        summaryText: event.Eps === "NS" ? "" : event.ECo,
-        timer: event.Eps === "L" ? "Live" : event.Eps === "NS" ? sDate : null,
-        timerDisplayColour: event.Eps === "L" ? "green" : "gray",
-        otherDetail: event.ErnInf,
-        venue: "",
-        matchSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/match/${event.Eid}`,
-        seasonId: item.Scd,
-        leagueId: item.Ccd,
-        leagueName: item.Snm,
-        leagueSlug: `/sports/${SPORT.CRICKET}/${item.Ccd}/${item.Scd}/matches`,
-        leagueImg: resolveSportImage(item.Snm),
-        competitorDetails: [
-          {
-            id: event.Eid + "-home",
-            img: resolveSportImage(event.T1[0].Nm),
-            score: `${event.Tr1CW1 ?? 0}/${event.Tr1C1 ?? 0}${event.Tr1CD1 === 1 ? "d" : ""}${home2Ing}`,
-            name: event.T1[0].Nm,
-          },
-          {
-            id: event.Eid + "-away",
-            img: resolveSportImage(event.T2[0].Nm),
-            score: `${event.Tr2CW1 ?? 0}/${event.Tr2C1 ?? 0}${event.Tr2CD1 === 1 ? "d" : ""}${away2Ing}`,
-            name: event.T2[0].Nm,
-          },
-        ],
-        winner: undefined,
-        cardVariant: CardVariant.DEFAULT,
-      } as MatchSummary
+    return super.eventMapper(event, {
+      ...options,
+      roundLabel:
+        event.roundInfo?.name ??
+        (event.tournament.name.split(",").length > 1
+          ? event.tournament.name.split(",").at(-1)
+          : "Matches"),
+      competitorDetails: [
+        {
+          ...options?.competitorDetails?.[0],
+          score: `${event.homeScore.innings?.inning1?.wickets ?? 0}/${event.homeScore.innings?.inning1?.score ?? 0}${/*event.Tr1CD1 === 1 ? "d" : */ ""}${home2Ing}`,
+        },
+        {
+          ...options?.competitorDetails?.[1],
+          score: `${event.awayScore.innings?.inning1?.wickets ?? 0}/${event.awayScore.innings?.inning1?.score ?? 0}${/*event.Tr2CD1 === 1 ? "d" : */ ""}${away2Ing}`,
+        },
+      ],
     })
-  })
-
-  // Sort by date first, then by start time
-  return matches.sort((a, b) => {
-    return a.startDate.getTime() - b.startDate.getTime()
-  })
-}
-
-function mapCricketStatus(status?: string): MatchStatus {
-  switch (status) {
-    case "NS":
-      return MatchStatus.UPCOMING
-    case "L":
-      return MatchStatus.LIVE
-    case "FT":
-      return MatchStatus.COMPLETED
-    default:
-      return MatchStatus.LIVE
   }
-}
 
-export function mapMatchDetails(
-  details: Cricket_LiveScoreAPI_MatchesGetScoreBoard,
-  innings: Cricket_LiveScoreAPI_MatchesGetInnings,
-) {
-  const middlePlayerIndex = Math.ceil((innings.Prns?.length ?? 0) / 2)
-  let homePlayers =
-    Object.keys(innings).length === 0
-      ? ["No Team Data"]
-      : innings.Prns.slice(0, middlePlayerIndex).map((item) => item.Snm)
-  let awayPlayers =
-    Object.keys(innings).length === 0
-      ? ["No Team Data"]
-      : innings.Prns.slice(middlePlayerIndex).map((item) => item.Snm)
-  let startDate = convertNumbertoDate(details.Esd)
-  let endDate = convertNumbertoDate(details.Ese)
-  let tossChoice = details.TCho === 1 ? "bat" : "bowl"
-  let tossWinner = details.TPa === 1 ? details.T1[0].Nm : details.T2[0].Nm
-  let longFormat =
-    (details.Tr1C1 && details.Tr1C2) || (details.Tr2C1 && details.Tr2C2)
-  let home1Ing = `${details.Tr1CW1 ?? 0}/${details.Tr1C1 ?? 0}${details.Tr1CD1 === 1 ? "d" : ""}`
-  let away1Ing = `${details.Tr2CW1 ?? 0}/${details.Tr2C1 ?? 0}${details.Tr2CD1 === 1 ? "d" : ""}`
-  let home2Ing = longFormat
-    ? ` & ${details.Tr1CW2 ?? 0}/${details.Tr1C2 ?? 0}${details.Tr1CD2 === 1 ? "d" : ""}`
-    : ""
-  let away2Ing = longFormat
-    ? ` & ${details.Tr2CW2 ?? 0}/${details.Tr2C2 ?? 0}${details.Tr2CD2 === 1 ? "d" : ""}`
-    : ""
+  matchInningsMapper(innings: Sofascore_Cricket_Inning[]) {
+    const inningsData = innings.map((item) => {
+      return {
+        inningLabel: `${item.battingTeam.shortName} ${item.number === 1 || item.number === 2 ? "1st" : "2nd"}`,
+        inningBatters: {
+          batters: item.battingLine.map((batter) => {
+            return {
+              name: batter.playerName,
+              runs: batter.score,
+              balls: batter.balls,
+              strikeRate:
+                batter.balls !== 0 ? (batter.score / batter.balls) * 100 : 0,
+              dismissalText: mapDismissalText(
+                batter.wicketBowler?.shortName ?? "",
+                batter.wicketTypeName,
+                batter.wicketCatch?.shortName,
+              ),
+            }
+          }),
+          total: item.score,
+          extras: {
+            byes: item.bye,
+            legbyes: item.legBye,
+            noballs: item.noBall,
+            wides: item.wide,
+            total: item.extra,
+          },
+          overs: item.overs,
+          wickets: item.wickets,
+        } as CricketScorecardBatProps,
+        inningBowlers: item.bowlingLine.map((bowl) => {
+          return {
+            name: bowl.playerName,
+            overs: bowl.over,
+            runs: bowl.run,
+            wickets: bowl.wicket,
+            economy: bowl.run / bowl.over,
+          }
+        }) as CricketScorecardBowlProps,
+      }
+    })
 
-  return {
-    matchSummaryText: details.ECo,
-    status: details.EpsL,
-    date: startDate,
-    venue: `${details.Venue.Vnm}, ${details.Stg.Cnm}`,
-    tossResult: `${tossWinner} won the toss and chose to ${tossChoice}`,
-    umpires: [""],
-    pom: "",
-    homeInfo: {
-      name: details.T1[0].Nm,
-      score: `${home1Ing}${home2Ing}`,
-      img: resolveSportImage(details.T1[0].Nm),
-    },
-    homePlayers: homePlayers,
-    awayInfo: {
-      name: details.T2[0].Nm,
-      score: `${away1Ing}${away2Ing}`,
-      img: resolveSportImage(details.T2[0].Nm),
-    },
-    awayPlayers: awayPlayers,
-  } as MatchDetailsPage
-}
-
-export function mapScorecardDetails(
-  data: Cricket_LiveScoreAPI_MatchesGetInnings,
-) {
-  if (Object.keys(data).length === 0) {
     return {
       matchState: "LIVE",
-      data: [],
+      data: inningsData,
     } as CricketScorecardPage
   }
 
-  const inningsData = data.SDInn.map((item) => {
-    let inningTile = item.Ti.replace(" INN", "").split(" ")
+  // override
+  matchIncidentsMapper(
+    matchIncidents: Sofascore_Cricket_Incident[],
+  ): CricketInningIncident[] {
+    const inningNumbers = new Set(
+      matchIncidents.map((incident) => incident.inningNumber),
+    )
 
-    return {
-      inningLabel: `${inningTile[1].toLowerCase()} ${inningTile[0]}`,
-      inningBatters: {
-        batters: item.Bat.map((x) => {
-          return {
-            name:
-              data.Prns.find((p) => p.Pid === x.Pid.toString())?.Snm ??
-              "Unknown",
-            runs: x.R,
-            balls: x.B,
-            strikeRate: x.Sr,
-            dismissalText:
-              x.LpTx === "did not bat"
-                ? ""
-                : x.LpTx.replace(
-                    "[F]",
-                    data.Prns.find((p) => p.Pid === x.Fid.toString())?.Ln ??
-                      "Unknown",
-                  ).replace(
-                    "[B]",
-                    data.Prns.find((p) => p.Pid === x.Bid.toString())?.Ln ??
-                      "Unknown",
-                  ),
+    const mappedIncidents = matchIncidents.reduce(
+      (acc, incident) => {
+        if (!acc[incident.inningNumber]) {
+          acc[incident.inningNumber] = {
+            inningLabel: `Inning ${incident.inningNumber}`,
+            inningIncidents: [],
           }
-        }),
-        total: item.Pt,
-        extras: {
-          byes: item.B,
-          legbyes: item.LB,
-          noballs: item.NB,
-          wides: item.WB,
-          total: item.Ex,
-        },
-        overs: item.Ov,
-        wickets: item.Wk,
-      } as CricketScorecardBatProps,
-      inningBowlers: item.Bow.map((bowl) => {
-        return {
-          name:
-            data.Prns.find((p) => p.Pid === bowl.Pid.toString())?.Snm ??
-            "Unknown",
-          overs: bowl.Ov,
-          runs: bowl.R,
-          wickets: bowl.Wk,
-          economy: bowl.Er,
         }
-      }) as CricketScorecardBowlProps,
-    }
-  })
 
-  return {
-    matchState: "LIVE",
-    data: inningsData,
-  } as CricketScorecardPage
+        let currentOverIndex = acc[
+          incident.inningNumber
+        ].inningIncidents.findIndex((item) => item.over === incident.over)
+
+        if (currentOverIndex === -1) {
+          acc[incident.inningNumber].inningIncidents.push({
+            over: incident.over,
+            bowlers: [],
+            batters: [],
+            runs: 0,
+            teamScore: "0/0",
+            balls: [],
+          })
+          currentOverIndex =
+            acc[incident.inningNumber].inningIncidents.length - 1
+        }
+
+        let currentOver =
+          acc[incident.inningNumber].inningIncidents[currentOverIndex]
+
+        currentOver = {
+          ...currentOver,
+          bowlers: Array.from(
+            new Set([
+              ...(currentOver?.bowlers ?? []),
+              incident.bowler.shortName,
+            ]),
+          ),
+          batters: Array.from(
+            new Set([
+              ...(currentOver?.batters ?? []),
+              incident.batsman.shortName,
+            ]),
+          ),
+          runs: currentOver.runs + incident.totalRuns,
+          teamScore: incident.score,
+          balls: [...currentOver.balls, incident.incidentClassLabel],
+        }
+
+        acc[incident.inningNumber].inningIncidents[currentOverIndex] =
+          currentOver
+        return acc
+      },
+      {} as Record<number, CricketInningIncident>,
+    )
+
+    return Object.values(mappedIncidents)
+  }
 }
 
-export function convertNumbertoDate(dateNumber: number) {
-  if (!dateNumber) {
-    return new Date()
+export const cricketService = new CricketService()
+
+function mapDismissalText(
+  bowlerName: string,
+  wicketType: string,
+  fielderName?: string,
+): string {
+  switch (wicketType) {
+    case "Not out":
+      return `not out`
+    case "Bowled":
+      return `b: ${bowlerName}`
+    case "Caught":
+      return `c: ${fielderName} b: ${bowlerName}`
+    case "Caught & Bowled":
+      return `c&b: ${bowlerName}`
+    case "LBW":
+      return `lbw: ${bowlerName}`
+    case "Run out":
+      return `run out (${fielderName})`
+    case "Stumped":
+      return `stumped b: ${bowlerName}`
+    case "Hurt":
+      return `retired hurt`
+    case "Hit wicket":
+      return `hit wicket b: ${bowlerName}`
+    case "Obstructing the field":
+      return `obstructing the field b: ${bowlerName}`
+    default:
+      return ""
   }
-  let dateString = dateNumber.toString()
-  let year = dateString.substring(0, 4)
-  let month = dateString.substring(4, 6)
-  let day = dateString.substring(6, 8)
-  let hour = dateString.substring(8, 10)
-  let minute = dateString.substring(10, 12)
-  let second = dateString.substring(12, 14)
-  // return new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`);
-  return new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}+10:00`)
 }

@@ -25,6 +25,26 @@ import {
 
 export const FALLBACK_IMAGE = "/vercel.svg"
 
+export const CRICKET_CATEGORIES = [
+  "1347", // Australia
+  "1343", // World
+  "1350", // India
+  "1349", // UK
+  // "1346", // Asia
+  // "1352", // Pakistan
+  // "1355", // South Africa
+  // "1684", // West Indies
+  // "1351", // USA
+]
+export const CRICKET_LADDER_HEADINGS = [
+  "Team",
+  "P",
+  "W",
+  "D",
+  "NR",
+  "NRR",
+  "Pts",
+]
 export const RUGBY_LEAGUE_LADDER_HEADINGS = [
   "Team",
   "P",
@@ -45,7 +65,7 @@ export const FOOTBALL_CATEGORIES = [
   // "1466", // Africa
   // "1469", // North America
   // "1471", // Oceania
-] //Australia, World, Asia, Europe, England, South America, Africa, North America, Oceania
+]
 export const FOOTBALL_LADDER_HEADINGS = ["Team", "P", "W", "D", "Diff", "Pts"]
 export const FOOTBALL_MATCH_LENGTH = 2 // in hours, used for TV guide end time estimation
 export const AUSSIE_RULES_LADDER_HEADINGS = ["Team", "P", "W", "D", "%", "Pts"]
@@ -148,6 +168,23 @@ const FINALS_TOP_8_LADDER_CONFIG: LadderPlacingCategory[] = [
 const CRICKET_PLAYOFFS_TOP_4_LADDER_CONFIG: LadderPlacingCategory[] = [
   { label: "Playoffs", position: [1, 2, 3, 4] },
 ]
+const CRICKET_FINALS_TOP_2_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Semi-Finals", position: [1, 2] },
+]
+const CRICKET_TOP_2_FINALS_LADDER_CONFIG: LadderConfig = {
+  ladderGroup: [
+    {
+      label: "Group A",
+      placingCategories: CRICKET_FINALS_TOP_2_LADDER_CONFIG,
+      groupFilter: (tableName) => tableName.includes("Group A"),
+    },
+    {
+      label: "Group B",
+      placingCategories: CRICKET_FINALS_TOP_2_LADDER_CONFIG,
+      groupFilter: (tableName) => tableName.includes("Group B"),
+    },
+  ],
+}
 
 // Rugby League
 const NRL_TOP_8_LADDER_CONFIG: LadderConfig = {
@@ -528,6 +565,73 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
   //   seasons: [{ name: "2025-2027", slug: "" }],
   // },
   {
+    name: "Sheffield Shield",
+    slug: "11160",
+    seasons: [
+      { name: "26/27", slug: "97892" },
+      { name: "25/26", slug: "78362" },
+    ],
+  },
+  {
+    name: "One Day Cup",
+    slug: "11161",
+    seasons: [
+      { name: "26/27", slug: "97891" },
+      { name: "25/26", slug: "78361" },
+    ],
+  },
+  {
+    name: "BBL",
+    slug: "11162",
+    seasons: [
+      // { name: "26/27", slug: "77627" },
+      { name: "25/26", slug: "77627" },
+    ],
+  },
+  {
+    name: "WNCL",
+    slug: "18704",
+    seasons: [
+      // { name: "26/27", slug: "77627" },
+      { name: "25/26", slug: "78399" },
+    ],
+  },
+  {
+    name: "WBBL",
+    slug: "11163",
+    seasons: [
+      // { name: "2026", slug: "77627" },
+      { name: "2025", slug: "78209" },
+    ],
+  },
+  {
+    name: "T20 Spring Challenge",
+    slug: "23072",
+    seasons: [
+      // { name: "2026", slug: "77627" },
+      { name: "2025", slug: "78371" },
+    ],
+  },
+  {
+    name: "ICC Women's T20 World Cup",
+    slug: "11183",
+    seasons: [
+      {
+        name: "2026",
+        slug: "76985",
+        ladderConfig: CRICKET_TOP_2_FINALS_LADDER_CONFIG,
+      },
+    ],
+  },
+  {
+    name: "T20 Internationals",
+    slug: "11191",
+    seasons: [
+      { name: "2026.1", slug: "77257" },
+      { name: "2026.2", slug: "93728" },
+    ],
+  },
+  {
     name: "IPL",
     slug: "india",
     seasons: [
@@ -551,21 +655,6 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
     name: "The Hundred - Women",
     slug: "the-hundred",
     seasons: [{ name: "2026", slug: "the-hundred-women" }],
-  },
-  {
-    name: "BBL",
-    slug: "australia",
-    seasons: [{ name: "25/26", slug: "big-bash-league" }],
-  },
-  {
-    name: "WBBL",
-    slug: "australia",
-    seasons: [{ name: "25/26", slug: "big-bash-league-women" }],
-  },
-  {
-    name: "ICC Mens T20 World Cup",
-    slug: "icc-mens-t20-world-cup",
-    seasons: [{ name: "2026", slug: "icc-mens-t20-world-cup" }],
   },
 ]
 
@@ -2151,8 +2240,8 @@ export const FOOTBALL_LEAGUES_CLIENT = stripLeagueSeasonConfig(FOOTBALL_LEAGUES)
 
 const MLB_TV_GUIDE: TVConfig = {
   channels: [
-    tvGuideConfigCreate(TVChannel.KAYO, 0, BASEBALL_MATCH_LENGTH),
-    tvGuideConfigCreate(TVChannel.DISNEY_PLUS, 0, BASEBALL_MATCH_LENGTH),
+    // tvGuideConfigCreate(TVChannel.KAYO, 0, BASEBALL_MATCH_LENGTH),
+    // tvGuideConfigCreate(TVChannel.DISNEY_PLUS, 0, BASEBALL_MATCH_LENGTH),
   ],
 }
 
@@ -2298,8 +2387,25 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
 export const BASKETBALL_LEAGUES_CLIENT =
   stripLeagueSeasonConfig(BASKETBALL_LEAGUES)
 
+const TENNIS_MATCH_LENGTH = 2 // hours
 const TENNIS_MAJORS_TV_GUIDE: TVConfig = {
-  channels: [tvGuideConfigCreate(TVChannel.NINE, 0, 2)],
+  channels: [
+    {
+      channel: TVChannel.NINE,
+      endTime: (date) => addHours(date, TENNIS_MATCH_LENGTH),
+      tvFilter(date, event) {
+        const tennisEvent = event as Sofascore_Event
+        if (
+          tennisEvent.homeTeam.country.name === "Australia" ||
+          tennisEvent.awayTeam.country.name === "Australia" ||
+          tennisEvent.roundInfo?.name?.includes("Final")
+        ) {
+          return true
+        }
+        return false
+      },
+    },
+  ],
 }
 
 export const TENNIS_CATEGORIES: LeagueSeasonConfig[] = [
@@ -2616,6 +2722,15 @@ export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
       // { name: "2026", slug: "" },
       { name: "2025", slug: "76747" },
       { name: "2024", slug: "61372" },
+    ],
+  },
+  {
+    name: "Nations Championship",
+    slug: "34478",
+    icon: "https://upload.wikimedia.org/wikipedia/commons/d/df/2026_Nations_Championship_pictogram.svg",
+    seasons: [
+      // { name: "2028", slug: "" },
+      { name: "2026", slug: "93780" },
     ],
   },
   {

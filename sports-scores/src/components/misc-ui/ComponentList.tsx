@@ -1,23 +1,27 @@
 "use client"
 
-import { clsx } from "clsx"
-import { useEffect, useRef, useState } from "react"
+import { cn } from "@/lib/utils"
+import { ReactNode, useEffect, useRef, useState } from "react"
 
-export default function GenericRoundList({
-  data,
-  curRound,
+export type ButtonStyle = "pill" | "rectangle"
+
+export default function ComponentList({
   children,
+  labels,
+  curItem,
+  buttonStyle = "pill",
 }: {
-  data: { roundLabel: string; component: React.ReactNode }[]
-  curRound: string
-  children?: React.ReactNode
+  children: ReactNode[]
+  labels: string[]
+  curItem: string
+  buttonStyle?: ButtonStyle
 }) {
-  const [round, setRound] = useState(curRound)
+  const [item, setItem] = useState(curItem)
   const btnListRef = useRef<HTMLDivElement>(null)
   const initialBtn = useRef<HTMLButtonElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-  const roundLabels = data.map((item) => item.roundLabel)
+  console.log(buttonStyle)
 
   useEffect(() => {
     //Ensure the curRound is scrolled into the centre of view on page load
@@ -27,26 +31,25 @@ export default function GenericRoundList({
     })
 
     // Scroll to current round on mount
-    const index = roundLabels.indexOf(curRound)
+    const index = labels.indexOf(curItem)
     if (scrollContainerRef.current && index !== -1) {
       const container = scrollContainerRef.current
       container.scrollLeft = index * container.offsetWidth
     }
-  }, []) // Intentionally run only once on mount; curRound and roundLabels are read for initial positioning and are not expected to change
+  }, []) //Empty array so only runs once on mount
 
   //When called ensures the new round state is set and the related button is visible in view
-  function handleRoundClick(roundLabel: string) {
-    setRound(roundLabel)
+  function handleRoundClick(label: string) {
+    setItem(label)
 
     const divNode = btnListRef.current
-    const btnNode =
-      divNode?.querySelectorAll("button")[roundLabels.indexOf(roundLabel)]
+    const btnNode = divNode?.querySelectorAll("button")[labels.indexOf(label)]
     btnNode?.scrollIntoView({
       behavior: "smooth",
     })
 
     // Scroll to the round
-    const index = roundLabels.indexOf(roundLabel)
+    const index = labels.indexOf(label)
     if (scrollContainerRef.current && index !== -1) {
       const container = scrollContainerRef.current
       container.scrollTo({
@@ -64,8 +67,8 @@ export default function GenericRoundList({
       const width = container.offsetWidth
       const index = Math.round(scrollLeft / width)
 
-      if (roundLabels[index] && roundLabels[index] !== round) {
-        setRound(roundLabels[index])
+      if (labels[index] && labels[index] !== item) {
+        setItem(labels[index])
 
         // Scroll button into view only if it's not already visible
         // Use setTimeout to allow React to update the button styling first
@@ -98,22 +101,30 @@ export default function GenericRoundList({
     <>
       <div
         ref={btnListRef}
-        className="hideScroll mx-2 mb-2 flex gap-1 overflow-x-auto"
+        className={cn(
+          "hideScroll mx-4 mb-2 flex overflow-x-auto",
+          buttonStyle === "pill" && "gap-1",
+          buttonStyle === "rectangle" &&
+            "rounded-lg bg-gray-200 p-1 dark:bg-neutral-800",
+        )}
       >
-        {roundLabels.map((item) => (
+        {labels.map((label) => (
           <button
-            onClick={() => handleRoundClick(item)}
-            key={item}
-            ref={item === curRound ? initialBtn : null}
-            className={clsx(
-              "inline-flex items-center justify-center rounded-full px-2.5 py-0.5",
-              item === round &&
+            onClick={() => handleRoundClick(label)}
+            key={label}
+            ref={label === curItem ? initialBtn : null}
+            className={cn(
+              buttonStyle === "pill" &&
+                "inline-flex items-center justify-center rounded-full px-2.5 py-0.5",
+              buttonStyle === "rectangle" &&
+                "flex-1 place-content-center rounded-md bg-white px-2 py-1 text-center text-black shadow-sm focus:relative dark:bg-neutral-600 dark:text-neutral-200",
+              label === item &&
                 "bg-gray-300 text-black dark:bg-neutral-600 dark:text-neutral-200",
-              item !== round &&
+              label !== item &&
                 "bg-gray-100 text-gray-700 dark:bg-neutral-800 dark:text-neutral-400",
             )}
           >
-            <p className="whitespace-nowrap text-sm">{item}</p>
+            <p className="whitespace-nowrap text-sm">{label}</p>
           </button>
         ))}
       </div>
@@ -124,12 +135,12 @@ export default function GenericRoundList({
         className="hideScroll flex flex-1 snap-x snap-mandatory overflow-x-auto overflow-y-hidden"
         style={{ scrollBehavior: "smooth" }}
       >
-        {data.map((item) => (
+        {children.map((item, index) => (
           <div
-            key={item.roundLabel}
+            key={labels[index] + index.toString()}
             className="w-full flex-shrink-0 snap-start overflow-y-auto"
           >
-            {item.component}
+            {item}
           </div>
         ))}
       </div>

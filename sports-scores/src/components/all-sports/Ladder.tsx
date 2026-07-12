@@ -21,7 +21,7 @@ export default function Ladder({
   placingCategories,
 }: SportsLadder) {
   return (
-    <div>
+    <div className="flex-1 overflow-y-auto px-4">
       {tableName && (
         <p className="pb-1 pt-3 dark:text-neutral-400">{tableName}</p>
       )}

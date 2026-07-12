@@ -1,5 +1,5 @@
 "use client"
-import { clsx } from "clsx"
+import { cn } from "@/lib/utils"
 import { Fragment, ReactNode, useState } from "react"
 
 export default function ClientSportsPage({
@@ -17,7 +17,7 @@ export default function ClientSportsPage({
         {options.map((item) => (
           <button
             key={item.state}
-            className={clsx(
+            className={cn(
               "flex-1 rounded-md px-2 py-1.5 text-center focus:relative",
               view == item.state
                 ? "bg-white text-black shadow-sm dark:bg-neutral-600 dark:text-neutral-200"

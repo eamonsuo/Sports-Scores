@@ -8,7 +8,7 @@ import { americanFootballService } from "@/services/american-football.service"
 import { aussieRulesService } from "@/services/aussie-rules.service"
 import { baseballService } from "@/services/baseball.service"
 import { basketballService } from "@/services/basketball.service"
-import { cricketMatchesByDate } from "@/services/cricket.service"
+import { cricketService } from "@/services/cricket.service"
 import { cyclingService } from "@/services/cycling.service"
 import { footballService } from "@/services/football.service"
 import { golfService } from "@/services/golf.service"
@@ -32,7 +32,7 @@ export default async function Page({
   const parsedDate =
     date === undefined ? curDate : new TZDate(date as string, curDate.timeZone)
   const [
-    cricketoday,
+    cricketToday,
     tennisToday,
     footballToday,
     basketballToday,
@@ -49,7 +49,7 @@ export default async function Page({
     dartsToday,
     cyclingToday,
   ] = await Promise.all([
-    cricketMatchesByDate(parsedDate),
+    cricketService.matchesByDate(parsedDate),
     tennisService.matchesByDate(parsedDate),
     footballService.matchesByDate(parsedDate),
     basketballService.matchesByDate(parsedDate),
@@ -68,13 +68,7 @@ export default async function Page({
   ])
 
   let allSports: FixtureRound[] = ([] as FixtureRound[])
-    .concat([
-      {
-        matches: cricketoday ?? [],
-        roundLabel: "Cricket",
-        roundSlug: `${SPORT.CRICKET}/main/matches`,
-      },
-    ])
+    .concat(cricketToday?.fixtures ?? [])
     .concat(rugbyLeagueToday?.fixtures ?? [])
     .concat(aussieRulesToday?.fixtures ?? [])
     .concat(americanFootballToday?.fixtures ?? [])

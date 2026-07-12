@@ -1,3 +1,172 @@
+import { TeamMatchDetail } from "./misc"
+import { Sofascore_Player, Sofascore_Team } from "./sofascore"
+
+export type CricketOverIncident = {
+  over: number
+  bowlers: string[]
+  batters: string[]
+  runs: number
+  teamScore: string
+  balls: string[]
+}
+
+export type CricketInningIncident = {
+  inningLabel: string
+  inningIncidents: CricketOverIncident[]
+}
+
+export type CricketMatchDetails = TeamMatchDetail & {
+  matchScorecard: CricketScorecardPage
+  matchIncidents?: CricketInningIncident[]
+}
+
+export type CricketScorecardBatProps = {
+  batters: {
+    name: string
+    image?: string
+    runs: number
+    balls: number
+    strikeRate: number
+    dismissalText?: string
+  }[]
+  total: number
+  overs: number
+  wickets: number
+  extras: {
+    total: number
+    byes: number
+    legbyes: number
+    wides: number
+    noballs: number
+  }
+}
+
+export type CricketScorecardBowlProps = {
+  overs: number
+  runs: number
+  wickets: number
+  economy: number
+  image?: string
+  name: string
+}[]
+
+export type CricketScorecardPage = {
+  data: {
+    inningLabel: string
+    inningBatters: CricketScorecardBatProps
+    inningBowlers: CricketScorecardBowlProps
+  }[]
+  matchState: "LIVE" | "COMPLETED"
+}
+
+export interface Sofascore_Cricket_MatchInnings_Response {
+  innings: Sofascore_Cricket_Inning[]
+}
+
+export interface Sofascore_Cricket_Incidents_Response {
+  incidents: Sofascore_Cricket_Incident[]
+}
+
+export interface Sofascore_Cricket_IncidentPlayer extends Sofascore_Player {
+  gender: string
+  sofascoreId: string
+  firstName?: string
+  lastName?: string
+}
+
+export interface Sofascore_Cricket_Incident {
+  number: number
+  over: number
+  ball: number
+  runs: number
+  zone?: string
+  angle?: number
+  length?: number
+  score: string
+  scored: boolean
+  wicket: boolean
+  missed: boolean
+  bowlDetail?: string
+  batsman: Sofascore_Cricket_IncidentPlayer
+  bowler: Sofascore_Cricket_IncidentPlayer
+  fielder?: Sofascore_Cricket_IncidentPlayer
+  ballDetails: {
+    pitchHit?: {
+      x: number
+      y: number
+    }
+  }
+  commentary?: string
+  id: number
+  time: number
+  inningNumber: number
+  battingTeamId: number
+  incidentClassLabel: string
+  incidentClassColor: string
+  totalRuns: number
+  incidentClass: string
+  incidentType: "ball"
+}
+
+interface Sofascore_Cricket_BowlingLine {
+  player: Sofascore_Player
+  playerName: string
+  over: number
+  maiden: number
+  run: number
+  wicket: number
+  wide: number
+  noBall: number
+}
+
+interface Sofascore_Cricket_BattingLine {
+  player: Sofascore_Player
+  playerName: string
+  score: number
+  balls: number
+  s4: number
+  s6: number
+  fowScore?: number
+  fowOver?: number
+  wicketBowler?: Sofascore_Player
+  wicketBowlerName?: string
+  wicketCatch?: Sofascore_Player
+  wicketCatchName?: string
+  wicketTypeId: number
+  wicketTypeName: string
+}
+
+interface Sofascore_Cricket_Partnership {
+  player1: Sofascore_Player
+  player2: Sofascore_Player
+  score: number
+  balls: number
+}
+
+export interface Sofascore_Cricket_Inning {
+  number: number
+  battingTeam: Sofascore_Team
+  bowlingTeam: Sofascore_Team
+  score: number
+  wickets: number
+  overs: number
+  extra: number
+  wide: number
+  noBall: number
+  bye: number
+  legBye: number
+  penalty: number
+  id: number
+  bowlingLine: Sofascore_Cricket_BowlingLine[]
+  battingLine: Sofascore_Cricket_BattingLine[]
+  partnerships: Sofascore_Cricket_Partnership[]
+}
+
+/**
+ * LiveScore Types
+ */
+
+/*
 // Define a reusable type for a team
 export interface Team {
   Nm: string
@@ -316,3 +485,4 @@ export interface Cricket_LiveScoreAPI_MatchesListByLeague {
     LeagueTable?: LeagueTable
   }[]
 }
+*/
