@@ -1,5 +1,5 @@
-import Placeholder from "@/components/misc-ui/Placeholder"
+import LoadingPage from "@/components/misc-ui/LoadingPage"
 
 export default function Loading() {
-  return <Placeholder>Loading...</Placeholder>
+  return <LoadingPage />
 }

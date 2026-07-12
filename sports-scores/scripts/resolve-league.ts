@@ -1,5 +1,5 @@
 /**
- * Resolves league choice to leagueId, seasonId, sport, and displayType.
+ * Resolves league choice to leagueId, seasonId, sport.
  * Used by the GitHub Actions workflow to auto-resolve from the league dropdown.
  *
  * Usage: npx tsx scripts/resolve-league.ts "<league choice>" [seasonId override]
@@ -21,7 +21,6 @@ type LeagueLookupEntry = {
   leagueId: string
   seasonId: string
   sport: string
-  displayType: string
 }
 
 const lookupPath = resolve(__dirname, "leagueLookup.json")
@@ -45,7 +44,6 @@ console.log(
   `  seasonId: ${resolvedSeasonId}${seasonIdOverride ? " (override)" : " (latest)"}`,
 )
 console.log(`  sport: ${entry.sport}`)
-console.log(`  displayType: ${entry.displayType}`)
 
 // Write to GitHub Actions output file
 const outputFile = process.env.GITHUB_OUTPUT
@@ -53,7 +51,6 @@ if (outputFile) {
   appendFileSync(outputFile, `leagueId=${entry.leagueId}\n`)
   appendFileSync(outputFile, `seasonId=${resolvedSeasonId}\n`)
   appendFileSync(outputFile, `sport=${entry.sport}\n`)
-  appendFileSync(outputFile, `displayType=${entry.displayType}\n`)
 } else {
   console.log("\n(No $GITHUB_OUTPUT — running locally)")
 }

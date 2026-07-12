@@ -5,6 +5,7 @@ import { getSportConfigurations } from "@/lib/projUtils"
 import {
   Brackets,
   CardVariant,
+  DeepPartial,
   DisplayTypes,
   LeagueSeasonConfig,
   MatchDetail,
@@ -30,6 +31,7 @@ class SurfingService implements SportService {
     this.tours = SURFING_TOURS
     this.cardVariant = CardVariant.SESSION
   }
+
   async matchesByLeagueSeason(
     leagueId: string,
     seasonId: string,
@@ -49,7 +51,7 @@ class SurfingService implements SportService {
         (a, b) =>
           new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
       )
-      .map(this.eventMapper)
+      .map((event) => this.eventMapper(event))
 
     const { leagueConfig } = getSportConfigurations(
       this.tours,
@@ -106,7 +108,10 @@ class SurfingService implements SportService {
     throw new Error("Method not implemented.")
   }
 
-  eventMapper(event: MatchSummary): MatchSummary {
+  eventMapper(
+    event: MatchSummary,
+    options?: DeepPartial<MatchSummary>,
+  ): MatchSummary {
     let currentDate = new Date()
 
     const status =
@@ -125,6 +130,9 @@ class SurfingService implements SportService {
       event.leagueId,
       event.seasonId,
     )
+
+    // Strip out competitorDetails and tv from options to avoid type errors
+    const { competitorDetails, tv, ...otherOptions } = options || {}
 
     return {
       ...event,
@@ -153,6 +161,7 @@ class SurfingService implements SportService {
                     : undefined,
               }))
           : event.tv,
+      ...otherOptions,
     }
   }
 }

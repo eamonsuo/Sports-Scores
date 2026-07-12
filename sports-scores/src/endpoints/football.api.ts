@@ -27,6 +27,10 @@ async function fetchFootballApi(endpoint: string) {
   return res.json()
 }
 
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 export async function fetchFootballLastMatches(
   tournamentId: string,
   seasonId: string,
@@ -113,14 +117,26 @@ export async function fetchFootballMatchesByCategoryDate(
   category: string[],
   date: Date,
 ) {
-  const responses = await Promise.all(
-    category.map(
-      (cat) =>
-        fetchFootballApi(
-          `/category/${cat}/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-        ) as Promise<Sofascore_Events_Response>,
-    ),
-  )
+  const responses: (Sofascore_Events_Response | null)[] = []
+  const maxRequestsPerSecond = 4
+
+  for (let i = 0; i < category.length; i += maxRequestsPerSecond) {
+    const batch = category.slice(i, i + maxRequestsPerSecond)
+    const batchResponses = await Promise.all(
+      batch.map(
+        (cat) =>
+          fetchFootballApi(
+            `/category/${cat}/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+          ) as Promise<Sofascore_Events_Response | null>,
+      ),
+    )
+
+    responses.push(...batchResponses)
+
+    if (i + maxRequestsPerSecond < category.length) {
+      await delay(1000)
+    }
+  }
 
   return {
     events: responses.flatMap((r) => r?.events ?? []),

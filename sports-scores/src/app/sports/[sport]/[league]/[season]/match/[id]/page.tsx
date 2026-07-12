@@ -1,5 +1,6 @@
 import LadderGroupList from "@/components/all-sports/LadderGroupList"
 import MatchDetailsHero from "@/components/all-sports/MatchDetailsHero"
+import MatchPropertyList from "@/components/all-sports/MatchPropertyList"
 import ScoreBreakdown from "@/components/all-sports/ScoreBreakdown"
 import ScoreChart from "@/components/all-sports/ScoreChart"
 import Placeholder from "@/components/misc-ui/Placeholder"
@@ -17,6 +18,10 @@ export default async function Page(props: {
   const { league, season, id, sport } = await props.params
   const config = SPORT_ROUTE_CONFIG[sport as SPORT]
 
+  if (config.matchDetailsPage) {
+    return config.matchDetailsPage(league, season, id)
+  }
+
   const pageData = await config.service.matchDetails(id, league, season)
 
   if (pageData === null) {
@@ -31,11 +36,13 @@ export default async function Page(props: {
           awayInfo={pageData.matchDetails.awayTeam}
           status={pageData.matchDetails.status}
         />
-        <ScoreBreakdown
-          scoreData={pageData.scoreBreakdown}
-          homeLogo={pageData.matchDetails.homeTeam.img}
-          awayLogo={pageData.matchDetails.awayTeam.img}
-        />
+        {pageData.scoreBreakdown && (
+          <ScoreBreakdown
+            scoreData={pageData.scoreBreakdown}
+            homeLogo={pageData.matchDetails.homeTeam.img}
+            awayLogo={pageData.matchDetails.awayTeam.img}
+          />
+        )}
         {pageData.scoreEvents && (
           <ScoreChart
             scoreDifference={pageData.scoreEvents}
@@ -43,6 +50,11 @@ export default async function Page(props: {
             awayLogo={pageData.matchDetails.awayTeam.img}
           />
         )}
+        <MatchPropertyList
+          startDate={pageData.matchDetails.startDate}
+          endDate={pageData.matchDetails.endDate}
+          properties={pageData.matchDetails.properties}
+        />
       </div>
     )
   } else if ("standings" in pageData && pageData.standings !== null) {

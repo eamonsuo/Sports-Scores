@@ -22,6 +22,9 @@ import {
   LeagueSeasonConfig,
   MatchDetail,
   Matches,
+  MatchLineup,
+  MatchProperties,
+  MatchProperty,
   MatchStatus,
   MatchSummary,
   PeriodScore,
@@ -29,12 +32,14 @@ import {
   SportService,
   SportsLadder,
   Standings,
-  TeamScoreDetails,
+  TeamMatchDetail,
 } from "@/types/misc"
 import { PlayoffPictureStanding } from "@/types/playoff-picture"
 import {
   PeriodKey,
   Sofascore_Event,
+  Sofascore_Lineup,
+  Sofascore_LineupPlayer,
   Sofascore_Stage,
   Sofascore_StageStandingRow,
   Sofascore_Standing,
@@ -44,7 +49,7 @@ import {
   SofascoreStagesAPI,
 } from "@/types/sofascore"
 import { TZDate } from "@date-fns/tz/date"
-import { addHours, isSameDay } from "date-fns"
+import { addHours, isSameDay, isWithinInterval } from "date-fns"
 import { matchSummariesByTournament } from "./dataverse.service"
 
 export type ScoreBreakdownConfig = {
@@ -142,7 +147,17 @@ export abstract class SofascoreSport implements SportService {
     matches.events = matches.events
       .filter((item) => {
         const eventDate = new TZDate(item.startTimestamp * 1000, timezone)
-        return isSameDay(eventDate, date)
+        const eventEndDate = item.endTimestamp
+          ? new TZDate(item.endTimestamp * 1000, timezone)
+          : null
+
+        // Check if the event start/end date is today OR today is between the start and end date
+        return (
+          isSameDay(eventDate, date) ||
+          (eventEndDate &&
+            (isWithinInterval(date, { start: eventDate, end: eventEndDate }) ||
+              isSameDay(eventEndDate, date)))
+        )
       })
       .filter(
         (item) =>
@@ -226,16 +241,60 @@ export abstract class SofascoreSport implements SportService {
     }
   }
 
-  async matchDetails(matchId: string): Promise<MatchDetail | null> {
-    const match = await this.apiEndpoints.fetchEventDetails(matchId)
-    const incidents = await this.apiEndpoints.fetchEventIncidents(matchId)
+  async matchDetails(
+    matchId: string,
+    leagueId?: string,
+    seasonId?: string,
+    dataOptions: {
+      details?: boolean
+      incidents?: boolean
+      lineups?: boolean
+    } = { details: true, incidents: true, lineups: true },
+  ): Promise<TeamMatchDetail> {
+    // Make requests
+    const [match, incidents, lineups] = await Promise.all([
+      dataOptions.details
+        ? this.apiEndpoints.fetchEventDetails(matchId)
+        : Promise.resolve(null),
+      dataOptions.incidents
+        ? this.apiEndpoints.fetchEventIncidents(matchId)
+        : Promise.resolve(null),
+      dataOptions.lineups
+        ? this.apiEndpoints.fetchEventLineups(matchId)
+        : Promise.resolve(null),
+    ])
 
+    // Extract responses
     const matchDetails = match?.event
     const scoreIncidents = incidents?.incidents
       ? incidents?.incidents
           .filter((item) => item.incidentType === "goal")
           .toReversed()
       : null
+    const matchLineups = lineups ? [lineups.home, lineups.away] : undefined
+
+    // Map responses
+    const mappedMatchDetails = this.matchDetailsMapper(matchDetails)
+    const mappedMatchLineups =
+      matchLineups && matchLineups.map(this.matchLineupsMapper)
+
+    // Merge details if available
+    mappedMatchDetails.properties.push({
+      label: "Home Team",
+      value: mappedMatchLineups
+        ? mappedMatchLineups[0].startingPlayers
+            .map((player) => player.name)
+            .join(", ")
+        : "No lineups available",
+    })
+    mappedMatchDetails.properties.push({
+      label: "Away Team",
+      value: mappedMatchLineups
+        ? mappedMatchLineups[1].startingPlayers
+            .map((player) => player.name)
+            .join(", ")
+        : "No lineups available",
+    })
 
     return {
       scoreEvents: !scoreIncidents
@@ -246,16 +305,9 @@ export abstract class SofascoreSport implements SportService {
               difference: (item.homeScore ?? 0) - (item.awayScore ?? 0),
             }
           }),
-      matchDetails: matchDetails
-        ? this.matchDetailsMapper(matchDetails)
-        : {
-            awayTeam: { id: "", name: "", score: "0" },
-            homeTeam: { id: "", name: "", score: "0" },
-            status: "",
-          },
-      scoreBreakdown: matchDetails
-        ? this.scoreBreakdownMapper(matchDetails)
-        : [],
+      matchDetails: mappedMatchDetails,
+      scoreBreakdown: matchDetails && this.scoreBreakdownMapper(matchDetails),
+      matchLineups: mappedMatchLineups,
     }
   }
 
@@ -309,26 +361,27 @@ export abstract class SofascoreSport implements SportService {
         name: tree.name,
         currentRound: tree.currentRound,
         matches: tree.rounds.flatMap((round, roundIndex) =>
-          round.blocks.map(
-            (match) =>
-              ({
-                id: match.blockId,
-                nextMatchId: null,
-                participants: match.participants.map((team, teamIndex) => ({
-                  id: team.team.id,
-                  isWinner: team.winner,
-                  name: team.team.name,
-                  resultText:
-                    teamIndex === 0 ? match.homeTeamScore : match.awayTeamScore,
-                  status: match.finished ? "PLAYED" : "SCHEDULED",
-                })),
-                startTime: match.seriesStartDateTimestamp?.toString(),
-                tournamentRoundText: (roundIndex + 1).toString(),
-                state: match.finished ? "PLAYED" : "SCHEDULED",
-                name: "",
-                href: `./match/${match?.events?.[0] ?? ""}`,
-              }) as BracketMatch,
-          ),
+          round.blocks.map((match) => {
+            const startDate = new Date(0)
+            startDate.setUTCSeconds(match.seriesStartDateTimestamp ?? 0)
+            return {
+              id: match.blockId,
+              nextMatchId: null,
+              participants: match.participants.map((team, teamIndex) => ({
+                id: team.team.id,
+                isWinner: team.winner,
+                name: team.team.name,
+                resultText:
+                  teamIndex === 0 ? match.homeTeamScore : match.awayTeamScore,
+                status: match.finished ? "PLAYED" : "SCHEDULED",
+              })),
+              startTime: startDate,
+              tournamentRoundText: (roundIndex + 1).toString(),
+              state: match.finished ? "PLAYED" : "SCHEDULED",
+              name: "",
+              href: `./match/${match?.events?.[0] ?? ""}`,
+            } as BracketMatch
+          }),
         ),
       }
     })
@@ -583,6 +636,8 @@ export abstract class SofascoreSport implements SportService {
             ? Math.round((item.scoresFor / item.scoresAgainst) * 100)
             : 0,
           BP: (item.points ?? 0) - item.wins * 4 - (item.draws ?? 0) * 2,
+          NR: item.noResult,
+          NRR: item.netRunRate,
         }
       }),
       placingCategories,
@@ -613,13 +668,59 @@ export abstract class SofascoreSport implements SportService {
     }
   }
 
-  protected matchDetailsMapper(matchDetails: Sofascore_Event): {
-    homeTeam: TeamScoreDetails
-    awayTeam: TeamScoreDetails
-    status: string
-  } {
+  protected matchDetailsMapper(
+    matchDetails?: Sofascore_Event,
+  ): MatchProperties {
+    if (!matchDetails) {
+      return {
+        awayTeam: { id: "", name: "", score: "0" },
+        homeTeam: { id: "", name: "", score: "0" },
+        status: "",
+        startDate: new Date(0),
+        properties: [],
+      }
+    }
+
+    const startDate = new Date(0)
+    const matchProperties: MatchProperty[] = []
+    startDate.setUTCSeconds(matchDetails?.startTimestamp ?? 0)
+    const endDate = new Date(0)
+    endDate.setUTCSeconds(matchDetails?.endTimestamp ?? 0)
+
+    if (matchDetails?.venue)
+      matchProperties.push({
+        label: "Venue",
+        value: `${matchDetails.venue.name}, ${matchDetails.venue.city.name}, ${matchDetails.venue.country.name}`,
+      })
+    if (matchDetails?.tossWin)
+      matchProperties.push({
+        label: "Toss",
+        value: `${matchDetails.tossWin} chose to ${matchDetails.tossDecision === "Bowling" ? "Bowl" : "Bat"}`,
+      })
+    if (matchDetails?.umpire1Name)
+      matchProperties.push({
+        label: "Umpires",
+        value: `${matchDetails.umpire1Name}, ${matchDetails.umpire2Name ?? ""}`,
+      })
+    if (matchDetails?.tvUmpireName)
+      matchProperties.push({
+        label: "3rd Umpire",
+        value: `${matchDetails.tvUmpireName}`,
+      })
+    if (matchDetails?.referee)
+      matchProperties.push({
+        label:
+          matchDetails.referee.sport.name === "Cricket"
+            ? "Match Referee"
+            : "Referee",
+        id: matchDetails.referee.id.toString(),
+        value: matchDetails.referee.name,
+      })
+
     return {
       status: `${matchDetails?.status.description}`,
+      startDate: startDate,
+      endDate: matchDetails?.endTimestamp ? endDate : undefined,
       homeTeam: {
         id: matchDetails?.homeTeam.id?.toString() ?? "",
         name: shortenTeamNames(matchDetails?.homeTeam.name ?? ""),
@@ -632,6 +733,7 @@ export abstract class SofascoreSport implements SportService {
         score: matchDetails?.awayScore?.current?.toString() ?? "0",
         img: resolveSportImage(matchDetails?.awayTeam.name),
       },
+      properties: matchProperties,
     }
   }
 
@@ -669,6 +771,37 @@ export abstract class SofascoreSport implements SportService {
     }
 
     return breakdown
+  }
+
+  protected matchLineupsMapper(lineups: Sofascore_Lineup): MatchLineup {
+    function mapPlayer(player: Sofascore_LineupPlayer) {
+      return {
+        id: player.player.id.toString(),
+        name: player.player.name + (player.captain ? " (c)" : ""),
+        position: player.position,
+        playerNumber: player.shirtNumber?.toString() ?? player.jerseyNumber,
+        starter: player.substitute === false,
+      }
+    }
+
+    return {
+      teamName: lineups?.team?.name ?? "",
+      startingPlayers: lineups.players
+        .filter((player) => player.substitute === false)
+        .map(mapPlayer),
+      otherPlayers: lineups.players
+        .filter((player) => player.substitute === true)
+        .map(mapPlayer)
+        .concat((lineups?.substitutes ?? []).map(mapPlayer)),
+      coaches: (lineups?.supportStaff ?? []).map((player) => ({
+        id: player.id.toString(),
+        name: player.name,
+        position: player.role,
+        playerNumber: undefined,
+        starter: false,
+        captain: false,
+      })),
+    }
   }
 }
 

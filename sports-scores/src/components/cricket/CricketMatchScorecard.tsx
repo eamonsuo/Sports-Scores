@@ -1,41 +1,35 @@
-import ClientSportsPage from "../all-sports/ClientSportsPage"
-import Placeholder from "../misc-ui/Placeholder"
-import CricketScorecardBat, {
+import {
   CricketScorecardBatProps,
-} from "./CricketScorecardBat"
-import CricketScorecardBowl, {
   CricketScorecardBowlProps,
-} from "./CricketScorecardBowl"
+  CricketScorecardPage,
+} from "@/types/cricket"
+import ComponentList from "../misc-ui/ComponentList"
+import Placeholder from "../misc-ui/Placeholder"
+import CricketScorecardBat from "./CricketScorecardBat"
+import CricketScorecardBowl from "./CricketScorecardBowl"
 
 //TODO: Add fall of wickets
 
-export default function CricketMatchScorecardPage({
+export default function CricketMatchScorecard({
   data,
   matchState,
-}: {
-  data: {
-    inningLabel: string
-    inningBatters: CricketScorecardBatProps
-    inningBowlers: CricketScorecardBowlProps
-  }[]
-  matchState: "LIVE" | "COMPLETED"
-}) {
+}: CricketScorecardPage) {
   if (data.length === 0) {
     return <Placeholder>No Scorecard Details</Placeholder>
   }
 
   let scorecards = createScorecardComponents(data)
   return (
-    <div className="flex-1 overflow-y-auto">
-      <ClientSportsPage
-        options={scorecards}
-        defaultState={
-          matchState === "LIVE"
-            ? scorecards[scorecards.length - 1].state
-            : scorecards[0].state
-        }
-      />
-    </div>
+    <ComponentList
+      labels={scorecards.map((item) => item.btnLabel)}
+      curItem={
+        matchState === "LIVE"
+          ? scorecards[scorecards.length - 1].state
+          : scorecards[0].state
+      }
+    >
+      {scorecards.map((item) => item.component)}
+    </ComponentList>
   )
 }
 
@@ -56,7 +50,7 @@ function createScorecardComponents(
           <CricketScorecardBowl data={item.inningBowlers} />
         </div>
       ),
-      state: item.inningLabel.toString(),
+      state: item.inningLabel,
     }
   })
 }

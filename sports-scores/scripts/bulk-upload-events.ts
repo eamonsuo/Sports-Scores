@@ -122,6 +122,10 @@ type LeagueAdapter = {
   ) => Promise<MatchSummary[]>
 }
 
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 // ---------------------------------------------------------------------------
 // Sofascore adapter factory
 // ---------------------------------------------------------------------------
@@ -493,6 +497,7 @@ async function fetchAllPages(
   while (true) {
     console.log(`Fetching ${label} events page ${page}...`)
     const data = await fn(leagueId, seasonId, page)
+    await sleep(600)
     if (!data || data.events.length === 0) break
     events.push(...data.events)
     if (!data.hasNextPage) break

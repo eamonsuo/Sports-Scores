@@ -1,14 +1,6 @@
 import { FALLBACK_IMAGE } from "@/lib/constants"
+import { CricketScorecardBowlProps } from "@/types/cricket"
 import Image from "next/image"
-
-export type CricketScorecardBowlProps = {
-  overs: number
-  runs: number
-  wickets: number
-  economy: number
-  image?: string
-  name: string
-}[]
 
 export default async function CricketScorecardBowl({
   data,
@@ -31,14 +23,16 @@ export default async function CricketScorecardBowl({
         {data.map((item) => (
           <tr key={item.name} className="border">
             <td className="ps-2">{data.indexOf(item) + 1}</td>
-            <td className="flex gap-2 py-2 text-left">
-              <Image
-                src={item.image ?? FALLBACK_IMAGE}
-                alt=""
-                width={30}
-                height={30}
-                style={{ width: "10px", height: "auto" }}
-              ></Image>{" "}
+            <td className="flex gap-2 p-2 text-left">
+              {item.image && (
+                <Image
+                  src={item.image ?? FALLBACK_IMAGE}
+                  alt=""
+                  width={30}
+                  height={30}
+                  style={{ width: "10px", height: "auto" }}
+                ></Image>
+              )}
               {item.name}
             </td>
             <td>{item.overs}</td>

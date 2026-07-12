@@ -1,15 +1,15 @@
 import { updateQuota } from "@/lib/projUtils"
 import {
-  Cricket_LiveScoreAPI_LeaguesListPopular,
-  Cricket_LiveScoreAPI_MatchesGetInnings,
-  Cricket_LiveScoreAPI_MatchesGetScoreBoard,
-  Cricket_LiveScoreAPI_MatchesListByDate,
-  Cricket_LiveScoreAPI_MatchesListByLeague,
-  Cricket_LiveScoreAPI_TeamDetails,
+  Sofascore_Cricket_Incidents_Response,
+  Sofascore_Cricket_MatchInnings_Response,
 } from "@/types/cricket"
 import { SPORT } from "@/types/misc"
-import { Sofascore_Events_Response } from "@/types/sofascore"
-import { format } from "date-fns/format"
+import {
+  Sofascore_Event_Response,
+  Sofascore_EventLineups_Response,
+  Sofascore_Events_Response,
+  Sofascore_TournamentCupTrees_Response,
+} from "@/types/sofascore"
 
 const SERIES_IDS = [
   1445395, //Darwin T20 Series
@@ -35,7 +35,7 @@ async function fetchCricketApi(endpoint: string) {
     },
   })
 
-  if (!res.ok) {
+  if (!res.ok || res.status === 204) {
     return null
   }
 
@@ -44,6 +44,10 @@ async function fetchCricketApi(endpoint: string) {
   return res.json()
 }
 
+/**
+ * LIVE SCORE API ENDPOINTS
+ */
+/*
 export async function fetchCricketMyTeams() {
   let matches: Cricket_LiveScoreAPI_TeamDetails[] = []
 
@@ -73,30 +77,13 @@ export async function fetchCricketMatchesByDateLiveScore(date: Date) {
   )) as Cricket_LiveScoreAPI_MatchesListByDate
 }
 
-export async function fetchCricketMatchesByDateSofascore(date: Date) {
-  const rawFixtures = await fetch(
-    `https://cricketapi21.p.rapidapi.com/api/cricket/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-    {
-      method: "GET",
-      headers: {
-        "X-RapidAPI-Key": process.env.RapidAPIKey ?? "",
-      },
-    },
-  )
-  if (!rawFixtures.ok) {
-    return null
-  }
-  updateQuota(rawFixtures, SPORT.CRICKET)
-  return (await rawFixtures.json()) as Sofascore_Events_Response
-}
-
 export async function fetchCricketMatchInnings(id: string) {
   return (await fetchCricketApi(
     `/matches/v2/get-innings?Category=cricket&Eid=${id}`,
   )) as Cricket_LiveScoreAPI_MatchesGetInnings
 }
 
-export async function fetchCricketMatchDetails(id: string) {
+export async function OLD_fetchCricketMatchDetails(id: string) {
   return (await fetchCricketApi(
     `/matches/v2/get-scoreboard?Category=cricket&Eid=${id}`,
   )) as Cricket_LiveScoreAPI_MatchesGetScoreBoard
@@ -109,3 +96,117 @@ export async function fetchCricketSeriesMatches(ccd: string, scd: string) {
 }
 
 export async function fetchCricketSeriesStandings(url: string) {}
+*/
+
+/**
+ * SOFASCORE ENDPOINTS
+ */
+import {
+  Sofascore_EventPage_Response,
+  Sofascore_TotalStandings_Response,
+} from "@/types/sofascore"
+
+export async function fetchCricketLastMatches(
+  tournamentId: string,
+  seasonId: string,
+  pageNumber: number = 0,
+) {
+  return (await fetchCricketApi(
+    `/cricket/tournament/${tournamentId}/season/${seasonId}/matches/last/${pageNumber}`,
+  )) as Sofascore_EventPage_Response
+}
+
+export async function fetchCricketNextMatches(
+  tournamentId: string,
+  seasonId: string,
+  pageNumber: number = 0,
+) {
+  return (await fetchCricketApi(
+    `/cricket/tournament/${tournamentId}/season/${seasonId}/matches/next/${pageNumber}`,
+  )) as Sofascore_EventPage_Response
+}
+
+export async function fetchCricketTeamLastMatches(
+  teamId: string,
+  pageNumber: number = 0,
+) {
+  return (await fetchCricketApi(
+    `/cricket/team/${teamId}/matches/previous/${pageNumber}`,
+  )) as Sofascore_EventPage_Response
+}
+
+export async function fetchCricketTeamNextMatches(
+  teamId: string,
+  pageNumber: number = 0,
+) {
+  return (await fetchCricketApi(
+    `/cricket/team/${teamId}/matches/next/${pageNumber}`,
+  )) as Sofascore_EventPage_Response
+}
+
+export async function fetchCricketStandings(
+  tournamentId: string,
+  seasonId: string,
+) {
+  return (await fetchCricketApi(
+    `/cricket/tournament/${tournamentId}/season/${seasonId}/standings/total`,
+  )) as Sofascore_TotalStandings_Response
+}
+
+export async function fetchCricketMatchDetails(matchId: string) {
+  return (await fetchCricketApi(
+    `/cricket/match/${matchId}`,
+  )) as Sofascore_Event_Response
+}
+
+export async function fetchCricketMatchIncidents(matchId: string) {
+  return (await fetchCricketApi(
+    `/cricket/match/${matchId}/incidents`,
+  )) as Sofascore_Cricket_Incidents_Response
+}
+
+export async function fetchCricketMatchLineups(matchId: string) {
+  return (await fetchCricketApi(
+    `/cricket/match/${matchId}/lineups`,
+  )) as Sofascore_EventLineups_Response
+}
+
+export async function fetchCricketMatchInnings(matchId: string) {
+  return (await fetchCricketApi(
+    `/cricket/match/${matchId}/innings`,
+  )) as Sofascore_Cricket_MatchInnings_Response
+}
+
+//Deprecated
+export async function fetchCricketMatchesByDate(date: Date) {
+  return (await fetchCricketApi(
+    `/cricket/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+  )) as Sofascore_Events_Response
+}
+
+export async function fetchCricketCupTrees(
+  tournamentId: string,
+  seasonId: string,
+) {
+  return (await fetchCricketApi(
+    `/cricket/tournament/${tournamentId}/season/${seasonId}/cuptrees`,
+  )) as Sofascore_TournamentCupTrees_Response
+}
+
+export async function fetchCricketMatchesByCategoryDate(
+  category: string[],
+  date: Date,
+) {
+  const responses = await Promise.all(
+    category.map(
+      (cat) =>
+        fetchCricketApi(
+          `/cricket/category/${cat}/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+        ) as Promise<Sofascore_Events_Response>,
+    ),
+  )
+
+  return {
+    events: responses.flatMap((r) => r?.events ?? []),
+  } as Sofascore_Events_Response
+}

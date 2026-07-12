@@ -68,14 +68,23 @@ export default function MatchSummaryCard({
               />
             )}
           </div>
-          <p
-            className={clsx(
-              "content-center dark:text-neutral-400",
-              winner === 1 && "font-bold",
+          <div className="flex flex-col items-center justify-center">
+            {Array.isArray(homeDetails?.score) ? (
+              <p className="content-center text-[9px] dark:text-neutral-400">
+                {homeDetails?.score}
+              </p>
+            ) : (
+              <p
+                className={cn(
+                  "content-center dark:text-neutral-400",
+                  winner === 1 && "font-bold",
+                )}
+              >
+                {homeDetails?.score}
+              </p>
             )}
-          >
-            {homeDetails?.score}
-          </p>
+          </div>
+
           <div className="flex items-center justify-center overflow-visible">
             {timer.display && (
               <Timer

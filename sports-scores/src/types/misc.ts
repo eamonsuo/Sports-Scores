@@ -160,6 +160,11 @@ export interface SportService {
     matchId: string,
     leagueId?: string,
     seasonId?: string,
+    dataOptions?: {
+      details?: boolean
+      incidents?: boolean
+      lineups?: boolean
+    },
   ): Promise<MatchDetail | null>
   standings(leagueId: string, seasonId: string): Promise<Standings | null>
   brackets(leagueId: string, seasonId: string): Promise<Brackets | null>
@@ -174,14 +179,42 @@ export interface Matches {
   currentRound: string
 }
 
+export interface MatchProperty {
+  id?: string
+  label: string
+  value: string
+}
+
+export interface MatchProperties {
+  homeTeam: TeamScoreDetails
+  awayTeam: TeamScoreDetails
+  status: string
+  startDate: Date
+  endDate?: Date
+  properties: MatchProperty[]
+}
+
+export interface LineupPlayer {
+  id: string
+  name: string
+  position?: string
+  playerNumber?: string
+  starter?: boolean
+}
+
+export interface MatchLineup {
+  teamName: string
+  startingPlayers: LineupPlayer[]
+  otherPlayers?: LineupPlayer[]
+  coaches?: LineupPlayer[]
+}
+
 export interface TeamMatchDetail {
-  matchDetails: {
-    homeTeam: TeamScoreDetails
-    awayTeam: TeamScoreDetails
-    status: string
-  }
-  scoreBreakdown: PeriodScore[]
+  matchDetails: MatchProperties
+  matchLineups?: MatchLineup[]
+  scoreBreakdown?: PeriodScore[]
   scoreEvents?: ScoreDifference[]
+  matchIncidents?: any
 }
 
 export interface StageMatchDetail {
@@ -281,6 +314,10 @@ export enum TVChannel {
   DISNEY_PLUS = "Disney+",
   BEIN_SPORTS = "beIN Sports",
   DAZN = "DAZN",
+  AMAZON_PRIME_VIDEO = "Amazon Prime Video",
+  FOX_SPORTS = "Fox Sports",
+  YOUTUBE = "YouTube",
+  OTHER = "Other",
 }
 
 export enum CountryFlagCode {
