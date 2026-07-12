@@ -48,6 +48,7 @@ class RugbyLeagueService extends SofascoreSport {
           "match-incidents",
           fetchRugbyLeagueMatchIncidents,
         ),
+        fetchEventLineups: async () => null,
         fetchStandingsTotal: withDevCache(
           "rugby-league",
           "standings",

@@ -50,6 +50,7 @@ class FootballService extends SofascoreSport {
           "match-incidents",
           fetchFootballMatchIncidents,
         ),
+        fetchEventLineups: async () => null,
         fetchStandingsTotal: withDevCache(
           "football",
           "standings",

@@ -47,6 +47,7 @@ class RugbyUnionService extends SofascoreSport {
           "match-incidents",
           fetchRugbyLeagueMatchIncidents,
         ),
+        fetchEventLineups: async () => null,
         fetchStandingsTotal: withDevCache(
           "rugby-union",
           "standings",

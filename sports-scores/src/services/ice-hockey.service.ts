@@ -47,6 +47,7 @@ class IceHockeyService extends SofascoreSport {
           "match-incidents",
           fetchIceHockeyMatchIncidents,
         ),
+        fetchEventLineups: async () => null,
         fetchStandingsTotal: withDevCache(
           "ice-hockey",
           "standings",

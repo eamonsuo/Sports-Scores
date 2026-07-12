@@ -48,6 +48,7 @@ class AussieRulesService extends SofascoreSport {
           "match-incidents",
           fetchMatchIncidents,
         ),
+        fetchEventLineups: async () => null,
         fetchStandingsTotal: withDevCache(
           "aussie-rules",
           "standings",
