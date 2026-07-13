@@ -68,18 +68,11 @@ export default function MatchSummaryCard({
               />
             )}
           </div>
-          <div className="flex flex-col items-center justify-center">
+          <div className="flex flex-col content-center text-left dark:text-neutral-400">
             {Array.isArray(homeDetails?.score) ? (
-              <p className="content-center text-[9px] dark:text-neutral-400">
-                {homeDetails?.score}
-              </p>
+              <p className="text-[9px]">{homeDetails?.score}</p>
             ) : (
-              <p
-                className={cn(
-                  "content-center dark:text-neutral-400",
-                  winner === 1 && "font-bold",
-                )}
-              >
+              <p className={cn(winner === 1 && "font-bold")}>
                 {homeDetails?.score}
               </p>
             )}

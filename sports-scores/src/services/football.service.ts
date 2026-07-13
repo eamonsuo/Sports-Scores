@@ -90,11 +90,11 @@ class FootballService extends SofascoreSport {
       competitorDetails: [
         {
           ...options?.competitorDetails?.[0],
-          score: `${event.homeScore.display}${event.homeScore.penalties ? ` (${event.homeScore.penalties})` : ""}`,
+          score: `${event.homeScore.display ?? 0}${event.homeScore.penalties ? ` (${event.homeScore.penalties})` : ""}`,
         },
         {
           ...options?.competitorDetails?.[1],
-          score: `${event.awayScore.display}${event.awayScore.penalties ? ` (${event.awayScore.penalties})` : ""}`,
+          score: `${event.awayScore.display ?? 0}${event.awayScore.penalties ? ` (${event.awayScore.penalties})` : ""}`,
         },
       ],
       summaryText: setMatchSummary(
