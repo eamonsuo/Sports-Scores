@@ -20,10 +20,7 @@ export default function LadderGroupList({
   return (
     <ComponentList labels={groupLabels} curItem={curGroup} buttonStyle="pill">
       {data.map((item) => (
-        <div
-          key={item.label + "-ladders"}
-          className="w-full flex-shrink-0 snap-start overflow-y-auto"
-        >
+        <>
           {item.tables.map((table, index) => (
             <Ladder
               key={index}
@@ -37,7 +34,7 @@ export default function LadderGroupList({
               }
             />
           ))}
-        </div>
+        </>
       ))}
     </ComponentList>
   )

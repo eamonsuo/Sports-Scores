@@ -3,7 +3,7 @@ import { FALLBACK_IMAGE } from "@/lib/constants"
 import { ScoreDifference } from "@/types/misc"
 import Image from "next/image"
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
-import { ChartConfig, ChartContainer } from "../zzzshadcn/chart"
+import { ChartConfig, ChartContainer } from "../shadcn/chart"
 
 export default function ScoreChart({
   scoreDifference,
@@ -38,7 +38,7 @@ export default function ScoreChart({
 
   return (
     <>
-      <p className="m-4">Score Trend</p>
+      {/* <p className="m-4">Score Trend</p> */}
       <div className="mx-4 flex gap-2">
         <div className="flex flex-col place-content-around">
           <Image

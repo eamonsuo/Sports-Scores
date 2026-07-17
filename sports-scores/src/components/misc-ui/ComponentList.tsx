@@ -1,6 +1,6 @@
 "use client"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/shadcnUtils"
 import { ReactNode, useEffect, useRef, useState } from "react"
 
 export type ButtonStyle = "pill" | "rectangle"
@@ -20,8 +20,6 @@ export default function ComponentList({
   const btnListRef = useRef<HTMLDivElement>(null)
   const initialBtn = useRef<HTMLButtonElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
-
-  console.log(buttonStyle)
 
   useEffect(() => {
     //Ensure the curRound is scrolled into the centre of view on page load
@@ -99,35 +97,37 @@ export default function ComponentList({
 
   return (
     <>
-      <div
-        ref={btnListRef}
-        className={cn(
-          "hideScroll mx-4 mb-2 flex overflow-x-auto",
-          buttonStyle === "pill" && "gap-1",
-          buttonStyle === "rectangle" &&
-            "rounded-lg bg-gray-200 p-1 dark:bg-neutral-800",
-        )}
-      >
-        {labels.map((label) => (
-          <button
-            onClick={() => handleRoundClick(label)}
-            key={label}
-            ref={label === curItem ? initialBtn : null}
-            className={cn(
-              buttonStyle === "pill" &&
-                "inline-flex items-center justify-center rounded-full px-2.5 py-0.5",
-              buttonStyle === "rectangle" &&
-                "flex-1 place-content-center rounded-md bg-white px-2 py-1 text-center text-black shadow-sm focus:relative dark:bg-neutral-600 dark:text-neutral-200",
-              label === item &&
-                "bg-gray-300 text-black dark:bg-neutral-600 dark:text-neutral-200",
-              label !== item &&
-                "bg-gray-100 text-gray-700 dark:bg-neutral-800 dark:text-neutral-400",
-            )}
-          >
-            <p className="whitespace-nowrap text-sm">{label}</p>
-          </button>
-        ))}
-      </div>
+      {labels.length > 1 && (
+        <div
+          ref={btnListRef}
+          className={cn(
+            "hideScroll mx-4 mb-2 flex overflow-x-auto",
+            buttonStyle === "pill" && "gap-1",
+            buttonStyle === "rectangle" &&
+              "rounded-lg bg-gray-200 p-1 dark:bg-neutral-800",
+          )}
+        >
+          {labels.map((label) => (
+            <button
+              onClick={() => handleRoundClick(label)}
+              key={label}
+              ref={label === curItem ? initialBtn : null}
+              className={cn(
+                buttonStyle === "pill" &&
+                  "inline-flex items-center justify-center rounded-full px-2.5 py-0.5",
+                buttonStyle === "rectangle" &&
+                  "flex-1 place-content-center rounded-md bg-white px-2 py-1 text-center text-black shadow-sm focus:relative dark:bg-neutral-600 dark:text-neutral-200",
+                label === item &&
+                  "bg-gray-300 text-black dark:bg-neutral-600 dark:text-neutral-200",
+                label !== item &&
+                  "bg-gray-100 text-gray-700 dark:bg-neutral-800 dark:text-neutral-400",
+              )}
+            >
+              <p className="whitespace-nowrap text-sm">{label}</p>
+            </button>
+          ))}
+        </div>
+      )}
 
       <div
         ref={scrollContainerRef}

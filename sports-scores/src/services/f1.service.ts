@@ -104,7 +104,7 @@ class F1Service implements SportService {
     }
   }
 
-  async matchesByTeam(teamId: string): Promise<Matches | null> {
+  async matchesByTeam(id: string): Promise<Matches | null> {
     return null
   }
   async matchDetails(matchId: string): Promise<MatchDetail | null> {
@@ -203,7 +203,7 @@ class F1Service implements SportService {
               data: rawStandings.map((item, index) => {
                 return {
                   position: Number(item.position) ?? index + 1,
-                  teamId: item.Driver.permanentNumber,
+                  id: item.Driver.permanentNumber,
                   teamName:
                     item.Driver.givenName + " " + item.Driver.familyName,
                   teamLogo: [
@@ -240,7 +240,7 @@ class F1Service implements SportService {
               data: rawStandings.map((item, index) => {
                 return {
                   position: Number(item.position) ?? index + 1,
-                  teamId: item.Constructor.constructorId,
+                  id: item.Constructor.constructorId,
                   teamName: item.Constructor.name,
                   teamLogo: resolveSportImage(item.Constructor.name),
                   Pts: item.points,
@@ -417,7 +417,7 @@ async function fetchOpenF1SessionResult(
 
     return {
       position: item.position,
-      teamId: item.driver_number,
+      id: item.driver_number,
       teamName: driverName,
       teamLogo: [
         resolveSportImage(driverName),
@@ -458,7 +458,7 @@ function mapJolpicaRaceResults(
 
     return {
       position: Number(item.position),
-      teamId: item.number,
+      id: item.number,
       teamName: driverName,
       teamLogo: [
         resolveSportImage(driverName),
@@ -502,7 +502,7 @@ function mapJolpicaQualifyingResults(
 
     return {
       position: Number(item.position),
-      teamId: item.number,
+      id: item.number,
       teamName: driverName,
       teamLogo: [
         resolveSportImage(driverName),

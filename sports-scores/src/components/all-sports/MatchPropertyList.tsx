@@ -13,11 +13,11 @@ export default function MatchPropertyList({
   properties: MatchProperty[]
 }) {
   return (
-    <table className="m-4 dark:text-neutral-500">
+    <table className="m-4 gap-1 dark:text-neutral-500">
       <tbody>
         <tr>
           <td>Date</td>
-          <td suppressHydrationWarning className="py-1 text-sm">
+          <td suppressHydrationWarning className="p-1 ps-3 text-sm">
             {formatDateLong(startDate)}
             {endDate ? ` - ${formatDateLong(endDate)}` : ""}
           </td>
@@ -25,7 +25,7 @@ export default function MatchPropertyList({
         {properties.map((property) => (
           <tr key={property.label}>
             <td>{property.label}</td>
-            <td className="py-1 text-sm">{property.value}</td>
+            <td className="p-1 ps-3 text-sm">{property.value}</td>
           </tr>
         ))}
       </tbody>

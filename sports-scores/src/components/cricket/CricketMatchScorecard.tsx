@@ -1,9 +1,6 @@
-import {
-  CricketScorecardBatProps,
-  CricketScorecardBowlProps,
-  CricketScorecardPage,
-} from "@/types/cricket"
+import { CricketScorecardInning, CricketScorecardPage } from "@/types/cricket"
 import ComponentList from "../misc-ui/ComponentList"
+import DataTable from "../misc-ui/DataTable"
 import Placeholder from "../misc-ui/Placeholder"
 import CricketScorecardBat from "./CricketScorecardBat"
 import CricketScorecardBowl from "./CricketScorecardBowl"
@@ -11,7 +8,7 @@ import CricketScorecardBowl from "./CricketScorecardBowl"
 //TODO: Add fall of wickets
 
 export default function CricketMatchScorecard({
-  data,
+  innings: data,
   matchState,
 }: CricketScorecardPage) {
   if (data.length === 0) {
@@ -33,13 +30,7 @@ export default function CricketMatchScorecard({
   )
 }
 
-function createScorecardComponents(
-  inningsData: {
-    inningLabel: string
-    inningBatters: CricketScorecardBatProps
-    inningBowlers: CricketScorecardBowlProps
-  }[],
-) {
+function createScorecardComponents(inningsData: CricketScorecardInning[]) {
   return inningsData.map((item) => {
     return {
       btnLabel: `${item.inningLabel}`,
@@ -48,6 +39,20 @@ function createScorecardComponents(
           <CricketScorecardBat data={item.inningBatters} />
           <div className="py-6"></div>
           <CricketScorecardBowl data={item.inningBowlers} />
+          <div className="py-6"></div>
+          <DataTable
+            tableName={item.fow.tableName}
+            data={item.fow.data}
+            headings={item.fow.headings}
+            columnClassName={item.fow.columnClassName}
+          />
+          <div className="py-6"></div>
+          <DataTable
+            tableName={item.partnerships.tableName}
+            data={item.partnerships.data}
+            headings={item.partnerships.headings}
+            columnClassName={item.partnerships.columnClassName}
+          />
         </div>
       ),
       state: item.inningLabel,

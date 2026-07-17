@@ -29,7 +29,7 @@ export const CRICKET_CATEGORIES = [
   "1347", // Australia
   "1343", // World
   "1350", // India
-  "1349", // UK
+  // "1349", // UK
   // "1346", // Asia
   // "1352", // Pakistan
   // "1355", // South Africa
@@ -560,10 +560,40 @@ export const SUPER_RUGBY_TEAMS_NAME_LOGO = [
 
 export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
   // {
-  //   name: "WTC",
-  //   slug: "wtc",
+  //   name: "Internationals",
+  //   slug: "1343",
   //   seasons: [{ name: "2025-2027", slug: "" }],
   // },
+  {
+    name: "Australia - Men",
+    slug: "team/15848468",
+    seasons: [{ name: "Current", slug: "" }],
+  },
+  {
+    name: "Australia - Women",
+    slug: "team/213117",
+    seasons: [{ name: "Current", slug: "" }],
+  },
+  {
+    name: "Queensland - Men",
+    slug: "team/187753",
+    seasons: [{ name: "Current", slug: "" }],
+  },
+  {
+    name: "Queensland - Women",
+    slug: "team/413997",
+    seasons: [{ name: "Current", slug: "" }],
+  },
+  {
+    name: "Brisbane Heat - Men",
+    slug: "team/187736",
+    seasons: [{ name: "Current", slug: "" }],
+  },
+  {
+    name: "Brisbane Heat - Women",
+    slug: "team/274884",
+    seasons: [{ name: "Current", slug: "" }],
+  },
   {
     name: "Sheffield Shield",
     slug: "11160",
@@ -613,7 +643,76 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "ICC Women's T20 World Cup",
+    name: "T20Is - Men",
+    slug: "11191",
+    seasons: [
+      { name: "2026.1", slug: "77257" },
+      { name: "2026.2", slug: "93728" },
+    ],
+  },
+  {
+    name: "T20Is - Women",
+    slug: "11222",
+    seasons: [{ name: "2026", slug: "74040" }],
+  },
+  {
+    name: "ODIs - Men",
+    slug: "11190",
+    seasons: [{ name: "2026", slug: "77922" }],
+  },
+  {
+    name: "ODIs - Women",
+    slug: "18793",
+    seasons: [
+      { name: "2026.1", slug: "74041" },
+      { name: "2026.2", slug: "90761" },
+      { name: "2026.3", slug: "93050" },
+      { name: "2026.4", slug: "94104" },
+    ],
+  },
+  {
+    name: "WTC",
+    // icon:
+    slug: "18833",
+    seasons: [
+      { name: "2027", slug: "92047" },
+      { name: "2026.1", slug: "79087" },
+      { name: "2026.2", slug: "93372" },
+      { name: "2026.3", slug: "95102" },
+      { name: "2026.4", slug: "95703" },
+    ],
+  },
+  {
+    name: "Test Matches - Men",
+    slug: "11189",
+    seasons: [
+      { name: "2027", slug: "92047" },
+      { name: "2026", slug: "79087" },
+      { name: "2026", slug: "95102" },
+    ],
+  },
+  {
+    name: "Test Matches - Women",
+    slug: "18794",
+    seasons: [{ name: "2026", slug: "74042" }],
+  },
+  {
+    name: "ICC ODI World Cup - Men",
+    slug: "20661",
+    seasons: [{ name: "2023", slug: "52509" }],
+  },
+  {
+    name: "ICC ODI World Cup - Women",
+    slug: "16735",
+    seasons: [{ name: "2025", slug: "76904" }],
+  },
+  {
+    name: "ICC T20 World Cup - Men",
+    slug: "11185",
+    seasons: [{ name: "2026", slug: "86747" }],
+  },
+  {
+    name: "ICC T20 World Cup - Women",
     slug: "11183",
     seasons: [
       {
@@ -624,20 +723,12 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "T20 Internationals",
-    slug: "11191",
-    seasons: [
-      { name: "2026.1", slug: "77257" },
-      { name: "2026.2", slug: "93728" },
-    ],
-  },
-  {
     name: "IPL",
-    slug: "india",
+    slug: "11165",
     seasons: [
       {
         name: "2026",
-        slug: "ipl",
+        slug: "91185",
         ladderConfig: {
           ladderGroup: [
             { placingCategories: CRICKET_PLAYOFFS_TOP_4_LADDER_CONFIG },
@@ -647,14 +738,53 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
+    name: "WPL",
+    slug: "19974",
+    seasons: [
+      {
+        name: "2026",
+        slug: "86861",
+        ladderConfig: {
+          ladderGroup: [
+            { placingCategories: CRICKET_PLAYOFFS_TOP_4_LADDER_CONFIG },
+          ],
+        },
+      },
+    ],
+  },
+  {
+    name: "Ranji Trophy",
+    slug: "18682",
+    seasons: [{ name: "25/26", slug: "77592" }],
+    excludeFromToday: true,
+  },
+  {
+    name: "County Championship",
+    slug: "16506",
+    seasons: [{ name: "2026", slug: "86873" }],
+    excludeFromToday: true,
+  },
+  {
     name: "The Hundred - Men",
-    slug: "the-hundred",
-    seasons: [{ name: "2026", slug: "the-hundred-men" }],
+    slug: "16710",
+    seasons: [{ name: "2026", slug: "89190" }],
   },
   {
     name: "The Hundred - Women",
-    slug: "the-hundred",
-    seasons: [{ name: "2026", slug: "the-hundred-women" }],
+    slug: "16717",
+    seasons: [{ name: "2026", slug: "89189" }],
+  },
+  {
+    name: "One Day Cup",
+    slug: "11177",
+    seasons: [{ name: "2026", slug: "86876" }],
+    excludeFromToday: true,
+  },
+  {
+    name: "T20 Blast",
+    slug: "11268",
+    seasons: [{ name: "2026", slug: "86875" }],
+    excludeFromToday: true,
   },
 ]
 
@@ -1751,6 +1881,12 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     icon: "https://r2.thesportsdb.com/images/media/team/badge/eylq8x1781926138.png",
     seasons: [{ name: "Current", slug: "" }],
   },
+  {
+    name: "Brisbane Roar - Men",
+    slug: "team/5968",
+    // icon: "https://r2.thesportsdb.com/images/media/team/badge/wwuqyr1421434817.png",
+    seasons: [{ name: "Current", slug: "" }],
+  },
   //England - category 1
   {
     name: "Premier League",
@@ -2304,6 +2440,13 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
     icon: "https://r2.thesportsdb.com/images/media/league/badge/gvz6vb1726086476.png/small",
     seasons: [
       {
+        name: "26/27",
+        slug: "96122",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
+      },
+      {
         name: "25/26",
         slug: "77205",
         ladderConfig: ladderConfigMap({
@@ -2382,6 +2525,11 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
   //     { name: "2024", slug: "57477" },
   //   ],
   // },
+  {
+    name: "Brisbane Bullets",
+    slug: "team/233139",
+    seasons: [{ name: "Current", slug: "" }],
+  },
 ]
 
 export const BASKETBALL_LEAGUES_CLIENT =

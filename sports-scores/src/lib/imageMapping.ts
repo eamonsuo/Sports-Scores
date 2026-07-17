@@ -20,7 +20,7 @@ export function resolveSportImage(
 
 export function resolveImage(teamName: string) {
   teamName = teamName.replace(
-    /\s((W|A|U19|Women|Reserve|Reserves|7s|U23)(\sW)?)$/i,
+    /\s((W|A|U19|Women|Reserve|Reserves|7s|U23|Under-19)(\sW)?)$/i,
     "",
   )
   switch (teamName) {

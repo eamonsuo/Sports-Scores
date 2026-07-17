@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/shadcnUtils"
 import { CricketInningIncident, CricketOverIncident } from "@/types/cricket"
 import ComponentList from "../misc-ui/ComponentList"
 

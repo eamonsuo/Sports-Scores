@@ -203,7 +203,7 @@ interface Sofascore_Tournament {
   name: string
   slug: string
   category: Sofascore_Category
-  uniqueTournament: Sofascore_UniqueTournament
+  uniqueTournament?: Sofascore_UniqueTournament
   priority: number
   isGroup: boolean
   isLive: boolean

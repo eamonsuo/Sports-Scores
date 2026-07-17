@@ -130,7 +130,7 @@ class GolfService implements SportService {
     }
   }
 
-  matchesByTeam(teamId: string): Promise<Matches | null> {
+  matchesByTeam(id: string): Promise<Matches | null> {
     throw new Error("Method not implemented.")
   }
 
@@ -177,7 +177,7 @@ class GolfService implements SportService {
                   let playerName = item.firstName + " " + item.lastName
                   return {
                     position: item.rank,
-                    teamId: item.playerId,
+                    id: item.playerId,
                     teamName: playerName,
                     teamLogo: resolveSportImage(playerName),
                     Total: item.totalPoints?.toString() ?? "",
@@ -279,7 +279,7 @@ class GolfService implements SportService {
                     .join(", ")
             return {
               position: item.position,
-              teamId: item.playerId + playerName,
+              id: item.playerId + playerName,
               teamName: playerName,
               teamLogo: resolveSportImage(playerName),
               Total: item.total,
@@ -305,7 +305,7 @@ class GolfService implements SportService {
             data: data.teams.map((item, idx) => {
               return {
                 position: (idx + 1).toString(),
-                teamId: item.teamId + item.name,
+                id: item.teamId + item.name,
                 teamName: item.name,
                 teamLogo: resolveSportImage(item.name),
                 Total: item.totalScore,

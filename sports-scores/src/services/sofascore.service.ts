@@ -145,6 +145,12 @@ export abstract class SofascoreSport implements SportService {
     const timezone = date instanceof TZDate ? date.timeZone : "UTC"
 
     matches.events = matches.events
+      .filter(
+        (item) =>
+          validLeagueIds.includes(
+            item.tournament?.uniqueTournament?.id ?? -1,
+          ) && item.status.type !== "canceled",
+      )
       .filter((item) => {
         const eventDate = new TZDate(item.startTimestamp * 1000, timezone)
         const eventEndDate = item.endTimestamp
@@ -159,11 +165,6 @@ export abstract class SofascoreSport implements SportService {
               isSameDay(eventEndDate, date)))
         )
       })
-      .filter(
-        (item) =>
-          validLeagueIds.includes(item.tournament.uniqueTournament.id) &&
-          item.status.type !== "canceled",
-      )
 
     if (!matches.events || matches.events.length === 0) return null
 
@@ -174,15 +175,15 @@ export abstract class SofascoreSport implements SportService {
             `${
               this.leagues.find(
                 (l) =>
-                  l.slug === event.tournament.uniqueTournament.id.toString(),
+                  l.slug === event.tournament?.uniqueTournament?.id.toString(),
               )?.name
             }` +
             (event.roundInfo?.name || event.roundInfo?.round
               ? ` - ${event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`}`
               : ""),
-          leagueSlug: `/sports/${this.sport}/${event.tournament.uniqueTournament.id}/${event.season.id}`,
+          leagueSlug: `/sports/${this.sport}/${event.tournament?.uniqueTournament?.id}/${event.season.id}`,
           leagueImg: this.leagues.find(
-            (l) => l.slug === event.tournament.uniqueTournament.id.toString(),
+            (l) => l.slug === event.tournament?.uniqueTournament?.id.toString(),
           )?.icon,
         }),
       )
@@ -224,11 +225,11 @@ export abstract class SofascoreSport implements SportService {
       .map((event) =>
         this.eventMapper(event, {
           roundLabel:
-            event.tournament.uniqueTournament.name + " " + event.season.year,
+            event.tournament?.uniqueTournament?.name + " " + event.season.year,
           leagueName: event.tournament.name + " " + event.season.year,
-          leagueSlug: `/sports/${this.sport}/${event.tournament.uniqueTournament.id}/${event.season.id}`,
+          leagueSlug: `/sports/${this.sport}/${event.tournament?.uniqueTournament?.id}/${event.season.id}`,
           leagueImg: this.leagues.find(
-            (l) => l.slug === event.tournament.uniqueTournament.id.toString(),
+            (l) => l.slug === event.tournament?.uniqueTournament?.id.toString(),
           )?.icon,
         }),
       )
@@ -432,7 +433,7 @@ export abstract class SofascoreSport implements SportService {
 
     const { tvConfig } = getSportConfigurations(
       this.leagues,
-      options?.leagueId ?? event.tournament.uniqueTournament.id.toString(),
+      options?.leagueId ?? event.tournament?.uniqueTournament?.id.toString(),
       options?.seasonId ?? event.season.id.toString(),
     )
 
@@ -478,9 +479,9 @@ export abstract class SofascoreSport implements SportService {
       venue:
         event?.venue?.name &&
         `${event?.venue?.name}, ${event?.venue?.city.name}`,
-      matchSlug: `/sports/${this.sport}/${event.tournament.uniqueTournament.id}/${event.season.id}/match/${event.id}`,
+      matchSlug: `/sports/${this.sport}/${event.tournament?.uniqueTournament?.id}/${event.season.id}/match/${event.id}`,
       seasonId: event.season.id.toString(),
-      leagueId: event.tournament.uniqueTournament.id.toString(),
+      leagueId: event.tournament?.uniqueTournament?.id.toString(),
       // leagueName: options?.leagueName ,
       // leagueSlug: options?.leagueSlug ,
       // leagueImg: FALLBACK_IMAGE,
@@ -613,7 +614,7 @@ export abstract class SofascoreSport implements SportService {
           (item.scoresFor ?? 0) - (item.scoresAgainst ?? 0)
         return {
           position: item.position,
-          teamId: item.team.id.toString(),
+          id: item.team.id.toString(),
           teamName: shortenTeamNames(item.team.name),
           teamLogo: resolveSportImage([
             item.team?.name,
@@ -1082,7 +1083,7 @@ export abstract class SofascoreStageSport implements SportService {
           data: table.map((item) => {
             return {
               position: item.position ?? "-",
-              teamId: item.team?.id?.toString() ?? "",
+              id: item.team?.id?.toString() ?? "",
               teamName: shortenTeamNames(item.team?.name ?? ""),
               teamLogo: resolveSportImage([
                 item.team?.name,
