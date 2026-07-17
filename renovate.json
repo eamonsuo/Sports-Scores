@@ -3,6 +3,6 @@
   "extends": [
     "config:recommended"
   ],
-  "baseBranchPatterns": ["dev"]
+  "baseBranchPatterns": ["general-work"]
 
 }
