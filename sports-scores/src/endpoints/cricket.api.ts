@@ -26,6 +26,29 @@ async function fetchCricketApi(endpoint: string) {
 
   updateQuota(res, SPORT.CRICKET)
 
+  const text = await res.text()
+
+  try {
+    return JSON.parse(text)
+  } catch (err) {
+    console.error("JSON parse failed", err)
+
+    const match = String(err).match(/position (\d+)/)
+    const pos = Number(match?.[1])
+
+    if (!Number.isNaN(pos)) {
+      console.log("Error position:", pos)
+      console.log(
+        text.substring(
+          Math.max(0, pos - 500),
+          Math.min(text.length, pos + 500),
+        ),
+      )
+    }
+
+    return null
+  }
+
   return res.json()
 }
 

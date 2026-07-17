@@ -11,7 +11,7 @@ import {
   RUGBY_UNION_LEAGUES,
   SURFING_TOURS,
 } from "@/lib/constants"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/shadcnUtils"
 import { SPORT } from "@/types/misc"
 import Image from "next/image"
 import { Avatar, AvatarFallback, AvatarImage } from "./Avatar"

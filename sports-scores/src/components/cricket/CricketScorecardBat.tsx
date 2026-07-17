@@ -38,7 +38,7 @@ export default async function CricketScorecardBat({
             </td>
             <td>{item.runs}</td>
             <td>{item.balls}</td>
-            <td>{item.strikeRate.toFixed(2)}</td>
+            <td>{item.strikeRate}</td>
           </tr>
         ))}
         <tr>

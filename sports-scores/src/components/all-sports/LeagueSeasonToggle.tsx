@@ -1,11 +1,11 @@
 "use client"
 
-import { Calendar } from "@/components/zzzshadcn/calendar"
+import { Calendar } from "@/components/shadcn/calendar"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/zzzshadcn/popover"
+} from "@/components/shadcn/popover"
 import {
   ClientLeagueSeasonConfig,
   LeagueSeasonConfig,
@@ -13,6 +13,7 @@ import {
 } from "@/types/misc"
 import { format } from "date-fns/format"
 import { ChevronDownIcon, ExternalLinkIcon } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -22,7 +23,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../zzzshadcn/dropdown-menu"
+} from "../shadcn/dropdown-menu"
 
 export default function LeagueSeasonToggle({
   sport,
@@ -177,13 +178,16 @@ export default function LeagueSeasonToggle({
       </Button>
       {/* League Dropdown */}
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+        <DropdownMenuTrigger>
           <Button variant="outline" className="justify-between">
             {!todayActive && selectedLeague.icon && (
-              <img
+              <Image
                 src={selectedLeague.icon}
                 alt=""
-                className="me-1 inline h-4 w-4"
+                width={56}
+                height={56}
+                style={{ width: "15px", height: "auto" }}
+                className="me-1"
               />
             )}
             {todayActive ? "League" : truncateName(selectedLeague.name)}
@@ -200,7 +204,13 @@ export default function LeagueSeasonToggle({
               onClick={() => handleLeagueChange(league)}
             >
               {league.icon && (
-                <img src={league.icon} alt="" className="inline h-4 w-4" />
+                <Image
+                  src={league.icon}
+                  alt=""
+                  width={56}
+                  height={56}
+                  style={{ width: "15px", height: "auto" }}
+                />
               )}
               {league.name}
               {league.externalURL && (
@@ -219,7 +229,7 @@ export default function LeagueSeasonToggle({
       {/* Season/Year Dropdown or Date Picker */}
       {todayActive ? (
         <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-          <PopoverTrigger asChild>
+          <PopoverTrigger>
             <Button variant="outline" className="justify-between">
               {format(selectedDate, "d MMM yy")}
               <ChevronDownIcon className="ml-2 h-4 w-4" />
@@ -235,7 +245,7 @@ export default function LeagueSeasonToggle({
         </Popover>
       ) : (
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger>
             <Button variant="outline" className="justify-between">
               {selectedSeason.name}
               <ChevronDownIcon className="ml-2 h-4 w-4" />

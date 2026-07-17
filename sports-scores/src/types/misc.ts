@@ -67,13 +67,11 @@ export interface FixtureRound {
   roundSlug?: string
 }
 
-export type LadderRow = {
-  teamId: string | number
+export interface LadderRow extends TableRow {
   teamName: string
   teamLogo?: string | string[]
   teamColour?: string
   position: number | string
-  [key: string]: string | number | undefined | string[]
 }
 
 export type LadderPlacingCategory = {
@@ -82,11 +80,9 @@ export type LadderPlacingCategory = {
   colour?: string
 }
 
-export interface SportsLadder {
-  tableName?: string
-  headings: string[]
-  data: LadderRow[]
+export interface SportsLadder extends SportsTable {
   placingCategories?: LadderPlacingCategory[]
+  data: LadderRow[]
 }
 
 export type LadderGroupConfig = {
@@ -99,6 +95,19 @@ export type LadderGroupConfig = {
 export type LadderConfig = {
   ladderGroup: LadderGroupConfig[]
   playoffPictureConfig?: PlayoffPictureConfig
+}
+
+export interface TableRow {
+  // position: number | string
+  id: string | number
+  [key: string]: string | number | undefined | string[]
+}
+
+export interface SportsTable {
+  tableName?: string
+  headings: string[]
+  columnClassName?: string[]
+  data: TableRow[]
 }
 
 export type TVChannelConfig = {

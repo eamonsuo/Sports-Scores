@@ -50,7 +50,7 @@ export async function mapFixtureRounds(
           case DisplayTypes.LEAGUE:
             roundLabel = isMultiLeague
               ? (leagueConfig.find((l) => l.slug === match.leagueId)?.name ??
-                "")
+                "Other")
               : (match.roundLabel ?? "")
             break
         }
@@ -65,7 +65,7 @@ export async function mapFixtureRounds(
 
         acc[roundLabel].matches.push(match)
         acc[roundLabel].roundSlug =
-          displayType === DisplayTypes.LEAGUE
+          displayType === DisplayTypes.LEAGUE && roundLabel !== "Other"
             ? `${match.sport}/${match.leagueId}/${match.seasonId}`
             : undefined
         if (showByes) {
@@ -82,7 +82,21 @@ export async function mapFixtureRounds(
       },
       {} as Record<string, FixtureRound>,
     ),
-  )
+  ).sort((a, b) => {
+    if (displayType === DisplayTypes.LEAGUE && isMultiLeague) {
+      const firstLeagueId = leagueConfig.findIndex(
+        (l) => l.slug === a.matches[0].leagueId,
+      )
+      const secondLeagueId = leagueConfig.findIndex(
+        (l) => l.slug === b.matches[0].leagueId,
+      )
+
+      if (firstLeagueId === -1) return 1
+      if (secondLeagueId === -1) return -1
+      return firstLeagueId - secondLeagueId
+    }
+    return 0
+  })
 }
 
 export function getCurrentRound(

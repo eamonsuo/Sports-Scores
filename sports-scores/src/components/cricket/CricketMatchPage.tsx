@@ -3,9 +3,8 @@ import MatchPropertyList from "@/components/all-sports/MatchPropertyList"
 import CricketMatchScorecard from "@/components/cricket/CricketMatchScorecard"
 import Placeholder from "@/components/misc-ui/Placeholder"
 import { cricketService } from "@/services/cricket.service"
-import { CricketInningIncident, CricketScorecardPage } from "@/types/cricket"
-import { MatchProperties } from "@/types/misc"
-import { ReactNode } from "react"
+import { CricketMatchDetails } from "@/types/cricket"
+import { Fragment } from "react"
 import ComponentList from "../misc-ui/ComponentList"
 import CricketCommentary from "./CricketCommentary"
 import CricketLineups from "./CricketLineups"
@@ -30,11 +29,7 @@ async function Page(props: {
     return <Placeholder>NO DATA</Placeholder>
   }
 
-  const pageSettingsData = pageSettings(
-    pageData.matchDetails,
-    pageData.matchScorecard,
-    pageData.matchIncidents,
-  )
+  const pageSettingsData = pageSettings(pageData)
 
   return (
     <ComponentList
@@ -42,70 +37,59 @@ async function Page(props: {
       curItem="Scorecard"
       buttonStyle="rectangle"
     >
-      {pageSettingsData.map((item) => item.component)}
+      {pageSettingsData.map((item, index) => (
+        <Fragment key={item.btnLabel.toLowerCase()}>{item.component}</Fragment>
+      ))}
     </ComponentList>
   )
 }
 
-function pageSettings(
-  matchDetails: MatchProperties,
-  matchScorecard: CricketScorecardPage,
-  matchIncidents?: CricketInningIncident[],
-): {
-  btnLabel: string
-  component: ReactNode
-  state: string
-}[] {
+function pageSettings(matchDetails: CricketMatchDetails) {
   return [
     {
       btnLabel: `Details`,
       component: (
         <div className="flex flex-1 flex-col overflow-y-auto pb-4">
           <MatchDetailsHero
-            status={matchDetails.status}
-            homeInfo={matchDetails.homeTeam}
-            awayInfo={matchDetails.awayTeam}
+            status={matchDetails.matchDetails.status}
+            homeInfo={matchDetails.matchDetails.homeTeam}
+            awayInfo={matchDetails.matchDetails.awayTeam}
             // summaryText={matchDetails.}
           />
           <MatchPropertyList
-            startDate={matchDetails.startDate}
-            endDate={matchDetails.endDate}
-            properties={matchDetails.properties}
+            startDate={matchDetails.matchDetails.startDate}
+            endDate={matchDetails.matchDetails.endDate}
+            properties={matchDetails.matchDetails.properties}
           />
         </div>
       ),
-      state: "details",
     },
     {
       btnLabel: `Scorecard`,
       component: (
         <CricketMatchScorecard
-          data={matchScorecard.data}
-          matchState={matchScorecard.matchState}
+          innings={matchDetails.matchScorecard.innings}
+          matchState={matchDetails.matchScorecard.matchState}
         />
       ),
-      state: "scorecard",
     },
     {
       btnLabel: `Commentary`,
-      component: matchIncidents && (
-        <CricketCommentary matchIncidents={matchIncidents} />
+      component: matchDetails.matchIncidents && (
+        <CricketCommentary matchIncidents={matchDetails.matchIncidents} />
       ),
-      state: "commentary",
     },
     {
       btnLabel: `Stats`,
-      component: matchIncidents && (
-        <CricketStats matchIncidents={matchIncidents} />
+      component: matchDetails.matchIncidents && (
+        <CricketStats matchIncidents={matchDetails.matchIncidents} />
       ), //TODO: Add Stats
-      state: "stats",
     },
     {
       btnLabel: `Lineups`,
-      component: matchIncidents && (
-        <CricketLineups matchIncidents={matchIncidents} />
+      component: matchDetails.matchIncidents && (
+        <CricketLineups matchIncidents={matchDetails.matchIncidents} />
       ), //TODO: Add Lineups
-      state: "lineups",
     },
   ]
 }

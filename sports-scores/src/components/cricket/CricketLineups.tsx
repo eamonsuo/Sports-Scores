@@ -8,7 +8,7 @@ export default function CricketLineups({
 }) {
   return (
     <Placeholder>
-      {matchIncidents ? JSON.stringify(matchIncidents) : "No Lineups Available"}
+      {matchIncidents ? "Coming soon" : "No Lineups Available"}
     </Placeholder>
   )
 }

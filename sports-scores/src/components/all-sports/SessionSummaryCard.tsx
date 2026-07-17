@@ -1,7 +1,7 @@
 import { FALLBACK_IMAGE } from "@/lib/constants"
 import { resolveSportImage } from "@/lib/imageMapping"
 import { formatTime } from "@/lib/projUtils"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/shadcnUtils"
 import { MatchStatus, MatchSummary } from "@/types/misc"
 import Image from "next/image"
 import Link from "next/link"

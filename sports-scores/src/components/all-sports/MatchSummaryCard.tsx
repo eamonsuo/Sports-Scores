@@ -1,7 +1,7 @@
 import { FALLBACK_IMAGE } from "@/lib/constants"
 import { resolveSportImage } from "@/lib/imageMapping"
 import { formatTime } from "@/lib/projUtils"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/shadcnUtils"
 import { MatchStatus, MatchSummary } from "@/types/misc"
 import clsx from "clsx"
 import Image from "next/image"
@@ -68,15 +68,24 @@ export default function MatchSummaryCard({
               />
             )}
           </div>
-          <div className="flex flex-col content-center text-left dark:text-neutral-400">
-            {Array.isArray(homeDetails?.score) ? (
-              <p className="text-[9px]">{homeDetails?.score}</p>
-            ) : (
-              <p className={cn(winner === 1 && "font-bold")}>
-                {homeDetails?.score}
-              </p>
+          <p
+            className={clsx(
+              "flex content-center items-center text-left dark:text-neutral-400",
+              winner === 1 && "font-bold",
             )}
-          </div>
+          >
+            {Array.isArray(homeDetails?.score) &&
+            homeDetails.score.length > 1 ? (
+              <>
+                {homeDetails?.score[0]}{" "}
+                <span className="ms-1 text-[9px]">
+                  {homeDetails?.score[1]}{" "}
+                </span>
+              </>
+            ) : (
+              <>{homeDetails?.score}</>
+            )}
+          </p>
 
           <div className="flex items-center justify-center overflow-visible">
             {timer.display && (
@@ -89,11 +98,21 @@ export default function MatchSummaryCard({
 
           <p
             className={clsx(
-              "content-center text-right dark:text-neutral-400",
+              "flex content-center items-center justify-self-end text-right dark:text-neutral-400",
               winner !== 1 && winner !== undefined && "font-bold",
             )}
           >
-            {awayDetails?.score}
+            {Array.isArray(awayDetails?.score) &&
+            awayDetails.score.length > 1 ? (
+              <>
+                {awayDetails?.score[0]}{" "}
+                <span className="ms-1 text-[9px]">
+                  {awayDetails?.score[1]}{" "}
+                </span>
+              </>
+            ) : (
+              <>{awayDetails?.score}</>
+            )}
           </p>
           <div className="content-center justify-self-end">
             {Array.isArray(awayDetails?.img) ? (

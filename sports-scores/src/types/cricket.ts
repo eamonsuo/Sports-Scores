@@ -1,4 +1,4 @@
-import { TeamMatchDetail } from "./misc"
+import { SportsTable, TeamMatchDetail } from "./misc"
 import { Sofascore_Player, Sofascore_Team } from "./sofascore"
 
 export type CricketOverIncident = {
@@ -24,9 +24,9 @@ export type CricketScorecardBatProps = {
   batters: {
     name: string
     image?: string
-    runs: number
-    balls: number
-    strikeRate: number
+    runs: string
+    balls: string
+    strikeRate: string
     dismissalText?: string
   }[]
   total: number
@@ -39,6 +39,7 @@ export type CricketScorecardBatProps = {
     wides: number
     noballs: number
   }
+  runRate: string
 }
 
 export type CricketScorecardBowlProps = {
@@ -50,12 +51,16 @@ export type CricketScorecardBowlProps = {
   name: string
 }[]
 
+export type CricketScorecardInning = {
+  inningLabel: string
+  inningBatters: CricketScorecardBatProps
+  inningBowlers: CricketScorecardBowlProps
+  fow: SportsTable
+  partnerships: SportsTable
+}
+
 export type CricketScorecardPage = {
-  data: {
-    inningLabel: string
-    inningBatters: CricketScorecardBatProps
-    inningBowlers: CricketScorecardBowlProps
-  }[]
+  innings: CricketScorecardInning[]
   matchState: "LIVE" | "COMPLETED"
 }
 

@@ -17,6 +17,7 @@ import {
   CRICKET_LEAGUES,
 } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
+import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
 import {
   CricketInningIncident,
   CricketMatchDetails,
@@ -26,8 +27,17 @@ import {
   Sofascore_Cricket_Incident,
   Sofascore_Cricket_Inning,
 } from "@/types/cricket"
-import { DeepPartial, MatchSummary, SPORT } from "@/types/misc"
+import {
+  DeepPartial,
+  DisplayTypes,
+  FixtureRound,
+  Matches,
+  MatchSummary,
+  SPORT,
+} from "@/types/misc"
 import { Sofascore_Event } from "@/types/sofascore"
+import { isSameDay, isWithinInterval } from "date-fns"
+import { TZDate } from "react-day-picker"
 import { SofascoreSport } from "./sofascore.service"
 
 class CricketService extends SofascoreSport {
@@ -89,6 +99,88 @@ class CricketService extends SofascoreSport {
     )
   }
 
+  async matchesByDate(date: Date): Promise<Matches | null> {
+    const matches = await this.apiEndpoints.fetchEventsByDate(
+      this.categories,
+      date,
+    )
+
+    if (!matches) return null
+
+    const validLeagueIds = this.leagues
+      .filter((l) => !l.excludeFromToday)
+      .map((l) => Number(l.slug))
+      .concat(this.categories.map((c) => Number(c)))
+
+    const timezone = date instanceof TZDate ? date.timeZone : "UTC"
+
+    matches.events = matches.events
+      .filter(
+        (item) =>
+          (validLeagueIds.includes(item.tournament.category.id) ||
+            validLeagueIds.includes(
+              item.tournament?.uniqueTournament?.id ?? -1,
+            )) &&
+          item.status.type !== "canceled",
+      )
+      .filter((item) => {
+        const eventDate = new TZDate(item.startTimestamp * 1000, timezone)
+        const eventEndDate = item.endTimestamp
+          ? new TZDate(item.endTimestamp * 1000, timezone)
+          : null
+
+        // Check if the event start/end date is today OR today is between the start and end date
+        return (
+          isSameDay(eventDate, date) ||
+          (eventEndDate &&
+            (isWithinInterval(date, { start: eventDate, end: eventEndDate }) ||
+              isSameDay(eventEndDate, date)))
+        )
+      })
+
+    if (!matches.events || matches.events.length === 0) return null
+
+    const allMatches = matches.events
+      .map((event) =>
+        this.eventMapper(event, {
+          leagueName:
+            `${
+              this.leagues.find(
+                (l) =>
+                  l.slug === event.tournament?.uniqueTournament?.id.toString(),
+              )?.name ?? event.tournament?.name
+            }` +
+            (event.roundInfo?.name || event.roundInfo?.round
+              ? ` - ${event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`}`
+              : ""),
+          leagueSlug: `/sports/${this.sport}/${event.tournament?.uniqueTournament?.id}/${event.season.id}`,
+          leagueImg: this.leagues.find(
+            (l) => l.slug === event.tournament?.uniqueTournament?.id.toString(),
+          )?.icon,
+        }),
+      )
+      .sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+      )
+
+    const fixtures = await mapFixtureRounds(allMatches, this.leagues)
+    const myTeams: FixtureRound = {
+      matches: allMatches.filter((match) =>
+        match.competitorDetails.some((team) =>
+          this.leagues.some((l) => l.slug === `team/${team.id}`),
+        ),
+      ),
+      roundLabel: "My Teams",
+      // roundSlug: `/sports/${this.sport}/my-teams`,
+    }
+
+    return {
+      fixtures: [myTeams, ...fixtures],
+      currentRound: getCurrentRound(fixtures, DisplayTypes.LEAGUE),
+    }
+  }
+
   override async matchDetails(
     matchId: string,
     leagueId?: string,
@@ -105,7 +197,7 @@ class CricketService extends SofascoreSport {
       },
     )
 
-    const [matchInnings, matchIncidents] = await Promise.all([
+    const [matchInnings, matchIncidentsRaw] = await Promise.all([
       withDevCache(
         "cricket",
         "match-innings",
@@ -118,12 +210,17 @@ class CricketService extends SofascoreSport {
       )(matchId),
     ])
 
+    const matchScorecard = this.matchInningsMapper(matchInnings?.innings ?? [])
+
+    const matchIncidents = this.matchIncidentsMapper(
+      (matchIncidentsRaw?.incidents ?? []).reverse(),
+      matchScorecard.innings.map((item) => item.inningLabel),
+    )
+
     return {
       matchDetails,
-      matchScorecard: this.matchInningsMapper(matchInnings?.innings ?? []),
-      matchIncidents: this.matchIncidentsMapper(
-        (matchIncidents?.incidents ?? []).reverse(),
-      ),
+      matchScorecard,
+      matchIncidents,
       matchLineups,
     }
   }
@@ -152,77 +249,150 @@ class CricketService extends SofascoreSport {
       competitorDetails: [
         {
           ...options?.competitorDetails?.[0],
-          score: `${event.homeScore.innings?.inning1?.wickets ?? 0}/${event.homeScore.innings?.inning1?.score ?? 0}${/*event.Tr1CD1 === 1 ? "d" : */ ""}${home2Ing}`,
+          score: [
+            `${event.homeScore.innings?.inning1?.wickets ?? 0}/${event.homeScore.innings?.inning1?.score ?? 0}${/*event.Tr1CD1 === 1 ? "d" : */ ""}${home2Ing}`,
+            // `(${event.homeScore.innings?.inning1?.overs ?? 0})`,
+          ],
         },
         {
           ...options?.competitorDetails?.[1],
-          score: `${event.awayScore.innings?.inning1?.wickets ?? 0}/${event.awayScore.innings?.inning1?.score ?? 0}${/*event.Tr2CD1 === 1 ? "d" : */ ""}${away2Ing}`,
+          score: [
+            `${event.awayScore.innings?.inning1?.wickets ?? 0}/${event.awayScore.innings?.inning1?.score ?? 0}${/*event.Tr2CD1 === 1 ? "d" : */ ""}${away2Ing}`,
+            // `(${event.awayScore.innings?.inning1?.overs ?? 0})`,
+          ],
         },
       ],
     })
   }
 
-  matchInningsMapper(innings: Sofascore_Cricket_Inning[]) {
-    const inningsData = innings.map((item) => {
-      return {
-        inningLabel: `${item.battingTeam.shortName} ${item.number === 1 || item.number === 2 ? "1st" : "2nd"}`,
-        inningBatters: {
-          batters: item.battingLine.map((batter) => {
-            return {
-              name: batter.playerName,
-              runs: batter.score,
-              balls: batter.balls,
-              strikeRate:
-                batter.balls !== 0 ? (batter.score / batter.balls) * 100 : 0,
-              dismissalText: mapDismissalText(
-                batter.wicketBowler?.shortName ?? "",
-                batter.wicketTypeName,
-                batter.wicketCatch?.shortName,
-              ),
-            }
-          }),
-          total: item.score,
-          extras: {
-            byes: item.bye,
-            legbyes: item.legBye,
-            noballs: item.noBall,
-            wides: item.wide,
-            total: item.extra,
-          },
-          overs: item.overs,
-          wickets: item.wickets,
-        } as CricketScorecardBatProps,
-        inningBowlers: item.bowlingLine.map((bowl) => {
-          return {
-            name: bowl.playerName,
-            overs: bowl.over,
-            runs: bowl.run,
-            wickets: bowl.wicket,
-            economy: bowl.run / bowl.over,
-          }
-        }) as CricketScorecardBowlProps,
-      }
-    })
+  override matchDetailsMapper(
+    event: Sofascore_Event,
+    options?: DeepPartial<MatchSummary>,
+  ) {
+    const twoInnings =
+      (event.homeScore.innings?.inning1 && event.homeScore.innings?.inning2) ||
+      (event.awayScore.innings?.inning1 && event.awayScore.innings?.inning2)
+    let home2Ing = twoInnings
+      ? `, ${event.homeScore.innings?.inning2?.wickets ?? 0}/${event.homeScore.innings?.inning2?.score ?? 0}${/*event.Tr1CD2 === 1 ? "d" : */ ""}`
+      : ""
+    let away2Ing = twoInnings
+      ? `, ${event.awayScore.innings?.inning2?.wickets ?? 0}/${event.awayScore.innings?.inning2?.score ?? 0}${/*event.Tr2CD2 === 1 ? "d" : */ ""}`
+      : ""
 
+    const matchDetails = super.matchDetailsMapper(event)
+    matchDetails.homeTeam.score = [
+      `${event.homeScore.innings?.inning1?.wickets ?? 0}/${event.homeScore.innings?.inning1?.score ?? 0}${/*event.Tr1CD1 === 1 ? "d" : */ ""}${home2Ing}`,
+      // `(${event.homeScore.innings?.inning1?.overs ?? 0})`,
+    ]
+    matchDetails.awayTeam.score = [
+      `${event.awayScore.innings?.inning1?.wickets ?? 0}/${event.awayScore.innings?.inning1?.score ?? 0}${/*event.Tr2CD1 === 1 ? "d" : */ ""}${away2Ing}`,
+      // `(${event.awayScore.innings?.inning1?.overs ?? 0})`,
+    ]
+    return matchDetails
+  }
+
+  matchInningsMapper(
+    innings: Sofascore_Cricket_Inning[],
+  ): CricketScorecardPage {
     return {
       matchState: "LIVE",
-      data: inningsData,
-    } as CricketScorecardPage
+      innings: innings
+        .sort((a, b) => a.number - b.number)
+        .map((item) => {
+          return {
+            inningLabel: `${item.battingTeam.shortName} ${item.number === 1 || item.number === 2 ? "1st" : "2nd"}`,
+            inningBatters: {
+              batters: item.battingLine.map((batter) => {
+                const didNotbat = batter.wicketTypeName === "Did not bat"
+
+                return {
+                  name: batter.player.name,
+                  runs: didNotbat ? "" : batter.score.toString(),
+                  balls: didNotbat ? "" : batter.balls.toString(),
+                  strikeRate: didNotbat
+                    ? ""
+                    : batter.balls !== 0
+                      ? ((batter.score / batter.balls) * 100).toFixed(2)
+                      : "0.00",
+                  dismissalText: mapDismissalText(
+                    batter.wicketBowler?.shortName ?? "",
+                    batter.wicketTypeName,
+                    batter.wicketCatch?.shortName,
+                  ),
+                }
+              }),
+              total: item.score,
+              extras: {
+                byes: item.bye,
+                legbyes: item.legBye,
+                noballs: item.noBall,
+                wides: item.wide,
+                total: item.extra,
+              },
+              overs: item.overs,
+              wickets: item.wickets,
+              runRate:
+                item.overs !== 0 ? (item.score / item.overs).toFixed(2) : "",
+            } as CricketScorecardBatProps,
+            inningBowlers: item.bowlingLine.map((bowl) => {
+              return {
+                name: bowl.player.name,
+                overs: bowl.over,
+                runs: bowl.run,
+                wickets: bowl.wicket,
+                economy: bowl.over !== 0 ? bowl.run / bowl.over : 0,
+              }
+            }) as CricketScorecardBowlProps,
+            fow: {
+              // tableName: "Fall of Wickets",
+              headings: ["FOW", "Over", "Batter"],
+              columnClassName: ["text-center", "text-center", "text-left"],
+              data: item.battingLine
+                .filter(
+                  (batter) =>
+                    batter.fowScore !== undefined &&
+                    batter.fowOver !== undefined,
+                )
+                .sort((a, b) => a.fowOver! - b.fowOver!)
+                .map((batter, idx) => {
+                  return {
+                    id: batter.player.id,
+                    Batter: `${batter.player.name}`,
+                    FOW: `${idx}/${batter.fowScore ?? 0}`,
+                    Over: `${batter.fowOver ?? 0}`,
+                  }
+                }),
+            },
+            partnerships: {
+              // tableName: "Partnerships",
+              headings: ["Batter 1", "Score", "Batter 2"],
+              columnClassName: ["text-left", "text-center ", "text-right"],
+              data: item.partnerships.map((partnership) => {
+                return {
+                  id: partnership.player1.id + partnership.player2.id,
+                  "Batter 1": partnership.player1.name,
+                  Score: `${partnership.score} (${partnership.balls})`,
+                  "Batter 2": partnership.player2.name,
+                }
+              }),
+            },
+          }
+        }),
+    }
   }
 
   // override
   matchIncidentsMapper(
     matchIncidents: Sofascore_Cricket_Incident[],
+    inningLabels?: string[],
   ): CricketInningIncident[] {
-    const inningNumbers = new Set(
-      matchIncidents.map((incident) => incident.inningNumber),
-    )
-
     const mappedIncidents = matchIncidents.reduce(
       (acc, incident) => {
         if (!acc[incident.inningNumber]) {
           acc[incident.inningNumber] = {
-            inningLabel: `Inning ${incident.inningNumber}`,
+            inningLabel:
+              inningLabels?.[incident.inningNumber - 1] ??
+              `Inning ${incident.inningNumber}`,
             inningIncidents: [],
           }
         }
@@ -262,7 +432,7 @@ class CricketService extends SofascoreSport {
             ]),
           ),
           runs: currentOver.runs + incident.totalRuns,
-          teamScore: incident.score,
+          teamScore: incident.score.split("/").reverse().join("/"),
           balls: [...currentOver.balls, incident.incidentClassLabel],
         }
 

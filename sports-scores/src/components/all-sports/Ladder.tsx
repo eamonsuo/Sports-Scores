@@ -1,5 +1,5 @@
 import { FALLBACK_IMAGE } from "@/lib/constants"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/shadcnUtils"
 import { SportsLadder } from "@/types/misc"
 import { clsx } from "clsx"
 import Image from "next/image"
@@ -53,7 +53,7 @@ export default function Ladder({
                 ? defaultColours[categoryIdx % defaultColours.length]
                 : undefined)
             return (
-              <tr key={item.teamId} className="border-b border-t">
+              <tr key={item.id} className="border-b border-t">
                 <td
                   className={cn("w-1 p-0", colour)}
                   style={{ backgroundColor: item.teamColour }}
@@ -62,9 +62,7 @@ export default function Ladder({
                 <td className="text-left text-sm">
                   <Link
                     href={
-                      item.sport
-                        ? `/sports/${item.sport}/team/${item.teamId}`
-                        : ""
+                      item.sport ? `/sports/${item.sport}/team/${item.id}` : ""
                     }
                   >
                     <div className="flex items-center">

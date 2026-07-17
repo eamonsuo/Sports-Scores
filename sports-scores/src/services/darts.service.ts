@@ -79,7 +79,7 @@ class DartsService extends SofascoreSport {
     options?: DeepPartial<MatchSummary>,
   ): MatchSummary {
     const leagueTournament = [2066, 592, 11565].includes(
-      event.tournament.uniqueTournament.id,
+      event.tournament?.uniqueTournament?.id ?? 0,
     )
 
     return super.eventMapper(event, {

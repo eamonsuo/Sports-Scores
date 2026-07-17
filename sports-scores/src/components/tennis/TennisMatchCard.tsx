@@ -1,6 +1,6 @@
 import { FALLBACK_IMAGE } from "@/lib/constants"
 import { formatTime } from "@/lib/projUtils"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/shadcnUtils"
 import { MatchSummary } from "@/types/misc"
 import clsx from "clsx"
 import Image from "next/image"

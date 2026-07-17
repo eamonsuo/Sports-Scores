@@ -2,7 +2,7 @@
 
 import { FALLBACK_IMAGE } from "@/lib/constants"
 import { resolveSportImage } from "@/lib/imageMapping"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/shadcnUtils"
 import { MatchStatus, MatchSummary, TVChannel, TVDetails } from "@/types/misc"
 import { format } from "date-fns/format"
 import Image from "next/image"

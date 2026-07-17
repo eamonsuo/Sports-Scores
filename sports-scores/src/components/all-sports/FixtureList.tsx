@@ -3,7 +3,7 @@
 import MatchSummaryCard from "@/components/all-sports/MatchSummaryCard"
 import SessionSummaryCard from "@/components/all-sports/SessionSummaryCard"
 import TennisMatchCard from "@/components/tennis/TennisMatchCard"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/shadcnUtils"
 import { CardVariant, MatchSummary } from "@/types/misc"
 import React, { useEffect } from "react"
 import Placeholder from "../misc-ui/Placeholder"

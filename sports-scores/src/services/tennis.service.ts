@@ -114,7 +114,7 @@ class TennisService extends SofascoreSport {
     const filteredMatches = matches.events.filter(
       (item) =>
         validLeagueIds.includes(item.tournament.category.id) ||
-        validLeagueIds.includes(item.tournament.uniqueTournament?.id),
+        validLeagueIds.includes(item.tournament?.uniqueTournament?.id ?? -1),
     )
 
     const aussieMatches = matches.events.filter(
@@ -208,7 +208,7 @@ class TennisService extends SofascoreSport {
               headings: TENNIS_RANKING_HEADINGS,
               data: rankings.rankings.map((rank) => ({
                 position: rank.ranking,
-                teamId: rank.id,
+                id: rank.id,
                 teamName: rank.rowName,
                 teamLogo: resolveSportImage([
                   rank.team.country.name,
@@ -244,8 +244,8 @@ class TennisService extends SofascoreSport {
         match.homeScore.current ?? 0,
         match.awayScore.current ?? 0,
       ),
-      leagueName: `${match.tournament.category.name} ${match.tournament.uniqueTournament?.tennisPoints ?? ""} - ${match.tournament.category.name === "ATP" || match.tournament.category.name === "WTA" || match.tournament.category.name === "Challenger" ? match.tournament.name : match.tournament.uniqueTournament.name}`,
-      leagueSlug: `/sports/${this.sport}/${match.tournament.uniqueTournament.id}/${match.season.id}`,
+      leagueName: `${match.tournament.category.name} ${match.tournament.uniqueTournament?.tennisPoints ?? ""} - ${match.tournament.category.name === "ATP" || match.tournament.category.name === "WTA" || match.tournament.category.name === "Challenger" ? match.tournament.name : match.tournament?.uniqueTournament?.name}`,
+      leagueSlug: `/sports/${this.sport}/${match.tournament?.uniqueTournament?.id}/${match.season.id}`,
       competitorDetails: [
         {
           id: match.homeTeam.id.toString(),

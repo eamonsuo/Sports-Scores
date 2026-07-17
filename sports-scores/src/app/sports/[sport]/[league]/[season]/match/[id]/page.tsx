@@ -3,6 +3,7 @@ import MatchDetailsHero from "@/components/all-sports/MatchDetailsHero"
 import MatchPropertyList from "@/components/all-sports/MatchPropertyList"
 import ScoreBreakdown from "@/components/all-sports/ScoreBreakdown"
 import ScoreChart from "@/components/all-sports/ScoreChart"
+import ComponentList from "@/components/misc-ui/ComponentList"
 import Placeholder from "@/components/misc-ui/Placeholder"
 import { SPORT_ROUTE_CONFIG } from "@/lib/routeConfig"
 import { SPORT } from "@/types/misc"
@@ -30,32 +31,47 @@ export default async function Page(props: {
 
   if ("matchDetails" in pageData && pageData.matchDetails !== null) {
     return (
-      <div className="flex flex-1 flex-col overflow-y-auto pb-4">
-        <MatchDetailsHero
-          homeInfo={pageData.matchDetails.homeTeam}
-          awayInfo={pageData.matchDetails.awayTeam}
-          status={pageData.matchDetails.status}
-        />
-        {pageData.scoreBreakdown && (
-          <ScoreBreakdown
-            scoreData={pageData.scoreBreakdown}
-            homeLogo={pageData.matchDetails.homeTeam.img}
-            awayLogo={pageData.matchDetails.awayTeam.img}
+      <ComponentList
+        labels={["Details", "Lineups", "Stats"]}
+        curItem="Details"
+        buttonStyle="rectangle"
+      >
+        <div className="flex flex-1 flex-col overflow-y-auto">
+          <MatchDetailsHero
+            homeInfo={pageData.matchDetails.homeTeam}
+            awayInfo={pageData.matchDetails.awayTeam}
+            status={pageData.matchDetails.status}
           />
-        )}
-        {pageData.scoreEvents && (
-          <ScoreChart
-            scoreDifference={pageData.scoreEvents}
-            homeLogo={pageData.matchDetails.homeTeam.img}
-            awayLogo={pageData.matchDetails.awayTeam.img}
+          {pageData.scoreBreakdown && (
+            <ScoreBreakdown
+              scoreData={pageData.scoreBreakdown}
+              homeLogo={pageData.matchDetails.homeTeam.img}
+              awayLogo={pageData.matchDetails.awayTeam.img}
+            />
+          )}
+          {pageData.scoreEvents && (
+            <ScoreChart
+              scoreDifference={pageData.scoreEvents}
+              homeLogo={pageData.matchDetails.homeTeam.img}
+              awayLogo={pageData.matchDetails.awayTeam.img}
+            />
+          )}
+          <MatchPropertyList
+            startDate={pageData.matchDetails.startDate}
+            endDate={pageData.matchDetails.endDate}
+            properties={pageData.matchDetails.properties}
           />
-        )}
-        <MatchPropertyList
-          startDate={pageData.matchDetails.startDate}
-          endDate={pageData.matchDetails.endDate}
-          properties={pageData.matchDetails.properties}
-        />
-      </div>
+        </div>
+        <>
+          <Placeholder>Lineups</Placeholder>
+        </>
+        <>
+          <Placeholder>Stats</Placeholder>
+        </>
+      </ComponentList>
+      // <div className="flex flex-1 flex-col overflow-y-auto pb-4">
+
+      // </div>
     )
   } else if ("standings" in pageData && pageData.standings !== null) {
     return (
