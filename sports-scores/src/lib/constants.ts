@@ -1651,6 +1651,13 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
     slug: "25029",
     seasons: [{ name: "2025", slug: "72022" }],
   },
+  {
+    name: "Sangate Hawks (Div 3 Bris North)",
+    slug: "hawks-div3",
+    externalURL:
+      "https://www.playhq.com/afl/org/sandgate-afc/580646b5/afl-queensland-2026/teams/sandgate-qfa-div-3-bris-north/57920623",
+    seasons: [{ name: "Current", slug: "external" }],
+  },
 ]
 
 export const AUSSIE_RULES_LEAGUES_CLIENT =
