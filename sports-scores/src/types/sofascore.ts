@@ -340,7 +340,7 @@ export interface Sofascore_Score {
   penalties?: number
 }
 
-interface Sofascore_Score_Inning {
+export interface Sofascore_Score_Inning {
   score: number
   wickets: number
   overs: number

@@ -1651,6 +1651,13 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
     slug: "25029",
     seasons: [{ name: "2025", slug: "72022" }],
   },
+  {
+    name: "Sangate Hawks (Div 3 Bris North)",
+    slug: "hawks-div3",
+    externalURL:
+      "https://www.playhq.com/afl/org/sandgate-afc/580646b5/afl-queensland-2026/teams/sandgate-qfa-div-3-bris-north/57920623",
+    seasons: [{ name: "Current", slug: "external" }],
+  },
 ]
 
 export const AUSSIE_RULES_LEAGUES_CLIENT =
@@ -1715,6 +1722,7 @@ export const AMERICAN_FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     name: "NFL Preseason",
     slug: "9465",
     seasons: [
+      { name: "2026", slug: "94852" },
       { name: "2025", slug: "75587" },
       { name: "2024", slug: "59432" },
       { name: "2023", slug: "51364" },
@@ -1727,29 +1735,15 @@ export const AMERICAN_FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     seasons: [{ name: "Current", slug: "" }],
   },
   {
-    name: "NCAA, Regular Season",
-    slug: "19510",
+    name: "NCAA, FBS",
+    slug: "32199",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/hm3cyr1758455622.png",
     excludeFromToday: true,
     seasons: [
-      { name: "25/26", slug: "74693" },
-      { name: "24/25", slug: "59703" },
-    ],
-  },
-  {
-    name: "NCAA Division I, FBS Post Season",
-    slug: "19750",
-    seasons: [
-      { name: "24/25", slug: "69101" },
-      { name: "23/24", slug: "57012" },
-    ],
-  },
-  {
-    name: "NCAA Division I, FCS National Championship",
-    slug: "19717",
-    seasons: [
-      { name: "24/25", slug: "69309" },
-      { name: "23/24", slug: "56827" },
+      { name: "26/27", slug: "93601" },
+      { name: "25/26 Post.", slug: "89410" },
+      { name: "25/26", slug: "89263" },
+      { name: "24/25", slug: "89273" },
     ],
   },
 ]
@@ -1817,6 +1811,14 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     icon: "https://r2.thesportsdb.com/images/media/league/badge/2u78lm1638459575.png",
     seasons: [
       {
+        name: "26/27",
+        slug: "98511",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+        }),
+        tvguide: A_LEAGUE_TV_GUIDE,
+      },
+      {
         name: "25/26",
         slug: "82603",
         ladderConfig: ladderConfigMap({
@@ -1838,6 +1840,13 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "1894",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/1sk49c1638459590.png",
     seasons: [
+      // {
+      //   name: "26/27",
+      //   slug: "82605",
+      //   ladderConfig: ladderConfigMap({
+      //     placingCategories: FINALS_TOP_6_LADDER_CONFIG,
+      //   }),
+      // },
       {
         name: "25/26",
         slug: "82605",
@@ -1859,6 +1868,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "1786",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/bjqd291645454828.png/small",
     seasons: [
+      { name: "2026", slug: "97074" },
       { name: "2025", slug: "75270" },
       { name: "2024", slug: "61199" },
     ],
@@ -1894,6 +1904,14 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     icon: "https://r2.thesportsdb.com/images/media/league/badge/gasy9d1737743125.png",
     seasons: [
       {
+        name: "26/27",
+        slug: "96668",
+        ladderConfig: ladderConfigMap({
+          placingCategories: EUROPEAN_DOMESTIC_SHARED_LADDER,
+        }),
+        tvguide: STAN_FOOTBALL_TV_GUIDE,
+      },
+      {
         name: "25/26",
         slug: "76986",
         ladderConfig: ladderConfigMap({
@@ -1915,6 +1933,11 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "1044",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/lpsm6p1751723311.png",
     seasons: [
+      // {
+      //   name: "26/27",
+      //   slug: "79227",
+      //   ladderConfig: ladderConfigMap({ placingCategories: WSL_LADDER_CONFIG }),
+      // },
       {
         name: "25/26",
         slug: "79227",
@@ -1932,6 +1955,14 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "18",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/ty5a681688770169.png/small",
     seasons: [
+      {
+        name: "26/27",
+        slug: "97037",
+        ladderConfig: ladderConfigMap({
+          placingCategories: CHAMPIONSHIP_LADDER_CONFIG,
+        }),
+        tvguide: BEIN_FOOTBALL_TV_GUIDE,
+      },
       {
         name: "25/26",
         slug: "77347",
@@ -1954,6 +1985,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "19",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/vk7isd1598802862.png/small",
     seasons: [
+      // { name: "25/26", slug: "82557", tvguide: STAN_FOOTBALL_TV_GUIDE },
       { name: "25/26", slug: "82557", tvguide: STAN_FOOTBALL_TV_GUIDE },
     ],
   },
@@ -1962,6 +1994,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "11666",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/vfjnxt1713511523.png/small",
     seasons: [
+      // { name: "25/26", slug: "84634", tvguide: STAN_FOOTBALL_TV_GUIDE },
       { name: "25/26", slug: "84634", tvguide: STAN_FOOTBALL_TV_GUIDE },
     ],
   },
@@ -1970,6 +2003,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "21",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/x1va771565372556.png/small",
     seasons: [
+      // { name: "25/26", slug: "77500", tvguide: BEIN_FOOTBALL_TV_GUIDE },
       { name: "25/26", slug: "77500", tvguide: BEIN_FOOTBALL_TV_GUIDE },
     ],
   },
@@ -2093,10 +2127,13 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   },
   // Asia - 1467
   {
-    name: "AFC Asian Cup",
+    name: "AFC Asian Cup - Men",
     slug: "246",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/0a86rp1710997941.png/small",
-    seasons: [{ name: "2023", slug: "51384" }],
+    seasons: [
+      { name: "2027", slug: "94444" },
+      { name: "2023", slug: "51384" },
+    ],
   },
   {
     name: "AFC Asian Cup - Women",
@@ -2131,31 +2168,41 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     seasons: [{ name: "26-27", slug: "wiki" }],
   },
   {
-    name: "AFC Champions League Elite",
+    name: "AFC Champions League Elite - Men",
     slug: "463",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/gsbq4k1719686780.png/small",
     seasons: [
+      // { name: "25/26", slug: "77010" },
       { name: "25/26", slug: "77010" },
       { name: "24/25", slug: "62485" },
     ],
   },
   {
-    name: "AFC Women's Champions League",
+    name: "AFC Champions League - Women",
     slug: "23009",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/fusqr71758302362.png/small",
     seasons: [
+      // { name: "25/26", slug: "77726" },
       { name: "25/26", slug: "77726" },
       { name: "24/25", slug: "64146" },
     ],
   },
   // Europe - category 1465
   {
-    name: "UEFA Champions League",
+    name: "UEFA Champions League - Men",
     slug: "7",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/facv1u1742998896.png/small",
     externalURL:
       "https://en.wikipedia.org/wiki/2025%E2%80%9326_UEFA_Champions_League",
     seasons: [
+      {
+        name: "26/27",
+        slug: "96518",
+        ladderConfig: ladderConfigMap({
+          placingCategories: UEFA_24_TEAM_LADDER_CONFIG,
+        }),
+        tvguide: STAN_FOOTBALL_TV_GUIDE,
+      },
       {
         name: "25/26",
         slug: "76953",
@@ -2167,12 +2214,20 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "UEFA Women's Champions League",
+    name: "UEFA Champions League - Women",
     slug: "696",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/nsi55h1761838458.png/small",
     externalURL:
       "https://en.wikipedia.org/wiki/2025%E2%80%9326_UEFA_Women%27s_Champions_League",
     seasons: [
+      {
+        name: "26/27",
+        slug: "96633",
+        ladderConfig: ladderConfigMap({
+          placingCategories: UEFA_WOMENS_CL_LADDER_CONFIG,
+        }),
+        tvguide: ESPN_FOOTBALL_TV_GUIDE,
+      },
       {
         name: "25/26",
         slug: "77328",
@@ -2191,6 +2246,14 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       "https://en.wikipedia.org/wiki/2025%E2%80%9326_UEFA_Europa_League",
     seasons: [
       {
+        name: "26/27",
+        slug: "96522",
+        ladderConfig: ladderConfigMap({
+          placingCategories: UEFA_24_TEAM_LADDER_CONFIG,
+        }),
+        tvguide: STAN_FOOTBALL_TV_GUIDE,
+      },
+      {
         name: "25/26",
         slug: "76984",
         ladderConfig: ladderConfigMap({
@@ -2208,6 +2271,13 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
       "https://en.wikipedia.org/wiki/2025%E2%80%9326_UEFA_Conference_League",
     seasons: [
       {
+        name: "26/27",
+        slug: "96529",
+        ladderConfig: ladderConfigMap({
+          placingCategories: UEFA_24_TEAM_LADDER_CONFIG,
+        }),
+      },
+      {
         name: "25/26",
         slug: "76960",
         ladderConfig: ladderConfigMap({
@@ -2218,13 +2288,13 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   },
 
   {
-    name: "UEFA European Championship",
+    name: "UEFA European Championship - Men",
     slug: "1",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/bivzlu1635869135.png/small",
     seasons: [{ name: "2024", slug: "56953" }],
   },
   {
-    name: "UEFA European Women's Championship",
+    name: "UEFA European Championship - Women",
     slug: "477",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/jrcfev1744026201.png/small",
     seasons: [{ name: "2025", slug: "69935" }],
@@ -2268,6 +2338,13 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     excludeFromToday: true,
     seasons: [
       {
+        name: "2026",
+        slug: "88711",
+        ladderConfig: ladderConfigMap({
+          placingCategories: NWSL_LADDER_CONFIG,
+        }),
+      },
+      {
         name: "2025",
         slug: "71412",
         ladderConfig: ladderConfigMap({
@@ -2283,6 +2360,14 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_Ligue_1",
     excludeFromToday: true,
     seasons: [
+      {
+        name: "26/27",
+        slug: "96127",
+        ladderConfig: ladderConfigMap({
+          placingCategories: LIGUE_1_LADDER_CONFIG,
+        }),
+        tvguide: BEIN_FOOTBALL_TV_GUIDE,
+      },
       {
         name: "25/26",
         slug: "77356",
@@ -2301,6 +2386,14 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     excludeFromToday: true,
     seasons: [
       {
+        name: "26/27",
+        slug: "97464",
+        ladderConfig: ladderConfigMap({
+          placingCategories: BUNDESLIGA_LADDER_CONFIG,
+        }),
+        tvguide: BEIN_FOOTBALL_TV_GUIDE,
+      },
+      {
         name: "25/26",
         slug: "77333",
         ladderConfig: ladderConfigMap({
@@ -2318,6 +2411,14 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     excludeFromToday: true,
     seasons: [
       {
+        name: "26/27",
+        slug: "95836",
+        ladderConfig: ladderConfigMap({
+          placingCategories: EUROPEAN_DOMESTIC_SHARED_LADDER,
+        }),
+        tvguide: BEIN_FOOTBALL_TV_GUIDE,
+      },
+      {
         name: "25/26",
         slug: "76457",
         ladderConfig: ladderConfigMap({
@@ -2334,6 +2435,14 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     externalURL: "https://en.wikipedia.org/wiki/2025%E2%80%9326_La_Liga",
     excludeFromToday: true,
     seasons: [
+      {
+        name: "26/27",
+        slug: "97268",
+        ladderConfig: ladderConfigMap({
+          placingCategories: EUROPEAN_DOMESTIC_SHARED_LADDER,
+        }),
+        tvguide: BEIN_FOOTBALL_TV_GUIDE,
+      },
       {
         name: "25/26",
         slug: "77559",
@@ -2467,6 +2576,7 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "1506",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/hnate81749406441.png/small",
     seasons: [
+      { name: "26/27", slug: "98055" },
       { name: "25/26", slug: "77204" },
       { name: "24/25", slug: "66424" },
     ],
@@ -2483,6 +2593,7 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: NBA_2021_LADDER_CONFIG,
         tvguide: NBA_TV_GUIDE,
       },
+      { name: "25/26 Cup", slug: "84238" },
       { name: "24/25", slug: "65360", ladderConfig: NBA_2021_LADDER_CONFIG },
     ],
   },
@@ -2670,6 +2781,18 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     slug: "2644",
     icon: "https://upload.wikimedia.org/wikipedia/en/4/48/Brisbane_International_logo.svg",
     seasons: [{ name: "2026", slug: "85608", tvguide: TENNIS_MAJORS_TV_GUIDE }],
+  },
+  {
+    name: "Davis Cup",
+    slug: "2287",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/i0qscy1672325773.png",
+    seasons: [{ name: "2026", slug: "88324" }],
+  },
+  {
+    name: "Billie Jean King Cup",
+    slug: "2310",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/ipw5go1672327786.png",
+    seasons: [{ name: "2026", slug: "88325" }],
   },
   {
     name: "🇦🇺 Alex De Minaur",
@@ -2926,7 +3049,7 @@ export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "World Cup",
+    name: "World Cup - Men",
     slug: "421",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/1otaxh1773613283.png/small",
     seasons: [
@@ -2979,7 +3102,7 @@ export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "World Cup Sevens",
+    name: "World Cup Sevens - Men",
     slug: "11276",
     icon: "https://upload.wikimedia.org/wikipedia/en/c/c5/Rugby_World_Cup_Sevens_logo.png",
     seasons: [

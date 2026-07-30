@@ -1,7 +1,16 @@
 "use client"
 
 import { CricketInningIncident } from "@/types/cricket"
-import { Bar, BarChart, CartesianGrid, Line, LineChart, XAxis } from "recharts"
+import {
+  Bar,
+  CartesianGrid,
+  ComposedChart,
+  Legend,
+  Line,
+  Scatter,
+  XAxis,
+  YAxis,
+} from "recharts"
 import { Card, CardContent, CardHeader, CardTitle } from "../shadcn/card"
 import {
   ChartConfig,
@@ -9,6 +18,17 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "../shadcn/chart"
+
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    color: "var(--chart-1)",
+  },
+  mobile: {
+    label: "Mobile",
+    color: "var(--chart-2)",
+  },
+} satisfies ChartConfig
 
 export default function CricketStats({
   matchIncidents,
@@ -26,22 +46,20 @@ export default function CricketStats({
   )
 }
 
+const colours = [
+  "#3182bd",
+  "#dd6b20",
+  "#805ad5",
+  "#d69e2e",
+  "#38a169",
+  "#e53e3e",
+]
+
 function Manhatten({
   matchIncidents,
 }: {
   matchIncidents: CricketInningIncident[]
 }) {
-  const chartConfig = {
-    desktop: {
-      label: "Desktop",
-      color: "var(--chart-1)",
-    },
-    mobile: {
-      label: "Mobile",
-      color: "var(--chart-2)",
-    },
-  } satisfies ChartConfig
-
   const overs = new Map<number, Record<string, string | number>>()
 
   matchIncidents.forEach((inning) => {
@@ -49,6 +67,10 @@ function Manhatten({
       const item = overs.get(over.over) ?? { over: over.over }
 
       item[inning.inningLabel] = over.runs
+
+      for (let i = 0; i < over.wickets; i++) {
+        item[inning.inningLabel + "Wickets"] = over.runs + 1 + i
+      }
 
       overs.set(over.over, item)
     })
@@ -65,7 +87,9 @@ function Manhatten({
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={data}>
+          <ComposedChart accessibilityLayer data={data}>
+            <Legend />
+
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="over"
@@ -73,11 +97,17 @@ function Manhatten({
               tickMargin={10}
               axisLine={false}
             />
+            <YAxis
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              width={30}
+            />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="dashed" />}
             />
-            {matchIncidents.map((inning) => (
+            {matchIncidents.map((inning, index) => (
               <Bar
                 key={inning.inningLabel}
                 dataKey={inning.inningLabel}
@@ -86,10 +116,19 @@ function Manhatten({
                 //     ? "var(--color-desktop)"
                 //     : "var(--color-mobile)"
                 // }
+                fill={colours[index % colours.length]}
                 radius={4}
               />
             ))}
-          </BarChart>
+            {/* {matchIncidents.map((inning, index) => (
+              <Scatter
+                key={inning.inningLabel + "Wickets"}
+                dataKey={inning.inningLabel + "Wickets"}
+                legendType="none"
+                fill={colours[index % colours.length]}
+              />
+            ))} */}
+          </ComposedChart>
         </ChartContainer>
       </CardContent>
     </Card>
@@ -101,17 +140,6 @@ function RunRate({
 }: {
   matchIncidents: CricketInningIncident[]
 }) {
-  const chartConfig = {
-    desktop: {
-      label: "Desktop",
-      color: "var(--chart-1)",
-    },
-    mobile: {
-      label: "Mobile",
-      color: "var(--chart-2)",
-    },
-  } satisfies ChartConfig
-
   const overs = new Map<number, Record<string, string | number>>()
 
   matchIncidents.forEach((inning) => {
@@ -120,6 +148,11 @@ function RunRate({
 
       item[inning.inningLabel] =
         Number(over.teamScore.split("/")[1]) / over.over
+
+      for (let i = 0; i < over.wickets; i++) {
+        item[inning.inningLabel + "Wickets"] =
+          Number(over.teamScore.split("/")[1]) / over.over + i
+      }
 
       overs.set(over.over, item)
     })
@@ -134,7 +167,7 @@ function RunRate({
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <LineChart
+          <ComposedChart
             accessibilityLayer
             data={data}
             margin={{
@@ -143,25 +176,41 @@ function RunRate({
             }}
           >
             <CartesianGrid vertical={false} />
+            <Legend />
             <XAxis
               dataKey="over"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
             />
+            <YAxis
+              tickLine={false}
+              width={30}
+              tickMargin={10}
+              axisLine={false}
+            />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            {matchIncidents.map((inning) => (
+            {matchIncidents.map((inning, index) => (
               <Line
                 key={inning.inningLabel}
                 dataKey={inning.inningLabel}
                 dot={false}
                 type="natural"
+                stroke={colours[index % colours.length]}
               />
             ))}
-          </LineChart>
+            {matchIncidents.map((inning, index) => (
+              <Scatter
+                key={inning.inningLabel + "Wickets"}
+                dataKey={inning.inningLabel + "Wickets"}
+                legendType="none"
+                fill={colours[index % colours.length]}
+              />
+            ))}
+          </ComposedChart>
         </ChartContainer>
       </CardContent>
     </Card>
@@ -169,17 +218,6 @@ function RunRate({
 }
 
 function Worm({ matchIncidents }: { matchIncidents: CricketInningIncident[] }) {
-  const chartConfig = {
-    desktop: {
-      label: "Desktop",
-      color: "var(--chart-1)",
-    },
-    mobile: {
-      label: "Mobile",
-      color: "var(--chart-2)",
-    },
-  } satisfies ChartConfig
-
   const overs = new Map<number, Record<string, string | number>>()
 
   matchIncidents.forEach((inning) => {
@@ -187,6 +225,11 @@ function Worm({ matchIncidents }: { matchIncidents: CricketInningIncident[] }) {
       const item = overs.get(over.over) ?? { over: over.over }
 
       item[inning.inningLabel] = Number(over.teamScore.split("/")[1])
+
+      for (let i = 0; i < over.wickets; i++) {
+        item[inning.inningLabel + "Wickets"] =
+          Number(over.teamScore.split("/")[1]) + i
+      }
 
       overs.set(over.over, item)
     })
@@ -201,7 +244,7 @@ function Worm({ matchIncidents }: { matchIncidents: CricketInningIncident[] }) {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <LineChart
+          <ComposedChart
             accessibilityLayer
             data={data}
             margin={{
@@ -210,25 +253,41 @@ function Worm({ matchIncidents }: { matchIncidents: CricketInningIncident[] }) {
             }}
           >
             <CartesianGrid vertical={false} />
+            <Legend />
             <XAxis
               dataKey="over"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
             />
-            <ChartTooltip
+            <YAxis
+              tickLine={false}
+              width={30}
+              tickMargin={10}
+              axisLine={false}
+            />
+            {/* <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
-            />
-            {matchIncidents.map((inning) => (
+            /> */}
+            {matchIncidents.map((inning, index) => (
               <Line
                 key={inning.inningLabel}
                 dataKey={inning.inningLabel}
                 dot={false}
                 type="natural"
+                stroke={colours[index % colours.length]}
               />
             ))}
-          </LineChart>
+            {matchIncidents.map((inning, index) => (
+              <Scatter
+                key={inning.inningLabel + "Wickets"}
+                dataKey={inning.inningLabel + "Wickets"}
+                legendType="none"
+                fill={colours[index % colours.length]}
+              />
+            ))}
+          </ComposedChart>
         </ChartContainer>
       </CardContent>
     </Card>
