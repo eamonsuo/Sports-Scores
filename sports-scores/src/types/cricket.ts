@@ -8,6 +8,7 @@ export type CricketOverIncident = {
   runs: number
   teamScore: string
   balls: string[]
+  wickets: number
 }
 
 export type CricketInningIncident = {
