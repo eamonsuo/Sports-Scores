@@ -85,11 +85,25 @@ export default function MatchDetailsHero({
         {awayInfo.name}
       </p>
       <p className="content-center text-center text-2xl dark:text-neutral-400">
-        {homeInfo.score}
+        {Array.isArray(homeInfo?.score) && homeInfo.score.length > 1 ? (
+          <>
+            {homeInfo?.score[0]}
+            <span className="text-base font-normal"> {homeInfo?.score[1]}</span>
+          </>
+        ) : (
+          <>{homeInfo?.score}</>
+        )}
       </p>
       <div></div>
       <p className="content-center text-center text-2xl dark:text-neutral-400">
-        {awayInfo.score}
+        {Array.isArray(awayInfo?.score) && awayInfo.score.length > 1 ? (
+          <>
+            {awayInfo?.score[0]}
+            <span className="text-base font-normal"> {awayInfo?.score[1]}</span>
+          </>
+        ) : (
+          <>{awayInfo?.score}</>
+        )}
       </p>
     </div>
   )

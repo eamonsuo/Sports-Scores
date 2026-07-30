@@ -35,7 +35,7 @@ import {
   MatchSummary,
   SPORT,
 } from "@/types/misc"
-import { Sofascore_Event } from "@/types/sofascore"
+import { Sofascore_Event, Sofascore_Score_Inning } from "@/types/sofascore"
 import { isSameDay, isWithinInterval } from "date-fns"
 import { TZDate } from "react-day-picker"
 import { SofascoreSport } from "./sofascore.service"
@@ -229,18 +229,9 @@ class CricketService extends SofascoreSport {
     event: Sofascore_Event,
     options?: DeepPartial<MatchSummary>,
   ): MatchSummary {
-    const twoInnings =
-      (event.homeScore.innings?.inning1 && event.homeScore.innings?.inning2) ||
-      (event.awayScore.innings?.inning1 && event.awayScore.innings?.inning2)
-    let home2Ing = twoInnings
-      ? `, ${event.homeScore.innings?.inning2?.wickets ?? 0}/${event.homeScore.innings?.inning2?.score ?? 0}${/*event.Tr1CD2 === 1 ? "d" : */ ""}`
-      : ""
-    let away2Ing = twoInnings
-      ? `, ${event.awayScore.innings?.inning2?.wickets ?? 0}/${event.awayScore.innings?.inning2?.score ?? 0}${/*event.Tr2CD2 === 1 ? "d" : */ ""}`
-      : ""
-
     return super.eventMapper(event, {
       ...options,
+      summaryText: event.note,
       roundLabel:
         event.roundInfo?.name ??
         (event.tournament.name.split(",").length > 1
@@ -249,17 +240,17 @@ class CricketService extends SofascoreSport {
       competitorDetails: [
         {
           ...options?.competitorDetails?.[0],
-          score: [
-            `${event.homeScore.innings?.inning1?.wickets ?? 0}/${event.homeScore.innings?.inning1?.score ?? 0}${/*event.Tr1CD1 === 1 ? "d" : */ ""}${home2Ing}`,
-            // `(${event.homeScore.innings?.inning1?.overs ?? 0})`,
-          ],
+          score: formatScore(
+            event.homeScore.innings?.inning1,
+            event.homeScore.innings?.inning2,
+          ),
         },
         {
           ...options?.competitorDetails?.[1],
-          score: [
-            `${event.awayScore.innings?.inning1?.wickets ?? 0}/${event.awayScore.innings?.inning1?.score ?? 0}${/*event.Tr2CD1 === 1 ? "d" : */ ""}${away2Ing}`,
-            // `(${event.awayScore.innings?.inning1?.overs ?? 0})`,
-          ],
+          score: formatScore(
+            event.awayScore.innings?.inning1,
+            event.awayScore.innings?.inning2,
+          ),
         },
       ],
     })
@@ -269,25 +260,15 @@ class CricketService extends SofascoreSport {
     event: Sofascore_Event,
     options?: DeepPartial<MatchSummary>,
   ) {
-    const twoInnings =
-      (event.homeScore.innings?.inning1 && event.homeScore.innings?.inning2) ||
-      (event.awayScore.innings?.inning1 && event.awayScore.innings?.inning2)
-    let home2Ing = twoInnings
-      ? `, ${event.homeScore.innings?.inning2?.wickets ?? 0}/${event.homeScore.innings?.inning2?.score ?? 0}${/*event.Tr1CD2 === 1 ? "d" : */ ""}`
-      : ""
-    let away2Ing = twoInnings
-      ? `, ${event.awayScore.innings?.inning2?.wickets ?? 0}/${event.awayScore.innings?.inning2?.score ?? 0}${/*event.Tr2CD2 === 1 ? "d" : */ ""}`
-      : ""
-
     const matchDetails = super.matchDetailsMapper(event)
-    matchDetails.homeTeam.score = [
-      `${event.homeScore.innings?.inning1?.wickets ?? 0}/${event.homeScore.innings?.inning1?.score ?? 0}${/*event.Tr1CD1 === 1 ? "d" : */ ""}${home2Ing}`,
-      // `(${event.homeScore.innings?.inning1?.overs ?? 0})`,
-    ]
-    matchDetails.awayTeam.score = [
-      `${event.awayScore.innings?.inning1?.wickets ?? 0}/${event.awayScore.innings?.inning1?.score ?? 0}${/*event.Tr2CD1 === 1 ? "d" : */ ""}${away2Ing}`,
-      // `(${event.awayScore.innings?.inning1?.overs ?? 0})`,
-    ]
+    matchDetails.homeTeam.score = formatScore(
+      event.homeScore.innings?.inning1,
+      event.homeScore.innings?.inning2,
+    )
+    matchDetails.awayTeam.score = formatScore(
+      event.awayScore.innings?.inning1,
+      event.awayScore.innings?.inning2,
+    )
     return matchDetails
   }
 
@@ -409,6 +390,7 @@ class CricketService extends SofascoreSport {
             runs: 0,
             teamScore: "0/0",
             balls: [],
+            wickets: 0,
           })
           currentOverIndex =
             acc[incident.inningNumber].inningIncidents.length - 1
@@ -434,6 +416,7 @@ class CricketService extends SofascoreSport {
           runs: currentOver.runs + incident.totalRuns,
           teamScore: incident.score.split("/").reverse().join("/"),
           balls: [...currentOver.balls, incident.incidentClassLabel],
+          wickets: currentOver.wickets + (incident.wicket ? 1 : 0),
         }
 
         acc[incident.inningNumber].inningIncidents[currentOverIndex] =
@@ -478,4 +461,22 @@ function mapDismissalText(
     default:
       return ""
   }
+}
+
+function formatScore(
+  inning1?: Sofascore_Score_Inning,
+  inning2?: Sofascore_Score_Inning,
+) {
+  const secondInnings = inning2
+    ? `, ${inning2?.wickets ?? 0}/${inning2?.score ?? 0}${/*event.Tr1CD2 === 1 ? "d" : */ ""}`
+    : ""
+
+  const score = [
+    `${inning1?.wickets ?? 0}/${inning1?.score ?? 0}${/*event.Tr1CD1 === 1 ? "d" : */ ""}${secondInnings}`,
+  ]
+  if (inning1?.overs !== undefined && inning1?.overs > 0 && !inning2) {
+    score.push(`(${inning1?.overs ?? 0})`)
+  }
+
+  return score
 }
