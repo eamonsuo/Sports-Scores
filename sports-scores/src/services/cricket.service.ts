@@ -415,7 +415,14 @@ class CricketService extends SofascoreSport {
           ),
           runs: currentOver.runs + incident.totalRuns,
           teamScore: incident.score.split("/").reverse().join("/"),
-          balls: [...currentOver.balls, incident.incidentClassLabel],
+          balls: [
+            ...currentOver.balls,
+            {
+              ball: incident.ball,
+              value: incident.incidentClassLabel,
+              commentary: incident.commentary,
+            },
+          ],
           wickets: currentOver.wickets + (incident.wicket ? 1 : 0),
         }
 

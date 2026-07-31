@@ -49,9 +49,9 @@ export default function CricketStats({
 const colours = [
   "#3182bd",
   "#dd6b20",
+  "#38a169",
   "#805ad5",
   "#d69e2e",
-  "#38a169",
   "#e53e3e",
 ]
 
@@ -93,6 +93,7 @@ function Manhatten({
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="over"
+              type="number"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
@@ -111,11 +112,6 @@ function Manhatten({
               <Bar
                 key={inning.inningLabel}
                 dataKey={inning.inningLabel}
-                // fill={
-                //   inning.inningLabel === "desktop"
-                //     ? "var(--color-desktop)"
-                //     : "var(--color-mobile)"
-                // }
                 fill={colours[index % colours.length]}
                 radius={4}
               />
@@ -140,25 +136,26 @@ function RunRate({
 }: {
   matchIncidents: CricketInningIncident[]
 }) {
-  const overs = new Map<number, Record<string, string | number>>()
+  const overs: Record<string, string | number>[] = []
+  const wickets: Record<string, string | number>[] = []
 
   matchIncidents.forEach((inning) => {
     inning.inningIncidents.forEach((over) => {
-      const item = overs.get(over.over) ?? { over: over.over }
+      const runRate = Number(over.teamScore.split("/")[1]) / over.over
 
-      item[inning.inningLabel] =
-        Number(over.teamScore.split("/")[1]) / over.over
+      overs.push({ over: over.over, [inning.inningLabel]: runRate })
 
+      // pushed as separate rows so multiple wickets in one over each get their own point
       for (let i = 0; i < over.wickets; i++) {
-        item[inning.inningLabel + "Wickets"] =
-          Number(over.teamScore.split("/")[1]) / over.over + i
+        wickets.push({
+          over: over.over,
+          [inning.inningLabel + "Wickets"]: runRate + i,
+        })
       }
-
-      overs.set(over.over, item)
     })
   })
 
-  const data = Array.from(overs.values()).reverse()
+  const data = [...overs, ...wickets]
 
   return (
     <Card>
@@ -179,6 +176,7 @@ function RunRate({
             <Legend />
             <XAxis
               dataKey="over"
+              type="number"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
@@ -194,20 +192,20 @@ function RunRate({
               content={<ChartTooltipContent hideLabel />}
             />
             {matchIncidents.map((inning, index) => (
+              <Scatter
+                key={inning.inningLabel + "Wickets"}
+                dataKey={inning.inningLabel + "Wickets"}
+                legendType="none"
+                fill={colours[index % colours.length]}
+              />
+            ))}
+            {matchIncidents.map((inning, index) => (
               <Line
                 key={inning.inningLabel}
                 dataKey={inning.inningLabel}
                 dot={false}
                 type="natural"
                 stroke={colours[index % colours.length]}
-              />
-            ))}
-            {matchIncidents.map((inning, index) => (
-              <Scatter
-                key={inning.inningLabel + "Wickets"}
-                dataKey={inning.inningLabel + "Wickets"}
-                legendType="none"
-                fill={colours[index % colours.length]}
               />
             ))}
           </ComposedChart>
@@ -218,24 +216,26 @@ function RunRate({
 }
 
 function Worm({ matchIncidents }: { matchIncidents: CricketInningIncident[] }) {
-  const overs = new Map<number, Record<string, string | number>>()
+  const overs: Record<string, string | number>[] = []
+  const wickets: Record<string, string | number>[] = []
 
   matchIncidents.forEach((inning) => {
     inning.inningIncidents.forEach((over) => {
-      const item = overs.get(over.over) ?? { over: over.over }
+      const runs = Number(over.teamScore.split("/")[1])
 
-      item[inning.inningLabel] = Number(over.teamScore.split("/")[1])
+      overs.push({ over: over.over, [inning.inningLabel]: runs })
 
+      // pushed as separate rows so multiple wickets in one over each get their own point
       for (let i = 0; i < over.wickets; i++) {
-        item[inning.inningLabel + "Wickets"] =
-          Number(over.teamScore.split("/")[1]) + i
+        wickets.push({
+          over: over.over,
+          [inning.inningLabel + "Wickets"]: runs + 10 * i,
+        })
       }
-
-      overs.set(over.over, item)
     })
   })
 
-  const data = Array.from(overs.values()).reverse()
+  const data = [...overs, ...wickets]
 
   return (
     <Card>
@@ -256,6 +256,7 @@ function Worm({ matchIncidents }: { matchIncidents: CricketInningIncident[] }) {
             <Legend />
             <XAxis
               dataKey="over"
+              type="number"
               tickLine={false}
               axisLine={false}
               tickMargin={8}

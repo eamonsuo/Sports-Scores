@@ -1,5 +1,18 @@
+"use client"
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/shadcn/dialog"
 import { cn } from "@/lib/shadcnUtils"
-import { CricketInningIncident, CricketOverIncident } from "@/types/cricket"
+import {
+  CricketBallIncident,
+  CricketInningIncident,
+  CricketOverIncident,
+} from "@/types/cricket"
 import ComponentList from "../misc-ui/ComponentList"
 
 export default function CricketCommentary({
@@ -31,24 +44,69 @@ type OverRowProps = {
 
 function OverRow({ over }: OverRowProps) {
   return (
-    <div className="grid grid-cols-[80px_1fr] border-t border-gray-400 text-sm">
-      <div className="p-2">
-        <div className="text-gray-400">Over {over.over}</div>
-        <div className="mt-2 text-xs text-gray-500">{over.runs} Runs</div>
-        <div className="text-xs text-gray-500">{over.teamScore}</div>
-      </div>
+    <Dialog>
+      <DialogTrigger asChild>
+        <div className="grid cursor-pointer grid-cols-[80px_1fr] border-t border-gray-400 text-sm">
+          <div className="p-2">
+            <div className="text-gray-400">Over {over.over}</div>
+            <div className="mt-2 text-xs text-gray-500">{over.runs} Runs</div>
+            <div className="text-xs text-gray-500">{over.teamScore}</div>
+          </div>
 
-      <div className="p-2">
-        <div className="mb-0 text-gray-500">{over.bowlers.join(" & ")} to</div>
-        <div className="mb-1 text-gray-500">{over.batters.join(" & ")}</div>
+          <div className="p-2">
+            <div className="mb-0 text-gray-500">
+              {over.bowlers.join(" & ")} to
+            </div>
+            <div className="mb-1 text-gray-500">{over.batters.join(" & ")}</div>
 
-        <div className="mb-1 flex flex-wrap gap-2">
-          {over.balls.map((ball, index) => (
-            <BallChip key={`${over.over}-${index}`} value={ball} />
-          ))}
+            <div className="mb-1 flex flex-wrap gap-2">
+              {over.balls.map((ball, index) => (
+                <BallChip key={`${over.over}-${index}`} value={ball.value} />
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </DialogTrigger>
+
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Over {over.over}</DialogTitle>
+        </DialogHeader>
+
+        <div className="max-h-[60vh] overflow-y-auto">
+          <table className="w-full text-sm">
+            <tbody>
+              {over.balls.map((ball, index) => (
+                <BallRow
+                  key={`${over.over}-${ball.ball}-${index}`}
+                  ball={ball}
+                  over={over.over}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+type BallRowProps = {
+  ball: CricketBallIncident
+  over: number
+}
+
+function BallRow({ ball, over }: BallRowProps) {
+  return (
+    <tr className="border-t border-gray-200 align-top">
+      <td className="w-10 px-1 py-2 text-xs text-gray-400">
+        {over}.{ball.ball}
+      </td>
+      <td className="w-10 px-1 py-2">
+        <BallChip value={ball.value} />
+      </td>
+      <td className="px-1 py-2 ps-2 text-gray-600">{ball.commentary}</td>
+    </tr>
   )
 }
 
