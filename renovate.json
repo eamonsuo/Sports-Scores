@@ -1,8 +1,17 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    ":enableVulnerabilityAlerts"
   ],
-  "baseBranchPatterns": ["general-work"]
-
+  "baseBranchPatterns": ["general-work"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "enabled": false
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true
+  }
 }
