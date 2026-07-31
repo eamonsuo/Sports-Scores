@@ -83,13 +83,13 @@ function pageSettings(matchDetails: CricketMatchDetails) {
       btnLabel: `Stats`,
       component: matchDetails.matchIncidents && (
         <CricketStats matchIncidents={matchDetails.matchIncidents} />
-      ), //TODO: Add Stats
+      ),
     },
     {
       btnLabel: `Lineups`,
       component: matchDetails.matchIncidents && (
         <CricketLineups matchIncidents={matchDetails.matchIncidents} />
-      ), //TODO: Add Lineups
+      ),
     },
   ]
 }

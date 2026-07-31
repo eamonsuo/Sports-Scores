@@ -68,7 +68,7 @@ export default function MatchSummaryCard({
               />
             )}
           </div>
-          <p
+          <div
             className={clsx(
               "flex content-center items-center text-left dark:text-neutral-400",
               winner === 1 && "font-bold",
@@ -85,7 +85,7 @@ export default function MatchSummaryCard({
             ) : (
               <>{homeDetails?.score}</>
             )}
-          </p>
+          </div>
 
           <div className="flex items-center justify-center overflow-visible">
             {timer.display && (
@@ -96,7 +96,7 @@ export default function MatchSummaryCard({
             )}
           </div>
 
-          <p
+          <div
             className={clsx(
               "flex content-center items-center justify-self-end text-right dark:text-neutral-400",
               winner !== 1 && winner !== undefined && "font-bold",
@@ -113,7 +113,7 @@ export default function MatchSummaryCard({
             ) : (
               <>{awayDetails?.score}</>
             )}
-          </p>
+          </div>
           <div className="content-center justify-self-end">
             {Array.isArray(awayDetails?.img) ? (
               <div className="flex">

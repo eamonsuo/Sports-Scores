@@ -178,7 +178,7 @@ export default function LeagueSeasonToggle({
       </Button>
       {/* League Dropdown */}
       <DropdownMenu>
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild>
           <Button variant="outline" className="justify-between">
             {!todayActive && selectedLeague.icon && (
               <Image
@@ -229,7 +229,7 @@ export default function LeagueSeasonToggle({
       {/* Season/Year Dropdown or Date Picker */}
       {todayActive ? (
         <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-          <PopoverTrigger>
+          <PopoverTrigger asChild>
             <Button variant="outline" className="justify-between">
               {format(selectedDate, "d MMM yy")}
               <ChevronDownIcon className="ml-2 h-4 w-4" />
@@ -245,7 +245,7 @@ export default function LeagueSeasonToggle({
         </Popover>
       ) : (
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
             <Button variant="outline" className="justify-between">
               {selectedSeason.name}
               <ChevronDownIcon className="ml-2 h-4 w-4" />

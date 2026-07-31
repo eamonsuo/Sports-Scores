@@ -1,13 +1,19 @@
 import { SportsTable, TeamMatchDetail } from "./misc"
 import { Sofascore_Player, Sofascore_Team } from "./sofascore"
 
+export type CricketBallIncident = {
+  ball: number
+  value: string
+  commentary?: string
+}
+
 export type CricketOverIncident = {
   over: number
   bowlers: string[]
   batters: string[]
   runs: number
   teamScore: string
-  balls: string[]
+  balls: CricketBallIncident[]
   wickets: number
 }
 
