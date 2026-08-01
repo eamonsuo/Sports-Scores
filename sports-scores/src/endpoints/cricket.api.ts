@@ -1,4 +1,4 @@
-import { updateQuota } from "@/lib/projUtils"
+import { fetchRapidApi } from "@/lib/projUtils"
 import {
   Sofascore_Cricket_Incidents_Response,
   Sofascore_Cricket_MatchInnings_Response,
@@ -12,44 +12,7 @@ import {
 } from "@/types/sofascore"
 
 async function fetchCricketApi(endpoint: string) {
-  const url = process.env.CRICKET_BASEURL + endpoint
-  const res = await fetch(url, {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Key": process.env.RapidAPIKey ?? "",
-    },
-  })
-
-  if (!res.ok || res.status === 204) {
-    return null
-  }
-
-  updateQuota(res, SPORT.CRICKET)
-
-  const text = await res.text()
-
-  try {
-    return JSON.parse(text)
-  } catch (err) {
-    console.error("JSON parse failed", err)
-
-    const match = String(err).match(/position (\d+)/)
-    const pos = Number(match?.[1])
-
-    if (!Number.isNaN(pos)) {
-      console.log("Error position:", pos)
-      console.log(
-        text.substring(
-          Math.max(0, pos - 500),
-          Math.min(text.length, pos + 500),
-        ),
-      )
-    }
-
-    return null
-  }
-
-  return res.json()
+  return fetchRapidApi(process.env.CRICKET_BASEURL, endpoint, SPORT.CRICKET)
 }
 
 /**

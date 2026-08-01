@@ -1,4 +1,4 @@
-import { updateQuota } from "@/lib/projUtils"
+import { fetchRapidApi } from "@/lib/projUtils"
 import { SPORT } from "@/types/misc"
 import {
   Sofascore_Events_Response,
@@ -16,21 +16,7 @@ import {
 } from "@/types/tennis"
 
 async function fetchTennisApi(endpoint: string) {
-  const url = process.env.TENNIS_BASEURL + endpoint
-  const res = await fetch(url, {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Key": process.env.RapidAPIKey ?? "",
-    },
-  })
-
-  if (!res.ok || res.status === 204) {
-    return null
-  }
-
-  updateQuota(res, SPORT.TENNIS)
-
-  return res.json()
+  return fetchRapidApi(process.env.TENNIS_BASEURL, endpoint, SPORT.TENNIS)
 }
 
 export async function fetchTennisTournamentRounds(
