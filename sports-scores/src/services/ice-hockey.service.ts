@@ -24,12 +24,12 @@ class IceHockeyService extends SofascoreSport {
       {
         fetchLastEvents: withDevCache(
           "ice-hockey",
-          "last-matches",
+          "matches-last",
           fetchIceHockeyLastMatches,
         ),
         fetchNextEvents: withDevCache(
           "ice-hockey",
-          "next-matches",
+          "matches-next",
           fetchIceHockeyNextMatches,
         ),
         fetchEventsByDate: withDevCache(
@@ -57,12 +57,12 @@ class IceHockeyService extends SofascoreSport {
         fetchPlayerRankings: async () => null,
         fetchTeamLastEvents: withDevCache(
           "ice-hockey",
-          "team-last-matches",
+          "team-matches-last",
           fetchIceHockeyTeamLastMatches,
         ),
         fetchTeamNextEvents: withDevCache(
           "ice-hockey",
-          "team-next-matches",
+          "team-matches-next",
           fetchIceHockeyTeamNextMatches,
         ),
       },

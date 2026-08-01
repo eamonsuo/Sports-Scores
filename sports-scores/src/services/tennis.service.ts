@@ -41,12 +41,12 @@ class TennisService extends SofascoreSport {
       {
         fetchLastEvents: withDevCache(
           "tennis",
-          "tournament-last-matches",
+          "tournament-matches-last",
           fetchTennisTournamentLastMatches,
         ),
         fetchNextEvents: withDevCache(
           "tennis",
-          "tournament-next-matches",
+          "tournament-matches-next",
           fetchTennisTournamentNextMatches,
         ),
         fetchEventsByDate: withDevCache(
@@ -66,12 +66,12 @@ class TennisService extends SofascoreSport {
         fetchPlayerRankings: async () => null,
         fetchTeamLastEvents: withDevCache(
           "tennis",
-          "player-last-matches",
+          "player-matches-last",
           fetchTennisPlayerLastMatches,
         ),
         fetchTeamNextEvents: withDevCache(
           "tennis",
-          "player-next-matches",
+          "player-matches-next",
           fetchTennisPlayerNextMatches,
         ),
       },

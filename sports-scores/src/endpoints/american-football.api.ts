@@ -1,4 +1,4 @@
-import { updateQuota } from "@/lib/projUtils"
+import { fetchRapidApi } from "@/lib/projUtils"
 import {
   AmericanFootball_AmericanFootballApi_CategorySchedule_Response,
   AmericanFootball_AmericanFootballApi_FixturePage_Response,
@@ -11,21 +11,11 @@ import {
 } from "@/types/sofascore"
 
 async function fetchAmericanFootballApi(endpoint: string) {
-  const url = process.env.NFL_BASEURL + endpoint
-  const res = await fetch(url, {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Key": process.env.RapidAPIKey ?? "",
-    },
-  })
-
-  if (!res.ok || res.status === 204) {
-    return null
-  }
-
-  updateQuota(res, SPORT.AMERICAN_FOOTBALL)
-
-  return res.json()
+  return fetchRapidApi(
+    process.env.NFL_BASEURL,
+    endpoint,
+    SPORT.AMERICAN_FOOTBALL,
+  )
 }
 
 export async function fetchAmericanFootballLastMatches(

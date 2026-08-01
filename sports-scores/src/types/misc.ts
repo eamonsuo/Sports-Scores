@@ -209,6 +209,9 @@ export interface LineupPlayer {
   position?: string
   playerNumber?: string
   starter?: boolean
+  country?: string
+  img?: string
+  overseasPlayer?: boolean
 }
 
 export interface MatchLineup {

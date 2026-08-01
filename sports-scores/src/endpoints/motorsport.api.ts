@@ -1,4 +1,4 @@
-import { updateQuota } from "@/lib/projUtils"
+import { fetchRapidApi } from "@/lib/projUtils"
 import { SPORT } from "@/types/misc"
 import {
   Sofascore_Stages_Response,
@@ -6,21 +6,11 @@ import {
 } from "@/types/sofascore"
 
 async function fetchMotorsportApi(endpoint: string) {
-  const url = process.env.MOTORSPORT_BASEURL + endpoint
-  const res = await fetch(url, {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Key": process.env.RapidAPIKey ?? "",
-    },
-  })
-
-  if (!res.ok || res.status === 204) {
-    return null
-  }
-
-  updateQuota(res, SPORT.MOTORSPORT)
-
-  return res.json()
+  return fetchRapidApi(
+    process.env.MOTORSPORT_BASEURL,
+    endpoint,
+    SPORT.MOTORSPORT,
+  )
 }
 
 //Use Categories to get stage id

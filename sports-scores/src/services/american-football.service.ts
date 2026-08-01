@@ -25,12 +25,12 @@ class AmericanFootballService extends SofascoreSport {
       {
         fetchLastEvents: withDevCache(
           "american-football",
-          "last-matches",
+          "matches-last",
           fetchAmericanFootballLastMatches,
         ),
         fetchNextEvents: withDevCache(
           "american-football",
-          "next-matches",
+          "matches-next",
           fetchAmericanFootballNextMatches,
         ),
         fetchEventsByDate: withDevCache(
@@ -58,12 +58,12 @@ class AmericanFootballService extends SofascoreSport {
         fetchPlayerRankings: async () => null,
         fetchTeamLastEvents: withDevCache(
           "american-football",
-          "team-last-matches",
+          "team-matches-last",
           fetchAmericanFootballTeamLastMatches,
         ),
         fetchTeamNextEvents: withDevCache(
           "american-football",
-          "team-next-matches",
+          "team-matches-next",
           fetchAmericanFootballTeamNextMatches,
         ),
       },

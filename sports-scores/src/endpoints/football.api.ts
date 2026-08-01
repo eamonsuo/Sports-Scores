@@ -1,4 +1,4 @@
-import { updateQuota } from "@/lib/projUtils"
+import { fetchRapidApi } from "@/lib/projUtils"
 import { SPORT } from "@/types/misc"
 import {
   Sofascore_Event_Response,
@@ -10,21 +10,7 @@ import {
 } from "@/types/sofascore"
 
 async function fetchFootballApi(endpoint: string) {
-  const url = process.env.FOOTBALL_BASEURL + endpoint
-  const res = await fetch(url, {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Key": process.env.RapidAPIKey ?? "",
-    },
-  })
-
-  if (!res.ok || res.status === 204) {
-    return null
-  }
-
-  updateQuota(res, SPORT.FOOTBALL)
-
-  return res.json()
+  return fetchRapidApi(process.env.FOOTBALL_BASEURL, endpoint, SPORT.FOOTBALL)
 }
 
 function delay(ms: number) {

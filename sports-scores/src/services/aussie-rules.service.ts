@@ -25,12 +25,12 @@ class AussieRulesService extends SofascoreSport {
       {
         fetchLastEvents: withDevCache(
           "aussie-rules",
-          "last-matches",
+          "matches-last",
           fetchTournamentLastMatches,
         ),
         fetchNextEvents: withDevCache(
           "aussie-rules",
-          "next-matches",
+          "matches-next",
           fetchTournamentNextMatches,
         ),
         fetchEventsByDate: withDevCache(
@@ -62,12 +62,12 @@ class AussieRulesService extends SofascoreSport {
         fetchPlayerRankings: async () => null,
         fetchTeamLastEvents: withDevCache(
           "aussie-rules",
-          "team-last-matches",
+          "team-matches-last",
           fetchTeamLastMatches,
         ),
         fetchTeamNextEvents: withDevCache(
           "aussie-rules",
-          "team-next-matches",
+          "team-matches-next",
           fetchTeamNextMatches,
         ),
       },

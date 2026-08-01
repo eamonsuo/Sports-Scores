@@ -24,12 +24,12 @@ class RugbyUnionService extends SofascoreSport {
       {
         fetchNextEvents: withDevCache(
           "rugby-union",
-          "next-matches",
+          "matches-next",
           fetchRugbyLeagueNextMatches,
         ),
         fetchLastEvents: withDevCache(
           "rugby-union",
-          "last-matches",
+          "matches-last",
           fetchRugbyLeagueLastMatches,
         ),
         fetchEventsByDate: withDevCache(
@@ -57,12 +57,12 @@ class RugbyUnionService extends SofascoreSport {
         fetchPlayerRankings: async () => null,
         fetchTeamLastEvents: withDevCache(
           "rugby-union",
-          "team-last-matches",
+          "team-matches-last",
           fetchRugbyLeagueTeamLastMatches,
         ),
         fetchTeamNextEvents: withDevCache(
           "rugby-union",
-          "team-next-matches",
+          "team-matches-next",
           fetchRugbyLeagueTeamNextMatches,
         ),
       },

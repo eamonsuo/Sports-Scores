@@ -149,7 +149,7 @@ function RunRate({
       for (let i = 0; i < over.wickets; i++) {
         wickets.push({
           over: over.over,
-          [inning.inningLabel + "Wickets"]: runRate + i,
+          [inning.inningLabel + "Wickets"]: runRate + 0.5 * i,
         })
       }
     })

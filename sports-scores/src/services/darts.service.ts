@@ -21,12 +21,12 @@ class DartsService extends SofascoreSport {
       {
         fetchLastEvents: withDevCache(
           "darts",
-          "last-matches",
+          "matches-last",
           fetchTournamentLastMatches,
         ),
         fetchNextEvents: withDevCache(
           "darts",
-          "next-matches",
+          "matches-next",
           fetchTournamentNextMatches,
         ),
         fetchEventsByDate: withDevCache(
@@ -58,12 +58,12 @@ class DartsService extends SofascoreSport {
         fetchPlayerRankings: async () => null,
         fetchTeamLastEvents: withDevCache(
           "darts",
-          "team-last-matches",
+          "team-matches-last",
           fetchTeamLastMatches,
         ),
         fetchTeamNextEvents: withDevCache(
           "darts",
-          "team-next-matches",
+          "team-matches-next",
           fetchTeamNextMatches,
         ),
       },

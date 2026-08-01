@@ -36,8 +36,8 @@ import {
   SPORT,
 } from "@/types/misc"
 import { Sofascore_Event, Sofascore_Score_Inning } from "@/types/sofascore"
+import { TZDate } from "@date-fns/tz/date"
 import { isSameDay, isWithinInterval } from "date-fns"
-import { TZDate } from "react-day-picker"
 import { SofascoreSport } from "./sofascore.service"
 
 class CricketService extends SofascoreSport {
@@ -46,12 +46,12 @@ class CricketService extends SofascoreSport {
       {
         fetchLastEvents: withDevCache(
           "cricket",
-          "last-matches",
+          "matches-last",
           fetchCricketLastMatches,
         ),
         fetchNextEvents: withDevCache(
           "cricket",
-          "next-matches",
+          "matches-next",
           fetchCricketNextMatches,
         ),
         fetchEventsByDate: withDevCache(
@@ -83,12 +83,12 @@ class CricketService extends SofascoreSport {
         fetchPlayerRankings: async () => null,
         fetchTeamLastEvents: withDevCache(
           "cricket",
-          "team-last-matches",
+          "team-matches-last",
           fetchCricketTeamLastMatches,
         ),
         fetchTeamNextEvents: withDevCache(
           "cricket",
-          "team-next-matches",
+          "team-matches-next",
           fetchCricketTeamNextMatches,
         ),
       },
@@ -287,7 +287,10 @@ class CricketService extends SofascoreSport {
                 const didNotbat = batter.wicketTypeName === "Did not bat"
 
                 return {
-                  name: batter.player.name,
+                  name:
+                    batter.player.name +
+                    (batter.player.position === "WK" ? " (wk)" : "") +
+                    (batter.player.position === "C" ? " (c)" : ""),
                   runs: didNotbat ? "" : batter.score.toString(),
                   balls: didNotbat ? "" : batter.balls.toString(),
                   strikeRate: didNotbat
