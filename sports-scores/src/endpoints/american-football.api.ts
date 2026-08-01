@@ -12,7 +12,7 @@ import {
 
 async function fetchAmericanFootballApi(endpoint: string) {
   return fetchRapidApi(
-    process.env.NFL_BASEURL,
+    process.env.AMERICAN_FOOTBALL_BASEURL,
     endpoint,
     SPORT.AMERICAN_FOOTBALL,
   )

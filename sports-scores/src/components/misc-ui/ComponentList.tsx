@@ -10,11 +10,13 @@ export default function ComponentList({
   labels,
   curItem,
   buttonStyle = "pill",
+  showAllLabels = false,
 }: {
   children: ReactNode[]
   labels: string[]
   curItem: string
   buttonStyle?: ButtonStyle
+  showAllLabels?: boolean
 }) {
   const [item, setItem] = useState(curItem)
   const btnListRef = useRef<HTMLDivElement>(null)
@@ -97,7 +99,7 @@ export default function ComponentList({
 
   return (
     <>
-      {labels.length > 1 && (
+      {(showAllLabels || labels.length > 1) && (
         <div
           ref={btnListRef}
           className={cn(

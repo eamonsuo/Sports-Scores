@@ -137,6 +137,7 @@ export type LeagueSeasonConfig = {
     slug: string
     ladderConfig?: LadderConfig
     tvguide?: TVConfig
+    externalURL?: string
   }[]
   display?: DisplayTypes
   externalURL?: string
@@ -266,7 +267,7 @@ export interface Brackets {
  */
 
 export enum SPORT {
-  ALL_SPORTS = "all-sports",
+  DEFAULT_SPORT = "default",
   AUSSIE_RULES = "aussie-rules",
   BASEBALL = "baseball",
   CRICKET = "cricket",
@@ -274,7 +275,7 @@ export enum SPORT {
   MOTORSPORT = "motorsport",
   RUGBY_LEAGUE = "rugby-league",
   GOLF = "golf",
-  OLYMPICS = "olympics",
+  MULTI_SPORT = "multi-sport",
   FOOTBALL = "football",
   SURFING = "surfing",
   TENNIS = "tennis",
@@ -284,6 +285,22 @@ export enum SPORT {
   RUGBY_UNION = "rugby-union",
   CYCLING = "cycling",
   DARTS = "darts",
+  // To be implemented
+  // ATHLETICS = "athletics",
+  // SWIMMING = "swimming",
+  // FIELD_HOCKEY = "field-hockey",
+  // VOLLEYBALL = "volleyball",
+  // WINTER_SPORTS = "winter-sports",
+  // X_GAMES = "x-games",
+  // EXTREME_SPORTS = "extreme-sports",
+  // BOXING = "boxing",
+  // HORSE_RACING = "horse-racing",
+  // WATER_POLO = "water-polo",
+  // LAWN_BOWLS = "lawn-bowls",
+  // SAILING = "sailing",
+  // ROWING = "rowing",
+  // CANOE_KAYAK = "canoe-kayak",
+  // TRIATHLON = "triathlon",
 }
 
 export enum MatchStatus {

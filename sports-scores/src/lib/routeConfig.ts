@@ -10,6 +10,7 @@ import { footballService } from "@/services/football.service"
 import { golfService } from "@/services/golf.service"
 import { iceHockeyService } from "@/services/ice-hockey.service"
 import { motorsportService } from "@/services/motorsport.service"
+import { placeholderService } from "@/services/placeholder.service"
 import { rugbyLeagueService } from "@/services/rugby-league.service"
 import { rugbyUnionService } from "@/services/rugby-union.service"
 import { surfingService } from "@/services/surfing.service"
@@ -28,6 +29,7 @@ import {
   GOLF_TOURS_CLIENT,
   ICE_HOCKEY_LEAGUES_CLIENT,
   MOTORSPORT_CATEGORIES_CLIENT,
+  MULTI_SPORT_LEAGUES_CLIENT,
   NETBALL_LEAGUES_CLIENT,
   RUGBY_LEAGUE_LEAGUES_CLIENT,
   RUGBY_UNION_LEAGUES_CLIENT,
@@ -55,9 +57,9 @@ export const DEFAULT_NAV_BUTTONS = [
 ]
 
 export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
-  [SPORT.ALL_SPORTS]: {
+  [SPORT.DEFAULT_SPORT]: {
     leagues: [],
-    service: aussieRulesService,
+    service: placeholderService,
   },
   [SPORT.AMERICAN_FOOTBALL]: {
     leagues: AMERICAN_FOOTBALL_LEAGUES_CLIENT,
@@ -138,13 +140,14 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
       // { href: "teams", label: "Teams", page: "teams" },
     ],
   },
+  [SPORT.MULTI_SPORT]: {
+    leagues: MULTI_SPORT_LEAGUES_CLIENT,
+    service: placeholderService,
+    navButtons: [{ href: "", label: "Details", page: "details" }],
+  },
   [SPORT.NETBALL]: {
     leagues: NETBALL_LEAGUES_CLIENT,
-    service: aussieRulesService,
-  },
-  [SPORT.OLYMPICS]: {
-    leagues: [],
-    service: aussieRulesService,
+    service: placeholderService,
   },
   [SPORT.RUGBY_LEAGUE]: {
     leagues: RUGBY_LEAGUE_LEAGUES_CLIENT,

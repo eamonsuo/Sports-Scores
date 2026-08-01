@@ -31,8 +31,9 @@ export async function fetchRapidApi(
     },
   })
 
+  if (res.status === 204) return null
+
   if (!res.ok) {
-    if (res.status === 204) return null
     return fetchAllsportsApi(endpoint)
   }
 

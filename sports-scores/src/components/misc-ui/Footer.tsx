@@ -6,6 +6,7 @@ import {
   AMERICAN_FOOTBALL_LEAGUES,
   AUSSIE_RULES_LEAGUES,
   MOTORSPORT_CATEGORIES,
+  MULTI_SPORT_LEAGUES_CLIENT,
   NETBALL_LEAGUES,
   RUGBY_LEAGUE_LEAGUES,
   RUGBY_UNION_LEAGUES,
@@ -132,8 +133,8 @@ const footerLinks: {
     altText: "AMERICAN FOOTBALL",
   },
   {
-    sport: SPORT.OLYMPICS,
-    link: `/sports/${SPORT.OLYMPICS}`,
+    sport: SPORT.MULTI_SPORT,
+    link: `/sports/${SPORT.MULTI_SPORT}/summer-olympics/${MULTI_SPORT_LEAGUES_CLIENT[0].seasons[0].slug}`,
     img: "/olympic-rings.svg",
     altText: "Olympics",
   },
