@@ -35,9 +35,9 @@ import {
   SportService,
   Standings,
 } from "@/types/misc"
+import { TZDate } from "@date-fns/tz/date"
 import { isSameDay } from "date-fns"
 import { addHours } from "date-fns/addHours"
-import { TZDate } from "react-day-picker"
 
 class F1Service implements SportService {
   protected sport: SPORT

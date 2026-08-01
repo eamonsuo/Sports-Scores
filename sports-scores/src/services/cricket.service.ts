@@ -36,8 +36,8 @@ import {
   SPORT,
 } from "@/types/misc"
 import { Sofascore_Event, Sofascore_Score_Inning } from "@/types/sofascore"
+import { TZDate } from "@date-fns/tz/date"
 import { isSameDay, isWithinInterval } from "date-fns"
-import { TZDate } from "react-day-picker"
 import { SofascoreSport } from "./sofascore.service"
 
 class CricketService extends SofascoreSport {
