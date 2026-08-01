@@ -11,18 +11,32 @@ export default async function Page(props: {
   const { league, season, sport } = await props.params
   const config = SPORT_ROUTE_CONFIG[sport as SPORT]
 
-  const { leagueConfig } = getSportConfigurations(
+  // Get configs for sport
+  const { leagueConfig, seasonConfig } = getSportConfigurations(
     config.leagues,
     league,
     season,
   )
 
-  if (season === "wiki" && leagueConfig?.externalURL) {
-    return <iframe src={leagueConfig.externalURL} className="h-full" />
-  } else if (season === "external" && leagueConfig?.externalURL) {
-    redirect(leagueConfig.externalURL)
+  // Check if special page is required. Use season URL before league URL
+  if (
+    seasonConfig?.slug?.startsWith("wiki") &&
+    (seasonConfig?.externalURL || leagueConfig?.externalURL)
+  ) {
+    return (
+      <iframe
+        src={seasonConfig?.externalURL ?? leagueConfig?.externalURL}
+        className="h-full"
+      />
+    )
+  } else if (
+    seasonConfig?.slug?.startsWith("external") &&
+    (seasonConfig?.externalURL || leagueConfig?.externalURL)
+  ) {
+    redirect((seasonConfig?.externalURL ?? leagueConfig?.externalURL)!)
   }
 
+  // Implemented page - get the associated data
   const pageData = await config.service.matchesByLeagueSeason(league, season)
 
   if (pageData === null) {

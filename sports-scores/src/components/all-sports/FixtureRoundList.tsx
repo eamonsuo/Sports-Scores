@@ -25,7 +25,7 @@ export default function FixtureRoundList({
   const roundLabels = data.map((item) => item.roundLabel)
 
   return (
-    <ComponentList labels={roundLabels} curItem={curRound}>
+    <ComponentList labels={roundLabels} curItem={curRound} showAllLabels={true}>
       {data.map((item) => (
         <div
           key={item.roundLabel}

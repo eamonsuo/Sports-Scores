@@ -141,7 +141,9 @@ export default function LeagueSeasonToggle({
       setTodayActive(true)
       setSelectedDate(new Date())
       router.push(
-        sport === SPORT.ALL_SPORTS ? `/sports/today` : `/sports/${sport}/today`,
+        sport === SPORT.DEFAULT_SPORT
+          ? `/sports/today`
+          : `/sports/${sport}/today`,
       )
     } else {
       setTodayActive(false)
@@ -157,7 +159,7 @@ export default function LeagueSeasonToggle({
     const dateStr = format(date, "yyyy-MM-dd")
 
     router.push(
-      sport === SPORT.ALL_SPORTS
+      sport === SPORT.DEFAULT_SPORT
         ? `/sports/today?date=${dateStr}`
         : `/sports/${sport}/today?date=${dateStr}`,
     )
@@ -246,7 +248,7 @@ export default function LeagueSeasonToggle({
       ) : (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="justify-between">
+            <Button variant="outline" className="justify-between truncate">
               {selectedSeason.name}
               <ChevronDownIcon className="ml-2 h-4 w-4" />
             </Button>

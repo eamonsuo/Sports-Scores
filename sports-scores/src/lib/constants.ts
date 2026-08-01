@@ -1274,7 +1274,6 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     name: "Queensland Cup",
     slug: "2135",
     icon: "https://upload.wikimedia.org/wikipedia/en/6/6e/2025_Host_Plus_Cup_Logo.svg",
-    excludeFromToday: false,
     seasons: [
       {
         name: "2026",
@@ -3500,3 +3499,79 @@ export const SURFING_TOURS: LeagueSeasonConfig[] = [
 ]
 
 export const SURFING_TOURS_CLIENT = stripLeagueSeasonConfig(SURFING_TOURS)
+
+export const MULTI_SPORT_LEAGUES: LeagueSeasonConfig[] = [
+  {
+    name: "Summer Olympics",
+    slug: "summer-olympics",
+    icon: "/olympic-rings.svg",
+    seasons: [
+      {
+        name: "2028",
+        slug: "wiki-2028",
+        externalURL: "https://en.wikipedia.org/wiki/2028_Summer_Olympics",
+      },
+      {
+        name: "2024",
+        slug: "wiki-2024",
+        externalURL: "https://en.wikipedia.org/wiki/2024_Summer_Olympics",
+      },
+      {
+        name: "2020",
+        slug: "wiki-2021",
+        externalURL: "https://en.wikipedia.org/wiki/2020_Summer_Olympics",
+      },
+      {
+        name: "2016",
+        slug: "wiki-2016",
+        externalURL: "https://en.wikipedia.org/wiki/2016_Summer_Olympics",
+      },
+      {
+        name: "2012",
+        slug: "wiki-2012",
+        externalURL: "https://en.wikipedia.org/wiki/2012_Summer_Olympics",
+      },
+      {
+        name: "2008",
+        slug: "wiki-2008",
+        externalURL: "https://en.wikipedia.org/wiki/2008_Summer_Olympics",
+      },
+      {
+        name: "2004",
+        slug: "wiki-2004",
+        externalURL: "https://en.wikipedia.org/wiki/2004_Summer_Olympics",
+      },
+      {
+        name: "2000",
+        slug: "wiki-2000",
+        externalURL: "https://en.wikipedia.org/wiki/2000_Summer_Olympics",
+      },
+    ],
+  },
+  {
+    name: "Commonwealth Games",
+    slug: "commonwealth-games",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/1suc6w1733648476.png",
+    seasons: [
+      {
+        name: "2026",
+        slug: "external",
+        // externalURL: "https://en.wikipedia.org/wiki/2022_Commonwealth_Games",
+        externalURL: "https://www.glasgow2026.com/schedule/day-by-day",
+      },
+      {
+        name: "2022",
+        slug: "wiki-2022",
+        externalURL: "https://en.wikipedia.org/wiki/2022_Commonwealth_Games",
+      },
+      {
+        name: "2018",
+        slug: "wiki-2018",
+        externalURL: "https://en.wikipedia.org/wiki/2018_Commonwealth_Games",
+      },
+    ],
+  },
+]
+
+export const MULTI_SPORT_LEAGUES_CLIENT =
+  stripLeagueSeasonConfig(MULTI_SPORT_LEAGUES)
