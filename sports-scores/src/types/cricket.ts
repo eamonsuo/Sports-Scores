@@ -22,7 +22,7 @@ export type CricketInningIncident = {
   inningIncidents: CricketOverIncident[]
 }
 
-export type CricketMatchDetails = TeamMatchDetail & {
+export interface CricketMatchDetails extends TeamMatchDetail {
   matchScorecard: CricketScorecardPage
   matchIncidents?: CricketInningIncident[]
 }

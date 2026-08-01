@@ -5,9 +5,9 @@ import Placeholder from "@/components/misc-ui/Placeholder"
 import { cricketService } from "@/services/cricket.service"
 import { CricketMatchDetails } from "@/types/cricket"
 import { Fragment } from "react"
+import MatchLineups from "../all-sports/MatchLineups"
 import ComponentList from "../misc-ui/ComponentList"
 import CricketCommentary from "./CricketCommentary"
-import CricketLineups from "./CricketLineups"
 import CricketStats from "./CricketStats"
 
 export function renderCricketMatchDetailsPage(
@@ -87,8 +87,8 @@ function pageSettings(matchDetails: CricketMatchDetails) {
     },
     {
       btnLabel: `Lineups`,
-      component: matchDetails.matchIncidents && (
-        <CricketLineups matchIncidents={matchDetails.matchIncidents} />
+      component: matchDetails.matchLineups && (
+        <MatchLineups matchLineups={matchDetails.matchLineups} />
       ),
     },
   ]

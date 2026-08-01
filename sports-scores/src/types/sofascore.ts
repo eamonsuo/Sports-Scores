@@ -476,6 +476,8 @@ export interface Sofascore_Player {
   marketValueCurrency: string
   dateOfBirthTimestamp?: number
   fieldTranslations?: Sofascore_FieldTranslations
+  country?: Sofascore_Country
+  gender?: string
 }
 
 interface Sofascore_CupTrees_Response {

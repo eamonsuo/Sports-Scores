@@ -566,7 +566,7 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
   // },
   {
     name: "Australia - Men",
-    slug: "team/15848468",
+    slug: "team/187746",
     seasons: [{ name: "Current", slug: "" }],
   },
   {
@@ -614,7 +614,7 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
     name: "BBL",
     slug: "11162",
     seasons: [
-      // { name: "26/27", slug: "77627" },
+      { name: "26/27", slug: "98330" },
       { name: "25/26", slug: "77627" },
     ],
   },
@@ -622,7 +622,7 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
     name: "WNCL",
     slug: "18704",
     seasons: [
-      // { name: "26/27", slug: "77627" },
+      { name: "26/27", slug: "98397" },
       { name: "25/26", slug: "78399" },
     ],
   },
@@ -630,7 +630,7 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
     name: "WBBL",
     slug: "11163",
     seasons: [
-      // { name: "2026", slug: "77627" },
+      { name: "2026", slug: "97391" },
       { name: "2025", slug: "78209" },
     ],
   },
@@ -638,7 +638,7 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
     name: "T20 Spring Challenge",
     slug: "23072",
     seasons: [
-      // { name: "2026", slug: "77627" },
+      { name: "2026", slug: "98416" },
       { name: "2025", slug: "78371" },
     ],
   },

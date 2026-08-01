@@ -78,9 +78,7 @@ export default function MatchSummaryCard({
             homeDetails.score.length > 1 ? (
               <div className="flex flex-col dark:text-neutral-400">
                 <p>{homeDetails?.score[0]} </p>
-                <p className="text-[9px] font-normal">
-                  {homeDetails?.score[1]}{" "}
-                </p>
+                <p className="text-xs font-normal">{homeDetails?.score[1]} </p>
               </div>
             ) : (
               <>{homeDetails?.score}</>
@@ -106,9 +104,7 @@ export default function MatchSummaryCard({
             awayDetails.score.length > 1 ? (
               <div className="flex flex-col dark:text-neutral-400">
                 <p>{awayDetails?.score[0]} </p>
-                <p className="text-[9px] font-normal">
-                  {awayDetails?.score[1]}{" "}
-                </p>
+                <p className="text-xs font-normal">{awayDetails?.score[1]} </p>
               </div>
             ) : (
               <>{awayDetails?.score}</>

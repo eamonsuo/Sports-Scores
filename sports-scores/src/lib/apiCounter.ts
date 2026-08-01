@@ -16,7 +16,7 @@ if (!globalThis.apiQuotas) {
 }
 
 export const API_RESET_PERIOD: Partial<Record<SPORT, string>> = {
-  [SPORT.CRICKET]: "per month",
+  [SPORT.CRICKET]: "per day",
   [SPORT.AUSSIE_RULES]: "per month",
   [SPORT.GOLF]: "per month",
   [SPORT.BASEBALL]: "per day",

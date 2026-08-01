@@ -1,3 +1,4 @@
+import { fetchAllsportsApi } from "@/endpoints/allsports.api"
 import { updateGlobalApiQuota } from "@/lib/apiCounter"
 import {
   ClientLeagueSeasonConfig,
@@ -14,6 +15,54 @@ import { Sofascore_Score } from "@/types/sofascore"
 import { addHours } from "date-fns/addHours"
 import { format } from "date-fns/format"
 import { FALLBACK_IMAGE } from "./constants"
+
+export async function fetchRapidApi(
+  baseURL: string = process.env.ALLSPORTS_BASEURL ?? "",
+  endpoint: string,
+  sport: SPORT,
+) {
+  if (baseURL === "") return null
+
+  const url = baseURL + endpoint
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Key": process.env.RapidAPIKey ?? "",
+    },
+  })
+
+  if (!res.ok) {
+    if (res.status === 204) return null
+    return fetchAllsportsApi(endpoint)
+  }
+
+  updateQuota(res, sport)
+
+  const text = await res.text()
+
+  try {
+    return JSON.parse(text)
+  } catch (err) {
+    console.error("JSON parse failed", err)
+
+    const match = String(err).match(/position (\d+)/)
+    const pos = Number(match?.[1])
+
+    if (!Number.isNaN(pos)) {
+      console.log("Error position:", pos)
+      console.log(
+        text.substring(
+          Math.max(0, pos - 500),
+          Math.min(text.length, pos + 500),
+        ),
+      )
+    }
+
+    return null
+  }
+
+  return res.json()
+}
 
 export function updateQuota(response: Response, sport: SPORT) {
   const limit = response.headers.get("x-ratelimit-requests-limit")
@@ -325,5 +374,20 @@ export function tvGuideConfigCreate(
     channel,
     startTime: (date: Date) => addHours(date, addHoursToStart),
     endTime: (date: Date) => addHours(date, addHoursToEnd),
+  }
+}
+
+export function mapPlayerPosition(position: string | null | undefined) {
+  switch (position) {
+    //Cricket
+    case "B":
+      return "Bowler"
+    case "BM":
+    case "WK":
+      return "Batter"
+    case "AR":
+      return "All-Rounder"
+    default:
+      return position ?? ""
   }
 }

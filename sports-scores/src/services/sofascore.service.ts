@@ -4,6 +4,7 @@ import { resolveSportImage } from "@/lib/imageMapping"
 import { resolvePlayoffPicture } from "@/lib/playoffPictureMapping"
 import {
   getSportConfigurations,
+  mapPlayerPosition,
   setMatchSummary,
   setSeriesInfo,
   setTimer,
@@ -273,11 +274,23 @@ export abstract class SofascoreSport implements SportService {
           .toReversed()
       : null
     const matchLineups = lineups ? [lineups.home, lineups.away] : undefined
+    const teamCountryHome =
+      matchLineups?.[0]?.team?.country?.name ??
+      match?.event.homeTeam?.country?.name
+    const teamCountryAway =
+      matchLineups?.[1]?.team?.country?.name ??
+      match?.event.awayTeam?.country?.name
 
     // Map responses
     const mappedMatchDetails = this.matchDetailsMapper(matchDetails)
     const mappedMatchLineups =
-      matchLineups && matchLineups.map(this.matchLineupsMapper)
+      matchLineups &&
+      matchLineups.map((lineup, index) =>
+        this.matchLineupsMapper(
+          lineup,
+          index === 0 ? teamCountryHome : teamCountryAway,
+        ),
+      )
 
     // Merge details if available
     mappedMatchDetails.properties.push({
@@ -774,14 +787,25 @@ export abstract class SofascoreSport implements SportService {
     return breakdown
   }
 
-  protected matchLineupsMapper(lineups: Sofascore_Lineup): MatchLineup {
+  protected matchLineupsMapper(
+    lineups: Sofascore_Lineup,
+    teamCountry?: string,
+  ): MatchLineup {
     function mapPlayer(player: Sofascore_LineupPlayer) {
       return {
         id: player.player.id.toString(),
-        name: player.player.name + (player.captain ? " (c)" : ""),
-        position: player.position,
+        name:
+          player.player.name +
+          (player.position === "WK" ? " (wk)" : "") +
+          (player.captain ? " (c)" : ""),
+        position: mapPlayerPosition(player.position),
         playerNumber: player.shirtNumber?.toString() ?? player.jerseyNumber,
         starter: player.substitute === false,
+        country: player.player.country?.name,
+        img: resolveSportImage(player.player.country?.name),
+        overseasPlayer:
+          teamCountry !== undefined &&
+          player.player.country?.name !== teamCountry,
       }
     }
 
