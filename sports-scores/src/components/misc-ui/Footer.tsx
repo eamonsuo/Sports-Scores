@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation"
 
 import {
   AMERICAN_FOOTBALL_LEAGUES,
+  ATHLETICS_LEAGUES_CLIENT,
   AUSSIE_RULES_LEAGUES,
   MOTORSPORT_CATEGORIES,
   MULTI_SPORT_LEAGUES_CLIENT,
@@ -55,6 +56,12 @@ const footerLinks: {
     altText: "AUSSIE RULES",
   },
   {
+    sport: SPORT.AMERICAN_FOOTBALL,
+    link: `/sports/${SPORT.AMERICAN_FOOTBALL}/${AMERICAN_FOOTBALL_LEAGUES[0].slug}/${AMERICAN_FOOTBALL_LEAGUES[0].seasons[0].slug}`,
+    img: "/footer/american-football.svg",
+    altText: "AMERICAN FOOTBALL",
+  },
+  {
     sport: SPORT.MOTORSPORT,
     link: `/sports/${SPORT.MOTORSPORT}/${MOTORSPORT_CATEGORIES[0].slug}/${MOTORSPORT_CATEGORIES[0].seasons[0].slug}`,
     img: "/footer/f1-helmet.svg",
@@ -71,12 +78,6 @@ const footerLinks: {
     link: `/sports/${SPORT.SURFING}/${SURFING_TOURS[0].slug}/${SURFING_TOURS[0].seasons[0].slug}`,
     img: "/footer/surfboard.svg",
     altText: "Surfing",
-  },
-  {
-    sport: SPORT.BASKETBALL,
-    link: `/sports/${SPORT.BASKETBALL}/today`,
-    img: "/footer/basketball.svg",
-    altText: "Basketball",
   },
   {
     sport: SPORT.FOOTBALL,
@@ -103,6 +104,12 @@ const footerLinks: {
     altText: "Rugby Union",
   },
   {
+    sport: SPORT.BASKETBALL,
+    link: `/sports/${SPORT.BASKETBALL}/today`,
+    img: "/footer/basketball.svg",
+    altText: "Basketball",
+  },
+  {
     sport: SPORT.ICE_HOCKEY,
     link: `/sports/${SPORT.ICE_HOCKEY}/today`,
     img: "/footer/hockey-puck.svg",
@@ -127,16 +134,16 @@ const footerLinks: {
     altText: "Cycling",
   },
   {
-    sport: SPORT.AMERICAN_FOOTBALL,
-    link: `/sports/${SPORT.AMERICAN_FOOTBALL}/${AMERICAN_FOOTBALL_LEAGUES[0].slug}/${AMERICAN_FOOTBALL_LEAGUES[0].seasons[0].slug}`,
-    img: "/footer/american-football.svg",
-    altText: "AMERICAN FOOTBALL",
-  },
-  {
     sport: SPORT.MULTI_SPORT,
     link: `/sports/${SPORT.MULTI_SPORT}/summer-olympics/${MULTI_SPORT_LEAGUES_CLIENT[0].seasons[0].slug}`,
     img: "/olympic-rings.svg",
     altText: "Olympics",
+  },
+  {
+    sport: SPORT.ATHLETICS,
+    link: `/sports/${SPORT.ATHLETICS}/summer-olympics/${ATHLETICS_LEAGUES_CLIENT[0].seasons[0].slug}`,
+    img: "/vercel.svg",
+    altText: "Athletics",
   },
 ]
 

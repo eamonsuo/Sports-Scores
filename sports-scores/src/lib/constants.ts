@@ -29,11 +29,11 @@ export const CRICKET_CATEGORIES = [
   "1347", // Australia
   "1343", // World
   "1350", // India
-  // "1349", // UK
+  "1349", // UK
   // "1346", // Asia
   // "1352", // Pakistan
   // "1355", // South Africa
-  // "1684", // West Indies
+  "1684", // West Indies
   // "1351", // USA
 ]
 export const CRICKET_LADDER_HEADINGS = [
@@ -1173,7 +1173,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "Brisbane Broncos",
+    name: "Brisbane Broncos - Men",
     slug: "team/4258",
     icon: "https://r2.thesportsdb.com/images/media/team/badge/yjgl741768487372.png",
     seasons: [{ name: "Current", slug: "", tvguide: NRL_TV_GUIDE }],
@@ -1220,6 +1220,12 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
+    name: "Brisbane Broncos - Women",
+    slug: "team/411821",
+    icon: "https://r2.thesportsdb.com/images/media/team/badge/yjgl741768487372.png",
+    seasons: [{ name: "Current", slug: "", tvguide: NRL_TV_GUIDE }],
+  },
+  {
     name: "State of Origin - Men",
     slug: "791",
     icon: "https://upload.wikimedia.org/wikipedia/en/0/0e/Ampol_State_Of_Origin_Logo_2026.svg",
@@ -1252,6 +1258,12 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
+    name: "QLD Maroons - Men",
+    slug: "team/42356",
+    icon: "https://r2.thesportsdb.com/images/media/team/badge/sec7911719410143.png",
+    seasons: [{ name: "Current", slug: "", tvguide: NRL_TV_GUIDE }],
+  },
+  {
     name: "State of Origin - Women",
     slug: "20374",
     icon: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Ampol_Women%27s_State_of_Origin.jpg",
@@ -1269,6 +1281,12 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2024", slug: "56901" },
       { name: "2023", slug: "51382" },
     ],
+  },
+  {
+    name: "QLD Maroons - Women",
+    slug: "team/476296",
+    icon: "https://r2.thesportsdb.com/images/media/team/badge/sec7911719410143.png",
+    seasons: [{ name: "Current", slug: "", tvguide: NRL_TV_GUIDE }],
   },
   {
     name: "Queensland Cup",
@@ -1461,7 +1479,7 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "Brisbane Lions",
+    name: "Brisbane Lions - Men",
     slug: "team/4444",
     icon: "https://r2.thesportsdb.com/images/media/team/badge/tvvxvp1474038810.png",
     seasons: [{ name: "Current", slug: "" }],
@@ -1548,6 +1566,12 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
         }),
       },
     ],
+  },
+  {
+    name: "Brisbane Lions - Women",
+    slug: "team/245151",
+    icon: "https://r2.thesportsdb.com/images/media/team/badge/tvvxvp1474038810.png",
+    seasons: [{ name: "Current", slug: "" }],
   },
   {
     name: "VFL",
@@ -1893,7 +1917,19 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "Brisbane Roar - Men",
     slug: "team/5968",
-    // icon: "https://r2.thesportsdb.com/images/media/team/badge/wwuqyr1421434817.png",
+    icon: "https://r2.thesportsdb.com/images/media/team/badge/sypxsu1473454634.png",
+    seasons: [{ name: "Current", slug: "" }],
+  },
+  {
+    name: "Brisbane Roar - Women",
+    slug: "team/174078",
+    icon: "https://r2.thesportsdb.com/images/media/team/badge/sypxsu1473454634.png",
+    seasons: [{ name: "Current", slug: "" }],
+  },
+  {
+    name: "Baptist Football QLD - Rivers Rubies",
+    slug: "external",
+    externalURL: "https://www.bfq.org.au/fixtures",
     seasons: [{ name: "Current", slug: "" }],
   },
   //England - category 1
@@ -2002,7 +2038,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "21",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/x1va771565372556.png/small",
     seasons: [
-      // { name: "25/26", slug: "77500", tvguide: BEIN_FOOTBALL_TV_GUIDE },
+      { name: "26/27", slug: "96185", tvguide: BEIN_FOOTBALL_TV_GUIDE },
       { name: "25/26", slug: "77500", tvguide: BEIN_FOOTBALL_TV_GUIDE },
     ],
   },
@@ -2508,6 +2544,12 @@ export const BASEBALL_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
+    name: "Seattle Mariners",
+    slug: "team/3641",
+    icon: "https://r2.thesportsdb.com/images/media/team/badge/39x9ph1521903933.png",
+    seasons: [{ name: "Current", slug: "" }],
+  },
+  {
     name: "ABL",
     slug: "19445",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/jlnr611641806780.png/small",
@@ -2515,6 +2557,12 @@ export const BASEBALL_LEAGUES: LeagueSeasonConfig[] = [
       { name: "25/26", slug: "81328" },
       { name: "24/25", slug: "65318" },
     ],
+  },
+  {
+    name: "Brisbane Bandits",
+    slug: "team/453057",
+    icon: "https://r2.thesportsdb.com/images/media/team/badge/u68i041637685295.png",
+    seasons: [{ name: "Current", slug: "" }],
   },
   {
     name: "World Baseball Classic",
@@ -2569,6 +2617,12 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
         }),
       },
     ],
+  },
+  {
+    name: "Brisbane Bullets",
+    slug: "team/1506",
+    icon: "https://r2.thesportsdb.com/images/media/team/badge/ubzenr1545867000.png",
+    seasons: [{ name: "Current", slug: "" }],
   },
   {
     name: "WNBL",
@@ -3141,6 +3195,12 @@ export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
+    name: "Brisbane Lightning",
+    slug: "team/459406",
+    icon: "https://upload.wikimedia.org/wikipedia/en/7/7c/Brisbane_Lightning_logo.png",
+    seasons: [{ name: "Current", slug: "" }],
+  },
+  {
     name: "NHL",
     slug: "234",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/4cem2k1619616539.png/small",
@@ -3575,3 +3635,79 @@ export const MULTI_SPORT_LEAGUES: LeagueSeasonConfig[] = [
 
 export const MULTI_SPORT_LEAGUES_CLIENT =
   stripLeagueSeasonConfig(MULTI_SPORT_LEAGUES)
+
+export const ATHLETICS_SPORT_LEAGUES: LeagueSeasonConfig[] = [
+  {
+    name: "Diamond League",
+    slug: "diamond",
+    // icon: "/olympic-rings.svg",
+    seasons: [
+      {
+        name: "2026",
+        slug: "wiki-2026",
+        externalURL: "https://en.wikipedia.org/wiki/2026_Diamond_League",
+      },
+      {
+        name: "2025",
+        slug: "wiki-2025",
+        externalURL: "https://en.wikipedia.org/wiki/2025_Diamond_League",
+      },
+    ],
+  },
+  {
+    name: "World Championships",
+    slug: "world-championships",
+    // icon: "https://r2.thesportsdb.com/images/media/league/badge/1suc6w1733648476.png",
+    seasons: [
+      {
+        name: "2025",
+        slug: "wiki-2025",
+        externalURL:
+          "https://en.wikipedia.org/wiki/2025_World_Athletics_Championships",
+      },
+    ],
+  },
+  {
+    name: "World Indoor Championships",
+    slug: "world-indoor-championships",
+    // icon: "https://r2.thesportsdb.com/images/media/league/badge/1suc6w1733648476.png",
+    seasons: [
+      {
+        name: "2026",
+        slug: "wiki-2026",
+        externalURL:
+          "https://en.wikipedia.org/wiki/2026_World_Athletics_Indoor_Championships",
+      },
+    ],
+  },
+  {
+    name: "World Relays",
+    slug: "world-relays",
+    // icon: "https://r2.thesportsdb.com/images/media/league/badge/1suc6w1733648476.png",
+    seasons: [
+      {
+        name: "2026",
+        slug: "wiki-2026",
+        externalURL:
+          "https://en.wikipedia.org/wiki/2026_World_Athletics_Relays",
+      },
+    ],
+  },
+  {
+    name: "World Ultimate Championship",
+    slug: "world-ultimate-championship",
+    // icon: "https://r2.thesportsdb.com/images/media/league/badge/1suc6w1733648476.png",
+    seasons: [
+      {
+        name: "2026",
+        slug: "wiki-2026",
+        externalURL:
+          "https://en.wikipedia.org/wiki/2026_World_Athletics_Ultimate_Championship",
+      },
+    ],
+  },
+]
+
+export const ATHLETICS_LEAGUES_CLIENT = stripLeagueSeasonConfig(
+  ATHLETICS_SPORT_LEAGUES,
+)

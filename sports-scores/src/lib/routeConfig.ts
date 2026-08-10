@@ -19,6 +19,7 @@ import { ClientLeagueSeasonConfig, SPORT, SportService } from "@/types/misc"
 import { JSX } from "react/jsx-dev-runtime"
 import {
   AMERICAN_FOOTBALL_LEAGUES_CLIENT,
+  ATHLETICS_LEAGUES_CLIENT,
   AUSSIE_RULES_LEAGUES_CLIENT,
   BASEBALL_LEAGUES_CLIENT,
   BASKETBALL_LEAGUES_CLIENT,
@@ -64,6 +65,10 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
   [SPORT.AMERICAN_FOOTBALL]: {
     leagues: AMERICAN_FOOTBALL_LEAGUES_CLIENT,
     service: americanFootballService,
+  },
+  [SPORT.ATHLETICS]: {
+    leagues: ATHLETICS_LEAGUES_CLIENT,
+    service: placeholderService,
   },
   [SPORT.AUSSIE_RULES]: {
     leagues: AUSSIE_RULES_LEAGUES_CLIENT,

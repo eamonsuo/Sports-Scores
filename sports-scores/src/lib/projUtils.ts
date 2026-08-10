@@ -11,10 +11,14 @@ import {
   TVChannelConfig,
 } from "@/types/misc"
 import { PlayoffPictureConfig } from "@/types/playoff-picture"
-import { Sofascore_Score } from "@/types/sofascore"
+import { Sofascore_Events_Response, Sofascore_Score } from "@/types/sofascore"
 import { addHours } from "date-fns/addHours"
 import { format } from "date-fns/format"
 import { FALLBACK_IMAGE } from "./constants"
+
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
 
 export async function fetchRapidApi(
   baseURL: string = process.env.ALLSPORTS_BASEURL ?? "",
@@ -71,6 +75,43 @@ export function updateQuota(response: Response, sport: SPORT) {
   if (remaining && limit) {
     updateGlobalApiQuota(parseInt(remaining, 10), parseInt(limit, 10), sport)
   }
+}
+
+/**
+ * Fetches events for a list of categories on a given date and flattens the results.
+ * Requests are batched to respect API rate limits (batch size defaults to no batching).
+ */
+export async function fetchEventsByCategoryDate<
+  T extends Sofascore_Events_Response,
+>(
+  fetchApi: (endpoint: string) => Promise<T | null>,
+  categoryPathPrefix: string,
+  category: string[],
+  date: Date,
+  maxRequestsPerSecond: number = 4,
+): Promise<T> {
+  const responses: (T | null)[] = []
+
+  for (let i = 0; i < category.length; i += maxRequestsPerSecond) {
+    const batch = category.slice(i, i + maxRequestsPerSecond)
+    const batchResponses = await Promise.all(
+      batch.map((cat) =>
+        fetchApi(
+          `${categoryPathPrefix}/category/${cat}/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+        ),
+      ),
+    )
+
+    responses.push(...batchResponses)
+
+    if (i + maxRequestsPerSecond < category.length) {
+      await delay(1000)
+    }
+  }
+
+  return {
+    events: responses.flatMap((r) => r?.events ?? []),
+  } as T
 }
 
 export function calculateMatchResult(

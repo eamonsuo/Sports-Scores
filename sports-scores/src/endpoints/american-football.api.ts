@@ -1,4 +1,4 @@
-import { fetchRapidApi } from "@/lib/projUtils"
+import { fetchEventsByCategoryDate, fetchRapidApi } from "@/lib/projUtils"
 import {
   AmericanFootball_AmericanFootballApi_CategorySchedule_Response,
   AmericanFootball_AmericanFootballApi_FixturePage_Response,
@@ -87,16 +87,10 @@ export async function fetchAmericanFootballMatchesByCategoryDate(
   category: string[],
   date: Date,
 ) {
-  const responses = await Promise.all(
-    category.map(
-      (cat) =>
-        fetchAmericanFootballApi(
-          `/american-football/category/${cat}/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-        ) as Promise<AmericanFootball_AmericanFootballApi_CategorySchedule_Response>,
-    ),
+  return fetchEventsByCategoryDate<AmericanFootball_AmericanFootballApi_CategorySchedule_Response>(
+    fetchAmericanFootballApi,
+    "/american-football",
+    category,
+    date,
   )
-
-  return {
-    events: responses.flatMap((r) => r?.events ?? []),
-  } as AmericanFootball_AmericanFootballApi_CategorySchedule_Response
 }
