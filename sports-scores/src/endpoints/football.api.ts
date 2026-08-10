@@ -1,4 +1,4 @@
-import { fetchRapidApi } from "@/lib/projUtils"
+import { fetchEventsByCategoryDate, fetchRapidApi } from "@/lib/projUtils"
 import { SPORT } from "@/types/misc"
 import {
   Sofascore_Event_Response,
@@ -11,10 +11,6 @@ import {
 
 async function fetchFootballApi(endpoint: string) {
   return fetchRapidApi(process.env.FOOTBALL_BASEURL, endpoint, SPORT.FOOTBALL)
-}
-
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 export async function fetchFootballLastMatches(
@@ -103,28 +99,11 @@ export async function fetchFootballMatchesByCategoryDate(
   category: string[],
   date: Date,
 ) {
-  const responses: (Sofascore_Events_Response | null)[] = []
-  const maxRequestsPerSecond = 4
-
-  for (let i = 0; i < category.length; i += maxRequestsPerSecond) {
-    const batch = category.slice(i, i + maxRequestsPerSecond)
-    const batchResponses = await Promise.all(
-      batch.map(
-        (cat) =>
-          fetchFootballApi(
-            `/category/${cat}/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-          ) as Promise<Sofascore_Events_Response | null>,
-      ),
-    )
-
-    responses.push(...batchResponses)
-
-    if (i + maxRequestsPerSecond < category.length) {
-      await delay(1000)
-    }
-  }
-
-  return {
-    events: responses.flatMap((r) => r?.events ?? []),
-  } as Sofascore_Events_Response
+  return fetchEventsByCategoryDate<Sofascore_Events_Response>(
+    fetchFootballApi,
+    "",
+    category,
+    date,
+    4,
+  )
 }

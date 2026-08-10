@@ -1,4 +1,4 @@
-import { fetchRapidApi } from "@/lib/projUtils"
+import { fetchEventsByCategoryDate, fetchRapidApi } from "@/lib/projUtils"
 import {
   Sofascore_Cricket_Incidents_Response,
   Sofascore_Cricket_MatchInnings_Response,
@@ -114,18 +114,12 @@ export async function fetchCricketMatchesByCategoryDate(
   category: string[],
   date: Date,
 ) {
-  const responses = await Promise.all(
-    category.map(
-      (cat) =>
-        fetchCricketApi(
-          `/cricket/category/${cat}/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-        ) as Promise<Sofascore_Events_Response>,
-    ),
+  return fetchEventsByCategoryDate<Sofascore_Events_Response>(
+    fetchCricketApi,
+    "/cricket",
+    category,
+    date,
   )
-
-  return {
-    events: responses.flatMap((r) => r?.events ?? []),
-  } as Sofascore_Events_Response
 }
 
 /**
