@@ -285,8 +285,7 @@ export enum SPORT {
   RUGBY_UNION = "rugby-union",
   CYCLING = "cycling",
   DARTS = "darts",
-  // To be implemented
-  // ATHLETICS = "athletics",
+  ATHLETICS = "athletics",
   // SWIMMING = "swimming",
   // FIELD_HOCKEY = "field-hockey",
   // VOLLEYBALL = "volleyball",

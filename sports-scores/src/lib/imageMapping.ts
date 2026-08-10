@@ -1141,6 +1141,8 @@ export function resolveImage(teamName: string) {
     case "Ryan Ruffels":
     case "Elvis Smylie":
     case "Wade Ormsby":
+    case "Travis Smyth":
+    case "Cameron John":
       return getCountryImageUrl(CountryFlagCode.Australia)
 
     // Golf Players - New Zealand
@@ -1161,7 +1163,6 @@ export function resolveImage(teamName: string) {
     case "Brian Harman":
     case "Billy Horschel":
     case "Akshay Bhatia":
-    case "Daniel Berger":
     case "J.J. Spaun":
     case "Sahith Theegala":
     case "Jordan Spieth":
@@ -1186,7 +1187,6 @@ export function resolveImage(teamName: string) {
     case "Matt Kuchar":
     case "Kevin Na":
     case "Gary Woodland":
-    case "Lucas Glover":
     case "Harris English":
     case "Chris Gotterup":
     case "Anthony Kim":
@@ -1194,20 +1194,27 @@ export function resolveImage(teamName: string) {
     case "Jacob Bridgeman":
     case "Max Greyserman":
     case "Michael Thorbjornsen":
-    case "Neal Shipley":
     case "Joel Dahmen":
-    case "Webb Simpson":
-    case "Davis Riley":
-    case "Kevin Streelman":
-    case "Austin Eckroat":
     case "Beau Hossler":
-    case "Dylan Wu":
     case "Blades Brown":
     case "Nick Dunlap":
     case "Brandt Snedeker":
-    case "Charley Hoffman":
-    case "Doug Ghim":
-    case "Lanto Griffen":
+    case "Brad Dalke":
+    //FEDEX 2026
+    case "Ryan Gerard":
+    case "Alex Smalley":
+    case "J.T. Poston":
+    case "Kurt Kitayama":
+    case "Bud Cauley":
+    case "Eric Cole":
+    case "Michael Brennan":
+    case "Matt McCarty":
+    case "Keith Mitchell":
+    case "Sam Stevens":
+    case "Pierceson Coody":
+    case "Patrick Rodgers":
+    case "Ricky Castillo":
+    case "Jackson Koivun":
       return getCountryImageUrl(CountryFlagCode.UnitedStates)
 
     // Golf Players - England
@@ -1223,13 +1230,14 @@ export function resolveImage(teamName: string) {
     case "Harry Hall":
     case "Marco Penge":
     case "Danny Willett":
+    case "Jordan Smith":
       return getCountryImageUrl(CountryFlagCode.England)
 
     // Golf Players - Ireland & UK
     case "Shane Lowry":
       return getCountryImageUrl(CountryFlagCode.Ireland)
     case "Rory McIlroy":
-    case "Tom Mckibbin":
+    case "Tom McKibbin":
       return getCountryImageUrl(CountryFlagCode.NorthernIreland)
     case "Robert MacIntyre":
       return getCountryImageUrl(CountryFlagCode.Scotland)
@@ -1240,6 +1248,7 @@ export function resolveImage(teamName: string) {
     case "Alex Noren":
       return getCountryImageUrl(CountryFlagCode.Sweden)
     case "Viktor Hovland":
+    case "Kristoffer Reitan":
       return getCountryImageUrl(CountryFlagCode.Norway)
     case "Sepp Straka":
       return getCountryImageUrl(CountryFlagCode.Austria)
@@ -1256,6 +1265,12 @@ export function resolveImage(teamName: string) {
       return getCountryImageUrl(CountryFlagCode.France)
     case "Adrian Meronk":
       return getCountryImageUrl(CountryFlagCode.Poland)
+    case "Sergio Garcia":
+    case "Jon Rahm":
+    case "David Puig":
+      return getCountryImageUrl(CountryFlagCode.Spain)
+    case "Matti Schmid":
+      return getCountryImageUrl(CountryFlagCode.Germany)
 
     // Golf Players - Asia
     case "Hideki Matsuyama":
@@ -1276,11 +1291,8 @@ export function resolveImage(teamName: string) {
     case "Nick Taylor":
     case "Mackenzie Hughes":
     case "Adam Hadwin":
+    case "Sudharshan Yellamaraju":
       return getCountryImageUrl(CountryFlagCode.Canada)
-    case "Sergio Garcia":
-    case "Jon Rahm":
-    case "David Puig":
-      return getCountryImageUrl(CountryFlagCode.Spain)
     case "Joaquin Niemann":
     case "Mito Pereira":
       return getCountryImageUrl(CountryFlagCode.Chile)

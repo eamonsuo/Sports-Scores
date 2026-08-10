@@ -2002,7 +2002,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "21",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/x1va771565372556.png/small",
     seasons: [
-      // { name: "25/26", slug: "77500", tvguide: BEIN_FOOTBALL_TV_GUIDE },
+      { name: "26/27", slug: "96185", tvguide: BEIN_FOOTBALL_TV_GUIDE },
       { name: "25/26", slug: "77500", tvguide: BEIN_FOOTBALL_TV_GUIDE },
     ],
   },
@@ -3575,3 +3575,79 @@ export const MULTI_SPORT_LEAGUES: LeagueSeasonConfig[] = [
 
 export const MULTI_SPORT_LEAGUES_CLIENT =
   stripLeagueSeasonConfig(MULTI_SPORT_LEAGUES)
+
+export const ATHLETICS_SPORT_LEAGUES: LeagueSeasonConfig[] = [
+  {
+    name: "Diamond League",
+    slug: "diamond",
+    // icon: "/olympic-rings.svg",
+    seasons: [
+      {
+        name: "2026",
+        slug: "wiki-2026",
+        externalURL: "https://en.wikipedia.org/wiki/2026_Diamond_League",
+      },
+      {
+        name: "2025",
+        slug: "wiki-2025",
+        externalURL: "https://en.wikipedia.org/wiki/2025_Diamond_League",
+      },
+    ],
+  },
+  {
+    name: "World Championships",
+    slug: "world-championships",
+    // icon: "https://r2.thesportsdb.com/images/media/league/badge/1suc6w1733648476.png",
+    seasons: [
+      {
+        name: "2025",
+        slug: "wiki-2025",
+        externalURL:
+          "https://en.wikipedia.org/wiki/2025_World_Athletics_Championships",
+      },
+    ],
+  },
+  {
+    name: "World Indoor Championships",
+    slug: "world-indoor-championships",
+    // icon: "https://r2.thesportsdb.com/images/media/league/badge/1suc6w1733648476.png",
+    seasons: [
+      {
+        name: "2026",
+        slug: "wiki-2026",
+        externalURL:
+          "https://en.wikipedia.org/wiki/2026_World_Athletics_Indoor_Championships",
+      },
+    ],
+  },
+  {
+    name: "World Relays",
+    slug: "world-relays",
+    // icon: "https://r2.thesportsdb.com/images/media/league/badge/1suc6w1733648476.png",
+    seasons: [
+      {
+        name: "2026",
+        slug: "wiki-2026",
+        externalURL:
+          "https://en.wikipedia.org/wiki/2026_World_Athletics_Relays",
+      },
+    ],
+  },
+  {
+    name: "World Ultimate Championship",
+    slug: "world-ultimate-championship",
+    // icon: "https://r2.thesportsdb.com/images/media/league/badge/1suc6w1733648476.png",
+    seasons: [
+      {
+        name: "2026",
+        slug: "wiki-2026",
+        externalURL:
+          "https://en.wikipedia.org/wiki/2026_World_Athletics_Ultimate_Championship",
+      },
+    ],
+  },
+]
+
+export const ATHLETICS_LEAGUES_CLIENT = stripLeagueSeasonConfig(
+  ATHLETICS_SPORT_LEAGUES,
+)
