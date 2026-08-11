@@ -29,7 +29,7 @@ export default function FixtureRoundList({
       {data.map((item) => (
         <div
           key={item.roundLabel}
-          className="w-full flex-shrink-0 snap-start overflow-y-auto"
+          className="w-full shrink-0 snap-start overflow-y-auto"
         >
           {item.roundSlug && (
             <Link

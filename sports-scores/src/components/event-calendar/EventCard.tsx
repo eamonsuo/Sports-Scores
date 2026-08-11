@@ -54,10 +54,10 @@ export default function EventCard({ event }: EventCardProps) {
 
   return (
     <Link href={event.link ?? ""}>
-      <div className="group flex h-full cursor-pointer overflow-hidden rounded-lg border border-gray-300 bg-white shadow-sm transition-all hover:shadow-md active:bg-gray-100 dark:border-neutral-500 dark:bg-neutral-800 dark:active:bg-neutral-700">
+      <div className="group flex h-full cursor-pointer overflow-hidden rounded-lg border border-gray-300 bg-white shadow-xs transition-all hover:shadow-md active:bg-gray-100 dark:border-neutral-500 dark:bg-neutral-800 dark:active:bg-neutral-700">
         {/* Image Section */}
         {event.imageUrl && (
-          <div className="flex w-20 flex-shrink-0 items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 p-2 dark:from-neutral-700 dark:to-neutral-800">
+          <div className="flex w-20 shrink-0 items-center justify-center bg-linear-to-br from-gray-100 to-gray-200 p-2 dark:from-neutral-700 dark:to-neutral-800">
             <Image
               src={event.imageUrl}
               alt={event.name}

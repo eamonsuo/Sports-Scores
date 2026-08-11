@@ -31,7 +31,7 @@ export default function TennisMatchCard({
     <Link href={href}>
       <div
         className={cn(
-          "mt-4 flex flex-col border border-gray-300 p-4 shadow-sm active:bg-gray-300 dark:border-neutral-500 dark:active:bg-neutral-700",
+          "mt-4 flex flex-col border border-gray-300 p-4 shadow-xs active:bg-gray-300 dark:border-neutral-500 dark:active:bg-neutral-700",
           className,
         )}
       >
