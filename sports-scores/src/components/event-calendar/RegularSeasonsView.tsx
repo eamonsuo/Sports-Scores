@@ -23,7 +23,7 @@ export default function RegularSeasonsView({
           onClick={() => setViewMode("active-upcoming")}
           className={`flex-1 rounded-md px-4 py-2 transition-all ${
             viewMode === "active-upcoming"
-              ? "bg-white text-black shadow-sm dark:bg-neutral-600 dark:text-neutral-200"
+              ? "bg-white text-black shadow-xs dark:bg-neutral-600 dark:text-neutral-200"
               : "text-gray-500 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-200"
           }`}
         >
@@ -33,7 +33,7 @@ export default function RegularSeasonsView({
           onClick={() => setViewMode("by-sport")}
           className={`flex-1 rounded-md px-4 py-2 transition-all ${
             viewMode === "by-sport"
-              ? "bg-white text-black shadow-sm dark:bg-neutral-600 dark:text-neutral-200"
+              ? "bg-white text-black shadow-xs dark:bg-neutral-600 dark:text-neutral-200"
               : "text-gray-500 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-200"
           }`}
         >

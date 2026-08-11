@@ -23,7 +23,7 @@ export default function NavButtonGroup({
           className={clsx(
             "flex-1 place-content-center rounded-md px-2 py-2 text-center focus:relative",
             index === resolvedIndex
-              ? "bg-white text-black shadow-sm dark:bg-neutral-600 dark:text-neutral-200"
+              ? "bg-white text-black shadow-xs dark:bg-neutral-600 dark:text-neutral-200"
               : "text-gray-500 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-200",
           )}
         >

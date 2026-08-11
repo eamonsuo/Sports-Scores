@@ -118,7 +118,7 @@ export default function ComponentList({
                 buttonStyle === "pill" &&
                   "inline-flex items-center justify-center rounded-full px-2.5 py-0.5",
                 buttonStyle === "rectangle" &&
-                  "flex-1 place-content-center rounded-md bg-white px-2 py-1 text-center text-black shadow-sm focus:relative dark:bg-neutral-600 dark:text-neutral-200",
+                  "flex-1 place-content-center rounded-md bg-white px-2 py-1 text-center text-black shadow-xs focus:relative dark:bg-neutral-600 dark:text-neutral-200",
                 label === item &&
                   "bg-gray-300 text-black dark:bg-neutral-600 dark:text-neutral-200",
                 label !== item &&
@@ -140,7 +140,7 @@ export default function ComponentList({
         {children.map((item, index) => (
           <div
             key={labels[index] + index.toString()}
-            className="w-full flex-shrink-0 snap-start overflow-y-auto"
+            className="w-full shrink-0 snap-start overflow-y-auto"
           >
             {item}
           </div>

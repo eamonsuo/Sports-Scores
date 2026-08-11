@@ -28,7 +28,7 @@ export default function SessionSummaryCard({
     <Link href={href}>
       <div
         className={cn(
-          "mt-4 flex flex-col gap-1 border border-gray-300 p-2 shadow-sm active:bg-gray-300 dark:border-neutral-500 dark:text-neutral-400 dark:active:bg-neutral-700",
+          "mt-4 flex flex-col gap-1 border border-gray-300 p-2 shadow-xs active:bg-gray-300 dark:border-neutral-500 dark:text-neutral-400 dark:active:bg-neutral-700",
           className,
         )}
       >
