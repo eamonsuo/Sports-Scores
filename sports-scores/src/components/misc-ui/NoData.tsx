@@ -1,6 +1,6 @@
 import Link from "next/link"
+import { Button } from "../shadcn/button"
 import Placeholder from "./Placeholder"
-import { Button } from "./Button"
 
 export default function NoData({ href }: { href?: string }) {
   return (

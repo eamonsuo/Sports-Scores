@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Button } from "./Button"
+import { Button } from "../shadcn/button"
 
 export default function ErrorPage({ externalUrl }: { externalUrl?: string }) {
   const handleReload = () => {

@@ -163,7 +163,7 @@ export default function Footer() {
           <Link key={item.sport} href={item.link}>
             <Avatar
               className={cn(
-                "size-11 p-[6px]",
+                "size-11 p-1.5",
                 isActive(item.link)
                   ? "bg-gray-500 dark:bg-neutral-400"
                   : "bg-gray-400 dark:bg-neutral-600",
