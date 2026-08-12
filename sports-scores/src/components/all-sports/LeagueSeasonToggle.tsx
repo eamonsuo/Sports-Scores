@@ -17,7 +17,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import { Button } from "../misc-ui/Button"
+import { Button } from "../shadcn/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -198,7 +198,7 @@ export default function LeagueSeasonToggle({
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="center"
-          className="w-full border bg-background"
+          className="bg-background w-full border"
         >
           {leagues.map((league, i) => (
             <DropdownMenuItem
@@ -255,7 +255,7 @@ export default function LeagueSeasonToggle({
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="center"
-            className="w-full border bg-background"
+            className="bg-background w-full border"
           >
             {selectedLeague.seasons.map((season, i) => (
               <DropdownMenuItem

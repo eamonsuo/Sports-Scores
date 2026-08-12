@@ -6,7 +6,7 @@ import type {
 } from "@/types/playoff-picture"
 import Image from "next/image"
 import { useState } from "react"
-import { Button } from "../misc-ui/Button"
+import { Button } from "../shadcn/button"
 
 const gridCols: Record<number, string> = {
   1: "grid-cols-1",

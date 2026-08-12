@@ -1,4 +1,4 @@
-import { Button } from "@/components/misc-ui/Button"
+import { Button } from "@/components/shadcn/button"
 import { addDays, format } from "date-fns"
 import Link from "next/link"
 

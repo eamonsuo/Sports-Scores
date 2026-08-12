@@ -5,8 +5,8 @@ import { FixtureRound } from "@/types/misc"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
-import { Button } from "../misc-ui/Button"
 import ComponentList from "../misc-ui/ComponentList"
+import { Button } from "../shadcn/button"
 import FixtureListComponent from "./FixtureList"
 
 // TODO: REMOVE IN FUTURE

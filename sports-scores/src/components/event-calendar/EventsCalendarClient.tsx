@@ -6,7 +6,7 @@ import { SportEvent } from "@/types/event-calendar"
 import { clsx } from "clsx"
 import Link from "next/link"
 import { useState } from "react"
-import { Button } from "../misc-ui/Button"
+import { Button } from "../shadcn/button"
 
 type ViewMode = "major" | "regular"
 
