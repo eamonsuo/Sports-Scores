@@ -24,31 +24,31 @@
     "sport": "rugby-league"
   },
   {
-    "name": "🇦🇺 A-League Men 25/26",
+    "name": "A-League Men 26/27",
     "leagueId": "136",
-    "seasonId": "82603",
+    "seasonId": "98511",
     "sport": "football"
   },
   {
-    "name": "🇦🇺 A-League Women 25/26",
+    "name": "A-League Women 25/26",
     "leagueId": "1894",
     "seasonId": "82605",
     "sport": "football"
   },
   {
-    "name": "🇦🇺 Australia Cup 2025",
+    "name": "Australia Cup 2026",
     "leagueId": "1786",
-    "seasonId": "75270",
+    "seasonId": "97074",
     "sport": "football"
   },
   {
-    "name": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League 25/26",
+    "name": "Premier League 26/27",
     "leagueId": "17",
-    "seasonId": "76986",
+    "seasonId": "96668",
     "sport": "football"
   },
   {
-    "name": "🏴 FA Cup 25/26",
+    "name": "FA Cup 25/26",
     "leagueId": "19",
     "seasonId": "82557",
     "sport": "football"
@@ -78,15 +78,15 @@
     "sport": "american-football"
   },
   {
-    "name": "NBL 25/26",
+    "name": "NBL 26/27",
     "leagueId": "1524",
-    "seasonId": "77205",
+    "seasonId": "96122",
     "sport": "basketball"
   },
   {
-    "name": "WNBL 25/26",
+    "name": "WNBL 26/27",
     "leagueId": "1506",
-    "seasonId": "77204",
+    "seasonId": "98055",
     "sport": "basketball"
   },
   {
@@ -108,7 +108,7 @@
     "sport": "baseball"
   },
   {
-    "name": "ALB 25/26",
+    "name": "ABL 25/26",
     "leagueId": "19445",
     "seasonId": "81328",
     "sport": "baseball"
