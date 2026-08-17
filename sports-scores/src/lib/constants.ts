@@ -775,7 +775,7 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
     seasons: [{ name: "2026", slug: "89189" }],
   },
   {
-    name: "One Day Cup",
+    name: "One Day Cup - UK",
     slug: "11177",
     seasons: [{ name: "2026", slug: "86876" }],
     excludeFromToday: true,
