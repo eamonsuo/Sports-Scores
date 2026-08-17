@@ -20,6 +20,7 @@ export default function CricketCommentary({
 }: {
   matchIncidents: CricketInningIncident[]
 }) {
+  console.log("CricketCommentary matchIncidents", matchIncidents)
   return (
     <ComponentList
       labels={matchIncidents.map((item) => item.inningLabel)}

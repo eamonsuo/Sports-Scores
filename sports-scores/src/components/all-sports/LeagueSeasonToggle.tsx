@@ -173,7 +173,7 @@ export default function LeagueSeasonToggle({
     <div className="flex items-center justify-center gap-4 bg-neutral-100 py-4 dark:bg-neutral-900">
       <Button
         variant="outline"
-        className="rounded bg-neutral-600 px-4 py-2"
+        className="rounded px-4 py-2"
         onClick={handleTodayClick}
       >
         {todayActive ? "Fixtures" : "Today"}

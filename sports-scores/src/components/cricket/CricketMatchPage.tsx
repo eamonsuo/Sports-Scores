@@ -37,9 +37,20 @@ async function Page(props: {
       curItem="Scorecard"
       buttonStyle="rectangle"
     >
-      {pageSettingsData.map((item, index) => (
-        <Fragment key={item.btnLabel.toLowerCase()}>{item.component}</Fragment>
-      ))}
+      {pageSettingsData.map(
+        (item, index) => (
+          console.log("pageSettingsData item", item),
+          (
+            <Fragment key={item.btnLabel.toLowerCase()}>
+              {item.component === false ? (
+                <Placeholder>NO DATA</Placeholder>
+              ) : (
+                item.component
+              )}
+            </Fragment>
+          )
+        ),
+      )}
     </ComponentList>
   )
 }
@@ -75,15 +86,17 @@ function pageSettings(matchDetails: CricketMatchDetails) {
     },
     {
       btnLabel: `Commentary`,
-      component: matchDetails.matchIncidents && (
-        <CricketCommentary matchIncidents={matchDetails.matchIncidents} />
-      ),
+      component: matchDetails.matchIncidents &&
+        matchDetails.matchIncidents.length > 0 && (
+          <CricketCommentary matchIncidents={matchDetails.matchIncidents} />
+        ),
     },
     {
       btnLabel: `Stats`,
-      component: matchDetails.matchIncidents && (
-        <CricketStats matchIncidents={matchDetails.matchIncidents} />
-      ),
+      component: matchDetails.matchIncidents &&
+        matchDetails.matchIncidents.length > 0 && (
+          <CricketStats matchIncidents={matchDetails.matchIncidents} />
+        ),
     },
     {
       btnLabel: `Lineups`,

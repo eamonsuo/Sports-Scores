@@ -1215,6 +1215,7 @@ export function resolveImage(teamName: string) {
     case "Patrick Rodgers":
     case "Ricky Castillo":
     case "Jackson Koivun":
+    case "Jackson Koivun":
       return getCountryImageUrl(CountryFlagCode.UnitedStates)
 
     // Golf Players - England
@@ -1291,7 +1292,7 @@ export function resolveImage(teamName: string) {
     case "Nick Taylor":
     case "Mackenzie Hughes":
     case "Adam Hadwin":
-    case "Sudharshan Yellamaraju":
+    case "Sudarshan Yellamaraju":
       return getCountryImageUrl(CountryFlagCode.Canada)
     case "Joaquin Niemann":
     case "Mito Pereira":
