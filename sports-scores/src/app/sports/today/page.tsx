@@ -10,6 +10,7 @@ import { baseballService } from "@/services/baseball.service"
 import { basketballService } from "@/services/basketball.service"
 import { cricketService } from "@/services/cricket.service"
 import { cyclingService } from "@/services/cycling.service"
+import { dartsService } from "@/services/darts.service"
 import { footballService } from "@/services/football.service"
 import { golfService } from "@/services/golf.service"
 import { iceHockeyService } from "@/services/ice-hockey.service"
@@ -63,7 +64,7 @@ export default async function Page({
     rugbyUnionService.matchesByDate(parsedDate),
     // netballMatchesByDate(parsedDate),
     surfingService.matchesByDate(parsedDate),
-    null,
+    dartsService.matchesByDate(parsedDate),
     cyclingService.matchesByDate(parsedDate),
   ])
 
@@ -82,7 +83,7 @@ export default async function Page({
     .concat(tennisToday?.fixtures ?? [])
     .concat(rugbyUnionToday?.fixtures ?? [])
     // .concat(netballToday?.fixtures ?? [])
-    // .concat(dartsToday?.fixtures ?? [])
+    .concat(dartsToday?.fixtures ?? [])
     .concat(cyclingToday?.fixtures ?? [])
 
   const myTeams = allSports.filter(

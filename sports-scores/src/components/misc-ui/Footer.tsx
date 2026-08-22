@@ -1,6 +1,7 @@
 "use client"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useMemo } from "react"
 
 import {
   AMERICAN_FOOTBALL_LEAGUES,
@@ -13,10 +14,12 @@ import {
   RUGBY_UNION_LEAGUES,
   SURFING_TOURS,
 } from "@/lib/constants"
+import { useFooterOrder } from "@/lib/footerPreferences"
 import { cn } from "@/lib/shadcnUtils"
 import { SPORT } from "@/types/misc"
 import Image from "next/image"
 import { Avatar, AvatarFallback, AvatarImage } from "./Avatar"
+import FooterCustomizeDialog from "./FooterCustomizeDialog"
 
 const footerLinks: {
   sport: string
@@ -28,13 +31,13 @@ const footerLinks: {
     sport: "abc news",
     link: "https://www.abc.net.au/news/sport",
     img: "/footer/abc-news-logo.svg",
-    altText: "ABC News",
+    altText: "ABC Grandstand",
   },
   {
     sport: "calendar",
     link: `/`,
     img: "/footer/calendar.png",
-    altText: "Calendar",
+    altText: "Event Calendar",
   },
 
   {
@@ -47,25 +50,25 @@ const footerLinks: {
     sport: SPORT.RUGBY_LEAGUE,
     link: `/sports/${SPORT.RUGBY_LEAGUE}/${RUGBY_LEAGUE_LEAGUES[0].slug}/${RUGBY_LEAGUE_LEAGUES[0].seasons[0].slug}`,
     img: "/footer/nrl-ball.svg",
-    altText: "RUGBY LEAGUE",
+    altText: "Rugby League",
   },
   {
     sport: SPORT.AUSSIE_RULES,
     link: `/sports/${SPORT.AUSSIE_RULES}/${AUSSIE_RULES_LEAGUES[0].slug}/${AUSSIE_RULES_LEAGUES[0].seasons[0].slug}`,
     img: "/footer/afl-ball.svg",
-    altText: "AUSSIE RULES",
+    altText: "Aussie Rules",
   },
   {
     sport: SPORT.AMERICAN_FOOTBALL,
     link: `/sports/${SPORT.AMERICAN_FOOTBALL}/${AMERICAN_FOOTBALL_LEAGUES[0].slug}/${AMERICAN_FOOTBALL_LEAGUES[0].seasons[0].slug}`,
     img: "/footer/american-football.svg",
-    altText: "AMERICAN FOOTBALL",
+    altText: "American Football",
   },
   {
     sport: SPORT.MOTORSPORT,
     link: `/sports/${SPORT.MOTORSPORT}/${MOTORSPORT_CATEGORIES[0].slug}/${MOTORSPORT_CATEGORIES[0].seasons[0].slug}`,
     img: "/footer/f1-helmet.svg",
-    altText: "MOTORSPORT",
+    altText: "Motorsport",
   },
   {
     sport: SPORT.GOLF,
@@ -141,14 +144,32 @@ const footerLinks: {
   },
   {
     sport: SPORT.ATHLETICS,
-    link: `/sports/${SPORT.ATHLETICS}/summer-olympics/${ATHLETICS_LEAGUES_CLIENT[0].seasons[0].slug}`,
+    link: `/sports/${SPORT.ATHLETICS}/${ATHLETICS_LEAGUES_CLIENT[0].slug}/${ATHLETICS_LEAGUES_CLIENT[0].seasons[0].slug}`,
     img: "/vercel.svg",
     altText: "Athletics",
   },
 ]
 
+const defaultFooterOrder = footerLinks.map((item) => item.sport)
+const footerLinksBySport = new Map(
+  footerLinks.map((item) => [item.sport, item]),
+)
+
 export default function Footer() {
   const pathname = usePathname()
+  const { order, hidden, reorder, toggleHidden, reset } =
+    useFooterOrder(defaultFooterOrder)
+
+  const visibleLinks = useMemo(
+    () =>
+      order
+        .map((sport) => footerLinksBySport.get(sport))
+        .filter(
+          (item): item is (typeof footerLinks)[number] =>
+            !!item && !hidden.includes(item.sport),
+        ),
+    [order, hidden],
+  )
 
   const isActive = (link: string) => {
     if (link === "/") return pathname === "/"
@@ -159,7 +180,7 @@ export default function Footer() {
   return (
     <footer className="bg-gray-200 dark:bg-neutral-900">
       <div className="hideScroll flex h-16 w-full flex-row place-items-center gap-2 overflow-auto p-2">
-        {footerLinks.map((item) => (
+        {visibleLinks.map((item) => (
           <Link key={item.sport} href={item.link}>
             <Avatar
               className={cn(
@@ -182,6 +203,18 @@ export default function Footer() {
             </Avatar>
           </Link>
         ))}
+        <FooterCustomizeDialog
+          items={footerLinks.map((item) => ({
+            id: item.sport,
+            altText: item.altText,
+            img: item.img,
+          }))}
+          order={order}
+          hidden={hidden}
+          onReorder={reorder}
+          onToggleHidden={toggleHidden}
+          onReset={reset}
+        />
       </div>
       <div className="h-6 dark:bg-neutral-900">
         <hr></hr>

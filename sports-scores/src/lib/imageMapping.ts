@@ -1603,6 +1603,7 @@ export function resolveImage(teamName: string) {
     case "Antarctica Heard":
       return getCountryImageUrl(CountryFlagCode.AntarcticaHeard)
     case "Antigua And Barbuda":
+    case "Antigua and Barbuda":
       return getCountryImageUrl(CountryFlagCode.AntiguaAndBarbuda)
     case "Argentina":
       return getCountryImageUrl(CountryFlagCode.Argentina)
@@ -1641,6 +1642,7 @@ export function resolveImage(teamName: string) {
     case "Bonaire Sint Eustatius Saba":
       return getCountryImageUrl(CountryFlagCode.BonaireSintEustatiusSaba)
     case "Bosnia And Herzegovina":
+    case "Bosnia and Herzegovina":
     case "Bosnia & Herzegovina":
       return getCountryImageUrl(CountryFlagCode.BosniaAndHerzegovina)
     case "Botswana":
@@ -1791,6 +1793,7 @@ export function resolveImage(teamName: string) {
     case "Haiti":
       return getCountryImageUrl(CountryFlagCode.Haiti)
     case "Heard Island And McDonald Islands":
+    case "Heard Island and McDonald Islands":
       return getCountryImageUrl(CountryFlagCode.HeardIslandAndMcDonaldIslands)
     case "Holy See":
       return getCountryImageUrl(CountryFlagCode.HolySee)
@@ -1813,6 +1816,7 @@ export function resolveImage(teamName: string) {
     case "Ireland":
       return getCountryImageUrl(CountryFlagCode.Ireland)
     case "Isle Of Man":
+    case "Isle of Man":
       return getCountryImageUrl(CountryFlagCode.IsleOfMan)
     case "Israel":
       return getCountryImageUrl(CountryFlagCode.Israel)
@@ -1982,20 +1986,24 @@ export function resolveImage(teamName: string) {
     case "Saint Helena":
       return getCountryImageUrl(CountryFlagCode.SaintHelena)
     case "Saint Kitts And Nevis":
+    case "Saint Kitts and Nevis":
       return getCountryImageUrl(CountryFlagCode.SaintKittsAndNevis)
     case "Saint Lucia":
       return getCountryImageUrl(CountryFlagCode.SaintLucia)
     case "Saint Martin":
       return getCountryImageUrl(CountryFlagCode.SaintMartin)
     case "Saint Pierre And Miquelon":
+    case "Saint Pierre and Miquelon":
       return getCountryImageUrl(CountryFlagCode.SaintPierreAndMiquelon)
     case "Saint Vincent And Grenadines":
+    case "Saint Vincent and Grenadines":
       return getCountryImageUrl(CountryFlagCode.SaintVincentAndGrenadines)
     case "Samoa":
       return getCountryImageUrl(CountryFlagCode.Samoa)
     case "San Marino":
       return getCountryImageUrl(CountryFlagCode.SanMarino)
     case "Sao Tome And Principe":
+    case "Sao Tome and Principe":
       return getCountryImageUrl(CountryFlagCode.SaoTomeAndPrincipe)
     case "Saudi Arabia":
       return getCountryImageUrl(CountryFlagCode.SaudiArabia)
@@ -2034,6 +2042,7 @@ export function resolveImage(teamName: string) {
     case "Suriname":
       return getCountryImageUrl(CountryFlagCode.Suriname)
     case "Svalbard And Jan Mayen":
+    case "Svalbard and Jan Mayen":
       return getCountryImageUrl(CountryFlagCode.SvalbardAndJanMayen)
     case "Sweden":
       return getCountryImageUrl(CountryFlagCode.Sweden)
@@ -2070,6 +2079,7 @@ export function resolveImage(teamName: string) {
     case "Turkmenistan":
       return getCountryImageUrl(CountryFlagCode.Turkmenistan)
     case "Turks And Caicos Islands":
+    case "Turks and Caicos Islands":
       return getCountryImageUrl(CountryFlagCode.TurksAndCaicosIslands)
     case "Tuvalu":
       return getCountryImageUrl(CountryFlagCode.Tuvalu)
@@ -2108,6 +2118,7 @@ export function resolveImage(teamName: string) {
     case "Wales":
       return getCountryImageUrl(CountryFlagCode.Wales)
     case "Wallis And Futuna":
+    case "Wallis and Futuna":
       return getCountryImageUrl(CountryFlagCode.WallisAndFutuna)
     case "Western Sahara":
       return getCountryImageUrl(CountryFlagCode.WesternSahara)

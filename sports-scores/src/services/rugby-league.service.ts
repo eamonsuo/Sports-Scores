@@ -3,6 +3,7 @@ import {
   fetchRugbyLeagueMatchDetails,
   fetchRugbyLeagueMatchesByCategoryDate,
   fetchRugbyLeagueMatchIncidents,
+  fetchRugbyLeagueMatchLineups,
   fetchRugbyLeagueNextMatches,
   fetchRugbyLeagueStandings,
   fetchRugbyLeagueTeamLastMatches,
@@ -48,7 +49,11 @@ class RugbyLeagueService extends SofascoreSport {
           "match-incidents",
           fetchRugbyLeagueMatchIncidents,
         ),
-        fetchEventLineups: async () => null,
+        fetchEventLineups: withDevCache(
+          "rugby-league",
+          "match-lineups",
+          fetchRugbyLeagueMatchLineups,
+        ),
         fetchStandingsTotal: withDevCache(
           "rugby-league",
           "standings",

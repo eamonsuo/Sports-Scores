@@ -4,6 +4,7 @@ import {
   fetchFootballMatchDetails,
   fetchFootballMatchesByCategoryDate,
   fetchFootballMatchIncidents,
+  fetchFootballMatchLineups,
   fetchFootballNextMatches,
   fetchFootballStandings,
   fetchFootballTeamLastMatches,
@@ -50,7 +51,11 @@ class FootballService extends SofascoreSport {
           "match-incidents",
           fetchFootballMatchIncidents,
         ),
-        fetchEventLineups: async () => null,
+        fetchEventLineups: withDevCache(
+          "football",
+          "match-lineups",
+          fetchFootballMatchLineups,
+        ),
         fetchStandingsTotal: withDevCache(
           "football",
           "standings",

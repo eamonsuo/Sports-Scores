@@ -3,6 +3,7 @@ import {
   fetchAmericanFootballMatchDetails,
   fetchAmericanFootballMatchesByCategoryDate,
   fetchAmericanFootballMatchIncidents,
+  fetchAmericanFootballMatchLineups,
   fetchAmericanFootballNextMatches,
   fetchAmericanFootballStandings,
   fetchAmericanFootballTeamLastMatches,
@@ -48,7 +49,11 @@ class AmericanFootballService extends SofascoreSport {
           "match-incidents",
           fetchAmericanFootballMatchIncidents,
         ),
-        fetchEventLineups: async () => null,
+        fetchEventLineups: withDevCache(
+          "american-football",
+          "match-lineups",
+          fetchAmericanFootballMatchLineups,
+        ),
         fetchStandingsTotal: withDevCache(
           "american-football",
           "standings",

@@ -3,6 +3,7 @@ import type {
   PlayoffPictureConfig,
   PlayoffPictureGroup,
 } from "@/types/playoff-picture"
+import { JSX } from "react"
 import { SlashGolf_Tournament } from "./golf"
 import { Sofascore_Event, Sofascore_Stage } from "./sofascore"
 
@@ -117,10 +118,7 @@ export type TVChannelConfig = {
   tvFilter?: (
     date: Date,
     event:
-      | Sofascore_Event
-      | Sofascore_Stage
-      | SlashGolf_Tournament
-      | MatchSummary,
+      Sofascore_Event | Sofascore_Stage | SlashGolf_Tournament | MatchSummary,
   ) => boolean
 }
 
@@ -260,6 +258,11 @@ export interface Brackets {
     currentRound: number
     matches: BracketMatch[]
   }[]
+}
+
+export interface MatchDetailComponents {
+  btnLabel: string
+  component?: JSX.Element | false
 }
 
 /**

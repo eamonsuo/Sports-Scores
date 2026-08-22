@@ -1,6 +1,7 @@
 import {
   fetchMatchDetails,
   fetchMatchIncidents,
+  fetchMatchLineups,
   fetchScheduledEvents,
   fetchTeamLastMatches,
   fetchTeamNextMatches,
@@ -48,7 +49,11 @@ class AussieRulesService extends SofascoreSport {
           "match-incidents",
           fetchMatchIncidents,
         ),
-        fetchEventLineups: async () => null,
+        fetchEventLineups: withDevCache(
+          "aussie-rules",
+          "match-lineups",
+          fetchMatchLineups,
+        ),
         fetchStandingsTotal: withDevCache(
           "aussie-rules",
           "standings",
