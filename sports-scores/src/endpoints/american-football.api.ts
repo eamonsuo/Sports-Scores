@@ -7,6 +7,7 @@ import {
 import { SPORT } from "@/types/misc"
 import {
   Sofascore_EventIncidents_Response,
+  Sofascore_EventLineups_Response,
   Sofascore_TotalStandings_Response,
 } from "@/types/sofascore"
 
@@ -75,6 +76,12 @@ export async function fetchAmericanFootballMatchIncidents(matchId: string) {
   return (await fetchAmericanFootballApi(
     `/american-football/match/${matchId}/incidents`,
   )) as Sofascore_EventIncidents_Response
+}
+
+export async function fetchAmericanFootballMatchLineups(matchId: string) {
+  return (await fetchAmericanFootballApi(
+    `/american-football/match/${matchId}/lineups`,
+  )) as Sofascore_EventLineups_Response
 }
 
 export async function fetchAmericanFootballCurrentMatches(date: Date) {

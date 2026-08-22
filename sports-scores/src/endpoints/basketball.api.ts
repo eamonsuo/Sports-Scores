@@ -3,6 +3,7 @@ import { SPORT } from "@/types/misc"
 import {
   Sofascore_Event_Response,
   Sofascore_EventIncidents_Response,
+  Sofascore_EventLineups_Response,
   Sofascore_EventPage_Response,
   Sofascore_Events_Response,
   Sofascore_TotalStandings_Response,
@@ -71,8 +72,14 @@ export async function fetchBasketballMatchDetails(matchId: string) {
 
 export async function fetchBasketballMatchIncidents(matchId: string) {
   return (await fetchBasketballApi(
-    `/match/${matchId}/incidents`,
+    `/basketball/match/${matchId}/incidents`,
   )) as Sofascore_EventIncidents_Response
+}
+
+export async function fetchBasketballMatchLineups(matchId: string) {
+  return (await fetchBasketballApi(
+    `/basketball/match/${matchId}/lineups`,
+  )) as Sofascore_EventLineups_Response
 }
 
 export async function fetchBasketballMatchesByDate(date: Date) {

@@ -1,12 +1,14 @@
 import LadderGroupList from "@/components/all-sports/LadderGroupList"
 import MatchDetailsHero from "@/components/all-sports/MatchDetailsHero"
+import MatchLineups from "@/components/all-sports/MatchLineups"
 import MatchPropertyList from "@/components/all-sports/MatchPropertyList"
 import ScoreBreakdown from "@/components/all-sports/ScoreBreakdown"
 import ScoreChart from "@/components/all-sports/ScoreChart"
 import ComponentList from "@/components/misc-ui/ComponentList"
 import Placeholder from "@/components/misc-ui/Placeholder"
 import { SPORT_ROUTE_CONFIG } from "@/lib/routeConfig"
-import { SPORT } from "@/types/misc"
+import { MatchDetail, MatchDetailComponents, SPORT } from "@/types/misc"
+import { Fragment } from "react"
 
 export default async function Page(props: {
   params: Promise<{
@@ -19,66 +21,104 @@ export default async function Page(props: {
   const { league, season, id, sport } = await props.params
   const config = SPORT_ROUTE_CONFIG[sport as SPORT]
 
-  if (config.matchDetailsPage) {
-    return config.matchDetailsPage(league, season, id)
-  }
-
   const pageData = await config.service.matchDetails(id, league, season)
 
   if (pageData === null) {
     return <Placeholder>NO DATA</Placeholder>
   }
 
-  if ("matchDetails" in pageData && pageData.matchDetails !== null) {
-    return (
-      <ComponentList
-        labels={["Details", "Lineups", "Stats"]}
-        curItem="Details"
-        buttonStyle="rectangle"
-      >
-        <div className="flex flex-1 flex-col overflow-y-auto">
-          <MatchDetailsHero
-            homeInfo={pageData.matchDetails.homeTeam}
-            awayInfo={pageData.matchDetails.awayTeam}
-            status={pageData.matchDetails.status}
-          />
-          {pageData.scoreBreakdown && (
-            <ScoreBreakdown
-              scoreData={pageData.scoreBreakdown}
-              homeLogo={pageData.matchDetails.homeTeam.img}
-              awayLogo={pageData.matchDetails.awayTeam.img}
-            />
-          )}
-          {pageData.scoreEvents && (
-            <ScoreChart
-              scoreDifference={pageData.scoreEvents}
-              homeLogo={pageData.matchDetails.homeTeam.img}
-              awayLogo={pageData.matchDetails.awayTeam.img}
-            />
-          )}
-          <MatchPropertyList
-            startDate={pageData.matchDetails.startDate}
-            endDate={pageData.matchDetails.endDate}
-            properties={pageData.matchDetails.properties}
-          />
-        </div>
-        <>
-          <Placeholder>Lineups</Placeholder>
-        </>
-        <>
-          <Placeholder>Stats</Placeholder>
-        </>
-      </ComponentList>
-      // <div className="flex flex-1 flex-col overflow-y-auto pb-4">
+  let pageComponents: MatchDetailComponents[] = []
 
-      // </div>
-    )
-  } else if ("standings" in pageData && pageData.standings !== null) {
-    return (
-      <LadderGroupList
-        data={pageData.standings}
-        curGroup={pageData.standings[0].label ?? ""}
-      />
-    )
+  if (!config.matchDetailsPageComponents) {
+    pageComponents = defaultPageComponents(pageData)
+  } else {
+    pageComponents = config.matchDetailsPageComponents(pageData)
   }
+
+  return (
+    <ComponentList
+      labels={pageComponents.map((item) => item.btnLabel)}
+      curItem={pageComponents[0]?.btnLabel}
+      buttonStyle="rectangle"
+    >
+      {pageComponents.map((item) => (
+        <Fragment key={item.btnLabel.toLowerCase()}>
+          {item.component === false || item.component === undefined ? (
+            <Placeholder>NO DATA</Placeholder>
+          ) : (
+            item.component
+          )}
+        </Fragment>
+      ))}
+    </ComponentList>
+  )
+}
+
+function defaultPageComponents(
+  matchDetails: MatchDetail,
+): MatchDetailComponents[] {
+  if ("standings" in matchDetails && matchDetails.standings !== null) {
+    return [
+      {
+        btnLabel: `Standings`,
+        component: (
+          <LadderGroupList
+            data={matchDetails.standings}
+            curGroup={matchDetails.standings[0].label ?? ""}
+          />
+        ),
+      },
+    ]
+  } else if (
+    "matchDetails" in matchDetails &&
+    matchDetails.matchDetails !== null
+  ) {
+    return [
+      {
+        btnLabel: `Details`,
+        component: (
+          <div className="flex flex-1 flex-col overflow-y-auto">
+            <MatchDetailsHero
+              homeInfo={matchDetails.matchDetails.homeTeam}
+              awayInfo={matchDetails.matchDetails.awayTeam}
+              status={matchDetails.matchDetails.status}
+            />
+            {matchDetails.scoreBreakdown && (
+              <ScoreBreakdown
+                scoreData={matchDetails.scoreBreakdown}
+                homeLogo={matchDetails.matchDetails.homeTeam.img}
+                awayLogo={matchDetails.matchDetails.awayTeam.img}
+              />
+            )}
+            {matchDetails.scoreEvents && (
+              <ScoreChart
+                scoreDifference={matchDetails.scoreEvents}
+                homeLogo={matchDetails.matchDetails.homeTeam.img}
+                awayLogo={matchDetails.matchDetails.awayTeam.img}
+              />
+            )}
+            <MatchPropertyList
+              startDate={matchDetails.matchDetails.startDate}
+              endDate={matchDetails.matchDetails.endDate}
+              properties={matchDetails.matchDetails.properties}
+            />
+          </div>
+        ),
+      },
+      {
+        btnLabel: `Stats`,
+        component: matchDetails.matchIncidents &&
+          matchDetails.matchIncidents.length > 0 && (
+            <Placeholder>Stats</Placeholder>
+          ),
+      },
+      {
+        btnLabel: `Lineups`,
+        component: matchDetails.matchLineups && (
+          <MatchLineups matchLineups={matchDetails.matchLineups} />
+        ),
+      },
+    ]
+  }
+  return []
 }

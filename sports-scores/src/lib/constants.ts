@@ -755,7 +755,11 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "Ranji Trophy",
     slug: "18682",
-    seasons: [{ name: "25/26", slug: "77592" }],
+    externalURL: "https://en.wikipedia.org/wiki/2026%E2%80%9327_Ranji_Trophy",
+    seasons: [
+      { name: "26/27", slug: "98950" },
+      { name: "25/26", slug: "77592" },
+    ],
     excludeFromToday: true,
   },
   {
@@ -1004,6 +1008,11 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
     externalURL: "https://golf.com.au/leaderboard",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/ce5bzs1751484107.png",
     seasons: [
+      {
+        name: "26/27",
+        slug: "26-27",
+        tvguide: KAYO_GOLF_TV_GUIDE,
+      },
       {
         name: "25/26",
         slug: "25-26",
@@ -1968,11 +1977,11 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "1044",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/lpsm6p1751723311.png",
     seasons: [
-      // {
-      //   name: "26/27",
-      //   slug: "79227",
-      //   ladderConfig: ladderConfigMap({ placingCategories: WSL_LADDER_CONFIG }),
-      // },
+      {
+        name: "26/27",
+        slug: "99801",
+        ladderConfig: ladderConfigMap({ placingCategories: WSL_LADDER_CONFIG }),
+      },
       {
         name: "25/26",
         slug: "79227",
@@ -2020,7 +2029,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "19",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/vk7isd1598802862.png/small",
     seasons: [
-      // { name: "25/26", slug: "82557", tvguide: STAN_FOOTBALL_TV_GUIDE },
+      // { name: "26/27", slug: "82557", tvguide: STAN_FOOTBALL_TV_GUIDE },
       { name: "25/26", slug: "82557", tvguide: STAN_FOOTBALL_TV_GUIDE },
     ],
   },
@@ -2029,7 +2038,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "11666",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/vfjnxt1713511523.png/small",
     seasons: [
-      // { name: "25/26", slug: "84634", tvguide: STAN_FOOTBALL_TV_GUIDE },
+      // { name: "26/27", slug: "84634", tvguide: STAN_FOOTBALL_TV_GUIDE },
       { name: "25/26", slug: "84634", tvguide: STAN_FOOTBALL_TV_GUIDE },
     ],
   },
@@ -2205,19 +2214,31 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "AFC Champions League Elite - Men",
     slug: "463",
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026%E2%80%9327_AFC_Champions_League_Elite",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/gsbq4k1719686780.png/small",
     seasons: [
-      // { name: "25/26", slug: "77010" },
+      { name: "26/27", slug: "99217" },
       { name: "25/26", slug: "77010" },
       { name: "24/25", slug: "62485" },
     ],
   },
   {
+    name: "AFC Champions League Two - Men",
+    slug: "668",
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026%E2%80%9327_AFC_Champions_League_Two",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/gsbq4k1719686780.png/small",
+    seasons: [{ name: "26/27", slug: "97465" }],
+  },
+  {
     name: "AFC Champions League - Women",
     slug: "23009",
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026%E2%80%9327_AFC_Women's_Champions_League",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/fusqr71758302362.png/small",
     seasons: [
-      // { name: "25/26", slug: "77726" },
+      { name: "26/27", slug: "97474" },
       { name: "25/26", slug: "77726" },
       { name: "24/25", slug: "64146" },
     ],
@@ -2640,6 +2661,12 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
     icon: "https://r2.thesportsdb.com/images/media/league/badge/frdjqy1536585083.png/small",
     display: DisplayTypes.DATE,
     seasons: [
+      {
+        name: "26/27",
+        slug: "100772",
+        ladderConfig: NBA_2021_LADDER_CONFIG,
+        tvguide: NBA_TV_GUIDE,
+      },
       {
         name: "25/26",
         slug: "80229",
@@ -3205,6 +3232,12 @@ export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
     slug: "234",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/4cem2k1619616539.png/small",
     seasons: [
+      {
+        name: "26/27",
+        slug: "98450",
+        ladderConfig: NHL_2014_LADDER_CONFIG,
+        tvguide: NHL_TV_GUIDE,
+      },
       {
         name: "25/26",
         slug: "78476",

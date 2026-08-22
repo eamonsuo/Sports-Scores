@@ -18,6 +18,7 @@ import {
 } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
+import { setMatchSummary } from "@/lib/projUtils"
 import {
   CricketInningIncident,
   CricketMatchDetails,
@@ -32,10 +33,15 @@ import {
   DisplayTypes,
   FixtureRound,
   Matches,
+  MatchLineup,
   MatchSummary,
   SPORT,
 } from "@/types/misc"
-import { Sofascore_Event, Sofascore_Score_Inning } from "@/types/sofascore"
+import {
+  Sofascore_Event,
+  Sofascore_Lineup,
+  Sofascore_Score_Inning,
+} from "@/types/sofascore"
 import { TZDate } from "@date-fns/tz/date"
 import { isSameDay, isWithinInterval } from "date-fns"
 import { SofascoreSport } from "./sofascore.service"
@@ -231,7 +237,15 @@ class CricketService extends SofascoreSport {
   ): MatchSummary {
     return super.eventMapper(event, {
       ...options,
-      summaryText: event.note,
+      summaryText:
+        event.note ??
+        setMatchSummary(
+          event.status.type,
+          event.homeTeam.name,
+          event.homeScore.current,
+          event.awayTeam.name,
+          event.awayScore.current,
+        ) + (event.status.type !== "notstarted" ? " runs" : ""),
       roundLabel:
         event.roundInfo?.name ??
         (event.tournament.name.split(",").length > 1
@@ -437,6 +451,15 @@ class CricketService extends SofascoreSport {
     )
 
     return Object.values(mappedIncidents)
+  }
+
+  override matchLineupsMapper(
+    lineups: Sofascore_Lineup,
+    teamCountry?: string,
+    teamname?: string,
+    overseasPlayerCheck: boolean = false,
+  ): MatchLineup {
+    return super.matchLineupsMapper(lineups, teamCountry, teamname, true)
   }
 }
 

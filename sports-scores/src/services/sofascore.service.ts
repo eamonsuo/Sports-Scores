@@ -274,12 +274,6 @@ export abstract class SofascoreSport implements SportService {
           .toReversed()
       : null
     const matchLineups = lineups ? [lineups.home, lineups.away] : undefined
-    const teamCountryHome =
-      matchLineups?.[0]?.team?.country?.name ??
-      match?.event.homeTeam?.country?.name
-    const teamCountryAway =
-      matchLineups?.[1]?.team?.country?.name ??
-      match?.event.awayTeam?.country?.name
 
     // Map responses
     const mappedMatchDetails = this.matchDetailsMapper(matchDetails)
@@ -288,7 +282,12 @@ export abstract class SofascoreSport implements SportService {
       matchLineups.map((lineup, index) =>
         this.matchLineupsMapper(
           lineup,
-          index === 0 ? teamCountryHome : teamCountryAway,
+          index === 0
+            ? match?.event.homeTeam?.country?.name
+            : match?.event.awayTeam?.country?.name,
+          index === 0
+            ? match?.event.homeTeam?.name
+            : match?.event.awayTeam?.name,
         ),
       )
 
@@ -790,6 +789,8 @@ export abstract class SofascoreSport implements SportService {
   protected matchLineupsMapper(
     lineups: Sofascore_Lineup,
     teamCountry?: string,
+    teamname?: string,
+    overseasPlayerCheck: boolean = false,
   ): MatchLineup {
     function mapPlayer(player: Sofascore_LineupPlayer) {
       return {
@@ -804,13 +805,15 @@ export abstract class SofascoreSport implements SportService {
         country: player.player.country?.name,
         img: resolveSportImage(player.player.country?.name),
         overseasPlayer:
-          teamCountry !== undefined &&
-          player.player.country?.name !== teamCountry,
+          overseasPlayerCheck &&
+          (lineups?.team?.country.name ?? teamCountry) !== undefined &&
+          player.player.country?.name !==
+            (lineups?.team?.country.name ?? teamCountry),
       }
     }
 
     return {
-      teamName: lineups?.team?.name ?? "",
+      teamName: lineups?.team?.name ?? teamname ?? "",
       startingPlayers: lineups.players
         .filter((player) => player.substitute === false)
         .map(mapPlayer),

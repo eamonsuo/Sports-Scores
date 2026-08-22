@@ -3,6 +3,7 @@ import { SPORT } from "@/types/misc"
 import {
   Sofascore_Event_Response,
   Sofascore_EventIncidents_Response,
+  Sofascore_EventLineups_Response,
   Sofascore_EventPage_Response,
   Sofascore_Events_Response,
   Sofascore_TotalStandings_Response,
@@ -94,6 +95,12 @@ export async function fetchMatchIncidents(matchId: string) {
   return (await fetchSofascoreRapidApi(
     `/matches/get-incidents?matchId=${matchId}`,
   )) as Sofascore_EventIncidents_Response
+}
+
+export async function fetchMatchLineups(matchId: string) {
+  return (await fetchSofascoreRapidApi(
+    `/matches/get-lineups?matchId=${matchId}`,
+  )) as Sofascore_EventLineups_Response
 }
 
 export async function fetchScheduledEvents(categoryId: string[], date: Date) {

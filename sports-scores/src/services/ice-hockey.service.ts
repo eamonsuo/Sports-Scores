@@ -3,6 +3,7 @@ import {
   fetchIceHockeyMatchDetails,
   fetchIceHockeyMatchesByCategoryDate,
   fetchIceHockeyMatchIncidents,
+  fetchIceHockeyMatchLineups,
   fetchIceHockeyNextMatches,
   fetchIceHockeyStandings,
   fetchIceHockeyTeamLastMatches,
@@ -47,7 +48,11 @@ class IceHockeyService extends SofascoreSport {
           "match-incidents",
           fetchIceHockeyMatchIncidents,
         ),
-        fetchEventLineups: async () => null,
+        fetchEventLineups: withDevCache(
+          "ice-hockey",
+          "match-lineups",
+          fetchIceHockeyMatchLineups,
+        ),
         fetchStandingsTotal: withDevCache(
           "ice-hockey",
           "standings",

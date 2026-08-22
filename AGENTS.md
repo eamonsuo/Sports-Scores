@@ -15,7 +15,6 @@ From [sports-scores](sports-scores):
 - npm run dev
 - npm run build
 - npm start
-- npm run lint
 
 Notes:
 
@@ -58,7 +57,6 @@ Notes:
 - Keep changes localized by sport/domain where possible.
 - Avoid broad refactors when adding one league, route, or API integration.
 - Preserve existing naming style (kebab-case files for services/endpoints, PascalCase component symbols).
-- Validate by running lint for touched app code when feasible.
 
 ## Existing Documentation to Link
 

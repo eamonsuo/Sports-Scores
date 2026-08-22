@@ -38,7 +38,22 @@ export async function fetchRapidApi(
   if (res.status === 204) return null
 
   if (!res.ok) {
-    return fetchAllsportsApi(endpoint)
+    // Primary sport API failed (rate limit, quota, outage, etc). This was
+    // previously swallowed silently, making backend failures indistinguishable
+    // from "no events today" once the AllSports fallback also returned null.
+    console.error(
+      `[fetchRapidApi] ${sport} request failed (${res.status} ${res.statusText}) for ${url}. Falling back to AllSports API.`,
+    )
+
+    const fallback = await fetchAllsportsApi(endpoint)
+
+    if (!fallback) {
+      console.error(
+        `[fetchRapidApi] ${sport} AllSports API fallback also failed for endpoint ${endpoint}.`,
+      )
+    }
+
+    return fallback
   }
 
   updateQuota(res, sport)

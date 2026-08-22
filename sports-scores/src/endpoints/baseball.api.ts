@@ -2,6 +2,7 @@ import { fetchEventsByCategoryDate, fetchRapidApi } from "@/lib/projUtils"
 import { SPORT } from "@/types/misc"
 import {
   Sofascore_Event_Response,
+  Sofascore_EventLineups_Response,
   Sofascore_EventPage_Response,
   Sofascore_Events_Response,
   Sofascore_TotalStandings_Response,
@@ -69,6 +70,12 @@ export async function fetchBaseballMatchDetails(matchId: string) {
 //     `/match/${matchId}/incidents`,
 //   )) as Baseball_BaseballApi_MatchIncidents_Response;
 // }
+
+export async function fetchBaseballMatchLineups(matchId: string) {
+  return (await fetchBaseballApi(
+    `/baseball/match/${matchId}/lineups`,
+  )) as Sofascore_EventLineups_Response
+}
 
 export async function fetchBaseballMatchesByDate(date: Date) {
   return (await fetchBaseballApi(

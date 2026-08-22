@@ -1,4 +1,4 @@
-import { renderCricketMatchDetailsPage } from "@/components/cricket/CricketMatchPage"
+import { cricketMatchDetailComponents } from "@/components/cricket/CricketMatchPage"
 import { americanFootballService } from "@/services/american-football.service"
 import { aussieRulesService } from "@/services/aussie-rules.service"
 import { baseballService } from "@/services/baseball.service"
@@ -15,8 +15,13 @@ import { rugbyLeagueService } from "@/services/rugby-league.service"
 import { rugbyUnionService } from "@/services/rugby-union.service"
 import { surfingService } from "@/services/surfing.service"
 import { tennisService } from "@/services/tennis.service"
-import { ClientLeagueSeasonConfig, SPORT, SportService } from "@/types/misc"
-import { JSX } from "react/jsx-dev-runtime"
+import {
+  ClientLeagueSeasonConfig,
+  MatchDetail,
+  MatchDetailComponents,
+  SPORT,
+  SportService,
+} from "@/types/misc"
 import {
   AMERICAN_FOOTBALL_LEAGUES_CLIENT,
   ATHLETICS_LEAGUES_CLIENT,
@@ -43,11 +48,9 @@ type NavButton = { href: string; label: string; page: string }
 type SportRouteConfig = {
   leagues: ClientLeagueSeasonConfig[]
   service: SportService
-  matchDetailsPage?: (
-    league: string,
-    season: string,
-    id: string,
-  ) => Promise<JSX.Element> // override default match details page
+  matchDetailsPageComponents?: (
+    matchDetails: MatchDetail,
+  ) => MatchDetailComponents[] // override default match details page
   navButtons?: NavButton[] // override default for all leagues
   navButtonsByLeague?: Record<string, NavButton[]> // override per league slug
 }
@@ -85,7 +88,10 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
   [SPORT.CRICKET]: {
     leagues: CRICKET_LEAGUES_CLIENT,
     service: cricketService,
-    matchDetailsPage: renderCricketMatchDetailsPage,
+    // cricketService always resolves to CricketMatchDetails, so this narrowing cast is safe at runtime
+    matchDetailsPageComponents: cricketMatchDetailComponents as (
+      matchDetails: MatchDetail,
+    ) => MatchDetailComponents[],
   },
   [SPORT.CYCLING]: {
     leagues: CYCLING_TOURS_CLIENT,

@@ -16,6 +16,8 @@ export default function MatchLineups({
             homeTeam={homeTeam.startingPlayers}
             awayTeam={awayTeam.startingPlayers}
             label="Team"
+            homeTeamName={homeTeam.teamName}
+            awayTeamName={awayTeam.teamName}
           />
           <LineupTable
             homeTeam={homeTeam.otherPlayers}
@@ -37,17 +39,27 @@ export function LineupTable({
   homeTeam,
   awayTeam,
   label,
+  homeTeamName,
+  awayTeamName,
 }: {
   homeTeam?: LineupPlayer[]
   awayTeam?: LineupPlayer[]
   label: string
+  homeTeamName?: string
+  awayTeamName?: string
 }) {
   const maxPlayers = Math.max(homeTeam?.length ?? 0, awayTeam?.length ?? 0)
 
   return (
     <div className="overflow-hidden rounded-lg">
       <div className="py-4 text-center">
-        <h2 className="text-lg font-semibold text-gray-200">{label}</h2>
+        <h2 className="text-lg font-semibold text-neutral-200">{label}</h2>
+        {homeTeamName && awayTeamName && (
+          <div className="grid grid-cols-2 py-2 text-center text-xs text-neutral-300">
+            <div>{homeTeamName}</div>
+            <div>{awayTeamName}</div>
+          </div>
+        )}
       </div>
 
       {Array.from({ length: maxPlayers }).map((_, index) => {
@@ -98,23 +110,23 @@ function PlayerCell({
       )}
 
       {isRight && player.overseasPlayer && (
-        <div className="text-xs text-gray-500">✈</div>
+        <div className="text-xs text-neutral-500">✈</div>
       )}
 
       <div>
-        <div className="text-sm text-gray-400">{player.name}</div>
+        <div className="text-sm text-neutral-400">{player.name}</div>
 
         {player.position && (
-          <div className="text-xs text-gray-500">{player.position}</div>
+          <div className="text-xs text-neutral-500">{player.position}</div>
         )}
 
         {player.playerNumber && (
-          <div className="text-xs text-gray-400">#{player.playerNumber}</div>
+          <div className="text-xs text-neutral-400">#{player.playerNumber}</div>
         )}
       </div>
 
       {!isRight && player.overseasPlayer && (
-        <div className="text-xs text-gray-500">✈</div>
+        <div className="text-xs text-neutral-500">✈</div>
       )}
 
       {isRight && player.img && (

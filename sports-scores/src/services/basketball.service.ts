@@ -3,6 +3,7 @@ import {
   fetchBasketballMatchDetails,
   fetchBasketballMatchesByCategoryDate,
   fetchBasketballMatchIncidents,
+  fetchBasketballMatchLineups,
   fetchBasketballNextMatches,
   fetchBasketballStandings,
   fetchBasketballTeamLastMatches,
@@ -47,7 +48,11 @@ class BasketballService extends SofascoreSport {
           "match-incidents",
           fetchBasketballMatchIncidents,
         ),
-        fetchEventLineups: async () => null,
+        fetchEventLineups: withDevCache(
+          "basketball",
+          "match-lineups",
+          fetchBasketballMatchLineups,
+        ),
         fetchStandingsTotal: withDevCache(
           "basketball",
           "standings",

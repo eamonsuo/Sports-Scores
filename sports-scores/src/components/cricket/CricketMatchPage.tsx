@@ -1,61 +1,15 @@
 import MatchDetailsHero from "@/components/all-sports/MatchDetailsHero"
 import MatchPropertyList from "@/components/all-sports/MatchPropertyList"
 import CricketMatchScorecard from "@/components/cricket/CricketMatchScorecard"
-import Placeholder from "@/components/misc-ui/Placeholder"
-import { cricketService } from "@/services/cricket.service"
 import { CricketMatchDetails } from "@/types/cricket"
-import { Fragment } from "react"
+import { MatchDetailComponents } from "@/types/misc"
 import MatchLineups from "../all-sports/MatchLineups"
-import ComponentList from "../misc-ui/ComponentList"
 import CricketCommentary from "./CricketCommentary"
 import CricketStats from "./CricketStats"
 
-export function renderCricketMatchDetailsPage(
-  league: string,
-  season: string,
-  id: string,
-) {
-  return Page({ params: Promise.resolve({ league, season, id }) })
-}
-
-async function Page(props: {
-  params: Promise<{ league: string; season: string; id: string }>
-}) {
-  const { league, season, id } = await props.params
-
-  const pageData = await cricketService.matchDetails(id, league, season)
-
-  if (pageData === null) {
-    return <Placeholder>NO DATA</Placeholder>
-  }
-
-  const pageSettingsData = pageSettings(pageData)
-
-  return (
-    <ComponentList
-      labels={pageSettingsData.map((item) => item.btnLabel)}
-      curItem="Scorecard"
-      buttonStyle="rectangle"
-    >
-      {pageSettingsData.map(
-        (item, index) => (
-          console.log("pageSettingsData item", item),
-          (
-            <Fragment key={item.btnLabel.toLowerCase()}>
-              {item.component === false ? (
-                <Placeholder>NO DATA</Placeholder>
-              ) : (
-                item.component
-              )}
-            </Fragment>
-          )
-        ),
-      )}
-    </ComponentList>
-  )
-}
-
-function pageSettings(matchDetails: CricketMatchDetails) {
+export function cricketMatchDetailComponents(
+  matchDetails: CricketMatchDetails,
+): MatchDetailComponents[] {
   return [
     {
       btnLabel: `Details`,
