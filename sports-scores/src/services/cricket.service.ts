@@ -159,7 +159,7 @@ class CricketService extends SofascoreSport {
             (event.roundInfo?.name || event.roundInfo?.round
               ? ` - ${event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`}`
               : ""),
-          leagueSlug: `/sports/${this.sport}/${event.tournament?.uniqueTournament?.id}/${event.season.id}`,
+          leagueSlug: `/sports/${this.sport}/${event.tournament?.uniqueTournament?.id}/${event?.season?.id}`,
           leagueImg: this.leagues.find(
             (l) => l.slug === event.tournament?.uniqueTournament?.id.toString(),
           )?.icon,

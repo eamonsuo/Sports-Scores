@@ -161,7 +161,7 @@ export interface Sofascore_Event {
   homeTeamSeed?: string
   awayTeamSeed?: string
   tournament: Sofascore_Tournament
-  season: Sofascore_Season
+  season?: Sofascore_Season
   roundInfo?: Sofascore_RoundInfo
   customId: string
   status: Sofascore_Status
