@@ -182,7 +182,7 @@ export abstract class SofascoreSport implements SportService {
             (event.roundInfo?.name || event.roundInfo?.round
               ? ` - ${event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`}`
               : ""),
-          leagueSlug: `/sports/${this.sport}/${event.tournament?.uniqueTournament?.id}/${event.season.id}`,
+          leagueSlug: `/sports/${this.sport}/${event.tournament?.uniqueTournament?.id}/${event.season?.id}`,
           leagueImg: this.leagues.find(
             (l) => l.slug === event.tournament?.uniqueTournament?.id.toString(),
           )?.icon,
@@ -226,9 +226,11 @@ export abstract class SofascoreSport implements SportService {
       .map((event) =>
         this.eventMapper(event, {
           roundLabel:
-            event.tournament?.uniqueTournament?.name + " " + event.season.year,
-          leagueName: event.tournament.name + " " + event.season.year,
-          leagueSlug: `/sports/${this.sport}/${event.tournament?.uniqueTournament?.id}/${event.season.id}`,
+            event.tournament?.uniqueTournament?.name +
+            " " +
+            event?.season?.year,
+          leagueName: event.tournament.name + " " + event?.season?.year,
+          leagueSlug: `/sports/${this.sport}/${event.tournament?.uniqueTournament?.id}/${event?.season?.id}`,
           leagueImg: this.leagues.find(
             (l) => l.slug === event.tournament?.uniqueTournament?.id.toString(),
           )?.icon,
@@ -446,7 +448,7 @@ export abstract class SofascoreSport implements SportService {
     const { tvConfig } = getSportConfigurations(
       this.leagues,
       options?.leagueId ?? event.tournament?.uniqueTournament?.id.toString(),
-      options?.seasonId ?? event.season.id.toString(),
+      options?.seasonId ?? event?.season?.id.toString(),
     )
 
     // Strip out competitorDetails and tv from options to avoid type errors
@@ -491,8 +493,8 @@ export abstract class SofascoreSport implements SportService {
       venue:
         event?.venue?.name &&
         `${event?.venue?.name}, ${event?.venue?.city.name}`,
-      matchSlug: `/sports/${this.sport}/${event.tournament?.uniqueTournament?.id}/${event.season.id}/match/${event.id}`,
-      seasonId: event.season.id.toString(),
+      matchSlug: `/sports/${this.sport}/${event.tournament?.uniqueTournament?.id}/${event?.season?.id}/match/${event.id}`,
+      seasonId: event?.season?.id.toString(),
       leagueId: event.tournament?.uniqueTournament?.id.toString(),
       // leagueName: options?.leagueName ,
       // leagueSlug: options?.leagueSlug ,
