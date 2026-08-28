@@ -114,7 +114,7 @@ class CricketService extends SofascoreSport {
     if (!matches) return null
 
     const validLeagueIds = this.leagues
-      .filter((l) => !l.excludeFromToday)
+      // .filter((l) => !l.excludeFromToday)
       .map((l) => Number(l.slug))
       .concat(this.categories.map((c) => Number(c)))
 
@@ -178,7 +178,6 @@ class CricketService extends SofascoreSport {
         ),
       ),
       roundLabel: "My Teams",
-      // roundSlug: `/sports/${this.sport}/my-teams`,
     }
 
     return {

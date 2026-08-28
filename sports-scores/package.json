@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "cross-env TZ=UTC next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "generate:splash": "tsx scripts/generate-splash-screens.ts",
+    "generate:matrix": "tsx scripts/generate-matrix.ts"
   },
   "dependencies": {
     "@date-fns/tz": "^1.4.1",
@@ -45,6 +47,7 @@
     "postcss": "^8.4.49",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "sharp": "^0.35.4",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.21.0",
     "typescript": "^7.0.2"

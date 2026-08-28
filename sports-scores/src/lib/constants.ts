@@ -5,6 +5,7 @@ import {
   LadderPlacingCategory,
   LeagueSeasonConfig,
   MatchSummary,
+  SPORT,
   TVChannel,
   TVConfig,
 } from "@/types/misc"
@@ -565,6 +566,12 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
   //   seasons: [{ name: "2025-2027", slug: "" }],
   // },
   {
+    name: "Alex Malcolm - News",
+    slug: "news-am",
+    seasons: [{ name: "Current", slug: "external" }],
+    externalURL: "https://www.cricinfo.com/author/alex-malcolm-382",
+  },
+  {
     name: "Australia - Men",
     slug: "team/187746",
     seasons: [{ name: "Current", slug: "" }],
@@ -603,7 +610,7 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "One Day Cup",
+    name: "🇦🇺 One Day Cup",
     slug: "11161",
     seasons: [
       { name: "26/27", slug: "97891" },
@@ -643,6 +650,32 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
+    name: "World Test Championship",
+    // icon:
+    slug: "18833",
+    seasons: [
+      { name: "2027", slug: "92047" },
+      { name: "2026.1", slug: "79087" },
+      { name: "2026.2", slug: "93372" },
+      { name: "2026.3", slug: "95102" },
+      { name: "2026.4", slug: "95703" },
+    ],
+  },
+  {
+    name: "Test Matches - Men",
+    slug: "11189",
+    seasons: [
+      { name: "2027", slug: "92047" },
+      { name: "2026", slug: "79087" },
+      { name: "2026", slug: "95102" },
+    ],
+  },
+  {
+    name: "Test Matches - Women",
+    slug: "18794",
+    seasons: [{ name: "2026", slug: "74042" }],
+  },
+  {
     name: "T20Is - Men",
     slug: "11191",
     seasons: [
@@ -669,32 +702,6 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2026.3", slug: "93050" },
       { name: "2026.4", slug: "94104" },
     ],
-  },
-  {
-    name: "WTC",
-    // icon:
-    slug: "18833",
-    seasons: [
-      { name: "2027", slug: "92047" },
-      { name: "2026.1", slug: "79087" },
-      { name: "2026.2", slug: "93372" },
-      { name: "2026.3", slug: "95102" },
-      { name: "2026.4", slug: "95703" },
-    ],
-  },
-  {
-    name: "Test Matches - Men",
-    slug: "11189",
-    seasons: [
-      { name: "2027", slug: "92047" },
-      { name: "2026", slug: "79087" },
-      { name: "2026", slug: "95102" },
-    ],
-  },
-  {
-    name: "Test Matches - Women",
-    slug: "18794",
-    seasons: [{ name: "2026", slug: "74042" }],
   },
   {
     name: "ICC ODI World Cup - Men",
@@ -779,7 +786,7 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
     seasons: [{ name: "2026", slug: "89189" }],
   },
   {
-    name: "One Day Cup - UK",
+    name: "🇬🇧 One Day Cup",
     slug: "11177",
     seasons: [{ name: "2026", slug: "86876" }],
     excludeFromToday: true,
@@ -788,6 +795,14 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
     name: "T20 Blast",
     slug: "11268",
     seasons: [{ name: "2026", slug: "86875" }],
+    excludeFromToday: true,
+  },
+  {
+    name: "European T20 Premier League",
+    slug: "etpl",
+    seasons: [{ name: "2026", slug: "external-2026" }],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_European_T20_Premier_League",
     excludeFromToday: true,
   },
 ]
@@ -1688,6 +1703,12 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
     slug: "hawks-div3",
     externalURL:
       "https://www.playhq.com/afl/org/sandgate-afc/580646b5/afl-queensland-2026/teams/sandgate-qfa-div-3-bris-north/57920623",
+    seasons: [{ name: "Current", slug: "external" }],
+  },
+  {
+    name: "Dylan Patterson",
+    slug: "player-dp",
+    externalURL: "https://www.goldcoastfc.com.au/players/12439/dylan-patterson",
     seasons: [{ name: "Current", slug: "external" }],
   },
 ]
@@ -3739,8 +3760,151 @@ export const ATHLETICS_SPORT_LEAGUES: LeagueSeasonConfig[] = [
       },
     ],
   },
+  {
+    name: "World Triathlon Championship Series",
+    slug: "world-triathlon-championship-series",
+    // icon: "https://r2.thesportsdb.com/images/media/league/badge/1suc6w1733648476.png",
+    seasons: [
+      {
+        name: "Current",
+        slug: "external",
+        externalURL: "https://events.triathlon.org/wtcs",
+      },
+    ],
+  },
 ]
 
 export const ATHLETICS_LEAGUES_CLIENT = stripLeagueSeasonConfig(
   ATHLETICS_SPORT_LEAGUES,
 )
+
+// Shared with the footer's reorder/hide settings and the "today" page's sport ordering.
+export type FooterLink = {
+  sport: string
+  link: string
+  img: string
+  altText: string
+}
+
+export const FOOTER_LINKS: FooterLink[] = [
+  {
+    sport: "abc news",
+    link: "https://www.abc.net.au/news/sport",
+    img: "/footer/abc-news-logo.svg",
+    altText: "ABC Grandstand",
+  },
+  {
+    sport: "calendar",
+    link: `/`,
+    img: "/footer/calendar.png",
+    altText: "Event Calendar",
+  },
+  {
+    sport: SPORT.CRICKET,
+    link: `/sports/${SPORT.CRICKET}/today`,
+    img: "/footer/cricket-ball.svg",
+    altText: "Cricket",
+  },
+  {
+    sport: SPORT.RUGBY_LEAGUE,
+    link: `/sports/${SPORT.RUGBY_LEAGUE}/${RUGBY_LEAGUE_LEAGUES[0].slug}/${RUGBY_LEAGUE_LEAGUES[0].seasons[0].slug}`,
+    img: "/footer/nrl-ball.svg",
+    altText: "Rugby League",
+  },
+  {
+    sport: SPORT.AUSSIE_RULES,
+    link: `/sports/${SPORT.AUSSIE_RULES}/${AUSSIE_RULES_LEAGUES[0].slug}/${AUSSIE_RULES_LEAGUES[0].seasons[0].slug}`,
+    img: "/footer/afl-ball.svg",
+    altText: "Aussie Rules",
+  },
+  {
+    sport: SPORT.AMERICAN_FOOTBALL,
+    link: `/sports/${SPORT.AMERICAN_FOOTBALL}/${AMERICAN_FOOTBALL_LEAGUES[0].slug}/${AMERICAN_FOOTBALL_LEAGUES[0].seasons[0].slug}`,
+    img: "/footer/american-football.svg",
+    altText: "American Football",
+  },
+  {
+    sport: SPORT.MOTORSPORT,
+    link: `/sports/${SPORT.MOTORSPORT}/${MOTORSPORT_CATEGORIES[0].slug}/${MOTORSPORT_CATEGORIES[0].seasons[0].slug}`,
+    img: "/footer/f1-helmet.svg",
+    altText: "Motorsport",
+  },
+  {
+    sport: SPORT.GOLF,
+    link: `/sports/${SPORT.GOLF}/today`,
+    img: "/footer/golf-ball.svg",
+    altText: "Golf",
+  },
+  {
+    sport: SPORT.SURFING,
+    link: `/sports/${SPORT.SURFING}/${SURFING_TOURS[0].slug}/${SURFING_TOURS[0].seasons[0].slug}`,
+    img: "/footer/surfboard.svg",
+    altText: "Surfing",
+  },
+  {
+    sport: SPORT.FOOTBALL,
+    link: `/sports/${SPORT.FOOTBALL}/today`,
+    img: "/footer/football.svg",
+    altText: "Football",
+  },
+  {
+    sport: SPORT.TENNIS,
+    link: `/sports/${SPORT.TENNIS}/today`,
+    img: "/footer/tennis.svg",
+    altText: "Tennis",
+  },
+  {
+    sport: SPORT.NETBALL,
+    link: `/sports/${SPORT.NETBALL}/${NETBALL_LEAGUES[0].slug}/${NETBALL_LEAGUES[0].seasons[0].slug}/matches`,
+    img: "/footer/netball.png",
+    altText: "Netball",
+  },
+  {
+    sport: SPORT.RUGBY_UNION,
+    link: `/sports/${SPORT.RUGBY_UNION}/${RUGBY_UNION_LEAGUES[0].slug}/${RUGBY_UNION_LEAGUES[0].seasons[0].slug}`,
+    img: "/footer/union.png",
+    altText: "Rugby Union",
+  },
+  {
+    sport: SPORT.BASKETBALL,
+    link: `/sports/${SPORT.BASKETBALL}/today`,
+    img: "/footer/basketball.svg",
+    altText: "Basketball",
+  },
+  {
+    sport: SPORT.ICE_HOCKEY,
+    link: `/sports/${SPORT.ICE_HOCKEY}/today`,
+    img: "/footer/hockey-puck.svg",
+    altText: "Ice Hockey",
+  },
+  {
+    sport: SPORT.BASEBALL,
+    link: `/sports/${SPORT.BASEBALL}/today`,
+    img: "/footer/baseball.svg",
+    altText: "Baseball",
+  },
+  {
+    sport: SPORT.DARTS,
+    link: `/sports/${SPORT.DARTS}/today`,
+    img: "/footer/dart.svg",
+    altText: "Darts",
+  },
+  {
+    sport: SPORT.CYCLING,
+    link: `/sports/${SPORT.CYCLING}/today`,
+    img: "/footer/bike.svg",
+    altText: "Cycling",
+  },
+  {
+    sport: SPORT.MULTI_SPORT,
+    link: `/sports/${SPORT.MULTI_SPORT}/summer-olympics/${MULTI_SPORT_LEAGUES_CLIENT[0].seasons[0].slug}`,
+    img: "/olympic-rings.svg",
+    altText: "Olympics",
+  },
+  {
+    sport: SPORT.ATHLETICS,
+    link: `/sports/${SPORT.ATHLETICS}/${ATHLETICS_LEAGUES_CLIENT[0].slug}/${ATHLETICS_LEAGUES_CLIENT[0].seasons[0].slug}`,
+    img: "/footer/athletics.svg",
+    altText: "Athletics",
+  },
+]

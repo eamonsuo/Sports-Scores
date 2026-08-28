@@ -65,7 +65,7 @@ export interface FixtureRound {
   matches: MatchSummary[]
   roundLabel: string
   byes?: { name?: string; img?: string }[]
-  roundSlug?: string
+  sport?: string
 }
 
 export interface LadderRow extends TableRow {

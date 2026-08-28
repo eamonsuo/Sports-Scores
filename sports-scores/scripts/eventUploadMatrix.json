@@ -90,9 +90,9 @@
     "sport": "basketball"
   },
   {
-    "name": "NBA 25/26",
+    "name": "NBA 26/27",
     "leagueId": "132",
-    "seasonId": "80229",
+    "seasonId": "100772",
     "sport": "basketball"
   },
   {
@@ -120,9 +120,9 @@
     "sport": "ice-hockey"
   },
   {
-    "name": "NHL 25/26",
+    "name": "NHL 26/27",
     "leagueId": "234",
-    "seasonId": "78476",
+    "seasonId": "98450",
     "sport": "ice-hockey"
   },
   {
@@ -156,9 +156,9 @@
     "sport": "golf"
   },
   {
-    "name": "PGA Tour Australasia 25/26",
+    "name": "PGA Tour Australasia 26/27",
     "leagueId": "australasia",
-    "seasonId": "25-26",
+    "seasonId": "26-27",
     "sport": "golf"
   },
   {

@@ -1,9 +1,12 @@
 import ClientSportsPage from "@/components/all-sports/ClientSportsPage"
-import FixtureRoundList from "@/components/all-sports/FixtureRoundList"
 import LeagueSeasonToggle from "@/components/all-sports/LeagueSeasonToggle"
+import OrderedFixtureRoundList from "@/components/all-sports/OrderedFixtureRoundList"
 import TVGuide from "@/components/all-sports/TVGuide"
 import DateNav from "@/components/misc-ui/DateNav"
+import { FOOTER_LINKS } from "@/lib/constants"
+import { SPORT_ROUTE_CONFIG } from "@/lib/routeConfig"
 import { getClientDate } from "@/lib/serverUtils"
+import { FOOTER_ORDER_STORAGE_KEY } from "@/lib/storageKeys"
 import { americanFootballService } from "@/services/american-football.service"
 import { aussieRulesService } from "@/services/aussie-rules.service"
 import { baseballService } from "@/services/baseball.service"
@@ -69,22 +72,22 @@ export default async function Page({
   ])
 
   let allSports: FixtureRound[] = ([] as FixtureRound[])
-    .concat(cricketToday?.fixtures ?? [])
-    .concat(rugbyLeagueToday?.fixtures ?? [])
-    .concat(aussieRulesToday?.fixtures ?? [])
-    .concat(americanFootballToday?.fixtures ?? [])
-    .concat(golfToday?.fixtures ?? [])
-    .concat(motorsportToday?.fixtures ?? [])
-    .concat(surfingToday?.fixtures ?? [])
-    .concat(footballToday?.fixtures ?? [])
-    .concat(basketballToday?.fixtures ?? [])
-    .concat(baseballToday?.fixtures ?? [])
-    .concat(iceHockeyToday?.fixtures ?? [])
-    .concat(tennisToday?.fixtures ?? [])
-    .concat(rugbyUnionToday?.fixtures ?? [])
-    // .concat(netballToday?.fixtures ?? [])
-    .concat(dartsToday?.fixtures ?? [])
-    .concat(cyclingToday?.fixtures ?? [])
+    .concat(tagSport(cricketToday?.fixtures, SPORT.CRICKET))
+    .concat(tagSport(rugbyLeagueToday?.fixtures, SPORT.RUGBY_LEAGUE))
+    .concat(tagSport(aussieRulesToday?.fixtures, SPORT.AUSSIE_RULES))
+    .concat(tagSport(americanFootballToday?.fixtures, SPORT.AMERICAN_FOOTBALL))
+    .concat(tagSport(golfToday?.fixtures, SPORT.GOLF))
+    .concat(tagSport(motorsportToday?.fixtures, SPORT.MOTORSPORT))
+    .concat(tagSport(surfingToday?.fixtures, SPORT.SURFING))
+    .concat(tagSport(footballToday?.fixtures, SPORT.FOOTBALL))
+    .concat(tagSport(basketballToday?.fixtures, SPORT.BASKETBALL))
+    .concat(tagSport(baseballToday?.fixtures, SPORT.BASEBALL))
+    .concat(tagSport(iceHockeyToday?.fixtures, SPORT.ICE_HOCKEY))
+    .concat(tagSport(tennisToday?.fixtures, SPORT.TENNIS))
+    .concat(tagSport(rugbyUnionToday?.fixtures, SPORT.RUGBY_UNION))
+    // .concat(tagSport(netballToday?.fixtures, SPORT.NETBALL))
+    .concat(tagSport(dartsToday?.fixtures, SPORT.DARTS))
+    .concat(tagSport(cyclingToday?.fixtures, SPORT.CYCLING))
 
   const myTeams = allSports.filter(
     (fixtures) => fixtures.roundLabel === "My Teams",
@@ -98,12 +101,23 @@ export default async function Page({
       roundLabel: "My Teams",
     })
 
+  const perSportLeagueExclusion = TODAY_PAGE_SPORTS.map((sport) => {
+    const leagues = SPORT_ROUTE_CONFIG[sport].leagues
+    return {
+      sport,
+      leagueIds: leagues.map((league) => league.slug),
+      defaultExcludedFromToday: leagues
+        .filter((league) => league.excludeFromToday)
+        .map((league) => league.slug),
+    }
+  })
+
   return (
     <div className="flex h-full flex-col">
       <LeagueSeasonToggle sport={SPORT.DEFAULT_SPORT} leagues={[]} />
       <div className="h-full overflow-y-auto">
         <ClientSportsPage
-          options={pageSettings(allSports)}
+          options={pageSettings(allSports, perSportLeagueExclusion)}
           defaultState="league"
         />
       </div>
@@ -113,7 +127,14 @@ export default async function Page({
   )
 }
 
-function pageSettings(data: FixtureRound[]): {
+function pageSettings(
+  data: FixtureRound[],
+  perSportLeagueExclusion: {
+    sport: SPORT
+    leagueIds: string[]
+    defaultExcludedFromToday: string[]
+  }[],
+): {
   btnLabel: string
   component: ReactNode
   state: string
@@ -131,7 +152,15 @@ function pageSettings(data: FixtureRound[]): {
     {
       btnLabel: `Leagues`,
       component: (
-        <FixtureRoundList data={data} curRound={data[0]?.roundLabel ?? ""} />
+        <OrderedFixtureRoundList
+          data={data}
+          storageKey={FOOTER_ORDER_STORAGE_KEY}
+          defaultOrder={defaultFooterOrder}
+          groupBy="sport"
+          pinnedRoundLabel="My Teams"
+          filterHidden
+          perSportLeagueExclusion={perSportLeagueExclusion}
+        />
       ),
       state: "league",
     },
@@ -142,3 +171,32 @@ function pageSettings(data: FixtureRound[]): {
     },
   ]
 }
+
+// Tags each round with its sport so OrderedFixtureRoundList can sort groups to match the user's footer order.
+function tagSport(
+  fixtures: FixtureRound[] | undefined,
+  sport: SPORT,
+): FixtureRound[] {
+  return (fixtures ?? []).map((fixture) => ({ ...fixture, sport }))
+}
+
+const defaultFooterOrder = FOOTER_LINKS.map((item) => item.sport)
+
+// Sports included on the combined Today page (kept in sync with the Promise.all above).
+const TODAY_PAGE_SPORTS = [
+  SPORT.CRICKET,
+  SPORT.RUGBY_LEAGUE,
+  SPORT.AUSSIE_RULES,
+  SPORT.AMERICAN_FOOTBALL,
+  SPORT.GOLF,
+  SPORT.MOTORSPORT,
+  SPORT.SURFING,
+  SPORT.FOOTBALL,
+  SPORT.BASKETBALL,
+  SPORT.BASEBALL,
+  SPORT.ICE_HOCKEY,
+  SPORT.TENNIS,
+  SPORT.RUGBY_UNION,
+  SPORT.DARTS,
+  SPORT.CYCLING,
+] as const

@@ -4,6 +4,7 @@ import "./globals.css"
 
 import ClientDateSetter from "@/components/misc-ui/ClientDateSetter"
 import Footer from "@/components/misc-ui/Footer"
+import { APPLE_SPLASH_IMAGES } from "@/lib/appleSplashScreens"
 import { Analytics } from "@vercel/analytics/next"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -26,6 +27,15 @@ export const metadata: Metadata = {
     },
   ],
   manifest: "/web.manifest",
+  appleWebApp: {
+    capable: true,
+    title: "Sports Scores",
+    statusBarStyle: "black",
+    startupImage: APPLE_SPLASH_IMAGES.map(({ url, media }) => ({ url, media })),
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
+  },
 }
 
 export default function RootLayout({
@@ -41,7 +51,6 @@ export default function RootLayout({
         type="image/png"
         sizes="180x180"
       />
-      <link rel="apple-touch-startup-image" href="/ios-splash.png" />
 
       <body className={inter.className}>
         <ClientDateSetter />

@@ -64,10 +64,6 @@ export async function mapFixtureRounds(
         }
 
         acc[roundLabel].matches.push(match)
-        acc[roundLabel].roundSlug =
-          displayType === DisplayTypes.LEAGUE && roundLabel !== "Other"
-            ? `${match.sport}/${match.leagueId}/${match.seasonId}`
-            : undefined
         if (showByes) {
           acc[roundLabel].byes = acc[roundLabel]?.byes?.filter(
             (team) =>

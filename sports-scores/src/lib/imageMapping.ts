@@ -1085,10 +1085,6 @@ export function resolveImage(teamName: string) {
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/lac.png"
     case "Phoenix Suns":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/phx.png"
-    case "Minnesota Timberwolves":
-      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/min.png"
-    case "Sacramento Kings":
-      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nba/500/sac.png"
     //WNBA
     case "Chicago Sky":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/wnba/500/chi.png"
@@ -1214,7 +1210,6 @@ export function resolveImage(teamName: string) {
     case "Pierceson Coody":
     case "Patrick Rodgers":
     case "Ricky Castillo":
-    case "Jackson Koivun":
     case "Jackson Koivun":
       return getCountryImageUrl(CountryFlagCode.UnitedStates)
 
@@ -1348,22 +1343,18 @@ export function resolveImage(teamName: string) {
     case "Adelaide":
     case "LIV Golf Adelaide":
       return getCountryImageUrl(CountryFlagCode.Australia)
-    case "Hong Kong":
     case "LIV Golf Hong Kong":
       return getCountryImageUrl(CountryFlagCode.HongKong)
-    case "Singapore":
     case "LIV Golf Singapore":
       return getCountryImageUrl(CountryFlagCode.Singapore)
     case "Mexico City":
     case "LIV Golf Mexico City":
       return getCountryImageUrl(CountryFlagCode.Mexico)
-    case "Korea":
     case "LIV Golf Korea":
       return getCountryImageUrl(CountryFlagCode.KoreaSouth)
     case "Andalucía":
     case "LIV Golf Andalucia":
       return getCountryImageUrl(CountryFlagCode.Spain)
-    case "United Kingdom":
     case "LIV Golf UK":
       return getCountryImageUrl(CountryFlagCode.UnitedKingdom)
     case "LIV Golf South Africa":
