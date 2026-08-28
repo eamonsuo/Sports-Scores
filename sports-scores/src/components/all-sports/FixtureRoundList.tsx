@@ -4,9 +4,7 @@ import { FALLBACK_IMAGE } from "@/lib/constants"
 import { FixtureRound } from "@/types/misc"
 import dynamic from "next/dynamic"
 import Image from "next/image"
-import Link from "next/link"
 import ComponentList from "../misc-ui/ComponentList"
-import { Button } from "../shadcn/button"
 import FixtureListComponent from "./FixtureList"
 
 // TODO: REMOVE IN FUTURE
@@ -31,14 +29,6 @@ export default function FixtureRoundList({
           key={item.roundLabel}
           className="w-full shrink-0 snap-start overflow-y-auto"
         >
-          {item.roundSlug && (
-            <Link
-              href={`/sports/${item.roundSlug ?? ""}`}
-              className="flex justify-center rounded"
-            >
-              <Button variant="secondary">All Events</Button>
-            </Link>
-          )}
           <FixtureList data={item.matches} />
           {(item.byes?.length ?? 0) > 0 ? (
             <div className="flex items-center gap-1 overflow-x-auto p-4 dark:text-neutral-400">

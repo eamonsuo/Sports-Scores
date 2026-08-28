@@ -91,7 +91,7 @@
   },
   "football — WSL": {
     "leagueId": "1044",
-    "seasonId": "79227",
+    "seasonId": "99801",
     "sport": "football"
   },
   "football — Championship": {
@@ -171,12 +171,17 @@
   },
   "football — AFC Champions League Elite - Men": {
     "leagueId": "463",
-    "seasonId": "77010",
+    "seasonId": "99217",
+    "sport": "football"
+  },
+  "football — AFC Champions League Two - Men": {
+    "leagueId": "668",
+    "seasonId": "97465",
     "sport": "football"
   },
   "football — AFC Champions League - Women": {
     "leagueId": "23009",
-    "seasonId": "77726",
+    "seasonId": "97474",
     "sport": "football"
   },
   "football — UEFA Champions League - Men": {
@@ -326,7 +331,7 @@
   },
   "basketball — NBA": {
     "leagueId": "132",
-    "seasonId": "80229",
+    "seasonId": "100772",
     "sport": "basketball"
   },
   "basketball — WNBA": {
@@ -366,7 +371,7 @@
   },
   "ice-hockey — NHL": {
     "leagueId": "234",
-    "seasonId": "78476",
+    "seasonId": "98450",
     "sport": "ice-hockey"
   },
   "ice-hockey — World Championship": {
@@ -470,8 +475,8 @@
     "sport": "cricket"
   },
   "cricket — One Day Cup": {
-    "leagueId": "11177",
-    "seasonId": "86876",
+    "leagueId": "11161",
+    "seasonId": "97891",
     "sport": "cricket"
   },
   "cricket — BBL": {
@@ -561,7 +566,7 @@
   },
   "cricket — Ranji Trophy": {
     "leagueId": "18682",
-    "seasonId": "77592",
+    "seasonId": "98950",
     "sport": "cricket"
   },
   "cricket — County Championship": {
@@ -577,6 +582,11 @@
   "cricket — The Hundred - Women": {
     "leagueId": "16717",
     "seasonId": "89189",
+    "sport": "cricket"
+  },
+  "cricket — One Day Cup - UK": {
+    "leagueId": "11177",
+    "seasonId": "86876",
     "sport": "cricket"
   },
   "cricket — T20 Blast": {
@@ -636,12 +646,12 @@
   },
   "tennis — US Open - Men's Singles": {
     "leagueId": "2449",
-    "seasonId": "67287",
+    "seasonId": "85956",
     "sport": "tennis"
   },
   "tennis — US Open - Women's Singles": {
     "leagueId": "2601",
-    "seasonId": "69937",
+    "seasonId": "85958",
     "sport": "tennis"
   },
   "tennis — Brisbane International - Men's Singles": {
@@ -696,7 +706,7 @@
   },
   "darts — World Matchplay": {
     "leagueId": "689",
-    "seasonId": "69484",
+    "seasonId": "84838",
     "sport": "darts"
   },
   "darts — World Grand Prix": {
@@ -716,7 +726,7 @@
   },
   "darts — World Series of Darts - Australian Darts Masters": {
     "leagueId": "23242",
-    "seasonId": "69511",
+    "seasonId": "84842",
     "sport": "darts"
   },
   "darts — World Series of Darts - Finals": {
@@ -726,7 +736,7 @@
   },
   "darts — Players Championship - Season": {
     "leagueId": "2066",
-    "seasonId": "71945",
+    "seasonId": "96781",
     "sport": "darts"
   },
   "darts — Players Championship - Finals": {
@@ -781,7 +791,7 @@
   },
   "golf — PGA Tour Australasia": {
     "leagueId": "australasia",
-    "seasonId": "25-26",
+    "seasonId": "26-27",
     "sport": "golf"
   },
   "golf — TGL": {

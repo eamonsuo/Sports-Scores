@@ -186,6 +186,7 @@ function createSofascoreStagesAdapter(
                 roundLabel: `Round ${i}`,
                 matchSlug: `/sports/motorsport/${leagueId}/${seasonId}/match/${stage.id}`,
                 leagueName: name,
+                leagueSlug: `/sports/motorsport/${leagueId}/${seasonId}`,
               }),
             ),
           )
@@ -264,9 +265,7 @@ function createFileAdapter(adapterLeagueId: string): LeagueAdapter {
         roundLabel: item.roundLabel,
         timer: item.status === "UPCOMING" ? new Date(item.timer) : item.timer,
         timerDisplayColour: item.timerDisplayColour as
-          | "green"
-          | "yellow"
-          | "gray",
+          "green" | "yellow" | "gray",
         venue: item.venue,
         seasonId: item.seasonId,
         leagueId: item.leagueId,

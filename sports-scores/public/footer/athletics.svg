@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="800px" height="800px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+<title>athletics</title>
+<circle cx="340" cy="98" r="46" fill="#000000"/>
+<g fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round">
+<path d="M318 168 L250 292" stroke-width="48"/>
+<path d="M320 196 L366 266 L432 226" stroke-width="28"/>
+<path d="M304 196 L230 216 L186 272" stroke-width="28"/>
+<path d="M252 292 L346 326 L326 416" stroke-width="36"/>
+<path d="M320 420 L372 436" stroke-width="26"/>
+<path d="M248 296 L170 376 L96 406" stroke-width="36"/>
+<path d="M92 404 L56 438" stroke-width="26"/>
+</g>
+</svg>
