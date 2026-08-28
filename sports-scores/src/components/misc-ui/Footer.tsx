@@ -1,154 +1,18 @@
 "use client"
+import { Settings } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useMemo } from "react"
 
-import {
-  AMERICAN_FOOTBALL_LEAGUES,
-  ATHLETICS_LEAGUES_CLIENT,
-  AUSSIE_RULES_LEAGUES,
-  MOTORSPORT_CATEGORIES,
-  MULTI_SPORT_LEAGUES_CLIENT,
-  NETBALL_LEAGUES,
-  RUGBY_LEAGUE_LEAGUES,
-  RUGBY_UNION_LEAGUES,
-  SURFING_TOURS,
-} from "@/lib/constants"
-import { useFooterOrder } from "@/lib/footerPreferences"
+import { FOOTER_LINKS } from "@/lib/constants"
+import { useOrderPreference } from "@/lib/orderPreferences"
 import { cn } from "@/lib/shadcnUtils"
-import { SPORT } from "@/types/misc"
+import { FOOTER_ORDER_STORAGE_KEY } from "@/lib/storageKeys"
 import Image from "next/image"
 import { Avatar, AvatarFallback, AvatarImage } from "./Avatar"
-import FooterCustomizeDialog from "./FooterCustomizeDialog"
+import CustomizeOrderDialog from "./CustomizeOrderDialog"
 
-const footerLinks: {
-  sport: string
-  link: string
-  img: string
-  altText: string
-}[] = [
-  {
-    sport: "abc news",
-    link: "https://www.abc.net.au/news/sport",
-    img: "/footer/abc-news-logo.svg",
-    altText: "ABC Grandstand",
-  },
-  {
-    sport: "calendar",
-    link: `/`,
-    img: "/footer/calendar.png",
-    altText: "Event Calendar",
-  },
-
-  {
-    sport: SPORT.CRICKET,
-    link: `/sports/${SPORT.CRICKET}/today`,
-    img: "/footer/cricket-ball.svg",
-    altText: "Cricket",
-  },
-  {
-    sport: SPORT.RUGBY_LEAGUE,
-    link: `/sports/${SPORT.RUGBY_LEAGUE}/${RUGBY_LEAGUE_LEAGUES[0].slug}/${RUGBY_LEAGUE_LEAGUES[0].seasons[0].slug}`,
-    img: "/footer/nrl-ball.svg",
-    altText: "Rugby League",
-  },
-  {
-    sport: SPORT.AUSSIE_RULES,
-    link: `/sports/${SPORT.AUSSIE_RULES}/${AUSSIE_RULES_LEAGUES[0].slug}/${AUSSIE_RULES_LEAGUES[0].seasons[0].slug}`,
-    img: "/footer/afl-ball.svg",
-    altText: "Aussie Rules",
-  },
-  {
-    sport: SPORT.AMERICAN_FOOTBALL,
-    link: `/sports/${SPORT.AMERICAN_FOOTBALL}/${AMERICAN_FOOTBALL_LEAGUES[0].slug}/${AMERICAN_FOOTBALL_LEAGUES[0].seasons[0].slug}`,
-    img: "/footer/american-football.svg",
-    altText: "American Football",
-  },
-  {
-    sport: SPORT.MOTORSPORT,
-    link: `/sports/${SPORT.MOTORSPORT}/${MOTORSPORT_CATEGORIES[0].slug}/${MOTORSPORT_CATEGORIES[0].seasons[0].slug}`,
-    img: "/footer/f1-helmet.svg",
-    altText: "Motorsport",
-  },
-  {
-    sport: SPORT.GOLF,
-    link: `/sports/${SPORT.GOLF}/today`,
-    img: "/footer/golf-ball.svg",
-    altText: "Golf",
-  },
-  {
-    sport: SPORT.SURFING,
-    link: `/sports/${SPORT.SURFING}/${SURFING_TOURS[0].slug}/${SURFING_TOURS[0].seasons[0].slug}`,
-    img: "/footer/surfboard.svg",
-    altText: "Surfing",
-  },
-  {
-    sport: SPORT.FOOTBALL,
-    link: `/sports/${SPORT.FOOTBALL}/today`,
-    img: "/footer/football.svg",
-    altText: "Football",
-  },
-  {
-    sport: SPORT.TENNIS,
-    link: `/sports/${SPORT.TENNIS}/today`,
-    img: "/footer/tennis.svg",
-    altText: "Tennis",
-  },
-  {
-    sport: SPORT.NETBALL,
-    link: `/sports/${SPORT.NETBALL}/${NETBALL_LEAGUES[0].slug}/${NETBALL_LEAGUES[0].seasons[0].slug}/matches`,
-    img: "/footer/netball.png",
-    altText: "Netball",
-  },
-  {
-    sport: SPORT.RUGBY_UNION,
-    link: `/sports/${SPORT.RUGBY_UNION}/${RUGBY_UNION_LEAGUES[0].slug}/${RUGBY_UNION_LEAGUES[0].seasons[0].slug}`,
-    img: "/footer/union.png",
-    altText: "Rugby Union",
-  },
-  {
-    sport: SPORT.BASKETBALL,
-    link: `/sports/${SPORT.BASKETBALL}/today`,
-    img: "/footer/basketball.svg",
-    altText: "Basketball",
-  },
-  {
-    sport: SPORT.ICE_HOCKEY,
-    link: `/sports/${SPORT.ICE_HOCKEY}/today`,
-    img: "/footer/hockey-puck.svg",
-    altText: "Hockey",
-  },
-  {
-    sport: SPORT.BASEBALL,
-    link: `/sports/${SPORT.BASEBALL}/today`,
-    img: "/footer/baseball.svg",
-    altText: "Baseball",
-  },
-  {
-    sport: SPORT.DARTS,
-    link: `/sports/${SPORT.DARTS}/today`,
-    img: "/footer/dart.svg",
-    altText: "Darts",
-  },
-  {
-    sport: SPORT.CYCLING,
-    link: `/sports/${SPORT.CYCLING}/today`,
-    img: "/footer/bike.svg",
-    altText: "Cycling",
-  },
-  {
-    sport: SPORT.MULTI_SPORT,
-    link: `/sports/${SPORT.MULTI_SPORT}/summer-olympics/${MULTI_SPORT_LEAGUES_CLIENT[0].seasons[0].slug}`,
-    img: "/olympic-rings.svg",
-    altText: "Olympics",
-  },
-  {
-    sport: SPORT.ATHLETICS,
-    link: `/sports/${SPORT.ATHLETICS}/${ATHLETICS_LEAGUES_CLIENT[0].slug}/${ATHLETICS_LEAGUES_CLIENT[0].seasons[0].slug}`,
-    img: "/vercel.svg",
-    altText: "Athletics",
-  },
-]
+const footerLinks = FOOTER_LINKS
 
 const defaultFooterOrder = footerLinks.map((item) => item.sport)
 const footerLinksBySport = new Map(
@@ -157,8 +21,10 @@ const footerLinksBySport = new Map(
 
 export default function Footer() {
   const pathname = usePathname()
-  const { order, hidden, reorder, toggleHidden, reset } =
-    useFooterOrder(defaultFooterOrder)
+  const { order, hidden, reorder, toggleHidden, reset } = useOrderPreference(
+    FOOTER_ORDER_STORAGE_KEY,
+    defaultFooterOrder,
+  )
 
   const visibleLinks = useMemo(
     () =>
@@ -203,7 +69,21 @@ export default function Footer() {
             </Avatar>
           </Link>
         ))}
-        <FooterCustomizeDialog
+        <CustomizeOrderDialog
+          title="Customize Footer"
+          trigger={
+            <button
+              type="button"
+              aria-label="Customize footer"
+              className="flex shrink-0 items-center justify-center"
+            >
+              <Avatar className="size-11 bg-gray-400 p-1.5 dark:bg-neutral-600">
+                <AvatarFallback className="bg-transparent">
+                  <Settings className="size-6 text-black" />
+                </AvatarFallback>
+              </Avatar>
+            </button>
+          }
           items={footerLinks.map((item) => ({
             id: item.sport,
             altText: item.altText,

@@ -6,22 +6,27 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/shadcn/popover"
+import { FALLBACK_IMAGE } from "@/lib/constants"
+import { useOrderPreference } from "@/lib/orderPreferences"
+import { leagueOrderStorageKey } from "@/lib/storageKeys"
 import {
   ClientLeagueSeasonConfig,
   LeagueSeasonConfig,
   SPORT,
 } from "@/types/misc"
 import { format } from "date-fns/format"
-import { ChevronDownIcon, ExternalLinkIcon } from "lucide-react"
+import { ChevronDownIcon, ExternalLinkIcon, Settings } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
+import CustomizeOrderDialog from "../misc-ui/CustomizeOrderDialog"
 import { Button } from "../shadcn/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../shadcn/dropdown-menu"
 
@@ -101,6 +106,33 @@ export default function LeagueSeasonToggle({
     return dateParam ? new Date(dateParam) : new Date()
   })
   const [calendarOpen, setCalendarOpen] = useState(false)
+  const [leagueMenuOpen, setLeagueMenuOpen] = useState(false)
+  const [customizeOpen, setCustomizeOpen] = useState(false)
+
+  const defaultLeagueOrder = leagues.map((league) => league.slug)
+  const defaultExcludedFromToday = leagues
+    .filter((league) => league.excludeFromToday)
+    .map((league) => league.slug)
+  const {
+    order,
+    hidden,
+    excludedFromToday,
+    reorder,
+    toggleHidden,
+    toggleExcludedFromToday,
+    reset,
+  } = useOrderPreference(
+    leagueOrderStorageKey(sport),
+    defaultLeagueOrder,
+    defaultExcludedFromToday,
+  )
+  const leaguesBySlug = new Map(leagues.map((league) => [league.slug, league]))
+  const orderedLeagues = order
+    .map((slug) => leaguesBySlug.get(slug))
+    .filter(
+      (league): league is ClientLeagueSeasonConfig =>
+        !!league && !hidden.includes(league.slug),
+    )
 
   // Update state if URL changes (e.g., via navigation)
   useEffect(() => {
@@ -179,7 +211,7 @@ export default function LeagueSeasonToggle({
         {todayActive ? "Fixtures" : "Today"}
       </Button>
       {/* League Dropdown */}
-      <DropdownMenu>
+      <DropdownMenu open={leagueMenuOpen} onOpenChange={setLeagueMenuOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="justify-between">
             {!todayActive && selectedLeague.icon && (
@@ -200,7 +232,7 @@ export default function LeagueSeasonToggle({
           align="center"
           className="bg-background w-full border"
         >
-          {leagues.map((league, i) => (
+          {orderedLeagues.map((league, i) => (
             <DropdownMenuItem
               key={`${league.slug}-${i}`}
               onClick={() => handleLeagueChange(league)}
@@ -225,8 +257,43 @@ export default function LeagueSeasonToggle({
               )}
             </DropdownMenuItem>
           ))}
+          {leagues.length > 1 && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onSelect={(e) => {
+                  e.preventDefault()
+                  setLeagueMenuOpen(false)
+                  setCustomizeOpen(true)
+                }}
+              >
+                <Settings className="size-4" />
+                Customize Leagues
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
+
+      {leagues.length > 1 && (
+        <CustomizeOrderDialog
+          title="Customize Leagues"
+          open={customizeOpen}
+          onOpenChange={setCustomizeOpen}
+          items={leagues.map((league) => ({
+            id: league.slug,
+            altText: league.name,
+            img: league.icon ?? FALLBACK_IMAGE,
+          }))}
+          order={order}
+          hidden={hidden}
+          onReorder={reorder}
+          onToggleHidden={toggleHidden}
+          excludedFromToday={excludedFromToday}
+          onToggleExcludedFromToday={toggleExcludedFromToday}
+          onReset={reset}
+        />
+      )}
 
       {/* Season/Year Dropdown or Date Picker */}
       {todayActive ? (

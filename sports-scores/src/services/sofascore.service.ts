@@ -141,7 +141,7 @@ export abstract class SofascoreSport implements SportService {
     if (!matches) return null
 
     const validLeagueIds = this.leagues
-      .filter((l) => !l.excludeFromToday)
+      // .filter((l) => !l.excludeFromToday)
       .map((l) => Number(l.slug))
     const timezone = date instanceof TZDate ? date.timeZone : "UTC"
 
@@ -871,7 +871,7 @@ export abstract class SofascoreStageSport implements SportService {
           this.eventMapper(stage, {
             seasonId,
             roundLabel: `Round ${i}`,
-            matchSlug: `/sports/motorsport/${leagueId}/${seasonId}/match/${stage.id}`,
+            matchSlug: `/sports/${this.sport}/${leagueId}/${seasonId}/match/${stage.id}`,
             leagueName: name,
           }),
         ),

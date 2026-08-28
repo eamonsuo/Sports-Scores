@@ -93,7 +93,8 @@ class TennisService extends SofascoreSport {
 
     if (!matches) return null
 
-    const validLeagueIds = TENNIS_LEAGUES.filter((l) => !l.excludeFromToday)
+    const validLeagueIds = TENNIS_LEAGUES
+      // .filter((l) => !l.excludeFromToday)
       .map((l) => Number(l.slug))
       .concat(TENNIS_CATEGORIES.map((c) => Number(c.slug)))
 
@@ -153,7 +154,6 @@ class TennisService extends SofascoreSport {
             matches: this.sortMatchesByDateAndTournament(leagueMatches),
             roundLabel: roundLabel,
             cardVariant: "tennis",
-            roundSlug: `${SPORT.TENNIS}/today`,
           } as FixtureRound
         })
         .concat(
@@ -162,7 +162,6 @@ class TennisService extends SofascoreSport {
                 matches: this.sortMatchesByDateAndTournament(aussieMatches),
                 roundLabel: "Australians",
                 cardVariant: "tennis",
-                roundSlug: `${SPORT.TENNIS}/today`,
               } as FixtureRound)
             : [],
         ),
