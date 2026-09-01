@@ -2857,7 +2857,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     slug: "2449",
     icon: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Usopen-horizontal-logo.svg",
     seasons: [
-      // { name: "2026", slug: "80012" },
+      { name: "2026", slug: "85956" },
       { name: "2025", slug: "67287", tvguide: TENNIS_MAJORS_TV_GUIDE },
     ],
   },
@@ -2866,7 +2866,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     slug: "2601",
     icon: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Usopen-horizontal-logo.svg",
     seasons: [
-      // { name: "2026", slug: "80013" },
+      { name: "2026", slug: "85958" },
       { name: "2025", slug: "69937", tvguide: TENNIS_MAJORS_TV_GUIDE },
     ],
   },
