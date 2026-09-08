@@ -2729,18 +2729,40 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
       // { name: "2024", slug: "57477" },
     ],
   },
-  // {
-  //   name: "Basketball World Cup",
-  //   slug: "486",
-  //   seasons: [
-  //     { name: "2025", slug: "69751" },
-  //     { name: "2024", slug: "57477" },
-  //   ],
-  // },
+  {
+    name: "Basketball World Cup - Men",
+    slug: "441",
+    seasons: [
+      // { name: "2027", slug: "69751" },
+      { name: "2023", slug: "51191" },
+    ],
+    externalURL: "https://en.wikipedia.org/wiki/2027_FIBA_Basketball_World_Cup",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/x45gjq1764423537.png",
+  },
+  {
+    name: "Basketball World Cup Qualifiers - Men",
+    slug: "fiba-qual",
+    seasons: [{ name: "24-27", slug: "external" }],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2027_FIBA_Basketball_World_Cup_qualification",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/x45gjq1764423537.png",
+  },
+  {
+    name: "Basketball World Cup - Women",
+    slug: "442",
+    seasons: [
+      { name: "2026", slug: "93569" },
+      { name: "2022", slug: "41229" },
+    ],
+    externalURL:
+      "https://en.wikipedia.org/wiki/2026_FIBA_Women's_Basketball_World_Cup",
+    icon: "https://upload.wikimedia.org/wikipedia/en/3/3f/FIBA_Women%27s_Basketball_World_Cup_Germany%2726_logo.svg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
+  },
   {
     name: "Brisbane Bullets",
     slug: "team/233139",
     seasons: [{ name: "Current", slug: "" }],
+    icon: "https://r2.thesportsdb.com/images/media/team/badge/ubzenr1545867000.png",
   },
 ]
 
