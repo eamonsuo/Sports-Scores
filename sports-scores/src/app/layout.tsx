@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     {
       rel: "icon",
       url: "/favicon.ico",
-      type: "image/png",
+      type: "image/x-icon",
       sizes: "64x64",
     },
     {
@@ -35,23 +35,18 @@ export const metadata: Metadata = {
   },
   other: {
     "mobile-web-app-capable": "yes",
+    // Next only emits the standard "mobile-web-app-capable" tag for appleWebApp.capable,
+    // but iOS still requires this legacy name to enable standalone mode + splash screens.
+    "apple-mobile-web-app-capable": "yes",
   },
 }
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  // Dark mode enabled.
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      {/* Dark mode enabled */}
-      <link rel="icon" href="/favicon.ico" sizes="64x64" />
-      <link
-        rel="apple-touch-icon"
-        href="/apple-touch-icon.png"
-        type="image/png"
-        sizes="180x180"
-      />
-
       <body className={inter.className}>
         <ClientDateSetter />
         {/* Set to Dynamic view height aka height of browser minus any browser things. Helps on
