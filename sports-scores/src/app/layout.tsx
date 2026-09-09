@@ -18,6 +18,9 @@ export const metadata: Metadata = {
     statusBarStyle: "black",
     startupImage: APPLE_SPLASH_IMAGES.map(({ url, media }) => ({ url, media })),
   },
+  other: {
+    "apple-mobile-web-app-capable": "yes",
+  },
 }
 
 export default function RootLayout({
