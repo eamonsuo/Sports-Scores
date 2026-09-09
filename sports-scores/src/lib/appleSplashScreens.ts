@@ -46,7 +46,7 @@ export const APPLE_SPLASH_IMAGES: AppleSplashImage[] =
   APPLE_SPLASH_DEVICES.flatMap(({ width, height, ratio }) => {
     const px = width * ratio
     const py = height * ratio
-    const device = `screen and (device-width: ${width}px) and (device-height: ${height}px) and (-webkit-device-pixel-ratio: ${ratio})`
+    const device = `(device-width: ${width}px) and (device-height: ${height}px) and (-webkit-device-pixel-ratio: ${ratio})`
     return [
       {
         url: `/splash/apple-splash-${px}-${py}.png`,

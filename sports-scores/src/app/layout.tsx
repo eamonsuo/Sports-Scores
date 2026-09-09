@@ -12,18 +12,11 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Sports Scores App",
   description: "An app to track scores for all your sports",
-  manifest: "/web.manifest",
   appleWebApp: {
     capable: true,
     title: "Sports Scores",
     statusBarStyle: "black",
     startupImage: APPLE_SPLASH_IMAGES.map(({ url, media }) => ({ url, media })),
-  },
-  other: {
-    "mobile-web-app-capable": "yes",
-    // Next only emits the standard "mobile-web-app-capable" tag for appleWebApp.capable,
-    // but iOS still requires this legacy name to enable standalone mode + splash screens.
-    "apple-mobile-web-app-capable": "yes",
   },
 }
 

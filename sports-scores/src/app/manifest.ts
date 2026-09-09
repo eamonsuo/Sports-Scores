@@ -1,0 +1,26 @@
+import type { MetadataRoute } from "next"
+
+export default function manifest(): MetadataRoute.Manifest {
+  return {
+    name: "Sports Scores",
+    short_name: "Sports Scores",
+    description: "An app to track results for all your sports",
+    id: "SportsScoresApp",
+    start_url: "/",
+    display: "standalone",
+    background_color: "#222224",
+    theme_color: "#0a0a0a",
+    icons: [
+      {
+        src: "/android-chrome-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        src: "/android-chrome-512x512.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
+  }
+}
