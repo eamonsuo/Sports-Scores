@@ -12,20 +12,6 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Sports Scores App",
   description: "An app to track scores for all your sports",
-  icons: [
-    {
-      rel: "icon",
-      url: "/favicon.ico",
-      type: "image/x-icon",
-      sizes: "64x64",
-    },
-    {
-      rel: "apple-touch-icon",
-      url: "/apple-touch-icon.png",
-      type: "image/png",
-      sizes: "180x180",
-    },
-  ],
   manifest: "/web.manifest",
   appleWebApp: {
     capable: true,
