@@ -156,53 +156,67 @@ function CustomizeOrderRow({
       ref={setNodeRef}
       style={style}
       className={cn(
-        "flex touch-none items-center gap-2 rounded-md border p-2 select-none dark:bg-neutral-600",
-        "cursor-grab active:cursor-grabbing",
+        "flex items-stretch rounded-md border select-none [-webkit-touch-callout:none] dark:bg-neutral-600",
         isHidden && "opacity-50",
       )}
-      aria-label={`Drag to reorder ${item.altText}`}
-      {...attributes}
-      {...listeners}
     >
-      <GripVertical className="text-muted-foreground size-4 shrink-0" />
+      <button
+        type="button"
+        aria-label={`Drag to reorder ${item.altText}`}
+        className="flex shrink-0 cursor-grab touch-none items-center justify-center border-r px-3 active:cursor-grabbing"
+        {...attributes}
+        {...listeners}
+      >
+        <GripVertical className="text-muted-foreground size-5" />
+      </button>
 
-      <Image src={item.img} width={24} height={24} alt="" className="size-6" />
+      <div className="flex min-w-0 flex-1 items-center gap-2 p-2">
+        <Image
+          src={item.img}
+          width={24}
+          height={24}
+          alt=""
+          className="size-6"
+        />
 
-      <span className="flex-1 truncate text-sm font-semibold text-black">
-        {item.altText}
-      </span>
+        <span className="flex-1 truncate text-sm font-semibold text-black select-none [-webkit-touch-callout:none]">
+          {item.altText}
+        </span>
 
-      {onToggleExcludedFromToday && (
+        {onToggleExcludedFromToday && (
+          <button
+            type="button"
+            aria-label={
+              isExcludedFromToday
+                ? `Show ${item.altText} on Today`
+                : `Hide ${item.altText} from Today`
+            }
+            onClick={() => onToggleExcludedFromToday(item.id)}
+            onPointerDown={(e) => e.stopPropagation()}
+          >
+            {isExcludedFromToday ? (
+              <CalendarOff className="text-muted-foreground size-4" />
+            ) : (
+              <Calendar className="text-muted-foreground size-4" />
+            )}
+          </button>
+        )}
+
         <button
           type="button"
           aria-label={
-            isExcludedFromToday
-              ? `Show ${item.altText} on Today`
-              : `Hide ${item.altText} from Today`
+            isHidden ? `Show ${item.altText}` : `Hide ${item.altText}`
           }
-          onClick={() => onToggleExcludedFromToday(item.id)}
+          onClick={() => onToggleHidden(item.id)}
           onPointerDown={(e) => e.stopPropagation()}
         >
-          {isExcludedFromToday ? (
-            <CalendarOff className="text-muted-foreground size-4" />
+          {isHidden ? (
+            <EyeOff className="text-muted-foreground size-4" />
           ) : (
-            <Calendar className="text-muted-foreground size-4" />
+            <Eye className="text-muted-foreground size-4" />
           )}
         </button>
-      )}
-
-      <button
-        type="button"
-        aria-label={isHidden ? `Show ${item.altText}` : `Hide ${item.altText}`}
-        onClick={() => onToggleHidden(item.id)}
-        onPointerDown={(e) => e.stopPropagation()}
-      >
-        {isHidden ? (
-          <EyeOff className="text-muted-foreground size-4" />
-        ) : (
-          <Eye className="text-muted-foreground size-4" />
-        )}
-      </button>
+      </div>
     </li>
   )
 }

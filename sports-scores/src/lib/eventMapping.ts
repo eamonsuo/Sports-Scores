@@ -20,8 +20,7 @@ const DEFAULT_DISPLAY_TYPE = DisplayTypes.ROUND
 export async function mapFixtureRounds(
   matches: MatchSummary[],
   leagueConfig:
-    | LeagueSeasonConfig
-    | LeagueSeasonConfig[] = DEFAULT_LEAGUE_SEASON_CONFIG,
+    LeagueSeasonConfig | LeagueSeasonConfig[] = DEFAULT_LEAGUE_SEASON_CONFIG,
 ) {
   const isMultiLeague = Array.isArray(leagueConfig)
   const displayType: DisplayTypes = isMultiLeague
@@ -50,7 +49,10 @@ export async function mapFixtureRounds(
           case DisplayTypes.LEAGUE:
             roundLabel = isMultiLeague
               ? (leagueConfig.find((l) => l.slug === match.leagueId)?.name ??
-                "Other")
+                `${match.sport
+                  .split("-")
+                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(" ")} - Other`)
               : (match.roundLabel ?? "")
             break
         }

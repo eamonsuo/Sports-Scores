@@ -1,3 +1,5 @@
+import { SportCategory } from "./misc"
+
 export interface Sofascore_Event_Response {
   event: Sofascore_Event
 }
@@ -85,9 +87,11 @@ export interface SofascoreAPI {
     eventId: string,
   ) => Promise<Sofascore_EventLineups_Response | null>
   fetchEventsByDate: (
-    category: string[],
+    category: SportCategory[],
     date: Date,
-  ) => Promise<Sofascore_Events_Response | null>
+  ) => Promise<
+    [Sofascore_Events_Response, { category: string; error: number }[]] | null
+  >
   fetchTeamLastEvents: (
     teamId: string,
     pageNumber?: number,

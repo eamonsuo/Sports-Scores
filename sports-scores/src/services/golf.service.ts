@@ -7,7 +7,7 @@ import {
   FALLBACK_IMAGE,
   GOLF_FEDEX_HEADINGS,
   GOLF_LEADERBOARD_HEADINGS,
-  GOLF_TOURS,
+  GOLF_LEAGUES,
 } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
@@ -47,7 +47,7 @@ class GolfService implements SportService {
 
   constructor() {
     this.sport = SPORT.GOLF
-    this.tours = GOLF_TOURS
+    this.tours = GOLF_LEAGUES
     this.cardVariant = CardVariant.SESSION
   }
   async matchesByLeagueSeason(
@@ -160,7 +160,7 @@ class GolfService implements SportService {
     }
 
     const { ladderConfig } = getSportConfigurations(
-      GOLF_TOURS,
+      GOLF_LEAGUES,
       leagueId,
       seasonId,
     )
@@ -218,7 +218,7 @@ class GolfService implements SportService {
       resolveSportImage(event.leagueName)
 
     const { tvConfig } = getSportConfigurations(
-      GOLF_TOURS,
+      GOLF_LEAGUES,
       event.leagueId,
       event.seasonId,
     )
@@ -367,7 +367,7 @@ export function mapTournamentToMatchSummary(
         : MatchStatus.COMPLETED
 
   const { tvConfig } = getSportConfigurations(
-    GOLF_TOURS,
+    GOLF_LEAGUES,
     options?.leagueId,
     options?.seasonId,
   )

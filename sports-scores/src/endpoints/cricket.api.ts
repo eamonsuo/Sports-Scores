@@ -3,7 +3,7 @@ import {
   Sofascore_Cricket_Incidents_Response,
   Sofascore_Cricket_MatchInnings_Response,
 } from "@/types/cricket"
-import { SPORT } from "@/types/misc"
+import { SPORT, SportCategory } from "@/types/misc"
 import {
   Sofascore_Event_Response,
   Sofascore_EventLineups_Response,
@@ -11,8 +11,8 @@ import {
   Sofascore_TournamentCupTrees_Response,
 } from "@/types/sofascore"
 
-async function fetchCricketApi(endpoint: string) {
-  return fetchRapidApi(process.env.CRICKET_BASEURL, endpoint, SPORT.CRICKET)
+async function fetchCricketApi<T>(endpoint: string) {
+  return fetchRapidApi<T>(process.env.CRICKET_BASEURL, endpoint, SPORT.CRICKET)
 }
 
 /**
@@ -28,9 +28,9 @@ export async function fetchCricketLastMatches(
   seasonId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchCricketApi(
+  return fetchCricketApi<Sofascore_EventPage_Response>(
     `/cricket/tournament/${tournamentId}/season/${seasonId}/matches/last/${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchCricketNextMatches(
@@ -38,87 +38,85 @@ export async function fetchCricketNextMatches(
   seasonId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchCricketApi(
+  return fetchCricketApi<Sofascore_EventPage_Response>(
     `/cricket/tournament/${tournamentId}/season/${seasonId}/matches/next/${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchCricketTeamLastMatches(
   teamId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchCricketApi(
+  return fetchCricketApi<Sofascore_EventPage_Response>(
     `/cricket/team/${teamId}/matches/previous/${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchCricketTeamNextMatches(
   teamId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchCricketApi(
+  return fetchCricketApi<Sofascore_EventPage_Response>(
     `/cricket/team/${teamId}/matches/next/${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchCricketStandings(
   tournamentId: string,
   seasonId: string,
 ) {
-  return (await fetchCricketApi(
+  return fetchCricketApi<Sofascore_TotalStandings_Response>(
     `/cricket/tournament/${tournamentId}/season/${seasonId}/standings/total`,
-  )) as Sofascore_TotalStandings_Response
+  )
 }
 
 export async function fetchCricketMatchDetails(matchId: string) {
-  return (await fetchCricketApi(
-    `/cricket/match/${matchId}`,
-  )) as Sofascore_Event_Response
+  return fetchCricketApi<Sofascore_Event_Response>(`/cricket/match/${matchId}`)
 }
 
 export async function fetchCricketMatchIncidents(matchId: string) {
-  return (await fetchCricketApi(
+  return fetchCricketApi<Sofascore_Cricket_Incidents_Response>(
     `/cricket/match/${matchId}/incidents`,
-  )) as Sofascore_Cricket_Incidents_Response
+  )
 }
 
 export async function fetchCricketMatchLineups(matchId: string) {
-  return (await fetchCricketApi(
+  return fetchCricketApi<Sofascore_EventLineups_Response>(
     `/cricket/match/${matchId}/lineups`,
-  )) as Sofascore_EventLineups_Response
+  )
 }
 
 export async function fetchCricketMatchInnings(matchId: string) {
-  return (await fetchCricketApi(
+  return fetchCricketApi<Sofascore_Cricket_MatchInnings_Response>(
     `/cricket/match/${matchId}/innings`,
-  )) as Sofascore_Cricket_MatchInnings_Response
+  )
 }
 
 //Deprecated
 export async function fetchCricketMatchesByDate(date: Date) {
-  return (await fetchCricketApi(
+  return fetchCricketApi<Sofascore_Events_Response>(
     `/cricket/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-  )) as Sofascore_Events_Response
+  )
 }
 
 export async function fetchCricketCupTrees(
   tournamentId: string,
   seasonId: string,
 ) {
-  return (await fetchCricketApi(
+  return fetchCricketApi<Sofascore_TournamentCupTrees_Response>(
     `/cricket/tournament/${tournamentId}/season/${seasonId}/cuptrees`,
-  )) as Sofascore_TournamentCupTrees_Response
+  )
 }
 
 export async function fetchCricketMatchesByCategoryDate(
-  category: string[],
+  category: SportCategory[],
   date: Date,
 ) {
   return fetchEventsByCategoryDate<Sofascore_Events_Response>(
     fetchCricketApi,
-    "/cricket",
+    "/cricket/category/",
+    `/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
     category,
-    date,
   )
 }
 

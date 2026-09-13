@@ -6,6 +6,7 @@ import {
   LeagueSeasonConfig,
   MatchSummary,
   SPORT,
+  SportCategory,
   TVChannel,
   TVConfig,
 } from "@/types/misc"
@@ -26,16 +27,12 @@ import {
 
 export const FALLBACK_IMAGE = "/vercel.svg"
 
-export const CRICKET_CATEGORIES = [
-  "1347", // Australia
-  "1343", // World
-  "1350", // India
-  "1349", // UK
-  // "1346", // Asia
-  // "1352", // Pakistan
-  // "1355", // South Africa
-  "1684", // West Indies
-  // "1351", // USA
+export const CRICKET_CATEGORIES: SportCategory[] = [
+  { id: "1347", name: "Australia", sport: SPORT.CRICKET },
+  { id: "1343", name: "World", sport: SPORT.CRICKET },
+  { id: "1350", name: "India", sport: SPORT.CRICKET },
+  { id: "1349", name: "UK", sport: SPORT.CRICKET },
+  { id: "1684", name: "West Indies", sport: SPORT.CRICKET },
 ]
 export const CRICKET_LADDER_HEADINGS = [
   "Team",
@@ -55,31 +52,47 @@ export const RUGBY_LEAGUE_LADDER_HEADINGS = [
   "Pts",
 ]
 const RUGBY_LEAGUE_MATCH_LENGTH = 1.75 // in hours, used for TV guide end time estimation
-export const RUGBY_LEAGUE_CATEGORIES = ["83"] //Rugby League
-export const FOOTBALL_CATEGORIES = [
-  "34", // Australia
-  "1468", // World
-  "1467", // Asia
-  "1465", // Europe
-  "1", // England
-  // "1470", // South America
-  // "1466", // Africa
-  // "1469", // North America
-  // "1471", // Oceania
+export const RUGBY_LEAGUE_CATEGORIES: SportCategory[] = [
+  { id: "83", name: "All", sport: SPORT.RUGBY_LEAGUE },
+]
+export const FOOTBALL_CATEGORIES: SportCategory[] = [
+  { id: "34", name: "Australia", sport: SPORT.FOOTBALL },
+  { id: "1468", name: "World", sport: SPORT.FOOTBALL },
+  { id: "1467", name: "Asia", sport: SPORT.FOOTBALL },
+  { id: "1465", name: "Europe", sport: SPORT.FOOTBALL },
+  { id: "1", name: "England", sport: SPORT.FOOTBALL },
+  // { id: "1470", name: "South America", sport: SPORT.FOOTBALL },
+  // { id: "1466", name: "Africa", sport: SPORT.FOOTBALL },
+  // { id: "1469", name: "North America", sport: SPORT.FOOTBALL },
+  // { id: "1471", name: "Oceania", sport: SPORT.FOOTBALL },
 ]
 export const FOOTBALL_LADDER_HEADINGS = ["Team", "P", "W", "D", "Diff", "Pts"]
 export const FOOTBALL_MATCH_LENGTH = 2 // in hours, used for TV guide end time estimation
 export const AUSSIE_RULES_LADDER_HEADINGS = ["Team", "P", "W", "D", "%", "Pts"]
 const AUSSIE_RULES_MATCH_LENGTH = 2.75 // in hours, used for TV guide end time estimation
-export const AUSSIE_RULES_CATEGORIES = ["87"] //Aussie Rules
+export const AUSSIE_RULES_CATEGORIES: SportCategory[] = [
+  { id: "87", name: "All", sport: SPORT.AUSSIE_RULES },
+] //Aussie Rules
 export const BASKETBALL_MATCH_LENGTH = 3 // in hours, used for TV guide end time estimation
-export const BASKETBALL_CATEGORIES = ["113", "103", "15"] //Australia, International, USA
+export const BASKETBALL_CATEGORIES: SportCategory[] = [
+  { id: "113", name: "Australia", sport: SPORT.BASKETBALL },
+  { id: "103", name: "International", sport: SPORT.BASKETBALL },
+  { id: "15", name: "USA", sport: SPORT.BASKETBALL },
+]
 export const BASKETBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "PCT"]
 export const BASEBALL_MATCH_LENGTH = 3 // in hours, used for TV guide end time estimation
-export const BASEBALL_CATEGORIES = ["1701", "1543", "1374"] //Australia, World, USA
+export const BASEBALL_CATEGORIES: SportCategory[] = [
+  { id: "1701", name: "Australia", sport: SPORT.BASEBALL },
+  { id: "1543", name: "World", sport: SPORT.BASEBALL },
+  { id: "1374", name: "USA", sport: SPORT.BASEBALL },
+]
 export const BASEBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "PCT"]
 export const ICE_HOCKEY_MATCH_LENGTH = 3 // in hours, used for TV guide end time estimation
-export const ICE_HOCKEY_CATEGORIES = ["1161", "56", "37"] //Australia, International, USA
+export const ICE_HOCKEY_CATEGORIES: SportCategory[] = [
+  { id: "1161", name: "Australia", sport: SPORT.ICE_HOCKEY },
+  { id: "56", name: "International", sport: SPORT.ICE_HOCKEY },
+  { id: "37", name: "USA", sport: SPORT.ICE_HOCKEY },
+]
 export const ICE_HOCKEY_LADDER_HEADINGS = [
   "Team",
   "P",
@@ -89,7 +102,10 @@ export const ICE_HOCKEY_LADDER_HEADINGS = [
   "Diff",
   "Pts",
 ]
-export const RUGBY_UNION_CATEGORIES = ["82", "1456"] //Rugby Union, Rugby Sevens
+export const RUGBY_UNION_CATEGORIES: SportCategory[] = [
+  { id: "82", name: "Union", sport: SPORT.RUGBY_UNION },
+  { id: "1456", name: "Sevens", sport: SPORT.RUGBY_UNION },
+]
 export const RUGBY_UNION_LADDER_HEADINGS = [
   "Team",
   "P",
@@ -100,7 +116,9 @@ export const RUGBY_UNION_LADDER_HEADINGS = [
   "Pts",
 ]
 export const AMERICAN_FOOTBALL_MATCH_LENGTH = 4 // in hours, used for TV guide end time estimation
-export const AMERICAN_FOOTBALL_CATEGORIES = ["1370"] //USA
+export const AMERICAN_FOOTBALL_CATEGORIES: SportCategory[] = [
+  { id: "1370", name: "USA", sport: SPORT.AMERICAN_FOOTBALL },
+]
 export const AMERICAN_FOOTBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "D"]
 export const GOLF_FEDEX_HEADINGS = ["Player", "Total", "Behind"]
 export const GOLF_OWGR_HEADINGS = ["Player", "Total", "Prev"]
@@ -905,7 +923,7 @@ const SUPERCARS_TV_GUIDE: TVConfig = {
   ],
 }
 
-export const MOTORSPORT_CATEGORIES: LeagueSeasonConfig[] = [
+export const MOTORSPORT_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "Formula 1",
     slug: "40",
@@ -949,16 +967,15 @@ export const MOTORSPORT_CATEGORIES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const MOTORSPORT_CATEGORIES_CLIENT = stripLeagueSeasonConfig(
-  MOTORSPORT_CATEGORIES,
-)
+export const MOTORSPORT_LEAGUES_CLIENT =
+  stripLeagueSeasonConfig(MOTORSPORT_LEAGUES)
 
 const GOLF_BROADCAST_LENGTH = 8
 const KAYO_GOLF_TV_GUIDE: TVConfig = {
   channels: [tvGuideConfigCreate(TVChannel.KAYO, 0, GOLF_BROADCAST_LENGTH)],
 }
 
-export const GOLF_TOURS: LeagueSeasonConfig[] = [
+export const GOLF_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "PGA Tour",
     slug: "pga",
@@ -1089,7 +1106,7 @@ export const GOLF_TOURS: LeagueSeasonConfig[] = [
   },
 ]
 
-export const GOLF_TOURS_CLIENT = stripLeagueSeasonConfig(GOLF_TOURS)
+export const GOLF_LEAGUES_CLIENT = stripLeagueSeasonConfig(GOLF_LEAGUES)
 
 const NRL_TV_GUIDE: TVConfig = {
   channels: [
@@ -1958,9 +1975,9 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   },
   {
     name: "Baptist Football QLD - Rivers Rubies",
-    slug: "external",
+    slug: "rivers-bap",
     externalURL: "https://www.bfq.org.au/fixtures",
-    seasons: [{ name: "Current", slug: "" }],
+    seasons: [{ name: "Current", slug: "external" }],
   },
   //England - category 1
   {
@@ -1994,7 +2011,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
-    name: "WSL",
+    name: "Women's Super League",
     slug: "1044",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/lpsm6p1751723311.png",
     seasons: [
@@ -2790,34 +2807,31 @@ const TENNIS_MAJORS_TV_GUIDE: TVConfig = {
   ],
 }
 
-export const TENNIS_CATEGORIES: LeagueSeasonConfig[] = [
+export const TENNIS_CATEGORIES: SportCategory[] = [
   {
     name: "ATP",
-    slug: "3",
-    seasons: [{ name: "2026", slug: "" }],
+    id: "3",
+    sport: SPORT.TENNIS,
   },
 
   {
     name: "WTA",
-    slug: "6",
-    seasons: [{ name: "2026", slug: "" }],
+    id: "6",
+    sport: SPORT.TENNIS,
   },
 
   {
     name: "Davis Cup",
-    slug: "76",
-    seasons: [{ name: "2026", slug: "" }],
+    id: "76",
+    sport: SPORT.TENNIS,
   },
 
   {
     name: "Billie Jean King Cup",
-    slug: "74",
-    seasons: [{ name: "2026", slug: "" }],
+    id: "74",
+    sport: SPORT.TENNIS,
   },
 ]
-
-export const TENNIS_CATEGORIES_CLIENT =
-  stripLeagueSeasonConfig(TENNIS_CATEGORIES)
 
 export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
   {
@@ -2935,7 +2949,9 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
 ]
 
 export const TENNIS_LEAGUES_CLIENT = stripLeagueSeasonConfig(TENNIS_LEAGUES)
-export const DARTS_CATEGORIES = ["104"]
+export const DARTS_CATEGORIES: SportCategory[] = [
+  { id: "104", name: "All", sport: SPORT.DARTS },
+]
 export const DARTS_LEAGUES: LeagueSeasonConfig[] = [
   //Majors
   // The premier event of darts: large global field, sets format.
@@ -3136,6 +3152,12 @@ export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2025", slug: "59195" },
       { name: "2024", slug: "49850" },
     ],
+  },
+  {
+    name: "WXV Global Series",
+    slug: "21299",
+    icon: "https://upload.wikimedia.org/wikipedia/commons/d/da/WXV_Global_Series_%28Navy_Purple%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
+    seasons: [{ name: "2026", slug: "103142" }],
   },
   {
     name: "Super Rugby AUS",
@@ -3510,7 +3532,7 @@ const VUELTA_LADDER_CONFIG: LadderConfig = {
   ],
 }
 
-export const CYCLING_TOURS: LeagueSeasonConfig[] = [
+export const CYCLING_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "UCI World Tour - Men",
     slug: "9",
@@ -3606,10 +3628,10 @@ export const CYCLING_TOURS: LeagueSeasonConfig[] = [
   },
 ]
 
-export const CYCLING_TOURS_CLIENT = stripLeagueSeasonConfig(CYCLING_TOURS)
+export const CYCLING_LEAGUES_CLIENT = stripLeagueSeasonConfig(CYCLING_LEAGUES)
 
 const SURFING_BROADCAST_LENGTH = 23
-export const SURFING_TOURS: LeagueSeasonConfig[] = [
+export const SURFING_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "WSL",
     slug: "wsl",
@@ -3634,7 +3656,7 @@ export const SURFING_TOURS: LeagueSeasonConfig[] = [
   },
 ]
 
-export const SURFING_TOURS_CLIENT = stripLeagueSeasonConfig(SURFING_TOURS)
+export const SURFING_LEAGUES_CLIENT = stripLeagueSeasonConfig(SURFING_LEAGUES)
 
 export const MULTI_SPORT_LEAGUES: LeagueSeasonConfig[] = [
   {
@@ -3847,7 +3869,7 @@ export const FOOTER_LINKS: FooterLink[] = [
   },
   {
     sport: SPORT.MOTORSPORT,
-    link: `/sports/${SPORT.MOTORSPORT}/${MOTORSPORT_CATEGORIES[0].slug}/${MOTORSPORT_CATEGORIES[0].seasons[0].slug}`,
+    link: `/sports/${SPORT.MOTORSPORT}/${MOTORSPORT_LEAGUES[0].slug}/${MOTORSPORT_LEAGUES[0].seasons[0].slug}`,
     img: "/footer/f1-helmet.svg",
     altText: "Motorsport",
   },
@@ -3859,7 +3881,7 @@ export const FOOTER_LINKS: FooterLink[] = [
   },
   {
     sport: SPORT.SURFING,
-    link: `/sports/${SPORT.SURFING}/${SURFING_TOURS[0].slug}/${SURFING_TOURS[0].seasons[0].slug}`,
+    link: `/sports/${SPORT.SURFING}/${SURFING_LEAGUES[0].slug}/${SURFING_LEAGUES[0].seasons[0].slug}`,
     img: "/footer/surfboard.svg",
     altText: "Surfing",
   },

@@ -1,15 +1,10 @@
-export async function fetchAllsportsApi(endpoint: string) {
-  const url = process.env.ALLSPORTS_BASEURL + endpoint
-  const res = await fetch(url, {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Key": process.env.RapidAPIKey ?? "",
-    },
-  })
+import { fetchRapidApi } from "@/lib/projUtils"
+import { SPORT } from "@/types/misc"
 
-  if (!res.ok || res.status === 204) {
-    return null
-  }
-
-  return res.json()
+export async function fetchAllsportsApi<T>(endpoint: string) {
+  return fetchRapidApi<T>(
+    process.env.ALLSPORTS_BASEURL,
+    endpoint,
+    SPORT.DEFAULT_SPORT,
+  )
 }

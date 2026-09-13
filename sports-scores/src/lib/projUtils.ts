@@ -1,4 +1,3 @@
-import { fetchAllsportsApi } from "@/endpoints/allsports.api"
 import { updateGlobalApiQuota } from "@/lib/apiCounter"
 import {
   ClientLeagueSeasonConfig,
@@ -7,6 +6,7 @@ import {
   LadderGroupConfig,
   LeagueSeasonConfig,
   SPORT,
+  SportCategory,
   TVChannel,
   TVChannelConfig,
 } from "@/types/misc"
@@ -20,11 +20,12 @@ function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-export async function fetchRapidApi(
+export async function fetchRapidApi<T>(
   baseURL: string = process.env.ALLSPORTS_BASEURL ?? "",
   endpoint: string,
   sport: SPORT,
-) {
+  fallbackEnabled: boolean = true,
+): Promise<T | null> {
   if (baseURL === "") return null
 
   const url = baseURL + endpoint
@@ -38,22 +39,24 @@ export async function fetchRapidApi(
   if (res.status === 204) return null
 
   if (!res.ok) {
-    // Primary sport API failed (rate limit, quota, outage, etc). This was
-    // previously swallowed silently, making backend failures indistinguishable
-    // from "no events today" once the AllSports fallback also returned null.
+    // Primary sport API failed (rate limit, quota, outage, etc). Fall back to all Sports API.
     console.error(
       `[fetchRapidApi] ${sport} request failed (${res.status} ${res.statusText}) for ${url}. Falling back to AllSports API.`,
     )
 
-    const fallback = await fetchAllsportsApi(endpoint)
-
-    if (!fallback) {
-      console.error(
-        `[fetchRapidApi] ${sport} AllSports API fallback also failed for endpoint ${endpoint}.`,
+    if (fallbackEnabled) {
+      return await fetchRapidApi(
+        process.env.ALLSPORTS_BASEURL,
+        endpoint,
+        sport,
+        false,
       )
+    } else if (endpoint.includes("category") && endpoint.includes("events")) {
+      // Matches by Date request
+      return { error: res.status } as T
+    } else {
+      return null
     }
-
-    return fallback
   }
 
   updateQuota(res, sport)
@@ -80,8 +83,6 @@ export async function fetchRapidApi(
 
     return null
   }
-
-  return res.json()
 }
 
 export function updateQuota(response: Response, sport: SPORT) {
@@ -101,32 +102,48 @@ export async function fetchEventsByCategoryDate<
 >(
   fetchApi: (endpoint: string) => Promise<T | null>,
   categoryPathPrefix: string,
-  category: string[],
-  date: Date,
-  maxRequestsPerSecond: number = 4,
-): Promise<T> {
+  categoryPathPostfix: string,
+  category: SportCategory[],
+  maxRequestsPerSecond: number = 3,
+): Promise<[T, { category: string; error: number }[]]> {
   const responses: (T | null)[] = []
+  const errors: { category: string; error: number }[] = []
 
   for (let i = 0; i < category.length; i += maxRequestsPerSecond) {
     const batch = category.slice(i, i + maxRequestsPerSecond)
     const batchResponses = await Promise.all(
       batch.map((cat) =>
-        fetchApi(
-          `${categoryPathPrefix}/category/${cat}/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-        ),
+        fetchApi(`${categoryPathPrefix}${cat.id}${categoryPathPostfix}`),
       ),
     )
 
-    responses.push(...batchResponses)
+    responses.push(...batchResponses.filter((r) => r && !("error" in r)))
+
+    // Collect errors for the second element of the return tuple
+    errors.push(
+      ...batchResponses
+        .map((r, index) => ({
+          r,
+          category: `${batch[index].name}`,
+        }))
+        .filter(({ r }) => r && "error" in r)
+        .map(({ r, category }) => ({
+          category,
+          error: (r as { error: number }).error,
+        })),
+    )
 
     if (i + maxRequestsPerSecond < category.length) {
       await delay(1000)
     }
   }
 
-  return {
-    events: responses.flatMap((r) => r?.events ?? []),
-  } as T
+  return [
+    {
+      events: responses.flatMap((r) => r?.events ?? []),
+    } as T,
+    errors,
+  ]
 }
 
 export function calculateMatchResult(

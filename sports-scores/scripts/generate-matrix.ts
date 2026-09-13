@@ -14,16 +14,15 @@ import {
   BASEBALL_LEAGUES,
   BASKETBALL_LEAGUES,
   CRICKET_LEAGUES,
-  CYCLING_TOURS,
+  CYCLING_LEAGUES,
   DARTS_LEAGUES,
   FOOTBALL_LEAGUES,
-  GOLF_TOURS,
+  GOLF_LEAGUES,
   ICE_HOCKEY_LEAGUES,
-  MOTORSPORT_CATEGORIES,
+  MOTORSPORT_LEAGUES,
   NETBALL_LEAGUES,
   RUGBY_LEAGUE_LEAGUES,
   RUGBY_UNION_LEAGUES,
-  TENNIS_CATEGORIES,
   TENNIS_LEAGUES,
 } from "@/lib/constants"
 import { LeagueSeasonConfig } from "@/types/misc"
@@ -94,7 +93,7 @@ const SYNC_CONFIG: SyncEntry[] = [
   // {
   // {
   //   sport: "tennis",
-  //   leagues: TENNIS_CATEGORIES,
+  //   leagues: TENNIS_LEAGUES,
   //   slugs: ["*"],
   // },
   // {
@@ -104,17 +103,17 @@ const SYNC_CONFIG: SyncEntry[] = [
   // },
   // {
   //   sport: "motorsport",
-  //   leagues: MOTORSPORT_CATEGORIES,
+  //   leagues: MOTORSPORT_LEAGUES,
   //   slugs: ["40", "17"],
   // },
   {
     sport: "golf",
-    leagues: GOLF_TOURS,
+    leagues: GOLF_LEAGUES,
     slugs: ["pga", "liv", "dpworld", "lpga", "australasia", "tgl"],
   },
   // {
   //   sport: "cycling",
-  //   leagues: CYCLING_TOURS,
+  //   leagues: CYCLING_LEAGUES,
   //   slugs: ["*"],
   // },
 ]
@@ -201,24 +200,20 @@ const ALL_LEAGUES_CONFIG: SyncEntry[] = [
     leagues: TENNIS_LEAGUES,
   },
   {
-    sport: "tennis",
-    leagues: TENNIS_CATEGORIES,
-  },
-  {
     sport: "darts",
     leagues: DARTS_LEAGUES,
   },
   {
     sport: "motorsport",
-    leagues: MOTORSPORT_CATEGORIES,
+    leagues: MOTORSPORT_LEAGUES,
   },
   {
     sport: "golf",
-    leagues: GOLF_TOURS,
+    leagues: GOLF_LEAGUES,
   },
   {
     sport: "cycling",
-    leagues: CYCLING_TOURS,
+    leagues: CYCLING_LEAGUES,
   },
 ]
 

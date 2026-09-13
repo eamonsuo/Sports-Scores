@@ -29,17 +29,17 @@ import {
   BASEBALL_LEAGUES_CLIENT,
   BASKETBALL_LEAGUES_CLIENT,
   CRICKET_LEAGUES_CLIENT,
-  CYCLING_TOURS_CLIENT,
+  CYCLING_LEAGUES_CLIENT,
   DARTS_LEAGUES_CLIENT,
   FOOTBALL_LEAGUES_CLIENT,
-  GOLF_TOURS_CLIENT,
+  GOLF_LEAGUES_CLIENT,
   ICE_HOCKEY_LEAGUES_CLIENT,
-  MOTORSPORT_CATEGORIES_CLIENT,
+  MOTORSPORT_LEAGUES_CLIENT,
   MULTI_SPORT_LEAGUES_CLIENT,
   NETBALL_LEAGUES_CLIENT,
   RUGBY_LEAGUE_LEAGUES_CLIENT,
   RUGBY_UNION_LEAGUES_CLIENT,
-  SURFING_TOURS_CLIENT,
+  SURFING_LEAGUES_CLIENT,
   TENNIS_LEAGUES_CLIENT,
 } from "./constants"
 
@@ -94,7 +94,7 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
     ) => MatchDetailComponents[],
   },
   [SPORT.CYCLING]: {
-    leagues: CYCLING_TOURS_CLIENT,
+    leagues: CYCLING_LEAGUES_CLIENT,
     service: cyclingService,
     navButtons: [
       { href: "#current-date", label: "Stages", page: "matches" },
@@ -120,7 +120,7 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
     ],
   },
   [SPORT.GOLF]: {
-    leagues: GOLF_TOURS_CLIENT,
+    leagues: GOLF_LEAGUES_CLIENT,
     service: golfService,
     navButtons: [
       { href: "#current-date", label: "Tournaments", page: "matches" },
@@ -142,7 +142,7 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
     service: iceHockeyService,
   },
   [SPORT.MOTORSPORT]: {
-    leagues: MOTORSPORT_CATEGORIES_CLIENT,
+    leagues: MOTORSPORT_LEAGUES_CLIENT,
     service: motorsportService,
     navButtons: [
       { href: "#current-date", label: "Races", page: "races" },
@@ -169,7 +169,7 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
     service: rugbyUnionService,
   },
   [SPORT.SURFING]: {
-    leagues: SURFING_TOURS_CLIENT,
+    leagues: SURFING_LEAGUES_CLIENT,
     service: surfingService,
     navButtons: [
       { href: "#current-date", label: "Events", page: "matches" },

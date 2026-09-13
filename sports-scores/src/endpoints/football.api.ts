@@ -1,5 +1,5 @@
 import { fetchEventsByCategoryDate, fetchRapidApi } from "@/lib/projUtils"
-import { SPORT } from "@/types/misc"
+import { SPORT, SportCategory } from "@/types/misc"
 import {
   Sofascore_Event_Response,
   Sofascore_EventIncidents_Response,
@@ -10,8 +10,12 @@ import {
   Sofascore_TournamentCupTrees_Response,
 } from "@/types/sofascore"
 
-async function fetchFootballApi(endpoint: string) {
-  return fetchRapidApi(process.env.FOOTBALL_BASEURL, endpoint, SPORT.FOOTBALL)
+async function fetchFootballApi<T>(endpoint: string) {
+  return fetchRapidApi<T>(
+    process.env.FOOTBALL_BASEURL,
+    endpoint,
+    SPORT.FOOTBALL,
+  )
 }
 
 export async function fetchFootballLastMatches(
@@ -19,9 +23,9 @@ export async function fetchFootballLastMatches(
   seasonId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchFootballApi(
+  return fetchFootballApi<Sofascore_EventPage_Response>(
     `/tournament/${tournamentId}/season/${seasonId}/matches/last/${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchFootballNextMatches(
@@ -29,36 +33,34 @@ export async function fetchFootballNextMatches(
   seasonId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchFootballApi(
+  return fetchFootballApi<Sofascore_EventPage_Response>(
     `/tournament/${tournamentId}/season/${seasonId}/matches/next/${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchFootballStandings(
   tournamentId: string,
   seasonId: string,
 ) {
-  return (await fetchFootballApi(
+  return fetchFootballApi<Sofascore_TotalStandings_Response>(
     `/tournament/${tournamentId}/season/${seasonId}/standings/total`,
-  )) as Sofascore_TotalStandings_Response
+  )
 }
 
 export async function fetchFootballMatchDetails(matchId: string) {
-  return (await fetchFootballApi(
-    `/match/${matchId}`,
-  )) as Sofascore_Event_Response
+  return fetchFootballApi<Sofascore_Event_Response>(`/match/${matchId}`)
 }
 
 export async function fetchFootballMatchIncidents(matchId: string) {
-  return (await fetchFootballApi(
+  return fetchFootballApi<Sofascore_EventIncidents_Response>(
     `/match/${matchId}/incidents`,
-  )) as Sofascore_EventIncidents_Response
+  )
 }
 
 export async function fetchFootballMatchLineups(matchId: string) {
-  return (await fetchFootballApi(
+  return fetchFootballApi<Sofascore_EventLineups_Response>(
     `/match/${matchId}/lineups`,
-  )) as Sofascore_EventLineups_Response
+  )
 }
 
 // All matches
@@ -70,47 +72,47 @@ export async function fetchFootballMatchLineups(matchId: string) {
 
 // Top League matches
 export async function fetchFootballMatchesByDate(date: Date) {
-  return (await fetchFootballApi(
+  return fetchFootballApi<Sofascore_Events_Response>(
     `/matches/top/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-  )) as Sofascore_Events_Response
+  )
 }
 
 export async function fetchFootballTeamLastMatches(
   teamId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchFootballApi(
+  return fetchFootballApi<Sofascore_EventPage_Response>(
     `/team/${teamId}/matches/previous/${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchFootballTeamNextMatches(
   teamId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchFootballApi(
+  return fetchFootballApi<Sofascore_EventPage_Response>(
     `/team/${teamId}/matches/next/${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchFootballCupTrees(
   tournamentId: string,
   seasonId: string,
 ) {
-  return (await fetchFootballApi(
+  return fetchFootballApi<Sofascore_TournamentCupTrees_Response>(
     `/tournament/${tournamentId}/season/${seasonId}/cuptrees`,
-  )) as Sofascore_TournamentCupTrees_Response
+  )
 }
 
 export async function fetchFootballMatchesByCategoryDate(
-  category: string[],
+  category: SportCategory[],
   date: Date,
 ) {
   return fetchEventsByCategoryDate<Sofascore_Events_Response>(
     fetchFootballApi,
-    "",
+    "/category/",
+    `/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
     category,
-    date,
-    4,
+    // 4,
   )
 }

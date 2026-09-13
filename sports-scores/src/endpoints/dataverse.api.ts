@@ -54,7 +54,7 @@ async function getAccessToken() {
   }
 }
 
-async function fetchDataverseApi(entity: string, queryParams?: string) {
+async function fetchDataverseApi<T>(entity: string, queryParams?: string) {
   const token = await getAccessToken()
   if (!token) return null
 
@@ -89,7 +89,7 @@ async function fetchDataverseApi(entity: string, queryParams?: string) {
     }
 
     const data = await res.json()
-    return data
+    return data as T
   } catch (error) {
     console.error(`[Dataverse] API request error (${entity}):`, error)
     return null
@@ -187,10 +187,10 @@ export async function fetchDataverseMatchSummaries(
   if (select) queryParams.push(`$select=${select}`)
   if (filters) queryParams.push(`$filter=${filters}`)
   if (orderBy) queryParams.push(`$orderby=${orderBy}`)
-  return (await fetchDataverseApi(
+  return fetchDataverseApi<DataverseResponse<DataverseMatchSummary>>(
     "ss_matchsummaries",
     queryParams.join("&"),
-  )) as DataverseResponse<DataverseMatchSummary>
+  )
 }
 
 export async function createDataverseMatchSummary(
@@ -218,9 +218,8 @@ export async function updateDataverseMatchSummary(
 export async function fetchSportEvents(): Promise<
   DataverseSportEvent[] | null
 > {
-  const result = (await fetchDataverseApi(
-    "ss_sporteventschedules",
-    "$orderby=ss_start_date asc",
-  )) as DataverseResponse<DataverseSportEvent> | null
+  const result = await fetchDataverseApi<
+    DataverseResponse<DataverseSportEvent>
+  >("ss_sporteventschedules", "$orderby=ss_start_date asc")
   return result?.value ?? null
 }

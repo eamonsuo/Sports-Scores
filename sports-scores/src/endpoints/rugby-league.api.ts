@@ -1,5 +1,5 @@
 import { fetchEventsByCategoryDate, fetchRapidApi } from "@/lib/projUtils"
-import { SPORT } from "@/types/misc"
+import { SPORT, SportCategory } from "@/types/misc"
 import {
   Sofascore_Event_Response,
   Sofascore_EventIncidents_Response,
@@ -9,8 +9,8 @@ import {
   Sofascore_TotalStandings_Response,
 } from "@/types/sofascore"
 
-async function fetchRugbyLeagueApi(endpoint: string) {
-  return fetchRapidApi(
+async function fetchRugbyLeagueApi<T>(endpoint: string) {
+  return fetchRapidApi<T>(
     process.env.RUGBY_LEAGUE_BASEURL,
     endpoint,
     SPORT.RUGBY_LEAGUE,
@@ -22,9 +22,9 @@ export async function fetchRugbyLeagueLastMatches(
   seasonId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchRugbyLeagueApi(
+  return await fetchRugbyLeagueApi<Sofascore_EventPage_Response>(
     `/rugby/tournament/${tournamentId}/season/${seasonId}/matches/last/${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchRugbyLeagueNextMatches(
@@ -32,71 +32,71 @@ export async function fetchRugbyLeagueNextMatches(
   seasonId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchRugbyLeagueApi(
+  return fetchRugbyLeagueApi<Sofascore_EventPage_Response>(
     `/rugby/tournament/${tournamentId}/season/${seasonId}/matches/next/${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchRugbyLeagueTeamLastMatches(
   teamId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchRugbyLeagueApi(
+  return fetchRugbyLeagueApi<Sofascore_EventPage_Response>(
     `/rugby/team/${teamId}/matches/previous/${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchRugbyLeagueTeamNextMatches(
   teamId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchRugbyLeagueApi(
+  return fetchRugbyLeagueApi<Sofascore_EventPage_Response>(
     `/rugby/team/${teamId}/matches/next/${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchRugbyLeagueStandings(
   tournamentId: string,
   seasonId: string,
 ) {
-  return (await fetchRugbyLeagueApi(
+  return fetchRugbyLeagueApi<Sofascore_TotalStandings_Response>(
     `/rugby/tournament/${tournamentId}/season/${seasonId}/standings/total`,
-  )) as Sofascore_TotalStandings_Response
+  )
 }
 
 export async function fetchRugbyLeagueMatchDetails(matchId: string) {
-  return (await fetchRugbyLeagueApi(
+  return fetchRugbyLeagueApi<Sofascore_Event_Response>(
     `/rugby/match/${matchId}`,
-  )) as Sofascore_Event_Response
+  )
 }
 
 export async function fetchRugbyLeagueMatchIncidents(matchId: string) {
-  return (await fetchRugbyLeagueApi(
+  return fetchRugbyLeagueApi<Sofascore_EventIncidents_Response>(
     `/rugby/match/${matchId}/incidents`,
-  )) as Sofascore_EventIncidents_Response
+  )
 }
 
 export async function fetchRugbyLeagueMatchLineups(matchId: string) {
-  return (await fetchRugbyLeagueApi(
+  return fetchRugbyLeagueApi<Sofascore_EventLineups_Response>(
     `/rugby/match/${matchId}/lineups`,
-  )) as Sofascore_EventLineups_Response
+  )
 }
 
 //Deprecated
 export async function fetchRugbyLeagueMatchesByDate(date: Date) {
-  return (await fetchRugbyLeagueApi(
+  return fetchRugbyLeagueApi<Sofascore_Events_Response>(
     `/rugby/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-  )) as Sofascore_Events_Response
+  )
 }
 
 export async function fetchRugbyLeagueMatchesByCategoryDate(
-  category: string[],
+  category: SportCategory[],
   date: Date,
 ) {
   return fetchEventsByCategoryDate<Sofascore_Events_Response>(
     fetchRugbyLeagueApi,
-    "/rugby",
+    "/rugby/category/",
+    `/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
     category,
-    date,
   )
 }

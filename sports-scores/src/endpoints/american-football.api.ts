@@ -4,15 +4,15 @@ import {
   AmericanFootball_AmericanFootballApi_FixturePage_Response,
   AmericanFootball_AmericanFootballApi_Match_Response,
 } from "@/types/american-football"
-import { SPORT } from "@/types/misc"
+import { SPORT, SportCategory } from "@/types/misc"
 import {
   Sofascore_EventIncidents_Response,
   Sofascore_EventLineups_Response,
   Sofascore_TotalStandings_Response,
 } from "@/types/sofascore"
 
-async function fetchAmericanFootballApi(endpoint: string) {
-  return fetchRapidApi(
+async function fetchAmericanFootballApi<T>(endpoint: string) {
+  return fetchRapidApi<T>(
     process.env.AMERICAN_FOOTBALL_BASEURL,
     endpoint,
     SPORT.AMERICAN_FOOTBALL,
@@ -24,9 +24,9 @@ export async function fetchAmericanFootballLastMatches(
   seasonId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchAmericanFootballApi(
+  return fetchAmericanFootballApi<AmericanFootball_AmericanFootballApi_FixturePage_Response>(
     `/american-football/tournament/${tournamentId}/season/${seasonId}/matches/last/${pageNumber}`,
-  )) as AmericanFootball_AmericanFootballApi_FixturePage_Response
+  )
 }
 
 export async function fetchAmericanFootballNextMatches(
@@ -34,70 +34,70 @@ export async function fetchAmericanFootballNextMatches(
   seasonId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchAmericanFootballApi(
+  return fetchAmericanFootballApi<AmericanFootball_AmericanFootballApi_FixturePage_Response>(
     `/american-football/tournament/${tournamentId}/season/${seasonId}/matches/next/${pageNumber}`,
-  )) as AmericanFootball_AmericanFootballApi_FixturePage_Response
+  )
 }
 
 export async function fetchAmericanFootballStandings(
   tournamentId: string,
   seasonId: string,
 ) {
-  return (await fetchAmericanFootballApi(
+  return fetchAmericanFootballApi<Sofascore_TotalStandings_Response>(
     `/american-football/tournament/${tournamentId}/season/${seasonId}/standings/total`,
-  )) as Sofascore_TotalStandings_Response
+  )
 }
 
 export async function fetchAmericanFootballTeamLastMatches(
   teamId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchAmericanFootballApi(
+  return fetchAmericanFootballApi<AmericanFootball_AmericanFootballApi_FixturePage_Response>(
     `/american-football/team/${teamId}/matches/previous/${pageNumber}`,
-  )) as AmericanFootball_AmericanFootballApi_FixturePage_Response
+  )
 }
 
 export async function fetchAmericanFootballTeamNextMatches(
   teamId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchAmericanFootballApi(
+  return fetchAmericanFootballApi<AmericanFootball_AmericanFootballApi_FixturePage_Response>(
     `/american-football/team/${teamId}/matches/next/${pageNumber}`,
-  )) as AmericanFootball_AmericanFootballApi_FixturePage_Response
+  )
 }
 
 export async function fetchAmericanFootballMatchDetails(matchId: string) {
-  return (await fetchAmericanFootballApi(
+  return fetchAmericanFootballApi<AmericanFootball_AmericanFootballApi_Match_Response>(
     `/american-football/match/${matchId}`,
-  )) as AmericanFootball_AmericanFootballApi_Match_Response
+  )
 }
 
 export async function fetchAmericanFootballMatchIncidents(matchId: string) {
-  return (await fetchAmericanFootballApi(
+  return fetchAmericanFootballApi<Sofascore_EventIncidents_Response>(
     `/american-football/match/${matchId}/incidents`,
-  )) as Sofascore_EventIncidents_Response
+  )
 }
 
 export async function fetchAmericanFootballMatchLineups(matchId: string) {
-  return (await fetchAmericanFootballApi(
+  return fetchAmericanFootballApi<Sofascore_EventLineups_Response>(
     `/american-football/match/${matchId}/lineups`,
-  )) as Sofascore_EventLineups_Response
+  )
 }
 
 export async function fetchAmericanFootballCurrentMatches(date: Date) {
-  return (await fetchAmericanFootballApi(
+  return fetchAmericanFootballApi<AmericanFootball_AmericanFootballApi_CategorySchedule_Response>(
     `/american-football/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-  )) as AmericanFootball_AmericanFootballApi_CategorySchedule_Response
+  )
 }
 
 export async function fetchAmericanFootballMatchesByCategoryDate(
-  category: string[],
+  category: SportCategory[],
   date: Date,
 ) {
   return fetchEventsByCategoryDate<AmericanFootball_AmericanFootballApi_CategorySchedule_Response>(
     fetchAmericanFootballApi,
-    "/american-football",
+    "/american-football/category/",
+    `/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
     category,
-    date,
   )
 }

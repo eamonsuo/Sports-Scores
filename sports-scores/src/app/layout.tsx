@@ -12,21 +12,6 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Sports Scores App",
   description: "An app to track scores for all your sports",
-  icons: [
-    {
-      rel: "icon",
-      url: "/favicon.ico",
-      type: "image/png",
-      sizes: "64x64",
-    },
-    {
-      rel: "apple-touch-icon",
-      url: "/apple-touch-icon.png",
-      type: "image/png",
-      sizes: "180x180",
-    },
-  ],
-  manifest: "/web.manifest",
   appleWebApp: {
     capable: true,
     title: "Sports Scores",
@@ -34,24 +19,16 @@ export const metadata: Metadata = {
     startupImage: APPLE_SPLASH_IMAGES.map(({ url, media }) => ({ url, media })),
   },
   other: {
-    "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
   },
 }
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  // Dark mode enabled.
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      {/* Dark mode enabled */}
-      <link rel="icon" href="/favicon.ico" sizes="64x64" />
-      <link
-        rel="apple-touch-icon"
-        href="/apple-touch-icon.png"
-        type="image/png"
-        sizes="180x180"
-      />
-
       <body className={inter.className}>
         <ClientDateSetter />
         {/* Set to Dynamic view height aka height of browser minus any browser things. Helps on

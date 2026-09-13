@@ -89,7 +89,7 @@
     "seasonId": "96668",
     "sport": "football"
   },
-  "football — WSL": {
+  "football — Women's Super League": {
     "leagueId": "1044",
     "seasonId": "99801",
     "sport": "football"
@@ -304,6 +304,11 @@
     "seasonId": "external",
     "sport": "aussie-rules"
   },
+  "aussie-rules — Dylan Patterson": {
+    "leagueId": "player-dp",
+    "seasonId": "external",
+    "sport": "aussie-rules"
+  },
   "american-football — NFL": {
     "leagueId": "9464",
     "seasonId": "94366",
@@ -342,6 +347,21 @@
   "basketball — March Madness": {
     "leagueId": "13434",
     "seasonId": "91315",
+    "sport": "basketball"
+  },
+  "basketball — Basketball World Cup - Men": {
+    "leagueId": "441",
+    "seasonId": "51191",
+    "sport": "basketball"
+  },
+  "basketball — Basketball World Cup Qualifiers - Men": {
+    "leagueId": "fiba-qual",
+    "seasonId": "external",
+    "sport": "basketball"
+  },
+  "basketball — Basketball World Cup - Women": {
+    "leagueId": "442",
+    "seasonId": "93569",
     "sport": "basketball"
   },
   "baseball — MLB": {
@@ -419,6 +439,11 @@
     "seasonId": "86339",
     "sport": "rugby-union"
   },
+  "rugby-union — WXV Global Series": {
+    "leagueId": "21299",
+    "seasonId": "103142",
+    "sport": "rugby-union"
+  },
   "rugby-union — Super Rugby AUS": {
     "leagueId": "29227",
     "seasonId": "82008",
@@ -469,12 +494,17 @@
     "seasonId": "45757",
     "sport": "rugby-union"
   },
+  "cricket — Alex Malcolm - News": {
+    "leagueId": "news-am",
+    "seasonId": "external",
+    "sport": "cricket"
+  },
   "cricket — Sheffield Shield": {
     "leagueId": "11160",
     "seasonId": "97892",
     "sport": "cricket"
   },
-  "cricket — One Day Cup": {
+  "cricket — 🇦🇺 One Day Cup": {
     "leagueId": "11161",
     "seasonId": "97891",
     "sport": "cricket"
@@ -499,6 +529,21 @@
     "seasonId": "98416",
     "sport": "cricket"
   },
+  "cricket — World Test Championship": {
+    "leagueId": "18833",
+    "seasonId": "92047",
+    "sport": "cricket"
+  },
+  "cricket — Test Matches - Men": {
+    "leagueId": "11189",
+    "seasonId": "92047",
+    "sport": "cricket"
+  },
+  "cricket — Test Matches - Women": {
+    "leagueId": "18794",
+    "seasonId": "74042",
+    "sport": "cricket"
+  },
   "cricket — T20Is - Men": {
     "leagueId": "11191",
     "seasonId": "77257",
@@ -517,21 +562,6 @@
   "cricket — ODIs - Women": {
     "leagueId": "18793",
     "seasonId": "74041",
-    "sport": "cricket"
-  },
-  "cricket — WTC": {
-    "leagueId": "18833",
-    "seasonId": "92047",
-    "sport": "cricket"
-  },
-  "cricket — Test Matches - Men": {
-    "leagueId": "11189",
-    "seasonId": "92047",
-    "sport": "cricket"
-  },
-  "cricket — Test Matches - Women": {
-    "leagueId": "18794",
-    "seasonId": "74042",
     "sport": "cricket"
   },
   "cricket — ICC ODI World Cup - Men": {
@@ -584,7 +614,7 @@
     "seasonId": "89189",
     "sport": "cricket"
   },
-  "cricket — One Day Cup - UK": {
+  "cricket — 🇬🇧 One Day Cup": {
     "leagueId": "11177",
     "seasonId": "86876",
     "sport": "cricket"
@@ -592,6 +622,11 @@
   "cricket — T20 Blast": {
     "leagueId": "11268",
     "seasonId": "86875",
+    "sport": "cricket"
+  },
+  "cricket — European T20 Premier League": {
+    "leagueId": "etpl",
+    "seasonId": "external-2026",
     "sport": "cricket"
   },
   "netball — Super Netball": {
@@ -706,7 +741,7 @@
   },
   "darts — World Matchplay": {
     "leagueId": "689",
-    "seasonId": "84838",
+    "seasonId": "69484",
     "sport": "darts"
   },
   "darts — World Grand Prix": {
@@ -726,7 +761,7 @@
   },
   "darts — World Series of Darts - Australian Darts Masters": {
     "leagueId": "23242",
-    "seasonId": "84842",
+    "seasonId": "69511",
     "sport": "darts"
   },
   "darts — World Series of Darts - Finals": {
@@ -736,7 +771,7 @@
   },
   "darts — Players Championship - Season": {
     "leagueId": "2066",
-    "seasonId": "96781",
+    "seasonId": "71945",
     "sport": "darts"
   },
   "darts — Players Championship - Finals": {

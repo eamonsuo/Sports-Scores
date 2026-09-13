@@ -111,6 +111,12 @@ export interface SportsTable {
   data: TableRow[]
 }
 
+export type SportCategory = {
+  id: string
+  name: string
+  sport: SPORT
+}
+
 export type TVChannelConfig = {
   channel: TVChannel
   startTime?: (date: Date) => Date

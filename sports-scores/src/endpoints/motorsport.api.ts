@@ -5,8 +5,8 @@ import {
   Sofascore_StageStanding_Response,
 } from "@/types/sofascore"
 
-async function fetchMotorsportApi(endpoint: string) {
-  return fetchRapidApi(
+async function fetchMotorsportApi<T>(endpoint: string) {
+  return fetchRapidApi<T>(
     process.env.MOTORSPORT_BASEURL,
     endpoint,
     SPORT.MOTORSPORT,
@@ -17,28 +17,28 @@ async function fetchMotorsportApi(endpoint: string) {
 //Use UniqueStageSeasons to get season for a stage id
 //Use StageSubstages to get season races for a uniquestage id
 export async function fetchMotorsportSubstages(stageId: string) {
-  return (await fetchMotorsportApi(
+  return fetchMotorsportApi<Sofascore_Stages_Response>(
     `/stage/${stageId}/substages`,
-  )) as Sofascore_Stages_Response
+  )
 }
 
 export async function fetchMotorsportDriverStandings(stageId: string) {
-  return (await fetchMotorsportApi(
+  return fetchMotorsportApi<Sofascore_StageStanding_Response>(
     `/stage/${stageId}/standings/competitor`,
-  )) as Sofascore_StageStanding_Response
+  )
 }
 
 export async function fetchMotorsportDriverSeasonRaces(
   teamId: string,
   seasonId: string,
 ) {
-  return (await fetchMotorsportApi(
+  return fetchMotorsportApi<any>(
     `/team/${teamId}/stage/season/${seasonId}/races`,
-  )) as any
+  )
 }
 
 export async function fetchMotorsportTeamStandings(stageId: string) {
-  return (await fetchMotorsportApi(
+  return fetchMotorsportApi<Sofascore_StageStanding_Response>(
     `/stage/${stageId}/standings/team`,
-  )) as Sofascore_StageStanding_Response
+  )
 }

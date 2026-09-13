@@ -76,7 +76,7 @@ class TennisService extends SofascoreSport {
         ),
       },
       SPORT.TENNIS,
-      TENNIS_CATEGORIES.map((c) => c.slug),
+      TENNIS_CATEGORIES,
       TENNIS_LEAGUES,
       [] as const,
       undefined,
@@ -86,23 +86,26 @@ class TennisService extends SofascoreSport {
 
   override async matchesByDate(date: Date) {
     const timezone = date instanceof TZDate ? date.timeZone : "UTC"
-    const matches = await this.apiEndpoints.fetchEventsByDate(
+    const matchesResponse = await this.apiEndpoints.fetchEventsByDate(
       this.categories,
       date,
     )
 
-    if (!matches) return null
+    if (!matchesResponse) return null
+
+    const [matches, errors] = matchesResponse
+
+    if (!matches && !errors) return null
 
     const validLeagueIds = TENNIS_LEAGUES
       // .filter((l) => !l.excludeFromToday)
       .map((l) => Number(l.slug))
-      .concat(TENNIS_CATEGORIES.map((c) => Number(c.slug)))
+      .concat(TENNIS_CATEGORIES.map((c) => Number(c.id)))
 
     const leagueIdToName = Object.fromEntries(
-      TENNIS_CATEGORIES.concat(TENNIS_LEAGUES).map((l) => [
-        Number(l.slug),
-        l.name,
-      ]),
+      TENNIS_CATEGORIES.map((l) => [Number(l.id), l.name]).concat(
+        TENNIS_LEAGUES.map((l) => [Number(l.slug), l.name]),
+      ),
     )
 
     matches.events = matches.events
@@ -174,7 +177,7 @@ class TennisService extends SofascoreSport {
     leagueId: string,
     seasonId: string,
   ): Promise<Standings | null> {
-    let rankings: Tennis_TennisApi_Rankings_Response
+    let rankings: Tennis_TennisApi_Rankings_Response | null = null
 
     switch (leagueId) {
       case RankingList.WTA:

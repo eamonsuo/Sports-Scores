@@ -1,5 +1,5 @@
 import { fetchEventsByCategoryDate, fetchRapidApi } from "@/lib/projUtils"
-import { SPORT } from "@/types/misc"
+import { SPORT, SportCategory } from "@/types/misc"
 import {
   Sofascore_Event_Response,
   Sofascore_EventLineups_Response,
@@ -8,8 +8,12 @@ import {
   Sofascore_TotalStandings_Response,
 } from "@/types/sofascore"
 
-async function fetchBaseballApi(endpoint: string) {
-  return fetchRapidApi(process.env.BASEBALL_BASEURL, endpoint, SPORT.BASEBALL)
+async function fetchBaseballApi<T>(endpoint: string) {
+  return fetchRapidApi<T>(
+    process.env.BASEBALL_BASEURL,
+    endpoint,
+    SPORT.BASEBALL,
+  )
 }
 
 export async function fetchBaseballLastMatches(
@@ -17,9 +21,9 @@ export async function fetchBaseballLastMatches(
   seasonId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchBaseballApi(
+  return fetchBaseballApi<Sofascore_EventPage_Response>(
     `/baseball/tournament/${tournamentId}/season/${seasonId}/matches/last/${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchBaseballNextMatches(
@@ -27,42 +31,42 @@ export async function fetchBaseballNextMatches(
   seasonId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchBaseballApi(
+  return fetchBaseballApi<Sofascore_EventPage_Response>(
     `/baseball/tournament/${tournamentId}/season/${seasonId}/matches/next/${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchBaseballTeamLastMatches(
   teamId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchBaseballApi(
+  return fetchBaseballApi<Sofascore_EventPage_Response>(
     `/baseball/team/${teamId}/matches/previous/${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchBaseballTeamNextMatches(
   teamId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchBaseballApi(
+  return fetchBaseballApi<Sofascore_EventPage_Response>(
     `/baseball/team/${teamId}/matches/next/${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchBaseballStandings(
   tournamentId: string,
   seasonId: string,
 ) {
-  return (await fetchBaseballApi(
+  return fetchBaseballApi<Sofascore_TotalStandings_Response>(
     `/baseball/tournament/${tournamentId}/season/${seasonId}/standings/total`,
-  )) as Sofascore_TotalStandings_Response
+  )
 }
 
 export async function fetchBaseballMatchDetails(matchId: string) {
-  return (await fetchBaseballApi(
+  return fetchBaseballApi<Sofascore_Event_Response>(
     `/baseball/match/${matchId}`,
-  )) as Sofascore_Event_Response
+  )
 }
 
 // export async function fetchBaseballMatchIncidents(matchId: number) {
@@ -72,25 +76,25 @@ export async function fetchBaseballMatchDetails(matchId: string) {
 // }
 
 export async function fetchBaseballMatchLineups(matchId: string) {
-  return (await fetchBaseballApi(
+  return fetchBaseballApi<Sofascore_EventLineups_Response>(
     `/baseball/match/${matchId}/lineups`,
-  )) as Sofascore_EventLineups_Response
+  )
 }
 
 export async function fetchBaseballMatchesByDate(date: Date) {
-  return (await fetchBaseballApi(
+  return fetchBaseballApi<Sofascore_Events_Response>(
     `/baseball/matches/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-  )) as Sofascore_Events_Response
+  )
 }
 
 export async function fetchBaseballMatchesByCategoryDate(
-  category: string[],
+  category: SportCategory[],
   date: Date,
 ) {
   return fetchEventsByCategoryDate<Sofascore_Events_Response>(
     fetchBaseballApi,
-    "/baseball",
+    "/baseball/category/",
+    `/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
     category,
-    date,
   )
 }

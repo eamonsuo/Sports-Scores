@@ -6,7 +6,7 @@ import {
 } from "@/types/golf"
 import { SPORT } from "@/types/misc"
 
-async function fetchGolfApi(endpoint: string) {
+async function fetchGolfApi<T>(endpoint: string) {
   const url = process.env.GOLF_BASEURL + endpoint
   const res = await fetch(url, {
     method: "GET",
@@ -22,19 +22,19 @@ async function fetchGolfApi(endpoint: string) {
 
   updateQuota(res, SPORT.GOLF)
 
-  return res.json()
+  return res.json() as Promise<T>
 }
 
 export async function fetchGolfSchedule(orgId: string, year: string) {
-  return (await fetchGolfApi(
+  return fetchGolfApi<Golf_SlashGolfAPI_Schedule>(
     `/schedule?orgId=${orgId}&year=${year}`,
-  )) as Golf_SlashGolfAPI_Schedule
+  )
 }
 
 export async function fetchGolfRankings(statId: string, year: string) {
-  return (await fetchGolfApi(
+  return fetchGolfApi<Golf_SlashGolfAPI_Stats>(
     `/stats?year=${year}&statId=${statId}`,
-  )) as Golf_SlashGolfAPI_Stats
+  )
 }
 
 export async function fetchGolfLeaderboard(
@@ -43,7 +43,7 @@ export async function fetchGolfLeaderboard(
   year: string,
   roundId?: number,
 ) {
-  return (await fetchGolfApi(
+  return fetchGolfApi<Golf_SlashGolfAPI_Leaderboard>(
     `/leaderboard?orgId=${orgId}&tournId=${tournId}&year=${year}${roundId != undefined ? `&roundId=${roundId}` : ""}`,
-  )) as Golf_SlashGolfAPI_Leaderboard
+  )
 }
