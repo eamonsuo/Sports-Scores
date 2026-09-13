@@ -1,5 +1,5 @@
-import { updateQuota } from "@/lib/projUtils"
-import { SPORT } from "@/types/misc"
+import { fetchEventsByCategoryDate, fetchRapidApi } from "@/lib/projUtils"
+import { SPORT, SportCategory } from "@/types/misc"
 import {
   Sofascore_Event_Response,
   Sofascore_EventIncidents_Response,
@@ -11,22 +11,12 @@ import {
 } from "@/types/sofascore"
 import { format } from "date-fns/format"
 
-async function fetchSofascoreRapidApi(endpoint: string) {
-  const url = process.env.SOFASCORE_API_BASEURL + endpoint
-  const res = await fetch(url, {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Key": process.env.RapidAPIKey ?? "",
-    },
-  })
-
-  if (!res.ok || res.status === 204) {
-    return null
-  }
-
-  updateQuota(res, SPORT.AUSSIE_RULES)
-
-  return res.json()
+async function fetchSofascoreRapidApi<T>(endpoint: string) {
+  return fetchRapidApi<T>(
+    process.env.SOFASCORE_API_BASEURL,
+    endpoint,
+    SPORT.AUSSIE_RULES,
+  )
 }
 
 export async function fetchTournamentLastMatches(
@@ -34,9 +24,9 @@ export async function fetchTournamentLastMatches(
   seasonId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchSofascoreRapidApi(
+  return fetchSofascoreRapidApi<Sofascore_EventPage_Response>(
     `/tournaments/get-last-matches?tournamentId=${tournamentId}&seasonId=${seasonId}&pageIndex=${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchTournamentNextMatches(
@@ -44,76 +34,73 @@ export async function fetchTournamentNextMatches(
   seasonId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchSofascoreRapidApi(
+  return fetchSofascoreRapidApi<Sofascore_EventPage_Response>(
     `/tournaments/get-next-matches?tournamentId=${tournamentId}&seasonId=${seasonId}&pageIndex=${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchTeamLastMatches(
   teamId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchSofascoreRapidApi(
+  return fetchSofascoreRapidApi<Sofascore_EventPage_Response>(
     `/teams/get-last-matches?teamId=${teamId}&pageIndex=${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchTeamNextMatches(
   teamId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchSofascoreRapidApi(
+  return fetchSofascoreRapidApi<Sofascore_EventPage_Response>(
     `/teams/get-next-matches?teamId=${teamId}&pageIndex=${pageNumber}`,
-  )) as Sofascore_EventPage_Response
+  )
 }
 
 export async function fetchTournamentStandings(
   tournamentId: string,
   seasonId: string,
 ) {
-  return (await fetchSofascoreRapidApi(
+  return fetchSofascoreRapidApi<Sofascore_TotalStandings_Response>(
     `/tournaments/get-standings?tournamentId=${tournamentId}&seasonId=${seasonId}&type=total`,
-  )) as Sofascore_TotalStandings_Response
+  )
 }
 
 export async function fetchTournamentBrackets(
   tournamentId: string,
   seasonId: string,
 ) {
-  return (await fetchSofascoreRapidApi(
+  return fetchSofascoreRapidApi<Sofascore_TournamentCupTrees_Response>(
     `/tournaments/get-cuptrees?tournamentId=${tournamentId}&seasonId=${seasonId}`,
-  )) as Sofascore_TournamentCupTrees_Response
+  )
 }
 
 export async function fetchMatchDetails(matchId: string) {
-  return (await fetchSofascoreRapidApi(
+  return fetchSofascoreRapidApi<Sofascore_Event_Response>(
     `/matches/detail?matchId=${matchId}`,
-  )) as Sofascore_Event_Response
+  )
 }
 
 export async function fetchMatchIncidents(matchId: string) {
-  return (await fetchSofascoreRapidApi(
+  return fetchSofascoreRapidApi<Sofascore_EventIncidents_Response>(
     `/matches/get-incidents?matchId=${matchId}`,
-  )) as Sofascore_EventIncidents_Response
+  )
 }
 
 export async function fetchMatchLineups(matchId: string) {
-  return (await fetchSofascoreRapidApi(
+  return fetchSofascoreRapidApi<Sofascore_EventLineups_Response>(
     `/matches/get-lineups?matchId=${matchId}`,
-  )) as Sofascore_EventLineups_Response
+  )
 }
 
-export async function fetchScheduledEvents(categoryId: string[], date: Date) {
-  const responses = await Promise.all(
-    categoryId.map(
-      (cat) =>
-        fetchSofascoreRapidApi(
-          `/tournaments/get-scheduled-events?categoryId=${cat}&date=${format(date, "yyyy-MM-dd")}`,
-        ) as Promise<Sofascore_Events_Response>,
-    ),
+export async function fetchScheduledEvents(
+  category: SportCategory[],
+  date: Date,
+): Promise<[Sofascore_Events_Response, { category: string; error: number }[]]> {
+  return fetchEventsByCategoryDate<Sofascore_Events_Response>(
+    fetchSofascoreRapidApi,
+    "/tournaments/get-scheduled-events?categoryId=",
+    `&date=${format(date, "yyyy-MM-dd")}`,
+    category,
   )
-
-  return {
-    events: responses.flatMap((r) => r?.events ?? []),
-  } as Sofascore_Events_Response
 }

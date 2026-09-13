@@ -11,9 +11,9 @@ import {
   fetchF1SprintResult,
 } from "@/endpoints/f1.api"
 import {
-  MOTORSPORT_CATEGORIES,
   MOTORSPORT_CONSTRUCTOR_STANDINGS_HEADINGS,
   MOTORSPORT_DRIVER_STANDINGS_HEADINGS,
+  MOTORSPORT_LEAGUES,
   MOTORSPORT_SESSION_STANDINGS_HEADINGS,
 } from "@/lib/constants"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
@@ -46,7 +46,7 @@ class F1Service implements SportService {
 
   constructor() {
     this.sport = SPORT.MOTORSPORT
-    this.categories = MOTORSPORT_CATEGORIES
+    this.categories = MOTORSPORT_LEAGUES
     this.cardVariant = CardVariant.SESSION
   }
 

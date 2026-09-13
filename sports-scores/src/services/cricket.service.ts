@@ -17,7 +17,6 @@ import {
   CRICKET_LEAGUES,
 } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
-import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
 import { setMatchSummary } from "@/lib/projUtils"
 import {
   CricketInningIncident,
@@ -28,22 +27,12 @@ import {
   Sofascore_Cricket_Incident,
   Sofascore_Cricket_Inning,
 } from "@/types/cricket"
-import {
-  DeepPartial,
-  DisplayTypes,
-  FixtureRound,
-  Matches,
-  MatchLineup,
-  MatchSummary,
-  SPORT,
-} from "@/types/misc"
+import { DeepPartial, MatchLineup, MatchSummary, SPORT } from "@/types/misc"
 import {
   Sofascore_Event,
   Sofascore_Lineup,
   Sofascore_Score_Inning,
 } from "@/types/sofascore"
-import { TZDate } from "@date-fns/tz/date"
-import { isSameDay, isWithinInterval } from "date-fns"
 import { SofascoreSport } from "./sofascore.service"
 
 class CricketService extends SofascoreSport {
@@ -105,86 +94,86 @@ class CricketService extends SofascoreSport {
     )
   }
 
-  async matchesByDate(date: Date): Promise<Matches | null> {
-    const matches = await this.apiEndpoints.fetchEventsByDate(
-      this.categories,
-      date,
-    )
+  // async matchesByDate(date: Date): Promise<Matches | null> {
+  //   const matches = await this.apiEndpoints.fetchEventsByDate(
+  //     this.categories,
+  //     date,
+  //   )
 
-    if (!matches) return null
+  //   if (!matches) return null
 
-    const validLeagueIds = this.leagues
-      // .filter((l) => !l.excludeFromToday)
-      .map((l) => Number(l.slug))
-      .concat(this.categories.map((c) => Number(c)))
+  //   const validLeagueIds = this.leagues
+  //     // .filter((l) => !l.excludeFromToday)
+  //     .map((l) => Number(l.slug))
+  //     .concat(this.categories.map((c) => Number(c)))
 
-    const timezone = date instanceof TZDate ? date.timeZone : "UTC"
+  //   const timezone = date instanceof TZDate ? date.timeZone : "UTC"
 
-    matches.events = matches.events
-      .filter(
-        (item) =>
-          (validLeagueIds.includes(item.tournament.category.id) ||
-            validLeagueIds.includes(
-              item.tournament?.uniqueTournament?.id ?? -1,
-            )) &&
-          item.status.type !== "canceled",
-      )
-      .filter((item) => {
-        const eventDate = new TZDate(item.startTimestamp * 1000, timezone)
-        const eventEndDate = item.endTimestamp
-          ? new TZDate(item.endTimestamp * 1000, timezone)
-          : null
+  //   matches.events = matches.events
+  //     .filter(
+  //       (item) =>
+  //         (validLeagueIds.includes(item.tournament.category.id) ||
+  //           validLeagueIds.includes(
+  //             item.tournament?.uniqueTournament?.id ?? -1,
+  //           )) &&
+  //         item.status.type !== "canceled",
+  //     )
+  //     .filter((item) => {
+  //       const eventDate = new TZDate(item.startTimestamp * 1000, timezone)
+  //       const eventEndDate = item.endTimestamp
+  //         ? new TZDate(item.endTimestamp * 1000, timezone)
+  //         : null
 
-        // Check if the event start/end date is today OR today is between the start and end date
-        return (
-          isSameDay(eventDate, date) ||
-          (eventEndDate &&
-            (isWithinInterval(date, { start: eventDate, end: eventEndDate }) ||
-              isSameDay(eventEndDate, date)))
-        )
-      })
+  //       // Check if the event start/end date is today OR today is between the start and end date
+  //       return (
+  //         isSameDay(eventDate, date) ||
+  //         (eventEndDate &&
+  //           (isWithinInterval(date, { start: eventDate, end: eventEndDate }) ||
+  //             isSameDay(eventEndDate, date)))
+  //       )
+  //     })
 
-    if (!matches.events || matches.events.length === 0) return null
+  //   if (!matches.events || matches.events.length === 0) return null
 
-    const allMatches = matches.events
-      .map((event) =>
-        this.eventMapper(event, {
-          leagueName:
-            `${
-              this.leagues.find(
-                (l) =>
-                  l.slug === event.tournament?.uniqueTournament?.id.toString(),
-              )?.name ?? event.tournament?.name
-            }` +
-            (event.roundInfo?.name || event.roundInfo?.round
-              ? ` - ${event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`}`
-              : ""),
-          leagueSlug: `/sports/${this.sport}/${event.tournament?.uniqueTournament?.id}/${event?.season?.id}`,
-          leagueImg: this.leagues.find(
-            (l) => l.slug === event.tournament?.uniqueTournament?.id.toString(),
-          )?.icon,
-        }),
-      )
-      .sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-      )
+  //   const allMatches = matches.events
+  //     .map((event) =>
+  //       this.eventMapper(event, {
+  //         leagueName:
+  //           `${
+  //             this.leagues.find(
+  //               (l) =>
+  //                 l.slug === event.tournament?.uniqueTournament?.id.toString(),
+  //             )?.name ?? event.tournament?.name
+  //           }` +
+  //           (event.roundInfo?.name || event.roundInfo?.round
+  //             ? ` - ${event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`}`
+  //             : ""),
+  //         leagueSlug: `/sports/${this.sport}/${event.tournament?.uniqueTournament?.id}/${event?.season?.id}`,
+  //         leagueImg: this.leagues.find(
+  //           (l) => l.slug === event.tournament?.uniqueTournament?.id.toString(),
+  //         )?.icon,
+  //       }),
+  //     )
+  //     .sort(
+  //       (a, b) =>
+  //         new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+  //     )
 
-    const fixtures = await mapFixtureRounds(allMatches, this.leagues)
-    const myTeams: FixtureRound = {
-      matches: allMatches.filter((match) =>
-        match.competitorDetails.some((team) =>
-          this.leagues.some((l) => l.slug === `team/${team.id}`),
-        ),
-      ),
-      roundLabel: "My Teams",
-    }
+  //   const fixtures = await mapFixtureRounds(allMatches, this.leagues)
+  //   const myTeams: FixtureRound = {
+  //     matches: allMatches.filter((match) =>
+  //       match.competitorDetails.some((team) =>
+  //         this.leagues.some((l) => l.slug === `team/${team.id}`),
+  //       ),
+  //     ),
+  //     roundLabel: "My Teams",
+  //   }
 
-    return {
-      fixtures: [myTeams, ...fixtures],
-      currentRound: getCurrentRound(fixtures, DisplayTypes.LEAGUE),
-    }
-  }
+  //   return {
+  //     fixtures: [myTeams, ...fixtures],
+  //     currentRound: getCurrentRound(fixtures, DisplayTypes.LEAGUE),
+  //   }
+  // }
 
   override async matchDetails(
     matchId: string,

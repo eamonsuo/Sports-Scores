@@ -3,7 +3,7 @@ import {
   fetchMotorsportSubstages,
   fetchMotorsportTeamStandings,
 } from "@/endpoints/motorsport.api"
-import { MOTORSPORT_CATEGORIES } from "@/lib/constants"
+import { MOTORSPORT_LEAGUES } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
 import { getSportConfigurations } from "@/lib/projUtils"
@@ -47,7 +47,7 @@ class MotorsportService extends SofascoreStageSport {
         ),
       },
       SPORT.MOTORSPORT,
-      MOTORSPORT_CATEGORIES,
+      MOTORSPORT_LEAGUES,
       CardVariant.SESSION,
     )
   }

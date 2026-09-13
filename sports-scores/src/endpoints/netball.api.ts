@@ -7,7 +7,7 @@ import {
 import { SportsDB_Events_Response } from "@/types/sportsdb"
 import { format } from "date-fns"
 
-async function fetchNetballApi(endpoint: string) {
+async function fetchNetballApi<T>(endpoint: string) {
   const url = process.env.NETBALL_BASEURL + endpoint
   const res = await fetch(url)
 
@@ -17,7 +17,7 @@ async function fetchNetballApi(endpoint: string) {
 
   updateQuota(res, SPORT.NETBALL)
 
-  return res.json()
+  return res.json() as Promise<T>
 }
 
 export async function fetchNetballLastMatches(
@@ -25,9 +25,9 @@ export async function fetchNetballLastMatches(
   seasonId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchNetballApi(
+  return fetchNetballApi<SportsDB_Events_Response>(
     `/eventspastleague.php?id=${tournamentId}`,
-  )) as SportsDB_Events_Response
+  )
 }
 
 export async function fetchNetballNextMatches(
@@ -35,18 +35,18 @@ export async function fetchNetballNextMatches(
   seasonId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchNetballApi(
+  return fetchNetballApi<SportsDB_Events_Response>(
     `/eventsnextleague.php?id=${tournamentId}`,
-  )) as SportsDB_Events_Response
+  )
 }
 
 export async function fetchNetballSeasonMatches(
   tournamentId: string,
   seasonId: string,
 ) {
-  return (await fetchNetballApi(
+  return fetchNetballApi<SportsDB_Events_Response>(
     `/eventsseason.php?id=${tournamentId}&s=${seasonId}`,
-  )) as SportsDB_Events_Response
+  )
 }
 
 export async function fetchNetballStandings(
@@ -57,9 +57,9 @@ export async function fetchNetballStandings(
 }
 
 export async function fetchNetballMatchDetails(matchId: string) {
-  return (await fetchNetballApi(
+  return fetchNetballApi<SportsDB_Events_Response>(
     `/lookupevent.php?id=${matchId}`,
-  )) as SportsDB_Events_Response
+  )
 }
 
 export async function fetchNetballMatchIncidents(
@@ -69,7 +69,7 @@ export async function fetchNetballMatchIncidents(
 }
 
 export async function fetchNetballMatchesByDate(date: Date) {
-  return (await fetchNetballApi(
+  return fetchNetballApi<SportsDB_Events_Response>(
     `/eventsday.php?d=${format(date, "yyyy-MM-dd")}&s=Netball${date.getMonth() > 1 && date.getMonth() < 7 ? "&l=Australian Super Netball League" : ""}`,
-  )) as SportsDB_Events_Response
+  )
 }

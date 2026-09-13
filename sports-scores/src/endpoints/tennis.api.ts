@@ -1,5 +1,5 @@
 import { fetchEventsByCategoryDate, fetchRapidApi } from "@/lib/projUtils"
-import { SPORT } from "@/types/misc"
+import { SPORT, SportCategory } from "@/types/misc"
 import {
   Sofascore_Events_Response,
   Sofascore_TournamentCupTrees_Response,
@@ -15,17 +15,17 @@ import {
   Tennis_TennisApi_TournamentStandings_Response,
 } from "@/types/tennis"
 
-async function fetchTennisApi(endpoint: string) {
-  return fetchRapidApi(process.env.TENNIS_BASEURL, endpoint, SPORT.TENNIS)
+async function fetchTennisApi<T>(endpoint: string) {
+  return fetchRapidApi<T>(process.env.TENNIS_BASEURL, endpoint, SPORT.TENNIS)
 }
 
 export async function fetchTennisTournamentRounds(
   tournamentId: string,
   seasonId: string,
 ) {
-  return (await fetchTennisApi(
-    `/tournament/${tournamentId}/season/${seasonId}/rounds`,
-  )) as Tennis_TennisApi_TournamentRounds_Response
+  return fetchTennisApi<Tennis_TennisApi_TournamentRounds_Response>(
+    `/tennis/tournament/${tournamentId}/season/${seasonId}/rounds`,
+  )
 }
 
 export async function fetchTennisTournamentRoundMatches(
@@ -34,9 +34,9 @@ export async function fetchTennisTournamentRoundMatches(
   roundId: string,
   roundSlug: string,
 ) {
-  return (await fetchTennisApi(
-    `/tournament/${tournamentId}/season/${seasonId}/events/round/${roundId}/slug/${roundSlug}`,
-  )) as Tennis_TennisApi_TournamentRoundMatch_Response
+  return fetchTennisApi<Tennis_TennisApi_TournamentRoundMatch_Response>(
+    `/tennis/tournament/${tournamentId}/season/${seasonId}/events/round/${roundId}/slug/${roundSlug}`,
+  )
 }
 
 export async function fetchTennisTournamentLastMatches(
@@ -44,9 +44,9 @@ export async function fetchTennisTournamentLastMatches(
   seasonId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchTennisApi(
-    `/tournament/${tournamentId}/season/${seasonId}/events/last/${pageNumber}`,
-  )) as Tennis_TennisApi_FixturePage_Response
+  return fetchTennisApi<Tennis_TennisApi_FixturePage_Response>(
+    `/tennis/tournament/${tournamentId}/season/${seasonId}/events/last/${pageNumber}`,
+  )
 }
 
 export async function fetchTennisTournamentNextMatches(
@@ -54,85 +54,85 @@ export async function fetchTennisTournamentNextMatches(
   seasonId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchTennisApi(
-    `/tournament/${tournamentId}/season/${seasonId}/events/next/${pageNumber}`,
-  )) as Tennis_TennisApi_FixturePage_Response
+  return fetchTennisApi<Tennis_TennisApi_FixturePage_Response>(
+    `/tennis/tournament/${tournamentId}/season/${seasonId}/events/next/${pageNumber}`,
+  )
 }
 
 export async function fetchTennisBracket(
   tournamentId: string,
   seasonId: string,
 ) {
-  return (await fetchTennisApi(
-    `/tournament/${tournamentId}/season/${seasonId}/cup-trees/old`,
-  )) as Sofascore_TournamentCupTrees_Response
+  return fetchTennisApi<Sofascore_TournamentCupTrees_Response>(
+    `/tennis/tournament/${tournamentId}/season/${seasonId}/cup-trees/old`,
+  )
 }
 
 export async function fetchTennisTournamentStandings(
   tournamentId: string,
   seasonId: string,
 ) {
-  return (await fetchTennisApi(
-    `/tournament/${tournamentId}/season/${seasonId}/standings/total`,
-  )) as Tennis_TennisApi_TournamentStandings_Response
+  return fetchTennisApi<Tennis_TennisApi_TournamentStandings_Response>(
+    `/tennis/tournament/${tournamentId}/season/${seasonId}/standings/total`,
+  )
 }
 
 export async function fetchTennisMatchDetails(matchId: string) {
-  return (await fetchTennisApi(
-    `/event/${matchId}/`,
-  )) as Tennis_TennisApi_MatchDetails_Response
+  return fetchTennisApi<Tennis_TennisApi_MatchDetails_Response>(
+    `/tennis/event/${matchId}/`,
+  )
 }
 
 export async function fetchTennisMatchStatistics(matchId: string) {
-  return (await fetchTennisApi(
-    `/match/${matchId}/statistics`,
-  )) as Tennis_TennisApi_MatchStatistics_Response
+  return fetchTennisApi<Tennis_TennisApi_MatchStatistics_Response>(
+    `/tennis/match/${matchId}/statistics`,
+  )
 }
 
 export async function fetchTennisMatchesByDate(date: Date) {
-  return (await fetchTennisApi(
-    `/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-  )) as Tennis_TennisApi_EventsByDate_Response
+  return fetchTennisApi<Tennis_TennisApi_EventsByDate_Response>(
+    `/tennis/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+  )
 }
 
 export async function fetchTennisPlayerLastMatches(
   teamId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchTennisApi(
-    `/team/${teamId}/events/previous/${pageNumber}`,
-  )) as Tennis_TennisApi_FixturePage_Response
+  return fetchTennisApi<Tennis_TennisApi_FixturePage_Response>(
+    `/tennis/team/${teamId}/events/previous/${pageNumber}`,
+  )
 }
 
 export async function fetchTennisPlayerNextMatches(
   teamId: string,
   pageNumber: number = 0,
 ) {
-  return (await fetchTennisApi(
-    `/team/${teamId}/events/next/${pageNumber}`,
-  )) as Tennis_TennisApi_FixturePage_Response
+  return fetchTennisApi<Tennis_TennisApi_FixturePage_Response>(
+    `/tennis/team/${teamId}/events/next/${pageNumber}`,
+  )
 }
 
 export async function fetchTennisWTARankings() {
-  return (await fetchTennisApi(
-    `/rankings/wta`,
-  )) as Tennis_TennisApi_Rankings_Response
+  return fetchTennisApi<Tennis_TennisApi_Rankings_Response>(
+    `/tennis/rankings/wta`,
+  )
 }
 
 export async function fetchTennisATPRankings() {
-  return (await fetchTennisApi(
-    `/rankings/atp`,
-  )) as Tennis_TennisApi_Rankings_Response
+  return fetchTennisApi<Tennis_TennisApi_Rankings_Response>(
+    `/tennis/rankings/atp`,
+  )
 }
 
 export async function fetchTennisMatchesByCategoryDate(
-  category: string[],
+  category: SportCategory[],
   date: Date,
 ) {
   return fetchEventsByCategoryDate<Sofascore_Events_Response>(
     fetchTennisApi,
-    "",
+    "/tennis/category/",
+    `/events/${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
     category,
-    date,
   )
 }

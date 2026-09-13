@@ -201,7 +201,7 @@ function createSofascoreStagesAdapter(
         console.log("Fetching single stage events...")
         const stageResponse = await fetchStages(seasonId)
         console.log(`Fetched ${stageResponse?.stages?.length ?? 0} stages.`)
-        return (stageResponse?.stages).flatMap((stage) =>
+        return (stageResponse?.stages ?? []).flatMap((stage) =>
           mapper(stage, {
             leagueId,
             leagueSlug: `/sports/cycling/${leagueId}/${seasonId}`,

@@ -30,6 +30,7 @@ import {
   MatchSummary,
   PeriodScore,
   SPORT,
+  SportCategory,
   SportService,
   SportsLadder,
   Standings,
@@ -61,7 +62,7 @@ export type ScoreBreakdownConfig = {
 export abstract class SofascoreSport implements SportService {
   protected apiEndpoints: SofascoreAPI
   protected sport: SPORT
-  protected categories: string[]
+  protected categories: SportCategory[]
   protected leagues: LeagueSeasonConfig[]
   protected headings: string[]
   protected scoreBreakdownConfig?: ScoreBreakdownConfig
@@ -70,7 +71,7 @@ export abstract class SofascoreSport implements SportService {
   constructor(
     apiEndpoints: SofascoreAPI,
     sport: SPORT,
-    categories: string[],
+    categories: SportCategory[],
     leagues: LeagueSeasonConfig[],
     headings: string[],
     scoreBreakdownConfig?: ScoreBreakdownConfig,
@@ -133,24 +134,32 @@ export abstract class SofascoreSport implements SportService {
   }
 
   async matchesByDate(date: Date): Promise<Matches | null> {
-    const matches = await this.apiEndpoints.fetchEventsByDate(
+    const matchesResponse = await this.apiEndpoints.fetchEventsByDate(
       this.categories,
       date,
     )
 
-    if (!matches) return null
+    if (!matchesResponse) return null
+
+    const [matches, errors] = matchesResponse
+
+    if (!matches && !errors) return null
 
     const validLeagueIds = this.leagues
       // .filter((l) => !l.excludeFromToday)
       .map((l) => Number(l.slug))
+      .concat(this.categories.map((c) => Number(c.id)))
+
     const timezone = date instanceof TZDate ? date.timeZone : "UTC"
 
     matches.events = matches.events
       .filter(
         (item) =>
-          validLeagueIds.includes(
-            item.tournament?.uniqueTournament?.id ?? -1,
-          ) && item.status.type !== "canceled",
+          (validLeagueIds.includes(item.tournament.category.id) ||
+            validLeagueIds.includes(
+              item.tournament?.uniqueTournament?.id ?? -1,
+            )) &&
+          item.status.type !== "canceled",
       )
       .filter((item) => {
         const eventDate = new TZDate(item.startTimestamp * 1000, timezone)
@@ -167,8 +176,6 @@ export abstract class SofascoreSport implements SportService {
         )
       })
 
-    if (!matches.events || matches.events.length === 0) return null
-
     const allMatches = matches.events
       .map((event) =>
         this.eventMapper(event, {
@@ -177,7 +184,7 @@ export abstract class SofascoreSport implements SportService {
               this.leagues.find(
                 (l) =>
                   l.slug === event.tournament?.uniqueTournament?.id.toString(),
-              )?.name
+              )?.name ?? event.tournament?.uniqueTournament?.name
             }` +
             (event.roundInfo?.name || event.roundInfo?.round
               ? ` - ${event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`}`
@@ -203,9 +210,33 @@ export abstract class SofascoreSport implements SportService {
       roundLabel: "My Teams",
     }
 
+    const errorCategories: FixtureRound[] = errors.map((error) => ({
+      matches: [
+        {
+          id: error.category + "-" + error.error,
+          startDate: new Date(),
+          sport: this.sport,
+          status: MatchStatus.UPCOMING,
+          summaryText: `Error retrieving data (${error.error})`,
+          competitorDetails: [],
+          matchSlug: `/sports/${this.sport}/today`,
+          cardVariant: CardVariant.SESSION,
+        },
+      ],
+      roundLabel:
+        this.sport
+          .split("-")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ") +
+        " - " +
+        error.category,
+    }))
+
+    const combinedFixtures = [myTeams, ...fixtures, ...errorCategories]
+
     return {
-      fixtures: [myTeams, ...fixtures],
-      currentRound: getCurrentRound(fixtures, DisplayTypes.LEAGUE),
+      fixtures: combinedFixtures,
+      currentRound: getCurrentRound(combinedFixtures, DisplayTypes.LEAGUE),
     }
   }
 

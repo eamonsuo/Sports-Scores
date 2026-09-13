@@ -1,4 +1,4 @@
-import { SURFING_TOURS } from "@/lib/constants"
+import { SURFING_LEAGUES } from "@/lib/constants"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
 import { resolveSportImage } from "@/lib/imageMapping"
 import { getSportConfigurations } from "@/lib/projUtils"
@@ -28,7 +28,7 @@ class SurfingService implements SportService {
 
   constructor() {
     this.sport = SPORT.SURFING
-    this.tours = SURFING_TOURS
+    this.tours = SURFING_LEAGUES
     this.cardVariant = CardVariant.SESSION
   }
 

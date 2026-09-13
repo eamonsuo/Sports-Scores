@@ -23,37 +23,37 @@ import {
 //   }
 // }
 
-async function fetchJolpicaApi(endpoint: string) {
+async function fetchJolpicaApi<T>(endpoint: string) {
   const res = await fetch(process.env.F1_BASEURL + endpoint)
 
   if (!res.ok) {
     return null
   }
 
-  return res.json()
+  return res.json() as Promise<T>
 }
 
-async function fetchOpenF1Api(endpoint: string) {
+async function fetchOpenF1Api<T>(endpoint: string) {
   const res = await fetch(process.env.OPENF1_BASEURL + endpoint)
 
   if (!res.ok) {
     return null
   }
 
-  return res.json()
+  return res.json() as Promise<T>
 }
 
 export async function fetchF1Events(season: string | number) {
-  const data = (await fetchJolpicaApi(
+  const data = await fetchJolpicaApi<F1_Jolpica_Races_Response>(
     `/f1/${season}/races`,
-  )) as F1_Jolpica_Races_Response | null
+  )
   return data?.MRData.RaceTable.Races ?? null
 }
 
 export async function fetchF1RaceResult(season: string, round: string) {
-  const data = (await fetchJolpicaApi(
+  const data = await fetchJolpicaApi<F1_Jolpica_RaceResults_Response>(
     `/f1/${season}/${round}/results/`,
-  )) as F1_Jolpica_RaceResults_Response | null
+  )
   if (!data) return null
   return data.MRData.RaceTable.Races.length > 0
     ? data.MRData.RaceTable.Races
@@ -61,9 +61,9 @@ export async function fetchF1RaceResult(season: string, round: string) {
 }
 
 export async function fetchF1QualifyingResult(season: string, round: string) {
-  const data = (await fetchJolpicaApi(
+  const data = await fetchJolpicaApi<F1_Jolpica_QualifyingResults_Response>(
     `/f1/${season}/${round}/qualifying/`,
-  )) as F1_Jolpica_QualifyingResults_Response | null
+  )
   if (!data) return null
   return data.MRData.RaceTable.Races.length > 0
     ? data.MRData.RaceTable.Races
@@ -71,9 +71,9 @@ export async function fetchF1QualifyingResult(season: string, round: string) {
 }
 
 export async function fetchF1SprintResult(season: string, round: string) {
-  const data = (await fetchJolpicaApi(
+  const data = await fetchJolpicaApi<F1_Jolpica_SprintResults_Response>(
     `/f1/${season}/${round}/sprint/`,
-  )) as F1_Jolpica_SprintResults_Response | null
+  )
   if (!data) return null
   return data.MRData.RaceTable.Races.length > 0
     ? data.MRData.RaceTable.Races
@@ -81,16 +81,16 @@ export async function fetchF1SprintResult(season: string, round: string) {
 }
 
 export async function fetchF1DriverStandings(season: string) {
-  const data = (await fetchJolpicaApi(
+  const data = await fetchJolpicaApi<F1_Jolpica_DriverStandings_Response>(
     `/f1/${season}/driverstandings`,
-  )) as F1_Jolpica_DriverStandings_Response | null
+  )
   return data?.MRData.StandingsTable.StandingsLists[0].DriverStandings ?? null
 }
 
 export async function fetchF1ConstructorStandings(season: string) {
-  const data = (await fetchJolpicaApi(
+  const data = await fetchJolpicaApi<F1_Jolpica_ConstructorStandings_Response>(
     `/f1/${season}/constructorstandings`,
-  )) as F1_Jolpica_ConstructorStandings_Response | null
+  )
   return (
     data?.MRData.StandingsTable.StandingsLists[0].ConstructorStandings ?? null
   )
@@ -110,9 +110,7 @@ export async function fetchF1Positions(
   if (date) endpoint += `date=${date}&`
   if (meetingId) endpoint += `meeting_key=${meetingId}&`
 
-  return (await fetchOpenF1Api(endpoint)) as
-    | F1_OpenF1_Positions_Response[]
-    | null
+  return fetchOpenF1Api<F1_OpenF1_Positions_Response[]>(endpoint)
 }
 
 export async function fetchF1DriverDetails(
@@ -123,13 +121,13 @@ export async function fetchF1DriverDetails(
   if (sessionId) endpoint += `session_key=${sessionId}&`
   if (driverId) endpoint += `driver_number=${driverId}&`
 
-  return (await fetchOpenF1Api(endpoint)) as F1_OpenF1_Drivers_Response[] | null
+  return fetchOpenF1Api<F1_OpenF1_Drivers_Response[]>(endpoint)
 }
 
 export async function fetchF1Meetings(year: string) {
-  return (await fetchOpenF1Api(`/meetings?year=${year}&`)) as
-    | F1_OpenF1_Meetings_Response[]
-    | null
+  return fetchOpenF1Api<F1_OpenF1_Meetings_Response[]>(
+    `/meetings?year=${year}&`,
+  )
 }
 
 export async function fetchF1Sessions(
@@ -141,7 +139,5 @@ export async function fetchF1Sessions(
   if (meetingId) endpoint += `meeting_key=${meetingId}&`
   if (sessionName) endpoint += `session_name=${sessionName}&`
 
-  return (await fetchOpenF1Api(endpoint)) as
-    | F1_OpenF1_Sessions_Response[]
-    | null
+  return fetchOpenF1Api<F1_OpenF1_Sessions_Response[]>(endpoint)
 }

@@ -2,7 +2,7 @@ import {
   fetchCyclingRiderStandings,
   fetchCyclingSubstages,
 } from "@/endpoints/cycling.api"
-import { CYCLING_TOURS } from "@/lib/constants"
+import { CYCLING_LEAGUES } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
 import { getSportConfigurations } from "@/lib/projUtils"
@@ -42,7 +42,7 @@ class CyclingService extends SofascoreStageSport {
         ),
       },
       SPORT.CYCLING,
-      CYCLING_TOURS,
+      CYCLING_LEAGUES,
       CardVariant.SESSION,
     )
   }
