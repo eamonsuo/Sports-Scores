@@ -680,8 +680,8 @@ export interface Sofascore_StageStandingRow {
   tyreType?: string
   tyreState?: string
   tyreInfo?: { type: string; laps: number }[]
-  personalFastestLap: 60
-  personalFastestLapTime: "1:20.150"
+  personalFastestLap: number
+  personalFastestLapTime: string
   // Cycling
   totalTime?: string
   sprint?: number

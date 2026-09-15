@@ -1,9 +1,14 @@
+"use client"
+
 import { FALLBACK_IMAGE } from "@/lib/constants"
 import { cn } from "@/lib/shadcnUtils"
 import { SportsLadder } from "@/types/misc"
 import { clsx } from "clsx"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useTransition } from "react"
+import PullToRefresh from "../misc-ui/PullToRefresh"
 
 const defaultColours = [
   "bg-green-500",
@@ -20,114 +25,124 @@ export default function Ladder({
   data,
   placingCategories,
 }: SportsLadder) {
+  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
+
   return (
-    <div className="flex-1 overflow-y-auto px-4">
-      {tableName && (
-        <p className="pb-1 pt-3 dark:text-neutral-400">{tableName}</p>
-      )}
+    <PullToRefresh
+      onRefresh={() => startTransition(() => router.refresh())}
+      refreshing={isPending}
+    >
+      <div className="flex-1 overflow-y-auto px-4">
+        {tableName && (
+          <p className="pt-3 pb-1 dark:text-neutral-400">{tableName}</p>
+        )}
 
-      <table className="w-full dark:text-neutral-400">
-        <thead>
-          <tr>
-            <th></th>
-            <th className="pe-2"></th>
-            {headings.map((heading) => (
-              <th key={heading} className="px-2">
-                {heading}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody className="text-center">
-          {data.map((item, idx) => {
-            // Get the colour for this placing if specified
-            const categoryIdx =
-              placingCategories?.findIndex((c) =>
-                c.position.includes(Number(item.position)),
-              ) ?? -1
-            const category =
-              categoryIdx >= 0 ? placingCategories?.[categoryIdx] : undefined
-            const colour =
-              category?.colour ??
-              (categoryIdx >= 0
-                ? defaultColours[categoryIdx % defaultColours.length]
-                : undefined)
-            return (
-              <tr key={item.id} className="border-b border-t">
-                <td
-                  className={cn("w-1 p-0", colour)}
-                  style={{ backgroundColor: item.teamColour }}
-                />
-                <td className="py-2 pe-2 ps-1">{item.position}</td>
-                <td className="text-left text-sm">
-                  <Link
-                    href={
-                      item.sport ? `/sports/${item.sport}/team/${item.id}` : ""
-                    }
-                  >
-                    <div className="flex items-center">
-                      <div className="me-2 flex gap-2">
-                        {Array.isArray(item.teamLogo) ? (
-                          item.teamLogo.map((img, idx) => (
-                            <Image
-                              key={idx + "-logo"}
-                              src={img}
-                              width={100}
-                              height={100}
-                              style={{ width: "20px", height: "auto" }}
-                              alt={`${item.teamName} player ${idx + 1}`}
-                            />
-                          ))
-                        ) : (
-                          <Image
-                            src={item.teamLogo || FALLBACK_IMAGE}
-                            width={80}
-                            height={80}
-                            style={{ width: "20px", height: "auto" }}
-                            alt={item.teamName}
-                          />
-                        )}
-                      </div>
-                      {item.teamName}
-                    </div>
-                  </Link>
-                </td>
-
-                {headings.slice(1).map((heading) => (
+        <table className="w-full dark:text-neutral-400">
+          <thead>
+            <tr>
+              <th></th>
+              <th className="pe-2"></th>
+              {headings.map((heading) => (
+                <th key={heading} className="px-2">
+                  {heading}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="text-center">
+            {data.map((item, idx) => {
+              // Get the colour for this placing if specified
+              const categoryIdx =
+                placingCategories?.findIndex((c) =>
+                  c.position.includes(Number(item.position)),
+                ) ?? -1
+              const category =
+                categoryIdx >= 0 ? placingCategories?.[categoryIdx] : undefined
+              const colour =
+                category?.colour ??
+                (categoryIdx >= 0
+                  ? defaultColours[categoryIdx % defaultColours.length]
+                  : undefined)
+              return (
+                <tr key={item.id} className="border-t border-b">
                   <td
-                    key={heading}
-                    className={cn(
-                      item[heading]?.toString()?.includes("↑") &&
-                        "text-green-500",
-                      item[heading]?.toString()?.includes("↓") &&
-                        "text-red-500",
-                    )}
-                  >
-                    {item[heading]}
+                    className={cn("w-1 p-0", colour)}
+                    style={{ backgroundColor: item.teamColour }}
+                  />
+                  <td className="py-2 ps-1 pe-2">{item.position}</td>
+                  <td className="text-left text-sm">
+                    <Link
+                      href={
+                        item.sport
+                          ? `/sports/${item.sport}/team/${item.id}`
+                          : ""
+                      }
+                    >
+                      <div className="flex items-center">
+                        <div className="me-2 flex gap-2">
+                          {Array.isArray(item.teamLogo) ? (
+                            item.teamLogo.map((img, idx) => (
+                              <Image
+                                key={idx + "-logo"}
+                                src={img}
+                                width={100}
+                                height={100}
+                                style={{ width: "20px", height: "auto" }}
+                                alt={`${item.teamName} player ${idx + 1}`}
+                              />
+                            ))
+                          ) : (
+                            <Image
+                              src={item.teamLogo || FALLBACK_IMAGE}
+                              width={80}
+                              height={80}
+                              style={{ width: "20px", height: "auto" }}
+                              alt={item.teamName}
+                            />
+                          )}
+                        </div>
+                        {item.teamName}
+                      </div>
+                    </Link>
                   </td>
-                ))}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      {/* Display placing category labels */}
-      {placingCategories && placingCategories.length > 0 && (
-        <div className="my-4 flex flex-col flex-wrap gap-4 text-sm">
-          {placingCategories.map((category, idx) => (
-            <div key={category.label} className="flex items-center gap-2">
-              <span
-                className={clsx(
-                  "inline-block h-3 w-3 rounded-full",
-                  category.colour ??
-                    defaultColours[idx % defaultColours.length],
-                )}
-              />
-              <span>{category.label}</span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+
+                  {headings.slice(1).map((heading) => (
+                    <td
+                      key={heading}
+                      className={cn(
+                        item[heading]?.toString()?.includes("↑") &&
+                          "text-green-500",
+                        item[heading]?.toString()?.includes("↓") &&
+                          "text-red-500",
+                      )}
+                    >
+                      {item[heading]}
+                    </td>
+                  ))}
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+        {/* Display placing category labels */}
+        {placingCategories && placingCategories.length > 0 && (
+          <div className="my-4 flex flex-col flex-wrap gap-4 text-sm">
+            {placingCategories.map((category, idx) => (
+              <div key={category.label} className="flex items-center gap-2">
+                <span
+                  className={clsx(
+                    "inline-block h-3 w-3 rounded-full",
+                    category.colour ??
+                      defaultColours[idx % defaultColours.length],
+                  )}
+                />
+                <span>{category.label}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </PullToRefresh>
   )
 }

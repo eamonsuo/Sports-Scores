@@ -444,7 +444,63 @@ const adapters: Partial<Record<SPORT, AdapterMap>> = {
         )
       },
     },
-    // australasia: createFileAdapter("australasia"),
+    // australasia: timer values are pre-formatted status words (e.g. "Upcoming"),
+    // not ISO dates, so it can't use the generic createFileAdapter's Date coercion.
+    // australasia: {
+    //   async fetchMatches(leagueId, seasonId) {
+    //     const filePath = resolve(
+    //       __dirname,
+    //       `australasia-${seasonId}-events.json`,
+    //     )
+
+    //     if (!existsSync(filePath)) {
+    //       throw new Error(`Events file not found: ${filePath}`)
+    //     }
+
+    //     const raw = JSON.parse(readFileSync(filePath, "utf-8")) as Array<{
+    //       id: string
+    //       sport: string
+    //       summaryText: string
+    //       startDate: string
+    //       endDate?: string
+    //       status: string
+    //       leagueName: string
+    //       leagueImg?: string
+    //       leagueSlug: string
+    //       matchSlug: string
+    //       roundLabel: string
+    //       timer: string
+    //       timerDisplayColour: string
+    //       venue: string
+    //       seasonId: string
+    //       leagueId: string
+    //       competitorDetails: { id: string; score: string; name: string }[]
+    //       cardVariant: string
+    //     }>
+
+    //     return raw.map((item) => ({
+    //       id: item.id,
+    //       sport: item.sport as SPORT,
+    //       summaryText: item.summaryText,
+    //       startDate: new Date(item.startDate),
+    //       endDate: item.endDate ? new Date(item.endDate) : undefined,
+    //       status: item.status as MatchStatus,
+    //       leagueName: item.leagueName,
+    //       leagueImg: item.leagueImg,
+    //       leagueSlug: item.leagueSlug,
+    //       matchSlug: item.matchSlug,
+    //       roundLabel: item.roundLabel,
+    //       timer: item.timer,
+    //       timerDisplayColour: item.timerDisplayColour as
+    //         "green" | "yellow" | "gray",
+    //       venue: item.venue,
+    //       seasonId: item.seasonId,
+    //       leagueId: item.leagueId,
+    //       competitorDetails: item.competitorDetails ?? [],
+    //       cardVariant: (item.cardVariant as CardVariant) ?? CardVariant.DEFAULT,
+    //     }))
+    //   },
+    // },
     // tgl: createFileAdapter("tgl"),
     default: createMatchSummaryAdapter(
       SPORT.GOLF,

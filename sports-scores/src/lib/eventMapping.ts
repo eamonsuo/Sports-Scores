@@ -27,7 +27,7 @@ export async function mapFixtureRounds(
     ? DisplayTypes.LEAGUE
     : (leagueConfig.display ?? DisplayTypes.ROUND)
   const byes = isMultiLeague ? undefined : leagueConfig.byes
-  const showByes = byes !== undefined
+  let showByes = byes !== undefined
   const timezone = await getClientTimezone()
 
   return Object.values(
@@ -57,11 +57,15 @@ export async function mapFixtureRounds(
             break
         }
 
+        if (!(roundLabel.includes("Round") || roundLabel.includes("Week"))) {
+          showByes = false
+        }
+
         if (!acc[roundLabel]) {
           acc[roundLabel] = {
             roundLabel,
             matches: [],
-            byes: byes,
+            byes: showByes ? byes : undefined,
           }
         }
 

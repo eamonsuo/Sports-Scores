@@ -1073,7 +1073,7 @@ export const GOLF_LEAGUES: LeagueSeasonConfig[] = [
     seasons: [
       {
         name: "2026",
-        slug: "2026",
+        slug: "external",
         tvguide: KAYO_GOLF_TV_GUIDE,
       },
     ],
@@ -1083,14 +1083,14 @@ export const GOLF_LEAGUES: LeagueSeasonConfig[] = [
     slug: "pga-champions-tour",
     externalURL: "https://www.pgatour.com/pgatour-champions/schedule",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/s4xljf1600855962.png",
-    seasons: [{ name: "2026", slug: "2026" }],
+    seasons: [{ name: "2026", slug: "external" }],
   },
   {
     name: "Korn Ferry Tour",
     slug: "korn-ferry-tour",
     externalURL: "https://www.pgatour.com/korn-ferry-tour/schedule",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/7bagvc1591956878.png",
-    seasons: [{ name: "2026", slug: "2026" }],
+    seasons: [{ name: "2026", slug: "external" }],
   },
   {
     name: "OWGR",
@@ -2067,7 +2067,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "19",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/vk7isd1598802862.png/small",
     seasons: [
-      // { name: "26/27", slug: "82557", tvguide: STAN_FOOTBALL_TV_GUIDE },
+      { name: "26/27", slug: "102079", tvguide: STAN_FOOTBALL_TV_GUIDE },
       { name: "25/26", slug: "82557", tvguide: STAN_FOOTBALL_TV_GUIDE },
     ],
   },

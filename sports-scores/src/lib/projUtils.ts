@@ -41,10 +41,11 @@ export async function fetchRapidApi<T>(
   if (!res.ok) {
     // Primary sport API failed (rate limit, quota, outage, etc). Fall back to all Sports API.
     console.error(
-      `[fetchRapidApi] ${sport} request failed (${res.status} ${res.statusText}) for ${url}. Falling back to AllSports API.`,
+      `[fetchRapidApi] ${sport} request failed (${res.status} ${res.statusText}) for ${url}.`,
     )
 
     if (fallbackEnabled) {
+      console.log("Falling back to AllSports API.")
       return await fetchRapidApi(
         process.env.ALLSPORTS_BASEURL,
         endpoint,
