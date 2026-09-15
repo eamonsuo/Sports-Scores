@@ -15,7 +15,12 @@ import {
   SPORT,
 } from "@/types/misc"
 import { format } from "date-fns/format"
-import { ChevronDownIcon, ExternalLinkIcon, Settings } from "lucide-react"
+import {
+  ChevronDownIcon,
+  ExternalLinkIcon,
+  Globe,
+  Settings,
+} from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
@@ -246,14 +251,18 @@ export default function LeagueSeasonToggle({
                   style={{ width: "15px", height: "auto" }}
                 />
               )}
-              {league.name}
-              {league.externalURL && (
-                <Link
-                  href={league.externalURL}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <ExternalLinkIcon className="h-4 w-6" />
-                </Link>
+              <div className="flex-1">{league.name}</div>
+              {league.seasons[0]?.slug === "external" ? (
+                <ExternalLinkIcon className="h-4 w-6" />
+              ) : (
+                league.externalURL && (
+                  <Link
+                    href={league.externalURL}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Globe className="h-4 w-6" />
+                  </Link>
+                )
               )}
             </DropdownMenuItem>
           ))}

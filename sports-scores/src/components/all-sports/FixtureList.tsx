@@ -5,8 +5,10 @@ import SessionSummaryCard from "@/components/all-sports/SessionSummaryCard"
 import TennisMatchCard from "@/components/tennis/TennisMatchCard"
 import { cn } from "@/lib/shadcnUtils"
 import { CardVariant, MatchSummary } from "@/types/misc"
-import React, { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import React, { useEffect, useTransition } from "react"
 import Placeholder from "../misc-ui/Placeholder"
+import PullToRefresh from "../misc-ui/PullToRefresh"
 import LeagueHeader from "./LeagueHeader"
 import SectionDate from "./SectionDate"
 
@@ -18,6 +20,9 @@ const cardVariantMap: Record<CardVariant, typeof MatchSummaryCard> = {
 
 // Assumes data prop is already sorted in desired order
 export default function FixtureList({ data }: { data: MatchSummary[] }) {
+  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
+
   useEffect(() => {
     let retryInterval: ReturnType<typeof setInterval> | null = null
 
@@ -63,81 +68,93 @@ export default function FixtureList({ data }: { data: MatchSummary[] }) {
   let currentDateFlag = false
 
   if (data.length === 0) {
-    return <Placeholder>NO DATA</Placeholder>
+    return (
+      <PullToRefresh
+        onRefresh={() => startTransition(() => router.refresh())}
+        refreshing={isPending}
+      >
+        <Placeholder>NO DATA</Placeholder>
+      </PullToRefresh>
+    )
   }
 
   return (
-    <div className="flex-1 overflow-y-auto px-4">
-      {data.map((item: MatchSummary, index) => {
-        let itemDate = new Date(item.startDate)
-        displayDate = displaySeries = false
+    <PullToRefresh
+      onRefresh={() => startTransition(() => router.refresh())}
+      refreshing={isPending}
+    >
+      <div className="flex-1 overflow-y-auto px-4">
+        {data.map((item: MatchSummary, index) => {
+          let itemDate = new Date(item.startDate)
+          displayDate = displaySeries = false
 
-        if (sectionDate.toDateString() !== itemDate.toDateString()) {
-          sectionDate = itemDate
-          displayDate = true
-        }
+          if (sectionDate.toDateString() !== itemDate.toDateString()) {
+            sectionDate = itemDate
+            displayDate = true
+          }
 
-        if (sectionSeries !== item.leagueName) {
-          sectionSeries = item.leagueName ?? ""
-          displaySeries = true
-        }
+          if (sectionSeries !== item.leagueName) {
+            sectionSeries = item.leagueName ?? ""
+            displaySeries = true
+          }
 
-        if (currentMatch) {
-          currentMatch = false
-        }
+          if (currentMatch) {
+            currentMatch = false
+          }
 
-        const now = currentDate.getTime()
-        const isCurrentDate =
-          !currentDateFlag &&
-          (currentDate.toDateString() === sectionDate.toDateString() ||
-            now <= sectionDate.getTime() ||
-            (item.endDate !== undefined &&
-              now >= new Date(item.startDate).getTime() &&
-              now <= item.endDate.getTime()))
+          const now = currentDate.getTime()
+          const isCurrentDate =
+            !currentDateFlag &&
+            (currentDate.toDateString() === sectionDate.toDateString() ||
+              now <= sectionDate.getTime() ||
+              (item.endDate !== undefined &&
+                now >= new Date(item.startDate).getTime() &&
+                now <= item.endDate.getTime()))
 
-        if (isCurrentDate) currentMatch = currentDateFlag = true
+          if (isCurrentDate) currentMatch = currentDateFlag = true
 
-        const CardComponent =
-          cardVariantMap[item.cardVariant] ?? MatchSummaryCard
+          const CardComponent =
+            cardVariantMap[item.cardVariant] ?? MatchSummaryCard
 
-        return (
-          <React.Fragment key={item.id}>
-            {displayDate && (
-              <SectionDate
-                sectionDate={sectionDate}
-                sectionDateEnd={item.endDate}
-                currentDate={currentMatch}
-              />
-            )}
-            {(displaySeries || displayDate) && item.leagueName && (
-              <LeagueHeader
-                href={item.leagueSlug ?? ""}
-                seriesName={item.leagueName}
-                img={item.leagueImg}
-              />
-            )}
-            <CardComponent
-              className={cn(
-                item.leagueName ? "mt-0" : "rounded-md",
-                item.leagueName &&
-                  (() => {
-                    // If next item is a different series or date, round the bottom corners
-                    const nextItem = data[index + 1]
-                    if (!nextItem) return true
-                    const nextDate = new Date(nextItem.startDate)
-                    return (
-                      nextDate.toDateString() !== itemDate.toDateString() ||
-                      nextItem.leagueName !== item.leagueName
-                    )
-                  })() &&
-                  "rounded-b-md",
+          return (
+            <React.Fragment key={item.id}>
+              {displayDate && (
+                <SectionDate
+                  sectionDate={sectionDate}
+                  sectionDateEnd={item.endDate}
+                  currentDate={currentMatch}
+                />
               )}
-              event={item}
-              href={item.matchSlug ?? ""}
-            />
-          </React.Fragment>
-        )
-      })}
-    </div>
+              {(displaySeries || displayDate) && item.leagueName && (
+                <LeagueHeader
+                  href={item.leagueSlug ?? ""}
+                  seriesName={item.leagueName}
+                  img={item.leagueImg}
+                />
+              )}
+              <CardComponent
+                className={cn(
+                  item.leagueName ? "mt-0" : "rounded-md",
+                  item.leagueName &&
+                    (() => {
+                      // If next item is a different series or date, round the bottom corners
+                      const nextItem = data[index + 1]
+                      if (!nextItem) return true
+                      const nextDate = new Date(nextItem.startDate)
+                      return (
+                        nextDate.toDateString() !== itemDate.toDateString() ||
+                        nextItem.leagueName !== item.leagueName
+                      )
+                    })() &&
+                    "rounded-b-md",
+                )}
+                event={item}
+                href={item.matchSlug ?? ""}
+              />
+            </React.Fragment>
+          )
+        })}
+      </div>
+    </PullToRefresh>
   )
 }
