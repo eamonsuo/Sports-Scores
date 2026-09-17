@@ -30,22 +30,24 @@ function loadOrderPreferences(
   storageKey: string,
   defaultOrder: string[],
   defaultExcludedFromToday: string[],
+  defaultHidden: string[],
 ): OrderPreferences {
-  if (typeof window === "undefined")
-    return { order: defaultOrder, hidden: [], excludedFromToday: [] }
+  const defaults: OrderPreferences = {
+    order: defaultOrder,
+    hidden: defaultHidden,
+    excludedFromToday: defaultExcludedFromToday,
+  }
+  if (typeof window === "undefined") return defaults
   try {
     const raw = window.localStorage.getItem(storageKey)
-    if (!raw)
-      return {
-        order: defaultOrder,
-        hidden: [],
-        excludedFromToday: defaultExcludedFromToday,
-      }
+    if (!raw) return defaults
     const parsed = JSON.parse(raw) as Partial<OrderPreferences>
     return reconcile(
       {
         order: parsed.order ?? [],
-        hidden: parsed.hidden ?? [],
+        // Missing key means this preference predates the feature (or the user never
+        // touched it), so fall back to the config-driven default rather than visible.
+        hidden: parsed.hidden ?? defaultHidden,
         // Missing key means this preference predates the feature, so fall back to the
         // current constants-driven default rather than treating it as "none excluded".
         excludedFromToday: parsed.excludedFromToday ?? defaultExcludedFromToday,
@@ -53,7 +55,7 @@ function loadOrderPreferences(
       defaultOrder,
     )
   } catch {
-    return { order: defaultOrder, hidden: [], excludedFromToday: [] }
+    return defaults
   }
 }
 
@@ -93,17 +95,23 @@ export function useOrderPreference(
   storageKey: string,
   defaultOrder: string[],
   defaultExcludedFromToday: string[] = [],
+  defaultHidden: string[] = [],
 ) {
   const [prefs, setPrefs] = useState<OrderPreferences>({
     order: defaultOrder,
-    hidden: [],
+    hidden: defaultHidden,
     excludedFromToday: defaultExcludedFromToday,
   })
   const [isHydrated, setIsHydrated] = useState(false)
 
   useEffect(() => {
     setPrefs(
-      loadOrderPreferences(storageKey, defaultOrder, defaultExcludedFromToday),
+      loadOrderPreferences(
+        storageKey,
+        defaultOrder,
+        defaultExcludedFromToday,
+        defaultHidden,
+      ),
     )
     setIsHydrated(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -145,7 +153,7 @@ export function useOrderPreference(
   const reset = () =>
     setPrefs({
       order: defaultOrder,
-      hidden: [],
+      hidden: defaultHidden,
       excludedFromToday: defaultExcludedFromToday,
     })
 

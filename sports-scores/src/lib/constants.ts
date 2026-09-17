@@ -804,10 +804,17 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
     seasons: [{ name: "2026", slug: "89189" }],
   },
   {
-    name: "🇬🇧 One Day Cup",
+    name: "🇬🇧 One Day Cup - Men",
     slug: "11177",
     seasons: [{ name: "2026", slug: "86876" }],
     excludeFromToday: true,
+  },
+  {
+    name: "🇬🇧 One Day Cup - Women",
+    slug: "25536",
+    seasons: [],
+    excludeFromToday: true,
+    hidden: true,
   },
   {
     name: "T20 Blast",
@@ -3083,6 +3090,13 @@ export const DARTS_LEAGUES: LeagueSeasonConfig[] = [
     slug: "rankings",
     externalURL: "https://www.pdc.tv/rankings#World_Rankings",
     seasons: [{ name: "Current", slug: "external" }],
+  },
+  {
+    name: "Modus Super Series",
+    slug: "16756",
+    seasons: [],
+    excludeFromToday: true,
+    hidden: true,
   },
 ]
 
