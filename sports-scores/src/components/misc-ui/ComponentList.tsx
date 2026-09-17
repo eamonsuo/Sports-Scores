@@ -13,7 +13,7 @@ export default function ComponentList({
   showAllLabels = false,
 }: {
   children: ReactNode[]
-  labels: { groupLabel?: string; labels: string[] }[]
+  labels: { groupLabel?: string; labels: string[] }[] | string[]
   curItem: string
   buttonStyle?: ButtonStyle
   showAllLabels?: boolean
@@ -23,6 +23,13 @@ export default function ComponentList({
   const initialBtn = useRef<HTMLButtonElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
+  const isLabelGroups = typeof labels[0] !== "string"
+  const flatLabels = isLabelGroups
+    ? (labels as { groupLabel?: string; labels: string[] }[]).flatMap(
+        (group) => group.labels,
+      )
+    : (labels as string[])
+
   useEffect(() => {
     //Ensure the curRound is scrolled into the centre of view on page load
     initialBtn.current?.scrollIntoView({
@@ -31,7 +38,6 @@ export default function ComponentList({
     })
 
     // Scroll to current round on mount
-    const flatLabels = labels.flatMap((group) => group.labels)
     const index = flatLabels.indexOf(curItem)
     if (scrollContainerRef.current && index !== -1) {
       const container = scrollContainerRef.current
@@ -44,7 +50,6 @@ export default function ComponentList({
     setItem(label)
 
     const divNode = btnListRef.current
-    const flatLabels = labels.flatMap((group) => group.labels)
     const btnNode =
       divNode?.querySelectorAll("button")[flatLabels.indexOf(label)]
     btnNode?.scrollIntoView({
@@ -70,7 +75,6 @@ export default function ComponentList({
       const width = container.offsetWidth
       const index = Math.round(scrollLeft / width)
 
-      const flatLabels = labels.flatMap((group) => group.labels)
       if (flatLabels[index] && flatLabels[index] !== item) {
         setItem(flatLabels[index])
 
@@ -113,43 +117,48 @@ export default function ComponentList({
               "rounded-lg bg-gray-200 p-1 dark:bg-neutral-800",
           )}
         >
-          {}
-          {labels.map((group, index) => (
-            <div
-              key={group.groupLabel ?? `ungrouped-${index}`}
-              className="flex flex-col gap-1 dark:text-neutral-400"
-            >
-              {group.groupLabel ? (
-                <p className="rounded-t-md border-t border-r border-l border-neutral-300 px-2 text-center text-xs whitespace-nowrap text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">
-                  {group.groupLabel}
-                </p>
-              ) : null}
-              <div className="mt-auto flex gap-1">
-                {group.labels.map((label) => (
-                  <button
-                    onClick={() => handleRoundClick(label)}
-                    key={label}
-                    ref={label === curItem ? initialBtn : null}
-                    className={cn(
-                      buttonStyle === "pill" &&
-                        "inline-flex items-center justify-center rounded-full px-2.5 py-0.5",
-                      buttonStyle === "pill" && group.groupLabel && "flex-1",
-                      buttonStyle === "rectangle" &&
-                        "flex-1 place-content-center rounded-md bg-white px-2 py-1 text-center text-black shadow-xs focus:relative dark:bg-neutral-600 dark:text-neutral-200",
-                      label === item &&
-                        "bg-gray-300 text-black dark:bg-neutral-600 dark:text-neutral-200",
-                      label !== item &&
-                        "bg-gray-100 text-gray-700 dark:bg-neutral-800 dark:text-neutral-400",
-                    )}
-                  >
-                    <p className="text-center text-sm whitespace-nowrap">
-                      {label}
-                    </p>
-                  </button>
-                ))}
+          {labels.map((group, index) => {
+            group = isLabelGroups
+              ? (group as { groupLabel?: string; labels: string[] })
+              : { labels: [group as string] }
+
+            return (
+              <div
+                key={group?.groupLabel ?? `ungrouped-${index}`}
+                className="flex flex-col gap-1 dark:text-neutral-400"
+              >
+                {group.groupLabel ? (
+                  <p className="rounded-t-md border-t border-r border-l border-neutral-300 px-2 text-center text-xs whitespace-nowrap text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">
+                    {group.groupLabel}
+                  </p>
+                ) : null}
+                <div className="mt-auto flex gap-1">
+                  {group.labels.map((label) => (
+                    <button
+                      onClick={() => handleRoundClick(label)}
+                      key={label}
+                      ref={label === curItem ? initialBtn : null}
+                      className={cn(
+                        buttonStyle === "pill" &&
+                          "inline-flex items-center justify-center rounded-full px-2.5 py-0.5",
+                        buttonStyle === "pill" && isLabelGroups && "flex-1",
+                        buttonStyle === "rectangle" &&
+                          "flex-1 place-content-center rounded-md bg-white px-2 py-1 text-center text-black shadow-xs focus:relative dark:bg-neutral-600 dark:text-neutral-200",
+                        label === item &&
+                          "bg-gray-300 text-black dark:bg-neutral-600 dark:text-neutral-200",
+                        label !== item &&
+                          "bg-gray-100 text-gray-700 dark:bg-neutral-800 dark:text-neutral-400",
+                      )}
+                    >
+                      <p className="text-center text-sm whitespace-nowrap">
+                        {label}
+                      </p>
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
 
