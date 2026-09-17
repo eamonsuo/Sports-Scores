@@ -27,103 +27,6 @@ import {
 
 export const FALLBACK_IMAGE = "/vercel.svg"
 
-export const CRICKET_CATEGORIES: SportCategory[] = [
-  { id: "1347", name: "Australia", sport: SPORT.CRICKET },
-  { id: "1343", name: "World", sport: SPORT.CRICKET },
-  { id: "1350", name: "India", sport: SPORT.CRICKET },
-  { id: "1349", name: "UK", sport: SPORT.CRICKET },
-  { id: "1684", name: "West Indies", sport: SPORT.CRICKET },
-]
-export const CRICKET_LADDER_HEADINGS = [
-  "Team",
-  "P",
-  "W",
-  "D",
-  "NR",
-  "NRR",
-  "Pts",
-]
-export const RUGBY_LEAGUE_LADDER_HEADINGS = [
-  "Team",
-  "P",
-  "W",
-  "D",
-  "Diff",
-  "Pts",
-]
-const RUGBY_LEAGUE_MATCH_LENGTH = 1.75 // in hours, used for TV guide end time estimation
-export const RUGBY_LEAGUE_CATEGORIES: SportCategory[] = [
-  { id: "83", name: "All", sport: SPORT.RUGBY_LEAGUE },
-]
-export const FOOTBALL_CATEGORIES: SportCategory[] = [
-  { id: "34", name: "Australia", sport: SPORT.FOOTBALL },
-  { id: "1468", name: "World", sport: SPORT.FOOTBALL },
-  { id: "1467", name: "Asia", sport: SPORT.FOOTBALL },
-  { id: "1465", name: "Europe", sport: SPORT.FOOTBALL },
-  { id: "1", name: "England", sport: SPORT.FOOTBALL },
-  // { id: "1470", name: "South America", sport: SPORT.FOOTBALL },
-  // { id: "1466", name: "Africa", sport: SPORT.FOOTBALL },
-  // { id: "1469", name: "North America", sport: SPORT.FOOTBALL },
-  // { id: "1471", name: "Oceania", sport: SPORT.FOOTBALL },
-]
-export const FOOTBALL_LADDER_HEADINGS = ["Team", "P", "W", "D", "Diff", "Pts"]
-export const FOOTBALL_MATCH_LENGTH = 2 // in hours, used for TV guide end time estimation
-export const AUSSIE_RULES_LADDER_HEADINGS = ["Team", "P", "W", "D", "%", "Pts"]
-const AUSSIE_RULES_MATCH_LENGTH = 2.75 // in hours, used for TV guide end time estimation
-export const AUSSIE_RULES_CATEGORIES: SportCategory[] = [
-  { id: "87", name: "All", sport: SPORT.AUSSIE_RULES },
-] //Aussie Rules
-export const BASKETBALL_MATCH_LENGTH = 3 // in hours, used for TV guide end time estimation
-export const BASKETBALL_CATEGORIES: SportCategory[] = [
-  { id: "113", name: "Australia", sport: SPORT.BASKETBALL },
-  { id: "103", name: "International", sport: SPORT.BASKETBALL },
-  { id: "15", name: "USA", sport: SPORT.BASKETBALL },
-]
-export const BASKETBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "PCT"]
-export const BASEBALL_MATCH_LENGTH = 3 // in hours, used for TV guide end time estimation
-export const BASEBALL_CATEGORIES: SportCategory[] = [
-  { id: "1701", name: "Australia", sport: SPORT.BASEBALL },
-  { id: "1543", name: "World", sport: SPORT.BASEBALL },
-  { id: "1374", name: "USA", sport: SPORT.BASEBALL },
-]
-export const BASEBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "PCT"]
-export const ICE_HOCKEY_MATCH_LENGTH = 3 // in hours, used for TV guide end time estimation
-export const ICE_HOCKEY_CATEGORIES: SportCategory[] = [
-  { id: "1161", name: "Australia", sport: SPORT.ICE_HOCKEY },
-  { id: "56", name: "International", sport: SPORT.ICE_HOCKEY },
-  { id: "37", name: "USA", sport: SPORT.ICE_HOCKEY },
-]
-export const ICE_HOCKEY_LADDER_HEADINGS = [
-  "Team",
-  "P",
-  "W",
-  "OTL",
-  // "L",
-  "Diff",
-  "Pts",
-]
-export const RUGBY_UNION_CATEGORIES: SportCategory[] = [
-  { id: "82", name: "Union", sport: SPORT.RUGBY_UNION },
-  { id: "1456", name: "Sevens", sport: SPORT.RUGBY_UNION },
-]
-export const RUGBY_UNION_LADDER_HEADINGS = [
-  "Team",
-  "P",
-  "W",
-  "D",
-  "Diff",
-  "BP",
-  "Pts",
-]
-export const AMERICAN_FOOTBALL_MATCH_LENGTH = 4 // in hours, used for TV guide end time estimation
-export const AMERICAN_FOOTBALL_CATEGORIES: SportCategory[] = [
-  { id: "1370", name: "USA", sport: SPORT.AMERICAN_FOOTBALL },
-]
-export const AMERICAN_FOOTBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "D"]
-export const GOLF_FEDEX_HEADINGS = ["Player", "Total", "Behind"]
-export const GOLF_OWGR_HEADINGS = ["Player", "Total", "Prev"]
-export const GOLF_LEADERBOARD_HEADINGS = ["Player", "Total", "Thru", "Rnd"]
-
 export const SCORE_BREAKDOWN_HALVES_CONFIG: ScoreBreakdownConfig = {
   periodNames: ["1st Half", "2nd Half"],
   overtimeName: "Extra Time",
@@ -144,29 +47,10 @@ export const SCORE_BREAKDOWN_PERIODS_CONFIG: ScoreBreakdownConfig = {
   overtimeName: "OT",
 }
 
-const RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG: PlayoffPictureConfig = {
-  rankingSystem: "points",
-  pointsPerWin: 2,
-  pointsPerDraw: 1,
-  totalSeasonGames: 24,
-  qualifyingPositions: 8,
-  structure: PlayoffPictureStructure.Top8,
-}
-
-const TOP_8_SECOND_CHANCE_PLACING: LadderPlacingCategory[] = [
-  { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
-  { label: "Finals", position: [5, 6, 7, 8] },
-]
-
-const TOP_10_SECOND_CHANCE_PLACING: LadderPlacingCategory[] = [
-  { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
-  { label: "Finals", position: [5, 6] },
-  { label: "Finals - Wildcard Round", position: [7, 8, 9, 10] },
-]
-
 // ── Ladder Config Constants ──────────────────────────────────────────────────
 
 // Shared across multiple sports
+
 const FINALS_TOP_4_LADDER_CONFIG: LadderPlacingCategory[] = [
   { label: "Finals", position: [1, 2, 3, 4] },
 ]
@@ -183,13 +67,45 @@ const FINALS_TOP_8_LADDER_CONFIG: LadderPlacingCategory[] = [
   { label: "Finals", position: [1, 2, 3, 4, 5, 6, 7, 8] },
 ]
 
+const TOP_8_SECOND_CHANCE_PLACING: LadderPlacingCategory[] = [
+  { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
+  { label: "Finals", position: [5, 6, 7, 8] },
+]
+
+const TOP_10_SECOND_CHANCE_PLACING: LadderPlacingCategory[] = [
+  { label: "Finals - Second Chance", position: [1, 2, 3, 4] },
+  { label: "Finals", position: [5, 6] },
+  { label: "Finals - Wildcard Round", position: [7, 8, 9, 10] },
+]
+
 // Cricket
+
+export const CRICKET_CATEGORIES: SportCategory[] = [
+  { id: "1347", name: "Australia", sport: SPORT.CRICKET },
+  { id: "1343", name: "World", sport: SPORT.CRICKET },
+  { id: "1350", name: "India", sport: SPORT.CRICKET },
+  { id: "1349", name: "UK", sport: SPORT.CRICKET },
+  { id: "1684", name: "West Indies", sport: SPORT.CRICKET },
+]
+
+export const CRICKET_LADDER_HEADINGS = [
+  "Team",
+  "P",
+  "W",
+  "D",
+  "NR",
+  "NRR",
+  "Pts",
+]
+
 const CRICKET_PLAYOFFS_TOP_4_LADDER_CONFIG: LadderPlacingCategory[] = [
   { label: "Playoffs", position: [1, 2, 3, 4] },
 ]
+
 const CRICKET_FINALS_TOP_2_LADDER_CONFIG: LadderPlacingCategory[] = [
   { label: "Semi-Finals", position: [1, 2] },
 ]
+
 const CRICKET_TOP_2_FINALS_LADDER_CONFIG: LadderConfig = {
   ladderGroup: [
     {
@@ -204,378 +120,6 @@ const CRICKET_TOP_2_FINALS_LADDER_CONFIG: LadderConfig = {
     },
   ],
 }
-
-// Rugby League
-const NRL_TOP_8_LADDER_CONFIG: LadderConfig = {
-  ladderGroup: [
-    {
-      placingCategories: TOP_8_SECOND_CHANCE_PLACING,
-    },
-  ],
-  playoffPictureConfig: RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG,
-}
-
-const RL_WORLD_CUP_LADDER_CONFIG: LadderPlacingCategory[] = [
-  { label: "Quarterfinals", position: [1, 2] },
-]
-
-// AFL
-const AFL_TOP_10_LADDER_CONFIG: LadderConfig = {
-  ladderGroup: [
-    {
-      placingCategories: TOP_10_SECOND_CHANCE_PLACING,
-    },
-  ],
-  playoffPictureConfig: {
-    rankingSystem: "points",
-    pointsPerWin: 4,
-    pointsPerDraw: 2,
-    totalSeasonGames: 23,
-    qualifyingPositions: 10,
-    structure: PlayoffPictureStructure.Top10,
-  },
-}
-
-const AFL_TOP_8_LADDER_CONFIG: LadderConfig = {
-  ladderGroup: [
-    {
-      placingCategories: TOP_8_SECOND_CHANCE_PLACING,
-    },
-  ],
-  playoffPictureConfig: {
-    rankingSystem: "points",
-    pointsPerWin: 4,
-    pointsPerDraw: 2,
-    totalSeasonGames: 23,
-    qualifyingPositions: 8,
-    structure: PlayoffPictureStructure.Top8,
-  },
-}
-
-// Football - European domestic (shared: CL 1-4, EL 5, Conf 6, Rel 18-20)
-const EUROPEAN_DOMESTIC_SHARED_LADDER: LadderPlacingCategory[] = [
-  { label: "Champions League", position: [1, 2, 3, 4] },
-  { label: "Europa League", position: [5] },
-  { label: "Conference League", position: [6] },
-  { label: "Relegation", position: [18, 19, 20], colour: "bg-red-500" },
-]
-
-const WSL_LADDER_CONFIG: LadderPlacingCategory[] = [
-  { label: "Champions League - League Phase", position: [1, 2] },
-  { label: "Champions League - Third Round Qualifiers", position: [3] },
-  { label: "Relegation Play-off", position: [12], colour: "bg-red-500" },
-]
-
-const CHAMPIONSHIP_LADDER_CONFIG: LadderPlacingCategory[] = [
-  { label: "Premier League Promotion", position: [1, 2] },
-  { label: "Promotion Playoffs", position: [3, 4, 5, 6] },
-  { label: "Relegation", position: [22, 23, 24], colour: "bg-red-500" },
-]
-
-const FIFA_WORLD_CUP_LADDER_CONFIG: LadderConfig = {
-  ladderGroup: [
-    {
-      label: "Groups",
-      groupFilter: (tableName) => tableName.includes("Group"),
-      placingCategories: [
-        { label: "Round of 32", position: [1, 2] },
-        {
-          label: "Possible Round of 32 - Best 8/12 3rd placed teams",
-          position: [3],
-        },
-      ],
-    },
-    {
-      label: "Third Place Teams",
-      groupFilter: (tableName) => !tableName.includes("Group"),
-      placingCategories: [
-        { label: "Round of 32", position: [1, 2, 3, 4, 5, 6, 7, 8] },
-      ],
-    },
-  ],
-}
-
-const UEFA_24_TEAM_LADDER_CONFIG: LadderPlacingCategory[] = [
-  { label: "Round of 16 (seeded)", position: [1, 2, 3, 4, 5, 6, 7, 8] },
-  {
-    label: "Knockout Playoffs (seeded)",
-    position: [9, 10, 11, 12, 13, 14, 15, 16],
-  },
-  {
-    label: "Knockout Playoffs (unseeded)",
-    position: [17, 18, 19, 20, 21, 22, 23, 24],
-  },
-]
-
-const UEFA_WOMENS_CL_LADDER_CONFIG: LadderPlacingCategory[] = [
-  { label: "Quarter Finals (seeded)", position: [1, 2, 3, 4] },
-  { label: "Knockout Playoffs (seeded)", position: [5, 6, 7, 8] },
-  { label: "Knockout Playoffs (unseeded)", position: [9, 10, 11, 12] },
-]
-
-const MLS_LADDER_CONFIG: LadderPlacingCategory[] = [
-  { label: "CONCACAF Champions Cup", position: [1] },
-  { label: "Playoffs", position: [2, 3, 4, 5, 6, 7] },
-  { label: "Wild Card", position: [8, 9] },
-]
-
-const NWSL_LADDER_CONFIG: LadderPlacingCategory[] = [
-  { label: "CONCACAF Champions Cup", position: [1, 2] },
-  { label: "Playoffs", position: [3, 4, 5, 6, 7, 8] },
-]
-
-const LIGUE_1_LADDER_CONFIG: LadderPlacingCategory[] = [
-  { label: "Champions League", position: [1, 2, 3] },
-  { label: "Champions League - Third Round Qualifiers", position: [4] },
-  { label: "Europa League", position: [5] },
-  { label: "Conference League", position: [6] },
-  { label: "Relegation Playoffs", position: [16], colour: "bg-red-300" },
-  { label: "Relegation", position: [17, 18], colour: "bg-red-500" },
-]
-
-const BUNDESLIGA_LADDER_CONFIG: LadderPlacingCategory[] = [
-  { label: "Champions League", position: [1, 2, 3, 4] },
-  { label: "Europa League", position: [5] },
-  { label: "Conference League", position: [6] },
-  {
-    label: "Relegation Playoffs",
-    position: [16],
-    colour: "bg-red-300",
-  },
-  { label: "Relegation", position: [17, 18], colour: "bg-red-500" },
-]
-
-// NFL
-const NFL_2020_LADDER_CONFIG: LadderConfig = {
-  ladderGroup: [
-    { groupFilter: (tableName) => tableName.includes("AFC"), label: "AFC" },
-    { groupFilter: (tableName) => tableName.includes("NFC"), label: "NFC" },
-    {
-      groupFilter: (tableName) =>
-        tableName.includes("NFL") &&
-        !tableName.includes("AFC") &&
-        !tableName.includes("NFC"),
-      label: "NFL",
-    },
-  ],
-  playoffPictureConfig: {
-    rankingSystem: "percentage",
-    totalSeasonGames: 17,
-    qualifyingPositions: 7,
-    structure: PlayoffPictureStructure.NFL,
-  },
-}
-
-// NBA
-const NBA_2021_LADDER_CONFIG: LadderConfig = {
-  ladderGroup: [
-    {
-      groupFilter: (tableName) => tableName?.includes("Division"),
-      label: "Division",
-    },
-    {
-      groupFilter: (tableName) =>
-        tableName === "Western Conference" ||
-        tableName === "Eastern Conference",
-      label: "Conference",
-    },
-    {
-      groupFilter: (tableName) => tableName.includes("NBA"),
-      label: "League",
-    },
-  ],
-  playoffPictureConfig: {
-    rankingSystem: "percentage",
-    totalSeasonGames: 82,
-    qualifyingPositions: 10,
-    structure: PlayoffPictureStructure.NBA,
-  },
-}
-
-// NHL
-const NHL_2014_LADDER_CONFIG: LadderConfig = {
-  ladderGroup: [
-    {
-      groupFilter: (tableName) => tableName?.includes("Division"),
-      label: "Division",
-    },
-    {
-      groupFilter: (tableName) =>
-        tableName === "Western Conference" ||
-        tableName === "Eastern Conference",
-      label: "Conference",
-    },
-    {
-      groupFilter: (tableName) => tableName.includes("NHL"),
-      label: "League",
-    },
-  ],
-  playoffPictureConfig: {
-    rankingSystem: "points",
-    pointsPerWin: 2,
-    pointsPerDraw: 1,
-    totalSeasonGames: 82,
-    qualifyingPositions: 8,
-    structure: PlayoffPictureStructure.NHL,
-  },
-}
-
-// MLB
-const MLB_2022_LADDER_CONFIG: LadderConfig = {
-  ladderGroup: [
-    {
-      groupFilter: (tableName) =>
-        tableName.includes("West") ||
-        tableName.includes("East") ||
-        tableName.includes("Central"),
-      label: "Division",
-    },
-    {
-      groupFilter: (tableName) =>
-        tableName === "American League" || tableName === "National League",
-      label: "Conference",
-    },
-    {
-      groupFilter: (tableName) => tableName.includes("MLB"),
-      label: "League",
-    },
-  ],
-  playoffPictureConfig: {
-    rankingSystem: "percentage",
-    totalSeasonGames: 162,
-    qualifyingPositions: 6,
-    structure: PlayoffPictureStructure.MLB,
-  },
-}
-
-// PGA
-const PGA_2013_LADDER_CONFIG: LadderConfig = {
-  ladderGroup: [
-    {
-      placingCategories: [
-        {
-          label: "TOUR Championship",
-          position: Array.from({ length: 30 }, (_, i) => i + 1),
-        },
-        {
-          label: "BMW Championship",
-          position: Array.from({ length: 20 }, (_, i) => i + 31),
-        },
-        {
-          label: "St. Jude Championship",
-          position: Array.from({ length: 20 }, (_, i) => i + 51),
-        },
-        {
-          label: "Full TOUR Card",
-          position: Array.from({ length: 30 }, (_, i) => i + 71),
-        },
-      ],
-      headings: GOLF_FEDEX_HEADINGS,
-    },
-  ],
-}
-
-export const NRL_TEAMS_NAME_LOGO = [
-  "Brisbane Broncos",
-  "Canberra Raiders",
-  "Canterbury Bulldogs",
-  "Cronulla Sharks",
-  "Dolphins",
-  "Gold Coast Titans",
-  "Manly Sea Eagles",
-  "Melbourne Storm",
-  "Newcastle Knights",
-  "New Zealand Warriors",
-  "North Queensland Cowboys",
-  "Parramatta Eels",
-  "Penrith Panthers",
-  "South Sydney Rabbitohs",
-  "St. George Illawarra Dragons",
-  "Sydney Roosters",
-  "Wests Tigers",
-].map((team) => ({
-  name: team,
-  img: resolveSportImage(team),
-}))
-
-export const AFL_TEAM_NAME_LOGO = [
-  "Adelaide Crows",
-  "Brisbane Lions",
-  "Carlton Blues",
-  "Collingwood Magpies",
-  "Essendon Bombers",
-  "Fremantle Dockers",
-  "Geelong Cats",
-  "Gold Coast Suns",
-  "GWS Giants",
-  "Hawthorn Hawks",
-  "Melbourne Demons",
-  "North Melbourne",
-  "Port Adelaide Power",
-  "Richmond Tigers",
-  "St Kilda Saints",
-  "Sydney Swans",
-  "West Coast Eagles",
-  "Western Bulldogs",
-].map((team) => ({
-  name: team,
-  img: resolveSportImage(team),
-}))
-
-export const NFL_TEAM_NAME_LOGO = [
-  "Arizona Cardinals",
-  "Atlanta Falcons",
-  "Baltimore Ravens",
-  "Buffalo Bills",
-  "Carolina Panthers",
-  "Chicago Bears",
-  "Cincinnati Bengals",
-  "Cleveland Browns",
-  "Dallas Cowboys",
-  "Denver Broncos",
-  "Detroit Lions",
-  "Green Bay Packers",
-  "Houston Texans",
-  "Indianapolis Colts",
-  "Jacksonville Jaguars",
-  "Kansas City Chiefs",
-  "Las Vegas Raiders",
-  "Los Angeles Chargers",
-  "Los Angeles Rams",
-  "Miami Dolphins",
-  "Minnesota Vikings",
-  "New England Patriots",
-  "New Orleans Saints",
-  "New York Giants",
-  "New York Jets",
-  "Philadelphia Eagles",
-  "Pittsburgh Steelers",
-  "San Francisco 49ers",
-  "Seattle Seahawks",
-  "Tampa Bay Buccaneers",
-  "Tennessee Titans",
-  "Washington Commanders",
-].map((team) => ({
-  name: team,
-  img: resolveSportImage(team),
-}))
-
-export const SUPER_RUGBY_TEAMS_NAME_LOGO = [
-  "Queensland Reds",
-  "NSW Waratahs",
-  "Brumbies",
-  "Western Force",
-  "Fijian Drua",
-  "Moana Pasifika",
-  "Gallagher Chiefs",
-  "Hurricanes",
-  "Blues",
-  "Highlanders",
-  "Crusaders",
-].map((team) => ({
-  name: team,
-  img: resolveSportImage(team),
-}))
 
 export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
   // {
@@ -832,7 +376,7 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const CRICKET_LEAGUES_CLIENT = stripLeagueSeasonConfig(CRICKET_LEAGUES)
+// Motorsport
 
 export const MOTORSPORT_SESSION_STANDINGS_HEADINGS = [
   "Driver",
@@ -842,6 +386,7 @@ export const MOTORSPORT_SESSION_STANDINGS_HEADINGS = [
 ]
 
 export const MOTORSPORT_DRIVER_STANDINGS_HEADINGS = ["Driver", "Pts", "Wins"]
+
 export const MOTORSPORT_CONSTRUCTOR_STANDINGS_HEADINGS = ["Constructor", "Pts"]
 
 const MOTORSPORT_LADDER_CONFIG: LadderConfig = {
@@ -875,8 +420,11 @@ const MOTORSPORT_LADDER_CONFIG: LadderConfig = {
 }
 
 const F1_SESSION_LENGTH = 1
+
 const F1_RACE_LENGTH = 2
+
 const SUPERCARS_SESSION_LENGTH = 8
+
 const MOTOGP_SESSION_LENGTH = 1
 
 const F1_TV_GUIDE: TVConfig = {
@@ -974,10 +522,42 @@ export const MOTORSPORT_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const MOTORSPORT_LEAGUES_CLIENT =
-  stripLeagueSeasonConfig(MOTORSPORT_LEAGUES)
+// Golf
+
+export const GOLF_FEDEX_HEADINGS = ["Player", "Total", "Behind"]
+
+export const GOLF_OWGR_HEADINGS = ["Player", "Total", "Prev"]
+
+export const GOLF_LEADERBOARD_HEADINGS = ["Player", "Total", "Thru", "Rnd"]
+
+const PGA_2013_LADDER_CONFIG: LadderConfig = {
+  ladderGroup: [
+    {
+      placingCategories: [
+        {
+          label: "TOUR Championship",
+          position: Array.from({ length: 30 }, (_, i) => i + 1),
+        },
+        {
+          label: "BMW Championship",
+          position: Array.from({ length: 20 }, (_, i) => i + 31),
+        },
+        {
+          label: "St. Jude Championship",
+          position: Array.from({ length: 20 }, (_, i) => i + 51),
+        },
+        {
+          label: "Full TOUR Card",
+          position: Array.from({ length: 30 }, (_, i) => i + 71),
+        },
+      ],
+      headings: GOLF_FEDEX_HEADINGS,
+    },
+  ],
+}
 
 const GOLF_BROADCAST_LENGTH = 8
+
 const KAYO_GOLF_TV_GUIDE: TVConfig = {
   channels: [tvGuideConfigCreate(TVChannel.KAYO, 0, GOLF_BROADCAST_LENGTH)],
 }
@@ -1113,7 +693,67 @@ export const GOLF_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const GOLF_LEAGUES_CLIENT = stripLeagueSeasonConfig(GOLF_LEAGUES)
+// Rugby League
+
+export const RUGBY_LEAGUE_LADDER_HEADINGS = [
+  "Team",
+  "P",
+  "W",
+  "D",
+  "Diff",
+  "Pts",
+]
+
+const RUGBY_LEAGUE_MATCH_LENGTH = 1.75 // in hours, used for TV guide end time estimation
+
+export const RUGBY_LEAGUE_CATEGORIES: SportCategory[] = [
+  { id: "83", name: "All", sport: SPORT.RUGBY_LEAGUE },
+]
+
+const RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG: PlayoffPictureConfig = {
+  rankingSystem: "points",
+  pointsPerWin: 2,
+  pointsPerDraw: 1,
+  totalSeasonGames: 24,
+  qualifyingPositions: 8,
+  structure: PlayoffPictureStructure.Top8,
+}
+
+const NRL_TOP_8_LADDER_CONFIG: LadderConfig = {
+  ladderGroup: [
+    {
+      placingCategories: TOP_8_SECOND_CHANCE_PLACING,
+    },
+  ],
+  playoffPictureConfig: RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG,
+}
+
+const RL_WORLD_CUP_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Quarterfinals", position: [1, 2] },
+]
+
+export const NRL_TEAMS_NAME_LOGO = [
+  "Brisbane Broncos",
+  "Canberra Raiders",
+  "Canterbury Bulldogs",
+  "Cronulla Sharks",
+  "Dolphins",
+  "Gold Coast Titans",
+  "Manly Sea Eagles",
+  "Melbourne Storm",
+  "Newcastle Knights",
+  "New Zealand Warriors",
+  "North Queensland Cowboys",
+  "Parramatta Eels",
+  "Penrith Panthers",
+  "South Sydney Rabbitohs",
+  "St. George Illawarra Dragons",
+  "Sydney Roosters",
+  "Wests Tigers",
+].map((team) => ({
+  name: team,
+  img: resolveSportImage(team),
+}))
 
 const NRL_TV_GUIDE: TVConfig = {
   channels: [
@@ -1461,8 +1101,71 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const RUGBY_LEAGUE_LEAGUES_CLIENT =
-  stripLeagueSeasonConfig(RUGBY_LEAGUE_LEAGUES)
+// Aussie Rules
+
+export const AUSSIE_RULES_LADDER_HEADINGS = ["Team", "P", "W", "D", "%", "Pts"]
+
+const AUSSIE_RULES_MATCH_LENGTH = 2.75 // in hours, used for TV guide end time estimation
+
+export const AUSSIE_RULES_CATEGORIES: SportCategory[] = [
+  { id: "87", name: "All", sport: SPORT.AUSSIE_RULES },
+]
+
+const AFL_TOP_10_LADDER_CONFIG: LadderConfig = {
+  ladderGroup: [
+    {
+      placingCategories: TOP_10_SECOND_CHANCE_PLACING,
+    },
+  ],
+  playoffPictureConfig: {
+    rankingSystem: "points",
+    pointsPerWin: 4,
+    pointsPerDraw: 2,
+    totalSeasonGames: 23,
+    qualifyingPositions: 10,
+    structure: PlayoffPictureStructure.Top10,
+  },
+}
+
+const AFL_TOP_8_LADDER_CONFIG: LadderConfig = {
+  ladderGroup: [
+    {
+      placingCategories: TOP_8_SECOND_CHANCE_PLACING,
+    },
+  ],
+  playoffPictureConfig: {
+    rankingSystem: "points",
+    pointsPerWin: 4,
+    pointsPerDraw: 2,
+    totalSeasonGames: 23,
+    qualifyingPositions: 8,
+    structure: PlayoffPictureStructure.Top8,
+  },
+}
+
+export const AFL_TEAM_NAME_LOGO = [
+  "Adelaide Crows",
+  "Brisbane Lions",
+  "Carlton Blues",
+  "Collingwood Magpies",
+  "Essendon Bombers",
+  "Fremantle Dockers",
+  "Geelong Cats",
+  "Gold Coast Suns",
+  "GWS Giants",
+  "Hawthorn Hawks",
+  "Melbourne Demons",
+  "North Melbourne",
+  "Port Adelaide Power",
+  "Richmond Tigers",
+  "St Kilda Saints",
+  "Sydney Swans",
+  "West Coast Eagles",
+  "Western Bulldogs",
+].map((team) => ({
+  name: team,
+  img: resolveSportImage(team),
+}))
 
 const AFL_TV_GUIDE: TVConfig = {
   channels: [
@@ -1737,8 +1440,73 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const AUSSIE_RULES_LEAGUES_CLIENT =
-  stripLeagueSeasonConfig(AUSSIE_RULES_LEAGUES)
+// American Football
+
+export const AMERICAN_FOOTBALL_MATCH_LENGTH = 4 // in hours, used for TV guide end time estimation
+
+export const AMERICAN_FOOTBALL_CATEGORIES: SportCategory[] = [
+  { id: "1370", name: "USA", sport: SPORT.AMERICAN_FOOTBALL },
+]
+
+export const AMERICAN_FOOTBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "D"]
+
+const NFL_2020_LADDER_CONFIG: LadderConfig = {
+  ladderGroup: [
+    { groupFilter: (tableName) => tableName.includes("AFC"), label: "AFC" },
+    { groupFilter: (tableName) => tableName.includes("NFC"), label: "NFC" },
+    {
+      groupFilter: (tableName) =>
+        tableName.includes("NFL") &&
+        !tableName.includes("AFC") &&
+        !tableName.includes("NFC"),
+      label: "NFL",
+    },
+  ],
+  playoffPictureConfig: {
+    rankingSystem: "percentage",
+    totalSeasonGames: 17,
+    qualifyingPositions: 7,
+    structure: PlayoffPictureStructure.NFL,
+  },
+}
+
+export const NFL_TEAM_NAME_LOGO = [
+  "Arizona Cardinals",
+  "Atlanta Falcons",
+  "Baltimore Ravens",
+  "Buffalo Bills",
+  "Carolina Panthers",
+  "Chicago Bears",
+  "Cincinnati Bengals",
+  "Cleveland Browns",
+  "Dallas Cowboys",
+  "Denver Broncos",
+  "Detroit Lions",
+  "Green Bay Packers",
+  "Houston Texans",
+  "Indianapolis Colts",
+  "Jacksonville Jaguars",
+  "Kansas City Chiefs",
+  "Las Vegas Raiders",
+  "Los Angeles Chargers",
+  "Los Angeles Rams",
+  "Miami Dolphins",
+  "Minnesota Vikings",
+  "New England Patriots",
+  "New Orleans Saints",
+  "New York Giants",
+  "New York Jets",
+  "Philadelphia Eagles",
+  "Pittsburgh Steelers",
+  "San Francisco 49ers",
+  "Seattle Seahawks",
+  "Tampa Bay Buccaneers",
+  "Tennessee Titans",
+  "Washington Commanders",
+].map((team) => ({
+  name: team,
+  img: resolveSportImage(team),
+}))
 
 const NFL_TV_GUIDE: TVConfig = {
   channels: [
@@ -1755,6 +1523,7 @@ const NFL_TV_GUIDE: TVConfig = {
     ),
   ],
 }
+
 export const AMERICAN_FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "NFL",
@@ -1825,9 +1594,115 @@ export const AMERICAN_FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const AMERICAN_FOOTBALL_LEAGUES_CLIENT = stripLeagueSeasonConfig(
-  AMERICAN_FOOTBALL_LEAGUES,
-)
+// Football
+
+export const FOOTBALL_CATEGORIES: SportCategory[] = [
+  { id: "34", name: "Australia", sport: SPORT.FOOTBALL },
+  { id: "1468", name: "World", sport: SPORT.FOOTBALL },
+  { id: "1467", name: "Asia", sport: SPORT.FOOTBALL },
+  { id: "1465", name: "Europe", sport: SPORT.FOOTBALL },
+  { id: "1", name: "England", sport: SPORT.FOOTBALL },
+  // { id: "1470", name: "South America", sport: SPORT.FOOTBALL },
+  // { id: "1466", name: "Africa", sport: SPORT.FOOTBALL },
+  // { id: "1469", name: "North America", sport: SPORT.FOOTBALL },
+  // { id: "1471", name: "Oceania", sport: SPORT.FOOTBALL },
+]
+
+export const FOOTBALL_LADDER_HEADINGS = ["Team", "P", "W", "D", "Diff", "Pts"]
+
+export const FOOTBALL_MATCH_LENGTH = 2 // in hours, used for TV guide end time estimation
+
+const EUROPEAN_DOMESTIC_SHARED_LADDER: LadderPlacingCategory[] = [
+  { label: "Champions League", position: [1, 2, 3, 4] },
+  { label: "Europa League", position: [5] },
+  { label: "Conference League", position: [6] },
+  { label: "Relegation", position: [18, 19, 20], colour: "bg-red-500" },
+]
+
+const WSL_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Champions League - League Phase", position: [1, 2] },
+  { label: "Champions League - Third Round Qualifiers", position: [3] },
+  { label: "Relegation Play-off", position: [12], colour: "bg-red-500" },
+]
+
+const CHAMPIONSHIP_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Premier League Promotion", position: [1, 2] },
+  { label: "Promotion Playoffs", position: [3, 4, 5, 6] },
+  { label: "Relegation", position: [22, 23, 24], colour: "bg-red-500" },
+]
+
+const FIFA_WORLD_CUP_LADDER_CONFIG: LadderConfig = {
+  ladderGroup: [
+    {
+      label: "Groups",
+      groupFilter: (tableName) => tableName.includes("Group"),
+      placingCategories: [
+        { label: "Round of 32", position: [1, 2] },
+        {
+          label: "Possible Round of 32 - Best 8/12 3rd placed teams",
+          position: [3],
+        },
+      ],
+    },
+    {
+      label: "Third Place Teams",
+      groupFilter: (tableName) => !tableName.includes("Group"),
+      placingCategories: [
+        { label: "Round of 32", position: [1, 2, 3, 4, 5, 6, 7, 8] },
+      ],
+    },
+  ],
+}
+
+const UEFA_24_TEAM_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Round of 16 (seeded)", position: [1, 2, 3, 4, 5, 6, 7, 8] },
+  {
+    label: "Knockout Playoffs (seeded)",
+    position: [9, 10, 11, 12, 13, 14, 15, 16],
+  },
+  {
+    label: "Knockout Playoffs (unseeded)",
+    position: [17, 18, 19, 20, 21, 22, 23, 24],
+  },
+]
+
+const UEFA_WOMENS_CL_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Quarter Finals (seeded)", position: [1, 2, 3, 4] },
+  { label: "Knockout Playoffs (seeded)", position: [5, 6, 7, 8] },
+  { label: "Knockout Playoffs (unseeded)", position: [9, 10, 11, 12] },
+]
+
+const MLS_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "CONCACAF Champions Cup", position: [1] },
+  { label: "Playoffs", position: [2, 3, 4, 5, 6, 7] },
+  { label: "Wild Card", position: [8, 9] },
+]
+
+const NWSL_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "CONCACAF Champions Cup", position: [1, 2] },
+  { label: "Playoffs", position: [3, 4, 5, 6, 7, 8] },
+]
+
+const LIGUE_1_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Champions League", position: [1, 2, 3] },
+  { label: "Champions League - Third Round Qualifiers", position: [4] },
+  { label: "Europa League", position: [5] },
+  { label: "Conference League", position: [6] },
+  { label: "Relegation Playoffs", position: [16], colour: "bg-red-300" },
+  { label: "Relegation", position: [17, 18], colour: "bg-red-500" },
+]
+
+const BUNDESLIGA_LADDER_CONFIG: LadderPlacingCategory[] = [
+  { label: "Champions League", position: [1, 2, 3, 4] },
+  { label: "Europa League", position: [5] },
+  { label: "Conference League", position: [6] },
+  {
+    label: "Relegation Playoffs",
+    position: [16],
+    colour: "bg-red-300",
+  },
+  { label: "Relegation", position: [17, 18], colour: "bg-red-500" },
+]
 
 const A_LEAGUE_TV_GUIDE: TVConfig = {
   channels: [
@@ -2582,7 +2457,44 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const FOOTBALL_LEAGUES_CLIENT = stripLeagueSeasonConfig(FOOTBALL_LEAGUES)
+// Baseball
+
+export const BASEBALL_MATCH_LENGTH = 3 // in hours, used for TV guide end time estimation
+
+export const BASEBALL_CATEGORIES: SportCategory[] = [
+  { id: "1701", name: "Australia", sport: SPORT.BASEBALL },
+  { id: "1543", name: "World", sport: SPORT.BASEBALL },
+  { id: "1374", name: "USA", sport: SPORT.BASEBALL },
+]
+
+export const BASEBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "PCT"]
+
+const MLB_2022_LADDER_CONFIG: LadderConfig = {
+  ladderGroup: [
+    {
+      groupFilter: (tableName) =>
+        tableName.includes("West") ||
+        tableName.includes("East") ||
+        tableName.includes("Central"),
+      label: "Division",
+    },
+    {
+      groupFilter: (tableName) =>
+        tableName === "American League" || tableName === "National League",
+      label: "Conference",
+    },
+    {
+      groupFilter: (tableName) => tableName.includes("MLB"),
+      label: "League",
+    },
+  ],
+  playoffPictureConfig: {
+    rankingSystem: "percentage",
+    totalSeasonGames: 162,
+    qualifyingPositions: 6,
+    structure: PlayoffPictureStructure.MLB,
+  },
+}
 
 const MLB_TV_GUIDE: TVConfig = {
   channels: [
@@ -2646,7 +2558,42 @@ export const BASEBALL_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const BASEBALL_LEAGUES_CLIENT = stripLeagueSeasonConfig(BASEBALL_LEAGUES)
+// Basketball
+
+export const BASKETBALL_MATCH_LENGTH = 3 // in hours, used for TV guide end time estimation
+
+export const BASKETBALL_CATEGORIES: SportCategory[] = [
+  { id: "113", name: "Australia", sport: SPORT.BASKETBALL },
+  { id: "103", name: "International", sport: SPORT.BASKETBALL },
+  { id: "15", name: "USA", sport: SPORT.BASKETBALL },
+]
+
+export const BASKETBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "PCT"]
+
+const NBA_2021_LADDER_CONFIG: LadderConfig = {
+  ladderGroup: [
+    {
+      groupFilter: (tableName) => tableName?.includes("Division"),
+      label: "Division",
+    },
+    {
+      groupFilter: (tableName) =>
+        tableName === "Western Conference" ||
+        tableName === "Eastern Conference",
+      label: "Conference",
+    },
+    {
+      groupFilter: (tableName) => tableName.includes("NBA"),
+      label: "League",
+    },
+  ],
+  playoffPictureConfig: {
+    rankingSystem: "percentage",
+    totalSeasonGames: 82,
+    qualifyingPositions: 10,
+    structure: PlayoffPictureStructure.NBA,
+  },
+}
 
 const NBA_TV_GUIDE: TVConfig = {
   channels: [
@@ -2790,10 +2737,10 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const BASKETBALL_LEAGUES_CLIENT =
-  stripLeagueSeasonConfig(BASKETBALL_LEAGUES)
+// Tennis
 
 const TENNIS_MATCH_LENGTH = 2 // hours
+
 const TENNIS_MAJORS_TV_GUIDE: TVConfig = {
   channels: [
     {
@@ -2955,10 +2902,12 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const TENNIS_LEAGUES_CLIENT = stripLeagueSeasonConfig(TENNIS_LEAGUES)
+// Darts
+
 export const DARTS_CATEGORIES: SportCategory[] = [
   { id: "104", name: "All", sport: SPORT.DARTS },
 ]
+
 export const DARTS_LEAGUES: LeagueSeasonConfig[] = [
   //Majors
   // The premier event of darts: large global field, sets format.
@@ -3100,7 +3049,39 @@ export const DARTS_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const DARTS_LEAGUES_CLIENT = stripLeagueSeasonConfig(DARTS_LEAGUES)
+// Rugby Union
+
+export const RUGBY_UNION_CATEGORIES: SportCategory[] = [
+  { id: "82", name: "Union", sport: SPORT.RUGBY_UNION },
+  { id: "1456", name: "Sevens", sport: SPORT.RUGBY_UNION },
+]
+
+export const RUGBY_UNION_LADDER_HEADINGS = [
+  "Team",
+  "P",
+  "W",
+  "D",
+  "Diff",
+  "BP",
+  "Pts",
+]
+
+export const SUPER_RUGBY_TEAMS_NAME_LOGO = [
+  "Queensland Reds",
+  "NSW Waratahs",
+  "Brumbies",
+  "Western Force",
+  "Fijian Drua",
+  "Moana Pasifika",
+  "Gallagher Chiefs",
+  "Hurricanes",
+  "Blues",
+  "Highlanders",
+  "Crusaders",
+].map((team) => ({
+  name: team,
+  img: resolveSportImage(team),
+}))
 
 export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
   {
@@ -3280,8 +3261,52 @@ export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const RUGBY_UNION_LEAGUES_CLIENT =
-  stripLeagueSeasonConfig(RUGBY_UNION_LEAGUES)
+// Ice Hockey
+
+export const ICE_HOCKEY_MATCH_LENGTH = 3 // in hours, used for TV guide end time estimation
+
+export const ICE_HOCKEY_CATEGORIES: SportCategory[] = [
+  { id: "1161", name: "Australia", sport: SPORT.ICE_HOCKEY },
+  { id: "56", name: "International", sport: SPORT.ICE_HOCKEY },
+  { id: "37", name: "USA", sport: SPORT.ICE_HOCKEY },
+]
+
+export const ICE_HOCKEY_LADDER_HEADINGS = [
+  "Team",
+  "P",
+  "W",
+  "OTL",
+  // "L",
+  "Diff",
+  "Pts",
+]
+
+const NHL_2014_LADDER_CONFIG: LadderConfig = {
+  ladderGroup: [
+    {
+      groupFilter: (tableName) => tableName?.includes("Division"),
+      label: "Division",
+    },
+    {
+      groupFilter: (tableName) =>
+        tableName === "Western Conference" ||
+        tableName === "Eastern Conference",
+      label: "Conference",
+    },
+    {
+      groupFilter: (tableName) => tableName.includes("NHL"),
+      label: "League",
+    },
+  ],
+  playoffPictureConfig: {
+    rankingSystem: "points",
+    pointsPerWin: 2,
+    pointsPerDraw: 1,
+    totalSeasonGames: 82,
+    qualifyingPositions: 8,
+    structure: PlayoffPictureStructure.NHL,
+  },
+}
 
 const NHL_TV_GUIDE: TVConfig = {
   channels: [
@@ -3377,8 +3402,7 @@ export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const ICE_HOCKEY_LEAGUES_CLIENT =
-  stripLeagueSeasonConfig(ICE_HOCKEY_LEAGUES)
+// Netball
 
 export const NETBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
@@ -3421,7 +3445,7 @@ export const NETBALL_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const NETBALL_LEAGUES_CLIENT = stripLeagueSeasonConfig(NETBALL_LEAGUES)
+// Cycling
 
 const TOUR_DE_FRANCE_LADDER_CONFIG: LadderConfig = {
   ladderGroup: [
@@ -3642,9 +3666,10 @@ export const CYCLING_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const CYCLING_LEAGUES_CLIENT = stripLeagueSeasonConfig(CYCLING_LEAGUES)
+// Surfing
 
 const SURFING_BROADCAST_LENGTH = 23
+
 export const SURFING_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "WSL",
@@ -3670,7 +3695,7 @@ export const SURFING_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const SURFING_LEAGUES_CLIENT = stripLeagueSeasonConfig(SURFING_LEAGUES)
+// Multi Sport
 
 export const MULTI_SPORT_LEAGUES: LeagueSeasonConfig[] = [
   {
@@ -3745,10 +3770,9 @@ export const MULTI_SPORT_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const MULTI_SPORT_LEAGUES_CLIENT =
-  stripLeagueSeasonConfig(MULTI_SPORT_LEAGUES)
+// Athletics
 
-export const ATHLETICS_SPORT_LEAGUES: LeagueSeasonConfig[] = [
+export const ATHLETICS_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "Diamond League",
     slug: "diamond",
@@ -3832,19 +3856,7 @@ export const ATHLETICS_SPORT_LEAGUES: LeagueSeasonConfig[] = [
   },
 ]
 
-export const ATHLETICS_LEAGUES_CLIENT = stripLeagueSeasonConfig(
-  ATHLETICS_SPORT_LEAGUES,
-)
-
-// Shared with the footer's reorder/hide settings and the "today" page's sport ordering.
-export type FooterLink = {
-  sport: string
-  link: string
-  img: string
-  altText: string
-}
-
-export const FOOTER_LINKS: FooterLink[] = [
+export const FOOTER_LINKS = [
   {
     sport: "abc news",
     link: "https://www.abc.net.au/news/sport",
@@ -3955,14 +3967,60 @@ export const FOOTER_LINKS: FooterLink[] = [
   },
   {
     sport: SPORT.MULTI_SPORT,
-    link: `/sports/${SPORT.MULTI_SPORT}/summer-olympics/${MULTI_SPORT_LEAGUES_CLIENT[0].seasons[0].slug}`,
+    link: `/sports/${SPORT.MULTI_SPORT}/summer-olympics/${MULTI_SPORT_LEAGUES[0].seasons[0].slug}`,
     img: "/olympic-rings.svg",
     altText: "Olympics",
   },
   {
     sport: SPORT.ATHLETICS,
-    link: `/sports/${SPORT.ATHLETICS}/${ATHLETICS_LEAGUES_CLIENT[0].slug}/${ATHLETICS_LEAGUES_CLIENT[0].seasons[0].slug}`,
+    link: `/sports/${SPORT.ATHLETICS}/${ATHLETICS_LEAGUES[0].slug}/${ATHLETICS_LEAGUES[0].seasons[0].slug}`,
     img: "/footer/athletics.svg",
     altText: "Athletics",
   },
 ]
+
+export const CRICKET_LEAGUES_CLIENT = stripLeagueSeasonConfig(CRICKET_LEAGUES)
+
+export const MOTORSPORT_LEAGUES_CLIENT =
+  stripLeagueSeasonConfig(MOTORSPORT_LEAGUES)
+
+export const GOLF_LEAGUES_CLIENT = stripLeagueSeasonConfig(GOLF_LEAGUES)
+
+export const RUGBY_LEAGUE_LEAGUES_CLIENT =
+  stripLeagueSeasonConfig(RUGBY_LEAGUE_LEAGUES)
+
+export const AUSSIE_RULES_LEAGUES_CLIENT =
+  stripLeagueSeasonConfig(AUSSIE_RULES_LEAGUES)
+
+export const AMERICAN_FOOTBALL_LEAGUES_CLIENT = stripLeagueSeasonConfig(
+  AMERICAN_FOOTBALL_LEAGUES,
+)
+
+export const FOOTBALL_LEAGUES_CLIENT = stripLeagueSeasonConfig(FOOTBALL_LEAGUES)
+
+export const BASEBALL_LEAGUES_CLIENT = stripLeagueSeasonConfig(BASEBALL_LEAGUES)
+
+export const BASKETBALL_LEAGUES_CLIENT =
+  stripLeagueSeasonConfig(BASKETBALL_LEAGUES)
+
+export const TENNIS_LEAGUES_CLIENT = stripLeagueSeasonConfig(TENNIS_LEAGUES)
+
+export const DARTS_LEAGUES_CLIENT = stripLeagueSeasonConfig(DARTS_LEAGUES)
+
+export const RUGBY_UNION_LEAGUES_CLIENT =
+  stripLeagueSeasonConfig(RUGBY_UNION_LEAGUES)
+
+export const ICE_HOCKEY_LEAGUES_CLIENT =
+  stripLeagueSeasonConfig(ICE_HOCKEY_LEAGUES)
+
+export const NETBALL_LEAGUES_CLIENT = stripLeagueSeasonConfig(NETBALL_LEAGUES)
+
+export const CYCLING_LEAGUES_CLIENT = stripLeagueSeasonConfig(CYCLING_LEAGUES)
+
+export const SURFING_LEAGUES_CLIENT = stripLeagueSeasonConfig(SURFING_LEAGUES)
+
+export const MULTI_SPORT_LEAGUES_CLIENT =
+  stripLeagueSeasonConfig(MULTI_SPORT_LEAGUES)
+
+export const ATHLETICS_LEAGUES_CLIENT =
+  stripLeagueSeasonConfig(ATHLETICS_LEAGUES)

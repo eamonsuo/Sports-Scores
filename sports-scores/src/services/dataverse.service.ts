@@ -1,9 +1,11 @@
 import {
   createDataverseMatchSummary,
   fetchDataverseMatchSummaries,
+  fetchDataverseSportEventSchedules,
   updateDataverseMatchSummary,
 } from "@/endpoints/dataverse.api"
-import { DataverseMatchSummary } from "@/types/dataverse"
+import { DataverseMatchSummary, DataverseSportEvent } from "@/types/dataverse"
+import { SportEvent } from "@/types/event-calendar"
 import {
   CardVariant,
   DeepPartial,
@@ -11,6 +13,7 @@ import {
   MatchSummary,
   SPORT,
   TeamScoreDetails,
+  TVChannel,
   TVDetails,
 } from "@/types/misc"
 import { TZDate } from "@date-fns/tz"
@@ -96,6 +99,44 @@ export function mapToMatchSummary(r: DataverseMatchSummary): MatchSummary {
   }
 }
 
+// --- Sport Event Schedule Utilities ---
+
+function mapToSportEvent(raw: DataverseSportEvent): SportEvent {
+  let tags: string[] | undefined
+  if (raw.ss_tags) {
+    try {
+      tags = JSON.parse(raw.ss_tags)
+    } catch {
+      tags = undefined
+    }
+  }
+
+  let tv: TVChannel[] | undefined
+  if (raw.ss_tv) {
+    try {
+      tv = JSON.parse(raw.ss_tv)
+    } catch {
+      tv = undefined
+    }
+  }
+
+  return {
+    id: raw.ss_sporteventscheduleid,
+    name: raw.ss_name ?? "",
+    sport: raw.ss_sport ?? "",
+    type: raw.ss_event_type === 100000001 ? "regular-season" : "major",
+    startDate: new Date(raw.ss_start_date!),
+    endDate: raw.ss_end_date ? new Date(raw.ss_end_date) : undefined,
+    dateDisplay: raw.ss_date_display ?? undefined,
+    imageUrl: raw.ss_image_url ?? undefined,
+    link: raw.ss_link ?? undefined,
+    location: raw.ss_location ?? undefined,
+    tags,
+    tv,
+    notes: raw.ss_notes ?? undefined,
+  }
+}
+
 export function mapToDataverseMatchSummary(
   m: MatchSummary,
 ): Omit<DataverseMatchSummary, "ss_matchsummaryid"> {
@@ -133,8 +174,16 @@ export function mapToDataverseMatchSummary(
 
 // --- MatchSummary Services ---
 
-export async function matchSummariesAll(): Promise<MatchSummary[] | null> {
-  const response = await fetchDataverseMatchSummaries()
+export async function matchSummaries(
+  filters?: string[],
+  select?: string,
+  orderBy?: string,
+): Promise<MatchSummary[] | null> {
+  const response = await fetchDataverseMatchSummaries(
+    filters?.join(" and "),
+    select,
+    orderBy,
+  )
   if (!response) return null
   return response.value.map(mapToMatchSummary)
 }
@@ -149,9 +198,7 @@ export async function matchSummariesByTournament(
     `ss_seasonid eq '${seasonId}'`,
     `ss_sport eq '${sport}'`,
   ]
-  const response = await fetchDataverseMatchSummaries(filters.join(" and "))
-  if (!response) return null
-  return response.value.map(mapToMatchSummary)
+  return matchSummaries(filters)
 }
 
 export async function matchSummariesBySportAndDay(
@@ -166,9 +213,7 @@ export async function matchSummariesBySportAndDay(
     `statecode eq 0`, // Only active records
     `((ss_startdate le '${dayEnd}' and ss_enddate ge '${dayStart}') or (ss_enddate eq null and ss_startdate ge '${dayStart}' and ss_startdate le '${dayEnd}'))`,
   ]
-  const response = await fetchDataverseMatchSummaries(filters.join(" and "))
-  if (!response) return null
-  return response.value.map(mapToMatchSummary)
+  return matchSummaries(filters)
 }
 
 export async function matchSummaryCreate(record: MatchSummary) {
@@ -184,4 +229,41 @@ export async function matchSummaryUpdate(
     Object.entries(mapped).filter(([, v]) => v !== null),
   ) as Partial<Omit<DataverseMatchSummary, "ss_matchsummaryid">>
   return updateDataverseMatchSummary(id, partial)
+}
+
+// --- Sport Event Schedule Services ---
+
+export async function sportEventSchedules(
+  filters?: string[],
+  select?: string,
+  orderBy?: string,
+): Promise<SportEvent[] | null> {
+  const response = await fetchDataverseSportEventSchedules(
+    filters?.join(" and "),
+    select,
+    orderBy,
+  )
+  if (!response) return null
+  return response.value.map(mapToSportEvent)
+}
+
+export async function sportEventSchedulesActive(): Promise<
+  SportEvent[] | null
+> {
+  return sportEventSchedules([`statecode eq 0`])
+}
+
+// Fetches all sport events from Dataverse and filters to upcoming/current
+export async function sportEventSchedulesUpcoming(
+  fromDate: Date = new Date(),
+): Promise<SportEvent[] | null> {
+  const response = await sportEventSchedules()
+  if (!response) return null
+
+  return response.filter((event) => {
+    const endDate = event.endDate
+      ? new Date(event.endDate)
+      : new Date(event.startDate)
+    return endDate >= fromDate
+  })
 }

@@ -2,15 +2,24 @@
 
 import { resolveSportImage } from "@/lib/imageMapping"
 import { SportEvent } from "@/types/event-calendar"
+import { TZDate } from "@date-fns/tz/date"
 import { format, isSameDay } from "date-fns"
 import Image from "next/image"
 import Link from "next/link"
+import { useEffect, useState } from "react"
 
 interface EventCardProps {
   event: SportEvent
 }
 
 export default function EventCard({ event }: EventCardProps) {
+  // Start on UTC to match the server render, then switch to the browser's zone post-mount
+  const [timezone, setTimezone] = useState("UTC")
+
+  useEffect(() => {
+    setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone)
+  }, [])
+
   const isOngoing = event.endDate
     ? new Date() >= new Date(event.startDate) &&
       new Date() <= new Date(event.endDate)
@@ -31,8 +40,8 @@ export default function EventCard({ event }: EventCardProps) {
       return event.dateDisplay
     }
 
-    const start = new Date(event.startDate)
-    const end = event.endDate ? new Date(event.endDate) : null
+    const start = new TZDate(event.startDate, timezone)
+    const end = event.endDate ? new TZDate(event.endDate, timezone) : null
 
     // If no end date or same day, show single date
     if (!end || isSameDay(start, end)) {
@@ -124,7 +133,7 @@ export default function EventCard({ event }: EventCardProps) {
 
           {/* Notes Section */}
           {event.notes && (
-            <div className="mb-2 whitespace-pre-line rounded bg-blue-50 px-2 py-1 text-xs text-blue-800 dark:bg-blue-900/30 dark:text-blue-200">
+            <div className="mb-2 rounded bg-blue-50 px-2 py-1 text-xs whitespace-pre-line text-blue-800 dark:bg-blue-900/30 dark:text-blue-200">
               {event.notes}
             </div>
           )}

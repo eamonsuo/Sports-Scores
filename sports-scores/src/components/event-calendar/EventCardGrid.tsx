@@ -1,7 +1,9 @@
 "use client"
 
 import { SportEvent } from "@/types/event-calendar"
+import { TZDate } from "@date-fns/tz/date"
 import { format } from "date-fns"
+import { useEffect, useState } from "react"
 import EventCard from "./EventCard"
 
 interface EventCardGridProps {
@@ -9,10 +11,20 @@ interface EventCardGridProps {
 }
 
 export default function EventCardGrid({ events }: EventCardGridProps) {
+  // Start on UTC to match the server render, then switch to the browser's zone post-mount
+  const [timezone, setTimezone] = useState("UTC")
+
+  useEffect(() => {
+    setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone)
+  }, [])
+
   // Group events by month - events only appear in their starting month
   const eventsByMonth = events.reduce(
     (acc, event) => {
-      const monthKey = format(event.startDate, "MMMM yyyy")
+      const monthKey = format(
+        new TZDate(event.startDate, timezone),
+        "MMMM yyyy",
+      )
 
       if (!acc[monthKey]) {
         acc[monthKey] = []
@@ -48,7 +60,7 @@ export default function EventCardGrid({ events }: EventCardGridProps) {
       {/* Current/Upcoming Events Section */}
       {currentEvents.length > 0 && (
         <div className="mb-6">
-          <h2 className="sticky top-0 z-10 mb-4 bg-white pb-2 pt-2 text-2xl font-bold text-gray-900 dark:bg-neutral-950 dark:text-neutral-200">
+          <h2 className="sticky top-0 z-10 mb-4 bg-white pt-2 pb-2 text-2xl font-bold text-gray-900 dark:bg-neutral-950 dark:text-neutral-200">
             Current Events
           </h2>
 
@@ -61,7 +73,7 @@ export default function EventCardGrid({ events }: EventCardGridProps) {
       )}
 
       <div className="sticky top-0 z-10 mb-6 bg-white dark:bg-neutral-950">
-        <h2 className="pb-2 pt-2 text-2xl font-bold text-gray-900 dark:text-neutral-200">
+        <h2 className="pt-2 pb-2 text-2xl font-bold text-gray-900 dark:text-neutral-200">
           Calendar of Events
         </h2>
         {/* Month Selector */}
@@ -70,10 +82,9 @@ export default function EventCardGrid({ events }: EventCardGridProps) {
             <div className="hideScroll flex gap-2 overflow-x-auto pb-2">
               {monthKeys.map((monthKey) => (
                 <button
-                  suppressHydrationWarning
                   key={monthKey}
                   onClick={() => scrollToMonth(monthKey)}
-                  className="whitespace-nowrap rounded-lg bg-white px-4 py-2 text-sm font-medium text-black shadow-xs transition-all hover:bg-gray-50 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
+                  className="rounded-lg bg-white px-4 py-2 text-sm font-medium whitespace-nowrap text-black shadow-xs transition-all hover:bg-gray-50 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
                 >
                   {monthKey}
                 </button>

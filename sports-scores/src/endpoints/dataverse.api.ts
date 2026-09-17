@@ -215,11 +215,17 @@ export async function updateDataverseMatchSummary(
 
 // --- SportEventSchedule table ---
 
-export async function fetchSportEvents(): Promise<
-  DataverseSportEvent[] | null
-> {
-  const result = await fetchDataverseApi<
-    DataverseResponse<DataverseSportEvent>
-  >("ss_sporteventschedules", "$orderby=ss_start_date asc")
-  return result?.value ?? null
+export async function fetchDataverseSportEventSchedules(
+  filters?: string,
+  select: string = "*",
+  orderBy: string = "ss_start_date asc",
+) {
+  const queryParams = []
+  if (select) queryParams.push(`$select=${select}`)
+  if (filters) queryParams.push(`$filter=${filters}`)
+  if (orderBy) queryParams.push(`$orderby=${orderBy}`)
+  return fetchDataverseApi<DataverseResponse<DataverseSportEvent>>(
+    "ss_sporteventschedules",
+    queryParams.join("&"),
+  )
 }
