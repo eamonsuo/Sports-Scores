@@ -118,6 +118,9 @@ export default function LeagueSeasonToggle({
   const defaultExcludedFromToday = leagues
     .filter((league) => league.excludeFromToday)
     .map((league) => league.slug)
+  const defaultHidden = leagues
+    .filter((league) => league.hidden)
+    .map((league) => league.slug)
   const {
     order,
     hidden,
@@ -130,6 +133,7 @@ export default function LeagueSeasonToggle({
     leagueOrderStorageKey(sport),
     defaultLeagueOrder,
     defaultExcludedFromToday,
+    defaultHidden,
   )
   const leaguesBySlug = new Map(leagues.map((league) => [league.slug, league]))
   const orderedLeagues = order

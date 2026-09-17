@@ -5,6 +5,11 @@ on:
     # Runs Wednesday at 2:30pm AEST
     - cron: "30 14 * * 3"
       timezone: "Australia/Brisbane"
+  # Triggered externally (e.g. from a Power Automate flow) with the same
+  # parameters as workflow_dispatch, passed via client_payload.
+  repository_dispatch:
+    types:
+      - bulk-upload-power-automate
   workflow_dispatch:
     inputs:
       mode:
@@ -238,7 +243,7 @@ env:
 jobs:
   # ---- Read the committed matrix JSON ----
   read-matrix:
-    if: ${{ github.event_name == 'schedule' || inputs.mode == 'regularLeagues' }}
+    if: ${{ github.event_name == 'schedule' || (github.event.client_payload.mode || inputs.mode || 'singleLeague') == 'regularLeagues' }}
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -277,13 +282,13 @@ jobs:
             "${{ matrix.leagueId }}" \
             "${{ matrix.seasonId }}" \
             "${{ matrix.sport }}" \
-            ${{ inputs.fetchMatches == 'all' && 'true' || 'false' }}
+            ${{ (github.event.client_payload.fetchMatches || inputs.fetchMatches) == 'all' && 'true' || 'false' }}
 
-  # ---- Runs a single tournament (manual only) ----
+  # ---- Runs a single tournament (manual or repository_dispatch) ----
   upload-single:
-    if: ${{ inputs.mode == 'singleLeague' }}
+    if: ${{ (github.event.client_payload.mode || inputs.mode || 'singleLeague') == 'singleLeague' }}
     runs-on: ubuntu-latest
-    name: Upload ${{ inputs.league }}
+    name: Upload ${{ github.event.client_payload.league || inputs.league }}
     defaults:
       run:
         working-directory: sports-scores
@@ -300,12 +305,12 @@ jobs:
 
       - name: Resolve league details
         id: resolve
-        run: npx tsx scripts/resolve-league.ts "${{ inputs.league }}" "${{ inputs.seasonId }}"
+        run: npx tsx scripts/resolve-league.ts "${{ github.event.client_payload.league || inputs.league }}" "${{ github.event.client_payload.seasonId || inputs.seasonId }}"
 
-      - name: Run bulk upload - ${{ inputs.league }}
+      - name: Run bulk upload - ${{ github.event.client_payload.league || inputs.league }}
         run: |
           npx tsx scripts/bulk-upload-events.ts \
             "${{ steps.resolve.outputs.leagueId }}" \
             "${{ steps.resolve.outputs.seasonId }}" \
             "${{ steps.resolve.outputs.sport }}" \
-            ${{ inputs.fetchMatches == 'all' && 'true' || 'false' }}
+            ${{ (github.event.client_payload.fetchMatches || inputs.fetchMatches) == 'all' && 'true' || 'false' }}

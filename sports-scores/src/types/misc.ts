@@ -150,6 +150,7 @@ export type LeagueSeasonConfig = {
     img: string
   }[]
   excludeFromToday?: boolean
+  hidden?: boolean
 }
 
 export type ClientLeagueSeasonConfig = Omit<LeagueSeasonConfig, "seasons"> & {

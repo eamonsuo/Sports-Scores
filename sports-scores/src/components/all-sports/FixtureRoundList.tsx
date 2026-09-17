@@ -20,7 +20,21 @@ export default function FixtureRoundList({
   data: FixtureRound[]
   curRound: string
 }) {
-  const roundLabels = data.map((item) => item.roundLabel)
+  const roundLabels: { groupLabel?: string; labels: string[] }[] = data.reduce(
+    (acc, item) => {
+      if (!acc.some((group) => group.groupLabel === item.sport)) {
+        acc.push({
+          groupLabel: item.sport,
+          labels: [item.roundLabel],
+        })
+      } else {
+        const group = acc.find((group) => group.groupLabel === item.sport)
+        group?.labels.push(item.roundLabel)
+      }
+      return acc
+    },
+    [] as { groupLabel?: string; labels: string[] }[],
+  )
 
   return (
     <ComponentList labels={roundLabels} curItem={curRound} showAllLabels={true}>

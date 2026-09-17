@@ -52,11 +52,9 @@ export default function OrderedFixtureRoundList({
   )
   const rank = new Map(order.map((id, index) => [id, index]))
   const isLeagueGrouping = groupBy === "leagueSlug"
-  // On the Today view, a league that's hidden from the league list or excluded from
-  // Today should both drop its matches.
-  const hiddenIds = new Set(
-    isLeagueGrouping ? [...hidden, ...excludedFromToday] : hidden,
-  )
+  // The hidden preference only controls the LeagueSeasonToggle dropdown's own list; Today
+  // views are governed solely by excludedFromToday.
+  const hiddenIds = new Set(isLeagueGrouping ? excludedFromToday : hidden)
 
   // Each sport's excludedFromToday preference lives under its own storageKey, so it's
   // read directly from localStorage rather than via useOrderPreference (can't call a hook
