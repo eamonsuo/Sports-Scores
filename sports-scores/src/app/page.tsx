@@ -1,15 +1,12 @@
 import EventsCalendarClient from "@/components/event-calendar/EventsCalendarClient"
-import { getUpcomingEvents } from "@/services/event-calendar.service"
+import { sportEventSchedulesActive } from "@/services/dataverse.service"
 
 export const revalidate = 3600
 
 export default async function Home() {
-  const adjustedDate = new Date()
-  adjustedDate.setDate(adjustedDate.getDate() - 3)
+  const upcomingEvents = await sportEventSchedulesActive()
 
-  const upcomingEvents = await getUpcomingEvents(adjustedDate)
-
-  if (upcomingEvents.length === 0) {
+  if (!upcomingEvents || upcomingEvents.length === 0) {
     throw new Error(
       "No sport events returned from Dataverse — preserving stale cache",
     )

@@ -138,10 +138,18 @@ function createSofascoreAdapter(
   return {
     async fetchMatches(leagueId, seasonId, allEvents) {
       if (allEvents) {
-        const [lastEvents, nextEvents] = await Promise.all([
-          fetchAllPages("last", fetchLast, leagueId, seasonId),
-          fetchAllPages("next", fetchNext, leagueId, seasonId),
-        ])
+        const lastEvents = await fetchAllPages(
+          "last",
+          fetchLast,
+          leagueId,
+          seasonId,
+        )
+        const nextEvents = await fetchAllPages(
+          "next",
+          fetchNext,
+          leagueId,
+          seasonId,
+        )
         return [...lastEvents, ...nextEvents].map(mapper)
       } else {
         console.log("Fetching latest events...")
