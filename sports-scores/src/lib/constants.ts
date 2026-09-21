@@ -79,15 +79,6 @@ const TOP_10_SECOND_CHANCE_PLACING: LadderPlacingCategory[] = [
 ]
 
 // Cricket
-
-export const CRICKET_CATEGORIES: SportCategory[] = [
-  { id: "1347", name: "Australia", sport: SPORT.CRICKET },
-  { id: "1343", name: "World", sport: SPORT.CRICKET },
-  { id: "1350", name: "India", sport: SPORT.CRICKET },
-  { id: "1349", name: "UK", sport: SPORT.CRICKET },
-  { id: "1684", name: "West Indies", sport: SPORT.CRICKET },
-]
-
 export const CRICKET_LADDER_HEADINGS = [
   "Team",
   "P",
@@ -120,6 +111,18 @@ const CRICKET_TOP_2_FINALS_LADDER_CONFIG: LadderConfig = {
     },
   ],
 }
+
+export const CRICKET_CATEGORIES: SportCategory[] = [
+  { id: "1347", name: "Australia", sport: SPORT.CRICKET },
+  { id: "1343", name: "World", sport: SPORT.CRICKET },
+  // { id: "1350", name: "India", sport: SPORT.CRICKET, excludeByDefault: true },
+  // { id: "1349", name: "UK", sport: SPORT.CRICKET, excludeByDefault: true },
+  // { id: "1684", name: "West Indies", sport: SPORT.CRICKET },
+  // { id: "1351", name: "USA", sport: SPORT.CRICKET },
+  // { id: "1352", name: "Pakistan", sport: SPORT.CRICKET },
+  // { id: "1354", name: "New Zealand", sport: SPORT.CRICKET },
+  // { id: "1355", name: "South Africa", sport: SPORT.CRICKET },
+]
 
 export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
   // {
@@ -706,10 +709,6 @@ export const RUGBY_LEAGUE_LADDER_HEADINGS = [
 
 const RUGBY_LEAGUE_MATCH_LENGTH = 1.75 // in hours, used for TV guide end time estimation
 
-export const RUGBY_LEAGUE_CATEGORIES: SportCategory[] = [
-  { id: "83", name: "All", sport: SPORT.RUGBY_LEAGUE },
-]
-
 const RUGBY_LEAGUE_TOP_8_PLAYOFF_CONFIG: PlayoffPictureConfig = {
   rankingSystem: "points",
   pointsPerWin: 2,
@@ -825,6 +824,10 @@ const QLD_CUP_TV_GUIDE: TVConfig = {
     },
   ],
 }
+
+export const RUGBY_LEAGUE_CATEGORIES: SportCategory[] = [
+  { id: "83", name: "All", sport: SPORT.RUGBY_LEAGUE, excludeByDefault: true },
+]
 
 export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
   {
@@ -1107,10 +1110,6 @@ export const AUSSIE_RULES_LADDER_HEADINGS = ["Team", "P", "W", "D", "%", "Pts"]
 
 const AUSSIE_RULES_MATCH_LENGTH = 2.75 // in hours, used for TV guide end time estimation
 
-export const AUSSIE_RULES_CATEGORIES: SportCategory[] = [
-  { id: "87", name: "All", sport: SPORT.AUSSIE_RULES },
-]
-
 const AFL_TOP_10_LADDER_CONFIG: LadderConfig = {
   ladderGroup: [
     {
@@ -1194,6 +1193,10 @@ const AFL_TV_GUIDE: TVConfig = {
     },
   ],
 }
+
+export const AUSSIE_RULES_CATEGORIES: SportCategory[] = [
+  { id: "87", name: "All", sport: SPORT.AUSSIE_RULES, excludeByDefault: true },
+]
 
 export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
   {
@@ -1444,10 +1447,6 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
 
 export const AMERICAN_FOOTBALL_MATCH_LENGTH = 4 // in hours, used for TV guide end time estimation
 
-export const AMERICAN_FOOTBALL_CATEGORIES: SportCategory[] = [
-  { id: "1370", name: "USA", sport: SPORT.AMERICAN_FOOTBALL },
-]
-
 export const AMERICAN_FOOTBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "D"]
 
 const NFL_2020_LADDER_CONFIG: LadderConfig = {
@@ -1524,6 +1523,15 @@ const NFL_TV_GUIDE: TVConfig = {
   ],
 }
 
+export const AMERICAN_FOOTBALL_CATEGORIES: SportCategory[] = [
+  {
+    id: "1370",
+    name: "USA",
+    sport: SPORT.AMERICAN_FOOTBALL,
+    excludeByDefault: true,
+  },
+]
+
 export const AMERICAN_FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "NFL",
@@ -1595,18 +1603,6 @@ export const AMERICAN_FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
 ]
 
 // Football
-
-export const FOOTBALL_CATEGORIES: SportCategory[] = [
-  { id: "34", name: "Australia", sport: SPORT.FOOTBALL },
-  { id: "1468", name: "World", sport: SPORT.FOOTBALL },
-  { id: "1467", name: "Asia", sport: SPORT.FOOTBALL },
-  { id: "1465", name: "Europe", sport: SPORT.FOOTBALL },
-  { id: "1", name: "England", sport: SPORT.FOOTBALL },
-  // { id: "1470", name: "South America", sport: SPORT.FOOTBALL },
-  // { id: "1466", name: "Africa", sport: SPORT.FOOTBALL },
-  // { id: "1469", name: "North America", sport: SPORT.FOOTBALL },
-  // { id: "1471", name: "Oceania", sport: SPORT.FOOTBALL },
-]
 
 export const FOOTBALL_LADDER_HEADINGS = ["Team", "P", "W", "D", "Diff", "Pts"]
 
@@ -1754,6 +1750,23 @@ const FIFA_WORLD_CUP_TV_GUIDE: TVConfig = {
     },
   ],
 }
+
+export const FOOTBALL_CATEGORIES: SportCategory[] = [
+  {
+    id: "34",
+    name: "Australia",
+    sport: SPORT.FOOTBALL,
+    excludeByDefault: true,
+  },
+  { id: "1468", name: "World", sport: SPORT.FOOTBALL },
+  { id: "1467", name: "Asia", sport: SPORT.FOOTBALL },
+  { id: "1465", name: "Europe", sport: SPORT.FOOTBALL },
+  { id: "1", name: "England", sport: SPORT.FOOTBALL, excludeByDefault: true },
+  // { id: "1470", name: "South America", sport: SPORT.FOOTBALL },
+  // { id: "1466", name: "Africa", sport: SPORT.FOOTBALL },
+  // { id: "1469", name: "North America", sport: SPORT.FOOTBALL },
+  // { id: "1471", name: "Oceania", sport: SPORT.FOOTBALL },
+]
 
 export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   //Australia - category 34
@@ -2461,12 +2474,6 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
 
 export const BASEBALL_MATCH_LENGTH = 3 // in hours, used for TV guide end time estimation
 
-export const BASEBALL_CATEGORIES: SportCategory[] = [
-  { id: "1701", name: "Australia", sport: SPORT.BASEBALL },
-  { id: "1543", name: "World", sport: SPORT.BASEBALL },
-  { id: "1374", name: "USA", sport: SPORT.BASEBALL },
-]
-
 export const BASEBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "PCT"]
 
 const MLB_2022_LADDER_CONFIG: LadderConfig = {
@@ -2502,6 +2509,12 @@ const MLB_TV_GUIDE: TVConfig = {
     // tvGuideConfigCreate(TVChannel.DISNEY_PLUS, 0, BASEBALL_MATCH_LENGTH),
   ],
 }
+
+export const BASEBALL_CATEGORIES: SportCategory[] = [
+  { id: "1701", name: "Australia", sport: SPORT.BASEBALL },
+  { id: "1543", name: "World", sport: SPORT.BASEBALL },
+  { id: "1374", name: "USA", sport: SPORT.BASEBALL, excludeByDefault: true },
+]
 
 export const BASEBALL_LEAGUES: LeagueSeasonConfig[] = [
   //Australia - category 34
@@ -2556,17 +2569,16 @@ export const BASEBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "11206",
     seasons: [{ name: "2024", slug: "65281" }],
   },
+  {
+    name: "MLB All Star Game",
+    slug: "19443",
+    seasons: [{ name: "2026", slug: "97026" }],
+  },
 ]
 
 // Basketball
 
 export const BASKETBALL_MATCH_LENGTH = 3 // in hours, used for TV guide end time estimation
-
-export const BASKETBALL_CATEGORIES: SportCategory[] = [
-  { id: "113", name: "Australia", sport: SPORT.BASKETBALL },
-  { id: "103", name: "International", sport: SPORT.BASKETBALL },
-  { id: "15", name: "USA", sport: SPORT.BASKETBALL },
-]
 
 export const BASKETBALL_LADDER_HEADINGS = ["Team", "P", "W", "L", "PCT"]
 
@@ -2601,6 +2613,12 @@ const NBA_TV_GUIDE: TVConfig = {
     tvGuideConfigCreate(TVChannel.DISNEY_PLUS, 0, BASKETBALL_MATCH_LENGTH),
   ],
 }
+
+export const BASKETBALL_CATEGORIES: SportCategory[] = [
+  { id: "113", name: "Australia", sport: SPORT.BASKETBALL },
+  { id: "103", name: "International", sport: SPORT.BASKETBALL },
+  { id: "15", name: "USA", sport: SPORT.BASKETBALL, excludeByDefault: true },
+]
 
 export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
@@ -2734,6 +2752,16 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "team/233139",
     seasons: [{ name: "Current", slug: "" }],
     icon: "https://r2.thesportsdb.com/images/media/team/badge/ubzenr1545867000.png",
+  },
+  {
+    name: "NBA All Star Game",
+    slug: "875",
+    seasons: [{ name: "2026", slug: "89489" }],
+  },
+  {
+    name: "WNBA All Star Game",
+    slug: "1329",
+    seasons: [{ name: "2026", slug: "98564" }],
   },
 ]
 
@@ -3051,11 +3079,6 @@ export const DARTS_LEAGUES: LeagueSeasonConfig[] = [
 
 // Rugby Union
 
-export const RUGBY_UNION_CATEGORIES: SportCategory[] = [
-  { id: "82", name: "Union", sport: SPORT.RUGBY_UNION },
-  { id: "1456", name: "Sevens", sport: SPORT.RUGBY_UNION },
-]
-
 export const RUGBY_UNION_LADDER_HEADINGS = [
   "Team",
   "P",
@@ -3082,6 +3105,11 @@ export const SUPER_RUGBY_TEAMS_NAME_LOGO = [
   name: team,
   img: resolveSportImage(team),
 }))
+
+export const RUGBY_UNION_CATEGORIES: SportCategory[] = [
+  { id: "82", name: "Union", sport: SPORT.RUGBY_UNION },
+  { id: "1456", name: "Sevens", sport: SPORT.RUGBY_UNION },
+]
 
 export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
   {
@@ -3265,12 +3293,6 @@ export const RUGBY_UNION_LEAGUES: LeagueSeasonConfig[] = [
 
 export const ICE_HOCKEY_MATCH_LENGTH = 3 // in hours, used for TV guide end time estimation
 
-export const ICE_HOCKEY_CATEGORIES: SportCategory[] = [
-  { id: "1161", name: "Australia", sport: SPORT.ICE_HOCKEY },
-  { id: "56", name: "International", sport: SPORT.ICE_HOCKEY },
-  { id: "37", name: "USA", sport: SPORT.ICE_HOCKEY },
-]
-
 export const ICE_HOCKEY_LADDER_HEADINGS = [
   "Team",
   "P",
@@ -3314,6 +3336,12 @@ const NHL_TV_GUIDE: TVConfig = {
     tvGuideConfigCreate(TVChannel.DISNEY_PLUS, 0, ICE_HOCKEY_MATCH_LENGTH),
   ],
 }
+
+export const ICE_HOCKEY_CATEGORIES: SportCategory[] = [
+  { id: "1161", name: "Australia", sport: SPORT.ICE_HOCKEY },
+  { id: "56", name: "International", sport: SPORT.ICE_HOCKEY },
+  { id: "37", name: "USA", sport: SPORT.ICE_HOCKEY, excludeByDefault: true },
+]
 
 export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
   {
@@ -3391,7 +3419,6 @@ export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
       "https://en.wikipedia.org/wiki/2026_IIHF_Women%27s_World_Championship_Division_II",
     seasons: [{ name: "2026", slug: "wiki" }],
   },
-
   {
     name: "Int. Friendly Games",
     slug: "873",
@@ -3399,6 +3426,11 @@ export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2026", slug: "87173" },
       { name: "2025", slug: "69568" },
     ],
+  },
+  {
+    name: "NHL All Star Game",
+    slug: "870",
+    seasons: [{ name: "2024", slug: "58148" }],
   },
 ]
 
@@ -3746,6 +3778,28 @@ export const MULTI_SPORT_LEAGUES: LeagueSeasonConfig[] = [
     ],
   },
   {
+    name: "Winter Olympics",
+    slug: "winter-olympics",
+    icon: "/olympic-rings.svg",
+    seasons: [
+      {
+        name: "2026",
+        slug: "wiki-2026",
+        externalURL: "https://en.wikipedia.org/wiki/2026_Winter_Olympics",
+      },
+      {
+        name: "2022",
+        slug: "wiki-2022",
+        externalURL: "https://en.wikipedia.org/wiki/2022_Winter_Olympics",
+      },
+      {
+        name: "2018",
+        slug: "wiki-2018",
+        externalURL: "https://en.wikipedia.org/wiki/2018_Winter_Olympics",
+      },
+    ],
+  },
+  {
     name: "Commonwealth Games",
     slug: "commonwealth-games",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/1suc6w1733648476.png",
@@ -3765,6 +3819,18 @@ export const MULTI_SPORT_LEAGUES: LeagueSeasonConfig[] = [
         name: "2018",
         slug: "wiki-2018",
         externalURL: "https://en.wikipedia.org/wiki/2018_Commonwealth_Games",
+      },
+    ],
+  },
+  {
+    name: "Asian Games",
+    slug: "asian-games",
+    icon: "https://upload.wikimedia.org/wikipedia/commons/1/19/Asian_Games_logo.svg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
+    seasons: [
+      {
+        name: "2026",
+        slug: "wiki-2026",
+        externalURL: "https://en.wikipedia.org/wiki/2026_Asian_Games",
       },
     ],
   },

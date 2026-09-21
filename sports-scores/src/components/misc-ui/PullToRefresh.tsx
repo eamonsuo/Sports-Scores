@@ -6,6 +6,8 @@ import { ReactNode, useEffect, useRef, useState } from "react"
 const PULL_THRESHOLD = 70 // px of pull needed to release into a refresh
 const MAX_PULL = 100 // visual cap so dragging doesn't feel infinite
 const RESISTANCE = 0.5 // rubber-band feel while dragging
+const DIRECTION_THRESHOLD = 8 // wait for enough movement to identify intent
+const VERTICAL_BIAS = 1.25 // downward movement must clearly beat horizontal movement
 
 const RING_SIZE = 24
 const RING_STROKE = 3
@@ -43,7 +45,11 @@ export default function PullToRefresh({
 }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const scrollParentRef = useRef<HTMLElement | null>(null)
+  const startX = useRef<number | null>(null)
   const startY = useRef<number | null>(null)
+  const gestureDirection = useRef<"pending" | "vertical" | "horizontal">(
+    "pending",
+  )
   const [pullDistance, setPullDistance] = useState(0)
   const [dragging, setDragging] = useState(false)
 
@@ -54,11 +60,33 @@ export default function PullToRefresh({
     if (!container) return
 
     function handleTouchMove(e: TouchEvent) {
-      if (startY.current === null) return
+      if (startX.current === null || startY.current === null) return
 
-      const delta = e.touches[0].clientY - startY.current
+      const deltaX = e.touches[0].clientX - startX.current
+      const deltaY = e.touches[0].clientY - startY.current
       const atTop = (scrollParentRef.current?.scrollTop ?? 0) <= 0
-      if (delta <= 0 || !atTop) {
+      if (deltaY <= 0 || !atTop) {
+        startX.current = null
+        startY.current = null
+        setDragging(false)
+        setPullDistance(0)
+        return
+      }
+
+      if (gestureDirection.current === "pending") {
+        const horizontalDistance = Math.abs(deltaX)
+        if (Math.max(horizontalDistance, deltaY) < DIRECTION_THRESHOLD) {
+          return
+        }
+
+        gestureDirection.current =
+          deltaY > horizontalDistance * VERTICAL_BIAS
+            ? "vertical"
+            : "horizontal"
+      }
+
+      if (gestureDirection.current === "horizontal") {
+        startX.current = null
         startY.current = null
         setDragging(false)
         setPullDistance(0)
@@ -66,7 +94,8 @@ export default function PullToRefresh({
       }
 
       e.preventDefault()
-      setPullDistance(Math.min(delta * RESISTANCE, MAX_PULL))
+      setDragging(true)
+      setPullDistance(Math.min(deltaY * RESISTANCE, MAX_PULL))
     }
 
     container.addEventListener("touchmove", handleTouchMove, {
@@ -82,13 +111,17 @@ export default function PullToRefresh({
     // cached once at mount can point at the wrong (non-scrolling) ancestor.
     scrollParentRef.current = getScrollParent(containerRef.current)
     const atTop = (scrollParentRef.current?.scrollTop ?? 0) <= 0
+    startX.current = atTop ? e.touches[0].clientX : null
     startY.current = atTop ? e.touches[0].clientY : null
-    setDragging(atTop)
+    gestureDirection.current = "pending"
+    setDragging(false)
   }
 
   function handleTouchEnd() {
     if (!refreshing && pullDistance >= PULL_THRESHOLD) onRefresh()
+    startX.current = null
     startY.current = null
+    gestureDirection.current = "pending"
     setDragging(false)
     setPullDistance(0)
   }

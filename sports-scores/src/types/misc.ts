@@ -115,6 +115,7 @@ export type SportCategory = {
   id: string
   name: string
   sport: SPORT
+  excludeByDefault?: boolean
 }
 
 export type TVChannelConfig = {

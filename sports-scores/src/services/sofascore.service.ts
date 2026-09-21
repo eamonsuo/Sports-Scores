@@ -148,18 +148,25 @@ export abstract class SofascoreSport implements SportService {
     const validLeagueIds = this.leagues
       // .filter((l) => !l.excludeFromToday)
       .map((l) => Number(l.slug))
-      .concat(this.categories.map((c) => Number(c.id)))
+      .filter((id) => !isNaN(id))
+
+    const validCategoryIds = this.categories
+      .filter((c) => !c.excludeByDefault)
+      .map((c) => Number(c.id))
+      .filter((id) => !isNaN(id))
 
     const timezone = date instanceof TZDate ? date.timeZone : "UTC"
 
     matches.events = matches.events
       .filter(
         (item) =>
-          (validLeagueIds.includes(item.tournament.category.id) ||
+          (validCategoryIds.includes(item.tournament.category.id) ||
             validLeagueIds.includes(
               item.tournament?.uniqueTournament?.id ?? -1,
             )) &&
-          item.status.type !== "canceled",
+          item.status.type !== "canceled" &&
+          !item.tournament.name.includes("Club Friendl") &&
+          !item.tournament.uniqueTournament?.name.includes("Club Friendl"),
       )
       .filter((item) => {
         const eventDate = new TZDate(item.startTimestamp * 1000, timezone)
