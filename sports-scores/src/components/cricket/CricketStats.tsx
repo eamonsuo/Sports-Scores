@@ -12,12 +12,7 @@ import {
   YAxis,
 } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle } from "../shadcn/card"
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "../shadcn/chart"
+import { ChartConfig, ChartContainer } from "../shadcn/chart"
 
 const chartConfig = {
   desktop: {
@@ -38,9 +33,9 @@ export default function CricketStats({
   return (
     matchIncidents && (
       <div className="flex flex-col gap-6 p-4">
-        <Manhatten matchIncidents={matchIncidents} />
-        <RunRate matchIncidents={matchIncidents} />
         <Worm matchIncidents={matchIncidents} />
+        <RunRate matchIncidents={matchIncidents} />
+        <Manhatten matchIncidents={matchIncidents} />
       </div>
     )
   )
@@ -104,10 +99,10 @@ function Manhatten({
               axisLine={false}
               width={30}
             />
-            <ChartTooltip
+            {/* <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="dashed" />}
-            />
+            /> */}
             {matchIncidents.map((inning, index) => (
               <Bar
                 key={inning.inningLabel}
@@ -187,10 +182,10 @@ function RunRate({
               tickMargin={10}
               axisLine={false}
             />
-            <ChartTooltip
+            {/* <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
-            />
+            /> */}
             {matchIncidents.map((inning, index) => (
               <Scatter
                 key={inning.inningLabel + "Wickets"}

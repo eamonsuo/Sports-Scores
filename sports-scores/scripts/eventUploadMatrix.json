@@ -48,9 +48,9 @@
     "sport": "football"
   },
   {
-    "name": "FA Cup 25/26",
+    "name": "FA Cup 26/27",
     "leagueId": "19",
-    "seasonId": "82557",
+    "seasonId": "102079",
     "sport": "football"
   },
   {
@@ -130,6 +130,42 @@
     "leagueId": "422",
     "seasonId": "86502",
     "sport": "rugby-union"
+  },
+  {
+    "name": "Sheffield Shield 26/27",
+    "leagueId": "11160",
+    "seasonId": "97892",
+    "sport": "cricket"
+  },
+  {
+    "name": "🇦🇺 One Day Cup 26/27",
+    "leagueId": "11161",
+    "seasonId": "97891",
+    "sport": "cricket"
+  },
+  {
+    "name": "BBL 26/27",
+    "leagueId": "11162",
+    "seasonId": "98330",
+    "sport": "cricket"
+  },
+  {
+    "name": "WNCL 26/27",
+    "leagueId": "18704",
+    "seasonId": "98397",
+    "sport": "cricket"
+  },
+  {
+    "name": "WBBL 2026",
+    "leagueId": "11163",
+    "seasonId": "97391",
+    "sport": "cricket"
+  },
+  {
+    "name": "IPL 2026",
+    "leagueId": "11165",
+    "seasonId": "91185",
+    "sport": "cricket"
   },
   {
     "name": "PGA Tour 2026",

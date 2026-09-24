@@ -2,8 +2,7 @@ name: Bulk Upload Events
 
 on:
   schedule:
-    # Runs Wednesday at 2:30pm AEST
-    - cron: "30 14 * * 3"
+    - cron: "30 11 * * 3"
       timezone: "Australia/Brisbane"
   # Triggered externally (e.g. from a Power Automate flow) with the same
   # parameters as workflow_dispatch, passed via client_payload.
@@ -26,6 +25,7 @@ on:
         type: choice
         options:
           # --- LEAGUE_CHOICES_START ---
+          - "american-football — CFP Rankings"
           - "american-football — NCAA, FBS"
           - "american-football — NFL"
           - "american-football — NFL Preseason"
@@ -40,6 +40,7 @@ on:
           - "aussie-rules — WAFL"
           - "baseball — ABL"
           - "baseball — MLB"
+          - "baseball — MLB All Star Game"
           - "baseball — WBSC Premier12"
           - "baseball — World Baseball Classic"
           - "basketball — Basketball World Cup - Men"
@@ -47,8 +48,10 @@ on:
           - "basketball — Basketball World Cup Qualifiers - Men"
           - "basketball — March Madness"
           - "basketball — NBA"
+          - "basketball — NBA All Star Game"
           - "basketball — NBL"
           - "basketball — WNBA"
+          - "basketball — WNBA All Star Game"
           - "basketball — WNBL"
           - "cricket — Alex Malcolm - News"
           - "cricket — BBL"
@@ -76,7 +79,7 @@ on:
           - "cricket — WPL"
           - "cricket — World Test Championship"
           - "cricket — 🇦🇺 One Day Cup"
-          - "cricket — 🇬🇧 One Day Cup"
+          - "cricket — 🇬🇧 One Day Cup - Men"
           - "cycling — Cadel Evans Great Ocean Road Race"
           - "cycling — Giro d'Italia"
           - "cycling — Tour Down Under"
@@ -111,6 +114,7 @@ on:
           - "football — AFC World Cup Qualifiers"
           - "football — Australia Cup"
           - "football — Australian Championship"
+          - "football — Baptist Football QLD - Rivers Rubies"
           - "football — Championship"
           - "football — EFL Cup"
           - "football — FA Cup"
@@ -153,6 +157,7 @@ on:
           - "ice-hockey — AIHL"
           - "ice-hockey — Int. Friendly Games"
           - "ice-hockey — NHL"
+          - "ice-hockey — NHL All Star Game"
           - "ice-hockey — World Championship"
           - "ice-hockey — World Championship - Australia Men"
           - "ice-hockey — World Championship - Australia Women"

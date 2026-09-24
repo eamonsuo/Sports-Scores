@@ -125,7 +125,10 @@ export default function ComponentList({
             return (
               <div
                 key={group?.groupLabel ?? `ungrouped-${index}`}
-                className="flex flex-col gap-1 dark:text-neutral-400"
+                className={cn(
+                  "flex flex-col gap-1 dark:text-neutral-400",
+                  buttonStyle === "rectangle" && "flex-1",
+                )}
               >
                 {group.groupLabel ? (
                   <p className="rounded-t-md border-t border-r border-l border-neutral-300 px-2 text-center text-xs whitespace-nowrap text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">

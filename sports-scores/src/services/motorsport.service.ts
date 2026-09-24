@@ -10,7 +10,6 @@ import { getSportConfigurations } from "@/lib/projUtils"
 import {
   Brackets,
   CardVariant,
-  DisplayTypes,
   LadderGroup,
   LadderGroupConfig,
   MatchDetail,
@@ -19,11 +18,7 @@ import {
   Standings,
 } from "@/types/misc"
 import { Sofascore_StageStandingRow } from "@/types/sofascore"
-import {
-  matchSummariesBySportAndDay,
-  matchSummariesByTournament,
-} from "./dataverse.service"
-import { f1Service } from "./f1.service"
+import { matchSummariesByTournament } from "./dataverse.service"
 import { SofascoreStageSport } from "./sofascore.service"
 
 class MotorsportService extends SofascoreStageSport {
@@ -56,10 +51,6 @@ class MotorsportService extends SofascoreStageSport {
     leagueId: string,
     seasonId: string,
   ): Promise<Matches | null> {
-    if (leagueId === "f1") {
-      return await f1Service.matchesByLeagueSeason(leagueId, seasonId)
-    }
-
     const dataverseMatches = await matchSummariesByTournament(
       leagueId,
       seasonId,
@@ -92,38 +83,6 @@ class MotorsportService extends SofascoreStageSport {
     } as Matches
   }
 
-  async matchesByDate(date: Date): Promise<Matches | null> {
-    const [dataverseMatches] = await Promise.all([
-      matchSummariesBySportAndDay(this.sport, date),
-    ])
-
-    if (!dataverseMatches || dataverseMatches.length === 0) {
-      return null
-    }
-
-    const allMatches = (dataverseMatches ?? [])
-      .sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-      )
-      .map((match) =>
-        this.eventMapperMatchSummary(match, {
-          leagueImg: this.leagues.find((l) => l.slug === match.leagueId)?.icon,
-        }),
-      )
-
-    const fixtures = await mapFixtureRounds(allMatches, this.leagues)
-
-    return {
-      fixtures: fixtures,
-      currentRound: getCurrentRound(fixtures, DisplayTypes.LEAGUE),
-    }
-  }
-
-  async matchesByTeam(teamId: string): Promise<Matches | null> {
-    return null
-  }
-
   async matchDetails(
     matchId: string,
     leagueId: string,
@@ -136,10 +95,6 @@ class MotorsportService extends SofascoreStageSport {
     leagueId: string,
     seasonId: string,
   ): Promise<Standings | null> {
-    if (leagueId === "f1") {
-      return await f1Service.standings(leagueId, seasonId)
-    }
-
     const stageStandings = await this.apiEndpoints.fetchStageStandings(seasonId)
     const teamStandings = await this.apiEndpoints.fetchTeamStandings(seasonId)
 

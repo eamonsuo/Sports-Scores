@@ -84,6 +84,11 @@
     "seasonId": "81331",
     "sport": "football"
   },
+  "football — Baptist Football QLD - Rivers Rubies": {
+    "leagueId": "rivers-bap",
+    "seasonId": "external",
+    "sport": "football"
+  },
   "football — Premier League": {
     "leagueId": "17",
     "seasonId": "96668",
@@ -101,7 +106,7 @@
   },
   "football — FA Cup": {
     "leagueId": "19",
-    "seasonId": "82557",
+    "seasonId": "102079",
     "sport": "football"
   },
   "football — Women's FA Cup": {
@@ -324,6 +329,11 @@
     "seasonId": "93601",
     "sport": "american-football"
   },
+  "american-football — CFP Rankings": {
+    "leagueId": "cfp-rankings",
+    "seasonId": "external",
+    "sport": "american-football"
+  },
   "basketball — NBL": {
     "leagueId": "1524",
     "seasonId": "96122",
@@ -364,6 +374,16 @@
     "seasonId": "93569",
     "sport": "basketball"
   },
+  "basketball — NBA All Star Game": {
+    "leagueId": "875",
+    "seasonId": "89489",
+    "sport": "basketball"
+  },
+  "basketball — WNBA All Star Game": {
+    "leagueId": "1329",
+    "seasonId": "98564",
+    "sport": "basketball"
+  },
   "baseball — MLB": {
     "leagueId": "11205",
     "seasonId": "84695",
@@ -382,6 +402,11 @@
   "baseball — WBSC Premier12": {
     "leagueId": "11206",
     "seasonId": "65281",
+    "sport": "baseball"
+  },
+  "baseball — MLB All Star Game": {
+    "leagueId": "19443",
+    "seasonId": "97026",
     "sport": "baseball"
   },
   "ice-hockey — AIHL": {
@@ -417,6 +442,11 @@
   "ice-hockey — Int. Friendly Games": {
     "leagueId": "873",
     "seasonId": "87173",
+    "sport": "ice-hockey"
+  },
+  "ice-hockey — NHL All Star Game": {
+    "leagueId": "870",
+    "seasonId": "58148",
     "sport": "ice-hockey"
   },
   "rugby-union — Super Rugby": {
@@ -614,7 +644,7 @@
     "seasonId": "89189",
     "sport": "cricket"
   },
-  "cricket — 🇬🇧 One Day Cup": {
+  "cricket — 🇬🇧 One Day Cup - Men": {
     "leagueId": "11177",
     "seasonId": "86876",
     "sport": "cricket"
@@ -836,17 +866,17 @@
   },
   "golf — Asian Tour": {
     "leagueId": "asian-tour",
-    "seasonId": "2026",
+    "seasonId": "external",
     "sport": "golf"
   },
   "golf — PGA Champions Tour": {
     "leagueId": "pga-champions-tour",
-    "seasonId": "2026",
+    "seasonId": "external",
     "sport": "golf"
   },
   "golf — Korn Ferry Tour": {
     "leagueId": "korn-ferry-tour",
-    "seasonId": "2026",
+    "seasonId": "external",
     "sport": "golf"
   },
   "golf — OWGR": {

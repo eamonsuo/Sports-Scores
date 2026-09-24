@@ -15,9 +15,12 @@ import {
   SPORT,
   SportService,
   Standings,
+  UpcomingMatches,
 } from "@/types/misc"
+import { TZDate } from "@date-fns/tz/date"
 import {
   matchSummariesBySportAndDay,
+  matchSummariesBySportUpcoming,
   matchSummariesByTournament,
 } from "./dataverse.service"
 
@@ -68,33 +71,51 @@ class SurfingService implements SportService {
   }
 
   async matchesByDate(date: Date): Promise<Matches | null> {
-    const [dataverseMatches] = await Promise.all([
-      matchSummariesBySportAndDay(this.sport, date),
-    ])
+    const dataverseMatches = await matchSummariesBySportAndDay(this.sport, date)
 
     if (!dataverseMatches || dataverseMatches.length === 0) {
       return null
     }
 
-    const allMatches = (dataverseMatches ?? [])
-      .sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-      )
-      .map((event) => this.eventMapper(event))
-
-    const fixtures = await mapFixtureRounds(allMatches, this.tours)
+    const fixtures = await mapFixtureRounds(
+      dataverseMatches.map((event) => this.eventMapper(event)),
+      this.tours,
+    )
 
     return {
       fixtures: fixtures,
       currentRound: getCurrentRound(fixtures, DisplayTypes.LEAGUE),
     }
   }
+
   matchesByTeam(teamId: string): Promise<Matches | null> {
     throw new Error("Method not implemented.")
   }
+
   matchDetails(matchId: string): Promise<MatchDetail | null> {
     throw new Error("Method not implemented.")
+  }
+
+  async matchesUpcoming(fromDate: TZDate): Promise<UpcomingMatches | null> {
+    const dataverseMatches = await matchSummariesBySportUpcoming(
+      this.sport,
+      fromDate,
+    )
+
+    if (!dataverseMatches || dataverseMatches.length === 0) {
+      return null
+    }
+
+    const fixtures = await mapFixtureRounds(
+      dataverseMatches.map((event) => this.eventMapper(event)),
+      this.tours,
+    )
+
+    return {
+      fixtures: fixtures,
+      currentRound: getCurrentRound(fixtures, DisplayTypes.LEAGUE),
+      nextEventDate: fixtures[0]?.matches?.[0]?.startDate,
+    }
   }
 
   async standings(

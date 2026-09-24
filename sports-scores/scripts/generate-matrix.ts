@@ -80,11 +80,11 @@ const SYNC_CONFIG: SyncEntry[] = [
     leagues: RUGBY_UNION_LEAGUES,
     slugs: ["422"],
   },
-  // {
-  //   sport: "cricket",
-  //   leagues: CRICKET_LEAGUES,
-  //   slugs: ["*"],
-  // },
+  {
+    sport: "cricket",
+    leagues: CRICKET_LEAGUES,
+    slugs: ["11160", "11161", "11162", "18704", "11163", "11165"],
+  },
   // {
   //   sport: "netball",
   //   leagues: NETBALL_LEAGUES,
