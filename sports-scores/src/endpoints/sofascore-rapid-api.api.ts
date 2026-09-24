@@ -16,6 +16,7 @@ async function fetchSofascoreRapidApi<T>(endpoint: string) {
     process.env.SOFASCORE_API_BASEURL,
     endpoint,
     SPORT.AUSSIE_RULES,
+    false,
   )
 }
 

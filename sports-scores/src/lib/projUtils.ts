@@ -24,7 +24,7 @@ export async function fetchRapidApi<T>(
   baseURL: string = process.env.ALLSPORTS_BASEURL ?? "",
   endpoint: string,
   sport: SPORT,
-  fallbackEnabled: boolean = true,
+  fallbackToAllSports: boolean = true,
 ): Promise<T | null> {
   if (baseURL === "") return null
 
@@ -44,7 +44,7 @@ export async function fetchRapidApi<T>(
       `[fetchRapidApi] ${sport} request failed (${res.status} ${res.statusText}) for ${url}.`,
     )
 
-    if (fallbackEnabled) {
+    if (fallbackToAllSports) {
       console.log("Falling back to AllSports API.")
       return await fetchRapidApi(
         process.env.ALLSPORTS_BASEURL,

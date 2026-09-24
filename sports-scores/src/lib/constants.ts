@@ -27,6 +27,10 @@ import {
 
 export const FALLBACK_IMAGE = "/vercel.svg"
 
+export const EVENT_TODAY_EXTENTION_HOURS = 3
+
+export const FALLBACK_TIMEZONE = "UTC"
+
 export const SCORE_BREAKDOWN_HALVES_CONFIG: ScoreBreakdownConfig = {
   periodNames: ["1st Half", "2nd Half"],
   overtimeName: "Extra Time",
@@ -1575,6 +1579,7 @@ export const AMERICAN_FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "NFL Preseason",
     slug: "9465",
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/g85fqz1662057187.png",
     seasons: [
       { name: "2026", slug: "94852" },
       { name: "2025", slug: "75587" },
@@ -1593,12 +1598,20 @@ export const AMERICAN_FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "32199",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/hm3cyr1758455622.png",
     excludeFromToday: true,
+    display: DisplayTypes.DATE,
     seasons: [
       { name: "26/27", slug: "93601" },
       { name: "25/26 Post.", slug: "89410" },
       { name: "25/26", slug: "89263" },
       { name: "24/25", slug: "89273" },
     ],
+  },
+  {
+    name: "CFP Rankings",
+    slug: "cfp-rankings",
+    icon: "https://upload.wikimedia.org/wikipedia/commons/1/18/Logo_of_college_football_playoff.svg",
+    externalURL: "https://collegefootballplayoff.com/rankings",
+    seasons: [{ name: "Current", slug: "external" }],
   },
 ]
 

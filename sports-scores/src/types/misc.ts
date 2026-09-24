@@ -171,6 +171,7 @@ export interface SportService {
     seasonId: string,
   ): Promise<Matches | null>
   matchesByDate(date: Date): Promise<Matches | null>
+  matchesUpcoming(fromDate: Date): Promise<UpcomingMatches | null>
   matchesByTeam(teamId: string): Promise<Matches | null>
   matchDetails(
     matchId: string,
@@ -193,6 +194,10 @@ export interface SportService {
 export interface Matches {
   fixtures: FixtureRound[]
   currentRound: string
+}
+
+export interface UpcomingMatches extends Matches {
+  nextEventDate: Date
 }
 
 export interface MatchProperty {

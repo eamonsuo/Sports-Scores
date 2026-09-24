@@ -113,6 +113,13 @@ export default function LeagueSeasonToggle({
   const [calendarOpen, setCalendarOpen] = useState(false)
   const [leagueMenuOpen, setLeagueMenuOpen] = useState(false)
   const [customizeOpen, setCustomizeOpen] = useState(false)
+  // `new Date()` resolves to a different day on the server (UTC) than in the
+  // user's timezone, so the formatted date is only rendered after hydration.
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const defaultLeagueOrder = leagues.map((league) => league.slug)
   const defaultExcludedFromToday = leagues
@@ -313,7 +320,9 @@ export default function LeagueSeasonToggle({
         <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
           <PopoverTrigger asChild>
             <Button variant="outline" className="justify-between">
-              {format(selectedDate, "d MMM yy")}
+              <span className={mounted ? undefined : "invisible"}>
+                {mounted ? format(selectedDate, "d MMM yy") : "00 Mmm 00"}
+              </span>
               <ChevronDownIcon className="ml-2 h-4 w-4" />
             </Button>
           </PopoverTrigger>

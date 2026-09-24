@@ -11,6 +11,7 @@ import {
   fetchF1SprintResult,
 } from "@/endpoints/f1.api"
 import {
+  FALLBACK_TIMEZONE,
   MOTORSPORT_CONSTRUCTOR_STANDINGS_HEADINGS,
   MOTORSPORT_DRIVER_STANDINGS_HEADINGS,
   MOTORSPORT_LEAGUES,
@@ -34,6 +35,7 @@ import {
   SPORT,
   SportService,
   Standings,
+  UpcomingMatches,
 } from "@/types/misc"
 import { TZDate } from "@date-fns/tz/date"
 import { isSameDay } from "date-fns"
@@ -85,7 +87,7 @@ class F1Service implements SportService {
       return null
     }
 
-    const timezone = date instanceof TZDate ? date.timeZone : "UTC"
+    const timezone = date instanceof TZDate ? date.timeZone : FALLBACK_TIMEZONE
 
     const filteredEvents = rawEvents
       .flatMap((race) => mapRaceToMatchSummaries(race))
@@ -104,9 +106,14 @@ class F1Service implements SportService {
     }
   }
 
+  async matchesUpcoming(fromDate: Date): Promise<UpcomingMatches | null> {
+    return null
+  }
+
   async matchesByTeam(id: string): Promise<Matches | null> {
     return null
   }
+
   async matchDetails(matchId: string): Promise<MatchDetail | null> {
     return null
   }

@@ -2,7 +2,11 @@ import {
   fetchCyclingRiderStandings,
   fetchCyclingSubstages,
 } from "@/endpoints/cycling.api"
-import { CYCLING_LEAGUES } from "@/lib/constants"
+import {
+  CYCLING_LEAGUES,
+  EVENT_TODAY_EXTENTION_HOURS,
+  FALLBACK_TIMEZONE,
+} from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
 import { getSportConfigurations } from "@/lib/projUtils"
@@ -20,7 +24,7 @@ import {
 } from "@/types/misc"
 import { Sofascore_Stage } from "@/types/sofascore"
 import { TZDate } from "@date-fns/tz/date"
-import { isSameDay, isWithinInterval } from "date-fns"
+import { addHours, isSameDay, isWithinInterval } from "date-fns"
 import { SofascoreStageSport } from "./sofascore.service"
 
 class CyclingService extends SofascoreStageSport {
@@ -130,7 +134,7 @@ class CyclingService extends SofascoreStageSport {
       return null
     }
 
-    const timezone = date instanceof TZDate ? date.timeZone : "UTC"
+    const timezone = date instanceof TZDate ? date.timeZone : FALLBACK_TIMEZONE
 
     const apiMatches = this.processByDateEvents(
       menRaces?.stages ?? [],
@@ -334,7 +338,9 @@ class CyclingService extends SofascoreStageSport {
         return (
           isWithinInterval(date, { start: startDate, end: endDate }) ||
           isSameDay(date, startDate) ||
-          isSameDay(date, endDate)
+          isSameDay(addHours(startDate, EVENT_TODAY_EXTENTION_HOURS), date) ||
+          isSameDay(date, endDate) ||
+          isSameDay(addHours(endDate, EVENT_TODAY_EXTENTION_HOURS), date)
         )
       })
       .map((stage) =>

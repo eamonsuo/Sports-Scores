@@ -1,4 +1,5 @@
 import { Match as BracketMatch } from "@/components/bracket/types"
+import { EVENT_TODAY_EXTENTION_HOURS, FALLBACK_TIMEZONE } from "@/lib/constants"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
 import { resolveSportImage } from "@/lib/imageMapping"
 import { resolvePlayoffPicture } from "@/lib/playoffPictureMapping"
@@ -35,6 +36,7 @@ import {
   SportsLadder,
   Standings,
   TeamMatchDetail,
+  UpcomingMatches,
 } from "@/types/misc"
 import { PlayoffPictureStanding } from "@/types/playoff-picture"
 import {
@@ -52,7 +54,11 @@ import {
 } from "@/types/sofascore"
 import { TZDate } from "@date-fns/tz/date"
 import { addHours, isSameDay, isWithinInterval } from "date-fns"
-import { matchSummariesByTournament } from "./dataverse.service"
+import {
+  matchSummariesBySportAndDay,
+  matchSummariesBySportUpcoming,
+  matchSummariesByTournament,
+} from "./dataverse.service"
 
 export type ScoreBreakdownConfig = {
   periodNames: string[]
@@ -145,17 +151,13 @@ export abstract class SofascoreSport implements SportService {
 
     if (!matches && !errors) return null
 
-    const validLeagueIds = this.leagues
-      // .filter((l) => !l.excludeFromToday)
-      .map((l) => Number(l.slug))
-      .filter((id) => !isNaN(id))
+    const validLeagueIds = this.leagues.map((l) => Number(l.slug))
 
     const validCategoryIds = this.categories
       .filter((c) => !c.excludeByDefault)
       .map((c) => Number(c.id))
-      .filter((id) => !isNaN(id))
 
-    const timezone = date instanceof TZDate ? date.timeZone : "UTC"
+    const timezone = date instanceof TZDate ? date.timeZone : FALLBACK_TIMEZONE
 
     matches.events = matches.events
       .filter(
@@ -174,12 +176,20 @@ export abstract class SofascoreSport implements SportService {
           ? new TZDate(item.endTimestamp * 1000, timezone)
           : null
 
-        // Check if the event start/end date is today OR today is between the start and end date
+        // Check if the event start/end date is today, today + EVENT_TODAY_EXTENTION_HOURS OR today is between the start and end date
         return (
           isSameDay(eventDate, date) ||
+          isSameDay(addHours(eventDate, EVENT_TODAY_EXTENTION_HOURS), date) ||
           (eventEndDate &&
-            (isWithinInterval(date, { start: eventDate, end: eventEndDate }) ||
-              isSameDay(eventEndDate, date)))
+            (isWithinInterval(date, {
+              start: eventDate,
+              end: addHours(eventEndDate, EVENT_TODAY_EXTENTION_HOURS),
+            }) ||
+              isSameDay(eventEndDate, date) ||
+              isSameDay(
+                addHours(eventEndDate, EVENT_TODAY_EXTENTION_HOURS),
+                date,
+              )))
         )
       })
 
@@ -244,6 +254,20 @@ export abstract class SofascoreSport implements SportService {
     return {
       fixtures: combinedFixtures,
       currentRound: getCurrentRound(combinedFixtures, DisplayTypes.LEAGUE),
+    }
+  }
+
+  async matchesUpcoming(fromDate: TZDate): Promise<UpcomingMatches | null> {
+    const matches = await matchSummariesBySportUpcoming(this.sport, fromDate)
+
+    if (!matches || matches.length === 0) return null
+
+    const fixtures = await mapFixtureRounds(matches, this.leagues)
+
+    return {
+      fixtures: fixtures,
+      currentRound: getCurrentRound(fixtures, DisplayTypes.LEAGUE),
+      nextEventDate: fixtures[0].matches[0].startDate,
     }
   }
 
@@ -934,7 +958,36 @@ export abstract class SofascoreStageSport implements SportService {
   }
 
   async matchesByDate(date: Date): Promise<Matches | null> {
-    return null
+    const dataverseMatches = await matchSummariesBySportAndDay(this.sport, date)
+
+    if (!dataverseMatches || dataverseMatches.length === 0) return null
+
+    const fixtures = await mapFixtureRounds(
+      dataverseMatches.map((match) => this.eventMapperMatchSummary(match)),
+      this.leagues,
+    )
+
+    return {
+      fixtures: fixtures,
+      currentRound: getCurrentRound(fixtures, DisplayTypes.LEAGUE),
+    }
+  }
+
+  async matchesUpcoming(fromDate: TZDate): Promise<UpcomingMatches | null> {
+    const matches = await matchSummariesBySportUpcoming(this.sport, fromDate)
+
+    if (!matches || matches.length === 0) return null
+
+    const fixtures = await mapFixtureRounds(
+      matches.map((match) => this.eventMapperMatchSummary(match)),
+      this.leagues,
+    )
+
+    return {
+      fixtures: fixtures,
+      currentRound: getCurrentRound(fixtures, DisplayTypes.LEAGUE),
+      nextEventDate: fixtures[0].matches[0].startDate,
+    }
   }
 
   async matchesByTeam(teamId: string): Promise<Matches | null> {

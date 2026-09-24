@@ -4,6 +4,7 @@ import {
   Matches,
   SportService,
   Standings,
+  UpcomingMatches,
 } from "@/types/misc"
 
 class PlaceholderService implements SportService {
@@ -14,6 +15,9 @@ class PlaceholderService implements SportService {
     return Promise.resolve(null)
   }
   matchesByDate(date: Date): Promise<Matches | null> {
+    return Promise.resolve(null)
+  }
+  matchesUpcoming(fromDate: Date): Promise<UpcomingMatches | null> {
     return Promise.resolve(null)
   }
   matchesByTeam(teamId: string): Promise<Matches | null> {

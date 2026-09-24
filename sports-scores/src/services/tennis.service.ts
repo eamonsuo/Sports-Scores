@@ -1,39 +1,45 @@
 import {
-  fetchTennisATPRankings,
-  fetchTennisBracket,
-  fetchTennisMatchDetails,
-  fetchTennisMatchesByCategoryDate,
-  fetchTennisPlayerLastMatches,
-  fetchTennisPlayerNextMatches,
-  fetchTennisTournamentLastMatches,
-  fetchTennisTournamentNextMatches,
-  fetchTennisWTARankings,
-} from "@/endpoints/tennis.api"
-import { TENNIS_CATEGORIES, TENNIS_LEAGUES } from "@/lib/constants"
-import { withDevCache } from "@/lib/devCache"
-import { resolveSportImage } from "@/lib/imageMapping"
-import { setTennisMatchSummary, shortenTeamNames } from "@/lib/projUtils"
+    fetchTennisATPRankings,
+    fetchTennisBracket,
+    fetchTennisMatchDetails,
+    fetchTennisMatchesByCategoryDate,
+    fetchTennisPlayerLastMatches,
+    fetchTennisPlayerNextMatches,
+    fetchTennisTournamentLastMatches,
+    fetchTennisTournamentNextMatches,
+    fetchTennisWTARankings,
+} from "@/endpoints/tennis.api";
 import {
-  CardVariant,
-  DeepPartial,
-  FixtureRound,
-  MatchProperties,
-  MatchSummary,
-  PeriodScore,
-  SPORT,
-  Standings,
-} from "@/types/misc"
-import { Sofascore_Event } from "@/types/sofascore"
+    EVENT_TODAY_EXTENTION_HOURS,
+    FALLBACK_TIMEZONE,
+    TENNIS_CATEGORIES,
+    TENNIS_LEAGUES,
+} from "@/lib/constants";
+import { withDevCache } from "@/lib/devCache";
+import { resolveSportImage } from "@/lib/imageMapping";
+import { setTennisMatchSummary, shortenTeamNames } from "@/lib/projUtils";
 import {
-  RankingList,
-  Tennis_Sofascore_Event,
-  Tennis_TennisApi_Rankings_Response,
-} from "@/types/tennis"
-import { TZDate } from "@date-fns/tz"
-import { isSameDay } from "date-fns"
-import { SofascoreSport } from "./sofascore.service"
+    CardVariant,
+    DeepPartial,
+    FixtureRound,
+    MatchProperties,
+    MatchSummary,
+    PeriodScore,
+    SPORT,
+    Standings,
+} from "@/types/misc";
+import { Sofascore_Event, Sofascore_Score } from "@/types/sofascore";
+import {
+    RankingList,
+    Tennis_Sofascore_Event,
+    Tennis_TennisApi_Rankings_Response,
+} from "@/types/tennis";
+import { TZDate } from "@date-fns/tz";
+import { addHours, isSameDay, isWithinInterval } from "date-fns";
+import { SofascoreSport } from "./sofascore.service";
 
 const TENNIS_RANKING_HEADINGS = ["Player", "Total", "Prev"]
+const TENNIS_SET_NUMBERS = [1, 2, 3, 4, 5] as const
 
 class TennisService extends SofascoreSport {
   constructor() {
@@ -85,7 +91,7 @@ class TennisService extends SofascoreSport {
   }
 
   override async matchesByDate(date: Date) {
-    const timezone = date instanceof TZDate ? date.timeZone : "UTC"
+    const timezone = date instanceof TZDate ? date.timeZone : FALLBACK_TIMEZONE
     const matchesResponse = await this.apiEndpoints.fetchEventsByDate(
       this.categories,
       date,
@@ -97,10 +103,11 @@ class TennisService extends SofascoreSport {
 
     if (!matches && !errors) return null
 
-    const validLeagueIds = TENNIS_LEAGUES
-      // .filter((l) => !l.excludeFromToday)
-      .map((l) => Number(l.slug))
-      .concat(TENNIS_CATEGORIES.map((c) => Number(c.id)))
+    const validLeagueIds = this.leagues.map((l) => Number(l.slug))
+
+    const validCategoryIds = this.categories
+      .filter((c) => !c.excludeByDefault)
+      .map((c) => Number(c.id))
 
     const leagueIdToName = Object.fromEntries(
       TENNIS_CATEGORIES.map((l) => [Number(l.id), l.name]).concat(
@@ -111,13 +118,31 @@ class TennisService extends SofascoreSport {
     matches.events = matches.events
       .filter((item) => {
         const eventDate = new TZDate(item.startTimestamp * 1000, timezone)
-        return isSameDay(eventDate, date)
+        const eventEndDate = item.endTimestamp
+          ? new TZDate(item.endTimestamp * 1000, timezone)
+          : null
+
+        // Check if the event start/end date is today, today + EVENT_TODAY_EXTENTION_HOURS OR today is between the start and end date
+        return (
+          isSameDay(eventDate, date) ||
+          isSameDay(addHours(eventDate, EVENT_TODAY_EXTENTION_HOURS), date) ||
+          (eventEndDate &&
+            (isWithinInterval(date, {
+              start: eventDate,
+              end: addHours(eventEndDate, EVENT_TODAY_EXTENTION_HOURS),
+            }) ||
+              isSameDay(eventEndDate, date) ||
+              isSameDay(
+                addHours(eventEndDate, EVENT_TODAY_EXTENTION_HOURS),
+                date,
+              )))
+        )
       })
       .filter((item) => item.status.type !== "canceled")
 
     const filteredMatches = matches.events.filter(
       (item) =>
-        validLeagueIds.includes(item.tournament.category.id) ||
+        validCategoryIds.includes(item.tournament.category.id) ||
         validLeagueIds.includes(item.tournament?.uniqueTournament?.id ?? -1),
     )
 
@@ -235,6 +260,11 @@ class TennisService extends SofascoreSport {
     match: Tennis_Sofascore_Event,
     options?: DeepPartial<MatchSummary>,
   ): MatchSummary {
+    const convertedScores = this.constructTennisScore(
+      match.homeScore,
+      match.awayScore,
+    )
+
     return super.eventMapper(match, {
       ...options,
       otherDetail: match.roundInfo?.name ?? undefined,
@@ -252,23 +282,7 @@ class TennisService extends SofascoreSport {
         {
           id: match.homeTeam.id.toString(),
           name: `${match.homeTeamSeed ? match.homeTeamSeed + " " : ""}${shortenTeamNames(match.homeTeam.name)}`,
-          score: [
-            match.homeScore.period1 !== undefined
-              ? `${match.homeScore.period1}${match.homeScore.period1TieBreak !== undefined ? ` ${match.homeScore.period1TieBreak}` : ""}`
-              : null,
-            match.homeScore.period2 !== undefined
-              ? `${match.homeScore.period2}${match.homeScore.period2TieBreak !== undefined ? ` ${match.homeScore.period2TieBreak}` : ""}`
-              : null,
-            match.homeScore.period3 !== undefined
-              ? `${match.homeScore.period3}${match.homeScore.period3TieBreak !== undefined ? ` ${match.homeScore.period3TieBreak}` : ""}`
-              : null,
-            match.homeScore.period4 !== undefined
-              ? `${match.homeScore.period4}${match.homeScore.period4TieBreak !== undefined ? ` ${match.homeScore.period4TieBreak}` : ""}`
-              : null,
-            match.homeScore.period5 !== undefined
-              ? `${match.homeScore.period5}${match.homeScore.period5TieBreak !== undefined ? ` ${match.homeScore.period5TieBreak}` : ""}`
-              : null,
-          ].filter((s): s is string => s !== null),
+          score: convertedScores.homeScore,
           img:
             match.homeTeam.subTeams && match.homeTeam.subTeams.length > 0
               ? match.homeTeam.subTeams.map((subTeam) =>
@@ -283,23 +297,7 @@ class TennisService extends SofascoreSport {
           name:
             `${match.awayTeamSeed ? match.awayTeamSeed + " " : ""}` +
             shortenTeamNames(match.awayTeam.name),
-          score: [
-            match.awayScore.period1 !== undefined
-              ? `${match.awayScore.period1}${match.awayScore.period1TieBreak !== undefined ? ` ${match.awayScore.period1TieBreak}` : ""}`
-              : null,
-            match.awayScore.period2 !== undefined
-              ? `${match.awayScore.period2}${match.awayScore.period2TieBreak !== undefined ? ` ${match.awayScore.period2TieBreak}` : ""}`
-              : null,
-            match.awayScore.period3 !== undefined
-              ? `${match.awayScore.period3}${match.awayScore.period3TieBreak !== undefined ? ` ${match.awayScore.period3TieBreak}` : ""}`
-              : null,
-            match.awayScore.period4 !== undefined
-              ? `${match.awayScore.period4}${match.awayScore.period4TieBreak !== undefined ? ` ${match.awayScore.period4TieBreak}` : ""}`
-              : null,
-            match.awayScore.period5 !== undefined
-              ? `${match.awayScore.period5}${match.awayScore.period5TieBreak !== undefined ? ` ${match.awayScore.period5TieBreak}` : ""}`
-              : null,
-          ].filter((s): s is string => s !== null),
+          score: convertedScores.awayScore,
           img:
             match.awayTeam.subTeams && match.awayTeam.subTeams.length > 0
               ? match.awayTeam.subTeams.map((subTeam) =>
@@ -401,49 +399,72 @@ class TennisService extends SofascoreSport {
   protected override scoreBreakdownMapper(
     match: Sofascore_Event,
   ): PeriodScore[] {
-    return [
-      {
-        periodName: "1st",
+    const scoreBreakdown: PeriodScore[] = []
+
+    const scores = this.constructTennisScore(
+      match.homeScore,
+      match.awayScore,
+      true,
+    )
+
+    const breakdownLength = Math.max(scores.homeScore.length, 2)
+
+    for (let i = 0; i < breakdownLength; i++) {
+      const set = TENNIS_SET_NUMBERS[i]
+      scoreBreakdown.push({
+        periodName: `Set ${set}`,
         teams: {
-          home: { score: match.homeScore?.period1 ?? "0" },
-          away: { score: match.awayScore?.period1 ?? "0" },
+          home: { score: scores.homeScore[i] ?? "0" },
+          away: { score: scores.awayScore[i] ?? "0" },
         },
-      },
-      {
-        periodName: "2nd",
-        teams: {
-          home: { score: match.homeScore?.period2 ?? "0" },
-          away: { score: match.awayScore?.period2 ?? "0" },
-        },
-      },
-      match.homeScore?.period3
-        ? {
-            periodName: "3rd",
-            teams: {
-              home: { score: match.homeScore?.period3 ?? "0" },
-              away: { score: match.awayScore?.period3 ?? "0" },
-            },
-          }
-        : null,
-      match.homeScore?.period4
-        ? {
-            periodName: "4th",
-            teams: {
-              home: { score: match.homeScore?.period4 ?? "0" },
-              away: { score: match.awayScore?.period4 ?? "0" },
-            },
-          }
-        : null,
-      match.homeScore?.period5
-        ? {
-            periodName: "5th",
-            teams: {
-              home: { score: match.homeScore?.period5 ?? "0" },
-              away: { score: match.awayScore?.period5 ?? "0" },
-            },
-          }
-        : null,
-    ].filter((set) => set !== null)
+      })
+    }
+
+    return scoreBreakdown
+  }
+
+  private constructTennisScore(
+    homeScore: Sofascore_Score,
+    awayScore: Sofascore_Score,
+    bracketedTiebreaks: boolean = false,
+  ) {
+    const home: string[] = []
+    const away: string[] = []
+
+    for (const set of TENNIS_SET_NUMBERS) {
+      // Function to validate if a tiebreaker exists & contains valid data
+      const validateTiebreakerScore = (
+        homeScore: number | undefined,
+        awayScore: number | undefined,
+      ) => {
+        const invalidTiebreakerScores = [30, 40]
+        return !(
+          (homeScore !== undefined &&
+            invalidTiebreakerScores.includes(homeScore)) ||
+          (awayScore !== undefined &&
+            invalidTiebreakerScores.includes(awayScore))
+        )
+      }
+
+      const homeTieBreak = homeScore[`period${set}TieBreak`]
+      const awayTieBreak = awayScore[`period${set}TieBreak`]
+      const showTieBreak = validateTiebreakerScore(homeTieBreak, awayTieBreak)
+
+      // Function to return the string formatted set
+      const formatSet = (games?: number, tieBreak?: number) => {
+        return games === undefined
+          ? null
+          : `${games}${showTieBreak && tieBreak !== undefined ? (bracketedTiebreaks ? ` (${tieBreak})` : ` ${tieBreak}`) : ""}`
+      }
+
+      const homeSet = formatSet(homeScore[`period${set}`], homeTieBreak)
+      if (homeSet !== null) home.push(homeSet)
+
+      const awaySet = formatSet(awayScore[`period${set}`], awayTieBreak)
+      if (awaySet !== null) away.push(awaySet)
+    }
+
+    return { homeScore: home, awayScore: away }
   }
 }
 

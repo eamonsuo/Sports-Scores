@@ -1,3 +1,4 @@
+import FixtureRoundList from "@/components/all-sports/FixtureRoundList"
 import OrderedFixtureRoundList from "@/components/all-sports/OrderedFixtureRoundList"
 import DateNav from "@/components/misc-ui/DateNav"
 import Placeholder from "@/components/misc-ui/Placeholder"
@@ -25,6 +26,38 @@ export default async function Page({
   const pageData = await config.service.matchesByDate(parsedDate)
 
   if (pageData === null) {
+    const [year, month, day] = (date as string)?.split("-").map(Number) ?? []
+    const parsedDateUpcoming =
+      date === undefined
+        ? curDate
+        : new TZDate(year, month - 1, day, curDate.timeZone)
+
+    const upcomingMatches =
+      await config.service.matchesUpcoming(parsedDateUpcoming)
+
+    if (upcomingMatches) {
+      return (
+        <>
+          <p className="mt-4 shrink-0 px-4 text-center text-sm text-black dark:text-neutral-200">
+            NO EVENT DATA
+          </p>
+          <p className="my-4 shrink-0 px-4 text-center text-sm text-black dark:text-neutral-400">
+            The next Event Date can be seen below:
+          </p>
+          <FixtureRoundList
+            data={upcomingMatches.fixtures}
+            curRound={upcomingMatches.currentRound}
+          />
+          <DateNav
+            date={parsedDateUpcoming}
+            nextDate={
+              new TZDate(upcomingMatches.nextEventDate, curDate.timeZone)
+            }
+          />
+        </>
+      )
+    }
+
     return (
       <>
         <Placeholder>NO DATA</Placeholder>

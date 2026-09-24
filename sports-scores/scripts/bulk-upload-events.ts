@@ -26,6 +26,10 @@ import {
   fetchBasketballLastMatches,
   fetchBasketballNextMatches,
 } from "@/endpoints/basketball.api"
+import {
+  fetchCricketLastMatches,
+  fetchCricketNextMatches,
+} from "@/endpoints/cricket.api"
 import { fetchCyclingSubstages } from "@/endpoints/cycling.api"
 import { fetchDataverseMatchSummaries } from "@/endpoints/dataverse.api"
 import { fetchF1Events } from "@/endpoints/f1.api"
@@ -56,7 +60,9 @@ import { americanFootballService } from "@/services/american-football.service"
 import { aussieRulesService } from "@/services/aussie-rules.service"
 import { baseballService } from "@/services/baseball.service"
 import { basketballService } from "@/services/basketball.service"
+import { cricketService } from "@/services/cricket.service"
 import { cyclingService } from "@/services/cycling.service"
+import { dartsService } from "@/services/darts.service"
 import {
   mapToDataverseMatchSummary,
   mapToMatchSummary,
@@ -350,6 +356,20 @@ const adapters: Partial<Record<SPORT, AdapterMap>> = {
       fetchBasketballLastMatches,
       fetchBasketballNextMatches,
       basketballService.eventMapper.bind(basketballService),
+    ),
+  },
+  [SPORT.CRICKET]: {
+    default: createSofascoreAdapter(
+      fetchCricketLastMatches,
+      fetchCricketNextMatches,
+      cricketService.eventMapper.bind(cricketService),
+    ),
+  },
+  [SPORT.DARTS]: {
+    default: createSofascoreAdapter(
+      fetchTournamentLastMatches,
+      fetchTournamentNextMatches,
+      dartsService.eventMapper.bind(dartsService),
     ),
   },
   [SPORT.FOOTBALL]: {

@@ -4,6 +4,7 @@ import {
   fetchDataverseSportEventSchedules,
   updateDataverseMatchSummary,
 } from "@/endpoints/dataverse.api"
+import { EVENT_TODAY_EXTENTION_HOURS, FALLBACK_TIMEZONE } from "@/lib/constants"
 import { DataverseMatchSummary, DataverseSportEvent } from "@/types/dataverse"
 import { SportEvent } from "@/types/event-calendar"
 import {
@@ -17,7 +18,7 @@ import {
   TVDetails,
 } from "@/types/misc"
 import { TZDate } from "@date-fns/tz"
-import { endOfDay, startOfDay } from "date-fns"
+import { addHours, endOfDay, isSameDay, startOfDay } from "date-fns"
 
 // --- MatchSummary Utilities ---
 
@@ -175,15 +176,11 @@ export function mapToDataverseMatchSummary(
 // --- MatchSummary Services ---
 
 export async function matchSummaries(
-  filters?: string[],
+  filters?: string,
   select?: string,
   orderBy?: string,
 ): Promise<MatchSummary[] | null> {
-  const response = await fetchDataverseMatchSummaries(
-    filters?.join(" and "),
-    select,
-    orderBy,
-  )
+  const response = await fetchDataverseMatchSummaries(filters, select, orderBy)
   if (!response) return null
   return response.value.map(mapToMatchSummary)
 }
@@ -198,22 +195,54 @@ export async function matchSummariesByTournament(
     `ss_seasonid eq '${seasonId}'`,
     `ss_sport eq '${sport}'`,
   ]
-  return matchSummaries(filters)
+  return matchSummaries(filters.join(" and "))
 }
 
 export async function matchSummariesBySportAndDay(
   sport: SPORT,
   date: Date | TZDate,
 ): Promise<MatchSummary[] | null> {
-  const dayStart = new Date(startOfDay(date).getTime()).toISOString()
-  const dayEnd = new Date(endOfDay(date).getTime()).toISOString()
+  const dayStart = addHours(
+    new Date(startOfDay(date).getTime()),
+    -EVENT_TODAY_EXTENTION_HOURS,
+  ).toISOString()
+  const dayEnd = addHours(
+    new Date(endOfDay(date).getTime()),
+    EVENT_TODAY_EXTENTION_HOURS,
+  ).toISOString()
 
   const filters = [
     `ss_sport eq '${sport}'`,
     `statecode eq 0`, // Only active records
     `((ss_startdate le '${dayEnd}' and ss_enddate ge '${dayStart}') or (ss_enddate eq null and ss_startdate ge '${dayStart}' and ss_startdate le '${dayEnd}'))`,
   ]
-  return matchSummaries(filters)
+  return matchSummaries(filters.join(" and "))
+}
+
+export async function matchSummariesBySportUpcoming(
+  sport: SPORT,
+  fromDate: Date = new Date(),
+): Promise<MatchSummary[] | null> {
+  const dayStart = new Date(fromDate).toISOString()
+  const timezone =
+    fromDate instanceof TZDate ? fromDate.timeZone : FALLBACK_TIMEZONE
+
+  const filters = [
+    `ss_sport eq '${sport}'`,
+    `statecode eq 0`, // Only active records
+    `ss_startdate ge '${dayStart}'`,
+  ]
+
+  const matches = await matchSummaries(filters.join(" and "))
+  const nextDate =
+    matches && matches.length > 0
+      ? new TZDate(matches[0].startDate, timezone)
+      : null
+  return nextDate
+    ? (matches?.filter((match) =>
+        isSameDay(new TZDate(match.startDate, timezone), nextDate),
+      ) ?? null)
+    : null
 }
 
 export async function matchSummaryCreate(record: MatchSummary) {
