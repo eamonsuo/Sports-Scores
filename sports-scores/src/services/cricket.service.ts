@@ -190,6 +190,15 @@ class CricketService extends SofascoreSport {
       event.awayScore.innings?.inning1,
       event.awayScore.innings?.inning2,
     )
+    matchDetails.summaryText =
+      event.note ??
+      setMatchSummary(
+        event.status.type,
+        event.homeTeam.name,
+        event.homeScore.current,
+        event.awayTeam.name,
+        event.awayScore.current,
+      ) + (event.status.type !== "notstarted" ? " runs" : "")
     return matchDetails
   }
 

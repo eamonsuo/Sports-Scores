@@ -25,6 +25,17 @@ import {
   tvGuideConfigCreate,
 } from "./projUtils"
 
+// Ctrl+Shift+[    Fold (collapse) region at the cursor.
+// Ctrl+Shift+]    Unfold (uncollapse) region at the cursor.
+// Ctrl+K Ctrl+[   Fold (collapse) all subregions at cursor
+// Ctrl+K Ctrl+]   Unfold (uncollapse) all subregions at cursor
+// Ctrl+K Ctrl+0   Fold (collapse) all regions
+// Ctrl+K Ctrl+J   Unfold (uncollapse) all regions
+// Ctrl+K Ctrl+1   Fold all regions of Level 1 (namespace)
+// Ctrl+K Ctrl+2   Fold all regions of Level 2 (class / methods)
+// Ctrl+K Ctrl+3   Fold all regions of Level 3 (methods / blocks)
+// Ctrl+K Ctrl+4   Fold all regions of Level 4 (blocks / inner blocks)
+
 export const FALLBACK_IMAGE = "/vercel.svg"
 
 export const EVENT_TODAY_EXTENTION_HOURS = 3
@@ -376,7 +387,7 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
   {
     name: "European T20 Premier League",
     slug: "etpl",
-    seasons: [{ name: "2026", slug: "external-2026" }],
+    seasons: [{ name: "2026", slug: "external" }],
     externalURL:
       "https://en.wikipedia.org/wiki/2026_European_T20_Premier_League",
     excludeFromToday: true,
@@ -2301,6 +2312,20 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     icon: "https://r2.thesportsdb.com/images/media/league/badge/jrcfev1744026201.png/small",
     seasons: [{ name: "2025", slug: "69935" }],
   },
+  {
+    name: "UEFA Nations League - Men",
+    slug: "10783",
+    icon: "https://upload.wikimedia.org/wikipedia/en/8/80/UEFA_Nations_League.svg",
+    externalURL: "https://en.wikipedia.org/wiki/UEFA_Nations_League",
+    seasons: [{ name: "26/27", slug: "89945" }],
+  },
+  {
+    name: "UEFA Nations League - Women",
+    slug: "20378",
+    icon: "https://upload.wikimedia.org/wikipedia/en/8/8a/UEFA_Women%27s_Nations_League_logo.svg",
+    externalURL: "https://en.wikipedia.org/wiki/UEFA_Women%27s_Nations_League",
+    seasons: [{ name: "2025", slug: "69066" }],
+  },
   // {
   //   name: "UEFA World Cup Qualifiers",
   //   slug: "11",
@@ -3009,7 +3034,7 @@ export const DARTS_LEAGUES: LeagueSeasonConfig[] = [
     name: "World Grand Prix",
     slug: "751",
     seasons: [
-      // { name: "2026", slug: "85121" },
+      { name: "2026", slug: "84943" },
       { name: "2025", slug: "69485" },
     ],
   },

@@ -1360,6 +1360,10 @@ export function resolveImage(teamName: string) {
     case "LIV Golf South Africa":
       return getCountryImageUrl(CountryFlagCode.SouthAfrica)
 
+    // Golf - Teams
+    case "INTL":
+      return "/liv/Scoring-Banner-INT.svg"
+
     // F1 - Grand Prix
     case "Australian Grand Prix":
       return getCountryImageUrl(CountryFlagCode.Australia)

@@ -154,7 +154,7 @@ export abstract class SofascoreSport implements SportService {
     const validLeagueIds = this.leagues.map((l) => Number(l.slug))
 
     const validCategoryIds = this.categories
-      .filter((c) => !c.excludeByDefault)
+      .filter((c) => !c.excludeByDefault) // TODO: Remove when all leagues implemented
       .map((c) => Number(c.id))
 
     const timezone = date instanceof TZDate ? date.timeZone : FALLBACK_TIMEZONE
@@ -167,8 +167,13 @@ export abstract class SofascoreSport implements SportService {
               item.tournament?.uniqueTournament?.id ?? -1,
             )) &&
           item.status.type !== "canceled" &&
+          // TODO: Remove when all leagues implemented
           !item.tournament.name.includes("Club Friendl") &&
-          !item.tournament.uniqueTournament?.name.includes("Club Friendl"),
+          !item.tournament.uniqueTournament?.name.includes("Club Friendl") &&
+          !/\bU\d{2}\s+Friendly\b/i.test(item.tournament.name) &&
+          !/\bU\d{2}\s+Friendly\b/i.test(
+            item.tournament.uniqueTournament?.name ?? "",
+          ),
       )
       .filter((item) => {
         const eventDate = new TZDate(item.startTimestamp * 1000, timezone)
@@ -754,6 +759,7 @@ export abstract class SofascoreSport implements SportService {
         homeTeam: { id: "", name: "", score: "0" },
         status: "",
         startDate: new Date(0),
+        winner: undefined,
         properties: [],
       }
     }
@@ -803,13 +809,23 @@ export abstract class SofascoreSport implements SportService {
         name: shortenTeamNames(matchDetails?.homeTeam.name ?? ""),
         score: matchDetails?.homeScore?.current?.toString() ?? "0",
         img: resolveSportImage(matchDetails?.homeTeam.name),
+        slug: `/sports/${this.sport}/team/${matchDetails?.homeTeam.id}`,
       },
       awayTeam: {
         id: matchDetails?.awayTeam.id?.toString() ?? "",
         name: shortenTeamNames(matchDetails?.awayTeam.name ?? ""),
         score: matchDetails?.awayScore?.current?.toString() ?? "0",
         img: resolveSportImage(matchDetails?.awayTeam.name),
+        slug: `/sports/${this.sport}/team/${matchDetails?.awayTeam.id}`,
       },
+      summaryText: setMatchSummary(
+        matchDetails.status.type,
+        matchDetails.homeTeam.name,
+        matchDetails.homeScore.current,
+        matchDetails.awayTeam.name,
+        matchDetails.awayScore.current,
+      ),
+      winner: matchDetails?.winnerCode,
       properties: matchProperties,
     }
   }

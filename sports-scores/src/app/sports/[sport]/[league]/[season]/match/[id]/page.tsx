@@ -82,6 +82,8 @@ function defaultPageComponents(
               homeInfo={matchDetails.matchDetails.homeTeam}
               awayInfo={matchDetails.matchDetails.awayTeam}
               status={matchDetails.matchDetails.status}
+              summaryText={matchDetails.matchDetails.summaryText}
+              winner={matchDetails.matchDetails.winner}
             />
             {matchDetails.scoreBreakdown && (
               <ScoreBreakdown
