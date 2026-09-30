@@ -212,6 +212,8 @@ export interface MatchProperties {
   status: string
   startDate: Date
   endDate?: Date
+  summaryText?: string
+  winner?: number
   properties: MatchProperty[]
 }
 

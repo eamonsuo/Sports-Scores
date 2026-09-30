@@ -15,6 +15,8 @@ import { resolveSportImage } from "@/lib/imageMapping"
 import { getCountryImageUrl, getSportConfigurations } from "@/lib/projUtils"
 import {
   Golf_SlashGolfAPI_Leaderboard,
+  GolfMatchDetail,
+  SlashGolf_MatchPlayRound,
   SlashGolf_PlayerRanking,
   SlashGolf_Tournament,
 } from "@/types/golf"
@@ -24,9 +26,9 @@ import {
   CountryFlagCode,
   DeepPartial,
   DisplayTypes,
+  FixtureRound,
   LadderGroup,
   LeagueSeasonConfig,
-  MatchDetail,
   Matches,
   MatchStatus,
   MatchSummary,
@@ -153,12 +155,21 @@ class GolfService implements SportService {
     matchId: string,
     leagueId: string,
     seasonId: string,
-  ): Promise<MatchDetail | null> {
+  ): Promise<GolfMatchDetail | null> {
     const orgId = leagueId === "pga" ? "1" : "2"
 
     var rawLeaderboard = await cachedFetchLeaderboard(orgId, matchId, seasonId)
     if (!rawLeaderboard || !rawLeaderboard.leaderboardRows) return null
-    return { standings: this.leaderboardMapper(rawLeaderboard) }
+
+    return {
+      standings: this.leaderboardMapper(
+        rawLeaderboard,
+        rawLeaderboard.rounds ? ["Team", "Total"] : undefined,
+      ),
+      matches: rawLeaderboard.rounds
+        ? this.matchPlayMapping(rawLeaderboard.rounds)
+        : [],
+    }
   }
 
   async standings(
@@ -275,40 +286,46 @@ class GolfService implements SportService {
     }
   }
 
-  leaderboardMapper(data: Golf_SlashGolfAPI_Leaderboard): LadderGroup[] {
-    // Construct Player rankings
-    const playerTable: LadderGroup = {
-      label: "Players",
-      tables: [
-        {
-          headings: GOLF_LEADERBOARD_HEADINGS,
-          data: data.leaderboardRows.map((item) => {
-            const playerName =
-              item.players === undefined
-                ? `${item.firstName} ${item.lastName}${item.isAmateur ? " (A)" : ""}`
-                : item.players
-                    .map(
-                      (item) =>
-                        `${item.firstName} ${item.lastName}${item.isAmateur ? " (A)" : ""}`,
-                    )
-                    .join(", ")
-            return {
-              position: item.position,
-              id: item.playerId + playerName,
-              teamName: playerName,
-              teamLogo: resolveSportImage(playerName),
-              Total: item.total,
-              Thru: item.thru,
-              Rnd:
-                Number(item.currentRoundScore) > 0 &&
-                item.currentRoundScore[0] !== "+"
-                  ? "+" + item.currentRoundScore
-                  : item.currentRoundScore,
-            }
-          }),
-        },
-      ],
-    }
+  leaderboardMapper(
+    data: Golf_SlashGolfAPI_Leaderboard,
+    headings?: string[],
+  ): LadderGroup[] {
+    const ladders: LadderGroup[] = [
+      // Construct Player rankings
+      {
+        label: "Players",
+        tables: [
+          {
+            headings: headings ?? GOLF_LEADERBOARD_HEADINGS,
+            data: data.leaderboardRows.map((item) => {
+              const playerName =
+                item.teamId ??
+                (item.players === undefined
+                  ? `${item.firstName} ${item.lastName}${item.isAmateur ? " (A)" : ""}`
+                  : item.players
+                      .map(
+                        (item) =>
+                          `${item.firstName} ${item.lastName}${item.isAmateur ? " (A)" : ""}`,
+                      )
+                      .join(", "))
+              return {
+                position: item.position,
+                id: item.playerId + playerName,
+                teamName: playerName,
+                teamLogo: resolveSportImage(playerName),
+                Total: item.teamScore ?? item.total,
+                Thru: item.thru,
+                Rnd:
+                  Number(item.currentRoundScore) > 0 &&
+                  item.currentRoundScore[0] !== "+"
+                    ? "+" + item.currentRoundScore
+                    : item.currentRoundScore,
+              }
+            }),
+          },
+        ],
+      },
+    ]
 
     // Construct Team rankings if applicable
     if (data.teams) {
@@ -316,7 +333,7 @@ class GolfService implements SportService {
         label: "Teams",
         tables: [
           {
-            headings: GOLF_LEADERBOARD_HEADINGS,
+            headings: headings ?? GOLF_LEADERBOARD_HEADINGS,
             data: data.teams.map((item, idx) => {
               return {
                 position: (idx + 1).toString(),
@@ -329,9 +346,70 @@ class GolfService implements SportService {
           },
         ],
       }
-      return [playerTable, teamTable]
+      ladders.push(teamTable)
     }
-    return [playerTable]
+
+    return ladders
+  }
+
+  matchPlayMapping(data: SlashGolf_MatchPlayRound[]): FixtureRound[] {
+    return data.map((item) => {
+      return {
+        roundLabel: item.format,
+        // sport: this.sport,
+        matches: item.matches.map((match) => {
+          const status =
+            match.status === "inprogress"
+              ? MatchStatus.LIVE
+              : match.status === "Final"
+                ? MatchStatus.COMPLETED
+                : MatchStatus.UPCOMING
+
+          const winnerCode = match.teams.findIndex(
+            (team) => team.country === match.matchWinner,
+          )
+
+          return {
+            id: match.matchId.toString(),
+            startDate: new Date(),
+            // endDate: ,
+            sport: this.sport,
+            status: status,
+            roundLabel: item.format,
+            summaryText:
+              match.currentScore === "TIED"
+                ? match.currentScore
+                : status === MatchStatus.COMPLETED
+                  ? `${match.matchWinner} wins ${match.currentScore}`
+                  : `${match.matchLeader} leads ${match.currentScore}`,
+            timer: match.status,
+            timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
+            // otherDetail: match.teeTime,
+            // venue:
+            // matchSlug: "",
+            // seasonId: "",
+            // leagueId: "",
+            // leagueName: options?.leagueName ,
+            // leagueSlug: options?.leagueSlug ,
+            // leagueImg: FALLBACK_IMAGE,
+            competitorDetails: match.teams.map((team) => {
+              return {
+                id: team.teamId,
+                name: team.players
+                  .map((player) => player.displayName)
+                  .join(" & "),
+                score: "",
+                img: resolveSportImage(team.country),
+                // winDrawLoss: ,
+                // slug:,
+              }
+            }),
+            winner: winnerCode === -1 ? undefined : winnerCode + 1,
+            // cardVariant: this.cardVariant ?? CardVariant.DEFAULT,
+          } as MatchSummary
+        }),
+      }
+    })
   }
 }
 
@@ -455,6 +533,7 @@ const PGA_FALL_EVENTS = new Set([
   "VidantaWorld Mexico Open",
   "World Wide Technology Championship",
   "Good Good Championship",
+  "Austin Championship",
   "The RSM Classic",
 ])
 

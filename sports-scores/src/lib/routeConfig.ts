@@ -1,4 +1,5 @@
 import { cricketMatchDetailComponents } from "@/components/cricket/CricketMatchPage"
+import { GolfMatchPage } from "@/components/golf/GolfMatchPage"
 import { americanFootballService } from "@/services/american-football.service"
 import { aussieRulesService } from "@/services/aussie-rules.service"
 import { baseballService } from "@/services/baseball.service"
@@ -48,6 +49,7 @@ type NavButton = { href: string; label: string; page: string }
 type SportRouteConfig = {
   leagues: ClientLeagueSeasonConfig[]
   service: SportService
+  // If a service always resolves to custom type, you can safely cast to MatchDetail here
   matchDetailsPageComponents?: (
     matchDetails: MatchDetail,
   ) => MatchDetailComponents[] // override default match details page
@@ -136,6 +138,9 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
         { href: "", label: "Standings", page: "ladder" },
       ],
     },
+    matchDetailsPageComponents: GolfMatchPage as (
+      matchDetails: MatchDetail,
+    ) => MatchDetailComponents[],
   },
   [SPORT.ICE_HOCKEY]: {
     leagues: ICE_HOCKEY_LEAGUES_CLIENT,
@@ -150,6 +155,16 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
       // { href: "drivers", label: "Drivers", page: "drivers" },
       // { href: "teams", label: "Teams", page: "teams" },
     ],
+    navButtonsByLeague: {
+      supercars: [
+        { href: "#current-date", label: "Races", page: "races" },
+        {
+          href: "https://www.supercars.com/standings/2026/supercars",
+          label: "Standings",
+          page: "ladder",
+        },
+      ],
+    },
   },
   [SPORT.MULTI_SPORT]: {
     leagues: MULTI_SPORT_LEAGUES_CLIENT,
@@ -171,14 +186,16 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
   [SPORT.SURFING]: {
     leagues: SURFING_LEAGUES_CLIENT,
     service: surfingService,
-    navButtons: [
-      { href: "#current-date", label: "Events", page: "matches" },
-      {
-        href: "https://www.worldsurfleague.com/athletes/rankings",
-        label: "Rankings",
-        page: "ladder",
-      },
-    ],
+    navButtonsByLeague: {
+      wsl: [
+        { href: "#current-date", label: "Events", page: "matches" },
+        {
+          href: "https://www.worldsurfleague.com/athletes/rankings",
+          label: "Rankings",
+          page: "ladder",
+        },
+      ],
+    },
   },
   [SPORT.TENNIS]: {
     leagues: TENNIS_LEAGUES_CLIENT,

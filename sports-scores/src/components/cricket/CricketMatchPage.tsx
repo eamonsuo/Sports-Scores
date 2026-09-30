@@ -19,7 +19,8 @@ export function cricketMatchDetailComponents(
             status={matchDetails.matchDetails.status}
             homeInfo={matchDetails.matchDetails.homeTeam}
             awayInfo={matchDetails.matchDetails.awayTeam}
-            // summaryText={matchDetails.}
+            summaryText={matchDetails.matchDetails.summaryText}
+            winner={matchDetails.matchDetails.winner}
           />
           <MatchPropertyList
             startDate={matchDetails.matchDetails.startDate}
