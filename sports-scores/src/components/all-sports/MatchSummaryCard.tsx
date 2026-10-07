@@ -1,9 +1,10 @@
 import { FALLBACK_IMAGE } from "@/lib/constants"
 import { resolveSportImage } from "@/lib/imageMapping"
 import { formatTime } from "@/lib/projUtils"
-import { cn } from "@/lib/shadcnUtils"
+import { cn } from "cn"
+
 import { MatchStatus, MatchSummary } from "@/types/misc"
-import clsx from "clsx"
+import { clsx } from "cn"
 import Image from "next/image"
 import Link from "next/link"
 import Timer from "../misc-ui/Timer"

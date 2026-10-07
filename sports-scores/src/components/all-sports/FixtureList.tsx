@@ -3,7 +3,8 @@
 import MatchSummaryCard from "@/components/all-sports/MatchSummaryCard"
 import SessionSummaryCard from "@/components/all-sports/SessionSummaryCard"
 import TennisMatchCard from "@/components/tennis/TennisMatchCard"
-import { cn } from "@/lib/shadcnUtils"
+import { cn } from "cn"
+
 import { CardVariant, MatchSummary } from "@/types/misc"
 import { useRouter } from "next/navigation"
 import React, { useEffect, useTransition } from "react"

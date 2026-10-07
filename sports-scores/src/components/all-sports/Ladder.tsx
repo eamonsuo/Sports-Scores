@@ -1,9 +1,10 @@
 "use client"
 
 import { FALLBACK_IMAGE } from "@/lib/constants"
-import { cn } from "@/lib/shadcnUtils"
+import { cn } from "cn"
+
 import { SportsLadder } from "@/types/misc"
-import { clsx } from "clsx"
+import { clsx } from "cn"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"

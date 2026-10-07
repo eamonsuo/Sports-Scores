@@ -1,4 +1,4 @@
-﻿import { ScoreBreakdownConfig } from "@/services/sofascore.service"
+import { ScoreBreakdownConfig } from "@/services/sofascore.service"
 import {
   DisplayTypes,
   LadderConfig,
@@ -3378,7 +3378,13 @@ const NHL_TV_GUIDE: TVConfig = {
 export const ICE_HOCKEY_CATEGORIES: SportCategory[] = [
   { id: "1161", name: "Australia", sport: SPORT.ICE_HOCKEY },
   { id: "56", name: "International", sport: SPORT.ICE_HOCKEY },
-  { id: "37", name: "USA", sport: SPORT.ICE_HOCKEY, excludeByDefault: true },
+  // { id: "37", name: "USA", sport: SPORT.ICE_HOCKEY, excludeByDefault: true },
+  {
+    id: "1171",
+    name: "North America",
+    sport: SPORT.ICE_HOCKEY,
+    excludeByDefault: true,
+  },
 ]
 
 export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
@@ -3417,6 +3423,12 @@ export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
       { name: "24/25", slug: "63409", ladderConfig: NHL_2014_LADDER_CONFIG },
     ],
     display: DisplayTypes.DATE,
+  },
+  {
+    name: "Seattle Kraken",
+    slug: "team/381707",
+    icon: "https://r2.thesportsdb.com/images/media/team/badge/zsx49m1595775836.png",
+    seasons: [{ name: "Current", slug: "" }],
   },
   {
     name: "World Championship",
@@ -3458,7 +3470,7 @@ export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
     seasons: [{ name: "2026", slug: "wiki" }],
   },
   {
-    name: "Int. Friendly Games",
+    name: "International Friendly Games",
     slug: "873",
     seasons: [
       { name: "2026", slug: "87173" },

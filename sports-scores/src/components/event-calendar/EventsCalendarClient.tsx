@@ -3,10 +3,10 @@
 import EventCardGrid from "@/components/event-calendar/EventCardGrid"
 import RegularSeasonsView from "@/components/event-calendar/RegularSeasonsView"
 import { SportEvent } from "@/types/event-calendar"
-import { clsx } from "clsx"
 import Link from "next/link"
 import { useState } from "react"
 import { Button } from "../shadcn/button"
+import { clsx } from "cn";
 
 type ViewMode = "major" | "regular"
 

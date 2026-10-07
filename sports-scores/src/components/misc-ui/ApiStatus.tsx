@@ -3,9 +3,9 @@
 import { API_RESET_PERIOD } from "@/lib/apiCounter"
 import { getQuota } from "@/lib/quotaActions"
 import { SPORT } from "@/types/misc"
-import { clsx } from "clsx"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
+import { clsx } from "cn";
 
 export default function APIStatus({
   sport,

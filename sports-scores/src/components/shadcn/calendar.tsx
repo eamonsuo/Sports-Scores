@@ -1,6 +1,7 @@
 "use client"
 
-import { cn } from "@/lib/shadcnUtils"
+import { cn } from "cn"
+
 import {
   ChevronDownIcon,
   ChevronLeftIcon,

@@ -1,4 +1,4 @@
-import { cn } from "@/lib/shadcnUtils"
+import { cn } from "cn"
 
 export default function Timer({
   display,
@@ -11,7 +11,7 @@ export default function Timer({
     <p
       suppressHydrationWarning
       className={cn(
-        "whitespace-nowrap rounded-sm px-2 py-1 text-center text-xs",
+        "rounded-sm px-2 py-1 text-center text-xs whitespace-nowrap",
 
         displayColour === "green" &&
           "bg-green-500 text-neutral-200 dark:bg-green-700",

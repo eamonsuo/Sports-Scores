@@ -1,5 +1,6 @@
 "use client"
-import { cn } from "@/lib/shadcnUtils"
+import { cn } from "cn"
+
 import { Fragment, ReactNode, useState } from "react"
 
 export default function ClientSportsPage({

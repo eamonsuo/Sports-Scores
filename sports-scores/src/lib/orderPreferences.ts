@@ -26,7 +26,7 @@ function reconcile(
   return { order, hidden, excludedFromToday }
 }
 
-function loadOrderPreferences(
+export function loadOrderPreferences(
   storageKey: string,
   defaultOrder: string[],
   defaultExcludedFromToday: string[],
