@@ -4,7 +4,6 @@ import { FALLBACK_IMAGE } from "@/lib/constants"
 import { cn } from "cn"
 
 import { SportsLadder } from "@/types/misc"
-import { clsx } from "cn"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -132,7 +131,7 @@ export default function Ladder({
             {placingCategories.map((category, idx) => (
               <div key={category.label} className="flex items-center gap-2">
                 <span
-                  className={clsx(
+                  className={cn(
                     "inline-block h-3 w-3 rounded-full",
                     category.colour ??
                       defaultColours[idx % defaultColours.length],

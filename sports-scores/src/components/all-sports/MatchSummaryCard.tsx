@@ -4,7 +4,6 @@ import { formatTime } from "@/lib/projUtils"
 import { cn } from "cn"
 
 import { MatchStatus, MatchSummary } from "@/types/misc"
-import { clsx } from "cn"
 import Image from "next/image"
 import Link from "next/link"
 import Timer from "../misc-ui/Timer"
@@ -70,7 +69,7 @@ export default function MatchSummaryCard({
             )}
           </div>
           <div
-            className={clsx(
+            className={cn(
               "flex content-center items-center text-left dark:text-neutral-400",
               winner === 1 && "font-bold",
             )}
@@ -96,7 +95,7 @@ export default function MatchSummaryCard({
           </div>
 
           <div
-            className={clsx(
+            className={cn(
               "flex content-center items-center justify-self-end text-right dark:text-neutral-400",
               winner !== 1 && winner !== undefined && "font-bold",
             )}
@@ -137,7 +136,7 @@ export default function MatchSummaryCard({
             )}
           </div>
           <p
-            className={clsx(
+            className={cn(
               "col-span-2 text-left text-xs text-gray-700 dark:text-neutral-500",
               winner === 1 && "font-bold",
             )}
@@ -159,7 +158,7 @@ export default function MatchSummaryCard({
               ))}
           </div>
           <p
-            className={clsx(
+            className={cn(
               "col-span-2 text-right text-xs text-gray-700 dark:text-neutral-500",
               winner !== 1 && winner !== undefined && "font-bold",
             )}

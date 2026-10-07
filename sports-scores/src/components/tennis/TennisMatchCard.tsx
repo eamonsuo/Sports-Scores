@@ -3,7 +3,6 @@ import { formatTime } from "@/lib/projUtils"
 import { cn } from "cn"
 
 import { MatchSummary } from "@/types/misc"
-import { clsx } from "cn"
 import Image from "next/image"
 import Link from "next/link"
 import Timer from "../misc-ui/Timer"
@@ -77,7 +76,7 @@ export default function TennisMatchCard({
               />
             )}
             <p
-              className={clsx(
+              className={cn(
                 "truncate text-sm text-gray-700 dark:text-neutral-500",
                 winner === 1 && "font-bold",
               )}
@@ -130,7 +129,7 @@ export default function TennisMatchCard({
               />
             )}
             <p
-              className={clsx(
+              className={cn(
                 "truncate text-sm text-gray-700 dark:text-neutral-500",
                 winner !== 1 && winner !== undefined && "font-bold",
               )}
