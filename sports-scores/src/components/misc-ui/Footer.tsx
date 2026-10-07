@@ -6,7 +6,8 @@ import { useMemo } from "react"
 
 import { FOOTER_LINKS } from "@/lib/constants"
 import { useOrderPreference } from "@/lib/orderPreferences"
-import { cn } from "@/lib/shadcnUtils"
+import { cn } from "cn"
+
 import { FOOTER_ORDER_STORAGE_KEY } from "@/lib/storageKeys"
 import Image from "next/image"
 import { Avatar, AvatarFallback, AvatarImage } from "./Avatar"

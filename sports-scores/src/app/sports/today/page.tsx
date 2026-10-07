@@ -106,6 +106,7 @@ export default async function Page({
     return {
       sport,
       leagueIds: leagues.map((league) => league.slug),
+      defaultLeagueOrder: leagues.map((league) => league.slug),
       defaultExcludedFromToday: leagues
         .filter((league) => league.excludeFromToday)
         .map((league) => league.slug),
@@ -132,6 +133,7 @@ function pageSettings(
   perSportLeagueExclusion: {
     sport: SPORT
     leagueIds: string[]
+    defaultLeagueOrder: string[]
     defaultExcludedFromToday: string[]
   }[],
 ): {

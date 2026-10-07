@@ -1,4 +1,5 @@
-import { cn } from "@/lib/shadcnUtils"
+import { cn } from "cn"
+
 import { SportsTable } from "@/types/misc"
 
 export default async function DataTable({
@@ -10,7 +11,7 @@ export default async function DataTable({
   return (
     <>
       {tableName && (
-        <p className="pb-1 pt-3 dark:text-neutral-400">{tableName}</p>
+        <p className="pt-3 pb-1 dark:text-neutral-400">{tableName}</p>
       )}
 
       <table className="w-full flex-1 dark:text-neutral-400">

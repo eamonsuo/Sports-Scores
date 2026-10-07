@@ -1,6 +1,7 @@
 "use client"
 
-import { cn } from "@/lib/shadcnUtils"
+import { cn } from "cn"
+
 import { ReactNode, useEffect, useRef, useState } from "react"
 
 const PULL_THRESHOLD = 70 // px of pull needed to release into a refresh

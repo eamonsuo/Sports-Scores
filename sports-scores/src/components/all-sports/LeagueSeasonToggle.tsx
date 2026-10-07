@@ -19,6 +19,7 @@ import {
   ChevronDownIcon,
   ExternalLinkIcon,
   Globe,
+  Search,
   Settings,
 } from "lucide-react"
 import Image from "next/image"
@@ -26,6 +27,7 @@ import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import CustomizeOrderDialog from "../misc-ui/CustomizeOrderDialog"
+import SearchSports from "../misc-ui/SearchSports"
 import { Button } from "../shadcn/button"
 import {
   DropdownMenu,
@@ -113,6 +115,7 @@ export default function LeagueSeasonToggle({
   const [calendarOpen, setCalendarOpen] = useState(false)
   const [leagueMenuOpen, setLeagueMenuOpen] = useState(false)
   const [customizeOpen, setCustomizeOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   // `new Date()` resolves to a different day on the server (UTC) than in the
   // user's timezone, so the formatted date is only rendered after hydration.
   const [mounted, setMounted] = useState(false)
@@ -292,6 +295,18 @@ export default function LeagueSeasonToggle({
               </DropdownMenuItem>
             </>
           )}
+          <>
+            <DropdownMenuItem
+              onSelect={(e) => {
+                e.preventDefault()
+                setLeagueMenuOpen(false)
+                setSearchOpen(true)
+              }}
+            >
+              <Search className="size-4" />
+              Search
+            </DropdownMenuItem>
+          </>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -312,6 +327,14 @@ export default function LeagueSeasonToggle({
           excludedFromToday={excludedFromToday}
           onToggleExcludedFromToday={toggleExcludedFromToday}
           onReset={reset}
+        />
+      )}
+
+      {leagues.length > 1 && (
+        <SearchSports
+          open={searchOpen}
+          onOpenChange={setSearchOpen}
+          sport={sport}
         />
       )}
 

@@ -1,5 +1,6 @@
 import { FALLBACK_IMAGE } from "@/lib/constants"
-import { cn } from "@/lib/shadcnUtils"
+import { cn } from "cn"
+
 import Image from "next/image"
 import Link from "next/link"
 

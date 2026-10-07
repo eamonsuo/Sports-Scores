@@ -1,5 +1,43 @@
 import { SportCategory } from "./misc"
 
+export interface Sofascore_Search_Response {
+  results: Sofascore_SearchResult[]
+}
+
+export interface Sofascore_SearchResult {
+  entity: Sofascore_SearchEntity
+  score: number
+  type: "team" | "player" | "uniqueTournament" | string
+}
+
+export interface Sofascore_SearchEntity {
+  id: number
+  name: string
+  slug: string
+  userCount: number
+  nameCode?: string
+  national?: boolean
+  sport?: Sofascore_Sport
+  teamColors?: Sofascore_TeamColors
+  gender?: string
+  country?: Sofascore_Country
+  fieldTranslations?: Sofascore_FieldTranslations
+  team?: Sofascore_SearchEntity
+  deceased?: boolean
+  shortName?: string
+  position?: string
+  jerseyNumber?: string
+  sofascoreId?: string
+  category?: {
+    id: number
+    name: string
+    slug: string
+    flag: string
+    sport: Sofascore_Sport
+  }
+  displayInverseHomeAwayTeams?: boolean
+}
+
 export interface Sofascore_Event_Response {
   event: Sofascore_Event
 }

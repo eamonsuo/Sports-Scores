@@ -181,12 +181,12 @@ function createSofascoreStagesAdapter(
         console.log("Fetching all events...")
         const stageResponse = await fetchStages(seasonId)
         const allSessions: MatchSummary[] = []
-        let i = 1
 
         console.log(`Fetched ${stageResponse?.stages?.length ?? 0} stages.`)
         console.log("Fetching substages...")
 
-        for (const { id, name } of stageResponse?.stages ?? []) {
+        for (const [index, { id, name }] of stageResponse?.stages.entries() ??
+          []) {
           // if (name.includes("Test")) continue
           const raceSessions = await fetchStages(id.toString())
           console.log(
@@ -197,18 +197,17 @@ function createSofascoreStagesAdapter(
             ...(raceSessions?.stages ?? []).flatMap((stage) =>
               mapper(stage, {
                 seasonId,
-                roundLabel: `Round ${i}`,
+                roundLabel: `Round ${index + 1}`,
                 matchSlug: `/sports/motorsport/${leagueId}/${seasonId}/match/${stage.id}`,
                 leagueName: name,
                 leagueSlug: `/sports/motorsport/${leagueId}/${seasonId}`,
               }),
             ),
           )
-          i++
         }
 
         console.log(
-          `Fetched ${allSessions.length} total substages from ${i} calls...`,
+          `Fetched ${allSessions.length} total substages from ${stageResponse?.stages?.length} calls...`,
         )
         return allSessions
       } else {

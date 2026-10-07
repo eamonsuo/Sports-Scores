@@ -1,7 +1,7 @@
 "use client"
 
 import { formatDateLong } from "@/lib/projUtils"
-import { cn } from "@/lib/shadcnUtils"
+import { cn } from "cn"
 
 export default function SectionDate({
   sectionDate,

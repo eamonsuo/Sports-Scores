@@ -1,6 +1,5 @@
 "use client"
-
-import clsx from "clsx"
+import { cn } from "cn"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -20,7 +19,7 @@ export default function NavButtonGroup({
         <Link
           key={item.href}
           href={item.href}
-          className={clsx(
+          className={cn(
             "flex-1 place-content-center rounded-md px-2 py-2 text-center focus:relative",
             index === resolvedIndex
               ? "bg-white text-black shadow-xs dark:bg-neutral-600 dark:text-neutral-200"

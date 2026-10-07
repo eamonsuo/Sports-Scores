@@ -3,7 +3,7 @@
 import { API_RESET_PERIOD } from "@/lib/apiCounter"
 import { getQuota } from "@/lib/quotaActions"
 import { SPORT } from "@/types/misc"
-import { clsx } from "clsx"
+import { cn } from "cn"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -26,10 +26,7 @@ export default function APIStatus({
 
   return (
     <div
-      className={clsx(
-        "p-1 dark:bg-neutral-900 dark:text-neutral-400",
-        className,
-      )}
+      className={cn("p-1 dark:bg-neutral-900 dark:text-neutral-400", className)}
     >{`API Calls: ${status}% used (${reset})`}</div>
   )
 }

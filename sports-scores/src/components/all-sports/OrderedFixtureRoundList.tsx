@@ -1,6 +1,7 @@
 "use client"
 import {
   loadExcludedFromToday,
+  loadOrderPreferences,
   useOrderPreference,
 } from "@/lib/orderPreferences"
 import { leagueOrderStorageKey } from "@/lib/storageKeys"
@@ -14,6 +15,7 @@ import FixtureRoundList from "./FixtureRoundList"
 type SportLeagueExclusionConfig = {
   sport: SPORT
   leagueIds: string[]
+  defaultLeagueOrder: string[]
   defaultExcludedFromToday: string[]
 }
 
@@ -62,9 +64,13 @@ export default function OrderedFixtureRoundList({
   const [sportExclusions, setSportExclusions] = useState<
     Record<string, Set<string>>
   >({})
+  const [sportLeagueRanks, setSportLeagueRanks] = useState<
+    Record<string, Map<string, number>>
+  >({})
   useEffect(() => {
     if (!perSportLeagueExclusion) return
     const next: Record<string, Set<string>> = {}
+    const nextRanks: Record<string, Map<string, number>> = {}
     for (const config of perSportLeagueExclusion) {
       next[config.sport] = new Set(
         loadExcludedFromToday(
@@ -73,8 +79,18 @@ export default function OrderedFixtureRoundList({
           config.defaultExcludedFromToday,
         ),
       )
+      const { order } = loadOrderPreferences(
+        leagueOrderStorageKey(config.sport),
+        config.defaultLeagueOrder,
+        config.defaultExcludedFromToday,
+        [],
+      )
+      nextRanks[config.sport] = new Map(
+        order.map((leagueId, index) => [leagueId, index]),
+      )
     }
     setSportExclusions(next)
+    setSportLeagueRanks(nextRanks)
   }, [perSportLeagueExclusion])
 
   const pinnedRound = pinnedRoundLabel
@@ -126,8 +142,19 @@ export default function OrderedFixtureRoundList({
     }, Infinity)
   }
 
+  const leagueRankWithinSport = (round: FixtureRound) =>
+    round.matches.reduce((best, match) => {
+      const leagueRank = match.leagueId
+        ? (sportLeagueRanks[round.sport ?? match.sport]
+            ?.get(match.leagueId) ?? Infinity)
+        : Infinity
+      return Math.min(best, leagueRank)
+    }, Infinity)
+
   const orderedRest = [...visibleRest].sort(
-    (a, b) => roundRank(a) - roundRank(b),
+    (a, b) =>
+      roundRank(a) - roundRank(b) ||
+      leagueRankWithinSport(a) - leagueRankWithinSport(b),
   )
   const orderedData = pinnedRound ? [pinnedRound, ...orderedRest] : orderedRest
 

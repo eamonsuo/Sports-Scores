@@ -2,7 +2,8 @@
 
 import { FALLBACK_IMAGE } from "@/lib/constants"
 import { resolveSportImage } from "@/lib/imageMapping"
-import { cn } from "@/lib/shadcnUtils"
+import { cn } from "cn"
+
 import { MatchStatus, MatchSummary, TVChannel, TVDetails } from "@/types/misc"
 import { format } from "date-fns/format"
 import Image from "next/image"
@@ -221,7 +222,7 @@ export default function TVGuide({ data }: { data: MatchSummary[] }) {
   return (
     <div
       ref={scrollRef}
-      className="hideScroll overflow-auto bg-white dark:bg-neutral-950 max-lg:landscape:fixed max-lg:landscape:inset-0 max-lg:landscape:z-100"
+      className="hideScroll overflow-auto bg-white max-lg:landscape:fixed max-lg:landscape:inset-0 max-lg:landscape:z-100 dark:bg-neutral-950"
     >
       {/* Inner canvas — wider than viewport */}
       <div
@@ -230,7 +231,7 @@ export default function TVGuide({ data }: { data: MatchSummary[] }) {
       >
         {/* ── Current-time indicator ──────────────────────────── */}
         <div
-          className="pointer-events-none absolute bottom-0 top-0 z-9 w-0.5 bg-red-500/80"
+          className="pointer-events-none absolute top-0 bottom-0 z-9 w-0.5 bg-red-500/80"
           style={{ left: CHANNEL_COL_WIDTH + nowMins * PX_PER_MIN }}
         />
         {/* ── Time ruler row ──────────────────────────────────── */}
@@ -296,7 +297,7 @@ export default function TVGuide({ data }: { data: MatchSummary[] }) {
                 {hours.map((h) => (
                   <div
                     key={h}
-                    className="absolute bottom-0 top-0 border-r border-gray-100 dark:border-neutral-800/60"
+                    className="absolute top-0 bottom-0 border-r border-gray-100 dark:border-neutral-800/60"
                     style={{ left: h * HOUR_WIDTH }}
                   />
                 ))}
@@ -345,7 +346,7 @@ export default function TVGuide({ data }: { data: MatchSummary[] }) {
                       {match.leagueImg && (
                         <div
                           className={cn(
-                            "absolute left-0 top-0 flex h-full w-9 items-center justify-center bg-blue-700/60 dark:bg-slate-800/60",
+                            "absolute top-0 left-0 flex h-full w-9 items-center justify-center bg-blue-700/60 dark:bg-slate-800/60",
                           )}
                         >
                           <Image
@@ -374,7 +375,7 @@ export default function TVGuide({ data }: { data: MatchSummary[] }) {
                         }}
                       >
                         {match.leagueName && (
-                          <span className="truncate text-[10px] font-semibold leading-tight">
+                          <span className="truncate text-[10px] leading-tight font-semibold">
                             {match.leagueName}
                           </span>
                         )}

@@ -7,7 +7,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/shadcn/dialog"
-import { cn } from "@/lib/shadcnUtils"
+import { cn } from "cn"
+
 import {
   CricketBallIncident,
   CricketInningIncident,

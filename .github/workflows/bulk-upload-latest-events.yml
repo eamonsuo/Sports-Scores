@@ -2,7 +2,7 @@ name: Bulk Upload Events
 
 on:
   schedule:
-    - cron: "30 11 * * 3"
+    - cron: "30 9 * * 3"
       timezone: "Australia/Brisbane"
   # Triggered externally (e.g. from a Power Automate flow) with the same
   # parameters as workflow_dispatch, passed via client_payload.
@@ -291,7 +291,7 @@ jobs:
 
   # ---- Runs a single tournament (manual or repository_dispatch) ----
   upload-single:
-    if: ${{ (github.event.client_payload.mode || inputs.mode || 'singleLeague') == 'singleLeague' }}
+    if: ${{ github.event_name != 'schedule' && (github.event.client_payload.mode || inputs.mode || 'singleLeague') == 'singleLeague' }}
     runs-on: ubuntu-latest
     name: Upload ${{ github.event.client_payload.league || inputs.league }}
     defaults:

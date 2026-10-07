@@ -3,7 +3,7 @@
 import EventCardGrid from "@/components/event-calendar/EventCardGrid"
 import RegularSeasonsView from "@/components/event-calendar/RegularSeasonsView"
 import { SportEvent } from "@/types/event-calendar"
-import { clsx } from "clsx"
+import { cn } from "cn"
 import Link from "next/link"
 import { useState } from "react"
 import { Button } from "../shadcn/button"
@@ -37,7 +37,7 @@ export default function EventsCalendarClient({
         <div className="mb-4 flex rounded-lg bg-gray-200 p-1 dark:bg-neutral-800">
           <button
             onClick={() => setViewMode("major")}
-            className={clsx(
+            className={cn(
               "flex-1 place-content-center rounded-md px-2 py-2 text-center focus:relative",
               viewMode === "major"
                 ? "bg-white text-black shadow-xs dark:bg-neutral-600 dark:text-neutral-200"
@@ -48,7 +48,7 @@ export default function EventsCalendarClient({
           </button>
           <button
             onClick={() => setViewMode("regular")}
-            className={clsx(
+            className={cn(
               "flex-1 place-content-center rounded-md px-2 py-2 text-center focus:relative",
               viewMode === "regular"
                 ? "bg-white text-black shadow-xs dark:bg-neutral-600 dark:text-neutral-200"
