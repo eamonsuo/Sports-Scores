@@ -2,7 +2,7 @@ name: Bulk Upload Events
 
 on:
   schedule:
-    - cron: "30 11 * * 3"
+    - cron: "30 9 * * 3"
       timezone: "Australia/Brisbane"
   # Triggered externally (e.g. from a Power Automate flow) with the same
   # parameters as workflow_dispatch, passed via client_payload.
