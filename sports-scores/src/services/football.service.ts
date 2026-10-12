@@ -89,29 +89,34 @@ class FootballService extends SofascoreSport {
   override eventMapper(
     event: Sofascore_Event,
     options?: DeepPartial<MatchSummary>,
+    timezone?: string,
   ): MatchSummary {
-    return super.eventMapper(event, {
-      ...options,
-      competitorDetails: [
-        {
-          ...options?.competitorDetails?.[0],
-          score: `${event.homeScore.display ?? 0}${event.homeScore.penalties ? ` (${event.homeScore.penalties})` : ""}`,
-        },
-        {
-          ...options?.competitorDetails?.[1],
-          score: `${event.awayScore.display ?? 0}${event.awayScore.penalties ? ` (${event.awayScore.penalties})` : ""}`,
-        },
-      ],
-      summaryText: setMatchSummary(
-        event.status.description === "AP" && event.status.type === "finished"
-          ? "penalties"
-          : event.status.type,
-        event.homeTeam.name,
-        event.homeScore.current,
-        event.awayTeam.name,
-        event.awayScore.current,
-      ),
-    })
+    return super.eventMapper(
+      event,
+      {
+        ...options,
+        competitorDetails: [
+          {
+            ...options?.competitorDetails?.[0],
+            score: `${event.homeScore.display ?? 0}${event.homeScore.penalties ? ` (${event.homeScore.penalties})` : ""}`,
+          },
+          {
+            ...options?.competitorDetails?.[1],
+            score: `${event.awayScore.display ?? 0}${event.awayScore.penalties ? ` (${event.awayScore.penalties})` : ""}`,
+          },
+        ],
+        summaryText: setMatchSummary(
+          event.status.description === "AP" && event.status.type === "finished"
+            ? "penalties"
+            : event.status.type,
+          event.homeTeam.name,
+          event.homeScore.current,
+          event.awayTeam.name,
+          event.awayScore.current,
+        ),
+      },
+      timezone,
+    )
   }
 }
 

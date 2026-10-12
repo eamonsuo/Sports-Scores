@@ -141,40 +141,45 @@ class CricketService extends SofascoreSport {
   override eventMapper(
     event: Sofascore_Event,
     options?: DeepPartial<MatchSummary>,
+    timezone?: string,
   ): MatchSummary {
-    return super.eventMapper(event, {
-      ...options,
-      summaryText:
-        event.note ??
-        setMatchSummary(
-          event.status.type,
-          event.homeTeam.name,
-          event.homeScore.current,
-          event.awayTeam.name,
-          event.awayScore.current,
-        ) + (event.status.type !== "notstarted" ? " runs" : ""),
-      roundLabel:
-        event.roundInfo?.name ??
-        (event.tournament.name.split(",").length > 1
-          ? event.tournament.name.split(",").at(-1)
-          : "Matches"),
-      competitorDetails: [
-        {
-          ...options?.competitorDetails?.[0],
-          score: formatScore(
-            event.homeScore.innings?.inning1,
-            event.homeScore.innings?.inning2,
-          ),
-        },
-        {
-          ...options?.competitorDetails?.[1],
-          score: formatScore(
-            event.awayScore.innings?.inning1,
-            event.awayScore.innings?.inning2,
-          ),
-        },
-      ],
-    })
+    return super.eventMapper(
+      event,
+      {
+        ...options,
+        summaryText:
+          event.note ??
+          setMatchSummary(
+            event.status.type,
+            event.homeTeam.name,
+            event.homeScore.current,
+            event.awayTeam.name,
+            event.awayScore.current,
+          ) + (event.status.type !== "notstarted" ? " runs" : ""),
+        roundLabel:
+          event.roundInfo?.name ??
+          (event.tournament.name.split(",").length > 1
+            ? event.tournament.name.split(",").at(-1)
+            : "Matches"),
+        competitorDetails: [
+          {
+            ...options?.competitorDetails?.[0],
+            score: formatScore(
+              event.homeScore.innings?.inning1,
+              event.homeScore.innings?.inning2,
+            ),
+          },
+          {
+            ...options?.competitorDetails?.[1],
+            score: formatScore(
+              event.awayScore.innings?.inning1,
+              event.awayScore.innings?.inning2,
+            ),
+          },
+        ],
+      },
+      timezone,
+    )
   }
 
   override matchDetailsMapper(

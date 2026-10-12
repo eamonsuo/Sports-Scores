@@ -105,9 +105,7 @@ export default function LeagueSeasonToggle({
   })
   const [selectedLeague, setSelectedLeague] = useState(initialLeague)
   const [selectedSeason, setSelectedSeason] = useState(initialSeason)
-  const [todayActive, setTodayActive] = useState(
-    pathname?.includes("/today") ?? false,
-  )
+  const [todayActive, setTodayActive] = useState(true)
   const [selectedDate, setSelectedDate] = useState<Date>(() => {
     const dateParam = searchParams?.get("date")
     return dateParam ? new Date(dateParam) : new Date()
@@ -162,10 +160,16 @@ export default function LeagueSeasonToggle({
         setSelectedDate(new Date(dateParam))
       }
     } else {
-      setTodayActive(false)
       const { leagueSlug, seasonSlug } = getLeagueAndSeasonFromPath(
         pathname || "",
       )
+      const leagueExists = leagues.some((league) => league.slug === leagueSlug)
+      if (!leagueExists) {
+        setTodayActive(true)
+        return
+      }
+
+      setTodayActive(false)
       const { league, season } = findLeagueAndSeason(leagueSlug, seasonSlug)
       setSelectedLeague(league)
       setSelectedSeason(season)
