@@ -6,9 +6,9 @@ import { SPORT } from "@/types/misc"
 import { redirect } from "next/navigation"
 
 export default async function Page(props: {
-  params: Promise<{ league: string; season: string; sport: string }>
+  params: Promise<{ sport: string; league: string; season: string }>
 }) {
-  const { league, season, sport } = await props.params
+  const { sport, league, season } = await props.params
   const config = SPORT_ROUTE_CONFIG[sport as SPORT]
 
   // Get configs for sport

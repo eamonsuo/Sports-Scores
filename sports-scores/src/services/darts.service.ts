@@ -77,19 +77,24 @@ class DartsService extends SofascoreSport {
   override eventMapper(
     event: Sofascore_Event,
     options?: DeepPartial<MatchSummary>,
+    timezone?: string,
   ): MatchSummary {
     const leagueTournament = [2066, 592, 11565].includes(
       event.tournament?.uniqueTournament?.id ?? 0,
     )
 
-    return super.eventMapper(event, {
-      venue: "",
-      roundLabel: leagueTournament
-        ? event.tournament.name
-        : (event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`),
-      leagueName: leagueTournament ? event.roundInfo?.name : undefined,
-      ...options,
-    })
+    return super.eventMapper(
+      event,
+      {
+        venue: "",
+        roundLabel: leagueTournament
+          ? event.tournament.name
+          : (event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`),
+        leagueName: leagueTournament ? event.roundInfo?.name : undefined,
+        ...options,
+      },
+      timezone,
+    )
   }
 }
 

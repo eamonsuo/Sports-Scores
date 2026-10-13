@@ -11,6 +11,7 @@ import {
   setTimer,
   shortenTeamNames,
 } from "@/lib/projUtils"
+import { getClientTimezone } from "@/lib/serverUtils"
 import {
   Brackets,
   CardVariant,
@@ -110,10 +111,12 @@ export abstract class SofascoreSport implements SportService {
       return null
     }
 
+    const timezone = await getClientTimezone()
+
     const apiMatches = (lastMatches?.events ?? [])
       .concat(nextMatches?.events ?? [])
       .filter((event) => event.status.type !== "canceled")
-      .map((event) => this.eventMapper(event))
+      .map((event) => this.eventMapper(event, undefined, timezone))
 
     // Merge API and dataverse matches, deduplicating by id (API takes priority)
     const apiIds = new Set(apiMatches.map((m) => m.id))
@@ -157,7 +160,8 @@ export abstract class SofascoreSport implements SportService {
       .filter((c) => !c.excludeByDefault) // TODO: Remove when all leagues implemented
       .map((c) => Number(c.id))
 
-    const timezone = date instanceof TZDate ? date.timeZone : FALLBACK_TIMEZONE
+    // const timezone = date instanceof TZDate ? date.timeZone : FALLBACK_TIMEZONE
+    const timezone = await getClientTimezone()
 
     matches.events = matches.events
       .filter(
@@ -200,22 +204,28 @@ export abstract class SofascoreSport implements SportService {
 
     const allMatches = matches.events
       .map((event) =>
-        this.eventMapper(event, {
-          leagueName:
-            `${
-              this.leagues.find(
-                (l) =>
-                  l.slug === event.tournament?.uniqueTournament?.id.toString(),
-              )?.name ?? event.tournament?.uniqueTournament?.name
-            }` +
-            (event.roundInfo?.name || event.roundInfo?.round
-              ? ` - ${event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`}`
-              : ""),
-          leagueSlug: `/sports/${this.sport}/${event.tournament?.uniqueTournament?.id}/${event.season?.id}`,
-          leagueImg: this.leagues.find(
-            (l) => l.slug === event.tournament?.uniqueTournament?.id.toString(),
-          )?.icon,
-        }),
+        this.eventMapper(
+          event,
+          {
+            leagueName:
+              `${
+                this.leagues.find(
+                  (l) =>
+                    l.slug ===
+                    event.tournament?.uniqueTournament?.id.toString(),
+                )?.name ?? event.tournament?.uniqueTournament?.name
+              }` +
+              (event.roundInfo?.name || event.roundInfo?.round
+                ? ` - ${event.roundInfo?.name ?? `Round ${event.roundInfo?.round ?? "x"}`}`
+                : ""),
+            leagueSlug: `/sports/${this.sport}/${event.tournament?.uniqueTournament?.id}/${event.season?.id}`,
+            leagueImg: this.leagues.find(
+              (l) =>
+                l.slug === event.tournament?.uniqueTournament?.id.toString(),
+            )?.icon,
+          },
+          timezone,
+        ),
       )
       .sort(
         (a, b) =>
@@ -225,8 +235,11 @@ export abstract class SofascoreSport implements SportService {
     const fixtures = await mapFixtureRounds(allMatches, this.leagues)
     const myTeams: FixtureRound = {
       matches: allMatches.filter((match) =>
-        match.competitorDetails.some((team) =>
-          this.leagues.some((l) => l.slug === `team/${team.id}`),
+        match.competitorDetails.some(
+          (team) =>
+            //TODO: Update to include user selected teams
+            this.leagues.some((l) => l.slug === `team/${team.id}`) ||
+            team.name.startsWith("Australia"),
         ),
       ),
       roundLabel: "My Teams",
@@ -288,20 +301,27 @@ export abstract class SofascoreSport implements SportService {
       nextMatches?.events ?? [],
     )
 
+    const timezone = await getClientTimezone()
+
     const allMatches = matches
       .filter((event) => event.status.type !== "canceled")
       .map((event) =>
-        this.eventMapper(event, {
-          roundLabel:
-            event.tournament?.uniqueTournament?.name +
-            " " +
-            event?.season?.year,
-          leagueName: event.tournament.name + " " + event?.season?.year,
-          leagueSlug: `/sports/${this.sport}/${event.tournament?.uniqueTournament?.id}/${event?.season?.id}`,
-          leagueImg: this.leagues.find(
-            (l) => l.slug === event.tournament?.uniqueTournament?.id.toString(),
-          )?.icon,
-        }),
+        this.eventMapper(
+          event,
+          {
+            roundLabel:
+              event.tournament?.uniqueTournament?.name +
+              " " +
+              event?.season?.year,
+            leagueName: event.tournament.name + " " + event?.season?.year,
+            leagueSlug: `/sports/${this.sport}/${event.tournament?.uniqueTournament?.id}/${event?.season?.id}`,
+            leagueImg: this.leagues.find(
+              (l) =>
+                l.slug === event.tournament?.uniqueTournament?.id.toString(),
+            )?.icon,
+          },
+          timezone,
+        ),
       )
 
     const fixtures = await mapFixtureRounds(allMatches, undefined)
@@ -499,11 +519,15 @@ export abstract class SofascoreSport implements SportService {
   eventMapper(
     event: Sofascore_Event,
     options?: DeepPartial<MatchSummary>,
+    timezone = FALLBACK_TIMEZONE,
   ): MatchSummary {
     const startDate = new Date(0)
     const endDate = new Date(0)
     startDate.setUTCSeconds(event.startTimestamp)
     endDate.setUTCSeconds(event?.endTimestamp ?? 0)
+
+    const convertedStartDate = new TZDate(startDate.getTime(), timezone)
+    const convertedEndDate = new TZDate(endDate.getTime(), timezone)
 
     const status =
       event.status.type === "inprogress" || event.status.type === "interrupted"
@@ -523,9 +547,9 @@ export abstract class SofascoreSport implements SportService {
 
     return {
       id: event.id.toString(),
-      startDate: startDate,
+      startDate,
       endDate:
-        event?.endTimestamp && !isSameDay(startDate, endDate)
+        event?.endTimestamp && !isSameDay(convertedStartDate, convertedEndDate)
           ? endDate
           : undefined,
       sport: this.sport,

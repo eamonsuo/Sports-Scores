@@ -1,4 +1,4 @@
-import { ScoreBreakdownConfig } from "@/services/sofascore.service"
+﻿import { ScoreBreakdownConfig } from "@/services/sofascore.service"
 import {
   DisplayTypes,
   LadderConfig,
@@ -2926,7 +2926,6 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2025", slug: "69937", tvguide: TENNIS_MAJORS_TV_GUIDE },
     ],
   },
-
   {
     name: "Brisbane International - Men's Singles",
     slug: "2437",
@@ -2950,6 +2949,24 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     slug: "2310",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/ipw5go1672327786.png",
     seasons: [{ name: "2026", slug: "88325" }],
+  },
+  {
+    name: "ATP Finals",
+    slug: "2517",
+    // icon: "https://r2.thesportsdb.com/images/media/league/badge/i0qscy1672325773.png",
+    seasons: [{ name: "2025", slug: "67326" }],
+  },
+  {
+    name: "WTA Finals",
+    slug: "11864",
+    // icon: "https://r2.thesportsdb.com/images/media/league/badge/i0qscy1672325773.png",
+    seasons: [{ name: "2026", slug: "67328" }],
+  },
+  {
+    name: "Laver Cup",
+    slug: "10524",
+    // icon: "https://r2.thesportsdb.com/images/media/league/badge/i0qscy1672325773.png",
+    seasons: [{ name: "2026", slug: "88326" }],
   },
   {
     name: "🇦🇺 Alex De Minaur",

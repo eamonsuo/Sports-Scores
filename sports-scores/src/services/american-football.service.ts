@@ -87,25 +87,30 @@ class AmericanFootballService extends SofascoreSport {
   override eventMapper(
     event: AmericanFootball_Sofascore_Event,
     options?: DeepPartial<MatchSummary>,
+    timezone?: string,
   ): MatchSummary {
-    return super.eventMapper(event, {
-      ...options,
-      roundLabel: event.roundInfo?.name ?? `Week ${event.roundInfo?.round}`,
-      competitorDetails: [
-        {
-          ...options?.competitorDetails?.[0],
-          winDrawLoss:
-            event.homeTeamSeasonHistoricalForm &&
-            `${event.homeTeamSeasonHistoricalForm.wins ?? 0}-${event.homeTeamSeasonHistoricalForm.losses ?? 0}${event.homeTeamSeasonHistoricalForm.draws ? "-" + event.homeTeamSeasonHistoricalForm.draws : ""}`,
-        },
-        {
-          ...options?.competitorDetails?.[1],
-          winDrawLoss:
-            event.awayTeamSeasonHistoricalForm &&
-            `${event.awayTeamSeasonHistoricalForm.wins ?? 0}-${event.awayTeamSeasonHistoricalForm.losses ?? 0}${event.awayTeamSeasonHistoricalForm.draws ? "-" + event.awayTeamSeasonHistoricalForm.draws : ""}`,
-        },
-      ],
-    })
+    return super.eventMapper(
+      event,
+      {
+        ...options,
+        roundLabel: event.roundInfo?.name ?? `Week ${event.roundInfo?.round}`,
+        competitorDetails: [
+          {
+            ...options?.competitorDetails?.[0],
+            winDrawLoss:
+              event.homeTeamSeasonHistoricalForm &&
+              `${event.homeTeamSeasonHistoricalForm.wins ?? 0}-${event.homeTeamSeasonHistoricalForm.losses ?? 0}${event.homeTeamSeasonHistoricalForm.draws ? "-" + event.homeTeamSeasonHistoricalForm.draws : ""}`,
+          },
+          {
+            ...options?.competitorDetails?.[1],
+            winDrawLoss:
+              event.awayTeamSeasonHistoricalForm &&
+              `${event.awayTeamSeasonHistoricalForm.wins ?? 0}-${event.awayTeamSeasonHistoricalForm.losses ?? 0}${event.awayTeamSeasonHistoricalForm.draws ? "-" + event.awayTeamSeasonHistoricalForm.draws : ""}`,
+          },
+        ],
+      },
+      timezone,
+    )
   }
 }
 

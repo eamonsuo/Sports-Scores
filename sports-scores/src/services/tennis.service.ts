@@ -1,42 +1,42 @@
 import {
-    fetchTennisATPRankings,
-    fetchTennisBracket,
-    fetchTennisMatchDetails,
-    fetchTennisMatchesByCategoryDate,
-    fetchTennisPlayerLastMatches,
-    fetchTennisPlayerNextMatches,
-    fetchTennisTournamentLastMatches,
-    fetchTennisTournamentNextMatches,
-    fetchTennisWTARankings,
-} from "@/endpoints/tennis.api";
+  fetchTennisATPRankings,
+  fetchTennisBracket,
+  fetchTennisMatchDetails,
+  fetchTennisMatchesByCategoryDate,
+  fetchTennisPlayerLastMatches,
+  fetchTennisPlayerNextMatches,
+  fetchTennisTournamentLastMatches,
+  fetchTennisTournamentNextMatches,
+  fetchTennisWTARankings,
+} from "@/endpoints/tennis.api"
 import {
-    EVENT_TODAY_EXTENTION_HOURS,
-    FALLBACK_TIMEZONE,
-    TENNIS_CATEGORIES,
-    TENNIS_LEAGUES,
-} from "@/lib/constants";
-import { withDevCache } from "@/lib/devCache";
-import { resolveSportImage } from "@/lib/imageMapping";
-import { setTennisMatchSummary, shortenTeamNames } from "@/lib/projUtils";
+  EVENT_TODAY_EXTENTION_HOURS,
+  FALLBACK_TIMEZONE,
+  TENNIS_CATEGORIES,
+  TENNIS_LEAGUES,
+} from "@/lib/constants"
+import { withDevCache } from "@/lib/devCache"
+import { resolveSportImage } from "@/lib/imageMapping"
+import { setTennisMatchSummary, shortenTeamNames } from "@/lib/projUtils"
 import {
-    CardVariant,
-    DeepPartial,
-    FixtureRound,
-    MatchProperties,
-    MatchSummary,
-    PeriodScore,
-    SPORT,
-    Standings,
-} from "@/types/misc";
-import { Sofascore_Event, Sofascore_Score } from "@/types/sofascore";
+  CardVariant,
+  DeepPartial,
+  FixtureRound,
+  MatchProperties,
+  MatchSummary,
+  PeriodScore,
+  SPORT,
+  Standings,
+} from "@/types/misc"
+import { Sofascore_Event, Sofascore_Score } from "@/types/sofascore"
 import {
-    RankingList,
-    Tennis_Sofascore_Event,
-    Tennis_TennisApi_Rankings_Response,
-} from "@/types/tennis";
-import { TZDate } from "@date-fns/tz";
-import { addHours, isSameDay, isWithinInterval } from "date-fns";
-import { SofascoreSport } from "./sofascore.service";
+  RankingList,
+  Tennis_Sofascore_Event,
+  Tennis_TennisApi_Rankings_Response,
+} from "@/types/tennis"
+import { TZDate } from "@date-fns/tz"
+import { addHours, isSameDay, isWithinInterval } from "date-fns"
+import { SofascoreSport } from "./sofascore.service"
 
 const TENNIS_RANKING_HEADINGS = ["Player", "Total", "Prev"]
 const TENNIS_SET_NUMBERS = [1, 2, 3, 4, 5] as const
@@ -259,56 +259,61 @@ class TennisService extends SofascoreSport {
   override eventMapper(
     match: Tennis_Sofascore_Event,
     options?: DeepPartial<MatchSummary>,
+    timezone?: string,
   ): MatchSummary {
     const convertedScores = this.constructTennisScore(
       match.homeScore,
       match.awayScore,
     )
 
-    return super.eventMapper(match, {
-      ...options,
-      otherDetail: match.roundInfo?.name ?? undefined,
-      summaryText: setTennisMatchSummary(
-        match.status.type,
-        match.winnerCode,
-        match.homeTeam.name,
-        match.awayTeam.name,
-        match.homeScore.current ?? 0,
-        match.awayScore.current ?? 0,
-      ),
-      leagueName: `${match.tournament.category.name} ${match.tournament.uniqueTournament?.tennisPoints ?? ""} - ${match.tournament.category.name === "ATP" || match.tournament.category.name === "WTA" || match.tournament.category.name === "Challenger" ? match.tournament.name : match.tournament?.uniqueTournament?.name}`,
-      leagueSlug: `/sports/${this.sport}/${match.tournament?.uniqueTournament?.id}/${match?.season?.id}`,
-      competitorDetails: [
-        {
-          id: match.homeTeam.id.toString(),
-          name: `${match.homeTeamSeed ? match.homeTeamSeed + " " : ""}${shortenTeamNames(match.homeTeam.name)}`,
-          score: convertedScores.homeScore,
-          img:
-            match.homeTeam.subTeams && match.homeTeam.subTeams.length > 0
-              ? match.homeTeam.subTeams.map((subTeam) =>
-                  resolveSportImage(subTeam.country.name ?? subTeam.name),
-                )
-              : resolveSportImage(
-                  match.homeTeam.country.name ?? match.homeTeam.name,
-                ),
-        },
-        {
-          id: match.awayTeam.id.toString(),
-          name:
-            `${match.awayTeamSeed ? match.awayTeamSeed + " " : ""}` +
-            shortenTeamNames(match.awayTeam.name),
-          score: convertedScores.awayScore,
-          img:
-            match.awayTeam.subTeams && match.awayTeam.subTeams.length > 0
-              ? match.awayTeam.subTeams.map((subTeam) =>
-                  resolveSportImage(subTeam.country.name ?? subTeam.name),
-                )
-              : resolveSportImage(
-                  match.awayTeam.country.name ?? match.awayTeam.name,
-                ),
-        },
-      ],
-    })
+    return super.eventMapper(
+      match,
+      {
+        ...options,
+        otherDetail: match.roundInfo?.name ?? undefined,
+        summaryText: setTennisMatchSummary(
+          match.status.type,
+          match.winnerCode,
+          match.homeTeam.name,
+          match.awayTeam.name,
+          match.homeScore.current ?? 0,
+          match.awayScore.current ?? 0,
+        ),
+        leagueName: `${match.tournament.category.name} ${match.tournament.uniqueTournament?.tennisPoints ?? ""} - ${match.tournament.category.name === "ATP" || match.tournament.category.name === "WTA" || match.tournament.category.name === "Challenger" ? match.tournament.name : match.tournament?.uniqueTournament?.name}`,
+        leagueSlug: `/sports/${this.sport}/${match.tournament?.uniqueTournament?.id}/${match?.season?.id}`,
+        competitorDetails: [
+          {
+            id: match.homeTeam.id.toString(),
+            name: `${match.homeTeamSeed ? match.homeTeamSeed + " " : ""}${shortenTeamNames(match.homeTeam.name)}`,
+            score: convertedScores.homeScore,
+            img:
+              match.homeTeam.subTeams && match.homeTeam.subTeams.length > 0
+                ? match.homeTeam.subTeams.map((subTeam) =>
+                    resolveSportImage(subTeam.country.name ?? subTeam.name),
+                  )
+                : resolveSportImage(
+                    match.homeTeam.country.name ?? match.homeTeam.name,
+                  ),
+          },
+          {
+            id: match.awayTeam.id.toString(),
+            name:
+              `${match.awayTeamSeed ? match.awayTeamSeed + " " : ""}` +
+              shortenTeamNames(match.awayTeam.name),
+            score: convertedScores.awayScore,
+            img:
+              match.awayTeam.subTeams && match.awayTeam.subTeams.length > 0
+                ? match.awayTeam.subTeams.map((subTeam) =>
+                    resolveSportImage(subTeam.country.name ?? subTeam.name),
+                  )
+                : resolveSportImage(
+                    match.awayTeam.country.name ?? match.awayTeam.name,
+                  ),
+          },
+        ],
+      },
+      timezone,
+    )
   }
 
   protected override matchDetailsMapper(
