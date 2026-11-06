@@ -130,8 +130,12 @@ type NonQualifiers = ReturnType<typeof classifyNonQualifiers>
 function findStandings(
   tables: PlayoffPictureStandingTables[],
   name: string,
+  endsWith?: boolean,
 ): PlayoffPictureStanding[] {
-  return tables.find((t) => t.name === name)?.standings ?? []
+  return (
+    tables.find((t) => (endsWith ? t.name?.endsWith(name) : t.name === name))
+      ?.standings ?? []
+  )
 }
 
 function filterDivisionTables(
@@ -267,7 +271,7 @@ function buildNflConference(
   displayName: string,
   colour: string,
 ): PlayoffPictureGroup {
-  const standings = findStandings(tables, fullTableName)
+  const standings = findStandings(tables, fullTableName, true)
   const wildCard = standings.slice(4, 7)
   const inHunt = standings.slice(7)
   const divisionTables = filterDivisionTables(tables, shortName, fullTableName)
@@ -304,7 +308,7 @@ function buildNfl(
     buildNflConference(
       tables,
       config,
-      "NFL 25/26, AFC",
+      "AFC",
       "AFC",
       "AFC",
       "text-red-700 dark:text-red-400",
@@ -312,7 +316,7 @@ function buildNfl(
     buildNflConference(
       tables,
       config,
-      "NFL 25/26, NFC",
+      "NFC",
       "NFC",
       "NFC",
       "text-blue-700 dark:text-blue-400",

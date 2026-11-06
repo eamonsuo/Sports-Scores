@@ -474,7 +474,7 @@ export function resolveImage(teamName: string) {
     case "Perth Glory":
       return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/5322.png"
     case "Canberra United":
-      return "https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/5321.png"
+      return "https://r2.thesportsdb.com/images/media/team/badge/h64bw71704571124.png"
 
     // EPL
     case "Arsenal":
@@ -1023,6 +1023,8 @@ export function resolveImage(teamName: string) {
       return "https://upload.wikimedia.org/wikipedia/en/1/17/Bendigo_Spirit_new_logo.png"
     case "Sydney Flames":
       return "https://upload.wikimedia.org/wikipedia/en/7/7a/Sydney_Flames_new_logo.png"
+    case "Tasmania Jewels":
+      return "https://r2.thesportsdb.com/images/media/team/badge/jhkz6l1787576823.png"
 
     //NBA
     case "Detroit Pistons":

@@ -97,7 +97,12 @@ export default async function Page({
 
   if (myTeams.length > 0)
     allSports.unshift({
-      matches: myTeams.flatMap((fixtures) => fixtures.matches),
+      matches: myTeams
+        .flatMap((fixtures) => fixtures.matches)
+        .sort(
+          (a, b) =>
+            new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+        ),
       roundLabel: "My Teams",
     })
 

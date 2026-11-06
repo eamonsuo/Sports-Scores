@@ -43,16 +43,27 @@ export default async function CricketScorecardBat({
         ))}
         <tr>
           <td></td>
-          <td className="pt-3 text-left">
-            {`b ${data.extras.byes} lb ${data.extras.legbyes} w ${data.extras.wides} nb ${data.extras.noballs}`}
+          <td className="p-2 text-left">
+            Extras{" "}
+            <span className="text-left text-xs">
+              {`(b ${data.extras.byes} lb ${data.extras.legbyes} w ${data.extras.wides} nb ${data.extras.noballs})`}
+            </span>
           </td>
-          <td className="pt-3">{data.extras.total}</td>
+          <td>{data.extras.total}</td>
         </tr>
         <tr>
           <td></td>
-          <td className="py-3 text-left">Total</td>
-          <td>{`${data.wickets}/${data.total}`}</td>
-          <td>({data.overs})</td>
+          <td className="p-2 text-left">
+            Total{" "}
+            <span className="text-xs">
+              {`(${data.overs} ov, ${(data.total / data.overs).toFixed(2)} rr)`}
+            </span>
+          </td>
+          <td>{`${data.wickets}/${data.total}`} </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
         </tr>
       </tbody>
     </table>
