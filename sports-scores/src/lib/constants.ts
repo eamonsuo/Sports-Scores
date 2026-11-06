@@ -1259,6 +1259,19 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
     icon: "https://r2.thesportsdb.com/images/media/league/badge/4grr341659039857.png",
     seasons: [
       {
+        name: "2026",
+        slug: "95427",
+        ladderConfig: ladderConfigMap({
+          placingCategories: FINALS_TOP_8_LADDER_CONFIG,
+        }),
+        tvguide: {
+          channels: [
+            tvGuideConfigCreate(TVChannel.KAYO, 0, AUSSIE_RULES_MATCH_LENGTH),
+            tvGuideConfigCreate(TVChannel.SEVEN, 0, AUSSIE_RULES_MATCH_LENGTH),
+          ],
+        },
+      },
+      {
         name: "2025",
         slug: "76123",
         ladderConfig: ladderConfigMap({
@@ -2689,7 +2702,7 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
   },
   {
     name: "Brisbane Bullets",
-    slug: "team/1506",
+    slug: "team/233139",
     icon: "https://r2.thesportsdb.com/images/media/team/badge/ubzenr1545867000.png",
     seasons: [{ name: "Current", slug: "" }],
   },
