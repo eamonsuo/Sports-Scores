@@ -16,9 +16,11 @@ const FixtureList =
 export default function FixtureRoundList({
   data,
   curRound,
+  showAllLabels,
 }: {
   data: FixtureRound[]
   curRound: string
+  showAllLabels?: boolean
 }) {
   const roundLabels: { groupLabel?: string; labels: string[] }[] = data.reduce(
     (acc, item) => {
@@ -37,7 +39,11 @@ export default function FixtureRoundList({
   )
 
   return (
-    <ComponentList labels={roundLabels} curItem={curRound} showAllLabels={true}>
+    <ComponentList
+      labels={roundLabels}
+      curItem={curRound}
+      showAllLabels={showAllLabels ?? true}
+    >
       {data.map((item) => (
         <div
           key={item.roundLabel}

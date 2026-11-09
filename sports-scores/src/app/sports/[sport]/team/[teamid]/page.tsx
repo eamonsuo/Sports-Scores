@@ -1,9 +1,8 @@
 import ClientSportsPage from "@/components/all-sports/ClientSportsPage"
-import FixtureList from "@/components/all-sports/FixtureList"
 import FixtureRoundList from "@/components/all-sports/FixtureRoundList"
 import Placeholder from "@/components/misc-ui/Placeholder"
 import { SPORT_ROUTE_CONFIG } from "@/lib/routeConfig"
-import { Matches, SPORT } from "@/types/misc"
+import { FixtureRound, Matches, RoundLabel, SPORT } from "@/types/misc"
 import { ReactNode } from "react"
 
 export default async function Page(props: {
@@ -36,6 +35,10 @@ function pageSettings(data: Matches): {
       return new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
     })
 
+  const fixtureRound: FixtureRound[] = [
+    { matches: fixtureList, roundLabel: RoundLabel.ALL_MATCHES },
+  ]
+
   return [
     {
       btnLabel: `Matches By League`,
@@ -46,7 +49,13 @@ function pageSettings(data: Matches): {
     },
     {
       btnLabel: `Matches List`,
-      component: <FixtureList data={fixtureList} />,
+      component: (
+        <FixtureRoundList
+          data={fixtureRound}
+          curRound={fixtureRound[0].roundLabel}
+          showAllLabels={false}
+        />
+      ),
       state: "list",
     },
   ]

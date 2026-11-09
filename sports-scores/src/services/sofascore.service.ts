@@ -31,6 +31,7 @@ import {
   MatchStatus,
   MatchSummary,
   PeriodScore,
+  RoundLabel,
   SPORT,
   SportCategory,
   SportService,
@@ -242,7 +243,15 @@ export abstract class SofascoreSport implements SportService {
             team.name.startsWith("Australia"),
         ),
       ),
-      roundLabel: "My Teams",
+      roundLabel: RoundLabel.MY_TEAMS,
+    }
+    const live: FixtureRound = {
+      matches: allMatches.filter(
+        (match) =>
+          match.status === MatchStatus.LIVE &&
+          validLeagueIds.includes(Number(match.leagueId)),
+      ),
+      roundLabel: RoundLabel.LIVE,
     }
 
     const errorCategories: FixtureRound[] = errors.map((error) => ({
@@ -267,7 +276,7 @@ export abstract class SofascoreSport implements SportService {
         error.category,
     }))
 
-    const combinedFixtures = [myTeams, ...fixtures, ...errorCategories]
+    const combinedFixtures = [myTeams, live, ...fixtures, ...errorCategories]
 
     return {
       fixtures: combinedFixtures,
@@ -1002,13 +1011,18 @@ export abstract class SofascoreStageSport implements SportService {
 
     if (!dataverseMatches || dataverseMatches.length === 0) return null
 
-    const fixtures = await mapFixtureRounds(
-      dataverseMatches.map((match) => this.eventMapperMatchSummary(match)),
-      this.leagues,
+    const allMatches = dataverseMatches.map((match) =>
+      this.eventMapperMatchSummary(match),
     )
 
+    const fixtures = await mapFixtureRounds(allMatches, this.leagues)
+    const live: FixtureRound = {
+      matches: allMatches.filter((match) => match.status === MatchStatus.LIVE),
+      roundLabel: RoundLabel.LIVE,
+    }
+
     return {
-      fixtures: fixtures,
+      fixtures: [live, ...fixtures],
       currentRound: getCurrentRound(fixtures, DisplayTypes.LEAGUE),
     }
   }

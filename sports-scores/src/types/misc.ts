@@ -338,6 +338,12 @@ export enum DisplayTypes {
   LEAGUE = "league",
 }
 
+export enum RoundLabel {
+  MY_TEAMS = "My Teams",
+  LIVE = "Live",
+  ALL_MATCHES = "All Matches",
+}
+
 export enum TVChannel {
   KAYO = "Kayo",
   NINE = "9",

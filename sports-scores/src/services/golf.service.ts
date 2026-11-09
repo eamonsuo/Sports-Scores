@@ -32,6 +32,7 @@ import {
   Matches,
   MatchStatus,
   MatchSummary,
+  RoundLabel,
   SPORT,
   SportService,
   Standings,
@@ -114,13 +115,17 @@ class GolfService implements SportService {
       return null
     }
 
-    const fixtures = await mapFixtureRounds(
-      dataverseMatches.map((event) => this.eventMapper(event)),
-      this.tours,
-    )
+    const allMatches = dataverseMatches.map((event) => this.eventMapper(event))
+
+    const fixtures = await mapFixtureRounds(allMatches, this.tours)
+
+    const live: FixtureRound = {
+      matches: allMatches.filter((match) => match.status === MatchStatus.LIVE),
+      roundLabel: RoundLabel.LIVE,
+    }
 
     return {
-      fixtures: fixtures,
+      fixtures: [live, ...fixtures],
       currentRound: getCurrentRound(fixtures, DisplayTypes.LEAGUE),
     }
   }
