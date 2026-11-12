@@ -290,9 +290,7 @@ export async function sportEventSchedulesUpcoming(
   if (!response) return null
 
   return response.filter((event) => {
-    const endDate = event.endDate
-      ? new Date(event.endDate)
-      : new Date(event.startDate)
+    const endDate = event.endDate ?? event.startDate
     return endDate >= fromDate
   })
 }
