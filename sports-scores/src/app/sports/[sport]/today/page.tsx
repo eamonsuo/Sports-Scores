@@ -5,7 +5,7 @@ import Placeholder from "@/components/misc-ui/Placeholder"
 import { SPORT_ROUTE_CONFIG } from "@/lib/routeConfig"
 import { getClientDate } from "@/lib/serverUtils"
 import { leagueOrderStorageKey } from "@/lib/storageKeys"
-import { SPORT } from "@/types/misc"
+import { RoundLabel, SPORT } from "@/types/misc"
 import { TZDate } from "@date-fns/tz/date"
 
 export default async function Page({
@@ -80,7 +80,7 @@ export default async function Page({
         defaultOrder={defaultLeagueOrder}
         defaultExcludedFromToday={defaultExcludedFromToday}
         groupBy="leagueSlug"
-        pinnedRoundLabel="My Teams"
+        pinnedRoundLabels={[RoundLabel.MY_TEAMS, RoundLabel.LIVE]}
         filterHidden
       />
       <DateNav date={parsedDate} />

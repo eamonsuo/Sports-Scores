@@ -118,6 +118,14 @@ export type SportCategory = {
   excludeByDefault?: boolean
 }
 
+export type Season = {
+  name: string
+  slug: string
+  ladderConfig?: LadderConfig
+  tvGuide?: TVConfig
+  externalURL?: string
+}
+
 export type TVChannelConfig = {
   channel: TVChannel
   startTime?: (date: Date) => Date
@@ -137,13 +145,7 @@ export type LeagueSeasonConfig = {
   name: string
   slug: string
   icon?: string
-  seasons: {
-    name: string
-    slug: string
-    ladderConfig?: LadderConfig
-    tvguide?: TVConfig
-    externalURL?: string
-  }[]
+  seasons: Season[]
   display?: DisplayTypes
   externalURL?: string
   byes?: {
@@ -157,7 +159,7 @@ export type LeagueSeasonConfig = {
 export type ClientLeagueSeasonConfig = Omit<LeagueSeasonConfig, "seasons"> & {
   seasons: Omit<
     LeagueSeasonConfig["seasons"][number],
-    "ladderConfig" | "tvguide"
+    "ladderConfig" | "tvGuide"
   >[]
 }
 
@@ -336,6 +338,12 @@ export enum DisplayTypes {
   ROUND = "round",
   DATE = "date",
   LEAGUE = "league",
+}
+
+export enum RoundLabel {
+  MY_TEAMS = "My Teams",
+  LIVE = "Live",
+  ALL_MATCHES = "All Matches",
 }
 
 export enum TVChannel {

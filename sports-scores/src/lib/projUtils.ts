@@ -407,7 +407,7 @@ export function getSportConfigurations(
   )
 
   const ladderConfig = seasonConfig?.ladderConfig
-  const tvConfig = seasonConfig?.tvguide
+  const tvConfig = seasonConfig?.tvGuide
 
   return { leagueConfig, seasonConfig, ladderConfig, tvConfig }
 }
@@ -418,7 +418,7 @@ export function stripLeagueSeasonConfig(
   return config.map(({ seasons, ...rest }) => ({
     ...rest,
     seasons: seasons.map(
-      ({ ladderConfig, tvguide, ...seasonRest }) => seasonRest,
+      ({ ladderConfig, tvGuide: tvguide, ...seasonRest }) => seasonRest,
     ),
   }))
 }

@@ -22,7 +22,7 @@ import { rugbyLeagueService } from "@/services/rugby-league.service"
 import { rugbyUnionService } from "@/services/rugby-union.service"
 import { surfingService } from "@/services/surfing.service"
 import { tennisService } from "@/services/tennis.service"
-import { FixtureRound, SPORT } from "@/types/misc"
+import { FixtureRound, RoundLabel, SPORT } from "@/types/misc"
 import { TZDate } from "@date-fns/tz/date"
 import { ReactNode } from "react"
 
@@ -90,12 +90,30 @@ export default async function Page({
     .concat(tagSport(cyclingToday?.fixtures, SPORT.CYCLING))
 
   const myTeams = allSports.filter(
-    (fixtures) => fixtures.roundLabel === "My Teams",
+    (fixtures) => fixtures.roundLabel === RoundLabel.MY_TEAMS,
+  )
+  const liveFixtures = allSports.filter(
+    (fixtures) => fixtures.roundLabel === RoundLabel.LIVE,
   )
 
-  allSports = allSports.filter((fixtures) => fixtures.roundLabel !== "My Teams")
+  allSports = allSports.filter(
+    (fixtures) =>
+      fixtures.roundLabel !== RoundLabel.MY_TEAMS &&
+      fixtures.roundLabel !== RoundLabel.LIVE,
+  )
 
-  if (myTeams.length > 0)
+  if (liveFixtures.length > 0) {
+    allSports.unshift({
+      matches: liveFixtures
+        .flatMap((fixtures) => fixtures.matches)
+        .sort(
+          (a, b) =>
+            new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+        ),
+      roundLabel: RoundLabel.LIVE,
+    })
+  }
+  if (myTeams.length > 0) {
     allSports.unshift({
       matches: myTeams
         .flatMap((fixtures) => fixtures.matches)
@@ -103,8 +121,9 @@ export default async function Page({
           (a, b) =>
             new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
         ),
-      roundLabel: "My Teams",
+      roundLabel: RoundLabel.MY_TEAMS,
     })
+  }
 
   const perSportLeagueExclusion = TODAY_PAGE_SPORTS.map((sport) => {
     const leagues = SPORT_ROUTE_CONFIG[sport].leagues
@@ -147,7 +166,7 @@ function pageSettings(
   state: string
 }[] {
   const tvGuideList = data
-    .filter((fixtures) => fixtures.roundLabel !== "My Teams")
+    .filter((fixtures) => fixtures.roundLabel !== RoundLabel.MY_TEAMS)
     .flatMap((item) => item.matches)
     .filter((match) => match.tv && match.tv.length > 0)
     .sort(
@@ -164,7 +183,7 @@ function pageSettings(
           storageKey={FOOTER_ORDER_STORAGE_KEY}
           defaultOrder={defaultFooterOrder}
           groupBy="sport"
-          pinnedRoundLabel="My Teams"
+          pinnedRoundLabels={[RoundLabel.MY_TEAMS, RoundLabel.LIVE]}
           filterHidden
           perSportLeagueExclusion={perSportLeagueExclusion}
         />

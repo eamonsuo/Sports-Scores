@@ -6,6 +6,7 @@ import TennisMatchCard from "@/components/tennis/TennisMatchCard"
 import { cn } from "cn"
 
 import { CardVariant, MatchSummary } from "@/types/misc"
+import { isSameDay } from "date-fns"
 import { useRouter } from "next/navigation"
 import React, { useEffect, useTransition } from "react"
 import Placeholder from "../misc-ui/Placeholder"
@@ -62,6 +63,7 @@ export default function FixtureList({ data }: { data: MatchSummary[] }) {
   const currentDate: Date = new Date()
 
   let sectionDate = new Date("2000-01-01")
+  let sectionDateEnd = new Date("2000-01-01")
   let sectionSeries = ""
   let displayDate = false
   let displaySeries = false
@@ -86,11 +88,14 @@ export default function FixtureList({ data }: { data: MatchSummary[] }) {
     >
       <div className="flex-1 overflow-y-auto px-4">
         {data.map((item: MatchSummary, index) => {
-          let itemDate = new Date(item.startDate)
           displayDate = displaySeries = false
 
-          if (sectionDate.toDateString() !== itemDate.toDateString()) {
-            sectionDate = itemDate
+          if (
+            !isSameDay(sectionDate, item.startDate) ||
+            !isSameDay(sectionDateEnd, item.endDate ?? item.startDate)
+          ) {
+            sectionDate = item.startDate
+            sectionDateEnd = item.endDate ?? item.startDate
             displayDate = true
           }
 
@@ -143,7 +148,8 @@ export default function FixtureList({ data }: { data: MatchSummary[] }) {
                       if (!nextItem) return true
                       const nextDate = new Date(nextItem.startDate)
                       return (
-                        nextDate.toDateString() !== itemDate.toDateString() ||
+                        nextDate.toDateString() !==
+                          item.startDate.toDateString() ||
                         nextItem.leagueName !== item.leagueName
                       )
                     })() &&

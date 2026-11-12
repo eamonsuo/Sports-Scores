@@ -1,13 +1,13 @@
 "use client"
 import {
-  loadExcludedFromToday,
-  loadOrderPreferences,
-  useOrderPreference,
-} from "@/lib/orderPreferences"
-import { leagueOrderStorageKey } from "@/lib/storageKeys"
-import { FixtureRound, SPORT } from "@/types/misc"
-import { useEffect, useState } from "react"
-import FixtureRoundList from "./FixtureRoundList"
+    loadExcludedFromToday,
+    loadOrderPreferences,
+    useOrderPreference,
+} from "@/lib/orderPreferences";
+import { leagueOrderStorageKey } from "@/lib/storageKeys";
+import { FixtureRound, SPORT } from "@/types/misc";
+import { useEffect, useState } from "react";
+import FixtureRoundList from "./FixtureRoundList";
 
 // A sport's league config, needed to resolve its own excludedFromToday preference
 // independently of this list's own storageKey/groupBy (used by groupBy="sport" pages
@@ -25,7 +25,7 @@ type OrderedFixtureRoundListProps = {
   defaultOrder: string[]
   // Field to group/sort rounds by - a function prop can't cross the server/client boundary.
   groupBy: "sport" | "roundLabel" | "leagueSlug"
-  pinnedRoundLabel?: string
+  pinnedRoundLabels?: string[]
   // When set, hides rounds whose groupKey the user has hidden via the customize dialog.
   filterHidden?: boolean
   // Leagues excluded from Today by default (only meaningful for groupBy="leagueSlug").
@@ -36,13 +36,13 @@ type OrderedFixtureRoundListProps = {
 }
 
 // Generic sort of FixtureRound groups (sports, leagues, etc.) by a persisted order preference,
-// with an optional round (e.g. "My Teams") always pinned first.
+// with optional round/s (e.g. "My Teams") always pinned first.
 export default function OrderedFixtureRoundList({
   data,
   storageKey,
   defaultOrder,
   groupBy,
-  pinnedRoundLabel,
+  pinnedRoundLabels,
   filterHidden = false,
   defaultExcludedFromToday = [],
   perSportLeagueExclusion,
@@ -93,12 +93,14 @@ export default function OrderedFixtureRoundList({
     setSportLeagueRanks(nextRanks)
   }, [perSportLeagueExclusion])
 
-  const pinnedRound = pinnedRoundLabel
-    ? data.find((item) => item.roundLabel === pinnedRoundLabel)
-    : undefined
-  const rest = pinnedRoundLabel
-    ? data.filter((item) => item.roundLabel !== pinnedRoundLabel)
-    : data
+  const pinnedRound =
+    pinnedRoundLabels && pinnedRoundLabels.length > 0
+      ? data.filter((item) => pinnedRoundLabels.includes(item.roundLabel))
+      : undefined
+  const rest =
+    pinnedRoundLabels && pinnedRoundLabels.length > 0
+      ? data.filter((item) => !pinnedRoundLabels.includes(item.roundLabel))
+      : data
 
   // A round (grouped by round name) can contain matches from several leagues, so
   // hiding/ranking is resolved per-match rather than by a single key for the round.
@@ -145,8 +147,8 @@ export default function OrderedFixtureRoundList({
   const leagueRankWithinSport = (round: FixtureRound) =>
     round.matches.reduce((best, match) => {
       const leagueRank = match.leagueId
-        ? (sportLeagueRanks[round.sport ?? match.sport]
-            ?.get(match.leagueId) ?? Infinity)
+        ? (sportLeagueRanks[round.sport ?? match.sport]?.get(match.leagueId) ??
+          Infinity)
         : Infinity
       return Math.min(best, leagueRank)
     }, Infinity)
@@ -156,7 +158,9 @@ export default function OrderedFixtureRoundList({
       roundRank(a) - roundRank(b) ||
       leagueRankWithinSport(a) - leagueRankWithinSport(b),
   )
-  const orderedData = pinnedRound ? [pinnedRound, ...orderedRest] : orderedRest
+  const orderedData = pinnedRound
+    ? [...pinnedRound, ...orderedRest]
+    : orderedRest
 
   return (
     <FixtureRoundList

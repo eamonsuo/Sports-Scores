@@ -155,31 +155,37 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
     name: "Australia - Men",
     slug: "team/187746",
     seasons: [{ name: "Current", slug: "" }],
+    icon: "https://upload.wikimedia.org/wikipedia/en/3/35/Australia_cricket_logo.svg",
   },
   {
     name: "Australia - Women",
     slug: "team/213117",
     seasons: [{ name: "Current", slug: "" }],
+    icon: "https://upload.wikimedia.org/wikipedia/en/0/07/Australia_cricket_women_logo.svg",
   },
   {
     name: "Queensland - Men",
     slug: "team/187753",
     seasons: [{ name: "Current", slug: "" }],
+    icon: "https://upload.wikimedia.org/wikipedia/en/2/29/QueenslandBullsLogo.svg",
   },
   {
     name: "Queensland - Women",
     slug: "team/413997",
     seasons: [{ name: "Current", slug: "" }],
+    icon: "https://upload.wikimedia.org/wikipedia/en/0/08/Queensland_Fire_Logo.png",
   },
   {
     name: "Brisbane Heat - Men",
     slug: "team/187736",
     seasons: [{ name: "Current", slug: "" }],
+    icon: "https://r2.thesportsdb.com/images/media/team/badge/6r5cly1492606239.png",
   },
   {
     name: "Brisbane Heat - Women",
     slug: "team/274884",
     seasons: [{ name: "Current", slug: "" }],
+    icon: "https://r2.thesportsdb.com/images/media/team/badge/6r5cly1492606239.png",
   },
   {
     name: "Sheffield Shield",
@@ -188,14 +194,16 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
       { name: "26/27", slug: "97892" },
       { name: "25/26", slug: "78362" },
     ],
+    icon: "https://upload.wikimedia.org/wikipedia/en/9/93/Marsh_Sheffield_Shield.png",
   },
   {
-    name: "🇦🇺 One Day Cup",
+    name: "One Day Cup",
     slug: "11161",
     seasons: [
       { name: "26/27", slug: "97891" },
       { name: "25/26", slug: "78361" },
     ],
+    icon: "https://upload.wikimedia.org/wikipedia/en/3/30/Marsh_One-Day_Cup_Logo.png",
   },
   {
     name: "BBL",
@@ -204,6 +212,7 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
       { name: "26/27", slug: "98330" },
       { name: "25/26", slug: "77627" },
     ],
+    icon: "https://upload.wikimedia.org/wikipedia/en/c/c0/Big_Bash_League_%28logo%29.png",
   },
   {
     name: "WNCL",
@@ -212,6 +221,7 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
       { name: "26/27", slug: "98397" },
       { name: "25/26", slug: "78399" },
     ],
+    icon: "https://upload.wikimedia.org/wikipedia/en/0/0b/WNCL_Logo.png",
   },
   {
     name: "WBBL",
@@ -220,6 +230,7 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2026", slug: "97391" },
       { name: "2025", slug: "78209" },
     ],
+    icon: "https://upload.wikimedia.org/wikipedia/en/9/97/Weber_wbbl_logo.png",
   },
   {
     name: "T20 Spring Challenge",
@@ -228,6 +239,7 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2026", slug: "98416" },
       { name: "2025", slug: "78371" },
     ],
+    icon: "https://static-files.cricket-australia.pulselive.com/series-web/94/4693.png",
   },
   {
     name: "World Test Championship",
@@ -240,6 +252,7 @@ export const CRICKET_LEAGUES: LeagueSeasonConfig[] = [
       { name: "2026.3", slug: "95102" },
       { name: "2026.4", slug: "95703" },
     ],
+    icon: "https://r2.thesportsdb.com/images/media/league/badge/ejkl931662127133.pngs",
   },
   {
     name: "Test Matches - Men",
@@ -507,7 +520,7 @@ export const MOTORSPORT_LEAGUES: LeagueSeasonConfig[] = [
         name: "2026",
         slug: "214140",
         ladderConfig: MOTORSPORT_LADDER_CONFIG,
-        tvguide: F1_TV_GUIDE,
+        tvGuide: F1_TV_GUIDE,
       },
       { name: "2025", slug: "209766", ladderConfig: MOTORSPORT_LADDER_CONFIG },
       { name: "2024", slug: "206455", ladderConfig: MOTORSPORT_LADDER_CONFIG },
@@ -519,7 +532,7 @@ export const MOTORSPORT_LEAGUES: LeagueSeasonConfig[] = [
     slug: "supercars",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/64f67s1770108650.png",
     externalURL: `https://www.supercars.com/calendar`,
-    seasons: [{ name: "2026", slug: "2026", tvguide: SUPERCARS_TV_GUIDE }],
+    seasons: [{ name: "2026", slug: "2026", tvGuide: SUPERCARS_TV_GUIDE }],
   },
   {
     name: "MotoGP",
@@ -530,7 +543,7 @@ export const MOTORSPORT_LEAGUES: LeagueSeasonConfig[] = [
         name: "2026",
         slug: "220597",
         ladderConfig: MOTORSPORT_LADDER_CONFIG,
-        tvguide: {
+        tvGuide: {
           channels: [
             tvGuideConfigCreate(TVChannel.KAYO, 0, MOTOGP_SESSION_LENGTH),
           ],
@@ -590,7 +603,7 @@ export const GOLF_LEAGUES: LeagueSeasonConfig[] = [
         name: "2026",
         slug: "2026",
         ladderConfig: PGA_2013_LADDER_CONFIG,
-        tvguide: KAYO_GOLF_TV_GUIDE,
+        tvGuide: KAYO_GOLF_TV_GUIDE,
       },
       { name: "2025", slug: "2025", ladderConfig: PGA_2013_LADDER_CONFIG },
     ],
@@ -603,7 +616,7 @@ export const GOLF_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "2026",
         slug: "2026",
-        tvguide: {
+        tvGuide: {
           channels: [
             tvGuideConfigCreate(TVChannel.SEVEN_PLUS, 0, GOLF_BROADCAST_LENGTH),
           ],
@@ -621,7 +634,7 @@ export const GOLF_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "2026",
         slug: "2026",
-        tvguide: KAYO_GOLF_TV_GUIDE,
+        tvGuide: KAYO_GOLF_TV_GUIDE,
       },
     ],
   },
@@ -635,7 +648,7 @@ export const GOLF_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "2026",
         slug: "2026",
-        tvguide: KAYO_GOLF_TV_GUIDE,
+        tvGuide: KAYO_GOLF_TV_GUIDE,
       },
     ],
   },
@@ -648,12 +661,12 @@ export const GOLF_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "26/27",
         slug: "26-27",
-        tvguide: KAYO_GOLF_TV_GUIDE,
+        tvGuide: KAYO_GOLF_TV_GUIDE,
       },
       {
         name: "25/26",
         slug: "25-26",
-        tvguide: KAYO_GOLF_TV_GUIDE,
+        tvGuide: KAYO_GOLF_TV_GUIDE,
       },
     ],
   },
@@ -666,7 +679,7 @@ export const GOLF_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "2026",
         slug: "2026",
-        tvguide: KAYO_GOLF_TV_GUIDE,
+        tvGuide: KAYO_GOLF_TV_GUIDE,
       },
     ],
   },
@@ -679,7 +692,7 @@ export const GOLF_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "2026",
         slug: "external",
-        tvguide: KAYO_GOLF_TV_GUIDE,
+        tvGuide: KAYO_GOLF_TV_GUIDE,
       },
     ],
   },
@@ -855,7 +868,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
         name: "2026",
         slug: "86317",
         ladderConfig: NRL_TOP_8_LADDER_CONFIG,
-        tvguide: NRL_TV_GUIDE,
+        tvGuide: NRL_TV_GUIDE,
       },
       { name: "2025", slug: "69277", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
       { name: "2024", slug: "56749", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
@@ -882,7 +895,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     name: "Brisbane Broncos - Men",
     slug: "team/4258",
     icon: "https://r2.thesportsdb.com/images/media/team/badge/yjgl741768487372.png",
-    seasons: [{ name: "Current", slug: "", tvguide: NRL_TV_GUIDE }],
+    seasons: [{ name: "Current", slug: "", tvGuide: NRL_TV_GUIDE }],
   },
   {
     name: "NRLW",
@@ -895,7 +908,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: FINALS_TOP_6_LADDER_CONFIG,
         }),
-        tvguide: {
+        tvGuide: {
           channels: [
             tvGuideConfigCreate(TVChannel.NINE, 0, RUGBY_LEAGUE_MATCH_LENGTH),
             tvGuideConfigCreate(TVChannel.KAYO, 0, RUGBY_LEAGUE_MATCH_LENGTH),
@@ -929,7 +942,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     name: "Brisbane Broncos - Women",
     slug: "team/411821",
     icon: "https://r2.thesportsdb.com/images/media/team/badge/yjgl741768487372.png",
-    seasons: [{ name: "Current", slug: "", tvguide: NRL_TV_GUIDE }],
+    seasons: [{ name: "Current", slug: "", tvGuide: NRL_TV_GUIDE }],
   },
   {
     name: "State of Origin - Men",
@@ -939,7 +952,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "2026",
         slug: "87571",
-        tvguide: {
+        tvGuide: {
           channels: [
             tvGuideConfigCreate(TVChannel.NINE, 0, RUGBY_LEAGUE_MATCH_LENGTH),
           ],
@@ -967,7 +980,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     name: "QLD Maroons - Men",
     slug: "team/42356",
     icon: "https://r2.thesportsdb.com/images/media/team/badge/sec7911719410143.png",
-    seasons: [{ name: "Current", slug: "", tvguide: NRL_TV_GUIDE }],
+    seasons: [{ name: "Current", slug: "", tvGuide: NRL_TV_GUIDE }],
   },
   {
     name: "State of Origin - Women",
@@ -977,7 +990,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "2026",
         slug: "87574",
-        tvguide: {
+        tvGuide: {
           channels: [
             tvGuideConfigCreate(TVChannel.NINE, 0, RUGBY_LEAGUE_MATCH_LENGTH),
           ],
@@ -992,7 +1005,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
     name: "QLD Maroons - Women",
     slug: "team/476296",
     icon: "https://r2.thesportsdb.com/images/media/team/badge/sec7911719410143.png",
-    seasons: [{ name: "Current", slug: "", tvguide: NRL_TV_GUIDE }],
+    seasons: [{ name: "Current", slug: "", tvGuide: NRL_TV_GUIDE }],
   },
   {
     name: "Queensland Cup",
@@ -1003,7 +1016,7 @@ export const RUGBY_LEAGUE_LEAGUES: LeagueSeasonConfig[] = [
         name: "2026",
         slug: "88763",
         ladderConfig: NRL_TOP_8_LADDER_CONFIG,
-        tvguide: QLD_CUP_TV_GUIDE,
+        tvGuide: QLD_CUP_TV_GUIDE,
       },
       { name: "2025", slug: "69961", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
       { name: "2024", slug: "57514", ladderConfig: NRL_TOP_8_LADDER_CONFIG },
@@ -1224,7 +1237,7 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
         name: "2026",
         slug: "86748",
         ladderConfig: AFL_TOP_10_LADDER_CONFIG,
-        tvguide: AFL_TV_GUIDE,
+        tvGuide: AFL_TV_GUIDE,
       },
       { name: "2025", slug: "71308", ladderConfig: AFL_TOP_8_LADDER_CONFIG },
       { name: "2024", slug: "58226", ladderConfig: AFL_TOP_8_LADDER_CONFIG },
@@ -1264,7 +1277,7 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: FINALS_TOP_8_LADDER_CONFIG,
         }),
-        tvguide: {
+        tvGuide: {
           channels: [
             tvGuideConfigCreate(TVChannel.KAYO, 0, AUSSIE_RULES_MATCH_LENGTH),
             tvGuideConfigCreate(TVChannel.SEVEN, 0, AUSSIE_RULES_MATCH_LENGTH),
@@ -1277,7 +1290,7 @@ export const AUSSIE_RULES_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: FINALS_TOP_8_LADDER_CONFIG,
         }),
-        tvguide: {
+        tvGuide: {
           channels: [
             tvGuideConfigCreate(TVChannel.KAYO, 0, AUSSIE_RULES_MATCH_LENGTH),
             tvGuideConfigCreate(TVChannel.SEVEN, 0, AUSSIE_RULES_MATCH_LENGTH),
@@ -1571,7 +1584,7 @@ export const AMERICAN_FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         name: "26/27",
         slug: "94366",
         ladderConfig: NFL_2020_LADDER_CONFIG,
-        tvguide: NFL_TV_GUIDE,
+        tvGuide: NFL_TV_GUIDE,
       },
       { name: "25/26", slug: "75522", ladderConfig: NFL_2020_LADDER_CONFIG },
       { name: "24/25", slug: "60592", ladderConfig: NFL_2020_LADDER_CONFIG },
@@ -1818,7 +1831,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: FINALS_TOP_6_LADDER_CONFIG,
         }),
-        tvguide: A_LEAGUE_TV_GUIDE,
+        tvGuide: A_LEAGUE_TV_GUIDE,
       },
       {
         name: "25/26",
@@ -1826,7 +1839,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: FINALS_TOP_6_LADDER_CONFIG,
         }),
-        tvguide: A_LEAGUE_TV_GUIDE,
+        tvGuide: A_LEAGUE_TV_GUIDE,
       },
       {
         name: "24/25",
@@ -1923,7 +1936,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: EUROPEAN_DOMESTIC_SHARED_LADDER,
         }),
-        tvguide: STAN_FOOTBALL_TV_GUIDE,
+        tvGuide: STAN_FOOTBALL_TV_GUIDE,
       },
       {
         name: "25/26",
@@ -1931,7 +1944,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: EUROPEAN_DOMESTIC_SHARED_LADDER,
         }),
-        tvguide: STAN_FOOTBALL_TV_GUIDE,
+        tvGuide: STAN_FOOTBALL_TV_GUIDE,
       },
       {
         name: "24/25",
@@ -1975,7 +1988,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: CHAMPIONSHIP_LADDER_CONFIG,
         }),
-        tvguide: BEIN_FOOTBALL_TV_GUIDE,
+        tvGuide: BEIN_FOOTBALL_TV_GUIDE,
       },
       {
         name: "25/26",
@@ -1983,7 +1996,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: CHAMPIONSHIP_LADDER_CONFIG,
         }),
-        tvguide: BEIN_FOOTBALL_TV_GUIDE,
+        tvGuide: BEIN_FOOTBALL_TV_GUIDE,
       },
       {
         name: "24/25",
@@ -1999,8 +2012,8 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "19",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/vk7isd1598802862.png/small",
     seasons: [
-      { name: "26/27", slug: "102079", tvguide: STAN_FOOTBALL_TV_GUIDE },
-      { name: "25/26", slug: "82557", tvguide: STAN_FOOTBALL_TV_GUIDE },
+      { name: "26/27", slug: "102079", tvGuide: STAN_FOOTBALL_TV_GUIDE },
+      { name: "25/26", slug: "82557", tvGuide: STAN_FOOTBALL_TV_GUIDE },
     ],
   },
   {
@@ -2009,7 +2022,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     icon: "https://r2.thesportsdb.com/images/media/league/badge/vfjnxt1713511523.png/small",
     seasons: [
       // { name: "26/27", slug: "84634", tvguide: STAN_FOOTBALL_TV_GUIDE },
-      { name: "25/26", slug: "84634", tvguide: STAN_FOOTBALL_TV_GUIDE },
+      { name: "25/26", slug: "84634", tvGuide: STAN_FOOTBALL_TV_GUIDE },
     ],
   },
   {
@@ -2017,8 +2030,8 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
     slug: "21",
     icon: "https://r2.thesportsdb.com/images/media/league/badge/x1va771565372556.png/small",
     seasons: [
-      { name: "26/27", slug: "96185", tvguide: BEIN_FOOTBALL_TV_GUIDE },
-      { name: "25/26", slug: "77500", tvguide: BEIN_FOOTBALL_TV_GUIDE },
+      { name: "26/27", slug: "96185", tvGuide: BEIN_FOOTBALL_TV_GUIDE },
+      { name: "25/26", slug: "77500", tvGuide: BEIN_FOOTBALL_TV_GUIDE },
     ],
   },
 
@@ -2064,7 +2077,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         name: "2026",
         slug: "58210",
         ladderConfig: FIFA_WORLD_CUP_LADDER_CONFIG,
-        tvguide: FIFA_WORLD_CUP_TV_GUIDE,
+        tvGuide: FIFA_WORLD_CUP_TV_GUIDE,
       },
       {
         name: "2022",
@@ -2227,7 +2240,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: UEFA_24_TEAM_LADDER_CONFIG,
         }),
-        tvguide: STAN_FOOTBALL_TV_GUIDE,
+        tvGuide: STAN_FOOTBALL_TV_GUIDE,
       },
       {
         name: "25/26",
@@ -2235,7 +2248,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: UEFA_24_TEAM_LADDER_CONFIG,
         }),
-        tvguide: STAN_FOOTBALL_TV_GUIDE,
+        tvGuide: STAN_FOOTBALL_TV_GUIDE,
       },
     ],
   },
@@ -2252,7 +2265,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: UEFA_WOMENS_CL_LADDER_CONFIG,
         }),
-        tvguide: ESPN_FOOTBALL_TV_GUIDE,
+        tvGuide: ESPN_FOOTBALL_TV_GUIDE,
       },
       {
         name: "25/26",
@@ -2260,7 +2273,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: UEFA_WOMENS_CL_LADDER_CONFIG,
         }),
-        tvguide: ESPN_FOOTBALL_TV_GUIDE,
+        tvGuide: ESPN_FOOTBALL_TV_GUIDE,
       },
     ],
   },
@@ -2277,7 +2290,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: UEFA_24_TEAM_LADDER_CONFIG,
         }),
-        tvguide: STAN_FOOTBALL_TV_GUIDE,
+        tvGuide: STAN_FOOTBALL_TV_GUIDE,
       },
       {
         name: "25/26",
@@ -2285,7 +2298,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: UEFA_24_TEAM_LADDER_CONFIG,
         }),
-        tvguide: STAN_FOOTBALL_TV_GUIDE,
+        tvGuide: STAN_FOOTBALL_TV_GUIDE,
       },
     ],
   },
@@ -2406,7 +2419,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: LIGUE_1_LADDER_CONFIG,
         }),
-        tvguide: BEIN_FOOTBALL_TV_GUIDE,
+        tvGuide: BEIN_FOOTBALL_TV_GUIDE,
       },
       {
         name: "25/26",
@@ -2414,7 +2427,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: LIGUE_1_LADDER_CONFIG,
         }),
-        tvguide: BEIN_FOOTBALL_TV_GUIDE,
+        tvGuide: BEIN_FOOTBALL_TV_GUIDE,
       },
     ],
   },
@@ -2431,7 +2444,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: BUNDESLIGA_LADDER_CONFIG,
         }),
-        tvguide: BEIN_FOOTBALL_TV_GUIDE,
+        tvGuide: BEIN_FOOTBALL_TV_GUIDE,
       },
       {
         name: "25/26",
@@ -2439,7 +2452,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: BUNDESLIGA_LADDER_CONFIG,
         }),
-        tvguide: BEIN_FOOTBALL_TV_GUIDE,
+        tvGuide: BEIN_FOOTBALL_TV_GUIDE,
       },
     ],
   },
@@ -2456,7 +2469,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: EUROPEAN_DOMESTIC_SHARED_LADDER,
         }),
-        tvguide: BEIN_FOOTBALL_TV_GUIDE,
+        tvGuide: BEIN_FOOTBALL_TV_GUIDE,
       },
       {
         name: "25/26",
@@ -2464,7 +2477,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: EUROPEAN_DOMESTIC_SHARED_LADDER,
         }),
-        tvguide: BEIN_FOOTBALL_TV_GUIDE,
+        tvGuide: BEIN_FOOTBALL_TV_GUIDE,
       },
     ],
   },
@@ -2481,7 +2494,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: EUROPEAN_DOMESTIC_SHARED_LADDER,
         }),
-        tvguide: BEIN_FOOTBALL_TV_GUIDE,
+        tvGuide: BEIN_FOOTBALL_TV_GUIDE,
       },
       {
         name: "25/26",
@@ -2489,7 +2502,7 @@ export const FOOTBALL_LEAGUES: LeagueSeasonConfig[] = [
         ladderConfig: ladderConfigMap({
           placingCategories: EUROPEAN_DOMESTIC_SHARED_LADDER,
         }),
-        tvguide: BEIN_FOOTBALL_TV_GUIDE,
+        tvGuide: BEIN_FOOTBALL_TV_GUIDE,
       },
     ],
   },
@@ -2579,7 +2592,7 @@ export const BASEBALL_LEAGUES: LeagueSeasonConfig[] = [
         name: "2026",
         slug: "84695",
         ladderConfig: MLB_2022_LADDER_CONFIG,
-        tvguide: MLB_TV_GUIDE,
+        tvGuide: MLB_TV_GUIDE,
       },
       { name: "2025", slug: "68611", ladderConfig: MLB_2022_LADDER_CONFIG },
       { name: "2024", slug: "57577", ladderConfig: MLB_2022_LADDER_CONFIG },
@@ -2726,13 +2739,13 @@ export const BASKETBALL_LEAGUES: LeagueSeasonConfig[] = [
         name: "26/27",
         slug: "100772",
         ladderConfig: NBA_2021_LADDER_CONFIG,
-        tvguide: NBA_TV_GUIDE,
+        tvGuide: NBA_TV_GUIDE,
       },
       {
         name: "25/26",
         slug: "80229",
         ladderConfig: NBA_2021_LADDER_CONFIG,
-        tvguide: NBA_TV_GUIDE,
+        tvGuide: NBA_TV_GUIDE,
       },
       { name: "25/26 Cup", slug: "84238" },
       { name: "24/25", slug: "65360", ladderConfig: NBA_2021_LADDER_CONFIG },
@@ -2872,7 +2885,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     icon: "https://upload.wikimedia.org/wikipedia/commons/b/b4/Australian_Open_Logo_2017.svg",
     slug: "2363",
     seasons: [
-      { name: "2026", slug: "80012", tvguide: TENNIS_MAJORS_TV_GUIDE },
+      { name: "2026", slug: "80012", tvGuide: TENNIS_MAJORS_TV_GUIDE },
       { name: "2025", slug: "69039" },
     ],
   },
@@ -2881,7 +2894,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     icon: "https://upload.wikimedia.org/wikipedia/commons/b/b4/Australian_Open_Logo_2017.svg",
     slug: "2571",
     seasons: [
-      { name: "2026", slug: "80013", tvguide: TENNIS_MAJORS_TV_GUIDE },
+      { name: "2026", slug: "80013", tvGuide: TENNIS_MAJORS_TV_GUIDE },
       { name: "2025", slug: "67042" },
     ],
   },
@@ -2890,7 +2903,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     slug: "2480",
     icon: "https://upload.wikimedia.org/wikipedia/en/1/1d/Logo_Roland-Garros.svg",
     seasons: [
-      { name: "2026", slug: "85951", tvguide: TENNIS_MAJORS_TV_GUIDE },
+      { name: "2026", slug: "85951", tvGuide: TENNIS_MAJORS_TV_GUIDE },
       { name: "2025", slug: "61364" },
     ],
   },
@@ -2899,7 +2912,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     slug: "2577",
     icon: "https://upload.wikimedia.org/wikipedia/en/1/1d/Logo_Roland-Garros.svg",
     seasons: [
-      { name: "2026", slug: "85953", tvguide: TENNIS_MAJORS_TV_GUIDE },
+      { name: "2026", slug: "85953", tvGuide: TENNIS_MAJORS_TV_GUIDE },
       { name: "2025", slug: "61365" },
     ],
   },
@@ -2908,7 +2921,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     slug: "2361",
     icon: "https://upload.wikimedia.org/wikipedia/en/b/b9/Wimbledon.svg",
     seasons: [
-      { name: "2026", slug: "85943", tvguide: TENNIS_MAJORS_TV_GUIDE },
+      { name: "2026", slug: "85943", tvGuide: TENNIS_MAJORS_TV_GUIDE },
       { name: "2025", slug: "63966" },
     ],
   },
@@ -2917,7 +2930,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     slug: "2600",
     icon: "https://upload.wikimedia.org/wikipedia/en/b/b9/Wimbledon.svg",
     seasons: [
-      { name: "2026", slug: "85945", tvguide: TENNIS_MAJORS_TV_GUIDE },
+      { name: "2026", slug: "85945", tvGuide: TENNIS_MAJORS_TV_GUIDE },
       { name: "2025", slug: "63967" },
     ],
   },
@@ -2927,7 +2940,7 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     icon: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Usopen-horizontal-logo.svg",
     seasons: [
       { name: "2026", slug: "85956" },
-      { name: "2025", slug: "67287", tvguide: TENNIS_MAJORS_TV_GUIDE },
+      { name: "2025", slug: "67287", tvGuide: TENNIS_MAJORS_TV_GUIDE },
     ],
   },
   {
@@ -2936,20 +2949,20 @@ export const TENNIS_LEAGUES: LeagueSeasonConfig[] = [
     icon: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Usopen-horizontal-logo.svg",
     seasons: [
       { name: "2026", slug: "85958" },
-      { name: "2025", slug: "69937", tvguide: TENNIS_MAJORS_TV_GUIDE },
+      { name: "2025", slug: "69937", tvGuide: TENNIS_MAJORS_TV_GUIDE },
     ],
   },
   {
     name: "Brisbane International - Men's Singles",
     slug: "2437",
     icon: "https://upload.wikimedia.org/wikipedia/en/4/48/Brisbane_International_logo.svg",
-    seasons: [{ name: "2026", slug: "80014", tvguide: TENNIS_MAJORS_TV_GUIDE }],
+    seasons: [{ name: "2026", slug: "80014", tvGuide: TENNIS_MAJORS_TV_GUIDE }],
   },
   {
     name: "Brisbane International - Women's Singles",
     slug: "2644",
     icon: "https://upload.wikimedia.org/wikipedia/en/4/48/Brisbane_International_logo.svg",
-    seasons: [{ name: "2026", slug: "85608", tvguide: TENNIS_MAJORS_TV_GUIDE }],
+    seasons: [{ name: "2026", slug: "85608", tvGuide: TENNIS_MAJORS_TV_GUIDE }],
   },
   {
     name: "Davis Cup",
@@ -3442,13 +3455,13 @@ export const ICE_HOCKEY_LEAGUES: LeagueSeasonConfig[] = [
         name: "26/27",
         slug: "98450",
         ladderConfig: NHL_2014_LADDER_CONFIG,
-        tvguide: NHL_TV_GUIDE,
+        tvGuide: NHL_TV_GUIDE,
       },
       {
         name: "25/26",
         slug: "78476",
         ladderConfig: NHL_2014_LADDER_CONFIG,
-        tvguide: NHL_TV_GUIDE,
+        tvGuide: NHL_TV_GUIDE,
       },
       { name: "24/25", slug: "63409", ladderConfig: NHL_2014_LADDER_CONFIG },
     ],
@@ -3792,7 +3805,7 @@ export const SURFING_LEAGUES: LeagueSeasonConfig[] = [
       {
         name: "2026",
         slug: "2026",
-        tvguide: {
+        tvGuide: {
           channels: [
             tvGuideConfigCreate(TVChannel.KAYO, 0, SURFING_BROADCAST_LENGTH),
             tvGuideConfigCreate(
