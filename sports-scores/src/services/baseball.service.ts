@@ -9,9 +9,7 @@ import {
   fetchBaseballTeamNextMatches,
 } from "@/endpoints/baseball.api"
 import {
-  BASEBALL_CATEGORIES,
   BASEBALL_LADDER_HEADINGS,
-  BASEBALL_LEAGUES,
   SCORE_BREAKDOWN_INNINGS_CONFIG,
 } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
@@ -67,8 +65,6 @@ class BaseballService extends SofascoreSport {
         ),
       },
       SPORT.BASEBALL,
-      BASEBALL_CATEGORIES,
-      BASEBALL_LEAGUES,
       BASEBALL_LADDER_HEADINGS,
       SCORE_BREAKDOWN_INNINGS_CONFIG,
     )

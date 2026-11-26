@@ -10,14 +10,12 @@ import {
   fetchAmericanFootballTeamNextMatches,
 } from "@/endpoints/american-football.api"
 import {
-  AMERICAN_FOOTBALL_CATEGORIES,
   AMERICAN_FOOTBALL_LADDER_HEADINGS,
-  AMERICAN_FOOTBALL_LEAGUES,
   SCORE_BREAKDOWN_QUARTERS_CONFIG,
 } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
 import { AmericanFootball_Sofascore_Event } from "@/types/american-football"
-import { DeepPartial, MatchSummary, SPORT } from "@/types/misc"
+import { DeepPartial, MatchSummary, SPORT, TVConfig } from "@/types/misc"
 import { SofascoreSport } from "./sofascore.service"
 
 class AmericanFootballService extends SofascoreSport {
@@ -73,8 +71,6 @@ class AmericanFootballService extends SofascoreSport {
         ),
       },
       SPORT.AMERICAN_FOOTBALL,
-      AMERICAN_FOOTBALL_CATEGORIES,
-      AMERICAN_FOOTBALL_LEAGUES,
       AMERICAN_FOOTBALL_LADDER_HEADINGS,
       SCORE_BREAKDOWN_QUARTERS_CONFIG,
     )
@@ -87,6 +83,7 @@ class AmericanFootballService extends SofascoreSport {
   override eventMapper(
     event: AmericanFootball_Sofascore_Event,
     options?: DeepPartial<MatchSummary>,
+    tvConfig?: TVConfig,
     timezone?: string,
   ): MatchSummary {
     return super.eventMapper(
@@ -109,6 +106,7 @@ class AmericanFootballService extends SofascoreSport {
           },
         ],
       },
+      tvConfig,
       timezone,
     )
   }

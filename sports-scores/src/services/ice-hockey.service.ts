@@ -10,9 +10,7 @@ import {
   fetchIceHockeyTeamNextMatches,
 } from "@/endpoints/ice-hockey.api"
 import {
-  ICE_HOCKEY_CATEGORIES,
   ICE_HOCKEY_LADDER_HEADINGS,
-  ICE_HOCKEY_LEAGUES,
   SCORE_BREAKDOWN_PERIODS_CONFIG,
 } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
@@ -72,8 +70,6 @@ class IceHockeyService extends SofascoreSport {
         ),
       },
       SPORT.ICE_HOCKEY,
-      ICE_HOCKEY_CATEGORIES,
-      ICE_HOCKEY_LEAGUES,
       ICE_HOCKEY_LADDER_HEADINGS,
       SCORE_BREAKDOWN_PERIODS_CONFIG,
     )

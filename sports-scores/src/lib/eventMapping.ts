@@ -4,6 +4,7 @@ import {
   LeagueSeasonConfig,
   MatchStatus,
   MatchSummary,
+  Season,
 } from "@/types/misc"
 import { TZDate } from "@date-fns/tz/date"
 import { format } from "date-fns/format"
@@ -21,12 +22,13 @@ export async function mapFixtureRounds(
   matches: MatchSummary[],
   leagueConfig:
     LeagueSeasonConfig | LeagueSeasonConfig[] = DEFAULT_LEAGUE_SEASON_CONFIG,
+  seasonConfig?: Season,
 ) {
   const isMultiLeague = Array.isArray(leagueConfig)
   const displayType: DisplayTypes = isMultiLeague
     ? DisplayTypes.LEAGUE
     : (leagueConfig.display ?? DisplayTypes.ROUND)
-  const byes = isMultiLeague ? undefined : leagueConfig.byes
+  const byes = seasonConfig?.byes
   let showByes = byes !== undefined
   const timezone = await getClientTimezone()
 

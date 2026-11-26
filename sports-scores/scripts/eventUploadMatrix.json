@@ -1,68 +1,14 @@
 [
   {
-    "name": "NRL 2026",
-    "leagueId": "294",
-    "seasonId": "86317",
-    "sport": "rugby-league"
-  },
-  {
-    "name": "NRLW 2026",
-    "leagueId": "19120",
-    "seasonId": "87573",
-    "sport": "rugby-league"
-  },
-  {
-    "name": "Queensland Cup 2026",
-    "leagueId": "2135",
-    "seasonId": "88763",
-    "sport": "rugby-league"
-  },
-  {
-    "name": "New South Wales Cup 2026",
-    "leagueId": "2134",
-    "seasonId": "89006",
-    "sport": "rugby-league"
-  },
-  {
-    "name": "A-League Men 26/27",
-    "leagueId": "136",
-    "seasonId": "98511",
-    "sport": "football"
-  },
-  {
-    "name": "A-League Women 25/26",
-    "leagueId": "1894",
-    "seasonId": "82605",
-    "sport": "football"
-  },
-  {
-    "name": "Australia Cup 2026",
-    "leagueId": "1786",
-    "seasonId": "97074",
-    "sport": "football"
-  },
-  {
-    "name": "Premier League 26/27",
-    "leagueId": "17",
-    "seasonId": "96668",
-    "sport": "football"
-  },
-  {
-    "name": "FA Cup 26/27",
-    "leagueId": "19",
-    "seasonId": "102079",
-    "sport": "football"
-  },
-  {
     "name": "AFL 2026",
     "leagueId": "656",
     "seasonId": "86748",
     "sport": "aussie-rules"
   },
   {
-    "name": "AFLW 2025",
+    "name": "AFLW 2026",
     "leagueId": "10159",
-    "seasonId": "76123",
+    "seasonId": "95427",
     "sport": "aussie-rules"
   },
   {
@@ -72,64 +18,16 @@
     "sport": "aussie-rules"
   },
   {
-    "name": "NFL 26/27",
-    "leagueId": "9464",
-    "seasonId": "94366",
-    "sport": "american-football"
-  },
-  {
-    "name": "NBL 26/27",
-    "leagueId": "1524",
-    "seasonId": "96122",
-    "sport": "basketball"
-  },
-  {
-    "name": "WNBL 26/27",
-    "leagueId": "1506",
-    "seasonId": "98055",
-    "sport": "basketball"
-  },
-  {
-    "name": "NBA 26/27",
-    "leagueId": "132",
-    "seasonId": "100772",
-    "sport": "basketball"
-  },
-  {
-    "name": "WNBA 2026",
-    "leagueId": "486",
-    "seasonId": "89004",
-    "sport": "basketball"
-  },
-  {
-    "name": "MLB 2026",
+    "name": "MLB 2027",
     "leagueId": "11205",
-    "seasonId": "84695",
+    "seasonId": "108036",
     "sport": "baseball"
   },
   {
-    "name": "ABL 25/26",
+    "name": "ABL 26/27",
     "leagueId": "19445",
-    "seasonId": "81328",
+    "seasonId": "100783",
     "sport": "baseball"
-  },
-  {
-    "name": "AIHL 2026",
-    "leagueId": "11059",
-    "seasonId": "86527",
-    "sport": "ice-hockey"
-  },
-  {
-    "name": "NHL 26/27",
-    "leagueId": "234",
-    "seasonId": "98450",
-    "sport": "ice-hockey"
-  },
-  {
-    "name": "Super Rugby 2026",
-    "leagueId": "422",
-    "seasonId": "86502",
-    "sport": "rugby-union"
   },
   {
     "name": "Sheffield Shield 26/27",
@@ -138,7 +36,7 @@
     "sport": "cricket"
   },
   {
-    "name": "🇦🇺 One Day Cup 26/27",
+    "name": "One Day Cup 26/27",
     "leagueId": "11161",
     "seasonId": "97891",
     "sport": "cricket"
@@ -168,6 +66,60 @@
     "sport": "cricket"
   },
   {
+    "name": "NFL 26/27",
+    "leagueId": "9464",
+    "seasonId": "94366",
+    "sport": "american-football"
+  },
+  {
+    "name": "Formula 1 2026",
+    "leagueId": "40",
+    "seasonId": "214140",
+    "sport": "motorsport"
+  },
+  {
+    "name": "MotoGP 2026",
+    "leagueId": "17",
+    "seasonId": "220597",
+    "sport": "motorsport"
+  },
+  {
+    "name": "Indycar 2027",
+    "leagueId": "67",
+    "seasonId": "235992",
+    "sport": "motorsport"
+  },
+  {
+    "name": "NASCAR Cup Series 2026",
+    "leagueId": "18",
+    "seasonId": "226324",
+    "sport": "motorsport"
+  },
+  {
+    "name": "NRL 2026",
+    "leagueId": "294",
+    "seasonId": "86317",
+    "sport": "rugby-league"
+  },
+  {
+    "name": "NRLW 2026",
+    "leagueId": "19120",
+    "seasonId": "87573",
+    "sport": "rugby-league"
+  },
+  {
+    "name": "Queensland Cup 2026",
+    "leagueId": "2135",
+    "seasonId": "88763",
+    "sport": "rugby-league"
+  },
+  {
+    "name": "New South Wales Cup 2026",
+    "leagueId": "2134",
+    "seasonId": "89006",
+    "sport": "rugby-league"
+  },
+  {
     "name": "PGA Tour 2026",
     "leagueId": "pga",
     "seasonId": "2026",
@@ -180,14 +132,14 @@
     "sport": "golf"
   },
   {
-    "name": "LPGA Tour 2026",
-    "leagueId": "lpga",
+    "name": "DP World Tour 2026",
+    "leagueId": "dpworld",
     "seasonId": "2026",
     "sport": "golf"
   },
   {
-    "name": "DP World Tour 2026",
-    "leagueId": "dpworld",
+    "name": "LPGA Tour 2026",
+    "leagueId": "lpga",
     "seasonId": "2026",
     "sport": "golf"
   },
@@ -202,5 +154,95 @@
     "leagueId": "tgl",
     "seasonId": "2026",
     "sport": "golf"
+  },
+  {
+    "name": "A-League Men 26/27",
+    "leagueId": "136",
+    "seasonId": "98511",
+    "sport": "football"
+  },
+  {
+    "name": "A-League Women 26/27",
+    "leagueId": "1894",
+    "seasonId": "101529",
+    "sport": "football"
+  },
+  {
+    "name": "Australia Cup 2026",
+    "leagueId": "1786",
+    "seasonId": "97074",
+    "sport": "football"
+  },
+  {
+    "name": "Premier League 26/27",
+    "leagueId": "17",
+    "seasonId": "96668",
+    "sport": "football"
+  },
+  {
+    "name": "FA Cup 26/27",
+    "leagueId": "19",
+    "seasonId": "102079",
+    "sport": "football"
+  },
+  {
+    "name": "WSL 2026",
+    "leagueId": "wsl",
+    "seasonId": "2026",
+    "sport": "surfing"
+  },
+  {
+    "name": "NBL 26/27",
+    "leagueId": "1524",
+    "seasonId": "96122",
+    "sport": "basketball"
+  },
+  {
+    "name": "WNBL 26/27",
+    "leagueId": "1506",
+    "seasonId": "98055",
+    "sport": "basketball"
+  },
+  {
+    "name": "NBA 26/27",
+    "leagueId": "132",
+    "seasonId": "100772",
+    "sport": "basketball"
+  },
+  {
+    "name": "WNBA 2026",
+    "leagueId": "486",
+    "seasonId": "89004",
+    "sport": "basketball"
+  },
+  {
+    "name": "AIHL 2026",
+    "leagueId": "11059",
+    "seasonId": "86527",
+    "sport": "ice-hockey"
+  },
+  {
+    "name": "NHL 26/27",
+    "leagueId": "234",
+    "seasonId": "98450",
+    "sport": "ice-hockey"
+  },
+  {
+    "name": "Super Rugby 2026",
+    "leagueId": "422",
+    "seasonId": "86502",
+    "sport": "rugby-union"
+  },
+  {
+    "name": "UCI World Tour - Men 2027",
+    "leagueId": "9",
+    "seasonId": "237626",
+    "sport": "cycling"
+  },
+  {
+    "name": "UCI World Tour - Women 2027",
+    "leagueId": "94",
+    "seasonId": "237670",
+    "sport": "cycling"
   }
 ]

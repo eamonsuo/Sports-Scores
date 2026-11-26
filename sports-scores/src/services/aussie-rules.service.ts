@@ -11,9 +11,7 @@ import {
   fetchTournamentStandings,
 } from "@/endpoints/sofascore-rapid-api.api"
 import {
-  AUSSIE_RULES_CATEGORIES,
   AUSSIE_RULES_LADDER_HEADINGS,
-  AUSSIE_RULES_LEAGUES,
   SCORE_BREAKDOWN_QUARTERS_CONFIG,
 } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
@@ -77,8 +75,6 @@ class AussieRulesService extends SofascoreSport {
         ),
       },
       SPORT.AUSSIE_RULES,
-      AUSSIE_RULES_CATEGORIES,
-      AUSSIE_RULES_LEAGUES,
       AUSSIE_RULES_LADDER_HEADINGS,
       SCORE_BREAKDOWN_QUARTERS_CONFIG,
     )

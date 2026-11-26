@@ -6,7 +6,6 @@ import {
   fetchNetballSeasonMatches,
   fetchNetballStandings,
 } from "@/endpoints/netball.api"
-import { NETBALL_LEAGUES } from "@/lib/constants"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
 import { setMatchSummary, shortenTeamNames } from "@/lib/projUtils"
 import {
@@ -23,11 +22,16 @@ import {
   NetballTodayPage,
 } from "@/types/netball"
 import { SportsDB_Event } from "@/types/sportsdb"
+import {
+  leaguesBySportByDate,
+  leaguesBySportByLeague,
+} from "./dataverse.service"
 
 export async function netballMatches(leagueId: string, seasonId: string) {
   const seasonMatches = await fetchNetballSeasonMatches(leagueId, seasonId)
   const lastMatches = await fetchNetballLastMatches(leagueId, seasonId)
   const nextMatches = await fetchNetballNextMatches(leagueId, seasonId)
+  const leagues = await leaguesBySportByLeague(SPORT.NETBALL, leagueId)
 
   if (!lastMatches && !nextMatches && !seasonMatches) {
     return null
@@ -42,7 +46,7 @@ export async function netballMatches(leagueId: string, seasonId: string) {
     new Map(allMatches.map((match) => [match.idEvent, match])).values(),
   )
 
-  const leagueConfig = NETBALL_LEAGUES.find((l) => l.slug === leagueId)
+  const leagueConfig = leagues.find((l) => l.slug === leagueId)
 
   const sortedMatches = matches
     .map((match) =>
@@ -149,12 +153,13 @@ export async function netballMatchDetails(matchId: string) {
 
 export async function netballMatchesByDate(date: Date) {
   const matches = await fetchNetballMatchesByDate(date)
+  const leagues = await leaguesBySportByDate(SPORT.NETBALL)
 
   if (!matches || !matches.events) return null
 
-  const validLeagueIds = NETBALL_LEAGUES.filter((l) => !l.excludeFromToday).map(
-    (l) => Number(l.slug),
-  )
+  const validLeagueIds = leagues
+    .filter((l) => !l.excludeFromToday)
+    .map((l) => Number(l.slug))
 
   matches.events = matches.events
     // .filter((item) =>
@@ -172,7 +177,7 @@ export async function netballMatchesByDate(date: Date) {
     mapNetballMatch(match, { roundLabel: `Round ${match.intRound ?? 0}` }),
   )
 
-  const fixture = await mapFixtureRounds(allMatches, NETBALL_LEAGUES)
+  const fixture = await mapFixtureRounds(allMatches, leagues)
 
   return {
     fixtures: fixture,

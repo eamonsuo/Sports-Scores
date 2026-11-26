@@ -122,7 +122,7 @@ The upload is handled via `scripts/bulk-upload-events.ts`. This script uses a un
 **Check if an adapter already exists** by looking at the `adapters` registry in `scripts/bulk-upload-events.ts`. If one exists, run it directly:
 
 ```bash
-npx tsx scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport>
+npx tsx --tsconfig scripts/tsconfig.json scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport>
 ```
 
 **If no adapter exists**, register one using `createFileAdapter("<leagueId>")` — this generic factory in `bulk-upload-events.ts` reads from `scripts/{leagueId}-{seasonId}-events.json` and maps all standard `MatchSummary` fields automatically (including optional `leagueImg`). Add it to the appropriate sport entry in the `adapters` registry (create the sport entry if it's new):

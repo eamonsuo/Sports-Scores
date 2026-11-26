@@ -1,5 +1,4 @@
 import { Button } from "@/components/shadcn/button"
-import { formatDate } from "@/lib/projUtils"
 import { addDays, format } from "date-fns"
 import Link from "next/link"
 
@@ -22,7 +21,7 @@ export default function DateNav({
       </Link>
       <Link href={`?date=${tomorrow}`}>
         <Button variant="secondary">
-          {nextDate ? formatDate(nextDate) : "Next Day"} -&gt;
+          {nextDate ? format(nextDate, "d MMM") : "Next Day"} -&gt;
         </Button>
       </Link>
     </div>

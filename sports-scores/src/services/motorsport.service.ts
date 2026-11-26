@@ -3,7 +3,6 @@ import {
   fetchMotorsportSubstages,
   fetchMotorsportTeamStandings,
 } from "@/endpoints/motorsport.api"
-import { MOTORSPORT_LEAGUES } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
 import { getSportConfigurations } from "@/lib/projUtils"
@@ -18,7 +17,11 @@ import {
   Standings,
 } from "@/types/misc"
 import { Sofascore_StageStandingRow } from "@/types/sofascore"
-import { matchSummariesByTournament } from "./dataverse.service"
+import {
+  ladderConfigByLeagueBySeason,
+  leaguesBySportByLeague,
+  matchSummariesBySportByLeagueBySeason,
+} from "./dataverse.service"
 import { SofascoreStageSport } from "./sofascore.service"
 
 class MotorsportService extends SofascoreStageSport {
@@ -42,7 +45,6 @@ class MotorsportService extends SofascoreStageSport {
         ),
       },
       SPORT.MOTORSPORT,
-      MOTORSPORT_LEAGUES,
       CardVariant.SESSION,
     )
   }
@@ -51,30 +53,22 @@ class MotorsportService extends SofascoreStageSport {
     leagueId: string,
     seasonId: string,
   ): Promise<Matches | null> {
-    const dataverseMatches = await matchSummariesByTournament(
-      leagueId,
-      seasonId,
-      this.sport,
-    )
+    const [dataverseMatches, leagues] = await Promise.all([
+      matchSummariesBySportByLeagueBySeason(leagueId, seasonId, this.sport),
+      leaguesBySportByLeague(this.sport, leagueId),
+    ])
+
     if (!dataverseMatches || dataverseMatches.length === 0) {
       return null
     }
 
-    const allMatches = dataverseMatches
-      .sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-      )
-      .map((match) => this.eventMapperMatchSummary(match))
+    const allMatches = dataverseMatches.map((match) =>
+      this.eventMapperMatchSummary(match),
+    )
 
     if (!allMatches) return null
 
-    const { leagueConfig } = getSportConfigurations(
-      this.leagues,
-      leagueId,
-      seasonId,
-    )
-
+    const { leagueConfig } = getSportConfigurations(leagues, leagueId, seasonId)
     const fixtures = await mapFixtureRounds(allMatches, leagueConfig)
 
     return {
@@ -95,16 +89,13 @@ class MotorsportService extends SofascoreStageSport {
     leagueId: string,
     seasonId: string,
   ): Promise<Standings | null> {
-    const stageStandings = await this.apiEndpoints.fetchStageStandings(seasonId)
-    const teamStandings = await this.apiEndpoints.fetchTeamStandings(seasonId)
+    const [stageStandings, teamStandings, ladderConfig] = await Promise.all([
+      this.apiEndpoints.fetchStageStandings(seasonId),
+      this.apiEndpoints.fetchTeamStandings(seasonId),
+      ladderConfigByLeagueBySeason(leagueId, seasonId),
+    ])
 
     if (!stageStandings && !teamStandings) return null
-
-    const { ladderConfig } = getSportConfigurations(
-      this.leagues,
-      leagueId,
-      seasonId,
-    )
 
     const athleteConfig = ladderConfig?.ladderGroup[0]
 
@@ -169,13 +160,6 @@ class MotorsportService extends SofascoreStageSport {
     } else {
       return "0"
     }
-  }
-
-  async matchesFromAPI(
-    leagueId: string,
-    seasonId: string,
-  ): Promise<Matches | null> {
-    return super.matchesByLeagueSeason(leagueId, seasonId)
   }
 }
 

@@ -4,8 +4,6 @@ import type {
   PlayoffPictureGroup,
 } from "@/types/playoff-picture"
 import { JSX } from "react"
-import { SlashGolf_Tournament } from "./golf"
-import { Sofascore_Event, Sofascore_Stage } from "./sofascore"
 
 /**
  * Generic Types
@@ -68,6 +66,12 @@ export interface FixtureRound {
   sport?: string
 }
 
+export type LadderGroupFilter = {
+  operator: FilterOperator
+  value: string
+  negate?: boolean
+}
+
 export interface LadderRow extends TableRow {
   teamName: string
   teamLogo?: string | string[]
@@ -87,15 +91,18 @@ export interface SportsLadder extends SportsTable {
 }
 
 export type LadderGroupConfig = {
-  groupFilter?: (tableName: string) => boolean
+  filters?: LadderGroupFilter[]
+  filterCondition?: FilterCondition
   placingCategories?: LadderPlacingCategory[]
   headings?: string[]
-  label?: string
+  label: string
+  dataverseGUID?: string
 }
 
 export type LadderConfig = {
   ladderGroup: LadderGroupConfig[]
-  playoffPictureConfig?: PlayoffPictureConfig
+  headings?: string[]
+  dataverseGUID?: string
 }
 
 export interface TableRow {
@@ -121,24 +128,18 @@ export type SportCategory = {
 export type Season = {
   name: string
   slug: string
+  byes?: { name: string; img: string }[]
   ladderConfig?: LadderConfig
+  playoffPictureConfig?: PlayoffPictureConfig
   tvGuide?: TVConfig
   externalURL?: string
-}
-
-export type TVChannelConfig = {
-  channel: TVChannel
-  startTime?: (date: Date) => Date
-  endTime?: (date: Date) => Date
-  tvFilter?: (
-    date: Date,
-    event:
-      Sofascore_Event | Sofascore_Stage | SlashGolf_Tournament | MatchSummary,
-  ) => boolean
+  dataverseGUID?: string
 }
 
 export type TVConfig = {
-  channels: TVChannelConfig[]
+  channels: TVChannel[]
+  matchLength: number
+  dataverseGUID?: string
 }
 
 export type LeagueSeasonConfig = {
@@ -148,19 +149,9 @@ export type LeagueSeasonConfig = {
   seasons: Season[]
   display?: DisplayTypes
   externalURL?: string
-  byes?: {
-    name: string
-    img: string
-  }[]
   excludeFromToday?: boolean
   hidden?: boolean
-}
-
-export type ClientLeagueSeasonConfig = Omit<LeagueSeasonConfig, "seasons"> & {
-  seasons: Omit<
-    LeagueSeasonConfig["seasons"][number],
-    "ladderConfig" | "tvGuide"
-  >[]
+  dataverseGUID?: string
 }
 
 /**
@@ -344,6 +335,16 @@ export enum RoundLabel {
   MY_TEAMS = "My Teams",
   LIVE = "Live",
   ALL_MATCHES = "All Matches",
+}
+
+export enum FilterCondition {
+  AND = "AND",
+  OR = "OR",
+}
+
+export enum FilterOperator {
+  EQUALS = "equals",
+  INCLUDES = "includes",
 }
 
 export enum TVChannel {

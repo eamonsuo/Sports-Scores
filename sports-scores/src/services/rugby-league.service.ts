@@ -10,9 +10,7 @@ import {
   fetchRugbyLeagueTeamNextMatches,
 } from "@/endpoints/rugby-league.api"
 import {
-  RUGBY_LEAGUE_CATEGORIES,
   RUGBY_LEAGUE_LADDER_HEADINGS,
-  RUGBY_LEAGUE_LEAGUES,
   SCORE_BREAKDOWN_HALVES_CONFIG,
 } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
@@ -73,8 +71,6 @@ class RugbyLeagueService extends SofascoreSport {
         ),
       },
       SPORT.RUGBY_LEAGUE,
-      RUGBY_LEAGUE_CATEGORIES,
-      RUGBY_LEAGUE_LEAGUES,
       RUGBY_LEAGUE_LADDER_HEADINGS,
       SCORE_BREAKDOWN_HALVES_CONFIG,
     )

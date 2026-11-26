@@ -11,11 +11,7 @@ import {
   fetchCricketTeamLastMatches,
   fetchCricketTeamNextMatches,
 } from "@/endpoints/cricket.api"
-import {
-  CRICKET_CATEGORIES,
-  CRICKET_LADDER_HEADINGS,
-  CRICKET_LEAGUES,
-} from "@/lib/constants"
+import { CRICKET_LADDER_HEADINGS } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
 import { setMatchSummary } from "@/lib/projUtils"
 import {
@@ -27,7 +23,13 @@ import {
   Sofascore_Cricket_Incident,
   Sofascore_Cricket_Inning,
 } from "@/types/cricket"
-import { DeepPartial, MatchLineup, MatchSummary, SPORT } from "@/types/misc"
+import {
+  DeepPartial,
+  MatchLineup,
+  MatchSummary,
+  SPORT,
+  TVConfig,
+} from "@/types/misc"
 import {
   Sofascore_Event,
   Sofascore_Lineup,
@@ -88,8 +90,6 @@ class CricketService extends SofascoreSport {
         ),
       },
       SPORT.CRICKET,
-      CRICKET_CATEGORIES,
-      CRICKET_LEAGUES,
       CRICKET_LADDER_HEADINGS,
     )
   }
@@ -141,6 +141,7 @@ class CricketService extends SofascoreSport {
   override eventMapper(
     event: Sofascore_Event,
     options?: DeepPartial<MatchSummary>,
+    tvConfig?: TVConfig,
     timezone?: string,
   ): MatchSummary {
     return super.eventMapper(
@@ -178,6 +179,7 @@ class CricketService extends SofascoreSport {
           },
         ],
       },
+      tvConfig,
       timezone,
     )
   }

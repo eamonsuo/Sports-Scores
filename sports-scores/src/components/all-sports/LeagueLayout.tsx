@@ -3,13 +3,11 @@ import { DEFAULT_NAV_BUTTONS, SPORT_ROUTE_CONFIG } from "@/lib/routeConfig"
 import { SPORT } from "@/types/misc"
 import { RankingList } from "@/types/tennis"
 
-export default async function LeagueLayout({
-  children,
+export default async function LeagueHeader({
   sport,
   league,
   season,
 }: {
-  children: React.ReactNode
   sport: string
   league: string
   season: string
@@ -33,7 +31,6 @@ export default async function LeagueLayout({
         !Object.values(RankingList).includes(league as RankingList) && (
           <NavButtonGroup buttons={buttons} />
         )}
-      {children}
     </>
   )
 }

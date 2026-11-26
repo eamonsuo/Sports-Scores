@@ -22,21 +22,19 @@ export type PlayoffPictureStanding<
 }
 
 // ── Config: tells the system how to rank and lay out ──
-export type PlayoffPictureConfig<
-  T extends Record<string, number> = Record<string, number>,
-> = {
-  rankingSystem: "points" | "percentage"
+export type PlayoffPictureConfig = {
+  rankingSystem: PlayoffPictureSystem
   pointsPerWin?: number
   pointsPerDraw?: number
   totalSeasonGames: number
   qualifyingPositions: number
   structure: PlayoffPictureStructure
-  tiebreakerOrder?: (keyof T)[]
-  customRankingValue?: (team: PlayoffPictureStanding<T>) => number
-  customSort?: (
-    a: PlayoffPictureStanding<T>,
-    b: PlayoffPictureStanding<T>,
-  ) => number
+  dataverseGUID?: string
+}
+
+export enum PlayoffPictureSystem {
+  POINTS = "points",
+  PERCENTAGE = "percentage",
 }
 
 export enum PlayoffPictureStructure {

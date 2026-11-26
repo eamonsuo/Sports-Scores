@@ -7,13 +7,13 @@ import {
   fetchTennisPlayerNextMatches,
   fetchTennisTournamentLastMatches,
   fetchTennisTournamentNextMatches,
+  fetchTennisTournamentStandings,
   fetchTennisWTARankings,
 } from "@/endpoints/tennis.api"
 import {
   EVENT_TODAY_EXTENTION_HOURS,
   FALLBACK_TIMEZONE,
-  TENNIS_CATEGORIES,
-  TENNIS_LEAGUES,
+  TENNIS_LADDER_HEADINGS,
 } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
 import { resolveSportImage } from "@/lib/imageMapping"
@@ -27,6 +27,7 @@ import {
   PeriodScore,
   SPORT,
   Standings,
+  TVConfig,
 } from "@/types/misc"
 import { Sofascore_Event, Sofascore_Score } from "@/types/sofascore"
 import {
@@ -36,6 +37,11 @@ import {
 } from "@/types/tennis"
 import { TZDate } from "@date-fns/tz"
 import { addHours, isSameDay, isWithinInterval } from "date-fns"
+import { connection } from "next/server"
+import {
+  categoriesBySportByDate,
+  leaguesBySportByDate,
+} from "./dataverse.service"
 import { SofascoreSport } from "./sofascore.service"
 
 const TENNIS_RANKING_HEADINGS = ["Player", "Total", "Prev"]
@@ -67,7 +73,11 @@ class TennisService extends SofascoreSport {
         ),
         fetchEventIncidents: async () => null,
         fetchEventLineups: async () => null,
-        fetchStandingsTotal: async () => null,
+        fetchStandingsTotal: withDevCache(
+          "tennis",
+          "standings",
+          fetchTennisTournamentStandings,
+        ),
         fetchCupTrees: withDevCache("tennis", "bracket", fetchTennisBracket),
         fetchPlayerRankings: async () => null,
         fetchTeamLastEvents: withDevCache(
@@ -82,18 +92,21 @@ class TennisService extends SofascoreSport {
         ),
       },
       SPORT.TENNIS,
-      TENNIS_CATEGORIES,
-      TENNIS_LEAGUES,
-      [] as const,
+      TENNIS_LADDER_HEADINGS,
       undefined,
       CardVariant.TENNIS,
     )
   }
 
   override async matchesByDate(date: Date) {
+    await connection()
+
     const timezone = date instanceof TZDate ? date.timeZone : FALLBACK_TIMEZONE
+    const categories = (await categoriesBySportByDate(this.sport)) ?? []
+    const leagues = (await leaguesBySportByDate(this.sport)) ?? []
+
     const matchesResponse = await this.apiEndpoints.fetchEventsByDate(
-      this.categories,
+      categories,
       date,
     )
 
@@ -103,16 +116,16 @@ class TennisService extends SofascoreSport {
 
     if (!matches && !errors) return null
 
-    const validLeagueIds = this.leagues.map((l) => Number(l.slug))
+    const validLeagueIds = leagues.map((l) => Number(l.slug))
 
-    const validCategoryIds = this.categories
+    const validCategoryIds = categories
       .filter((c) => !c.excludeByDefault)
       .map((c) => Number(c.id))
 
     const leagueIdToName = Object.fromEntries(
-      TENNIS_CATEGORIES.map((l) => [Number(l.id), l.name]).concat(
-        TENNIS_LEAGUES.map((l) => [Number(l.slug), l.name]),
-      ),
+      categories
+        .map((l) => [Number(l.id), l.name])
+        .concat(leagues.map((l) => [Number(l.slug), l.name])),
     )
 
     matches.events = matches.events
@@ -220,7 +233,7 @@ class TennisService extends SofascoreSport {
         )()
         break
       default:
-        return null
+        return super.standings(leagueId, seasonId)
     }
 
     if (!rankings) {
@@ -259,6 +272,7 @@ class TennisService extends SofascoreSport {
   override eventMapper(
     match: Tennis_Sofascore_Event,
     options?: DeepPartial<MatchSummary>,
+    tvConfig?: TVConfig,
     timezone?: string,
   ): MatchSummary {
     const convertedScores = this.constructTennisScore(
@@ -270,7 +284,7 @@ class TennisService extends SofascoreSport {
       match,
       {
         ...options,
-        otherDetail: match.roundInfo?.name ?? undefined,
+        otherDetail: match.roundInfo?.name,
         summaryText: setTennisMatchSummary(
           match.status.type,
           match.winnerCode,
@@ -312,6 +326,7 @@ class TennisService extends SofascoreSport {
           },
         ],
       },
+      tvConfig,
       timezone,
     )
   }

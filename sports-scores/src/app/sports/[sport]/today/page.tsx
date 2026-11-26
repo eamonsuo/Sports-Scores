@@ -5,6 +5,7 @@ import Placeholder from "@/components/misc-ui/Placeholder"
 import { SPORT_ROUTE_CONFIG } from "@/lib/routeConfig"
 import { getClientDate } from "@/lib/serverUtils"
 import { leagueOrderStorageKey } from "@/lib/storageKeys"
+import { leaguesBySport } from "@/services/dataverse.service"
 import { RoundLabel, SPORT } from "@/types/misc"
 import { TZDate } from "@date-fns/tz/date"
 
@@ -17,9 +18,11 @@ export default async function Page({
 }) {
   const { sport } = await params
   const config = SPORT_ROUTE_CONFIG[sport as SPORT]
+  const leagues = await leaguesBySport(sport as SPORT)
 
   const date = (await searchParams)?.date //Gets ?date= query string
   const curDate = await getClientDate()
+
   const parsedDate =
     date === undefined ? curDate : new TZDate(date as string, curDate.timeZone)
 
@@ -66,8 +69,8 @@ export default async function Page({
     )
   }
 
-  const defaultLeagueOrder = config.leagues.map((league) => league.slug)
-  const defaultExcludedFromToday = config.leagues
+  const defaultLeagueOrder = leagues.map((league) => league.slug)
+  const defaultExcludedFromToday = leagues
     .filter((league) => league.excludeFromToday)
     .map((league) => league.slug)
 

@@ -28,29 +28,23 @@ export function getRankingValue(
   team: PlayoffPictureStanding,
   config: PlayoffPictureConfig,
 ): number {
-  if (config.customRankingValue) return config.customRankingValue(team)
-  if (config.rankingSystem === "percentage") {
-    if (team.played === 0) return 0
-    return (team.wins + team.draws * 0.5) / team.played
+  switch (config.rankingSystem) {
+    case "percentage":
+      if (team.played === 0) return 0
+      return (team.wins + team.draws * 0.5) / team.played
+    case "points":
+    default:
+      return (
+        team.wins * (config.pointsPerWin ?? 2) +
+        team.draws * (config.pointsPerDraw ?? 1)
+      )
   }
-  return (
-    team.wins * (config.pointsPerWin ?? 2) +
-    team.draws * (config.pointsPerDraw ?? 1)
-  )
 }
 
 export function getMaxRankingValue(
   team: PlayoffPictureStanding,
   config: PlayoffPictureConfig,
 ): number {
-  if (config.customRankingValue) {
-    const projected: PlayoffPictureStanding = {
-      ...team,
-      wins: team.wins + (team.totalSeasonGames - team.played),
-      played: team.totalSeasonGames,
-    }
-    return config.customRankingValue(projected)
-  }
   const remaining = team.totalSeasonGames - team.played
   if (config.rankingSystem === "percentage") {
     return (team.wins + remaining + team.draws * 0.5) / team.totalSeasonGames

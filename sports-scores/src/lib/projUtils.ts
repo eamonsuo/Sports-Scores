@@ -1,18 +1,14 @@
 import { updateGlobalApiQuota } from "@/lib/apiCounter"
 import {
-  ClientLeagueSeasonConfig,
   CountryFlagCode,
-  LadderConfig,
-  LadderGroupConfig,
+  FilterCondition,
+  FilterOperator,
+  LadderGroupFilter,
   LeagueSeasonConfig,
   SPORT,
   SportCategory,
-  TVChannel,
-  TVChannelConfig,
 } from "@/types/misc"
-import { PlayoffPictureConfig } from "@/types/playoff-picture"
-import { Sofascore_Events_Response, Sofascore_Score } from "@/types/sofascore"
-import { addHours } from "date-fns/addHours"
+import { Sofascore_Events_Response } from "@/types/sofascore"
 import { format } from "date-fns/format"
 import { FALLBACK_IMAGE } from "./constants"
 
@@ -323,49 +319,6 @@ export function formatDateLong(date: Date | number | null | undefined): string {
   return format(dateObj, "EEE d MMM yyyy")
 }
 
-export const formatDate = (date: Date) => format(date, "d MMM")
-export const formatDateYear = (date: Date) => format(date, "d MMM yyyy")
-
-export function formatPeriodScores(
-  homeScore: Sofascore_Score,
-  awayScore: Sofascore_Score,
-  showWinnerFirst: boolean = false,
-  winner?: number,
-) {
-  const periodKeys = Object.keys(homeScore).filter(
-    (key) => key.includes("period") && !key.includes("TieBreak"),
-  )
-
-  // Determine if we should reverse scores (show away/home instead of home/away)
-  const shouldReverse = showWinnerFirst && winner === 2
-
-  const periodScores = periodKeys.map((periodKey) => {
-    const tieBreakKey = `${periodKey}TieBreak` as keyof Sofascore_Score
-    const homeVal = homeScore[periodKey as keyof Sofascore_Score]
-    const awayVal = awayScore[periodKey as keyof Sofascore_Score]
-
-    let scoreStr = shouldReverse
-      ? `${awayVal}-${homeVal}`
-      : `${homeVal}-${awayVal}`
-
-    // Check if there's a tie break for this period
-    if (
-      homeScore[tieBreakKey] !== undefined &&
-      awayScore[tieBreakKey] !== undefined
-    ) {
-      const homeTB = homeScore[tieBreakKey]
-      const awayTB = awayScore[tieBreakKey]
-      scoreStr += shouldReverse
-        ? ` (${awayTB}-${homeTB})`
-        : ` (${homeTB}-${awayTB})`
-    }
-
-    return scoreStr
-  })
-
-  return periodScores.join(", ")
-}
-
 export function setTennisMatchSummary(
   status: string,
   winner: number,
@@ -406,49 +359,9 @@ export function getSportConfigurations(
     (s) => s.slug.split("/")[0] === seasonId,
   )
 
-  const ladderConfig = seasonConfig?.ladderConfig
-  const tvConfig = seasonConfig?.tvGuide
-
-  return { leagueConfig, seasonConfig, ladderConfig, tvConfig }
-}
-
-export function stripLeagueSeasonConfig(
-  config: LeagueSeasonConfig[],
-): ClientLeagueSeasonConfig[] {
-  return config.map(({ seasons, ...rest }) => ({
-    ...rest,
-    seasons: seasons.map(
-      ({ ladderConfig, tvGuide: tvguide, ...seasonRest }) => seasonRest,
-    ),
-  }))
-}
-
-export function ladderConfigMap(
-  ladderGroupConfig?: LadderGroupConfig[] | LadderGroupConfig,
-  playoffPictureConfig?: PlayoffPictureConfig,
-): LadderConfig {
-  let ladderGroup: LadderGroupConfig[]
-
-  if (Array.isArray(ladderGroupConfig)) {
-    ladderGroup = ladderGroupConfig
-  } else if (ladderGroupConfig) {
-    ladderGroup = [ladderGroupConfig]
-  } else {
-    ladderGroup = []
-  }
-
-  return { ladderGroup, playoffPictureConfig }
-}
-
-export function tvGuideConfigCreate(
-  channel: TVChannel,
-  addHoursToStart: number,
-  addHoursToEnd: number,
-): TVChannelConfig {
   return {
-    channel,
-    startTime: (date: Date) => addHours(date, addHoursToStart),
-    endTime: (date: Date) => addHours(date, addHoursToEnd),
+    leagueConfig,
+    seasonConfig,
   }
 }
 
@@ -464,5 +377,44 @@ export function mapPlayerPosition(position: string | null | undefined) {
       return "All-Rounder"
     default:
       return position ?? ""
+  }
+}
+
+export function filterLadderGroup(
+  tableName: string,
+  filters: LadderGroupFilter[],
+  condition: FilterCondition = FilterCondition.OR,
+) {
+  if (filters.length === 0) return true
+
+  switch (condition) {
+    case FilterCondition.OR: {
+      return filters.some((filter) =>
+        applyLadderFilter(tableName, filter, filter.negate),
+      )
+    }
+    case FilterCondition.AND: {
+      return filters.every((filter) =>
+        applyLadderFilter(tableName, filter, filter.negate),
+      )
+    }
+  }
+
+  function applyLadderFilter(
+    tableName: string,
+    filter: LadderGroupFilter,
+    negate?: boolean,
+  ) {
+    // Implement the filter logic based on the operator
+    switch (filter.operator) {
+      case FilterOperator.EQUALS:
+        return negate ? tableName !== filter.value : tableName === filter.value // Replace with actual value to compare
+      case FilterOperator.INCLUDES:
+        return negate
+          ? !tableName.includes(filter.value)
+          : tableName.includes(filter.value) // Replace with actual value to compare
+      default:
+        return false
+    }
   }
 }

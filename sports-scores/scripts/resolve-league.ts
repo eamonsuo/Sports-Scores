@@ -2,7 +2,7 @@
  * Resolves league choice to leagueId, seasonId, sport.
  * Used by the GitHub Actions workflow to auto-resolve from the league dropdown.
  *
- * Usage: npx tsx scripts/resolve-league.ts "<league choice>" [seasonId override]
+ * Usage: npx tsx --tsconfig scripts/tsconfig.json scripts/resolve-league.ts "<league choice>" [seasonId override]
  *
  * Outputs GitHub Actions step outputs to $GITHUB_OUTPUT.
  */

@@ -14,7 +14,6 @@ import {
   FALLBACK_TIMEZONE,
   MOTORSPORT_CONSTRUCTOR_STANDINGS_HEADINGS,
   MOTORSPORT_DRIVER_STANDINGS_HEADINGS,
-  MOTORSPORT_LEAGUES,
   MOTORSPORT_SESSION_STANDINGS_HEADINGS,
 } from "@/lib/constants"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
@@ -48,7 +47,7 @@ class F1Service implements SportService {
 
   constructor() {
     this.sport = SPORT.MOTORSPORT
-    this.categories = MOTORSPORT_LEAGUES
+    this.categories = []
     this.cardVariant = CardVariant.SESSION
   }
 

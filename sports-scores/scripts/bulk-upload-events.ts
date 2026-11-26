@@ -6,12 +6,12 @@
  * Motorsport substages, file-based) via a unified adapter registry.
  *
  * Run from the sports-scores directory:
- *   npx tsx scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> [displayType] [allEventsMode] [useSportApi]
+ *   npx tsx --tsconfig scripts/tsconfig.json scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> [displayType] [allEventsMode] [useSportApi]
  *
  * Examples:
- *   npx tsx scripts/bulk-upload-events.ts 294 86317 rugby-league round false true
- *   npx tsx scripts/bulk-upload-events.ts f1 2026 motorsport
- *   npx tsx scripts/bulk-upload-events.ts pga 2026 golf
+ *   npx tsx --tsconfig scripts/tsconfig.json scripts/bulk-upload-events.ts 294 86317 rugby-league round false true
+ *   npx tsx --tsconfig scripts/tsconfig.json scripts/bulk-upload-events.ts f1 2026 motorsport
+ *   npx tsx --tsconfig scripts/tsconfig.json scripts/bulk-upload-events.ts pga 2026 golf
  */
 
 import {
@@ -111,7 +111,7 @@ const sport = sportArg as SPORT
 
 if (!leagueIdArg || !seasonIdArg || !sport) {
   console.error(
-    "Usage: npx tsx scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> [allEventsMode]",
+    "Usage: npx tsx --tsconfig scripts/tsconfig.json scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> [allEventsMode]",
   )
   process.exit(1)
 }
@@ -214,14 +214,21 @@ function createSofascoreStagesAdapter(
         console.log("Fetching single stage events...")
         const stageResponse = await fetchStages(seasonId)
         console.log(`Fetched ${stageResponse?.stages?.length ?? 0} stages.`)
-        return (stageResponse?.stages ?? []).flatMap((stage) =>
-          mapper(stage, {
-            leagueId,
-            leagueSlug: `/sports/cycling/${leagueId}/${seasonId}`,
-            seasonId,
-            matchSlug: `/sports/cycling/${leagueId}/${seasonId}/match/${stage.id}`,
-          }),
-        )
+        return (stageResponse?.stages ?? [])
+          .filter(
+            (stage) =>
+              stage.info.discipline === "World Tour" ||
+              stage.info.discipline === "World Tour 1 Grand Tour" ||
+              stage.info.stageRound,
+          )
+          .flatMap((stage) =>
+            mapper(stage, {
+              leagueId,
+              leagueSlug: `/sports/cycling/${leagueId}/${seasonId}`,
+              seasonId,
+              matchSlug: `/sports/cycling/${leagueId}/${seasonId}/match/${stage.id}`,
+            }),
+          )
       }
     },
   }
