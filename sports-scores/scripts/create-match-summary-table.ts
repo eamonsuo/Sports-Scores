@@ -2,7 +2,7 @@
  * One-time script to create the MatchSummary table in Dataverse.
  *
  * Run from the sports-scores directory:
- *   npx tsx scripts/create-match-summary-table.ts
+ *   npx tsx --tsconfig scripts/tsconfig.json scripts/create-match-summary-table.ts
  *
  * Change PREFIX below if your Dataverse publisher prefix is not "new".
  */

@@ -2,6 +2,7 @@ import FixtureRoundList from "@/components/all-sports/FixtureRoundList"
 import Placeholder from "@/components/misc-ui/Placeholder"
 import { getSportConfigurations } from "@/lib/projUtils"
 import { SPORT_ROUTE_CONFIG } from "@/lib/routeConfig"
+import { leaguesBySportByLeague } from "@/services/dataverse.service"
 import { SPORT } from "@/types/misc"
 import { redirect } from "next/navigation"
 
@@ -10,10 +11,11 @@ export default async function Page(props: {
 }) {
   const { sport, league, season } = await props.params
   const config = SPORT_ROUTE_CONFIG[sport as SPORT]
+  const leagues = await leaguesBySportByLeague(sport as SPORT, league)
 
   // Get configs for sport
   const { leagueConfig, seasonConfig } = getSportConfigurations(
-    config.leagues,
+    leagues,
     league,
     season,
   )

@@ -4,7 +4,6 @@ import OrderedFixtureRoundList from "@/components/all-sports/OrderedFixtureRound
 import TVGuide from "@/components/all-sports/TVGuide"
 import DateNav from "@/components/misc-ui/DateNav"
 import { FOOTER_LINKS } from "@/lib/constants"
-import { SPORT_ROUTE_CONFIG } from "@/lib/routeConfig"
 import { getClientDate } from "@/lib/serverUtils"
 import { FOOTER_ORDER_STORAGE_KEY } from "@/lib/storageKeys"
 import { americanFootballService } from "@/services/american-football.service"
@@ -14,6 +13,7 @@ import { basketballService } from "@/services/basketball.service"
 import { cricketService } from "@/services/cricket.service"
 import { cyclingService } from "@/services/cycling.service"
 import { dartsService } from "@/services/darts.service"
+import { leagues } from "@/services/dataverse.service"
 import { footballService } from "@/services/football.service"
 import { golfService } from "@/services/golf.service"
 import { iceHockeyService } from "@/services/ice-hockey.service"
@@ -125,15 +125,17 @@ export default async function Page({
     })
   }
 
+  const allLeagues = await leagues()
+
   const perSportLeagueExclusion = TODAY_PAGE_SPORTS.map((sport) => {
-    const leagues = SPORT_ROUTE_CONFIG[sport].leagues
     return {
       sport,
-      leagueIds: leagues.map((league) => league.slug),
-      defaultLeagueOrder: leagues.map((league) => league.slug),
-      defaultExcludedFromToday: leagues
-        .filter((league) => league.excludeFromToday)
-        .map((league) => league.slug),
+      leagueIds: allLeagues?.map((league) => league.slug) ?? [],
+      defaultLeagueOrder: allLeagues?.map((league) => league.slug) ?? [],
+      defaultExcludedFromToday:
+        allLeagues
+          ?.filter((league) => league.excludeFromToday)
+          .map((league) => league.slug) ?? [],
     }
   })
 

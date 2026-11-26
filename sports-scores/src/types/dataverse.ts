@@ -4,6 +4,18 @@ export interface DataverseResponse<T> {
   value: T[]
 }
 
+type DataverseLookup<T extends string> = {
+  [K in `_${T}_value`]?: string
+} & {
+  [K in `_${T}_value@OData.Community.Display.V1.FormattedValue`]?: string
+} & {
+  [
+    K in `_${T}_value@Microsoft.Dynamics.CRM.associatednavigationproperty`
+  ]?: string
+} & {
+  [K in `_${T}_value@Microsoft.Dynamics.CRM.lookuplogicalname`]?: string
+}
+
 // ss_matchsummary table
 export interface DataverseMatchSummary {
   ss_matchsummaryid: string
@@ -57,4 +69,88 @@ export interface DataverseContact {
   telephone1: string | null
   jobtitle: string | null
   companyname: string | null
+}
+
+export type DataverseSport = {
+  ss_sportid: string
+  ss_name: string | null
+  ss_slug: string | null
+  ss_sofascoreendpoint: string | null
+
+  // Expands
+  ss_league_sportid_ss_sport?: DataverseLeague[]
+  ss_category_sportid_ss_sport?: DataverseCategory[]
+}
+
+export type DataverseCategory = {
+  ss_categoryid: string
+  ss_name: string | null
+  ss_slug: string | null
+  ss_excludefromtoday: boolean
+  ss_sport: string | null
+
+  // Expands
+  // ss_league_sportid_ss_sport?: DataverseLeague[]
+} & DataverseLookup<"ss_sportid"> // Lookup to DataverseSport
+
+export type DataverseLeague = {
+  ss_leagueid: string
+  ss_name: string | null
+  ss_slug: string | null
+  ss_icon: string | null
+  ss_display: string | null
+  ss_externalurl: string | null
+  ss_excludefromtoday: boolean
+  ss_hidden: boolean
+
+  // Expands
+  ss_season_leagueid_ss_league?: DataverseSeason[]
+} & DataverseLookup<"ss_sportid"> &
+  DataverseLookup<"ss_categoryid"> // Lookup to DataverseSport and DataverseCategory
+
+export type DataverseSeason = {
+  ss_seasonid: string
+  ss_name: string | null
+  ss_slug: string | null
+  ss_externalurl: string | null
+  ss_byes: string | null // JSON array of byes
+} & DataverseLookup<"ss_leagueid"> & // Lookup to DataverseLeague
+  DataverseLookup<"ss_ladderconfigid"> & // Lookup to DataverseLadderConfig
+  DataverseLookup<"ss_playoffpictureconfigid"> & // Lookup to DataversePlayoffPictureConfig
+  DataverseLookup<"ss_tvconfigid"> // Lookup to DataverseTVConfig
+
+export type DataverseLadderConfig = {
+  ss_ladderconfigid: string
+  ss_name: string | null
+  ss_headings: string | null
+
+  // Expands
+  ss_laddergroupconfig_ladderconfigid_ss_ladderconfig?: DataverseLadderGroupConfig[]
+}
+
+export type DataverseLadderGroupConfig = {
+  ss_laddergroupconfigid: string
+  ss_label: string | null
+  ss_headings: string | null
+  ss_placingcategories: string | null
+  ss_filtercondition: string | null // JSON array of byes
+  ss_filters: string | null // JSON array of byes
+} & DataverseLookup<"ss_ladderconfigid">
+
+export type DataversePlayoffPictureConfig = {
+  ss_playoffpictureconfigid: string
+  ss_name: string | null
+  ss_rankingsystem: string | null
+  ss_totalseasongames: number | null
+  ss_qualifyingpositions: number | null
+  ss_pointsperdraw: number | null
+  ss_pointsperwin: number | null
+  ss_structure: string | null
+}
+
+export type DataverseTVConfig = {
+  ss_tvconfigid: string
+  ss_name: string | null
+  ss_matchlength: number | null
+  ss_channels: string | null
 }

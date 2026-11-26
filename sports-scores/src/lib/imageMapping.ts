@@ -902,13 +902,13 @@ export function resolveImage(teamName: string) {
     // Baseball
     // ABL
     case "Brisbane Bandits":
-      return "https://assets.baseball.com.au/uploads/sites/8/2020/07/Site-Logo-for-MLBAM.png"
+      return "https://r2.thesportsdb.com/images/media/team/badge/u68i041637685295.png"
     case "Adelaide Giants":
-      return "https://assets.baseball.com.au/uploads/sites/6/2019/11/Adelaide-2.png"
+      return "https://r2.thesportsdb.com/images/media/team/badge/8azpqh1637685288.png"
     case "Perth Heat":
-      return "https://assets.baseball.com.au/uploads/sites/12/2019/10/Perth-1.png"
+      return "https://r2.thesportsdb.com/images/media/team/badge/wpzrmt1637685317.png"
     case "Sydney Blue Sox":
-      return "https://assets.baseball.com.au/uploads/sites/13/2023/07/Site-Logo-for-MLBAM.png"
+      return "https://r2.thesportsdb.com/images/media/team/badge/q8zrxy1637685325.png"
 
     // MLB - American League East
     case "Baltimore Orioles":

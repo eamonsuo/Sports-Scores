@@ -1,21 +1,23 @@
 import {
+  DataverseCategory,
+  DataverseLadderConfig,
+  DataverseLeague,
   DataverseMatchSummary,
+  DataversePlayoffPictureConfig,
   DataverseResponse,
+  DataverseSeason,
+  DataverseSport,
   DataverseSportEvent,
+  DataverseTVConfig,
 } from "@/types/dataverse"
-
-// const ENVIRONMENT_URL = process.env.DATAVERSE_ENVIRONMENT_URL ?? ""
-// const TENANT_ID = process.env.DATAVERSE_TENANT_ID ?? ""
-// const CLIENT_ID = process.env.DATAVERSE_CLIENT_ID ?? ""
-// const CLIENT_SECRET = process.env.DATAVERSE_CLIENT_SECRET ?? ""
+import { cacheLife, cacheTag } from "next/cache"
 
 // Module-scoped token cache
-let cachedToken: { accessToken: string; expiresAt: number } | null = null
 
 async function getAccessToken() {
-  if (cachedToken && Date.now() < cachedToken.expiresAt) {
-    return cachedToken.accessToken
-  }
+  "use cache"
+  cacheLife("minutes")
+  cacheTag("dataverse-access-token")
 
   const tokenUrl = `https://login.microsoftonline.com/${process.env.DATAVERSE_TENANT_ID}/oauth2/v2.0/token`
 
@@ -42,12 +44,8 @@ async function getAccessToken() {
     }
 
     const data = await res.json()
-    cachedToken = {
-      accessToken: data.access_token,
-      expiresAt: Date.now() + (data.expires_in - 300) * 1000,
-    }
 
-    return cachedToken.accessToken
+    return data.access_token
   } catch (error) {
     console.error("[Dataverse] Token request error:", error)
     return null
@@ -77,9 +75,6 @@ async function fetchDataverseApi<T>(entity: string, queryParams?: string) {
 
     if (!res.ok || res.status === 204) {
       const errorBody = await res.text()
-      if (res.status === 401) {
-        cachedToken = null
-      }
       console.error(
         `[Dataverse] API request failed: ${res.status} ${res.statusText} — ${entity}`,
         errorBody,
@@ -226,6 +221,138 @@ export async function fetchDataverseSportEventSchedules(
   if (orderBy) queryParams.push(`$orderby=${orderBy}`)
   return fetchDataverseApi<DataverseResponse<DataverseSportEvent>>(
     "ss_sporteventschedules",
+    queryParams.join("&"),
+  )
+}
+
+// --- Sport table ---
+export async function fetchDataverseSports(
+  filters?: string,
+  select: string = "*",
+  orderBy: string = "ss_name asc",
+  expand: string = "",
+) {
+  const queryParams = []
+  if (select) queryParams.push(`$select=${select}`)
+  if (filters) queryParams.push(`$filter=${filters}`)
+  if (orderBy) queryParams.push(`$orderby=${orderBy}`)
+  if (expand) queryParams.push(`$expand=${expand}`)
+  return fetchDataverseApi<DataverseResponse<DataverseSport>>(
+    "ss_sports",
+    queryParams.join("&"),
+  )
+}
+
+export async function createDataverseSport(
+  record: Omit<DataverseSport, "ss_sportid">,
+) {
+  return createDataverseRecord("ss_sports", record as Record<string, unknown>)
+}
+
+// --- Category table ---
+export async function fetchDataverseCategories(
+  filters?: string,
+  select: string = "*",
+  orderBy: string = "ss_name asc",
+  expand: string = "",
+) {
+  const queryParams = []
+  if (select) queryParams.push(`$select=${select}`)
+  if (filters) queryParams.push(`$filter=${filters}`)
+  if (orderBy) queryParams.push(`$orderby=${orderBy}`)
+  if (expand) queryParams.push(`$expand=${expand}`)
+  return fetchDataverseApi<DataverseResponse<DataverseCategory>>(
+    "ss_categories",
+    queryParams.join("&"),
+  )
+}
+
+// --- League table ---
+export async function fetchDataverseLeagues(
+  filters?: string,
+  select: string = "*",
+  orderBy: string = "ss_name asc",
+  expand: string = "ss_season_leagueid_ss_league($select=ss_name,ss_slug,ss_sport,_ss_leagueid_value,ss_externalurl,ss_byes)",
+) {
+  const queryParams = []
+  if (select) queryParams.push(`$select=${select}`)
+  if (filters) queryParams.push(`$filter=${filters}`)
+  if (orderBy) queryParams.push(`$orderby=${orderBy}`)
+  if (expand) queryParams.push(`$expand=${expand}`)
+  return fetchDataverseApi<DataverseResponse<DataverseLeague>>(
+    "ss_leagues",
+    queryParams.join("&"),
+  )
+}
+
+// --- Season table ---
+export async function fetchDataverseSeasons(
+  filters?: string,
+  select: string = "*",
+  orderBy: string = "ss_name asc",
+  expand: string = "",
+) {
+  const queryParams = []
+  if (select) queryParams.push(`$select=${select}`)
+  if (filters) queryParams.push(`$filter=${filters}`)
+  if (orderBy) queryParams.push(`$orderby=${orderBy}`)
+  if (expand) queryParams.push(`$expand=${expand}`)
+  return fetchDataverseApi<DataverseResponse<DataverseSeason>>(
+    "ss_seasons",
+    queryParams.join("&"),
+  )
+}
+
+// --- LadderConfig table ---
+export async function fetchDataverseLadderConfigs(
+  filters?: string,
+  select: string = "*",
+  orderBy: string = "ss_name asc",
+  expand: string = "ss_laddergroupconfig_ladderconfigid_ss_ladderconfig($select=ss_filtercondition,ss_filters,ss_headings,ss_label,_ss_ladderconfigid_value,ss_placingcategories)",
+) {
+  const queryParams = []
+  if (select) queryParams.push(`$select=${select}`)
+  if (filters) queryParams.push(`$filter=${filters}`)
+  if (orderBy) queryParams.push(`$orderby=${orderBy}`)
+  if (expand) queryParams.push(`$expand=${expand}`)
+  return fetchDataverseApi<DataverseResponse<DataverseLadderConfig>>(
+    "ss_ladderconfigs",
+    queryParams.join("&"),
+  )
+}
+
+// --- PlayoffPictureConfig table ---
+export async function fetchDataversePlayoffPictureConfigs(
+  filters?: string,
+  select: string = "*",
+  orderBy: string = "ss_name asc",
+  expand: string = "",
+) {
+  const queryParams = []
+  if (select) queryParams.push(`$select=${select}`)
+  if (filters) queryParams.push(`$filter=${filters}`)
+  if (orderBy) queryParams.push(`$orderby=${orderBy}`)
+  if (expand) queryParams.push(`$expand=${expand}`)
+  return fetchDataverseApi<DataverseResponse<DataversePlayoffPictureConfig>>(
+    "ss_playoffpictureconfigs",
+    queryParams.join("&"),
+  )
+}
+
+// --- TVConfig table ---
+export async function fetchDataverseTVConfigs(
+  filters?: string,
+  select: string = "*",
+  orderBy: string = "ss_name asc",
+  expand: string = "",
+) {
+  const queryParams = []
+  if (select) queryParams.push(`$select=${select}`)
+  if (filters) queryParams.push(`$filter=${filters}`)
+  if (orderBy) queryParams.push(`$orderby=${orderBy}`)
+  if (expand) queryParams.push(`$expand=${expand}`)
+  return fetchDataverseApi<DataverseResponse<DataverseTVConfig>>(
+    "ss_tvconfigs",
     queryParams.join("&"),
   )
 }

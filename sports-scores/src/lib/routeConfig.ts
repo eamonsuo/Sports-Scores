@@ -17,37 +17,15 @@ import { rugbyUnionService } from "@/services/rugby-union.service"
 import { surfingService } from "@/services/surfing.service"
 import { tennisService } from "@/services/tennis.service"
 import {
-  ClientLeagueSeasonConfig,
   MatchDetail,
   MatchDetailComponents,
   SPORT,
   SportService,
 } from "@/types/misc"
-import {
-  AMERICAN_FOOTBALL_LEAGUES_CLIENT,
-  ATHLETICS_LEAGUES_CLIENT,
-  AUSSIE_RULES_LEAGUES_CLIENT,
-  BASEBALL_LEAGUES_CLIENT,
-  BASKETBALL_LEAGUES_CLIENT,
-  CRICKET_LEAGUES_CLIENT,
-  CYCLING_LEAGUES_CLIENT,
-  DARTS_LEAGUES_CLIENT,
-  FOOTBALL_LEAGUES_CLIENT,
-  GOLF_LEAGUES_CLIENT,
-  ICE_HOCKEY_LEAGUES_CLIENT,
-  MOTORSPORT_LEAGUES_CLIENT,
-  MULTI_SPORT_LEAGUES_CLIENT,
-  NETBALL_LEAGUES_CLIENT,
-  RUGBY_LEAGUE_LEAGUES_CLIENT,
-  RUGBY_UNION_LEAGUES_CLIENT,
-  SURFING_LEAGUES_CLIENT,
-  TENNIS_LEAGUES_CLIENT,
-} from "./constants"
 
 type NavButton = { href: string; label: string; page: string }
 
 type SportRouteConfig = {
-  leagues: ClientLeagueSeasonConfig[]
   service: SportService
   // If a service always resolves to custom type, you can safely cast to MatchDetail here
   matchDetailsPageComponents?: (
@@ -64,31 +42,24 @@ export const DEFAULT_NAV_BUTTONS = [
 
 export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
   [SPORT.DEFAULT_SPORT]: {
-    leagues: [],
     service: placeholderService,
   },
   [SPORT.AMERICAN_FOOTBALL]: {
-    leagues: AMERICAN_FOOTBALL_LEAGUES_CLIENT,
     service: americanFootballService,
   },
   [SPORT.ATHLETICS]: {
-    leagues: ATHLETICS_LEAGUES_CLIENT,
     service: placeholderService,
   },
   [SPORT.AUSSIE_RULES]: {
-    leagues: AUSSIE_RULES_LEAGUES_CLIENT,
     service: aussieRulesService,
   },
   [SPORT.BASEBALL]: {
-    leagues: BASEBALL_LEAGUES_CLIENT,
     service: baseballService,
   },
   [SPORT.BASKETBALL]: {
-    leagues: BASKETBALL_LEAGUES_CLIENT,
     service: basketballService,
   },
   [SPORT.CRICKET]: {
-    leagues: CRICKET_LEAGUES_CLIENT,
     service: cricketService,
     // cricketService always resolves to CricketMatchDetails, so this narrowing cast is safe at runtime
     matchDetailsPageComponents: cricketMatchDetailComponents as (
@@ -96,7 +67,6 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
     ) => MatchDetailComponents[],
   },
   [SPORT.CYCLING]: {
-    leagues: CYCLING_LEAGUES_CLIENT,
     service: cyclingService,
     navButtons: [
       { href: "#current-date", label: "Stages", page: "matches" },
@@ -104,16 +74,14 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
     ],
   },
   [SPORT.DARTS]: {
-    leagues: DARTS_LEAGUES_CLIENT,
     service: dartsService,
     navButtons: [
       { href: "#current-date", label: "Matches", page: "matches" },
-      { href: "bracket", label: "Bracket", page: "bracket" },
       { href: "ladder", label: "Ladder", page: "ladder" },
+      { href: "bracket", label: "Bracket", page: "bracket" },
     ],
   },
   [SPORT.FOOTBALL]: {
-    leagues: FOOTBALL_LEAGUES_CLIENT,
     service: footballService,
     navButtons: [
       { href: "#current-date", label: "Matches", page: "matches" },
@@ -122,7 +90,6 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
     ],
   },
   [SPORT.GOLF]: {
-    leagues: GOLF_LEAGUES_CLIENT,
     service: golfService,
     navButtons: [
       { href: "#current-date", label: "Tournaments", page: "matches" },
@@ -143,11 +110,9 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
     ) => MatchDetailComponents[],
   },
   [SPORT.ICE_HOCKEY]: {
-    leagues: ICE_HOCKEY_LEAGUES_CLIENT,
     service: iceHockeyService,
   },
   [SPORT.MOTORSPORT]: {
-    leagues: MOTORSPORT_LEAGUES_CLIENT,
     service: motorsportService,
     navButtons: [
       { href: "#current-date", label: "Races", page: "races" },
@@ -167,24 +132,19 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
     },
   },
   [SPORT.MULTI_SPORT]: {
-    leagues: MULTI_SPORT_LEAGUES_CLIENT,
     service: placeholderService,
     navButtons: [{ href: "", label: "Details", page: "details" }],
   },
   [SPORT.NETBALL]: {
-    leagues: NETBALL_LEAGUES_CLIENT,
     service: placeholderService,
   },
   [SPORT.RUGBY_LEAGUE]: {
-    leagues: RUGBY_LEAGUE_LEAGUES_CLIENT,
     service: rugbyLeagueService,
   },
   [SPORT.RUGBY_UNION]: {
-    leagues: RUGBY_UNION_LEAGUES_CLIENT,
     service: rugbyUnionService,
   },
   [SPORT.SURFING]: {
-    leagues: SURFING_LEAGUES_CLIENT,
     service: surfingService,
     navButtonsByLeague: {
       wsl: [
@@ -198,10 +158,10 @@ export const SPORT_ROUTE_CONFIG: Record<SPORT, SportRouteConfig> = {
     },
   },
   [SPORT.TENNIS]: {
-    leagues: TENNIS_LEAGUES_CLIENT,
     service: tennisService,
     navButtons: [
       { href: "#current-date", label: "Matches", page: "matches" },
+      { href: "ladder", label: "Standings", page: "ladder" },
       { href: "bracket", label: "Bracket", page: "bracket" },
     ],
   },

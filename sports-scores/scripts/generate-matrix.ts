@@ -8,115 +8,40 @@
  * array below.
  */
 
-import {
-  AMERICAN_FOOTBALL_LEAGUES,
-  AUSSIE_RULES_LEAGUES,
-  BASEBALL_LEAGUES,
-  BASKETBALL_LEAGUES,
-  CRICKET_LEAGUES,
-  CYCLING_LEAGUES,
-  DARTS_LEAGUES,
-  FOOTBALL_LEAGUES,
-  GOLF_LEAGUES,
-  ICE_HOCKEY_LEAGUES,
-  MOTORSPORT_LEAGUES,
-  NETBALL_LEAGUES,
-  RUGBY_LEAGUE_LEAGUES,
-  RUGBY_UNION_LEAGUES,
-  TENNIS_LEAGUES,
-} from "@/lib/constants"
-import { LeagueSeasonConfig } from "@/types/misc"
+import { leaguesBySportToShow } from "@/services/dataverse.service"
+import { SPORT } from "@/types/misc"
+import { loadEnvConfig } from "@next/env"
+import { readFileSync, writeFileSync } from "fs"
+import { resolve } from "path"
+
+loadEnvConfig(process.cwd())
 
 // ---------------------------------------------------------------------------
 // Configure which leagues to sync. Each entry maps a sport key + display type
 // to a set of league slugs. Use "*" to include all leagues for that sport.
 // ---------------------------------------------------------------------------
 
-type SyncEntry = {
-  sport: string
-  leagues: LeagueSeasonConfig[]
-  /** Slugs to include. Omit or use ["*"] for all. */
-  slugs?: string[]
+const REGULAR_LEAGUES_CONFIG: Record<SPORT, string[]> = {
+  [SPORT.RUGBY_LEAGUE]: ["294", "19120", "2135", "2134"],
+  [SPORT.FOOTBALL]: ["136", "1894", "1786", "17", "19"],
+  [SPORT.AUSSIE_RULES]: ["656", "10159", "25506"],
+  [SPORT.AMERICAN_FOOTBALL]: ["9464"],
+  [SPORT.BASKETBALL]: ["1524", "1506", "132", "486"],
+  [SPORT.BASEBALL]: ["11205", "19445"],
+  [SPORT.ICE_HOCKEY]: ["11059", "234"],
+  [SPORT.RUGBY_UNION]: ["422"],
+  [SPORT.CRICKET]: ["11160", "11161", "11162", "18704", "11163", "11165"],
+  [SPORT.NETBALL]: [],
+  [SPORT.TENNIS]: [],
+  [SPORT.DARTS]: [],
+  [SPORT.MOTORSPORT]: ["40", "17", "67", "18"],
+  [SPORT.GOLF]: ["pga", "liv", "dpworld", "lpga", "australasia", "tgl"],
+  [SPORT.CYCLING]: ["9", "94"],
+  [SPORT.SURFING]: ["wsl"],
+  [SPORT.ATHLETICS]: [],
+  [SPORT.MULTI_SPORT]: [],
+  [SPORT.DEFAULT_SPORT]: [],
 }
-
-const SYNC_CONFIG: SyncEntry[] = [
-  {
-    sport: "rugby-league",
-    leagues: RUGBY_LEAGUE_LEAGUES,
-    slugs: ["294", "19120", "2135", "2134"],
-  },
-  {
-    sport: "football",
-    leagues: FOOTBALL_LEAGUES,
-    slugs: ["136", "1894", "1786", "17", "19"],
-  },
-  {
-    sport: "aussie-rules",
-    leagues: AUSSIE_RULES_LEAGUES,
-    slugs: ["656", "10159", "25506"],
-  },
-  {
-    sport: "american-football",
-    leagues: AMERICAN_FOOTBALL_LEAGUES,
-    slugs: ["9464"],
-  },
-  {
-    sport: "basketball",
-    leagues: BASKETBALL_LEAGUES,
-    slugs: ["1524", "1506", "132", "486"],
-  },
-  {
-    sport: "baseball",
-    leagues: BASEBALL_LEAGUES,
-    slugs: ["11205", "19445"],
-  },
-  {
-    sport: "ice-hockey",
-    leagues: ICE_HOCKEY_LEAGUES,
-    slugs: ["11059", "234"],
-  },
-  {
-    sport: "rugby-union",
-    leagues: RUGBY_UNION_LEAGUES,
-    slugs: ["422"],
-  },
-  {
-    sport: "cricket",
-    leagues: CRICKET_LEAGUES,
-    slugs: ["11160", "11161", "11162", "18704", "11163", "11165"],
-  },
-  // {
-  //   sport: "netball",
-  //   leagues: NETBALL_LEAGUES,
-  //   slugs: ["*"],
-  // },
-  // {
-  // {
-  //   sport: "tennis",
-  //   leagues: TENNIS_LEAGUES,
-  //   slugs: ["*"],
-  // },
-  // {
-  //   sport: "darts",
-  //   leagues: DARTS_LEAGUES,
-  //   slugs: ["*"],
-  // },
-  // {
-  //   sport: "motorsport",
-  //   leagues: MOTORSPORT_LEAGUES,
-  //   slugs: ["40", "17"],
-  // },
-  {
-    sport: "golf",
-    leagues: GOLF_LEAGUES,
-    slugs: ["pga", "liv", "dpworld", "lpga", "australasia", "tgl"],
-  },
-  // {
-  //   sport: "cycling",
-  //   leagues: CYCLING_LEAGUES,
-  //   slugs: ["*"],
-  // },
-]
 
 // ---------------------------------------------------------------------------
 // Build the matrix
@@ -131,91 +56,26 @@ type MatrixEntry = {
 
 const matrix: MatrixEntry[] = []
 
-for (const config of SYNC_CONFIG) {
-  const filtered =
-    !config.slugs || config.slugs.includes("*")
-      ? config.leagues
-      : config.leagues.filter((l) => config.slugs!.includes(l.slug))
+async function buildRegularEventMatrix() {
+  for (const sport of Object.values(SPORT)) {
+    const slugs = REGULAR_LEAGUES_CONFIG[sport]
+    const leagueList = await leaguesBySportToShow(sport)
 
-  for (const league of filtered) {
-    const latestSeason = league.seasons[0]
-    if (!latestSeason || !latestSeason.slug) continue
+    for (const slug of slugs) {
+      const league = leagueList.find((l) => l.slug === slug)
+      if (!league) continue
+      const latestSeason = league.seasons[0]
+      if (!latestSeason || !latestSeason.slug) continue
 
-    matrix.push({
-      name: `${league.name} ${latestSeason.name}`,
-      leagueId: league.slug,
-      seasonId: latestSeason.slug,
-      sport: config.sport,
-    })
+      matrix.push({
+        name: `${league.name} ${latestSeason.name}`,
+        leagueId: league.slug,
+        seasonId: latestSeason.slug,
+        sport: sport,
+      })
+    }
   }
 }
-
-// ---------------------------------------------------------------------------
-// All leagues config (used for league lookup generation)
-// ---------------------------------------------------------------------------
-
-const ALL_LEAGUES_CONFIG: SyncEntry[] = [
-  {
-    sport: "rugby-league",
-    leagues: RUGBY_LEAGUE_LEAGUES,
-  },
-  {
-    sport: "football",
-    leagues: FOOTBALL_LEAGUES,
-  },
-  {
-    sport: "aussie-rules",
-    leagues: AUSSIE_RULES_LEAGUES,
-  },
-  {
-    sport: "american-football",
-    leagues: AMERICAN_FOOTBALL_LEAGUES,
-  },
-  {
-    sport: "basketball",
-    leagues: BASKETBALL_LEAGUES,
-  },
-  {
-    sport: "baseball",
-    leagues: BASEBALL_LEAGUES,
-  },
-  {
-    sport: "ice-hockey",
-    leagues: ICE_HOCKEY_LEAGUES,
-  },
-  {
-    sport: "rugby-union",
-    leagues: RUGBY_UNION_LEAGUES,
-  },
-  {
-    sport: "cricket",
-    leagues: CRICKET_LEAGUES,
-  },
-  {
-    sport: "netball",
-    leagues: NETBALL_LEAGUES,
-  },
-  {
-    sport: "tennis",
-    leagues: TENNIS_LEAGUES,
-  },
-  {
-    sport: "darts",
-    leagues: DARTS_LEAGUES,
-  },
-  {
-    sport: "motorsport",
-    leagues: MOTORSPORT_LEAGUES,
-  },
-  {
-    sport: "golf",
-    leagues: GOLF_LEAGUES,
-  },
-  {
-    sport: "cycling",
-    leagues: CYCLING_LEAGUES,
-  },
-]
 
 // ---------------------------------------------------------------------------
 // Build league lookup (for single-mode resolve at runtime)
@@ -229,16 +89,20 @@ type LeagueLookupEntry = {
 
 const leagueLookup: Record<string, LeagueLookupEntry> = {}
 
-for (const config of ALL_LEAGUES_CONFIG) {
-  for (const league of config.leagues) {
-    const latestSeason = league.seasons[0]
-    if (!latestSeason || !latestSeason.slug) continue
+async function buildAllLeagueLookup() {
+  for (const sport of Object.values(SPORT)) {
+    const leagueList = await leaguesBySportToShow(sport)
 
-    const key = `${config.sport} — ${league.name}`
-    leagueLookup[key] = {
-      leagueId: league.slug,
-      seasonId: latestSeason.slug,
-      sport: config.sport,
+    for (const league of leagueList) {
+      const latestSeason = league.seasons[0]
+      if (!latestSeason || !latestSeason.slug) continue
+
+      const key = `${sport} — ${league.name}`
+      leagueLookup[key] = {
+        leagueId: league.slug,
+        seasonId: latestSeason.slug,
+        sport: sport,
+      }
     }
   }
 }
@@ -247,52 +111,59 @@ for (const config of ALL_LEAGUES_CONFIG) {
 // Write all output files
 // ---------------------------------------------------------------------------
 
-import { readFileSync, writeFileSync } from "fs"
-import { resolve } from "path"
+async function main() {
+  await buildRegularEventMatrix()
+  await buildAllLeagueLookup()
 
-const weeklyPath = resolve(__dirname, "eventUploadMatrix.json")
-writeFileSync(weeklyPath, JSON.stringify(matrix, null, 2))
-console.log(`Wrote ${matrix.length} entries to ${weeklyPath}`)
+  const weeklyPath = resolve(__dirname, "eventUploadMatrix.json")
+  writeFileSync(weeklyPath, JSON.stringify(matrix, null, 2))
+  console.log(`Wrote ${matrix.length} entries to ${weeklyPath}`)
 
-const lookupPath = resolve(__dirname, "leagueLookup.json")
-writeFileSync(lookupPath, JSON.stringify(leagueLookup, null, 2))
-console.log(
-  `Wrote ${Object.keys(leagueLookup).length} entries to ${lookupPath}`,
-)
-
-// ---------------------------------------------------------------------------
-// Inject league choices into the workflow YAML
-// ---------------------------------------------------------------------------
-
-const workflowPath = resolve(
-  __dirname,
-  "../../.github/workflows/bulk-upload-latest-events.yml",
-)
-
-const yamlContent = readFileSync(workflowPath, "utf-8")
-
-const startMarker = "# --- LEAGUE_CHOICES_START ---"
-const endMarker = "# --- LEAGUE_CHOICES_END ---"
-
-const startIdx = yamlContent.indexOf(startMarker)
-const endIdx = yamlContent.indexOf(endMarker)
-
-if (startIdx !== -1 && endIdx !== -1) {
-  const choices = Object.keys(leagueLookup)
-    .sort()
-    .map((key) => `          - "${key}"`)
-    .join("\n")
-
-  const before = yamlContent.substring(0, startIdx + startMarker.length)
-  const after = yamlContent.substring(endIdx)
-  const newYaml = `${before}\n${choices}\n          ${after}`
-
-  writeFileSync(workflowPath, newYaml)
+  const lookupPath = resolve(__dirname, "leagueLookup.json")
+  writeFileSync(lookupPath, JSON.stringify(leagueLookup, null, 2))
   console.log(
-    `Injected ${Object.keys(leagueLookup).length} league choices into workflow YAML`,
+    `Wrote ${Object.keys(leagueLookup).length} entries to ${lookupPath}`,
   )
-} else {
-  console.warn(
-    "⚠️  Could not find LEAGUE_CHOICES markers in workflow YAML. Add markers manually.",
+
+  // ---------------------------------------------------------------------------
+  // Inject league choices into the workflow YAML
+  // ---------------------------------------------------------------------------
+
+  const workflowPath = resolve(
+    __dirname,
+    "../../.github/workflows/bulk-upload-latest-events.yml",
   )
+
+  const yamlContent = readFileSync(workflowPath, "utf-8")
+
+  const startMarker = "# --- LEAGUE_CHOICES_START ---"
+  const endMarker = "# --- LEAGUE_CHOICES_END ---"
+
+  const startIdx = yamlContent.indexOf(startMarker)
+  const endIdx = yamlContent.indexOf(endMarker)
+
+  if (startIdx !== -1 && endIdx !== -1) {
+    const choices = Object.keys(leagueLookup)
+      .sort()
+      .map((key) => `          - "${key}"`)
+      .join("\n")
+
+    const before = yamlContent.substring(0, startIdx + startMarker.length)
+    const after = yamlContent.substring(endIdx)
+    const newYaml = `${before}\n${choices}\n          ${after}`
+
+    writeFileSync(workflowPath, newYaml)
+    console.log(
+      `Injected ${Object.keys(leagueLookup).length} league choices into workflow YAML`,
+    )
+  } else {
+    console.warn(
+      "⚠️  Could not find LEAGUE_CHOICES markers in workflow YAML. Add markers manually.",
+    )
+  }
 }
+
+main().catch((err) => {
+  console.error(err)
+  process.exit(1)
+})

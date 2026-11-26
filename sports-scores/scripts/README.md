@@ -3,6 +3,8 @@
 Quick reference for all scripts and agent commands available to populate the Dataverse `ss_matchsummaries` table.
 
 > All commands run from the `sports-scores` directory.
+>
+> Always pass `--tsconfig scripts/tsconfig.json` to `tsx`. It aliases `next/cache` to a no-op shim ([shims/next-cache.ts](./shims/next-cache.ts)), because `cacheLife()`/`cacheTag()` throw outside the Next.js runtime.
 
 ---
 
@@ -13,7 +15,7 @@ Quick reference for all scripts and agent commands available to populate the Dat
 Unified upload script that fetches matches from Sofascore APIs **and** custom sources (F1, Golf, Motorsport substages, file-based JSON) and bulk-uploads them to Dataverse. Handles dedup automatically via a unified adapter registry.
 
 ```
-npx tsx scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> [displayType] [allEventsMode] [useSportApi]
+npx tsx --tsconfig scripts/tsconfig.json scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> [displayType] [allEventsMode] [useSportApi]
 ```
 
 | Arg             | Description                                        | Default  |
@@ -29,29 +31,29 @@ npx tsx scripts/bulk-upload-events.ts <leagueId> <seasonId> <sport> [displayType
 
 ```bash
 # NRL 2026
-npx tsx scripts/bulk-upload-events.ts 294 86317 rugby-league round false true
+npx tsx --tsconfig scripts/tsconfig.json scripts/bulk-upload-events.ts 294 86317 rugby-league round false true
 
 # AFL 2026
-npx tsx scripts/bulk-upload-events.ts 656 86748 aussie-rules round false
+npx tsx --tsconfig scripts/tsconfig.json scripts/bulk-upload-events.ts 656 86748 aussie-rules round false
 ```
 
 **Custom adapter examples:**
 
 ```bash
 # F1 2026
-npx tsx scripts/bulk-upload-events.ts f1 2026 motorsport
+npx tsx --tsconfig scripts/tsconfig.json scripts/bulk-upload-events.ts f1 2026 motorsport
 
 # MotoGP 2026
-npx tsx scripts/bulk-upload-events.ts 17 2026 motorsport
+npx tsx --tsconfig scripts/tsconfig.json scripts/bulk-upload-events.ts 17 2026 motorsport
 
 # Supercars 2026 (file-based)
-npx tsx scripts/bulk-upload-events.ts supercars 2026 motorsport
+npx tsx --tsconfig scripts/tsconfig.json scripts/bulk-upload-events.ts supercars 2026 motorsport
 
 # PGA Tour 2026
-npx tsx scripts/bulk-upload-events.ts pga 2026 golf
+npx tsx --tsconfig scripts/tsconfig.json scripts/bulk-upload-events.ts pga 2026 golf
 
 # LIV Golf 2026
-npx tsx scripts/bulk-upload-events.ts liv 2026 golf
+npx tsx --tsconfig scripts/tsconfig.json scripts/bulk-upload-events.ts liv 2026 golf
 ```
 
 **Custom adapters:** The script contains a unified `adapters` registry. File-based leagues use `createFileAdapter("<leagueId>")` which reads from `scripts/{leagueId}-{seasonId}-events.json`.
@@ -63,7 +65,7 @@ npx tsx scripts/bulk-upload-events.ts liv 2026 golf
 Generates `eventUploadMatrix.json` and `leagueLookup.json` for GitHub Actions bulk-upload workflows, and injects league choices into the workflow YAML. Edit the `ALL_LEAGUES_CONFIG` array in the script to add/remove leagues.
 
 ```
-npx tsx scripts/generate-matrix.ts
+npx tsx --tsconfig scripts/tsconfig.json scripts/generate-matrix.ts
 ```
 
 ---
@@ -73,7 +75,7 @@ npx tsx scripts/generate-matrix.ts
 One-time script to create the `ss_matchsummary` table schema in Dataverse. Only needs to be run once.
 
 ```
-npx tsx scripts/create-match-summary-table.ts
+npx tsx --tsconfig scripts/tsconfig.json scripts/create-match-summary-table.ts
 ```
 
 ---

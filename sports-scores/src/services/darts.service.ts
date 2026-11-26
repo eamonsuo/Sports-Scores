@@ -9,9 +9,8 @@ import {
   fetchTournamentNextMatches,
   fetchTournamentStandings,
 } from "@/endpoints/sofascore-rapid-api.api"
-import { DARTS_CATEGORIES, DARTS_LEAGUES } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
-import { DeepPartial, MatchSummary, SPORT } from "@/types/misc"
+import { DeepPartial, MatchSummary, SPORT, TVConfig } from "@/types/misc"
 import { Sofascore_Event } from "@/types/sofascore"
 import { SofascoreSport } from "./sofascore.service"
 
@@ -68,8 +67,6 @@ class DartsService extends SofascoreSport {
         ),
       },
       SPORT.DARTS,
-      DARTS_CATEGORIES,
-      DARTS_LEAGUES,
       ["Player", "P", "W", "L", "Pts"],
     )
   }
@@ -77,6 +74,7 @@ class DartsService extends SofascoreSport {
   override eventMapper(
     event: Sofascore_Event,
     options?: DeepPartial<MatchSummary>,
+    tvConfig?: TVConfig,
     timezone?: string,
   ): MatchSummary {
     const leagueTournament = [2066, 592, 11565].includes(
@@ -93,6 +91,7 @@ class DartsService extends SofascoreSport {
         leagueName: leagueTournament ? event.roundInfo?.name : undefined,
         ...options,
       },
+      tvConfig,
       timezone,
     )
   }

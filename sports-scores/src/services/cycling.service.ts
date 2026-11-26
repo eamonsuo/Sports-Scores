@@ -2,11 +2,6 @@ import {
   fetchCyclingRiderStandings,
   fetchCyclingSubstages,
 } from "@/endpoints/cycling.api"
-import {
-  CYCLING_LEAGUES,
-  EVENT_TODAY_EXTENTION_HOURS,
-  FALLBACK_TIMEZONE,
-} from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
 import { getSportConfigurations } from "@/lib/projUtils"
@@ -14,17 +9,18 @@ import {
   Brackets,
   CardVariant,
   DeepPartial,
-  DisplayTypes,
   LadderGroup,
-  MatchDetail,
   Matches,
   MatchSummary,
   SPORT,
   Standings,
+  TVConfig,
 } from "@/types/misc"
 import { Sofascore_Stage } from "@/types/sofascore"
-import { TZDate } from "@date-fns/tz/date"
-import { addHours, isSameDay, isWithinInterval } from "date-fns"
+import {
+  ladderConfigByLeagueBySeason,
+  leaguesBySportByLeague,
+} from "./dataverse.service"
 import { SofascoreStageSport } from "./sofascore.service"
 
 class CyclingService extends SofascoreStageSport {
@@ -46,7 +42,6 @@ class CyclingService extends SofascoreStageSport {
         ),
       },
       SPORT.CYCLING,
-      CYCLING_LEAGUES,
       CardVariant.SESSION,
     )
   }
@@ -55,55 +50,39 @@ class CyclingService extends SofascoreStageSport {
     leagueId: string,
     seasonId: string,
   ): Promise<Matches | null> {
-    const stageResponse = await this.apiEndpoints.fetchStageRaces(seasonId)
-    // const dataverseMatches = await matchSummariesByTournament(
-    //   leagueId,
-    //   seasonId,
-    //   this.sport,
-    // )
+    const [stageResponse, leagues] = await Promise.all([
+      this.apiEndpoints.fetchStageRaces(seasonId),
+      leaguesBySportByLeague(this.sport, leagueId),
+    ])
 
-    if (
-      !stageResponse
-      // &&
-      // (!dataverseMatches || dataverseMatches.length === 0)
-    ) {
+    if (!stageResponse) {
       return null
     }
 
+    const { leagueConfig } = getSportConfigurations(leagues, leagueId, seasonId)
+
     const apiMatches = (stageResponse?.stages ?? [])
-      .filter(
-        (stage) =>
-          stage.info.discipline === "World Tour" ||
-          stage.info.discipline === "World Tour 1 Grand Tour" ||
-          stage.info.stageRound,
-      )
+      .filter((stage) => stage.info.discipline?.includes("World Tour"))
       .flatMap((stage) =>
-        this.eventMapper(stage, {
-          leagueId,
-          leagueSlug: `/sports/cycling/${leagueId}/${seasonId}`,
-          seasonId,
-          matchSlug: `/sports/cycling/${leagueId}/${seasonId}/match/${stage.id}`,
-          roundLabel: isNaN(Number(leagueId)) ? "Stages" : "Races",
-        }),
+        this.eventMapper(
+          stage,
+          {
+            leagueId,
+            leagueSlug: `/sports/cycling/${leagueId}/${seasonId}`,
+            seasonId,
+            matchSlug: `/sports/cycling/${leagueId}/${seasonId}/match/${stage.id}`,
+            roundLabel: isNaN(Number(leagueId)) ? "Stages" : "Races",
+          },
+          undefined,
+        ),
       )
 
-    // Merge API and dataverse matches, deduplicating by id (API takes priority)
-    // const apiIds = new Set(apiMatches.map((m) => m.id))
-
-    const allMatches = apiMatches
-      // .concat((dataverseMatches ?? []).filter((m) => !apiIds.has(m.id)))
-      .sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-      )
+    const allMatches = apiMatches.sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+    )
 
     if (!allMatches) return null
-
-    const { leagueConfig } = getSportConfigurations(
-      this.leagues,
-      leagueId,
-      seasonId,
-    )
 
     const fixtures = await mapFixtureRounds(allMatches, leagueConfig)
 
@@ -113,91 +92,21 @@ class CyclingService extends SofascoreStageSport {
     } as Matches
   }
 
-  async matchesByDate(date: Date): Promise<Matches | null> {
-    const menLeague = this.leagues.filter((league) => league.slug === "9")
-    const womenLeague = this.leagues.filter((league) => league.slug === "94")
-
-    const [menRaces, womenRaces] = await Promise.all([
-      this.apiEndpoints.fetchStageRaces(menLeague[0].seasons[0].slug),
-      this.apiEndpoints.fetchStageRaces(womenLeague[0].seasons[0].slug),
-    ])
-    // const [dataverseMatches] = await Promise.all([
-    //   matchSummariesBySportAndDay(this.sport, date),
-    // ])
-
-    if (
-      !menRaces &&
-      !womenRaces
-      // &&
-      // (!dataverseMatches || dataverseMatches.length === 0)
-    ) {
-      return null
-    }
-
-    const timezone = date instanceof TZDate ? date.timeZone : FALLBACK_TIMEZONE
-
-    const apiMatches = this.processByDateEvents(
-      menRaces?.stages ?? [],
-      date,
-      timezone,
-      menLeague[0].slug,
-      menLeague[0].seasons[0].slug,
-    ).concat(
-      this.processByDateEvents(
-        womenRaces?.stages ?? [],
-        date,
-        timezone,
-        womenLeague[0].slug,
-        womenLeague[0].seasons[0].slug,
-      ),
-    )
-
-    // Merge API and dataverse matches, deduplicating by id (API takes priority)
-    // const apiIds = new Set(apiMatches.map((m) => m.id))
-    const allMatches = apiMatches
-      // .concat((dataverseMatches ?? []).filter((m) => !apiIds.has(m.id)))
-      // .map((match) => this.eventMapperMatchSummary(match))
-      .sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-      )
-
-    if (!allMatches || allMatches.length === 0) return null
-
-    const fixtures = await mapFixtureRounds(allMatches, this.leagues)
-
-    return {
-      fixtures,
-      currentRound: getCurrentRound(fixtures, DisplayTypes.LEAGUE),
-    } as Matches
-  }
-
   async matchesByTeam(teamId: string): Promise<Matches | null> {
     return null
-  }
-
-  async matchDetails(
-    matchId: string,
-    leagueId: string,
-    seasonId: string,
-  ): Promise<MatchDetail | null> {
-    return await super.matchDetails(matchId, leagueId, seasonId)
   }
 
   async standings(
     leagueId: string,
     seasonId: string,
   ): Promise<Standings | null> {
-    const stageStandings = await this.apiEndpoints.fetchStageStandings(seasonId)
-    const teamStandings = await this.apiEndpoints.fetchTeamStandings(seasonId)
+    const [stageStandings, teamStandings, ladderConfig] = await Promise.all([
+      this.apiEndpoints.fetchStageStandings(seasonId),
+      this.apiEndpoints.fetchTeamStandings(seasonId),
+      ladderConfigByLeagueBySeason(leagueId, seasonId),
+    ])
 
     if (!stageStandings && !teamStandings) return null
-
-    const { ladderConfig } = getSportConfigurations(
-      this.leagues,
-      leagueId,
-      seasonId,
-    )
 
     const standingsMapped: LadderGroup[] = []
 
@@ -277,16 +186,10 @@ class CyclingService extends SofascoreStageSport {
     return null
   }
 
-  async matchesFromAPI(
-    leagueId: string,
-    seasonId: string,
-  ): Promise<Matches | null> {
-    return super.matchesByLeagueSeason(leagueId, seasonId)
-  }
-
   override eventMapper(
     event: Sofascore_Stage,
     options?: DeepPartial<MatchSummary>,
+    tvConfig?: TVConfig,
   ): MatchSummary {
     let stageIcon = ""
     switch (event.info.stageType) {
@@ -306,53 +209,20 @@ class CyclingService extends SofascoreStageSport {
         stageIcon = "🚲"
     }
 
-    return super.eventMapper(event, {
-      roundLabel: "Stages",
-      summaryText: event.info.raceDistance
-        ? `${stageIcon} | ${(event.info.raceDistance ?? 0) / 1000} km`
-        : "Details",
-      leagueName: event.info.departureCity
-        ? `${event.name} - ${event.info.departureCity} -> ${event.info.arrivalCity}`
-        : event.name,
-      ...options,
-    })
-  }
-
-  processByDateEvents(
-    events: Sofascore_Stage[],
-    date: Date,
-    timezone: string = "UTC",
-    leagueId: string,
-    seasonId: string,
-  ) {
-    return events
-      .filter(
-        (stage) =>
-          stage.info.discipline === "World Tour" ||
-          stage.info.discipline === "World Tour 1 Grand Tour" ||
-          stage.info.stageRound,
-      )
-      .filter((item) => {
-        const startDate = new TZDate(item.startDateTimestamp * 1000, timezone)
-        const endDate = new TZDate(item.endDateTimestamp * 1000, timezone)
-        return (
-          isWithinInterval(date, { start: startDate, end: endDate }) ||
-          isSameDay(date, startDate) ||
-          isSameDay(addHours(startDate, EVENT_TODAY_EXTENTION_HOURS), date) ||
-          isSameDay(date, endDate) ||
-          isSameDay(addHours(endDate, EVENT_TODAY_EXTENTION_HOURS), date)
-        )
-      })
-      .map((stage) =>
-        this.eventMapper(stage, {
-          leagueId: leagueId,
-          leagueSlug: `/sports/cycling/${leagueId}/${seasonId}`,
-          leagueName: stage.name,
-          summaryText: "Details",
-          seasonId: seasonId,
-          matchSlug: `/sports/cycling/${leagueId}/${seasonId}/match/${stage.id}`,
-        }),
-      )
+    return super.eventMapper(
+      event,
+      {
+        roundLabel: "Stages",
+        summaryText: event.info.raceDistance
+          ? `${stageIcon} | ${(event.info.raceDistance ?? 0) / 1000} km`
+          : "Details",
+        leagueName: event.info.departureCity
+          ? `${event.name} - ${event.info.departureCity} -> ${event.info.arrivalCity}`
+          : event.name,
+        ...options,
+      },
+      tvConfig,
+    )
   }
 }
 

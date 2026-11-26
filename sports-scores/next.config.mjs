@@ -17,13 +17,6 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
-      // ABL Logos
-      {
-        protocol: "https",
-        hostname: "assets.baseball.com.au",
-        port: "",
-        pathname: "/uploads/**",
-      },
       // ESPN logos
       {
         protocol: "https",
@@ -41,12 +34,6 @@ const nextConfig = {
       // The Sports DB images
       {
         protocol: "https",
-        hostname: "www.thesportsdb.com",
-        port: "",
-        pathname: "/images/**",
-      },
-      {
-        protocol: "https",
         hostname: "r2.thesportsdb.com",
         port: "",
         pathname: "/images/**",
@@ -59,6 +46,8 @@ const nextConfig = {
       hmrRefreshes: true,
     },
   },
+  cacheComponents: true,
+  partialPrefetching: true,
 }
 
 export default nextConfig

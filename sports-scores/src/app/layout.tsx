@@ -6,6 +6,7 @@ import ClientDateSetter from "@/components/misc-ui/ClientDateSetter"
 import Footer from "@/components/misc-ui/Footer"
 import { APPLE_SPLASH_IMAGES } from "@/lib/appleSplashScreens"
 import { Analytics } from "@vercel/analytics/next"
+import { Suspense } from "react"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -37,7 +38,9 @@ export default function RootLayout({
           <main className="flex-1 items-center overflow-y-auto bg-white dark:bg-neutral-950">
             {children}
           </main>
-          <Footer />
+          <Suspense fallback={null}>
+            <Footer />
+          </Suspense>
           <Analytics />
         </div>
       </body>

@@ -10,9 +10,7 @@ import {
   fetchBasketballTeamNextMatches,
 } from "@/endpoints/basketball.api"
 import {
-  BASKETBALL_CATEGORIES,
   BASKETBALL_LADDER_HEADINGS,
-  BASKETBALL_LEAGUES,
   SCORE_BREAKDOWN_QUARTERS_CONFIG,
 } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
@@ -72,8 +70,6 @@ class BasketballService extends SofascoreSport {
         ),
       },
       SPORT.BASKETBALL,
-      BASKETBALL_CATEGORIES,
-      BASKETBALL_LEAGUES,
       BASKETBALL_LADDER_HEADINGS,
       SCORE_BREAKDOWN_QUARTERS_CONFIG,
     )

@@ -7,7 +7,6 @@ import {
   FALLBACK_IMAGE,
   GOLF_FEDEX_HEADINGS,
   GOLF_LEADERBOARD_HEADINGS,
-  GOLF_LEAGUES,
 } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
@@ -28,7 +27,6 @@ import {
   DisplayTypes,
   FixtureRound,
   LadderGroup,
-  LeagueSeasonConfig,
   Matches,
   MatchStatus,
   MatchSummary,
@@ -36,56 +34,40 @@ import {
   SPORT,
   SportService,
   Standings,
+  TVConfig,
   UpcomingMatches,
 } from "@/types/misc"
 import { TZDate } from "@date-fns/tz/date"
 import { addDays, addHours } from "date-fns"
 import {
+  ladderConfigByLeagueBySeason,
+  leaguesBySportByDate,
+  leaguesBySportByLeague,
   matchSummariesBySportAndDay,
+  matchSummariesBySportByLeagueBySeason,
   matchSummariesBySportUpcoming,
-  matchSummariesByTournament,
 } from "./dataverse.service"
 
 class GolfService implements SportService {
   protected sport: SPORT
-  protected tours: LeagueSeasonConfig[]
   protected cardVariant?: CardVariant
 
   constructor() {
     this.sport = SPORT.GOLF
-    this.tours = GOLF_LEAGUES
     this.cardVariant = CardVariant.SESSION
   }
   async matchesByLeagueSeason(
     leagueId: string,
     seasonId: string,
   ): Promise<Matches | null> {
-    //TODO: Make generic for all tours
-    // const rawSchedule = await cachedFetchSchedule(
-    //   leagueId === "pga" ? "1" : "2",
-    //   seasonId,
-    // );
-
-    const dataverseMatches = await matchSummariesByTournament(
-      leagueId,
-      seasonId,
-      this.sport,
-    )
-
-    // if (!rawSchedule) {
-    //   return null;
-    // }
+    const [dataverseMatches, tours] = await Promise.all([
+      matchSummariesBySportByLeagueBySeason(leagueId, seasonId, this.sport),
+      leaguesBySportByLeague(this.sport, leagueId),
+    ])
 
     if (!dataverseMatches || dataverseMatches.length === 0) {
       return null
     }
-
-    // const allMatches = rawSchedule.schedule.map((item) =>
-    //   mapTournamentToMatchSummary(item, {
-    //     matchSlug: `/sports/${this.sport}/${leagueId}/${seasonId}/match/${item.tournId}`,
-    //     roundLabel: leagueId === "pga" ? "FedexCup" : "Schedule",
-    //   }),
-    // );
 
     const allMatches = dataverseMatches
       .sort(
@@ -94,11 +76,7 @@ class GolfService implements SportService {
       )
       .map((event) => this.eventMapper(event))
 
-    const { leagueConfig } = getSportConfigurations(
-      this.tours,
-      leagueId,
-      seasonId,
-    )
+    const { leagueConfig } = getSportConfigurations(tours, leagueId, seasonId)
 
     const fixtures = await mapFixtureRounds(allMatches, leagueConfig)
 
@@ -109,7 +87,10 @@ class GolfService implements SportService {
   }
 
   async matchesByDate(date: Date): Promise<Matches | null> {
-    const dataverseMatches = await matchSummariesBySportAndDay(this.sport, date)
+    const [dataverseMatches, tours] = await Promise.all([
+      matchSummariesBySportAndDay(this.sport, date),
+      leaguesBySportByDate(this.sport),
+    ])
 
     if (!dataverseMatches || dataverseMatches.length === 0) {
       return null
@@ -117,7 +98,7 @@ class GolfService implements SportService {
 
     const allMatches = dataverseMatches.map((event) => this.eventMapper(event))
 
-    const fixtures = await mapFixtureRounds(allMatches, this.tours)
+    const fixtures = await mapFixtureRounds(allMatches, tours)
 
     const live: FixtureRound = {
       matches: allMatches.filter((match) => match.status === MatchStatus.LIVE),
@@ -131,10 +112,10 @@ class GolfService implements SportService {
   }
 
   async matchesUpcoming(fromDate: TZDate): Promise<UpcomingMatches | null> {
-    const dataverseMatches = await matchSummariesBySportUpcoming(
-      this.sport,
-      fromDate,
-    )
+    const [dataverseMatches, tours] = await Promise.all([
+      matchSummariesBySportUpcoming(this.sport, fromDate),
+      leaguesBySportByDate(this.sport),
+    ])
 
     if (!dataverseMatches || dataverseMatches.length === 0) {
       return null
@@ -142,7 +123,7 @@ class GolfService implements SportService {
 
     const fixtures = await mapFixtureRounds(
       dataverseMatches.map((event) => this.eventMapper(event)),
-      this.tours,
+      tours,
     )
 
     return {
@@ -181,20 +162,17 @@ class GolfService implements SportService {
     leagueId: string,
     seasonId: string,
   ): Promise<Standings | null> {
-    const rawRanking = await cachedFetchRankings(
-      leagueId === "pga" ? "02671" : "186",
-      seasonId,
-    )
+    const [rawRanking, ladderConfig] = await Promise.all([
+      cachedFetchRankings(leagueId === "pga" ? "02671" : "186", seasonId),
+      ladderConfigByLeagueBySeason(
+        leagueId,
+        leagueId === "pga" ? seasonId : seasonId + "/ladder",
+      ),
+    ])
 
     if (!rawRanking) {
       return null
     }
-
-    const { ladderConfig } = getSportConfigurations(
-      GOLF_LEAGUES,
-      leagueId,
-      seasonId,
-    )
 
     return {
       standings: [
@@ -202,7 +180,9 @@ class GolfService implements SportService {
           tables: [
             {
               headings:
-                ladderConfig?.ladderGroup[0]?.headings ?? GOLF_FEDEX_HEADINGS,
+                ladderConfig?.ladderGroup[0]?.headings ??
+                ladderConfig?.headings ??
+                GOLF_FEDEX_HEADINGS,
               data: (rawRanking.rankings as SlashGolf_PlayerRanking[]).map(
                 (item) => {
                   let playerName = item.firstName + " " + item.lastName
@@ -233,6 +213,7 @@ class GolfService implements SportService {
   eventMapper(
     event: MatchSummary,
     options?: DeepPartial<MatchSummary>,
+    tvConfig?: TVConfig,
   ): MatchSummary {
     let currentDate = new Date()
 
@@ -247,12 +228,6 @@ class GolfService implements SportService {
       options?.leagueImg ??
       event.leagueImg ??
       resolveSportImage(event.leagueName)
-
-    const { tvConfig } = getSportConfigurations(
-      GOLF_LEAGUES,
-      event.leagueId,
-      event.seasonId,
-    )
 
     // Strip out competitorDetails and tv from options to avoid type errors
     const { competitorDetails, tv, ...otherOptions } = options || {}
@@ -269,24 +244,15 @@ class GolfService implements SportService {
       timerDisplayColour: status === MatchStatus.LIVE ? "green" : "gray",
       cardVariant: event.cardVariant ?? CardVariant.SESSION,
       tv:
-        event.tv?.length === 0
-          ? tvConfig?.channels
-              .filter((channel) =>
-                channel.tvFilter
-                  ? channel.tvFilter(event.startDate, event)
-                  : true,
-              )
-              .map((channel) => ({
-                channel: channel.channel,
-                startTime: channel.startTime
-                  ? channel.startTime(event.startDate)
-                  : event.startDate,
-                endTime: event.endDate
-                  ? event.endDate
-                  : channel.endTime
-                    ? channel.endTime(event.startDate)
-                    : undefined,
-              }))
+        status !== MatchStatus.COMPLETED && event.tv?.length === 0
+          ? tvConfig?.channels.map((channel) => ({
+              channel: channel,
+              startTime: options?.startDate ?? event.startDate,
+              endTime:
+                options?.endDate ??
+                event?.endDate ??
+                addHours(event.startDate, tvConfig.matchLength),
+            }))
           : event.tv,
     }
   }
@@ -432,6 +398,7 @@ const cachedFetchLeaderboard = withDevCache(
 export function mapTournamentToMatchSummary(
   event: SlashGolf_Tournament,
   options?: DeepPartial<MatchSummary>,
+  tvConfig?: TVConfig,
 ): MatchSummary {
   let startDate = new Date(event.date.start + "Z")
   let endDate = new Date(event.date.end + "Z")
@@ -464,12 +431,6 @@ export function mapTournamentToMatchSummary(
         ? MatchStatus.LIVE
         : MatchStatus.COMPLETED
 
-  const { tvConfig } = getSportConfigurations(
-    GOLF_LEAGUES,
-    options?.leagueId,
-    options?.seasonId,
-  )
-
   // Strip out competitorDetails and tv from options to avoid type errors
   const { competitorDetails, tv, ...otherOptions } = options || {}
 
@@ -499,25 +460,11 @@ export function mapTournamentToMatchSummary(
     cardVariant: CardVariant.SESSION,
     tv:
       status !== MatchStatus.COMPLETED
-        ? tvConfig?.channels
-            .filter((channel) =>
-              channel.tvFilter
-                ? channel.tvFilter(options?.startDate ?? startDate, event)
-                : true,
-            )
-            .map((channel) => ({
-              channel: channel.channel,
-              startTime: channel.startTime
-                ? channel.startTime(options?.startDate ?? startDate)
-                : (options?.startDate ?? startDate),
-              endTime:
-                options?.endDate ??
-                (event?.date.end
-                  ? endDate
-                  : channel.endTime
-                    ? channel.endTime(options?.startDate ?? startDate)
-                    : undefined),
-            }))
+        ? tvConfig?.channels.map((channel) => ({
+            channel: channel,
+            startTime: options?.startDate ?? startDate,
+            endTime: options?.endDate ?? endDate,
+          }))
         : undefined,
     ...otherOptions,
   }

@@ -1,5 +1,6 @@
-import LeagueLayout from "@/components/all-sports/LeagueLayout"
+import LeagueHeader from "@/components/all-sports/LeagueLayout"
 import { SPORT } from "@/types/misc"
+import { Suspense } from "react"
 
 export default async function SportsLayout({
   children,
@@ -8,10 +9,19 @@ export default async function SportsLayout({
   children: React.ReactNode
   params: Promise<{ sport: string; league: string; season: string }>
 }) {
-  const { sport, league, season } = await params
   return (
-    <LeagueLayout sport={sport as SPORT} league={league} season={season}>
+    <>
+      <Suspense fallback={<h1>Loading...</h1>}>
+        {/* await happens inside the boundary, so the shell still renders */}
+        {params.then(({ sport, league, season }) => (
+          <LeagueHeader
+            sport={sport as SPORT}
+            league={league}
+            season={season}
+          />
+        ))}
+      </Suspense>
       {children}
-    </LeagueLayout>
+    </>
   )
 }

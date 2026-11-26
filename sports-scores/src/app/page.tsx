@@ -1,8 +1,6 @@
 import EventsCalendarClient from "@/components/event-calendar/EventsCalendarClient"
 import { sportEventSchedulesActive } from "@/services/dataverse.service"
 
-export const revalidate = 3600
-
 export default async function Home() {
   const upcomingEvents = await sportEventSchedulesActive()
 

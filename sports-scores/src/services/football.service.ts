@@ -11,14 +11,12 @@ import {
   fetchFootballTeamNextMatches,
 } from "@/endpoints/football.api"
 import {
-  FOOTBALL_CATEGORIES,
   FOOTBALL_LADDER_HEADINGS,
-  FOOTBALL_LEAGUES,
   SCORE_BREAKDOWN_HALVES_CONFIG,
 } from "@/lib/constants"
 import { withDevCache } from "@/lib/devCache"
 import { setMatchSummary } from "@/lib/projUtils"
-import { DeepPartial, MatchSummary, SPORT } from "@/types/misc"
+import { DeepPartial, MatchSummary, SPORT, TVConfig } from "@/types/misc"
 import { Sofascore_Event } from "@/types/sofascore"
 import { SofascoreSport } from "./sofascore.service"
 
@@ -79,8 +77,6 @@ class FootballService extends SofascoreSport {
         ),
       },
       SPORT.FOOTBALL,
-      FOOTBALL_CATEGORIES,
-      FOOTBALL_LEAGUES,
       FOOTBALL_LADDER_HEADINGS,
       SCORE_BREAKDOWN_HALVES_CONFIG,
     )
@@ -89,6 +85,7 @@ class FootballService extends SofascoreSport {
   override eventMapper(
     event: Sofascore_Event,
     options?: DeepPartial<MatchSummary>,
+    tvConfig?: TVConfig,
     timezone?: string,
   ): MatchSummary {
     return super.eventMapper(
@@ -115,6 +112,7 @@ class FootballService extends SofascoreSport {
           event.awayScore.current,
         ),
       },
+      tvConfig,
       timezone,
     )
   }

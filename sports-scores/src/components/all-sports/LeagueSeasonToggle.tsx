@@ -9,11 +9,7 @@ import {
 import { FALLBACK_IMAGE } from "@/lib/constants"
 import { useOrderPreference } from "@/lib/orderPreferences"
 import { leagueOrderStorageKey } from "@/lib/storageKeys"
-import {
-  ClientLeagueSeasonConfig,
-  LeagueSeasonConfig,
-  SPORT,
-} from "@/types/misc"
+import { LeagueSeasonConfig, SPORT } from "@/types/misc"
 import { format } from "date-fns/format"
 import {
   ChevronDownIcon,
@@ -42,7 +38,7 @@ export default function LeagueSeasonToggle({
   leagues,
 }: {
   sport: SPORT
-  leagues: ClientLeagueSeasonConfig[]
+  leagues: LeagueSeasonConfig[]
 }) {
   const router = useRouter()
   const pathname = usePathname()
@@ -147,7 +143,7 @@ export default function LeagueSeasonToggle({
   const orderedLeagues = order
     .map((slug) => leaguesBySlug.get(slug))
     .filter(
-      (league): league is ClientLeagueSeasonConfig =>
+      (league): league is LeagueSeasonConfig =>
         !!league && !hidden.includes(league.slug),
     )
 

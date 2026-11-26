@@ -1,302 +1,7 @@
 {
-  "rugby-league — NRL": {
-    "leagueId": "294",
-    "seasonId": "86317",
-    "sport": "rugby-league"
-  },
-  "rugby-league — NRLW": {
-    "leagueId": "19120",
-    "seasonId": "87573",
-    "sport": "rugby-league"
-  },
-  "rugby-league — State of Origin - Men": {
-    "leagueId": "791",
-    "seasonId": "87571",
-    "sport": "rugby-league"
-  },
-  "rugby-league — State of Origin - Women": {
-    "leagueId": "20374",
-    "seasonId": "87574",
-    "sport": "rugby-league"
-  },
-  "rugby-league — Queensland Cup": {
-    "leagueId": "2135",
-    "seasonId": "88763",
-    "sport": "rugby-league"
-  },
-  "rugby-league — New South Wales Cup": {
-    "leagueId": "2134",
-    "seasonId": "89006",
-    "sport": "rugby-league"
-  },
-  "rugby-league — World Cup": {
-    "leagueId": "431",
-    "seasonId": "87548",
-    "sport": "rugby-league"
-  },
-  "rugby-league — World Cup - Women": {
-    "leagueId": "10683",
-    "seasonId": "87572",
-    "sport": "rugby-league"
-  },
-  "rugby-league — Pacific Champs": {
-    "leagueId": "13667",
-    "seasonId": "81655",
-    "sport": "rugby-league"
-  },
-  "rugby-league — Pacific Champs W": {
-    "leagueId": "21300",
-    "seasonId": "881656",
-    "sport": "rugby-league"
-  },
-  "rugby-league — Int. Friendly Games": {
-    "leagueId": "977",
-    "seasonId": "69571",
-    "sport": "rugby-league"
-  },
-  "rugby-league — World Club Challenge": {
-    "leagueId": "1590",
-    "seasonId": "87449",
-    "sport": "rugby-league"
-  },
-  "rugby-league — Super League": {
-    "leagueId": "302",
-    "seasonId": "86986",
-    "sport": "rugby-league"
-  },
-  "football — A-League Men": {
-    "leagueId": "136",
-    "seasonId": "98511",
-    "sport": "football"
-  },
-  "football — A-League Women": {
-    "leagueId": "1894",
-    "seasonId": "82605",
-    "sport": "football"
-  },
-  "football — Australia Cup": {
-    "leagueId": "1786",
-    "seasonId": "97074",
-    "sport": "football"
-  },
-  "football — Australian Championship": {
-    "leagueId": "29010",
-    "seasonId": "81331",
-    "sport": "football"
-  },
-  "football — Baptist Football QLD - Rivers Rubies": {
-    "leagueId": "rivers-bap",
-    "seasonId": "external",
-    "sport": "football"
-  },
-  "football — Premier League": {
-    "leagueId": "17",
-    "seasonId": "96668",
-    "sport": "football"
-  },
-  "football — Women's Super League": {
-    "leagueId": "1044",
-    "seasonId": "99801",
-    "sport": "football"
-  },
-  "football — Championship": {
-    "leagueId": "18",
-    "seasonId": "97037",
-    "sport": "football"
-  },
-  "football — FA Cup": {
-    "leagueId": "19",
-    "seasonId": "102079",
-    "sport": "football"
-  },
-  "football — Women's FA Cup": {
-    "leagueId": "11666",
-    "seasonId": "84634",
-    "sport": "football"
-  },
-  "football — EFL Cup": {
-    "leagueId": "21",
-    "seasonId": "96185",
-    "sport": "football"
-  },
-  "football — FIFA World Cup": {
-    "leagueId": "16",
-    "seasonId": "58210",
-    "sport": "football"
-  },
-  "football — 🌍 FIFA World Cup Qualifiers": {
-    "leagueId": "fifaQualifiers",
-    "seasonId": "wiki",
-    "sport": "football"
-  },
-  "football — 🌍 FIFA World Cup Qualifiers - Inter-Confed...": {
-    "leagueId": "10618",
-    "seasonId": "86613",
-    "sport": "football"
-  },
-  "football — FIFA Women's World Cup": {
-    "leagueId": "290",
-    "seasonId": "46930",
-    "sport": "football"
-  },
-  "football — 🌍 FIFA Women's World Cup Qualifiers": {
-    "leagueId": "fifaWQualifiers",
-    "seasonId": "wiki",
-    "sport": "football"
-  },
-  "football — FIFA Intercontinental Cup": {
-    "leagueId": "23674",
-    "seasonId": "78702",
-    "sport": "football"
-  },
-  "football — FIFA Club World Cup": {
-    "leagueId": "357",
-    "seasonId": "69619",
-    "sport": "football"
-  },
-  "football — AFC Asian Cup - Men": {
-    "leagueId": "246",
-    "seasonId": "94444",
-    "sport": "football"
-  },
-  "football — AFC Asian Cup - Women": {
-    "leagueId": "1692",
-    "seasonId": "79569",
-    "sport": "football"
-  },
-  "football — AFC World Cup Qualifiers": {
-    "leagueId": "308",
-    "seasonId": "53508",
-    "sport": "football"
-  },
-  "football — AFC Women's World Cup Qualifiers": {
-    "leagueId": "308-women",
-    "seasonId": "wiki",
-    "sport": "football"
-  },
-  "football — AFC Champions League Elite - Men": {
-    "leagueId": "463",
-    "seasonId": "99217",
-    "sport": "football"
-  },
-  "football — AFC Champions League Two - Men": {
-    "leagueId": "668",
-    "seasonId": "97465",
-    "sport": "football"
-  },
-  "football — AFC Champions League - Women": {
-    "leagueId": "23009",
-    "seasonId": "97474",
-    "sport": "football"
-  },
-  "football — UEFA Champions League - Men": {
-    "leagueId": "7",
-    "seasonId": "96518",
-    "sport": "football"
-  },
-  "football — UEFA Champions League - Women": {
-    "leagueId": "696",
-    "seasonId": "96633",
-    "sport": "football"
-  },
-  "football — UEFA Europa League": {
-    "leagueId": "679",
-    "seasonId": "96522",
-    "sport": "football"
-  },
-  "football — UEFA Conference League": {
-    "leagueId": "17015",
-    "seasonId": "96529",
-    "sport": "football"
-  },
-  "football — UEFA European Championship - Men": {
-    "leagueId": "1",
-    "seasonId": "56953",
-    "sport": "football"
-  },
-  "football — UEFA European Championship - Women": {
-    "leagueId": "477",
-    "seasonId": "69935",
-    "sport": "football"
-  },
-  "football — 🇺🇸 MLS": {
-    "leagueId": "242",
-    "seasonId": "86668",
-    "sport": "football"
-  },
-  "football — 🇺🇸 NWSL": {
-    "leagueId": "1690",
-    "seasonId": "88711",
-    "sport": "football"
-  },
-  "football — 🇫🇷 Ligue 1": {
-    "leagueId": "34",
-    "seasonId": "96127",
-    "sport": "football"
-  },
-  "football — 🇩🇪 Bundesliga": {
-    "leagueId": "35",
-    "seasonId": "97464",
-    "sport": "football"
-  },
-  "football — 🇮🇹 Serie A": {
-    "leagueId": "23",
-    "seasonId": "95836",
-    "sport": "football"
-  },
-  "football — 🇪🇸 La Liga": {
-    "leagueId": "8",
-    "seasonId": "97268",
-    "sport": "football"
-  },
-  "football — 🌍 International Friendlies - Men": {
-    "leagueId": "851",
-    "seasonId": "87155",
-    "sport": "football"
-  },
-  "football — 🌍 International Friendlies - Women": {
-    "leagueId": "852",
-    "seasonId": "86730",
-    "sport": "football"
-  },
-  "football — 🌍 FIFA Series - Men": {
-    "leagueId": "32832",
-    "seasonId": "91220",
-    "sport": "football"
-  },
-  "football — 🌍 FIFA Series - Women": {
-    "leagueId": "32833",
-    "seasonId": "91221",
-    "sport": "football"
-  },
   "aussie-rules — AFL": {
     "leagueId": "656",
     "seasonId": "86748",
-    "sport": "aussie-rules"
-  },
-  "aussie-rules — AFLW": {
-    "leagueId": "10159",
-    "seasonId": "76123",
-    "sport": "aussie-rules"
-  },
-  "aussie-rules — VFL": {
-    "leagueId": "25506",
-    "seasonId": "90001",
-    "sport": "aussie-rules"
-  },
-  "aussie-rules — SANFL": {
-    "leagueId": "20126",
-    "seasonId": "89835",
-    "sport": "aussie-rules"
-  },
-  "aussie-rules — WAFL": {
-    "leagueId": "20160",
-    "seasonId": "89836",
-    "sport": "aussie-rules"
-  },
-  "aussie-rules — AFL Preseason": {
-    "leagueId": "22064",
-    "seasonId": "89834",
     "sport": "aussie-rules"
   },
   "aussie-rules — AFL All Stars": {
@@ -304,9 +9,14 @@
     "seasonId": "72022",
     "sport": "aussie-rules"
   },
-  "aussie-rules — Sangate Hawks (Div 3 Bris North)": {
-    "leagueId": "hawks-div3",
-    "seasonId": "external",
+  "aussie-rules — AFL Preseason": {
+    "leagueId": "22064",
+    "seasonId": "89834",
+    "sport": "aussie-rules"
+  },
+  "aussie-rules — AFLW": {
+    "leagueId": "10159",
+    "seasonId": "95427",
     "sport": "aussie-rules"
   },
   "aussie-rules — Dylan Patterson": {
@@ -314,89 +24,64 @@
     "seasonId": "external",
     "sport": "aussie-rules"
   },
-  "american-football — NFL": {
-    "leagueId": "9464",
-    "seasonId": "94366",
-    "sport": "american-football"
+  "aussie-rules — SANFL": {
+    "leagueId": "20126",
+    "seasonId": "89835",
+    "sport": "aussie-rules"
   },
-  "american-football — NFL Preseason": {
-    "leagueId": "9465",
-    "seasonId": "94852",
-    "sport": "american-football"
-  },
-  "american-football — NCAA, FBS": {
-    "leagueId": "32199",
-    "seasonId": "93601",
-    "sport": "american-football"
-  },
-  "american-football — CFP Rankings": {
-    "leagueId": "cfp-rankings",
+  "aussie-rules — Sangate Hawks (Div 3 Bris North)": {
+    "leagueId": "hawks-div3",
     "seasonId": "external",
-    "sport": "american-football"
+    "sport": "aussie-rules"
   },
-  "basketball — NBL": {
-    "leagueId": "1524",
-    "seasonId": "96122",
-    "sport": "basketball"
+  "aussie-rules — VFL": {
+    "leagueId": "25506",
+    "seasonId": "90001",
+    "sport": "aussie-rules"
   },
-  "basketball — WNBL": {
-    "leagueId": "1506",
-    "seasonId": "98055",
-    "sport": "basketball"
-  },
-  "basketball — NBA": {
-    "leagueId": "132",
-    "seasonId": "100772",
-    "sport": "basketball"
-  },
-  "basketball — WNBA": {
-    "leagueId": "486",
-    "seasonId": "89004",
-    "sport": "basketball"
-  },
-  "basketball — March Madness": {
-    "leagueId": "13434",
-    "seasonId": "91315",
-    "sport": "basketball"
-  },
-  "basketball — Basketball World Cup - Men": {
-    "leagueId": "441",
-    "seasonId": "51191",
-    "sport": "basketball"
-  },
-  "basketball — Basketball World Cup Qualifiers - Men": {
-    "leagueId": "fiba-qual",
-    "seasonId": "external",
-    "sport": "basketball"
-  },
-  "basketball — Basketball World Cup - Women": {
-    "leagueId": "442",
-    "seasonId": "93569",
-    "sport": "basketball"
-  },
-  "basketball — NBA All Star Game": {
-    "leagueId": "875",
-    "seasonId": "89489",
-    "sport": "basketball"
-  },
-  "basketball — WNBA All Star Game": {
-    "leagueId": "1329",
-    "seasonId": "98564",
-    "sport": "basketball"
-  },
-  "baseball — MLB": {
-    "leagueId": "11205",
-    "seasonId": "84695",
-    "sport": "baseball"
+  "aussie-rules — WAFL": {
+    "leagueId": "20160",
+    "seasonId": "89836",
+    "sport": "aussie-rules"
   },
   "baseball — ABL": {
     "leagueId": "19445",
-    "seasonId": "81328",
+    "seasonId": "100783",
     "sport": "baseball"
   },
-  "baseball — World Baseball Classic": {
-    "leagueId": "11207",
-    "seasonId": "75868",
+  "baseball — MLB": {
+    "leagueId": "11205",
+    "seasonId": "108036",
+    "sport": "baseball"
+  },
+  "baseball — MLB All Star Game": {
+    "leagueId": "19443",
+    "seasonId": "108072",
+    "sport": "baseball"
+  },
+  "baseball — MLB Summer Camp": {
+    "leagueId": "19474",
+    "seasonId": "46805",
+    "sport": "baseball"
+  },
+  "baseball — MLB, Preseason": {
+    "leagueId": "11527",
+    "seasonId": "108076",
+    "sport": "baseball"
+  },
+  "baseball — NCAA Division I, National Championship": {
+    "leagueId": "19469",
+    "seasonId": "87866",
+    "sport": "baseball"
+  },
+  "baseball — NCAA, Regular Season": {
+    "leagueId": "19462",
+    "seasonId": "88812",
+    "sport": "baseball"
+  },
+  "baseball — U23 Baseball World Cup": {
+    "leagueId": "23486",
+    "seasonId": "107714",
     "sport": "baseball"
   },
   "baseball — WBSC Premier12": {
@@ -404,139 +89,29 @@
     "seasonId": "65281",
     "sport": "baseball"
   },
-  "baseball — MLB All Star Game": {
-    "leagueId": "19443",
-    "seasonId": "97026",
+  "baseball — World Baseball Classic": {
+    "leagueId": "11207",
+    "seasonId": "75868",
     "sport": "baseball"
   },
-  "ice-hockey — AIHL": {
-    "leagueId": "11059",
-    "seasonId": "86527",
-    "sport": "ice-hockey"
+  "baseball — World Baseball Classic, Qualification": {
+    "leagueId": "25043",
+    "seasonId": "72081",
+    "sport": "baseball"
   },
-  "ice-hockey — NHL": {
-    "leagueId": "234",
-    "seasonId": "98450",
-    "sport": "ice-hockey"
+  "cricket — 🇬🇧 One Day Cup - Men": {
+    "leagueId": "11177",
+    "seasonId": "86876",
+    "sport": "cricket"
   },
-  "ice-hockey — World Championship": {
-    "leagueId": "3",
-    "seasonId": "81043",
-    "sport": "ice-hockey"
-  },
-  "ice-hockey — World Championship - Australia Men": {
-    "leagueId": "13446",
-    "seasonId": "wiki",
-    "sport": "ice-hockey"
-  },
-  "ice-hockey — World Championship - Women": {
-    "leagueId": "428",
-    "seasonId": "wiki",
-    "sport": "ice-hockey"
-  },
-  "ice-hockey — World Championship - Australia Women": {
-    "leagueId": "wc-div2",
-    "seasonId": "wiki",
-    "sport": "ice-hockey"
-  },
-  "ice-hockey — Int. Friendly Games": {
-    "leagueId": "873",
-    "seasonId": "87173",
-    "sport": "ice-hockey"
-  },
-  "ice-hockey — NHL All Star Game": {
-    "leagueId": "870",
-    "seasonId": "58148",
-    "sport": "ice-hockey"
-  },
-  "rugby-union — Super Rugby": {
-    "leagueId": "422",
-    "seasonId": "86502",
-    "sport": "rugby-union"
-  },
-  "rugby-union — Rugby Championship": {
-    "leagueId": "789",
-    "seasonId": "76747",
-    "sport": "rugby-union"
-  },
-  "rugby-union — Nations Championship": {
-    "leagueId": "34478",
-    "seasonId": "93780",
-    "sport": "rugby-union"
-  },
-  "rugby-union — Six Nations": {
-    "leagueId": "423",
-    "seasonId": "86339",
-    "sport": "rugby-union"
-  },
-  "rugby-union — WXV Global Series": {
-    "leagueId": "21299",
-    "seasonId": "103142",
-    "sport": "rugby-union"
-  },
-  "rugby-union — Super Rugby AUS": {
-    "leagueId": "29227",
-    "seasonId": "82008",
-    "sport": "rugby-union"
-  },
-  "rugby-union — Queensland Premier Rugby": {
-    "leagueId": "2048",
-    "seasonId": "87649",
-    "sport": "rugby-union"
-  },
-  "rugby-union — Int. Friendly Games": {
-    "leagueId": "876",
-    "seasonId": "87128",
-    "sport": "rugby-union"
-  },
-  "rugby-union — World Cup - Men": {
-    "leagueId": "421",
-    "seasonId": "46701",
-    "sport": "rugby-union"
-  },
-  "rugby-union — World Cup - Women": {
-    "leagueId": "1826",
-    "seasonId": "69966",
-    "sport": "rugby-union"
-  },
-  "rugby-union — British and Irish Lions Tour": {
-    "leagueId": "27512",
-    "seasonId": "77221",
-    "sport": "rugby-union"
-  },
-  "rugby-union — Rugby Sevens World Series": {
-    "leagueId": "10055",
-    "seasonId": "85821",
-    "sport": "rugby-union"
-  },
-  "rugby-union — Rugby Sevens World Series - Women": {
-    "leagueId": "11623",
-    "seasonId": "85845",
-    "sport": "rugby-union"
-  },
-  "rugby-union — World Cup Sevens - Men": {
-    "leagueId": "11276",
-    "seasonId": "45756",
-    "sport": "rugby-union"
-  },
-  "rugby-union — World Cup Sevens - Women": {
-    "leagueId": "11277",
-    "seasonId": "45757",
-    "sport": "rugby-union"
+  "cricket — 🇬🇧 One Day Cup - Women": {
+    "leagueId": "25536",
+    "seasonId": "86874",
+    "sport": "cricket"
   },
   "cricket — Alex Malcolm - News": {
     "leagueId": "news-am",
     "seasonId": "external",
-    "sport": "cricket"
-  },
-  "cricket — Sheffield Shield": {
-    "leagueId": "11160",
-    "seasonId": "97892",
-    "sport": "cricket"
-  },
-  "cricket — 🇦🇺 One Day Cup": {
-    "leagueId": "11161",
-    "seasonId": "97891",
     "sport": "cricket"
   },
   "cricket — BBL": {
@@ -544,59 +119,24 @@
     "seasonId": "98330",
     "sport": "cricket"
   },
-  "cricket — WNCL": {
-    "leagueId": "18704",
-    "seasonId": "98397",
+  "cricket — County Championship": {
+    "leagueId": "16506",
+    "seasonId": "86873",
     "sport": "cricket"
   },
-  "cricket — WBBL": {
-    "leagueId": "11163",
-    "seasonId": "97391",
+  "cricket — European T20 Premier League": {
+    "leagueId": "etpl",
+    "seasonId": "external",
     "sport": "cricket"
   },
-  "cricket — T20 Spring Challenge": {
-    "leagueId": "23072",
-    "seasonId": "98416",
-    "sport": "cricket"
-  },
-  "cricket — World Test Championship": {
-    "leagueId": "18833",
-    "seasonId": "92047",
-    "sport": "cricket"
-  },
-  "cricket — Test Matches - Men": {
-    "leagueId": "11189",
-    "seasonId": "92047",
-    "sport": "cricket"
-  },
-  "cricket — Test Matches - Women": {
-    "leagueId": "18794",
-    "seasonId": "74042",
-    "sport": "cricket"
-  },
-  "cricket — T20Is - Men": {
-    "leagueId": "11191",
-    "seasonId": "77257",
-    "sport": "cricket"
-  },
-  "cricket — T20Is - Women": {
-    "leagueId": "11222",
-    "seasonId": "74040",
-    "sport": "cricket"
-  },
-  "cricket — ODIs - Men": {
-    "leagueId": "11190",
-    "seasonId": "77922",
-    "sport": "cricket"
-  },
-  "cricket — ODIs - Women": {
-    "leagueId": "18793",
-    "seasonId": "74041",
+  "cricket — ICC Champions Trophy": {
+    "leagueId": "11181",
+    "seasonId": "70172",
     "sport": "cricket"
   },
   "cricket — ICC ODI World Cup - Men": {
     "leagueId": "20661",
-    "seasonId": "52509",
+    "seasonId": "105163",
     "sport": "cricket"
   },
   "cricket — ICC ODI World Cup - Women": {
@@ -619,9 +159,24 @@
     "seasonId": "91185",
     "sport": "cricket"
   },
-  "cricket — WPL": {
-    "leagueId": "19974",
-    "seasonId": "86861",
+  "cricket — ODIs - ICC Women's Championship": {
+    "leagueId": "18793",
+    "seasonId": "92009",
+    "sport": "cricket"
+  },
+  "cricket — ODIs - Men": {
+    "leagueId": "11190",
+    "seasonId": "77922",
+    "sport": "cricket"
+  },
+  "cricket — ODIs - Women": {
+    "leagueId": "11221",
+    "seasonId": "56134",
+    "sport": "cricket"
+  },
+  "cricket — One Day Cup": {
+    "leagueId": "11161",
+    "seasonId": "97891",
     "sport": "cricket"
   },
   "cricket — Ranji Trophy": {
@@ -629,9 +184,39 @@
     "seasonId": "98950",
     "sport": "cricket"
   },
-  "cricket — County Championship": {
-    "leagueId": "16506",
-    "seasonId": "86873",
+  "cricket — Sheffield Shield": {
+    "leagueId": "11160",
+    "seasonId": "97892",
+    "sport": "cricket"
+  },
+  "cricket — T20 Blast": {
+    "leagueId": "11268",
+    "seasonId": "86875",
+    "sport": "cricket"
+  },
+  "cricket — T20 Spring Challenge": {
+    "leagueId": "23072",
+    "seasonId": "98416",
+    "sport": "cricket"
+  },
+  "cricket — T20Is - Men": {
+    "leagueId": "11191",
+    "seasonId": "77257",
+    "sport": "cricket"
+  },
+  "cricket — T20Is - Women": {
+    "leagueId": "11222",
+    "seasonId": "92008",
+    "sport": "cricket"
+  },
+  "cricket — Test Matches - Men": {
+    "leagueId": "11189",
+    "seasonId": "92047",
+    "sport": "cricket"
+  },
+  "cricket — Test Matches - Women": {
+    "leagueId": "18794",
+    "seasonId": "74042",
     "sport": "cricket"
   },
   "cricket — The Hundred - Men": {
@@ -644,189 +229,59 @@
     "seasonId": "89189",
     "sport": "cricket"
   },
-  "cricket — 🇬🇧 One Day Cup - Men": {
-    "leagueId": "11177",
-    "seasonId": "86876",
+  "cricket — WBBL": {
+    "leagueId": "11163",
+    "seasonId": "97391",
     "sport": "cricket"
   },
-  "cricket — T20 Blast": {
-    "leagueId": "11268",
-    "seasonId": "86875",
+  "cricket — WNCL": {
+    "leagueId": "18704",
+    "seasonId": "98397",
     "sport": "cricket"
   },
-  "cricket — European T20 Premier League": {
-    "leagueId": "etpl",
-    "seasonId": "external-2026",
+  "cricket — World Test Championship": {
+    "leagueId": "18833",
+    "seasonId": "63415",
     "sport": "cricket"
   },
-  "netball — Super Netball": {
-    "leagueId": "4540",
-    "seasonId": "2026",
-    "sport": "netball"
+  "cricket — WPL": {
+    "leagueId": "19974",
+    "seasonId": "107996",
+    "sport": "cricket"
   },
-  "netball — Constellation Cup": {
-    "leagueId": "5793",
-    "seasonId": "2025",
-    "sport": "netball"
-  },
-  "netball — World Cup": {
-    "leagueId": "5790",
-    "seasonId": "2023",
-    "sport": "netball"
-  },
-  "netball — Quad Series": {
-    "leagueId": "5792",
-    "seasonId": "2025",
-    "sport": "netball"
-  },
-  "tennis — Australian Open - Men's Singles": {
-    "leagueId": "2363",
-    "seasonId": "80012",
-    "sport": "tennis"
-  },
-  "tennis — Australian Open - Women's Singles": {
-    "leagueId": "2571",
-    "seasonId": "80013",
-    "sport": "tennis"
-  },
-  "tennis — French Open - Men's Singles": {
-    "leagueId": "2480",
-    "seasonId": "85951",
-    "sport": "tennis"
-  },
-  "tennis — French Open - Women's Singles": {
-    "leagueId": "2577",
-    "seasonId": "85953",
-    "sport": "tennis"
-  },
-  "tennis — Wimbledon - Men's Singles": {
-    "leagueId": "2361",
-    "seasonId": "85943",
-    "sport": "tennis"
-  },
-  "tennis — Wimbledon - Women's Singles": {
-    "leagueId": "2600",
-    "seasonId": "85945",
-    "sport": "tennis"
-  },
-  "tennis — US Open - Men's Singles": {
-    "leagueId": "2449",
-    "seasonId": "85956",
-    "sport": "tennis"
-  },
-  "tennis — US Open - Women's Singles": {
-    "leagueId": "2601",
-    "seasonId": "85958",
-    "sport": "tennis"
-  },
-  "tennis — Brisbane International - Men's Singles": {
-    "leagueId": "2437",
-    "seasonId": "80014",
-    "sport": "tennis"
-  },
-  "tennis — Brisbane International - Women's Singles": {
-    "leagueId": "2644",
-    "seasonId": "85608",
-    "sport": "tennis"
-  },
-  "tennis — Davis Cup": {
-    "leagueId": "2287",
-    "seasonId": "88324",
-    "sport": "tennis"
-  },
-  "tennis — Billie Jean King Cup": {
-    "leagueId": "2310",
-    "seasonId": "88325",
-    "sport": "tennis"
-  },
-  "tennis — ATP Rankings": {
-    "leagueId": "atpRankings",
-    "seasonId": "current/ladder",
-    "sport": "tennis"
-  },
-  "tennis — WTA Rankings": {
-    "leagueId": "wtaRankings",
-    "seasonId": "current/ladder",
-    "sport": "tennis"
-  },
-  "darts — World Darts Championship": {
-    "leagueId": "616",
-    "seasonId": "85121",
-    "sport": "darts"
-  },
-  "darts — World Masters": {
-    "leagueId": "1548",
-    "seasonId": "84672",
-    "sport": "darts"
-  },
-  "darts — UK Open": {
-    "leagueId": "670",
-    "seasonId": "84753",
-    "sport": "darts"
-  },
-  "darts — World Cup of Darts": {
-    "leagueId": "1744",
-    "seasonId": "84794",
-    "sport": "darts"
-  },
-  "darts — World Matchplay": {
-    "leagueId": "689",
-    "seasonId": "69484",
-    "sport": "darts"
-  },
-  "darts — World Grand Prix": {
-    "leagueId": "751",
-    "seasonId": "69485",
-    "sport": "darts"
-  },
-  "darts — Grand Slam of Darts": {
-    "leagueId": "597",
-    "seasonId": "85815",
-    "sport": "darts"
-  },
-  "darts — Premier League Darts": {
-    "leagueId": "11565",
-    "seasonId": "84759",
-    "sport": "darts"
-  },
-  "darts — World Series of Darts - Australian Darts Masters": {
-    "leagueId": "23242",
-    "seasonId": "69511",
-    "sport": "darts"
-  },
-  "darts — World Series of Darts - Finals": {
-    "leagueId": "11545",
-    "seasonId": "69497",
-    "sport": "darts"
-  },
-  "darts — Players Championship - Season": {
-    "leagueId": "2066",
-    "seasonId": "71945",
-    "sport": "darts"
-  },
-  "darts — Players Championship - Finals": {
-    "leagueId": "631",
-    "seasonId": "69482",
-    "sport": "darts"
-  },
-  "darts — European Championship": {
-    "leagueId": "592",
-    "seasonId": "69481",
-    "sport": "darts"
-  },
-  "darts — PDC Rankings": {
-    "leagueId": "rankings",
+  "american-football — CFP Rankings": {
+    "leagueId": "cfp-rankings",
     "seasonId": "external",
-    "sport": "darts"
+    "sport": "american-football"
+  },
+  "american-football — NCAA Division I, FBS Post Season": {
+    "leagueId": "19750",
+    "seasonId": "108563",
+    "sport": "american-football"
+  },
+  "american-football — NCAA, FBS": {
+    "leagueId": "32199",
+    "seasonId": "93601",
+    "sport": "american-football"
+  },
+  "american-football — NFL": {
+    "leagueId": "9464",
+    "seasonId": "94366",
+    "sport": "american-football"
+  },
+  "american-football — NFL Preseason": {
+    "leagueId": "9465",
+    "seasonId": "94852",
+    "sport": "american-football"
   },
   "motorsport — Formula 1": {
     "leagueId": "40",
     "seasonId": "214140",
     "sport": "motorsport"
   },
-  "motorsport — Supercars": {
-    "leagueId": "supercars",
-    "seasonId": "2026",
+  "motorsport — Indycar": {
+    "leagueId": "67",
+    "seasonId": "235992",
     "sport": "motorsport"
   },
   "motorsport — MotoGP": {
@@ -834,9 +289,84 @@
     "seasonId": "220597",
     "sport": "motorsport"
   },
-  "golf — PGA Tour": {
-    "leagueId": "pga",
+  "motorsport — NASCAR Cup Series": {
+    "leagueId": "18",
+    "seasonId": "226324",
+    "sport": "motorsport"
+  },
+  "motorsport — Supercars": {
+    "leagueId": "supercars",
     "seasonId": "2026",
+    "sport": "motorsport"
+  },
+  "rugby-league — New South Wales Cup": {
+    "leagueId": "2134",
+    "seasonId": "89006",
+    "sport": "rugby-league"
+  },
+  "rugby-league — NRL": {
+    "leagueId": "294",
+    "seasonId": "86317",
+    "sport": "rugby-league"
+  },
+  "rugby-league — NRLW": {
+    "leagueId": "19120",
+    "seasonId": "87573",
+    "sport": "rugby-league"
+  },
+  "rugby-league — Pacific Champs - Men": {
+    "leagueId": "13667",
+    "seasonId": "81655",
+    "sport": "rugby-league"
+  },
+  "rugby-league — Pacific Champs - Women": {
+    "leagueId": "21300",
+    "seasonId": "81656",
+    "sport": "rugby-league"
+  },
+  "rugby-league — Queensland Cup": {
+    "leagueId": "2135",
+    "seasonId": "88763",
+    "sport": "rugby-league"
+  },
+  "rugby-league — State of Origin - Men": {
+    "leagueId": "791",
+    "seasonId": "87571",
+    "sport": "rugby-league"
+  },
+  "rugby-league — State of Origin - Women": {
+    "leagueId": "20374",
+    "seasonId": "87574",
+    "sport": "rugby-league"
+  },
+  "rugby-league — Super League": {
+    "leagueId": "302",
+    "seasonId": "86986",
+    "sport": "rugby-league"
+  },
+  "rugby-league — World Cup - Men": {
+    "leagueId": "431",
+    "seasonId": "87548",
+    "sport": "rugby-league"
+  },
+  "rugby-league — World Cup - Women": {
+    "leagueId": "10683",
+    "seasonId": "87572",
+    "sport": "rugby-league"
+  },
+  "golf — Asian Tour": {
+    "leagueId": "asian-tour",
+    "seasonId": "external",
+    "sport": "golf"
+  },
+  "golf — DP World Tour": {
+    "leagueId": "dpworld",
+    "seasonId": "2026",
+    "sport": "golf"
+  },
+  "golf — Korn Ferry Tour": {
+    "leagueId": "korn-ferry-tour",
+    "seasonId": "external",
     "sport": "golf"
   },
   "golf — LIV Golf": {
@@ -849,8 +379,18 @@
     "seasonId": "2026",
     "sport": "golf"
   },
-  "golf — DP World Tour": {
-    "leagueId": "dpworld",
+  "golf — OWGR": {
+    "leagueId": "owgr",
+    "seasonId": "2026/ladder",
+    "sport": "golf"
+  },
+  "golf — PGA Champions Tour": {
+    "leagueId": "pga-champions-tour",
+    "seasonId": "external",
+    "sport": "golf"
+  },
+  "golf — PGA Tour": {
+    "leagueId": "pga",
     "seasonId": "2026",
     "sport": "golf"
   },
@@ -864,39 +404,684 @@
     "seasonId": "2026",
     "sport": "golf"
   },
-  "golf — Asian Tour": {
-    "leagueId": "asian-tour",
+  "multi-sport — Asian Games": {
+    "leagueId": "asian-games",
+    "seasonId": "wiki-2026",
+    "sport": "multi-sport"
+  },
+  "multi-sport — Commonwealth Games": {
+    "leagueId": "commonwealth-games",
     "seasonId": "external",
-    "sport": "golf"
+    "sport": "multi-sport"
   },
-  "golf — PGA Champions Tour": {
-    "leagueId": "pga-champions-tour",
+  "multi-sport — Summer Olympics": {
+    "leagueId": "summer-olympics",
+    "seasonId": "wiki-2028",
+    "sport": "multi-sport"
+  },
+  "multi-sport — Winter Olympics": {
+    "leagueId": "winter-olympics",
+    "seasonId": "wiki-2026",
+    "sport": "multi-sport"
+  },
+  "football — 🇩🇪 Bundesliga": {
+    "leagueId": "35",
+    "seasonId": "97464",
+    "sport": "football"
+  },
+  "football — 🌍 FIFA Series - Men": {
+    "leagueId": "32832",
+    "seasonId": "91220",
+    "sport": "football"
+  },
+  "football — 🌍 FIFA Series - Women": {
+    "leagueId": "32833",
+    "seasonId": "91221",
+    "sport": "football"
+  },
+  "football — 🌍 FIFA Women's World Cup Qualifiers": {
+    "leagueId": "fifaWQualifiers",
+    "seasonId": "wiki",
+    "sport": "football"
+  },
+  "football — 🌍 FIFA World Cup Qualifiers": {
+    "leagueId": "fifaQualifiers",
+    "seasonId": "wiki",
+    "sport": "football"
+  },
+  "football — 🌍 Int. Friendlies - Men": {
+    "leagueId": "851",
+    "seasonId": "87155",
+    "sport": "football"
+  },
+  "football — 🌍 Int. Friendlies - Women": {
+    "leagueId": "852",
+    "seasonId": "86730",
+    "sport": "football"
+  },
+  "football — 🇪🇸 La Liga": {
+    "leagueId": "8",
+    "seasonId": "97268",
+    "sport": "football"
+  },
+  "football — 🇫🇷 Ligue 1": {
+    "leagueId": "34",
+    "seasonId": "96127",
+    "sport": "football"
+  },
+  "football — 🇺🇸 MLS": {
+    "leagueId": "242",
+    "seasonId": "86668",
+    "sport": "football"
+  },
+  "football — 🇺🇸 NWSL": {
+    "leagueId": "1690",
+    "seasonId": "88711",
+    "sport": "football"
+  },
+  "football — 🇮🇹 Serie A": {
+    "leagueId": "23",
+    "seasonId": "95836",
+    "sport": "football"
+  },
+  "football — AFC Asian Cup - Men": {
+    "leagueId": "246",
+    "seasonId": "94444",
+    "sport": "football"
+  },
+  "football — AFC Asian Cup - Women": {
+    "leagueId": "1692",
+    "seasonId": "79569",
+    "sport": "football"
+  },
+  "football — AFC Asian Cup Qual.": {
+    "leagueId": "28",
+    "seasonId": "60998",
+    "sport": "football"
+  },
+  "football — AFC Asian Cup, Women, Qualification": {
+    "leagueId": "26544",
+    "seasonId": "75414",
+    "sport": "football"
+  },
+  "football — AFC Champions League - Women": {
+    "leagueId": "23009",
+    "seasonId": "97474",
+    "sport": "football"
+  },
+  "football — AFC Champions League Elite - Men": {
+    "leagueId": "463",
+    "seasonId": "99217",
+    "sport": "football"
+  },
+  "football — AFC Champions League Two - Men": {
+    "leagueId": "668",
+    "seasonId": "97465",
+    "sport": "football"
+  },
+  "football — AFC Women's World Cup Qualifiers": {
+    "leagueId": "308-women",
+    "seasonId": "wiki",
+    "sport": "football"
+  },
+  "football — AFC World Cup Qualifiers": {
+    "leagueId": "308",
+    "seasonId": "53508",
+    "sport": "football"
+  },
+  "football — Africa Cup of Nations": {
+    "leagueId": "270",
+    "seasonId": "71636",
+    "sport": "football"
+  },
+  "football — A-League Men": {
+    "leagueId": "136",
+    "seasonId": "98511",
+    "sport": "football"
+  },
+  "football — A-League Women": {
+    "leagueId": "1894",
+    "seasonId": "101529",
+    "sport": "football"
+  },
+  "football — Asian Games": {
+    "leagueId": "1862",
+    "seasonId": "101362",
+    "sport": "football"
+  },
+  "football — Asian Games, Women": {
+    "leagueId": "11330",
+    "seasonId": "101214",
+    "sport": "football"
+  },
+  "football — Australia Cup": {
+    "leagueId": "1786",
+    "seasonId": "97074",
+    "sport": "football"
+  },
+  "football — Australian Championship": {
+    "leagueId": "29010",
+    "seasonId": "104102",
+    "sport": "football"
+  },
+  "football — Baptist Football QLD - Rivers Rubies": {
+    "leagueId": "rivers-bap",
     "seasonId": "external",
-    "sport": "golf"
+    "sport": "football"
   },
-  "golf — Korn Ferry Tour": {
-    "leagueId": "korn-ferry-tour",
+  "football — Championship": {
+    "leagueId": "18",
+    "seasonId": "97037",
+    "sport": "football"
+  },
+  "football — CONCACAF Gold Cup": {
+    "leagueId": "140",
+    "seasonId": "72840",
+    "sport": "football"
+  },
+  "football — CONCACAF W Gold Cup": {
+    "leagueId": "21976",
+    "seasonId": "58390",
+    "sport": "football"
+  },
+  "football — Copa América": {
+    "leagueId": "133",
+    "seasonId": "57114",
+    "sport": "football"
+  },
+  "football — Copa América Femenina": {
+    "leagueId": "18681",
+    "seasonId": "70445",
+    "sport": "football"
+  },
+  "football — EFL Cup": {
+    "leagueId": "21",
+    "seasonId": "96185",
+    "sport": "football"
+  },
+  "football — FA Cup": {
+    "leagueId": "19",
+    "seasonId": "102079",
+    "sport": "football"
+  },
+  "football — FIFA Club World Cup": {
+    "leagueId": "357",
+    "seasonId": "69619",
+    "sport": "football"
+  },
+  "football — FIFA Intercontinental Cup": {
+    "leagueId": "23674",
+    "seasonId": "101512",
+    "sport": "football"
+  },
+  "football — FIFA Women's World Cup": {
+    "leagueId": "290",
+    "seasonId": "46930",
+    "sport": "football"
+  },
+  "football — FIFA World Cup": {
+    "leagueId": "16",
+    "seasonId": "58210",
+    "sport": "football"
+  },
+  "football — MLS All Star Game": {
+    "leagueId": "1794",
+    "seasonId": "96199",
+    "sport": "football"
+  },
+  "football — OFC Men's Nations Cup": {
+    "leagueId": "22716",
+    "seasonId": "61582",
+    "sport": "football"
+  },
+  "football — OFC Women's Nations Cup": {
+    "leagueId": "27059",
+    "seasonId": "76293",
+    "sport": "football"
+  },
+  "football — Premier League": {
+    "leagueId": "17",
+    "seasonId": "96668",
+    "sport": "football"
+  },
+  "football — UEFA Champions League - Men": {
+    "leagueId": "7",
+    "seasonId": "96518",
+    "sport": "football"
+  },
+  "football — UEFA Champions League - Women": {
+    "leagueId": "696",
+    "seasonId": "96633",
+    "sport": "football"
+  },
+  "football — UEFA Conference League": {
+    "leagueId": "17015",
+    "seasonId": "96529",
+    "sport": "football"
+  },
+  "football — UEFA Europa League": {
+    "leagueId": "679",
+    "seasonId": "96522",
+    "sport": "football"
+  },
+  "football — UEFA European Championship - Men": {
+    "leagueId": "1",
+    "seasonId": "56953",
+    "sport": "football"
+  },
+  "football — UEFA European Championship - Women": {
+    "leagueId": "477",
+    "seasonId": "69935",
+    "sport": "football"
+  },
+  "football — UEFA Nations League - Men": {
+    "leagueId": "10783",
+    "seasonId": "89945",
+    "sport": "football"
+  },
+  "football — UEFA Nations League - Women": {
+    "leagueId": "20378",
+    "seasonId": "108444",
+    "sport": "football"
+  },
+  "football — Women's Africa Cup of Nations": {
+    "leagueId": "9558",
+    "seasonId": "88739",
+    "sport": "football"
+  },
+  "football — Women's FA Cup": {
+    "leagueId": "11666",
+    "seasonId": "105939",
+    "sport": "football"
+  },
+  "football — Women's Super League": {
+    "leagueId": "1044",
+    "seasonId": "99801",
+    "sport": "football"
+  },
+  "football — World Cup Qual. UEFA": {
+    "leagueId": "11",
+    "seasonId": "69427",
+    "sport": "football"
+  },
+  "surfing — WSL": {
+    "leagueId": "wsl",
+    "seasonId": "2026",
+    "sport": "surfing"
+  },
+  "tennis — ATP Finals": {
+    "leagueId": "2517",
+    "seasonId": "82448",
+    "sport": "tennis"
+  },
+  "tennis — ATP Finals, Doubles": {
+    "leagueId": "2385",
+    "seasonId": "82449",
+    "sport": "tennis"
+  },
+  "tennis — ATP Rankings": {
+    "leagueId": "atpRankings",
+    "seasonId": "current/ladder",
+    "sport": "tennis"
+  },
+  "tennis — Australian Open - Men's Singles": {
+    "leagueId": "2363",
+    "seasonId": "80012",
+    "sport": "tennis"
+  },
+  "tennis — Australian Open - Women's Singles": {
+    "leagueId": "2571",
+    "seasonId": "80013",
+    "sport": "tennis"
+  },
+  "tennis — Australian Open, Men Doubles": {
+    "leagueId": "2455",
+    "seasonId": "85948",
+    "sport": "tennis"
+  },
+  "tennis — Australian Open, Mixed Doubles": {
+    "leagueId": "2403",
+    "seasonId": "85950",
+    "sport": "tennis"
+  },
+  "tennis — Australian Open, Women Doubles": {
+    "leagueId": "2650",
+    "seasonId": "85949",
+    "sport": "tennis"
+  },
+  "tennis — Billie Jean King Cup": {
+    "leagueId": "2310",
+    "seasonId": "88325",
+    "sport": "tennis"
+  },
+  "tennis — Brisbane International - Men's Singles": {
+    "leagueId": "2437",
+    "seasonId": "80014",
+    "sport": "tennis"
+  },
+  "tennis — Brisbane International - Women's Singles": {
+    "leagueId": "2644",
+    "seasonId": "85608",
+    "sport": "tennis"
+  },
+  "tennis — Brisbane, Doubles": {
+    "leagueId": "2485",
+    "seasonId": "80015",
+    "sport": "tennis"
+  },
+  "tennis — Davis Cup": {
+    "leagueId": "2287",
+    "seasonId": "88324",
+    "sport": "tennis"
+  },
+  "tennis — French Open - Men's Singles": {
+    "leagueId": "2480",
+    "seasonId": "85951",
+    "sport": "tennis"
+  },
+  "tennis — French Open - Women's Singles": {
+    "leagueId": "2577",
+    "seasonId": "85953",
+    "sport": "tennis"
+  },
+  "tennis — Kooyong Classic": {
+    "leagueId": "10148",
+    "seasonId": "88391",
+    "sport": "tennis"
+  },
+  "tennis — Laver Cup": {
+    "leagueId": "10524",
+    "seasonId": "88326",
+    "sport": "tennis"
+  },
+  "tennis — Laver Cup, Doubles": {
+    "leagueId": "10525",
+    "seasonId": "88327",
+    "sport": "tennis"
+  },
+  "tennis — Six Kings Slam": {
+    "leagueId": "23852",
+    "seasonId": "99654",
+    "sport": "tennis"
+  },
+  "tennis — United Cup": {
+    "leagueId": "19728",
+    "seasonId": "85650",
+    "sport": "tennis"
+  },
+  "tennis — US Open - Men's Singles": {
+    "leagueId": "2449",
+    "seasonId": "85956",
+    "sport": "tennis"
+  },
+  "tennis — US Open - Women's Singles": {
+    "leagueId": "2601",
+    "seasonId": "85958",
+    "sport": "tennis"
+  },
+  "tennis — Wimbledon - Men's Singles": {
+    "leagueId": "2361",
+    "seasonId": "85943",
+    "sport": "tennis"
+  },
+  "tennis — Wimbledon - Women's Singles": {
+    "leagueId": "2600",
+    "seasonId": "85945",
+    "sport": "tennis"
+  },
+  "tennis — WTA Finals": {
+    "leagueId": "11864",
+    "seasonId": "85630",
+    "sport": "tennis"
+  },
+  "tennis — WTA Finals, Doubles": {
+    "leagueId": "11865",
+    "seasonId": "85631",
+    "sport": "tennis"
+  },
+  "tennis — WTA Rankings": {
+    "leagueId": "wtaRankings",
+    "seasonId": "current/ladder",
+    "sport": "tennis"
+  },
+  "basketball — Basketball World Cup - Men": {
+    "leagueId": "441",
+    "seasonId": "51191",
+    "sport": "basketball"
+  },
+  "basketball — Basketball World Cup - Women": {
+    "leagueId": "442",
+    "seasonId": "93569",
+    "sport": "basketball"
+  },
+  "basketball — Basketball World Cup Qualifiers - Men": {
+    "leagueId": "fiba-qual",
     "seasonId": "external",
-    "sport": "golf"
+    "sport": "basketball"
   },
-  "golf — OWGR": {
-    "leagueId": "owgr",
-    "seasonId": "2026/ladder",
-    "sport": "golf"
+  "basketball — FIBA Asia Cup": {
+    "leagueId": "943",
+    "seasonId": "75866",
+    "sport": "basketball"
   },
-  "cycling — UCI World Tour - Men": {
-    "leagueId": "9",
-    "seasonId": "220825",
-    "sport": "cycling"
+  "basketball — FIBA Asia Cup, Women": {
+    "leagueId": "14237",
+    "seasonId": "74154",
+    "sport": "basketball"
   },
-  "cycling — UCI World Tour - Women": {
-    "leagueId": "94",
-    "seasonId": "220906",
-    "sport": "cycling"
+  "basketball — FIBA Women's World Cup, Qualification": {
+    "leagueId": "18520",
+    "seasonId": "65521",
+    "sport": "basketball"
   },
-  "cycling — Tour de France": {
-    "leagueId": "le-tour",
-    "seasonId": "220828",
+  "basketball — FIBA World Cup Qualification, Asia & Oceania": {
+    "leagueId": "10486",
+    "seasonId": "77992",
+    "sport": "basketball"
+  },
+  "basketball — IWBF Wheelchair Basketball World Championships": {
+    "leagueId": "32513",
+    "seasonId": "90223",
+    "sport": "basketball"
+  },
+  "basketball — March Madness": {
+    "leagueId": "13434",
+    "seasonId": "91315",
+    "sport": "basketball"
+  },
+  "basketball — NBA": {
+    "leagueId": "132",
+    "seasonId": "100772",
+    "sport": "basketball"
+  },
+  "basketball — NBA All Star Game": {
+    "leagueId": "875",
+    "seasonId": "89489",
+    "sport": "basketball"
+  },
+  "basketball — NBA Summer League": {
+    "leagueId": "10415",
+    "seasonId": "97120",
+    "sport": "basketball"
+  },
+  "basketball — NBL": {
+    "leagueId": "1524",
+    "seasonId": "96122",
+    "sport": "basketball"
+  },
+  "basketball — NCAA Men's Division I": {
+    "leagueId": "33651",
+    "seasonId": "98929",
+    "sport": "basketball"
+  },
+  "basketball — NCAA Women's Division I": {
+    "leagueId": "33655",
+    "seasonId": "98940",
+    "sport": "basketball"
+  },
+  "basketball — NCAA Women's March Madness": {
+    "leagueId": "16718",
+    "seasonId": "91318",
+    "sport": "basketball"
+  },
+  "basketball — WNBA": {
+    "leagueId": "486",
+    "seasonId": "89004",
+    "sport": "basketball"
+  },
+  "basketball — WNBA All Star Game": {
+    "leagueId": "1329",
+    "seasonId": "98564",
+    "sport": "basketball"
+  },
+  "basketball — WNBL": {
+    "leagueId": "1506",
+    "seasonId": "98055",
+    "sport": "basketball"
+  },
+  "ice-hockey — 4 Nations Face-Off": {
+    "leagueId": "23380",
+    "seasonId": "65855",
+    "sport": "ice-hockey"
+  },
+  "ice-hockey — AIHL": {
+    "leagueId": "11059",
+    "seasonId": "86527",
+    "sport": "ice-hockey"
+  },
+  "ice-hockey — NHL": {
+    "leagueId": "234",
+    "seasonId": "98450",
+    "sport": "ice-hockey"
+  },
+  "ice-hockey — World Championship": {
+    "leagueId": "3",
+    "seasonId": "96266",
+    "sport": "ice-hockey"
+  },
+  "ice-hockey — World Championship - Australia Men": {
+    "leagueId": "13446",
+    "seasonId": "69168",
+    "sport": "ice-hockey"
+  },
+  "ice-hockey — World Championship - Australia Women": {
+    "leagueId": "wc-div2",
+    "seasonId": "wiki",
+    "sport": "ice-hockey"
+  },
+  "ice-hockey — World Championship - Women": {
+    "leagueId": "428",
+    "seasonId": "96233",
+    "sport": "ice-hockey"
+  },
+  "ice-hockey — World Cup of Hockey": {
+    "leagueId": "9313",
+    "seasonId": "12179",
+    "sport": "ice-hockey"
+  },
+  "netball — Constellation Cup": {
+    "leagueId": "5793",
+    "seasonId": "2025",
+    "sport": "netball"
+  },
+  "netball — Quad Series": {
+    "leagueId": "5792",
+    "seasonId": "2025",
+    "sport": "netball"
+  },
+  "netball — Super Netball": {
+    "leagueId": "4540",
+    "seasonId": "2026",
+    "sport": "netball"
+  },
+  "netball — World Cup": {
+    "leagueId": "5790",
+    "seasonId": "2023",
+    "sport": "netball"
+  },
+  "rugby-union — British and Irish Lions Tour": {
+    "leagueId": "27512",
+    "seasonId": "77221",
+    "sport": "rugby-union"
+  },
+  "rugby-union — Int. Friendly Games": {
+    "leagueId": "876",
+    "seasonId": "87128",
+    "sport": "rugby-union"
+  },
+  "rugby-union — Nations Championship": {
+    "leagueId": "34478",
+    "seasonId": "93780",
+    "sport": "rugby-union"
+  },
+  "rugby-union — Queensland Premier Rugby": {
+    "leagueId": "2048",
+    "seasonId": "87649",
+    "sport": "rugby-union"
+  },
+  "rugby-union — Rugby Championship": {
+    "leagueId": "789",
+    "seasonId": "76747",
+    "sport": "rugby-union"
+  },
+  "rugby-union — Rugby Sevens World Series": {
+    "leagueId": "10055",
+    "seasonId": "107538",
+    "sport": "rugby-union"
+  },
+  "rugby-union — Rugby Sevens World Series - Women": {
+    "leagueId": "11623",
+    "seasonId": "107540",
+    "sport": "rugby-union"
+  },
+  "rugby-union — Six Nations": {
+    "leagueId": "423",
+    "seasonId": "108424",
+    "sport": "rugby-union"
+  },
+  "rugby-union — Six Nations, Women": {
+    "leagueId": "2055",
+    "seasonId": "108390",
+    "sport": "rugby-union"
+  },
+  "rugby-union — Super Rugby": {
+    "leagueId": "422",
+    "seasonId": "86502",
+    "sport": "rugby-union"
+  },
+  "rugby-union — Super Rugby AUS": {
+    "leagueId": "29227",
+    "seasonId": "101823",
+    "sport": "rugby-union"
+  },
+  "rugby-union — World Cup - Men": {
+    "leagueId": "421",
+    "seasonId": "95400",
+    "sport": "rugby-union"
+  },
+  "rugby-union — World Cup - Women": {
+    "leagueId": "1826",
+    "seasonId": "69966",
+    "sport": "rugby-union"
+  },
+  "rugby-union — World Cup Sevens - Men": {
+    "leagueId": "11276",
+    "seasonId": "45756",
+    "sport": "rugby-union"
+  },
+  "rugby-union — World Cup Sevens - Women": {
+    "leagueId": "11277",
+    "seasonId": "45757",
+    "sport": "rugby-union"
+  },
+  "rugby-union — WXV Global Series": {
+    "leagueId": "21299",
+    "seasonId": "103142",
+    "sport": "rugby-union"
+  },
+  "cycling — Cadel Evans Great Ocean Road Race": {
+    "leagueId": "cadel",
+    "seasonId": "221115",
     "sport": "cycling"
   },
   "cycling — Giro d'Italia": {
@@ -904,9 +1089,9 @@
     "seasonId": "220827",
     "sport": "cycling"
   },
-  "cycling — Vuelta a España": {
-    "leagueId": "vuelta",
-    "seasonId": "220829",
+  "cycling — Tour de France": {
+    "leagueId": "le-tour",
+    "seasonId": "220828",
     "sport": "cycling"
   },
   "cycling — Tour Down Under": {
@@ -914,9 +1099,9 @@
     "seasonId": "221114",
     "sport": "cycling"
   },
-  "cycling — Cadel Evans Great Ocean Road Race": {
-    "leagueId": "cadel",
-    "seasonId": "221115",
+  "cycling — UCI World Championship RR": {
+    "leagueId": "world-rr",
+    "seasonId": "220912",
     "sport": "cycling"
   },
   "cycling — UCI World Championship TT": {
@@ -924,9 +1109,124 @@
     "seasonId": "220913",
     "sport": "cycling"
   },
-  "cycling — UCI World Championship RR": {
-    "leagueId": "world-rr",
-    "seasonId": "220912",
+  "cycling — UCI World Tour - Men": {
+    "leagueId": "9",
+    "seasonId": "237626",
     "sport": "cycling"
+  },
+  "cycling — UCI World Tour - Women": {
+    "leagueId": "94",
+    "seasonId": "237670",
+    "sport": "cycling"
+  },
+  "cycling — Vuelta a España": {
+    "leagueId": "vuelta",
+    "seasonId": "220829",
+    "sport": "cycling"
+  },
+  "darts — ANZ Premier League 2026": {
+    "leagueId": "39152",
+    "seasonId": "106591",
+    "sport": "darts"
+  },
+  "darts — European Championship": {
+    "leagueId": "592",
+    "seasonId": "85030",
+    "sport": "darts"
+  },
+  "darts — Grand Slam of Darts": {
+    "leagueId": "597",
+    "seasonId": "104761",
+    "sport": "darts"
+  },
+  "darts — PDC Rankings": {
+    "leagueId": "rankings",
+    "seasonId": "external",
+    "sport": "darts"
+  },
+  "darts — Players Championship - Finals": {
+    "leagueId": "631",
+    "seasonId": "69482",
+    "sport": "darts"
+  },
+  "darts — Players Championship - Season": {
+    "leagueId": "2066",
+    "seasonId": "96781",
+    "sport": "darts"
+  },
+  "darts — Premier League Darts": {
+    "leagueId": "11565",
+    "seasonId": "84759",
+    "sport": "darts"
+  },
+  "darts — UK Open": {
+    "leagueId": "670",
+    "seasonId": "84753",
+    "sport": "darts"
+  },
+  "darts — World Cup of Darts": {
+    "leagueId": "1744",
+    "seasonId": "84794",
+    "sport": "darts"
+  },
+  "darts — World Darts Championship": {
+    "leagueId": "616",
+    "seasonId": "85121",
+    "sport": "darts"
+  },
+  "darts — World Grand Prix": {
+    "leagueId": "751",
+    "seasonId": "84943",
+    "sport": "darts"
+  },
+  "darts — World Masters": {
+    "leagueId": "1548",
+    "seasonId": "84672",
+    "sport": "darts"
+  },
+  "darts — World Matchplay": {
+    "leagueId": "689",
+    "seasonId": "84838",
+    "sport": "darts"
+  },
+  "darts — World Series of Darts - Australian Darts Masters": {
+    "leagueId": "23242",
+    "seasonId": "84842",
+    "sport": "darts"
+  },
+  "darts — World Series of Darts - Finals": {
+    "leagueId": "11545",
+    "seasonId": "84944",
+    "sport": "darts"
+  },
+  "athletics — Diamond League": {
+    "leagueId": "diamond",
+    "seasonId": "wiki-2026",
+    "sport": "athletics"
+  },
+  "athletics — World Championships": {
+    "leagueId": "world-championships",
+    "seasonId": "wiki-2025",
+    "sport": "athletics"
+  },
+  "athletics — World Indoor Championships": {
+    "leagueId": "world-indoor-championships",
+    "seasonId": "wiki-2026",
+    "sport": "athletics"
+  },
+  "athletics — World Relays": {
+    "leagueId": "world-relays",
+    "seasonId": "wiki-2026",
+    "sport": "athletics"
+  },
+  "athletics — World Triathlon Championship Series": {
+    "leagueId": "world-triathlon-championship-series",
+    "seasonId": "external",
+    "sport": "athletics"
+  },
+  "athletics — World Ultimate Championship": {
+    "leagueId": "world-ultimate-championship",
+    "seasonId": "wiki-2026",
+    "sport": "athletics"
   }
 }

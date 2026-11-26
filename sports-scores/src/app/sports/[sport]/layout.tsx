@@ -1,6 +1,6 @@
 import LeagueSeasonToggle from "@/components/all-sports/LeagueSeasonToggle"
 import APIStatus from "@/components/misc-ui/ApiStatus"
-import { SPORT_ROUTE_CONFIG } from "@/lib/routeConfig"
+import { leaguesBySportToShow } from "@/services/dataverse.service"
 import { SPORT } from "@/types/misc"
 
 export default async function SportsLayout({
@@ -11,12 +11,11 @@ export default async function SportsLayout({
   params: Promise<{ sport: string }>
 }) {
   const { sport } = await params
-  const config = SPORT_ROUTE_CONFIG[sport as SPORT]
+  const leagues = await leaguesBySportToShow(sport as SPORT)
 
   return (
     <div className="flex h-full flex-col">
-      <LeagueSeasonToggle sport={sport as SPORT} leagues={config.leagues} />
-
+      <LeagueSeasonToggle sport={sport as SPORT} leagues={leagues} />
       {children}
       <APIStatus sport={sport as SPORT} />
     </div>

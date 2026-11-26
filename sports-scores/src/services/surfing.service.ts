@@ -1,4 +1,3 @@
-import { SURFING_LEAGUES } from "@/lib/constants"
 import { getCurrentRound, mapFixtureRounds } from "@/lib/eventMapping"
 import { resolveSportImage } from "@/lib/imageMapping"
 import { getSportConfigurations } from "@/lib/projUtils"
@@ -8,7 +7,6 @@ import {
   DeepPartial,
   DisplayTypes,
   FixtureRound,
-  LeagueSeasonConfig,
   MatchDetail,
   Matches,
   MatchStatus,
@@ -17,23 +15,25 @@ import {
   SPORT,
   SportService,
   Standings,
+  TVConfig,
   UpcomingMatches,
 } from "@/types/misc"
 import { TZDate } from "@date-fns/tz/date"
+import { addHours } from "date-fns"
 import {
+  leaguesBySportByDate,
+  leaguesBySportByLeague,
   matchSummariesBySportAndDay,
+  matchSummariesBySportByLeagueBySeason,
   matchSummariesBySportUpcoming,
-  matchSummariesByTournament,
 } from "./dataverse.service"
 
 class SurfingService implements SportService {
   protected sport: SPORT
-  protected tours: LeagueSeasonConfig[]
   protected cardVariant?: CardVariant
 
   constructor() {
     this.sport = SPORT.SURFING
-    this.tours = SURFING_LEAGUES
     this.cardVariant = CardVariant.SESSION
   }
 
@@ -41,11 +41,10 @@ class SurfingService implements SportService {
     leagueId: string,
     seasonId: string,
   ): Promise<Matches | null> {
-    const dataverseMatches = await matchSummariesByTournament(
-      leagueId,
-      seasonId,
-      this.sport,
-    )
+    const [dataverseMatches, tours] = await Promise.all([
+      matchSummariesBySportByLeagueBySeason(leagueId, seasonId, this.sport),
+      leaguesBySportByLeague(this.sport, leagueId),
+    ])
 
     if (!dataverseMatches || dataverseMatches.length === 0) {
       return null
@@ -58,11 +57,7 @@ class SurfingService implements SportService {
       )
       .map((event) => this.eventMapper(event))
 
-    const { leagueConfig } = getSportConfigurations(
-      this.tours,
-      leagueId,
-      seasonId,
-    )
+    const { leagueConfig } = getSportConfigurations(tours, leagueId, seasonId)
 
     const fixtures = await mapFixtureRounds(allMatches, leagueConfig)
 
@@ -73,7 +68,10 @@ class SurfingService implements SportService {
   }
 
   async matchesByDate(date: Date): Promise<Matches | null> {
-    const dataverseMatches = await matchSummariesBySportAndDay(this.sport, date)
+    const [dataverseMatches, tours] = await Promise.all([
+      matchSummariesBySportAndDay(this.sport, date),
+      leaguesBySportByDate(this.sport),
+    ])
 
     if (!dataverseMatches || dataverseMatches.length === 0) {
       return null
@@ -81,7 +79,7 @@ class SurfingService implements SportService {
 
     const allMatches = dataverseMatches.map((event) => this.eventMapper(event))
 
-    const fixtures = await mapFixtureRounds(allMatches, this.tours)
+    const fixtures = await mapFixtureRounds(allMatches, tours)
 
     const live: FixtureRound = {
       matches: allMatches.filter((match) => match.status === MatchStatus.LIVE),
@@ -103,10 +101,10 @@ class SurfingService implements SportService {
   }
 
   async matchesUpcoming(fromDate: TZDate): Promise<UpcomingMatches | null> {
-    const dataverseMatches = await matchSummariesBySportUpcoming(
-      this.sport,
-      fromDate,
-    )
+    const [dataverseMatches, tours] = await Promise.all([
+      matchSummariesBySportUpcoming(this.sport, fromDate),
+      leaguesBySportByDate(this.sport),
+    ])
 
     if (!dataverseMatches || dataverseMatches.length === 0) {
       return null
@@ -114,7 +112,7 @@ class SurfingService implements SportService {
 
     const fixtures = await mapFixtureRounds(
       dataverseMatches.map((event) => this.eventMapper(event)),
-      this.tours,
+      tours,
     )
 
     return {
@@ -138,6 +136,7 @@ class SurfingService implements SportService {
   eventMapper(
     event: MatchSummary,
     options?: DeepPartial<MatchSummary>,
+    tvConfig?: TVConfig,
   ): MatchSummary {
     let currentDate = new Date()
 
@@ -152,12 +151,6 @@ class SurfingService implements SportService {
       event.venue?.split(",").at(-1)?.trimStart(),
     )
 
-    const { tvConfig } = getSportConfigurations(
-      this.tours,
-      event.leagueId,
-      event.seasonId,
-    )
-
     // Strip out competitorDetails and tv from options to avoid type errors
     const { competitorDetails, tv, ...otherOptions } = options || {}
 
@@ -170,23 +163,14 @@ class SurfingService implements SportService {
       cardVariant: event.cardVariant ?? CardVariant.SESSION,
       tv:
         event.tv?.length === 0
-          ? tvConfig?.channels
-              .filter((channel) =>
-                channel.tvFilter
-                  ? channel.tvFilter(event.startDate, event)
-                  : true,
-              )
-              .map((channel) => ({
-                channel: channel.channel,
-                startTime: channel.startTime
-                  ? channel.startTime(event.startDate)
-                  : event.startDate,
-                endTime: event?.endDate
-                  ? event.endDate
-                  : channel.endTime
-                    ? channel.endTime(event.startDate)
-                    : undefined,
-              }))
+          ? tvConfig?.channels.map((channel) => ({
+              channel: channel,
+              startTime: options?.startDate ?? event.startDate,
+              endTime:
+                options?.endDate ??
+                event?.endDate ??
+                addHours(event.startDate, tvConfig.matchLength),
+            }))
           : event.tv,
       ...otherOptions,
     }
