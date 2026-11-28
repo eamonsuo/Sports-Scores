@@ -22,17 +22,19 @@ export default function LeagueHeader({
           className,
         )}
       >
-        {img && img !== "/vercel.svg" && (
-          <Image
-            src={img}
-            height={100}
-            width={100}
-            style={{ width: "auto", height: "25px" }}
-            alt="League Logo"
-            className="my-auto"
-          />
-        )}
-        <p>{seriesName}</p>
+        <div className={cn("my-auto", img?.includes("footer") && "invert")}>
+          {img && img !== "/vercel.svg" && (
+            <Image
+              src={img}
+              height={100}
+              width={100}
+              style={{ width: "auto", height: "25px" }}
+              alt="League Logo"
+            />
+          )}
+        </div>
+
+        <p className="text-center">{seriesName}</p>
         <p>{">"}</p>
       </div>
     </Link>
