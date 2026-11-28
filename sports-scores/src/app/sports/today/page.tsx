@@ -103,26 +103,10 @@ export default async function Page({
   )
 
   if (liveFixtures.length > 0) {
-    allSports.unshift({
-      matches: liveFixtures
-        .flatMap((fixtures) => fixtures.matches)
-        .sort(
-          (a, b) =>
-            new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-        ),
-      roundLabel: RoundLabel.LIVE,
-    })
+    allSports.unshift(createNewRound(liveFixtures, RoundLabel.LIVE))
   }
   if (myTeams.length > 0) {
-    allSports.unshift({
-      matches: myTeams
-        .flatMap((fixtures) => fixtures.matches)
-        .sort(
-          (a, b) =>
-            new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-        ),
-      roundLabel: RoundLabel.MY_TEAMS,
-    })
+    allSports.unshift(createNewRound(myTeams, RoundLabel.MY_TEAMS))
   }
 
   const allLeagues = await leagues()
@@ -168,9 +152,12 @@ function pageSettings(
   state: string
 }[] {
   const tvGuideList = data
-    .filter((fixtures) => fixtures.roundLabel !== RoundLabel.MY_TEAMS)
+    .filter(
+      (fixtures) =>
+        fixtures.roundLabel !== RoundLabel.MY_TEAMS &&
+        fixtures.roundLabel !== RoundLabel.LIVE,
+    )
     .flatMap((item) => item.matches)
-    .filter((match) => match.tv && match.tv.length > 0)
     .sort(
       (a, b) =>
         new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
@@ -228,3 +215,26 @@ const TODAY_PAGE_SPORTS = [
   SPORT.DARTS,
   SPORT.CYCLING,
 ] as const
+
+function createNewRound(
+  fixtures: FixtureRound[],
+  roundLabel: string,
+): FixtureRound {
+  return {
+    matches: fixtures
+      .flatMap((fixtures) => fixtures.matches)
+      .sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+      )
+      .map((match) => {
+        return {
+          ...match,
+          leagueImg:
+            match.leagueImg ??
+            FOOTER_LINKS.find((item) => item.sport === match.sport)?.img,
+        }
+      }),
+    roundLabel,
+  }
+}
